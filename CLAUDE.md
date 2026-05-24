@@ -112,6 +112,7 @@ project.yml                      ← XcodeGen — single source of truth for pro
 1. **`Domain/` never imports `SwiftData` or `SwiftUI`.** Pure structs and functions, easy to test.
 2. **`Features/` never opens the SwiftData container directly.** Uses repositories or `@Query` projections.
 3. **HealthKit access goes through `HealthKitService`** — never call `HKHealthStore` from a view.
+4. **All `.swift` filenames within the target must be unique** (Swift compiler requirement). The persistence `@Model` classes live in `Data/PersistenceModels.swift` — don't name any new file `Models.swift`.
 
 ---
 
@@ -145,7 +146,7 @@ project.yml                      ← XcodeGen — single source of truth for pro
 
 All entities namespaced per `Profile`. Append-only logs (sets, food entries, body metrics, markers). Daily/weekly/streak/trend figures are *derived*, never stored.
 
-`Domain/Models.swift` holds the value-type DTOs used by domain functions and view state. `Data/Models/*.swift` holds matching `@Model` classes used for persistence. A small adapter on each `@Model` (`var snapshot: ProfileDTO { ... }`) keeps the boundary explicit and tests cheap.
+`Domain/Models.swift` holds the value-type DTOs used by domain functions and view state. `Data/PersistenceModels.swift` holds matching `@Model` classes used for persistence. A small adapter on each `@Model` (`var snapshot: ProfileDTO { ... }`) keeps the boundary explicit and tests cheap.
 
 Headline entities:
 - `Profile` — name, mode, biometrics, activity, restrictions, `computedTargets`
