@@ -1,0 +1,85 @@
+# TestFlight ship workflow.
+# Triggers: manual (workflow_dispatch) or a pushed tag matching `v*`.
+# Does NOT run on every main push — iterate via compile.yml first.
+
+name: TestFlight
+
+on:
+  workflow_dispatch:
+    inputs:
+      changelog:
+        description: "Changelog text shown to TestFlight testers"
+        required: false
+        default: ""
+  push:
+    tags: ["v*"]
+
+concurrency:
+  group: testflight
+  cancel-in-progress: false   # never cancel an upload mid-flight
+
+jobs:
+  ship:
+    name: Sign + Archive + Upload via Fastlane
+    runs-on: macos-14
+    timeout-minutes: 45
+
+    env:
+      XCODE_VERSION: "15.4"
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+      APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+      APP_STORE_CONNECT_API_KEY_P8: ${{ secrets.APP_STORE_CONNECT_API_KEY_P8 }}
+      KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+      CHANGELOG: ${{ github.event.inputs.changelog }}
+      LANG: en_US.UTF-8
+      LC_ALL: en_US.UTF-8
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate required secrets
+        run: |
+          missing=()
+          for v in APPLE_TEAM_ID APP_STORE_CONNECT_API_KEY_ID APP_STORE_CONNECT_API_ISSUER_ID APP_STORE_CONNECT_API_KEY_P8 KEYCHAIN_PASSWORD; do
+            if [ -z "${!v:-}" ]; then missing+=("$v"); fi
+          done
+          if [ ${#missing[@]} -ne 0 ]; then
+            echo "::error::Missing required GitHub secrets: ${missing[*]}"
+            echo "See README.md → 'GitHub secrets' for setup."
+            exit 1
+          fi
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_${{ env.XCODE_VERSION }}.app
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Setup Ruby + Fastlane
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+          bundler-cache: true
+
+      - name: Generate placeholder AppIcon (skipped if a real icon exists)
+        run: bash scripts/generate-icon.sh
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      # Tests first — never ship a red build.
+      - name: Run tests
+        run: bundle exec fastlane ios tests
+
+      - name: Ship to TestFlight
+        run: bundle exec fastlane ios beta
+
+      - name: Upload IPA artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: OurFitness-${{ github.run_number }}.ipa
+          path: build/ipa/*.ipa
+          retention-days: 30

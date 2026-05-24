@@ -1,0 +1,60 @@
+// All date math lives here so timezone handling is in exactly one place.
+// Day boundaries are local-calendar by design.
+
+import Foundation
+
+public enum Dates {
+
+    private static let dayFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM-dd"
+        f.timeZone = TimeZone.current
+        f.calendar = Calendar(identifier: .iso8601)
+        return f
+    }()
+
+    /// Local YYYY-MM-DD for a given Date (defaults to now).
+    public static func dayKey(_ date: Date = Date()) -> String {
+        dayFormatter.string(from: date)
+    }
+
+    /// Parse a YYYY-MM-DD back to a local-midnight Date. Returns nil on bad input.
+    public static func date(fromDayKey key: String) -> Date? {
+        dayFormatter.date(from: key)
+    }
+
+    /// Inclusive array of dayKeys ending at `end` (default today), `days` long, oldest first.
+    public static func lastNDays(_ days: Int, end: Date = Date()) -> [String] {
+        guard days > 0 else { return [] }
+        let cal = Calendar.current
+        let endStart = cal.startOfDay(for: end)
+        var out: [String] = []
+        out.reserveCapacity(days)
+        for i in stride(from: days - 1, through: 0, by: -1) {
+            if let d = cal.date(byAdding: .day, value: -i, to: endStart) {
+                out.append(dayKey(d))
+            }
+        }
+        return out
+    }
+
+    /// Whole days between two dayKeys.
+    public static func daysBetween(_ a: String, _ b: String) -> Int {
+        guard let da = date(fromDayKey: a), let db = date(fromDayKey: b) else { return 0 }
+        let comps = Calendar.current.dateComponents([.day], from: da, to: db)
+        return comps.day ?? 0
+    }
+
+    /// "just now", "5m ago", "3h ago", or "Mon 3:42 PM".
+    public static func formatTimeAgo(_ ts: Date, now: Date = Date()) -> String {
+        let diff = max(0, now.timeIntervalSince(ts))
+        let minutes = Int(diff / 60)
+        if minutes < 1 { return "just now" }
+        if minutes < 60 { return "\(minutes)m ago" }
+        let hours = minutes / 60
+        if hours < 24 { return "\(hours)h ago" }
+        let f = DateFormatter()
+        f.dateFormat = "EEE h:mm a"
+        return f.string(from: ts)
+    }
+}

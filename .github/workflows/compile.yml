@@ -1,0 +1,72 @@
+# Fast feedback workflow. Runs on every push + PR.
+# Generates the Xcode project, compiles, runs unit tests. NO signing.
+# Use this loop to flush Swift errors before triggering TestFlight.
+
+name: Compile + Test
+
+on:
+  push:
+    branches: [main, "feature/**", "fix/**"]
+  pull_request:
+
+concurrency:
+  group: compile-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compile:
+    name: xcodegen + build + test (no signing)
+    runs-on: macos-14
+    timeout-minutes: 25
+
+    env:
+      XCODE_VERSION: "15.4"
+      SCHEME: OurFitness
+      PROJECT: OurFitness.xcodeproj
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_${{ env.XCODE_VERSION }}.app
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate placeholder AppIcon (skipped if a real icon exists)
+        run: bash scripts/generate-icon.sh
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build (Debug, no signing)
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project "${{ env.PROJECT }}" \
+            -scheme "${{ env.SCHEME }}" \
+            -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            build \
+            | xcbeautify --renderer github-actions
+
+      - name: Run unit tests
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -project "${{ env.PROJECT }}" \
+            -scheme "${{ env.SCHEME }}" \
+            -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' \
+            -resultBundlePath build/TestResults.xcresult \
+            CODE_SIGNING_ALLOWED=NO \
+            | xcbeautify --renderer github-actions
+
+      - name: Upload xcresult on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TestResults-${{ github.run_id }}
+          path: build/TestResults.xcresult
+          retention-days: 7

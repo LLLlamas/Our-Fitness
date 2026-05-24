@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fuel Plan — Lorenzo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --panel: #131313;
+    --panel-2: #1a1a1a;
+    --line: #262626;
+    --text: #f5f5f0;
+    --dim: #8a8a82;
+    --accent: #ff6b35;
+    --accent-2: #ffb800;
+    --green: #7fb069;
+    --red: #e63946;
+    --blue: #4cc9f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    line-height: 1.55;
+    padding: 0;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(255,107,53,0.06), transparent 40%),
+      radial-gradient(circle at 80% 60%, rgba(255,184,0,0.04), transparent 50%);
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 28px 22px 80px; }
+
+  /* Header */
+  header {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 22px;
+    margin-bottom: 28px;
+  }
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(44px, 8vw, 84px);
+    letter-spacing: 0.02em;
+    line-height: 0.92;
+    font-weight: 400;
+  }
+  h1 .accent { color: var(--accent); }
+  .sub {
+    color: var(--dim);
+    margin-top: 14px;
+    max-width: 640px;
+    font-size: 13px;
+  }
+
+  /* Stats grid */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-bottom: 36px;
+  }
+  .stat {
+    background: var(--panel);
+    padding: 18px 16px;
+  }
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--dim);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 38px;
+    line-height: 1;
+    color: var(--text);
+  }
+  .stat-unit { font-size: 14px; color: var(--dim); margin-left: 4px; }
+  .stat-note { font-size: 11px; color: var(--accent-2); margin-top: 6px; }
+
+  /* Tab nav */
+  nav.tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 28px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav.tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    background: none;
+    border: none;
+    color: var(--dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 14px 18px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .panel { display: none; animation: fade 0.3s ease; }
+  .panel.active { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(4px);} to { opacity: 1; transform: none;}}
+
+  /* Section heads */
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 28px;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  h2 .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+  .section-desc { color: var(--dim); margin-bottom: 22px; font-size: 13px; max-width: 700px; }
+
+  /* Meal cards */
+  .meals { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+  .meal {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    padding: 18px;
+    position: relative;
+    transition: all 0.2s;
+  }
+  .meal:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .meal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    gap: 12px;
+  }
+  .meal-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 1.2;
+  }
+  .meal-cost {
+    font-size: 10px;
+    color: var(--green);
+    border: 1px solid var(--green);
+    padding: 2px 6px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .meal-cost.mid { color: var(--accent-2); border-color: var(--accent-2); }
+  .meal-cost.high { color: var(--accent); border-color: var(--accent); }
+  .meal-recipe { font-size: 12px; color: var(--dim); margin-bottom: 12px; line-height: 1.6; }
+  .meal-macros {
+    display: flex;
+    gap: 10px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding-top: 10px;
+    border-top: 1px dashed var(--line);
+  }
+  .macro b { color: var(--text); font-weight: 700; font-family: 'Bebas Neue', sans-serif; font-size: 16px; margin-right: 3px; }
+  .macro.cal b { color: var(--accent); }
+  .macro.p b { color: var(--blue); }
+  .macro.c b { color: var(--accent-2); }
+  .macro.f b { color: var(--green); }
+
+  /* Day layout */
+  .day {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .day-head {
+    padding: 14px 18px;
+    background: var(--panel-2);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+  .day-name { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.05em; }
+  .day-totals { font-size: 11px; color: var(--dim); letter-spacing: 0.05em; }
+  .day-totals span { color: var(--accent); font-weight: 700; }
+  .day-body { padding: 14px 18px; display: grid; gap: 10px; }
+  .slot {
+    display: grid;
+    grid-template-columns: 90px 1fr auto;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--line);
+    align-items: center;
+  }
+  .slot:last-child { border-bottom: none; }
+  .slot-time {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--accent-2);
+    text-transform: uppercase;
+  }
+  .slot-food { font-size: 13px; }
+  .slot-food b { font-family: 'Fraunces', serif; font-weight: 600; }
+  .slot-food .note { color: var(--dim); font-size: 11px; display: block; margin-top: 2px; }
+  .slot-cal { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--accent); white-space: nowrap; }
+
+  /* Grocery list */
+  .grocery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+  }
+  .gcat {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    padding: 16px;
+  }
+  .gcat-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  .gitem {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 12px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .gitem:last-child { border-bottom: none; }
+  .gitem .price { color: var(--green); font-weight: 700; }
+  .gtotal {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 2px solid var(--accent);
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--accent);
+  }
+
+  /* Tips */
+  .tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+  .tip {
+    background: var(--panel);
+    border-left: 3px solid var(--accent);
+    padding: 16px 18px;
+  }
+  .tip-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .tip-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+  .tip-body { font-size: 12px; color: var(--dim); line-height: 1.6; }
+  .tip.warn { border-left-color: var(--red); }
+  .tip.warn .tip-num { color: var(--red); }
+
+  /* Tracker */
+  .tracker-form {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    padding: 22px;
+    margin-bottom: 22px;
+  }
+  .tracker-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr auto;
+    gap: 10px;
+    align-items: end;
+    margin-bottom: 14px;
+  }
+  .tracker-row:last-child { margin-bottom: 0; }
+  label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--dim);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+  }
+  input, select {
+    width: 100%;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    color: var(--text);
+    padding: 10px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    border-radius: 0;
+  }
+  input:focus, select:focus { outline: none; border-color: var(--accent); }
+  button.add {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 10px 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  button.add:hover { background: var(--accent-2); }
+
+  .progress-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    margin-bottom: 22px;
+    border: 1px solid var(--line);
+  }
+  .prog {
+    background: var(--panel);
+    padding: 16px;
+  }
+  .prog-label { font-size: 10px; letter-spacing: 0.15em; color: var(--dim); text-transform: uppercase; margin-bottom: 8px; }
+  .prog-val { font-family: 'Bebas Neue', sans-serif; font-size: 28px; line-height: 1; }
+  .prog-target { font-size: 11px; color: var(--dim); margin-top: 4px; }
+  .bar {
+    height: 4px;
+    background: var(--panel-2);
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .bar-fill { height: 100%; background: var(--accent); transition: width 0.3s; }
+  .bar-fill.full { background: var(--green); }
+  .bar-fill.over { background: var(--red); }
+
+  .log-list { display: flex; flex-direction: column; gap: 6px; }
+  .log-entry {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 14px;
+    padding: 10px 14px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    font-size: 13px;
+    align-items: center;
+  }
+  .log-entry .name b { font-family: 'Fraunces', serif; }
+  .log-entry .cal { font-family: 'Bebas Neue', sans-serif; color: var(--accent); font-size: 18px; }
+  .log-entry .p { font-size: 11px; color: var(--blue); }
+  button.del {
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--dim);
+    padding: 4px 8px;
+    cursor: pointer;
+    font-family: monospace;
+    font-size: 11px;
+  }
+  button.del:hover { color: var(--red); border-color: var(--red); }
+  .empty-log { color: var(--dim); text-align: center; padding: 30px; font-size: 12px; }
+
+  /* Allergy banner */
+  .allergy {
+    background: rgba(230, 57, 70, 0.08);
+    border: 1px solid var(--red);
+    padding: 12px 16px;
+    margin-bottom: 28px;
+    font-size: 12px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .allergy::before {
+    content: "⚠";
+    color: var(--red);
+    font-size: 18px;
+  }
+  .allergy b { color: var(--red); }
+
+  @media (max-width: 720px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .progress-grid { grid-template-columns: repeat(2, 1fr); }
+    .tracker-row { grid-template-columns: 1fr 1fr; }
+    .tracker-row > *:last-child { grid-column: span 2; }
+    .slot { grid-template-columns: 1fr; gap: 4px; }
+    .slot-time { font-size: 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Nutrition Protocol · v1.0 · Built for Lorenzo</div>
+  <h1>EAT TO <span class="accent">PLAY.</span><br>EAT TO <span class="accent">BUILD.</span></h1>
+  <p class="sub">A picky-eater-friendly fuel plan calibrated to your stack: 5'7" / 130 lb / 4–5 active days. Built around foods you already like, with calorie density layered in via shakes, oils, and frequency — not by forcing big meals when you're not hungry.</p>
+</header>
+
+<div class="allergy"><span><b>NUT-FREE PROTOCOL.</b> Every food, recipe, and grocery item in this plan excludes peanuts, tree nuts, and common nut-derived ingredients. Always double-check labels for "may contain" warnings.</span></div>
+
+<div class="stats">
+  <div class="stat">
+    <div class="stat-label">Daily Calories</div>
+    <div class="stat-value">2,700<span class="stat-unit">kcal</span></div>
+    <div class="stat-note">+500 surplus for lean gain</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Protein Target</div>
+    <div class="stat-value">130<span class="stat-unit">g</span></div>
+    <div class="stat-note">~1g per lb bodyweight</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Carbs</div>
+    <div class="stat-value">350<span class="stat-unit">g</span></div>
+    <div class="stat-note">fuel hoop sessions</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Fats</div>
+    <div class="stat-value">85<span class="stat-unit">g</span></div>
+    <div class="stat-note">density without bulk</div>
+  </div>
+</div>
+
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-tab="strategy">01 · Strategy</button>
+  <button class="tab" data-tab="meals">02 · Meal Library</button>
+  <button class="tab" data-tab="schedule">03 · Weekly Schedule</button>
+  <button class="tab" data-tab="grocery">04 · Grocery + Cost</button>
+  <button class="tab" data-tab="tracker">05 · Daily Tracker</button>
+</nav>
+
+<!-- STRATEGY -->
+<section class="panel active" id="strategy">
+  <h2><span class="num">01.</span>The Strategy</h2>
+  <p class="section-desc">The problem isn't picky eating — it's appetite and pattern. You have a great list of foods. The job is to (a) eat more often than you feel like, (b) hide calories in liquids since you already love smoothies, and (c) keep cost down.</p>
+
+  <div class="tips">
+    <div class="tip">
+      <div class="tip-num">01</div>
+      <div class="tip-title">Drink your calories</div>
+      <div class="tip-body">Smoothies and chocolate milk bypass the "I'm not hungry" problem. One loaded smoothie = 700–900 cal in 4 minutes. You already make these — just upgrade them with oats, extra honey, and a banana you'd otherwise skip.</div>
+    </div>
+    <div class="tip">
+      <div class="tip-num">02</div>
+      <div class="tip-title">Eat by the clock, not hunger</div>
+      <div class="tip-body">Hardgainers can't trust appetite. Set 5 anchors: wake, mid-morning, post-hoops, mid-afternoon, dinner. Set phone alarms. Treat each one like a HoopCheck wake notification — non-negotiable.</div>
+    </div>
+    <div class="tip">
+      <div class="tip-num">03</div>
+      <div class="tip-title">Use what you already love</div>
+      <div class="tip-body">Spam, rice, eggs, chocolate milk, smoothies, pizza, chicken nuggets. These are all on your list and all calorie-dense. We're not introducing kale. We're stacking the foods you'll actually finish.</div>
+    </div>
+    <div class="tip">
+      <div class="tip-num">04</div>
+      <div class="tip-title">Post-hoops is your magic window</div>
+      <div class="tip-body">After your morning court session at Bliss St you'll have a 60-min window where appetite returns and protein absorbs best. Chocolate milk + a bagel + eggs in this window does more than dinner.</div>
+    </div>
+    <div class="tip">
+      <div class="tip-num">05</div>
+      <div class="tip-title">Cheap calorie multipliers</div>
+      <div class="tip-body">Olive oil ($0.12/tbsp = 120 cal), honey ($0.10/tbsp = 60 cal), butter ($0.10/tbsp = 100 cal), oats ($0.15/cup = 300 cal). Add one of these to anything and it gets denser without feeling bigger.</div>
+    </div>
+    <div class="tip warn">
+      <div class="tip-num">!</div>
+      <div class="tip-title">Track weight weekly</div>
+      <div class="tip-body">Same day, morning, after bathroom, before eating. Goal: +0.25 to +0.5 lb/week. If you stall 2 weeks, add 200 cal (one extra smoothie scoop + tbsp honey). If gaining too fast, drop oil.</div>
+    </div>
+  </div>
+
+  <div style="margin-top: 32px;">
+    <h2 style="font-size: 22px;"><span class="num">→</span>Daily Eating Schedule</h2>
+    <p class="section-desc">Anchor these times. Even a small intake at each beats skipping.</p>
+    <div class="day">
+      <div class="day-body">
+        <div class="slot">
+          <div class="slot-time">06:00 AM</div>
+          <div class="slot-food"><b>Pre-Hoops</b><span class="note">Banana + chocolate milk (8oz). Carbs only, easy on the stomach.</span></div>
+          <div class="slot-cal">280</div>
+        </div>
+        <div class="slot">
+          <div class="slot-time">08:30 AM</div>
+          <div class="slot-food"><b>Post-Hoops Refuel</b><span class="note">Big smoothie OR bagel + eggs + spam. Your money meal.</span></div>
+          <div class="slot-cal">800</div>
+        </div>
+        <div class="slot">
+          <div class="slot-time">12:00 PM</div>
+          <div class="slot-food"><b>Lunch</b><span class="note">Rice bowl, ravioli, pizza, or katsu sandwich. Keep it warm and filling.</span></div>
+          <div class="slot-cal">700</div>
+        </div>
+        <div class="slot">
+          <div class="slot-time">03:30 PM</div>
+          <div class="slot-food"><b>Snack Anchor</b><span class="note">Popcorn + chocolate milk, or cereal bowl, or shake. Don't skip.</span></div>
+          <div class="slot-cal">400</div>
+        </div>
+        <div class="slot">
+          <div class="slot-time">07:00 PM</div>
+          <div class="slot-food"><b>Dinner</b><span class="note">Whatever sounds good — burgers, fried rice, salmon, pasta. Add a side.</span></div>
+          <div class="slot-cal">600</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MEAL LIBRARY -->
+<section class="panel" id="meals">
+  <h2><span class="num">02.</span>Meal Library</h2>
+  <p class="section-desc">Every recipe uses foods from your list. Calories, macros, and cost-per-serving listed. Hover for emphasis — click "Daily Tracker" to log what you eat.</p>
+
+  <h3 style="font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--accent-2); margin: 18px 0 12px; letter-spacing: 0.05em;">★ SMOOTHIES + SHAKES (your strongest weapon)</h3>
+  <div class="meals" id="meals-smoothies"></div>
+
+  <h3 style="font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--accent-2); margin: 32px 0 12px; letter-spacing: 0.05em;">★ BREAKFAST + POST-HOOPS</h3>
+  <div class="meals" id="meals-breakfast"></div>
+
+  <h3 style="font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--accent-2); margin: 32px 0 12px; letter-spacing: 0.05em;">★ LUNCH + DINNER</h3>
+  <div class="meals" id="meals-mains"></div>
+
+  <h3 style="font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--accent-2); margin: 32px 0 12px; letter-spacing: 0.05em;">★ SNACKS + ANCHORS</h3>
+  <div class="meals" id="meals-snacks"></div>
+</section>
+
+<!-- SCHEDULE -->
+<section class="panel" id="schedule">
+  <h2><span class="num">03.</span>Sample Week</h2>
+  <p class="section-desc">A non-rigid template. Repeat what works, swap what doesn't. Hoops days have heavier breakfasts and post-workout shakes; rest days lean lighter on carbs but keep protein steady.</p>
+  <div id="week"></div>
+</section>
+
+<!-- GROCERY -->
+<section class="panel" id="grocery">
+  <h2><span class="num">04.</span>Grocery + Cost</h2>
+  <p class="section-desc">Weekly shop priced at NYC averages, May 2026. Trader Joe's, C-Town, or Key Food on Queens Blvd will all hit close to these numbers. Costco for bulk items if you have access. Eggs and bagels you can hit any deli for. </p>
+  <div class="grocery" id="grocery-list"></div>
+  <div style="margin-top: 22px; padding: 16px; background: var(--panel); border: 1px solid var(--accent); font-size: 12px; color: var(--dim);">
+    <b style="color: var(--text);">Money-saving notes:</b> Buy 18-count eggs at Costco/Trader Joe's. Frozen berries cost half of fresh and work better in smoothies. Whey protein lasts 5–6 weeks on this plan — split that cost across weeks. Spam is on sale most weeks at C-Town. Generic store-brand cereal is identical to name brand for ~40% less.
+  </div>
+</section>
+
+<!-- TRACKER -->
+<section class="panel" id="tracker">
+  <h2><span class="num">05.</span>Today's Log</h2>
+  <p class="section-desc">Quick logger — tap a meal from the library or enter custom. Data lives in browser memory only (resets on refresh).</p>
+
+  <div class="progress-grid">
+    <div class="prog">
+      <div class="prog-label">Calories</div>
+      <div class="prog-val" id="t-cal">0</div>
+      <div class="prog-target">of 2,700 kcal</div>
+      <div class="bar"><div class="bar-fill" id="bar-cal" style="width: 0%"></div></div>
+    </div>
+    <div class="prog">
+      <div class="prog-label">Protein</div>
+      <div class="prog-val" id="t-pro">0g</div>
+      <div class="prog-target">of 130g</div>
+      <div class="bar"><div class="bar-fill" id="bar-pro" style="width: 0%"></div></div>
+    </div>
+    <div class="prog">
+      <div class="prog-label">Carbs</div>
+      <div class="prog-val" id="t-car">0g</div>
+      <div class="prog-target">of 350g</div>
+      <div class="bar"><div class="bar-fill" id="bar-car" style="width: 0%"></div></div>
+    </div>
+    <div class="prog">
+      <div class="prog-label">Fats</div>
+      <div class="prog-val" id="t-fat">0g</div>
+      <div class="prog-target">of 85g</div>
+      <div class="bar"><div class="bar-fill" id="bar-fat" style="width: 0%"></div></div>
+    </div>
+  </div>
+
+  <div class="tracker-form">
+    <div class="tracker-row">
+      <div>
+        <label>Quick Add</label>
+        <select id="quick-select">
+          <option value="">— Pick from library —</option>
+        </select>
+      </div>
+      <div>
+        <label>Or Custom Name</label>
+        <input type="text" id="custom-name" placeholder="e.g. Slice of pizza">
+      </div>
+      <div>
+        <label>Calories</label>
+        <input type="number" id="custom-cal" placeholder="0">
+      </div>
+      <div>
+        <label>Protein (g)</label>
+        <input type="number" id="custom-pro" placeholder="0">
+      </div>
+      <div>
+        <button class="add" id="add-btn">Log It</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="log-list" id="log-list">
+    <div class="empty-log">Nothing logged yet. Add your first meal above.</div>
+  </div>
+</section>
+
+</div>
+
+<script>
+// ============= MEAL DATA =============
+const meals = {
+  smoothies: [
+    {
+      n: "The Anchor Smoothie",
+      r: "1 cup milk + 1 scoop whey + 1 banana + 1 cup frozen berries + 1 cup frozen mango + 2 tbsp honey + ½ cup oats. Blend.",
+      cal: 720, p: 38, c: 110, f: 9, cost: "$2.10", tier: "low"
+    },
+    {
+      n: "Chocolate Mango Lift",
+      r: "1 cup chocolate milk + 1 scoop whey + 1 frozen banana + 1 cup mango. Blend with ice.",
+      cal: 540, p: 35, c: 80, f: 7, cost: "$1.85", tier: "low"
+    },
+    {
+      n: "Mass Builder",
+      r: "1.5 cups whole milk + 2 scoops whey + 1 cup oats + 1 banana + 3 tbsp honey + 2 cups berries. (Drink in 2 sittings if needed.)",
+      cal: 1050, p: 60, c: 145, f: 14, cost: "$3.20", tier: "low"
+    },
+    {
+      n: "Bedtime Casein-Style",
+      r: "1 cup milk + 1 scoop whey + ½ cup oats + 1 banana + 1 tbsp honey. Thick, slow-digesting.",
+      cal: 520, p: 32, c: 75, f: 8, cost: "$1.60", tier: "low"
+    },
+    {
+      n: "Tropical Recovery",
+      r: "1 cup OJ + 1 cup mango + 1 banana + 1 scoop whey + ½ cup yogurt. Best 60 min post-hoops.",
+      cal: 480, p: 28, c: 92, f: 3, cost: "$2.40", tier: "low"
+    }
+  ],
+  breakfast: [
+    {
+      n: "Spam, Egg & Rice",
+      r: "3 eggs scrambled + 3 slices fried spam + 1 cup rice + drizzle of soy. Hawaiian breakfast.",
+      cal: 780, p: 40, c: 65, f: 38, cost: "$2.20", tier: "low"
+    },
+    {
+      n: "Bagel Stack",
+      r: "1 everything bagel, toasted + cream cheese + 2 fried eggs + 2 slices crispy spam.",
+      cal: 720, p: 32, c: 75, f: 32, cost: "$2.50", tier: "low"
+    },
+    {
+      n: "Oatmeal Power Bowl",
+      r: "1 cup oats cooked in milk + 1 banana + ½ cup berries + 2 tbsp honey + 1 scoop whey stirred in cold after.",
+      cal: 640, p: 32, c: 105, f: 11, cost: "$1.40", tier: "low"
+    },
+    {
+      n: "Pancake Stack + Eggs",
+      r: "3 pancakes + butter + maple syrup + 3 scrambled eggs + glass of chocolate milk.",
+      cal: 890, p: 30, c: 115, f: 32, cost: "$2.10", tier: "low"
+    },
+    {
+      n: "Cereal Mega Bowl",
+      r: "2 cups cereal + 1.5 cups whole milk + 1 sliced banana + 1 scoop whey mixed in milk first.",
+      cal: 620, p: 35, c: 95, f: 14, cost: "$1.50", tier: "low"
+    },
+    {
+      n: "Jelly Toast + Eggs",
+      r: "3 slices toast w/ butter & jelly + 3 scrambled eggs + glass of juice.",
+      cal: 580, p: 22, c: 78, f: 22, cost: "$1.30", tier: "low"
+    }
+  ],
+  mains: [
+    {
+      n: "Chicken Katsu Rice Bowl",
+      r: "1 chicken cutlet (panko-fried) + 1.5 cups rice + tonkatsu sauce + side of carrots/broccoli.",
+      cal: 780, p: 45, c: 85, f: 28, cost: "$3.80", tier: "mid"
+    },
+    {
+      n: "Spam Fried Rice",
+      r: "2 cups rice + 4 oz diced spam + 2 eggs scrambled in + frozen peas/carrots + soy + sesame oil.",
+      cal: 820, p: 32, c: 92, f: 36, cost: "$2.40", tier: "low"
+    },
+    {
+      n: "Salmon + Rice + Broccoli",
+      r: "5 oz salmon (pan-seared) + 1 cup rice + 1 cup roasted broccoli w/ olive oil.",
+      cal: 680, p: 42, c: 55, f: 32, cost: "$5.20", tier: "high"
+    },
+    {
+      n: "Brisket Rice Bowl",
+      r: "5 oz thin-sliced brisket + 1.5 cups rice + crispy onions on top + drizzle of sauce.",
+      cal: 820, p: 38, c: 75, f: 38, cost: "$4.50", tier: "mid"
+    },
+    {
+      n: "Penne Vodka Plate",
+      r: "2 cups cooked penne + ¾ cup vodka sauce + parmesan + side garlic bread.",
+      cal: 740, p: 22, c: 110, f: 24, cost: "$2.80", tier: "mid"
+    },
+    {
+      n: "Ravioli Bowl",
+      r: "Frozen cheese ravioli (1 bag, ~10 pieces) + marinara + parmesan + side of crispy onions.",
+      cal: 650, p: 26, c: 88, f: 22, cost: "$3.20", tier: "mid"
+    },
+    {
+      n: "Burger + Fries",
+      r: "Homemade smash burger (¼ lb beef) on bun w/ cheese + 1.5 cups oven fries + dipping sauce.",
+      cal: 920, p: 40, c: 78, f: 48, cost: "$3.60", tier: "mid"
+    },
+    {
+      n: "Chicken Nugget Combo",
+      r: "10 chicken nuggets + 1 cup fries + dipping sauces + glass of chocolate milk on the side.",
+      cal: 780, p: 32, c: 72, f: 38, cost: "$3.10", tier: "mid"
+    },
+    {
+      n: "Cup Noodles Upgrade",
+      r: "1 cup noodles + crack an egg in during cook + spam slices + sesame oil. Hits when low effort needed.",
+      cal: 580, p: 22, c: 65, f: 24, cost: "$1.80", tier: "low"
+    },
+    {
+      n: "Fried Rice + Plantains",
+      r: "2 cups fried rice + 1 cup fried plantains as side. Sweet/savory combo, very calorie-dense.",
+      cal: 760, p: 14, c: 125, f: 22, cost: "$2.50", tier: "low"
+    },
+    {
+      n: "Pizza Night",
+      r: "3 slices NY-style cheese pizza + side of fried cauliflower or pickles.",
+      cal: 950, p: 38, c: 110, f: 38, cost: "$5.00", tier: "high"
+    }
+  ],
+  snacks: [
+    {
+      n: "Popcorn + Chocolate Milk",
+      r: "1 bag popped popcorn (light butter) + 12oz cold chocolate milk.",
+      cal: 480, p: 14, c: 70, f: 14, cost: "$1.20", tier: "low"
+    },
+    {
+      n: "Sunflower Seed Pack",
+      r: "1 bag (1.7 oz) shelled sunflower seeds — easy protein/fat boost, fits in your bag.",
+      cal: 270, p: 9, c: 8, f: 24, cost: "$1.00", tier: "low"
+    },
+    {
+      n: "Banana + Honey + Crackers",
+      r: "Sliced banana drizzled w/ honey, scooped onto saltines or graham crackers.",
+      cal: 380, p: 5, c: 78, f: 7, cost: "$0.80", tier: "low"
+    },
+    {
+      n: "Donut + Chocolate Milk",
+      r: "1 glazed donut + 12oz chocolate milk. Treat that doubles as calories.",
+      cal: 510, p: 12, c: 75, f: 20, cost: "$2.20", tier: "mid"
+    },
+    {
+      n: "Bagel + Jelly",
+      r: "1 bagel toasted w/ butter and jelly + glass of juice.",
+      cal: 450, p: 10, c: 88, f: 8, cost: "$1.40", tier: "low"
+    },
+    {
+      n: "Berry Bowl + Whey Milk",
+      r: "1 cup mixed berries + 1 cup milk shaken with whey scoop on the side as a drink.",
+      cal: 320, p: 28, c: 35, f: 7, cost: "$2.10", tier: "low"
+    },
+    {
+      n: "Hush Puppies + Honey",
+      r: "6 hush puppies (frozen, oven) drizzled with honey. Sweet/savory snack.",
+      cal: 440, p: 8, c: 62, f: 18, cost: "$1.60", tier: "low"
+    },
+    {
+      n: "Fried Pickle / Plantain Plate",
+      r: "Air-fryer fried pickles or plantains as a quick-hit snack with dipping sauce.",
+      cal: 380, p: 4, c: 48, f: 18, cost: "$1.50", tier: "low"
+    }
+  ]
+};
+
+// Render meal cards
+function renderMeals() {
+  for (const [cat, items] of Object.entries(meals)) {
+    const container = document.getElementById('meals-' + cat);
+    container.innerHTML = items.map((m, i) => `
+      <div class="meal">
+        <div class="meal-head">
+          <div class="meal-title">${m.n}</div>
+          <div class="meal-cost ${m.tier}">${m.cost}</div>
+        </div>
+        <div class="meal-recipe">${m.r}</div>
+        <div class="meal-macros">
+          <span class="macro cal"><b>${m.cal}</b>cal</span>
+          <span class="macro p"><b>${m.p}</b>p</span>
+          <span class="macro c"><b>${m.c}</b>c</span>
+          <span class="macro f"><b>${m.f}</b>f</span>
+        </div>
+      </div>
+    `).join('');
+  }
+}
+renderMeals();
+
+// ============= WEEK SCHEDULE =============
+const week = [
+  { day: "Monday", type: "Hoops", total: 2720, slots: [
+    { t: "06:00", n: "Banana + chocolate milk", note: "Pre-court", cal: 280 },
+    { t: "08:30", n: "Bagel Stack", note: "Post-hoops, the money meal", cal: 720 },
+    { t: "12:00", n: "Spam Fried Rice", note: "Hot lunch", cal: 820 },
+    { t: "15:30", n: "Popcorn + Chocolate Milk", note: "Snack anchor", cal: 480 },
+    { t: "19:00", n: "Chicken Katsu Rice Bowl", note: "Solid dinner", cal: 780 }
+  ]},
+  { day: "Tuesday", type: "Rest", total: 2660, slots: [
+    { t: "08:00", n: "Oatmeal Power Bowl", note: "Lazy morning", cal: 640 },
+    { t: "11:30", n: "The Anchor Smoothie", note: "Liquid mid-morning", cal: 720 },
+    { t: "13:30", n: "Penne Vodka Plate", note: "Lunch", cal: 740 },
+    { t: "16:00", n: "Banana + Honey + Crackers", note: "Snack", cal: 380 },
+    { t: "19:30", n: "Burger + Fries", note: "Cheat dinner that's still on plan", cal: 920 }
+  ]},
+  { day: "Wednesday", type: "Hoops", total: 2730, slots: [
+    { t: "06:00", n: "Banana + chocolate milk", note: "Pre-court", cal: 280 },
+    { t: "08:30", n: "Mass Builder smoothie", note: "Drink in 2 sittings", cal: 1050 },
+    { t: "12:30", n: "Ravioli Bowl", note: "Easy lunch", cal: 650 },
+    { t: "15:30", n: "Hush Puppies + Honey", note: "Treat snack", cal: 440 },
+    { t: "19:00", n: "Salmon + Rice + Broccoli", note: "Quality dinner", cal: 680 }
+  ]},
+  { day: "Thursday", type: "Hoops", total: 2710, slots: [
+    { t: "06:00", n: "Banana + chocolate milk", note: "Pre-court", cal: 280 },
+    { t: "08:30", n: "Spam, Egg & Rice", note: "Hot post-hoops", cal: 780 },
+    { t: "12:00", n: "Cup Noodles Upgrade", note: "Low-effort lunch", cal: 580 },
+    { t: "15:00", n: "Tropical Recovery smoothie", note: "Extra shake to hit cals", cal: 480 },
+    { t: "19:00", n: "Brisket Rice Bowl", note: "Big dinner", cal: 820 }
+  ]},
+  { day: "Friday", type: "Hoops", total: 2750, slots: [
+    { t: "06:00", n: "Banana + chocolate milk", note: "Pre-court", cal: 280 },
+    { t: "08:30", n: "Chocolate Mango Lift", note: "Quick recovery", cal: 540 },
+    { t: "10:30", n: "Jelly Toast + Eggs", note: "Second breakfast", cal: 580 },
+    { t: "13:00", n: "Chicken Nugget Combo", note: "Easy lunch", cal: 780 },
+    { t: "16:00", n: "Donut + Chocolate Milk", note: "Friday treat", cal: 510 }
+  ]},
+  { day: "Saturday", type: "Hoops", total: 2700, slots: [
+    { t: "07:00", n: "Banana + chocolate milk", note: "Pre-weekend court", cal: 280 },
+    { t: "09:30", n: "Pancake Stack + Eggs", note: "Long breakfast", cal: 890 },
+    { t: "13:00", n: "Fried Rice + Plantains", note: "Late lunch", cal: 760 },
+    { t: "16:30", n: "Berry Bowl + Whey Milk", note: "Protein anchor", cal: 320 },
+    { t: "20:00", n: "Pizza Night", note: "Saturday is for pizza", cal: 450 }
+  ]},
+  { day: "Sunday", type: "Rest", total: 2690, slots: [
+    { t: "09:00", n: "Cereal Mega Bowl", note: "Slow start", cal: 620 },
+    { t: "12:00", n: "Pizza Night", note: "Leftover slices or fresh", cal: 950 },
+    { t: "15:30", n: "The Anchor Smoothie", note: "Hits all macros", cal: 720 },
+    { t: "19:00", n: "Salmon + Rice + Broccoli", note: "Reset for the week", cal: 400 }
+  ]}
+];
+
+const weekEl = document.getElementById('week');
+weekEl.innerHTML = week.map(d => `
+  <div class="day">
+    <div class="day-head">
+      <div>
+        <div class="day-name">${d.day}</div>
+        <div style="font-size: 10px; color: ${d.type === 'Hoops' ? 'var(--accent)' : 'var(--dim)'}; letter-spacing: 0.15em; margin-top: 2px;">${d.type.toUpperCase()} DAY</div>
+      </div>
+      <div class="day-totals">TOTAL <span>${d.total}</span> KCAL</div>
+    </div>
+    <div class="day-body">
+      ${d.slots.map(s => `
+        <div class="slot">
+          <div class="slot-time">${s.t}</div>
+          <div class="slot-food"><b>${s.n}</b><span class="note">${s.note}</span></div>
+          <div class="slot-cal">${s.cal}</div>
+        </div>
+      `).join('')}
+    </div>
+  </div>
+`).join('');
+
+// ============= GROCERY =============
+const grocery = {
+  "Proteins": [
+    { i: "Whole eggs (18ct)", p: "$5.50" },
+    { i: "Whey protein (5lb tub, lasts 5wk)", p: "$11/wk" },
+    { i: "Chicken thighs (2 lb)", p: "$6.50" },
+    { i: "Spam (3 cans)", p: "$9.00" },
+    { i: "Thin brisket / deli (½ lb)", p: "$7.00" },
+    { i: "Salmon fillet (1 lb, frozen)", p: "$10.00" },
+    { i: "Frozen chicken nuggets", p: "$7.50" }
+  ],
+  "Carbs + Grains": [
+    { i: "White rice (5 lb bag)", p: "$4.50" },
+    { i: "Bagels (6ct)", p: "$5.00" },
+    { i: "Sandwich bread", p: "$3.50" },
+    { i: "Rolled oats (canister)", p: "$4.00" },
+    { i: "Cereal (2 boxes, store brand)", p: "$7.00" },
+    { i: "Pasta (penne + ravioli)", p: "$6.00" },
+    { i: "Tortillas / pancake mix", p: "$4.50" }
+  ],
+  "Dairy + Drinks": [
+    { i: "Whole milk (gallon)", p: "$4.50" },
+    { i: "Chocolate milk (half gal)", p: "$4.00" },
+    { i: "Orange juice / fruit juice", p: "$4.50" },
+    { i: "Butter (1 lb)", p: "$5.00" },
+    { i: "Cream cheese", p: "$3.50" }
+  ],
+  "Fruit + Veg": [
+    { i: "Bananas (8–10)", p: "$2.50" },
+    { i: "Frozen berry blend (2 bags)", p: "$8.00" },
+    { i: "Frozen mango (1 bag)", p: "$4.50" },
+    { i: "Broccoli + carrots (fresh or frozen)", p: "$5.00" },
+    { i: "Plantains (3)", p: "$2.00" }
+  ],
+  "Pantry + Sauces": [
+    { i: "Olive oil (caloric multiplier)", p: "$3/wk" },
+    { i: "Honey (squeeze bottle)", p: "$2/wk" },
+    { i: "Soy sauce, sesame oil", p: "$2/wk" },
+    { i: "Jelly / preserves", p: "$4.00" },
+    { i: "Tonkatsu / dipping sauces", p: "$3.50" },
+    { i: "Marinara / vodka sauce", p: "$5.00" }
+  ],
+  "Snacks": [
+    { i: "Popcorn (microwave 6pk)", p: "$4.50" },
+    { i: "Sunflower seeds (4 bags)", p: "$4.00" },
+    { i: "Crackers", p: "$3.50" },
+    { i: "Frozen hush puppies", p: "$4.50" },
+    { i: "Donuts (1 box)", p: "$5.00" },
+    { i: "Frozen fries / onion rings", p: "$6.00" }
+  ]
+};
+
+const gel = document.getElementById('grocery-list');
+let weekTotal = 0;
+gel.innerHTML = Object.entries(grocery).map(([cat, items]) => {
+  const catTotal = items.reduce((s, it) => {
+    const n = parseFloat(it.p.replace(/[^0-9.]/g, ''));
+    return s + (isNaN(n) ? 0 : n);
+  }, 0);
+  weekTotal += catTotal;
+  return `
+    <div class="gcat">
+      <div class="gcat-title">${cat}</div>
+      ${items.map(it => `<div class="gitem"><span>${it.i}</span><span class="price">${it.p}</span></div>`).join('')}
+      <div class="gitem" style="margin-top: 8px; border-top: 1px solid var(--line); padding-top: 8px;"><span style="color: var(--text); font-weight: 700;">SUBTOTAL</span><span class="price">$${catTotal.toFixed(2)}</span></div>
+    </div>
+  `;
+}).join('') + `
+  <div class="gcat" style="border-color: var(--accent); background: rgba(255,107,53,0.04);">
+    <div class="gcat-title">Week Total</div>
+    <div style="font-family: 'Bebas Neue'; font-size: 42px; color: var(--accent); line-height: 1;">$${weekTotal.toFixed(2)}</div>
+    <div style="font-size: 11px; color: var(--dim); margin-top: 8px;">Approx ~$${(weekTotal/7).toFixed(2)}/day for ~2,700 cal &amp; 130g protein. NYC pricing, May 2026.</div>
+  </div>
+`;
+
+// ============= TRACKER =============
+const log = [];
+const allMeals = [];
+for (const cat of Object.values(meals)) {
+  for (const m of cat) allMeals.push(m);
+}
+const qsel = document.getElementById('quick-select');
+qsel.innerHTML += allMeals.map((m, i) => `<option value="${i}">${m.n} (${m.cal} cal)</option>`).join('');
+
+document.getElementById('add-btn').addEventListener('click', () => {
+  const sel = qsel.value;
+  let entry;
+  if (sel !== "") {
+    const m = allMeals[parseInt(sel)];
+    entry = { name: m.n, cal: m.cal, p: m.p, c: m.c, f: m.f };
+    qsel.value = "";
+  } else {
+    const name = document.getElementById('custom-name').value.trim();
+    const cal = parseInt(document.getElementById('custom-cal').value) || 0;
+    const p = parseInt(document.getElementById('custom-pro').value) || 0;
+    if (!name || !cal) return;
+    entry = { name, cal, p, c: 0, f: 0 };
+    document.getElementById('custom-name').value = '';
+    document.getElementById('custom-cal').value = '';
+    document.getElementById('custom-pro').value = '';
+  }
+  log.push(entry);
+  renderLog();
+});
+
+function renderLog() {
+  const totals = log.reduce((a, e) => ({
+    cal: a.cal + e.cal, p: a.p + e.p, c: a.c + (e.c || 0), f: a.f + (e.f || 0)
+  }), { cal: 0, p: 0, c: 0, f: 0 });
+
+  document.getElementById('t-cal').textContent = totals.cal.toLocaleString();
+  document.getElementById('t-pro').textContent = totals.p + 'g';
+  document.getElementById('t-car').textContent = totals.c + 'g';
+  document.getElementById('t-fat').textContent = totals.f + 'g';
+
+  const targets = { cal: 2700, p: 130, c: 350, f: 85 };
+  const setBar = (id, val, target) => {
+    const pct = Math.min(100, (val / target) * 100);
+    const el = document.getElementById(id);
+    el.style.width = pct + '%';
+    el.classList.remove('full', 'over');
+    if (val >= target * 0.95 && val <= target * 1.05) el.classList.add('full');
+    else if (val > target * 1.1) el.classList.add('over');
+  };
+  setBar('bar-cal', totals.cal, targets.cal);
+  setBar('bar-pro', totals.p, targets.p);
+  setBar('bar-car', totals.c, targets.c);
+  setBar('bar-fat', totals.f, targets.f);
+
+  const list = document.getElementById('log-list');
+  if (log.length === 0) {
+    list.innerHTML = '<div class="empty-log">Nothing logged yet. Add your first meal above.</div>';
+  } else {
+    list.innerHTML = log.map((e, i) => `
+      <div class="log-entry">
+        <div class="name"><b>${e.name}</b></div>
+        <div class="cal">${e.cal}</div>
+        <div class="p">${e.p}g pro</div>
+        <button class="del" data-i="${i}">✕</button>
+      </div>
+    `).join('');
+    list.querySelectorAll('.del').forEach(b => {
+      b.addEventListener('click', () => {
+        log.splice(parseInt(b.dataset.i), 1);
+        renderLog();
+      });
+    });
+  }
+}
+
+// ============= TABS =============
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.tab).classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

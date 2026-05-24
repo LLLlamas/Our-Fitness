@@ -1,0 +1,9 @@
+README.md
+report.xml
+Preview.html
+screenshots
+test_output
+*.p8
+*.p12
+*.cer
+*.mobileprovision

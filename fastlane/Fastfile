@@ -1,0 +1,154 @@
+# Mac-less workflow.
+# Every signing artifact is created by the App Store Connect API at run-time.
+# No manual .p12 export, no manual provisioning profile download.
+#
+# Required env (set as GitHub secrets, exported by the workflow):
+#   APPLE_TEAM_ID
+#   APP_STORE_CONNECT_API_KEY_ID
+#   APP_STORE_CONNECT_API_ISSUER_ID
+#   APP_STORE_CONNECT_API_KEY_P8   (full .p8 contents incl. BEGIN/END lines)
+#   KEYCHAIN_PASSWORD              (any random string; temp keychain on the runner)
+
+default_platform(:ios)
+
+SCHEME       = "OurFitness"
+PROJECT      = "OurFitness.xcodeproj"
+BUNDLE_ID    = "com.ourfitness.app"
+PROFILE_NAME = "OurFitness AppStore"
+KEYCHAIN     = "ourfitness-ci.keychain-db"
+OUTPUT_DIR   = "build"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Helpers
+# ─────────────────────────────────────────────────────────────────────────────
+
+def api_key_object
+  app_store_connect_api_key(
+    key_id:       ENV.fetch("APP_STORE_CONNECT_API_KEY_ID"),
+    issuer_id:    ENV.fetch("APP_STORE_CONNECT_API_ISSUER_ID"),
+    key_content:  ENV.fetch("APP_STORE_CONNECT_API_KEY_P8"),
+    in_house:     false,
+    is_key_content_base64: false,
+  )
+end
+
+def ensure_keychain
+  password = ENV.fetch("KEYCHAIN_PASSWORD")
+  create_keychain(
+    name: KEYCHAIN,
+    password: password,
+    default_keychain: true,
+    unlock: true,
+    timeout: 3600,
+    lock_when_sleeps: false,
+  )
+end
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Lanes
+# ─────────────────────────────────────────────────────────────────────────────
+
+platform :ios do
+
+  desc "Run unit tests on an iOS simulator. No signing needed."
+  lane :tests do
+    scan(
+      project: PROJECT,
+      scheme: SCHEME,
+      device: "iPhone 15",
+      code_coverage: true,
+      clean: true,
+      output_directory: "#{OUTPUT_DIR}/test_output",
+      result_bundle: true,
+    )
+  end
+
+  desc "Build the app without signing — just confirms it compiles on CI."
+  lane :compile do
+    xcodebuild(
+      project: PROJECT,
+      scheme: SCHEME,
+      destination: "generic/platform=iOS Simulator",
+      configuration: "Debug",
+      xcargs: "CODE_SIGNING_ALLOWED=NO build",
+    )
+  end
+
+  desc "Ship a build to TestFlight. Creates/refreshes the distribution cert + profile via the API."
+  lane :beta do
+    api_key = api_key_object
+    ensure_keychain
+
+    # Fetch (or create) a distribution certificate via App Store Connect API.
+    # The cert lands in our temporary CI keychain.
+    cert(
+      api_key: api_key,
+      development: false,
+      keychain_path: File.expand_path("~/Library/Keychains/#{KEYCHAIN}"),
+      keychain_password: ENV.fetch("KEYCHAIN_PASSWORD"),
+      output_path: "#{OUTPUT_DIR}/certs",
+    )
+
+    # Fetch (or create) an App Store provisioning profile for our bundle ID,
+    # including the HealthKit entitlement. The profile name MUST match the
+    # PROVISIONING_PROFILE_SPECIFIER set in project.yml.
+    sigh(
+      api_key: api_key,
+      app_identifier: BUNDLE_ID,
+      adhoc: false,
+      developer_id: false,
+      development: false,
+      force: true,                         # always re-sign with the active cert
+      provisioning_name: PROFILE_NAME,
+      output_path: "#{OUTPUT_DIR}/profiles",
+    )
+
+    # Bump build number to the GitHub Actions run number (or +1 of latest).
+    run_number = ENV["GITHUB_RUN_NUMBER"]
+    if run_number
+      increment_build_number(
+        xcodeproj: PROJECT,
+        build_number: run_number,
+      )
+    else
+      latest = latest_testflight_build_number(
+        api_key: api_key, app_identifier: BUNDLE_ID,
+      )
+      increment_build_number(xcodeproj: PROJECT, build_number: latest + 1)
+    end
+
+    build_app(
+      project: PROJECT,
+      scheme: SCHEME,
+      configuration: "Release",
+      export_method: "app-store",
+      output_directory: "#{OUTPUT_DIR}/ipa",
+      output_name: "OurFitness.ipa",
+      clean: true,
+      include_symbols: true,
+      export_options: {
+        method: "app-store",
+        signingStyle: "manual",
+        provisioningProfiles: {
+          BUNDLE_ID => PROFILE_NAME,
+        },
+      },
+    )
+
+    upload_to_testflight(
+      api_key: api_key,
+      skip_waiting_for_build_processing: true,
+      skip_submission: true,                 # we'll choose when to push to reviewers
+      ipa: "#{OUTPUT_DIR}/ipa/OurFitness.ipa",
+      changelog: ENV["CHANGELOG"] || "Internal build #{run_number || Time.now.to_i}",
+    )
+  end
+
+  after_all do |lane|
+    UI.success("✓ #{lane} complete")
+  end
+
+  error do |lane, exception|
+    UI.error("✗ #{lane} failed: #{exception.message}")
+  end
+end
