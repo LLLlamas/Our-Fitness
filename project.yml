@@ -11,6 +11,11 @@ options:
   createIntermediateGroups: true
   generateEmptyDirectories: true
   groupSortPosition: top
+  # Hard floor: keep the generated .xcodeproj at objectVersion 56 (Xcode 14–16 compatible).
+  # Without this, a Homebrew XcodeGen upgrade can silently emit format 77 (Xcode 16.3+)
+  # and break any CI runner pinned to an older Xcode. Bump this only when you also
+  # bump the CI Xcode pin in both .github/workflows files.
+  objectVersion: "56"
 
 settings:
   base:

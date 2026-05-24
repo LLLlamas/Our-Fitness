@@ -21,11 +21,11 @@ concurrency:
 jobs:
   ship:
     name: Sign + Archive + Upload via Fastlane
-    runs-on: macos-14
+    runs-on: macos-15
     timeout-minutes: 45
 
     env:
-      XCODE_VERSION: "15.4"
+      XCODE_VERSION: "16.3"
       APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
       APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
       APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
