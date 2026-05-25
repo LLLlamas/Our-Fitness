@@ -1,5 +1,4 @@
 import XCTest
-@testable import OurFitness
 
 final class ProgressionTests: XCTestCase {
 

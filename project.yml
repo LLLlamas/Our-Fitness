@@ -72,20 +72,15 @@ targets:
     platform: iOS
     sources:
       - path: OurFitnessTests
-    dependencies:
-      - target: OurFitness
+      - path: OurFitness/Domain
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.ourfitness.app.tests
-        # TEST_HOST must be blank to prevent xcodebuild from launching the full
-        # SwiftUI app lifecycle as the test host, which triggers the 120-second
-        # bootstrap watchdog (SIGABRT "never finished bootstrapping").
-        # BUNDLE_LOADER must point at the app binary so the linker can resolve
-        # @testable import OurFitness symbols without TEST_HOST launching @main.
-        # iOS app executables sit at the root of the .app bundle — no
-        # BUNDLE_EXECUTABLE_FOLDER_PATH needed (that var is for the test bundle, not the app).
+        # Domain tests compile the pure OurFitness/Domain sources directly.
+        # Keep them hostless so XCTest never launches the SwiftUI app lifecycle,
+        # and never link through the app executable/debug dylib.
         TEST_HOST: ""
-        BUNDLE_LOADER: "$(BUILT_PRODUCTS_DIR)/OurFitness.app/OurFitness"
+        BUNDLE_LOADER: ""
         GENERATE_INFOPLIST_FILE: "YES"
         CODE_SIGN_STYLE: Manual
         CODE_SIGN_IDENTITY: ""

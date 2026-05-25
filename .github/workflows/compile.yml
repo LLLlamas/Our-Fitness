@@ -40,6 +40,19 @@ jobs:
       - name: Generate Xcode project
         run: xcodegen generate
 
+      - name: Validate domain test boundaries
+        run: |
+          set -euo pipefail
+          if grep -R -n -E '@testable import OurFitness|^[[:space:]]*import OurFitness$' OurFitnessTests; then
+            echo "::error::OurFitnessTests are hostless Domain tests. Compile OurFitness/Domain into the test target instead of importing the app module."
+            exit 1
+          fi
+
+          if grep -R -n -E '^[[:space:]]*import (SwiftUI|SwiftData)$' OurFitness/Domain; then
+            echo "::error::Domain must stay pure. Do not import SwiftUI or SwiftData from OurFitness/Domain."
+            exit 1
+          fi
+
       - name: Build (Debug, no signing)
         run: |
           set -o pipefail
