@@ -47,6 +47,7 @@ jobs:
             -project "${{ env.PROJECT }}" \
             -scheme "${{ env.SCHEME }}" \
             -configuration Debug \
+            -sdk iphonesimulator18.5 \
             -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.5' \
             CODE_SIGNING_ALLOWED=NO \
             ASSETCATALOG_COMPILER_SKIP_APP_STORE_DEPLOYMENT=YES \
@@ -59,9 +60,11 @@ jobs:
           xcodebuild test \
             -project "${{ env.PROJECT }}" \
             -scheme "${{ env.SCHEME }}" \
+            -sdk iphonesimulator18.5 \
             -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.5' \
             -resultBundlePath build/TestResults.xcresult \
             CODE_SIGNING_ALLOWED=NO \
+            ASSETCATALOG_COMPILER_SKIP_APP_STORE_DEPLOYMENT=YES \
             | xcbeautify --renderer github-actions
 
       - name: Upload xcresult on failure

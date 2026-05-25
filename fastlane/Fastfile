@@ -56,10 +56,12 @@ platform :ios do
       project: PROJECT,
       scheme: SCHEME,
       device: "iPhone 16 (18.5)",
+      sdk: "iphonesimulator18.5",
       code_coverage: true,
       clean: true,
       output_directory: "#{OUTPUT_DIR}/test_output",
       result_bundle: true,
+      xcargs: "ASSETCATALOG_COMPILER_SKIP_APP_STORE_DEPLOYMENT=YES",
     )
   end
 
@@ -70,7 +72,8 @@ platform :ios do
       scheme: SCHEME,
       destination: "platform=iOS Simulator,name=iPhone 16,OS=18.5",
       configuration: "Debug",
-      xcargs: "CODE_SIGNING_ALLOWED=NO build",
+      sdk: "iphonesimulator18.5",
+      xcargs: "CODE_SIGNING_ALLOWED=NO ASSETCATALOG_COMPILER_SKIP_APP_STORE_DEPLOYMENT=YES build",
     )
   end
 
