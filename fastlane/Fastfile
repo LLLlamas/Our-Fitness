@@ -55,7 +55,7 @@ platform :ios do
     scan(
       project: PROJECT,
       scheme: SCHEME,
-      device: "iPhone 15",
+      device: "iPhone 16 (18.5)",
       code_coverage: true,
       clean: true,
       output_directory: "#{OUTPUT_DIR}/test_output",
