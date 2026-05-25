@@ -77,15 +77,15 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.ourfitness.app.tests
-        # XcodeGen defaults TEST_HOST to the app binary when a bundle.unit-test
-        # target has an app dependency. That turns the test bundle into a hosted
-        # test, which launches the full app and triggers the 120-second bootstrap
-        # watchdog (SIGABRT "never finished bootstrapping"). Blank both TEST_HOST
-        # and BUNDLE_LOADER explicitly so the test runner loads the bundle in its
-        # own process, not as a guest inside OurFitness.app.
+        # TEST_HOST must be blank to prevent xcodebuild from launching the full
+        # SwiftUI app lifecycle as the test host, which triggers the 120-second
+        # bootstrap watchdog (SIGABRT "never finished bootstrapping").
+        # BUNDLE_LOADER must point at the app binary so the linker can resolve
+        # @testable import OurFitness symbols without TEST_HOST launching @main.
+        # XcodeGen sets both to the app binary by default when there is an app
+        # dependency — we override TEST_HOST only, leaving BUNDLE_LOADER intact.
         TEST_HOST: ""
-        BUNDLE_LOADER: ""
-        # A host-less unit-test bundle requires a generated Info.plist.
+        BUNDLE_LOADER: "$(BUILT_PRODUCTS_DIR)/OurFitness.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/OurFitness"
         GENERATE_INFOPLIST_FILE: "YES"
         CODE_SIGN_STYLE: Manual
         CODE_SIGN_IDENTITY: ""
