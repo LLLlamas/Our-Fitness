@@ -77,8 +77,6 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.ourfitness.app.tests
-        BUNDLE_LOADER: "$(TEST_HOST)"
-        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/OurFitness.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/OurFitness"
         CODE_SIGN_STYLE: Manual
         CODE_SIGN_IDENTITY: ""
         CODE_SIGNING_REQUIRED: "NO"
