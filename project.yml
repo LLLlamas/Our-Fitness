@@ -82,10 +82,10 @@ targets:
         # bootstrap watchdog (SIGABRT "never finished bootstrapping").
         # BUNDLE_LOADER must point at the app binary so the linker can resolve
         # @testable import OurFitness symbols without TEST_HOST launching @main.
-        # XcodeGen sets both to the app binary by default when there is an app
-        # dependency — we override TEST_HOST only, leaving BUNDLE_LOADER intact.
+        # iOS app executables sit at the root of the .app bundle — no
+        # BUNDLE_EXECUTABLE_FOLDER_PATH needed (that var is for the test bundle, not the app).
         TEST_HOST: ""
-        BUNDLE_LOADER: "$(BUILT_PRODUCTS_DIR)/OurFitness.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/OurFitness"
+        BUNDLE_LOADER: "$(BUILT_PRODUCTS_DIR)/OurFitness.app/OurFitness"
         GENERATE_INFOPLIST_FILE: "YES"
         CODE_SIGN_STYLE: Manual
         CODE_SIGN_IDENTITY: ""
