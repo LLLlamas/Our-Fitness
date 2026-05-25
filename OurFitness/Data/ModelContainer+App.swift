@@ -6,7 +6,13 @@ import SwiftData
 public enum AppModelContainer {
 
     /// On-disk container persisted to the app's default location.
+    /// Automatically falls back to an in-memory store when running under XCTest
+    /// (detected via the XCTestConfigurationFilePath env var that xcodebuild injects
+    /// into the test host process), so the on-disk store never crashes the test runner.
     public static func make() -> ModelContainer {
+        if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil {
+            return makeInMemory()
+        }
         do {
             return try ModelContainer(
                 for: Schema(versionedSchema: SchemaV1.self),
