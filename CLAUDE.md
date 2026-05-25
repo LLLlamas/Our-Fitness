@@ -46,6 +46,14 @@ There is no local Xcode. The dev loop is **push → CI tells you if it compiles 
 - Strict concurrency is set to **minimal** in `project.yml` during scaffolding to avoid Sendable churn blocking iteration. Bump to `complete` later when the surface is stable.
 - **CI Xcode pin:** both workflows run `macos-15` / Xcode **16.4** (set via `XCODE_VERSION` env var at the top of each `.github/workflows/` file). Xcode 16.4 ships the **iphonesimulator18.5** SDK, which matches the iOS 18.5 runtime installed on `macos-15` runners — never pin `-sdk iphonesimulator<version>` explicitly; let xcodebuild resolve the SDK from the selected Xcode. To upgrade Xcode, bump that var in both files together. `project.yml` also sets `objectVersion: "56"` — this is a hard floor that prevents XcodeGen from emitting a project format newer than what the pinned Xcode can read. If you ever see *"cannot be opened because it is in a future Xcode project file format"*, the runner Xcode and this objectVersion are out of sync. Both the build step and the test step use a concrete simulator destination (`platform=iOS Simulator,name=iPhone 16,OS=18.5`) — **never `generic/platform=iOS Simulator`**. The build step also passes `ASSETCATALOG_COMPILER_SKIP_APP_STORE_DEPLOYMENT=YES` to suppress actool's SDK-version thinning pass. The test destination is pinned to `iPhone 16 (18.5)` / `OS=18.5` (runtime `22F77`). If you bump Xcode, re-check which runtimes ship with the new runner image and update both destination pins in `compile.yml` and `fastlane/Fastfile` together.
 
+### Test target topology (do not regress)
+
+CI incidents, May 25, 2026: the app target built, but tests failed in two different ways from the same bad topology. In the compile workflow, `xcodebuild test` failed while linking `OurFitnessTests` with many `Undefined symbols for architecture arm64` errors for `OurFitness.*` domain symbols. In the TestFlight workflow, Fastlane `scan` launched `OurFitness` as the test host, waited almost four minutes, then failed with `operation never finished bootstrapping` before test execution. The root cause was test topology, not domain code: `TEST_HOST` was blank, while `BUNDLE_LOADER` pointed at `$(BUILT_PRODUCTS_DIR)/OurFitness.app/OurFitness`. With modern Xcode Debug builds, Swift app code can be emitted into `OurFitness.debug.dylib`, leaving the `.app/OurFitness` executable as a stub; linking or hosting through that executable is fragile and can trigger app lifecycle bootstrapping.
+
+Current rule: **Domain tests are hostless logic tests.** `OurFitnessTests` compiles `OurFitness/Domain` sources directly in `project.yml`; test files should not use `@testable import OurFitness` or `import OurFitness`. Keep `TEST_HOST` and `BUNDLE_LOADER` blank for these tests. Both `compile.yml` and `testflight.yml` run `scripts/validate-ci-invariants.sh` after XcodeGen; it fails if tests import the app module, if `Domain/` imports `SwiftUI`/`SwiftData`, if `OurFitness/Domain` is not a direct test source root, or if generated build settings make `TEST_HOST`/`BUNDLE_LOADER` nonblank.
+
+For future apps we build: put pure domain logic in a Swift Package/framework and test that target, or compile pure sources directly into a hostless test target. Do **not** use an iOS app executable as a `BUNDLE_LOADER` shortcut for SwiftUI app-module tests unless you intentionally want app-hosted UI/integration tests and are prepared for the app lifecycle to launch. Any release/TestFlight workflow must run the same test-topology guard as the fast compile workflow before invoking Fastlane.
+
 ### Why native over web wrapper
 HealthKit only works in native iOS apps. Capacitor/PWA can't read step counts. We want phone-as-sensor passively, so native is the only path. Side benefits: real push notifications, Live Activities, Shortcuts intents, App Intents for Siri, Lock Screen widgets — all available later without re-platforming.
 
@@ -95,7 +103,7 @@ OurFitness/
   Assets.xcassets/               ← AppIcon, AccentColor, LaunchBackground
   Info.plist                     ← HealthKit usage strings (App Store requirement)
   OurFitness.entitlements        ← HealthKit capability
-OurFitnessTests/                 ← XCTest suites for Domain/* only
+OurFitnessTests/                 ← Hostless XCTest suites for Domain/* only
 fastlane/
   Fastfile                       ← lanes: tests, compile, beta
   Appfile                        ← bundle id + team id wiring
@@ -108,11 +116,12 @@ scripts/
 project.yml                      ← XcodeGen — single source of truth for project layout
 ```
 
-**Three architecture rules to keep clean:**
+**Architecture rules to keep clean:**
 1. **`Domain/` never imports `SwiftData` or `SwiftUI`.** Pure structs and functions, easy to test.
 2. **`Features/` never opens the SwiftData container directly.** Uses repositories or `@Query` projections.
 3. **HealthKit access goes through `HealthKitService`** — never call `HKHealthStore` from a view.
 4. **All `.swift` filenames within the target must be unique** (Swift compiler requirement). The persistence `@Model` classes live in `Data/PersistenceModels.swift` — don't name any new file `Models.swift`.
+5. **`OurFitnessTests` stays hostless and app-free.** It compiles `OurFitness/Domain` directly, keeps `TEST_HOST`/`BUNDLE_LOADER` blank, and never imports the `OurFitness` app module.
 
 ---
 
