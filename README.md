@@ -46,7 +46,7 @@ Iterate fast on `compile.yml`. Only burn TestFlight on builds you actually want 
 
 - **Generate API Key** under **Team Keys**
 - Name: `Our-Fitness CI`
-- Access: **App Manager** (required so the key can create distribution certificates and provisioning profiles)
+- Access: **App Manager** (required for TestFlight upload and the one-time signing refresh)
 - Click **Generate**
 - **Download the .p8 file** — you only get one chance. Keep it safe.
 - Note the **Key ID** (10 chars, on the same row as the key)
@@ -56,13 +56,25 @@ Iterate fast on `compile.yml`. Only burn TestFlight on builds you actually want 
 
 → https://developer.apple.com/account → **Membership Details** → **Team ID** (10 chars like `ABCD123456`).
 
+### 5. GitHub - create the encrypted signing repo for fastlane match
+
+Create a private GitHub repo just for signing assets, for example `Our-Fitness-Signing`. This repo stores the Apple Distribution certificate private key and provisioning profile encrypted by fastlane `match`; it should stay private and separate from the app repo.
+
+Create a fine-scoped GitHub token limited to that repo with **Contents: read and write**. Then create the Basic auth value for CI:
+
+```powershell
+[Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("YOUR_GITHUB_USERNAME:YOUR_TOKEN"))
+```
+
+Keep the output ready for the `MATCH_GIT_BASIC_AUTHORIZATION` secret below.
+
 ---
 
 ## GitHub secrets
 
 → Repo Settings → **Secrets and variables** → **Actions** → **New repository secret**
 
-Add all five:
+Add all eight:
 
 | Secret | Source | Notes |
 |---|---|---|
@@ -71,8 +83,19 @@ Add all five:
 | `APP_STORE_CONNECT_API_ISSUER_ID` | Step 3 above | UUID format |
 | `APP_STORE_CONNECT_API_KEY_P8` | Step 3 — open the `.p8` in Notepad, copy ALL of it including the `-----BEGIN PRIVATE KEY-----` / `-----END PRIVATE KEY-----` lines | Preserve newlines as-is when pasting |
 | `KEYCHAIN_PASSWORD` | Make up anything random (e.g. `openssl rand -hex 16` if you have Git Bash) | Used to lock the temporary keychain on the CI runner |
+| `MATCH_GIT_URL` | Step 5 signing repo URL | Example: `https://github.com/YOUR_ORG/Our-Fitness-Signing.git` |
+| `MATCH_PASSWORD` | Make up a long random passphrase | Encrypts/decrypts the signing repo contents |
+| `MATCH_GIT_BASIC_AUTHORIZATION` | Step 5 PowerShell output | Base64 `github-user:token`; token needs access to the private signing repo |
 
-That's it. No `.p12`, no provisioning profile uploads — fastlane creates and refreshes those via the API key on every run.
+Optional repository variable:
+
+| Variable | Default | Notes |
+|---|---|---|
+| `MATCH_GIT_BRANCH` | `main` | Only set this if the signing repo uses a different branch |
+| `MATCH_GIT_FULL_NAME` | `Our-Fitness CI` | Git commit author for match signing repo updates |
+| `MATCH_GIT_USER_EMAIL` | `ci@ourfitness.local` | Git commit email for match signing repo updates |
+
+No manual `.p12` export is needed. The first signing refresh seeds the encrypted match repo; normal TestFlight runs only sync those existing signing assets into the temporary CI keychain.
 
 ---
 
@@ -96,6 +119,7 @@ Two ways:
 ### Option A — Manual trigger
 - GitHub → **Actions** → **TestFlight** workflow → **Run workflow**
 - Optional: fill in a changelog (visible to testers in the TestFlight app)
+- Leave **refresh_signing** unchecked for normal releases. Check it only when bootstrapping or intentionally rotating signing assets.
 - Click **Run workflow**
 
 ### Option B — Tag push
@@ -106,13 +130,21 @@ git push --tags
 
 Either way, the workflow:
 1. Runs unit tests (fails the build if any test fails)
-2. Asks the API key for a distribution cert (creates one if needed)
-3. Asks the API key for a provisioning profile named **"OurFitness AppStore"** (creates one if needed)
+2. Syncs the Apple Distribution certificate and **"OurFitness AppStore"** provisioning profile from encrypted fastlane match storage
 4. Bumps `CFBundleVersion` to the GitHub run number
 5. Archives + exports IPA
 6. Uploads via fastlane `pilot`
 
 Within ~10 minutes the build appears in TestFlight. App Store Connect emails the testers (configure those once at App Store Connect → TestFlight → Internal Testing).
+
+### One-time signing refresh
+
+If the match repo is empty, or if signing assets were intentionally rotated:
+
+1. Confirm the private match repo and the three `MATCH_*` secrets are set.
+2. In Apple Developer → **Certificates**, revoke stale unused **Apple Distribution** certificates until at least one slot is free.
+3. Run the **TestFlight** workflow manually with **refresh_signing** checked.
+4. Future TestFlight runs should leave **refresh_signing** unchecked so CI is read-only and cannot consume another certificate slot.
 
 ---
 
@@ -142,8 +174,9 @@ If you want a real designed icon, swap in any 1024×1024 PNG and you're done.
 
 | Error | Why | Fix |
 |---|---|---|
-| `Missing required GitHub secrets: ...` | One of the 5 secrets isn't set | Add it under Repo Settings → Secrets |
-| `Could not create new certificate. Limit reached` | You have 3 distribution certs already on the team | Apple Developer portal → Certificates → revoke an old one |
+| `Missing required GitHub secrets: ...` | One of the required Apple or match secrets isn't set | Add it under Repo Settings → Secrets |
+| `Could not create another Distribution certificate, reached the maximum number` | CI tried to create/refresh signing assets but the Apple team has no Distribution certificate slots left | Revoke stale unused Apple Distribution certificates, then run TestFlight once with **refresh_signing** checked |
+| `match ... readonly` / `No code signing identity found` | The match repo has not been seeded yet, or CI cannot read it | Check `MATCH_GIT_URL`, `MATCH_PASSWORD`, `MATCH_GIT_BASIC_AUTHORIZATION`, then run the one-time signing refresh |
 | `App ID with bundle id ... does not exist` | Step 1 was skipped | Go to Apple Developer → Identifiers and create it |
 | `App not found on App Store Connect` | Step 2 was skipped | App Store Connect → My Apps → create the app record |
 | `Could not find action 'app_store_connect_api_key'` | Fastlane version drift | Bump the `~> 2.225` pin in `Gemfile` to latest |

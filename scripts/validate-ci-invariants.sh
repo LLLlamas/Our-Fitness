@@ -18,6 +18,16 @@ if ! grep -q 'path: OurFitness/Domain' project.yml; then
   exit 1
 fi
 
+if grep -n -E '^[[:space:]]*(adhoc|developer_id): false,?[[:space:]]*$' fastlane/Fastfile; then
+  echo "::error::For App Store/TestFlight profiles, omit false sigh mode flags like adhoc/developer_id. Passing both keys can make fastlane treat them as conflicting options."
+  exit 1
+fi
+
+if grep -n -E '^[[:space:]]*(cert|sigh)[[:space:]]*\(' fastlane/Fastfile; then
+  echo "::error::TestFlight signing must use fastlane match, not ephemeral cert/sigh calls. Ephemeral CI keychains cannot reuse private keys and can exhaust Apple Distribution certificate slots."
+  exit 1
+fi
+
 if command -v xcodebuild >/dev/null 2>&1 && [ -d "OurFitness.xcodeproj" ]; then
   settings_file="$(mktemp)"
   xcodebuild \

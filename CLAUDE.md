@@ -54,6 +54,22 @@ Current rule: **Domain tests are hostless logic tests.** `OurFitnessTests` compi
 
 For future apps we build: put pure domain logic in a Swift Package/framework and test that target, or compile pure sources directly into a hostless test target. Do **not** use an iOS app executable as a `BUNDLE_LOADER` shortcut for SwiftUI app-module tests unless you intentionally want app-hosted UI/integration tests and are prepared for the app lifecycle to launch. Any release/TestFlight workflow must run the same test-topology guard as the fast compile workflow before invoking Fastlane.
 
+### TestFlight signing profile options
+
+CI incident, May 25, 2026: after tests passed, the TestFlight lane failed in `sigh` with `You can't enable both :developer_id and :adhoc`. The lane was trying to be explicit by passing `adhoc: false` and `developer_id: false` for an App Store profile, but Fastlane treats the presence of those mutually exclusive mode keys as a conflict. For this iOS app, App Store/TestFlight provisioning should omit `adhoc` and `developer_id` entirely and use `development: false` plus the App Store export method. `scripts/validate-ci-invariants.sh` guards against reintroducing false `sigh` mode flags.
+
+The same run warned that Fastlane support for Ruby 3.2 is ending, so `testflight.yml` uses Ruby **3.3** via `ruby/setup-ruby`. Keep the release workflow on a Fastlane-supported Ruby unless the Gemfile pin forces a deliberate change.
+
+### Persistent TestFlight signing (do not regress)
+
+CI incident, May 25, 2026: the next TestFlight run passed CI invariants and all 59 tests, then failed in `cert` before archive/upload. Fastlane found existing Apple Distribution certificates on the Apple account (`DV6GS882ZV`, `GHQHG29W56`, `WV27X2GA2Q`) but none of their private keys existed in the runner's temporary keychain. A GitHub-hosted macOS runner is disposable, and Apple does not let Fastlane download an existing certificate's private key from the Developer Portal. The old lane therefore tried to create a new Apple Distribution certificate, but the team had already hit Apple's Distribution certificate limit.
+
+Current rule: **TestFlight signing uses fastlane `match`, not direct `cert`/`sigh` calls.** The encrypted match repo is the persistent source of truth for the Apple Distribution certificate private key and the `OurFitness AppStore` provisioning profile. Normal CI runs set `MATCH_READONLY=true`, sync existing signing assets into the temporary keychain, and cannot consume another certificate slot. Only a manual `workflow_dispatch` run with `refresh_signing` checked sets `MATCH_READONLY=false`, and that should be used only to bootstrap or intentionally rotate signing assets.
+
+Required release secrets now include the Apple API/keychain secrets plus `MATCH_GIT_URL`, `MATCH_PASSWORD`, and `MATCH_GIT_BASIC_AUTHORIZATION` (base64 `github-user:token` for the private match repo). If a run fails with `Could not create another Distribution certificate, reached the maximum number`, manual cleanup is required in Apple Developer > Certificates: revoke stale unused **Apple Distribution** certificates, then run TestFlight once with `refresh_signing` checked to seed/refresh match. Leave it unchecked after that.
+
+For future apps we build: never rely on ephemeral CI `cert`/`sigh` as the long-term signing strategy. Either use `match` from day one or another persistent signing-store pattern that preserves the private key between runners. Keep the CI guard that rejects top-level `cert(` or `sigh(` calls in the release Fastfile unless there is a deliberate, documented exception.
+
 ### Why native over web wrapper
 HealthKit only works in native iOS apps. Capacitor/PWA can't read step counts. We want phone-as-sensor passively, so native is the only path. Side benefits: real push notifications, Live Activities, Shortcuts intents, App Intents for Siri, Lock Screen widgets — all available later without re-platforming.
 

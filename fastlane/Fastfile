@@ -1,6 +1,6 @@
 # Mac-less workflow.
-# Every signing artifact is created by the App Store Connect API at run-time.
-# No manual .p12 export, no manual provisioning profile download.
+# Signing assets live in an encrypted fastlane match repository.
+# CI syncs them into a temporary keychain instead of creating certificates every run.
 #
 # Required env (set as GitHub secrets, exported by the workflow):
 #   APPLE_TEAM_ID
@@ -8,6 +8,9 @@
 #   APP_STORE_CONNECT_API_ISSUER_ID
 #   APP_STORE_CONNECT_API_KEY_P8   (full .p8 contents incl. BEGIN/END lines)
 #   KEYCHAIN_PASSWORD              (any random string; temp keychain on the runner)
+#   MATCH_GIT_URL                  (private encrypted match repo)
+#   MATCH_PASSWORD                 (encryption passphrase for match repo)
+#   MATCH_GIT_BASIC_AUTHORIZATION  (base64 "github-user:token" for match repo)
 
 default_platform(:ios)
 
@@ -44,6 +47,37 @@ def ensure_keychain
   )
 end
 
+def match_readonly?
+  ENV.fetch("MATCH_READONLY", "true") != "false"
+end
+
+def env_or_default(name, fallback)
+  value = ENV[name].to_s.strip
+  value.empty? ? fallback : value
+end
+
+def match_options(api_key)
+  options = {
+    type: "appstore",
+    api_key: api_key,
+    app_identifier: BUNDLE_ID,
+    team_id: ENV.fetch("APPLE_TEAM_ID"),
+    git_url: ENV.fetch("MATCH_GIT_URL"),
+    git_branch: env_or_default("MATCH_GIT_BRANCH", "main"),
+    git_full_name: env_or_default("MATCH_GIT_FULL_NAME", "Our-Fitness CI"),
+    git_user_email: env_or_default("MATCH_GIT_USER_EMAIL", "ci@ourfitness.local"),
+    readonly: match_readonly?,
+    keychain_name: KEYCHAIN,
+    keychain_password: ENV.fetch("KEYCHAIN_PASSWORD"),
+    profile_name: PROFILE_NAME,
+  }
+
+  basic_auth = ENV["MATCH_GIT_BASIC_AUTHORIZATION"].to_s.strip
+  options[:git_basic_authorization] = basic_auth unless basic_auth.empty?
+
+  options
+end
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Lanes
 # ─────────────────────────────────────────────────────────────────────────────
@@ -75,34 +109,15 @@ platform :ios do
     )
   end
 
-  desc "Ship a build to TestFlight. Creates/refreshes the distribution cert + profile via the API."
+  desc "Ship a build to TestFlight. Syncs signing with match, archives, and uploads."
   lane :beta do
     api_key = api_key_object
     ensure_keychain
 
-    # Fetch (or create) a distribution certificate via App Store Connect API.
-    # The cert lands in our temporary CI keychain.
-    cert(
-      api_key: api_key,
-      development: false,
-      keychain_path: File.expand_path("~/Library/Keychains/#{KEYCHAIN}"),
-      keychain_password: ENV.fetch("KEYCHAIN_PASSWORD"),
-      output_path: "#{OUTPUT_DIR}/certs",
-    )
-
-    # Fetch (or create) an App Store provisioning profile for our bundle ID,
-    # including the HealthKit entitlement. The profile name MUST match the
-    # PROVISIONING_PROFILE_SPECIFIER set in project.yml.
-    sigh(
-      api_key: api_key,
-      app_identifier: BUNDLE_ID,
-      adhoc: false,
-      developer_id: false,
-      development: false,
-      force: true,                         # always re-sign with the active cert
-      provisioning_name: PROFILE_NAME,
-      output_path: "#{OUTPUT_DIR}/profiles",
-    )
+    # match stores the Apple Distribution certificate private key and profile
+    # in encrypted git storage. Normal CI runs are read-only so they cannot
+    # consume Apple's limited distribution certificate slots.
+    match(**match_options(api_key))
 
     # Bump build number to the GitHub Actions run number (or +1 of latest).
     run_number = ENV["GITHUB_RUN_NUMBER"]

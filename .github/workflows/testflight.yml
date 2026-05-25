@@ -11,6 +11,11 @@ on:
         description: "Changelog text shown to TestFlight testers"
         required: false
         default: ""
+      refresh_signing:
+        description: "Allow match to create/refresh signing assets once. Leave off for normal releases."
+        required: false
+        type: boolean
+        default: false
   push:
     tags: ["v*"]
 
@@ -31,6 +36,13 @@ jobs:
       APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
       APP_STORE_CONNECT_API_KEY_P8: ${{ secrets.APP_STORE_CONNECT_API_KEY_P8 }}
       KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+      MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
+      MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+      MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+      MATCH_GIT_BRANCH: ${{ vars.MATCH_GIT_BRANCH }}
+      MATCH_GIT_FULL_NAME: ${{ vars.MATCH_GIT_FULL_NAME }}
+      MATCH_GIT_USER_EMAIL: ${{ vars.MATCH_GIT_USER_EMAIL }}
+      MATCH_READONLY: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.refresh_signing == 'true' && 'false' || 'true' }}
       CHANGELOG: ${{ github.event.inputs.changelog }}
       LANG: en_US.UTF-8
       LC_ALL: en_US.UTF-8
@@ -42,7 +54,7 @@ jobs:
       - name: Validate required secrets
         run: |
           missing=()
-          for v in APPLE_TEAM_ID APP_STORE_CONNECT_API_KEY_ID APP_STORE_CONNECT_API_ISSUER_ID APP_STORE_CONNECT_API_KEY_P8 KEYCHAIN_PASSWORD; do
+          for v in APPLE_TEAM_ID APP_STORE_CONNECT_API_KEY_ID APP_STORE_CONNECT_API_ISSUER_ID APP_STORE_CONNECT_API_KEY_P8 KEYCHAIN_PASSWORD MATCH_GIT_URL MATCH_PASSWORD MATCH_GIT_BASIC_AUTHORIZATION; do
             if [ -z "${!v:-}" ]; then missing+=("$v"); fi
           done
           if [ ${#missing[@]} -ne 0 ]; then
@@ -60,7 +72,7 @@ jobs:
       - name: Setup Ruby + Fastlane
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.2"
+          ruby-version: "3.3"
           bundler-cache: true
 
       - name: Generate placeholder AppIcon (skipped if a real icon exists)
