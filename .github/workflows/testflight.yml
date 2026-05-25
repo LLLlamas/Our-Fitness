@@ -25,7 +25,7 @@ jobs:
     timeout-minutes: 45
 
     env:
-      XCODE_VERSION: "16.3"
+      XCODE_VERSION: "16.4"
       APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
       APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
       APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
