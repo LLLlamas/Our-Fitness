@@ -88,6 +88,17 @@ jobs:
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode_${{ env.XCODE_VERSION }}.app
 
+      - name: Ensure iOS 26.0 simulator runtime is installed
+        run: |
+          set -e
+          if xcrun simctl list runtimes | grep -q "iOS 26.0"; then
+            echo "iOS 26.0 runtime already installed."
+          else
+            echo "iOS 26.0 runtime missing. Downloading via xcodebuild -downloadPlatform iOS…"
+            sudo xcodebuild -downloadPlatform iOS -buildVersion 26.0
+          fi
+          xcrun simctl list runtimes | grep iOS || true
+
       - name: Setup Ruby + Fastlane
         uses: ruby/setup-ruby@v1
         with:

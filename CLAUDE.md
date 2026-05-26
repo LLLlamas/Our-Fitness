@@ -88,6 +88,7 @@ Current rules:
 - Both workflows must use `macos-26` and `XCODE_VERSION: "26.0"`. If Apple's SDK floor advances again, bump both together.
 - `Info.plist` base `UISupportedInterfaceOrientations` must include all four orientations (Portrait, PortraitUpsideDown, LandscapeLeft, LandscapeRight) to satisfy iPad multitasking validation. Keep the `~ipad` variant in sync.
 - `UILaunchScreen` dict key (already present) satisfies the launch-screen requirement for iOS 14+ minimum — do not remove it.
+- The `macos-26` runner image ships Xcode 26 but does **not** pre-install the iOS 26.0 simulator runtime. Both workflows run an **Ensure iOS 26.0 simulator runtime is installed** step right after `Select Xcode` that uses `xcodebuild -downloadPlatform iOS -buildVersion 26.0` to install it headlessly when missing. Without this step, xcodebuild fails with *"iOS 26.0 is not installed. Please download and install the platform from Xcode > Settings > Components"* — a non-interactive error that has no remediation inside the build step itself.
 
 ### Why native over web wrapper
 HealthKit only works in native iOS apps. Capacitor/PWA can't read step counts. We want phone-as-sensor passively, so native is the only path. Side benefits: real push notifications, Live Activities, Shortcuts intents, App Intents for Siri, Lock Screen widgets — all available later without re-platforming.
