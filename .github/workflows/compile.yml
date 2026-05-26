@@ -20,7 +20,6 @@ jobs:
     timeout-minutes: 25
 
     env:
-      XCODE_VERSION: "26.0"
       SCHEME: OurFitness
       PROJECT: OurFitness.xcodeproj
 
@@ -28,19 +27,54 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_${{ env.XCODE_VERSION }}.app
-
-      - name: Ensure iOS 26.0 simulator runtime is installed
+      # actions/runner-images installs Xcode as point-release names
+      # (Xcode_26.0.1.app, never bare Xcode_26.app) and keeps the latest
+      # beta installed alongside the stable. Disable betas physically so
+      # they can't be picked up via PATH/SDK lookup, then select the
+      # highest stable Xcode 26.x.
+      - name: Select Xcode 26
         run: |
-          set -e
-          if xcrun simctl list runtimes | grep -q "iOS 26.0"; then
-            echo "iOS 26.0 runtime already installed."
-          else
-            echo "iOS 26.0 runtime missing. Downloading via xcodebuild -downloadPlatform iOS…"
-            sudo xcodebuild -downloadPlatform iOS -buildVersion 26.0
+          set -euo pipefail
+          for beta in /Applications/Xcode_*beta*.app; do
+            [ -e "$beta" ] || continue
+            sudo mv "$beta" "$(dirname "$beta")/_disabled_$(basename "$beta")"
+          done
+          shopt -s nullglob
+          ALL=( /Applications/Xcode_26*.app )
+          shopt -u nullglob
+          VALID=()
+          for x in "${ALL[@]}"; do
+            [ -d "$x/Contents/Developer" ] && VALID+=( "$x" )
+          done
+          if [ ${#VALID[@]} -eq 0 ]; then
+            echo "::error::No stable Xcode 26.x found in /Applications"
+            exit 1
           fi
-          xcrun simctl list runtimes | grep iOS || true
+          XCODE_APP=$(printf '%s\n' "${VALID[@]}" | sort -V | tail -1)
+          echo "Selecting $XCODE_APP"
+          sudo xcode-select -s "$XCODE_APP/Contents/Developer"
+          echo "DEVELOPER_DIR=$XCODE_APP/Contents/Developer" >> "$GITHUB_ENV"
+          echo "PATH=$XCODE_APP/Contents/Developer/usr/bin:$PATH" >> "$GITHUB_ENV"
+
+      - name: Ensure iOS simulator runtime
+        run: |
+          set -euo pipefail
+          # runFirstLaunch must run before -downloadPlatform; without it
+          # the simulator catalog isn't initialized and -downloadPlatform
+          # exits 70 with "not available for download".
+          sudo xcodebuild -runFirstLaunch
+          for attempt in 1 2 3; do
+            if xcodebuild -downloadPlatform iOS; then
+              exit 0
+            fi
+            if [ "$attempt" -lt 3 ]; then
+              sleep $((attempt * 30))
+              echo "::warning::-downloadPlatform iOS attempt $attempt failed; retrying"
+            fi
+          done
+          echo "::error::iOS simulator runtime download failed after 3 attempts"
+          xcrun simctl runtime list || true
+          exit 1
 
       - name: Install XcodeGen
         run: brew install xcodegen
@@ -61,7 +95,7 @@ jobs:
             -project "${{ env.PROJECT }}" \
             -scheme "${{ env.SCHEME }}" \
             -configuration Debug \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=26.0' \
+            -destination 'platform=iOS Simulator,name=iPhone 16' \
             CODE_SIGNING_ALLOWED=NO \
             ASSETCATALOG_COMPILER_SKIP_APP_STORE_DEPLOYMENT=YES \
             build \
@@ -73,7 +107,7 @@ jobs:
           xcodebuild test \
             -project "${{ env.PROJECT }}" \
             -scheme "${{ env.SCHEME }}" \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=26.0' \
+            -destination 'platform=iOS Simulator,name=iPhone 16' \
             -resultBundlePath build/TestResults.xcresult \
             CODE_SIGNING_ALLOWED=NO \
             ASSETCATALOG_COMPILER_SKIP_APP_STORE_DEPLOYMENT=YES \

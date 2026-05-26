@@ -89,7 +89,7 @@ platform :ios do
     scan(
       project: PROJECT,
       scheme: SCHEME,
-      device: "iPhone 16 (26.0)",
+      device: "iPhone 16",
       code_coverage: true,
       clean: true,
       output_directory: "#{OUTPUT_DIR}/test_output",
@@ -103,7 +103,7 @@ platform :ios do
     xcodebuild(
       project: PROJECT,
       scheme: SCHEME,
-      destination: "platform=iOS Simulator,name=iPhone 16,OS=18.5",
+      destination: "platform=iOS Simulator,name=iPhone 16",
       configuration: "Debug",
       xcargs: "CODE_SIGNING_ALLOWED=NO ASSETCATALOG_COMPILER_SKIP_APP_STORE_DEPLOYMENT=YES build",
     )

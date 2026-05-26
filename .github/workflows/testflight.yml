@@ -30,7 +30,6 @@ jobs:
     timeout-minutes: 45
 
     env:
-      XCODE_VERSION: "26.0"
       APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
       APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
       APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
@@ -85,19 +84,49 @@ jobs:
             exit 1
           fi
 
-      - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_${{ env.XCODE_VERSION }}.app
-
-      - name: Ensure iOS 26.0 simulator runtime is installed
+      # See compile.yml for why this is dynamic: runner image installs
+      # Xcode as Xcode_26.0.1.app etc., keeps betas alongside, and
+      # xcode-select alone isn't enough because PATH can route to beta.
+      - name: Select Xcode 26
         run: |
-          set -e
-          if xcrun simctl list runtimes | grep -q "iOS 26.0"; then
-            echo "iOS 26.0 runtime already installed."
-          else
-            echo "iOS 26.0 runtime missing. Downloading via xcodebuild -downloadPlatform iOS…"
-            sudo xcodebuild -downloadPlatform iOS -buildVersion 26.0
+          set -euo pipefail
+          for beta in /Applications/Xcode_*beta*.app; do
+            [ -e "$beta" ] || continue
+            sudo mv "$beta" "$(dirname "$beta")/_disabled_$(basename "$beta")"
+          done
+          shopt -s nullglob
+          ALL=( /Applications/Xcode_26*.app )
+          shopt -u nullglob
+          VALID=()
+          for x in "${ALL[@]}"; do
+            [ -d "$x/Contents/Developer" ] && VALID+=( "$x" )
+          done
+          if [ ${#VALID[@]} -eq 0 ]; then
+            echo "::error::No stable Xcode 26.x found in /Applications"
+            exit 1
           fi
-          xcrun simctl list runtimes | grep iOS || true
+          XCODE_APP=$(printf '%s\n' "${VALID[@]}" | sort -V | tail -1)
+          echo "Selecting $XCODE_APP"
+          sudo xcode-select -s "$XCODE_APP/Contents/Developer"
+          echo "DEVELOPER_DIR=$XCODE_APP/Contents/Developer" >> "$GITHUB_ENV"
+          echo "PATH=$XCODE_APP/Contents/Developer/usr/bin:$PATH" >> "$GITHUB_ENV"
+
+      - name: Ensure iOS simulator runtime
+        run: |
+          set -euo pipefail
+          sudo xcodebuild -runFirstLaunch
+          for attempt in 1 2 3; do
+            if xcodebuild -downloadPlatform iOS; then
+              exit 0
+            fi
+            if [ "$attempt" -lt 3 ]; then
+              sleep $((attempt * 30))
+              echo "::warning::-downloadPlatform iOS attempt $attempt failed; retrying"
+            fi
+          done
+          echo "::error::iOS simulator runtime download failed after 3 attempts"
+          xcrun simctl runtime list || true
+          exit 1
 
       - name: Setup Ruby + Fastlane
         uses: ruby/setup-ruby@v1
