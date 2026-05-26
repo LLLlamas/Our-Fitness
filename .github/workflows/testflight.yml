@@ -42,7 +42,7 @@ jobs:
       MATCH_GIT_BRANCH: ${{ vars.MATCH_GIT_BRANCH }}
       MATCH_GIT_FULL_NAME: ${{ vars.MATCH_GIT_FULL_NAME }}
       MATCH_GIT_USER_EMAIL: ${{ vars.MATCH_GIT_USER_EMAIL }}
-      MATCH_READONLY: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.refresh_signing == 'true' && 'false' || 'true' }}
+      MATCH_READONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.refresh_signing == true && 'false' || 'true' }}
       CHANGELOG: ${{ github.event.inputs.changelog }}
       LANG: en_US.UTF-8
       LC_ALL: en_US.UTF-8

@@ -70,6 +70,12 @@ Required release secrets now include the Apple API/keychain secrets plus `MATCH_
 
 For future apps we build: never rely on ephemeral CI `cert`/`sigh` as the long-term signing strategy. Either use `match` from day one or another persistent signing-store pattern that preserves the private key between runners. Keep the CI guard that rejects top-level `cert(` or `sigh(` calls in the release Fastfile unless there is a deliberate, documented exception.
 
+### GitHub Actions boolean inputs in workflow expressions (do not regress)
+
+CI incident, May 26, 2026: the TestFlight bootstrap run with `refresh_signing` checked still ran match in `readonly: true` mode. The `MATCH_READONLY` expression used `github.event.inputs.refresh_signing == 'true'` — a string comparison against a `boolean`-typed `workflow_dispatch` input. GitHub's expression engine passes the value as boolean `true`, not the string `"true"`, so the comparison always returned false and `MATCH_READONLY` was hardcoded to `true` on every run.
+
+Current rule: **access `workflow_dispatch` boolean inputs with `inputs.<name>` (not `github.event.inputs.<name>`) and compare with `== true` (not `== 'true'`).** The `inputs.` shorthand preserves the declared type. `github.event.inputs` coerces values to strings and makes boolean comparisons silently wrong.
+
 ### Why native over web wrapper
 HealthKit only works in native iOS apps. Capacitor/PWA can't read step counts. We want phone-as-sensor passively, so native is the only path. Side benefits: real push notifications, Live Activities, Shortcuts intents, App Intents for Siri, Lock Screen widgets — all available later without re-platforming.
 
