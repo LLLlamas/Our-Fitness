@@ -36,8 +36,10 @@ targets:
           - "**/.DS_Store"
     resources:
       - path: OurFitness/Assets.xcassets
-    info:
-      path: OurFitness/Info.plist
+    # No `info:` block — that would make XcodeGen regenerate Info.plist
+    # on every `xcodegen generate`, wiping the orientations, HealthKit
+    # usage strings, and UILaunchScreen we keep in the file. Xcode finds
+    # the file via the INFOPLIST_FILE build setting below.
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.ourfitness.app

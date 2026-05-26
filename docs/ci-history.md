@@ -101,6 +101,16 @@ Recovery from "reached the maximum number": revoke stale unused Apple Distributi
 
 ---
 
+## XcodeGen regenerates Info.plist — May 26, 2026
+
+**Symptom:** TestFlight upload failed again with the same two altool errors (no orientations, no launch screen) that we'd previously "fixed" by editing `OurFitness/Info.plist` to include all four orientations and a `UILaunchScreen` dict. The file in the working tree was correct, but altool kept reporting the bundle as if those keys didn't exist.
+
+**Root cause:** `project.yml` had an `info: { path: OurFitness/Info.plist }` block on the OurFitness target. With `info` declared on a target, XcodeGen *writes* an Info.plist at that path on every `xcodegen generate` — using only the keys in `info.properties` (or a minimal default when `properties:` is empty). Both CI workflows run `xcodegen generate` before building, so the file shipped in the archive was the regenerated minimal version, not the one in the repo. The local file's orientations / HealthKit usage strings / UILaunchScreen were silently being overwritten on every CI run.
+
+**Rule:** the OurFitness target does NOT have an `info:` block. Xcode finds the Info.plist via the `INFOPLIST_FILE` build setting, and `GENERATE_INFOPLIST_FILE: "NO"` at the project base prevents Xcode from auto-generating one too. The Info.plist file in the repo is the single source of truth.
+
+---
+
 ## General principle for future apps
 
 Never rely on ephemeral CI `cert`/`sigh` as the long-term signing strategy. Either use `match` from day one or another persistent signing-store pattern that preserves the private key between runners. Keep the CI guard that rejects top-level `cert(` / `sigh(` in the release Fastfile unless there is a deliberate, documented exception.
