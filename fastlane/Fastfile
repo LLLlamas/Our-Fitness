@@ -89,7 +89,7 @@ platform :ios do
     scan(
       project: PROJECT,
       scheme: SCHEME,
-      device: "iPhone 16 (18.5)",
+      device: "iPhone 16 (26.0)",
       code_coverage: true,
       clean: true,
       output_directory: "#{OUTPUT_DIR}/test_output",
@@ -107,6 +107,14 @@ platform :ios do
       configuration: "Debug",
       xcargs: "CODE_SIGNING_ALLOWED=NO ASSETCATALOG_COMPILER_SKIP_APP_STORE_DEPLOYMENT=YES build",
     )
+  end
+
+  desc "Bootstrap or refresh TestFlight signing assets in match. No build/archive."
+  lane :sync_signing do
+    api_key = api_key_object
+    ensure_keychain
+
+    match(**match_options(api_key))
   end
 
   desc "Ship a build to TestFlight. Syncs signing with match, archives, and uploads."

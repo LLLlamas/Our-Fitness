@@ -146,6 +146,8 @@ If the match repo is empty, or if signing assets were intentionally rotated:
 3. Run the **TestFlight** workflow manually with **refresh_signing** checked.
 4. Future TestFlight runs should leave **refresh_signing** unchecked so CI is read-only and cannot consume another certificate slot.
 
+When **refresh_signing** is checked, the workflow runs `fastlane ios sync_signing` before project generation and tests. If Apple still has no free Distribution certificate slot, it fails there immediately; clean up Apple Developer certificates and re-run the same refresh.
+
 ---
 
 ## Installing the build on your iPhone

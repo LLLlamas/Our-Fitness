@@ -26,11 +26,11 @@ concurrency:
 jobs:
   ship:
     name: Sign + Archive + Upload via Fastlane
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 45
 
     env:
-      XCODE_VERSION: "16.4"
+      XCODE_VERSION: "26.0"
       APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
       APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
       APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
@@ -88,14 +88,18 @@ jobs:
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode_${{ env.XCODE_VERSION }}.app
 
-      - name: Install XcodeGen
-        run: brew install xcodegen
-
       - name: Setup Ruby + Fastlane
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.3"
           bundler-cache: true
+
+      - name: Refresh signing assets in match
+        if: env.MATCH_READONLY == 'false'
+        run: bundle exec fastlane ios sync_signing
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
 
       - name: Generate placeholder AppIcon (skipped if a real icon exists)
         run: bash scripts/generate-icon.sh
