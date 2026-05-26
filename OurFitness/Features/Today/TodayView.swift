@@ -58,6 +58,10 @@ struct TodayView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
+                if HealthAccess.shouldPromptConnect(healthGranted: profile.healthGranted) {
+                    connectHealthCard
+                }
+
                 banner
 
                 Text("today.")
@@ -69,7 +73,7 @@ struct TodayView: View {
                 StepsCard(
                     steps: todaysSteps,
                     goal: profile.computedTargets.stepsDaily,
-                    sourceLabel: health.isAuthorized
+                    sourceLabel: profile.healthGranted
                         ? "Synced from Apple Health"
                         : "Manual — tap a + or grant Health access",
                     onManualSave: { n in
@@ -91,6 +95,44 @@ struct TodayView: View {
         .task(id: profile.id) { await refreshHealthKit() }
         .refreshable { await refreshHealthKit() }
         .sensoryFeedback(.selection, trigger: slot)
+    }
+
+    // MARK: - Connect Apple Health
+
+    @ViewBuilder
+    private var connectHealthCard: some View {
+        PressableCard(action: connectHealth) {
+            HStack(alignment: .top, spacing: 12) {
+                Image(systemName: "heart.text.square")
+                    .font(.system(size: 22))
+                    .foregroundStyle(theme.accent)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(HealthAccess.statusLabel(healthGranted: profile.healthGranted))
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(theme.text)
+                    Text("Steps, weight, RHR, and active energy. Apple Watch included.")
+                        .font(.caption).foregroundStyle(theme.dim)
+                }
+                Spacer(minLength: 0)
+            }
+        }
+    }
+
+    private func connectHealth() {
+        Task {
+            let ok = await health.requestAuthorization()
+            Repos.setHealthGranted(ctx, profileId: profile.id, granted: ok)
+            if ok {
+                toasts.show(Toast(title: "Apple Health connected",
+                                  detail: "Steps will sync automatically.",
+                                  accent: .ok, symbol: "heart.fill"))
+                health.beginStepObservation { steps in
+                    Repos.setSteps(ctx, userId: profile.id, date: today,
+                                   steps: steps, source: .appleHealth)
+                }
+                await refreshHealthKit()
+            }
+        }
     }
 
     // MARK: - Banner
@@ -213,7 +255,8 @@ struct TodayView: View {
     }
 
     private func refreshHealthKit() async {
-        guard health.isAuthorized else { return }
+        guard profile.healthGranted else { return }
+        if !health.isAuthorized { await health.requestAuthorization() }
         let map = await health.dailySteps(days: 30)
         for (date, count) in map where count > 0 {
             Repos.setSteps(ctx, userId: profile.id, date: date,

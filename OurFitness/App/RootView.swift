@@ -1,5 +1,5 @@
-// Top-level shell. Gates on whether any profile exists.
-// Switches theme based on active profile's mode.
+// Top-level shell. Two seeded profiles; user picks one for this device on first launch.
+// Theme follows the active profile's mode.
 // Overlays the toast host so any view can fire a confirmation.
 
 import SwiftUI
@@ -36,16 +36,13 @@ struct RootView: View {
     @StateObject private var health = HealthKitService.shared
 
     @State private var tab: Tab = .today
-    @State private var showAddProfile = false
+    @State private var showSettings = false
 
     private var profiles: [ProfileDTO] { profileModels.map(\.snapshot) }
 
     private var active: ProfileDTO? {
-        if let uuid = UUID(uuidString: activeProfileIdString),
-           let p = profiles.first(where: { $0.id == uuid }) {
-            return p
-        }
-        return profiles.first
+        guard let uuid = UUID(uuidString: activeProfileIdString) else { return nil }
+        return profiles.first(where: { $0.id == uuid })
     }
 
     var body: some View {
@@ -54,28 +51,31 @@ struct RootView: View {
             ToastHost()
                 .themed(active?.mode ?? .build)
         }
-        .task { await health.requestAuthorization() }
     }
 
     @ViewBuilder
     private var content: some View {
-        if profiles.isEmpty || showAddProfile {
-            OnboardingView { dto in
-                Repos.saveProfile(ctx, dto)
-                activeProfileIdString = dto.id.uuidString
-                showAddProfile = false
-                Task { await health.requestAuthorization() }
+        if profiles.isEmpty {
+            SwiftUI.ProgressView()
+        } else if let active {
+            appShell(for: active)
+        } else {
+            OnboardingView(profiles: profiles) { chosen, granted in
+                activeProfileIdString = chosen.id.uuidString
+                Repos.setHealthGranted(ctx, profileId: chosen.id, granted: granted)
+                if granted {
+                    health.beginStepObservation { steps in
+                        Repos.setSteps(ctx, userId: chosen.id, date: Dates.dayKey(),
+                                       steps: steps, source: .appleHealth)
+                    }
+                }
                 Haptics.success()
-                toasts.show(Toast(title: "Welcome, \(dto.name).",
-                                  detail: "Targets locked. Let's go.",
+                toasts.show(Toast(title: "Welcome, \(chosen.name).",
+                                  detail: granted ? "Apple Health connected." : "Targets locked. Let's go.",
                                   accent: .win, symbol: "checkmark.seal.fill"),
                             for: 2.4)
             }
             .themed(active?.mode ?? .build)
-        } else if let active {
-            appShell(for: active)
-        } else {
-            SwiftUI.ProgressView()
         }
     }
 
@@ -105,30 +105,37 @@ struct RootView: View {
         }
         .background(Theme.for(profile.mode).bg.ignoresSafeArea())
         .themed(profile.mode)
+        .sheet(isPresented: $showSettings) {
+            SettingsView(profile: profile, health: health)
+        }
+        .task(id: profile.id) {
+            if profile.healthGranted {
+                health.beginStepObservation { steps in
+                    Repos.setSteps(ctx, userId: profile.id, date: Dates.dayKey(),
+                                   steps: steps, source: .appleHealth)
+                }
+            }
+        }
     }
 
     @ViewBuilder
     private func header(for profile: ProfileDTO) -> some View {
         let theme = Theme.for(profile.mode)
-        HStack(spacing: 8) {
+        HStack(spacing: 10) {
+            ProfileSwitcher(
+                profiles: profiles,
+                active: profile,
+                onSelect: { activeProfileIdString = $0.id.uuidString },
+                onOpenSettings: { showSettings = true }
+            )
             Text("our-fitness.")
                 .font(.system(size: 22, weight: .regular))
                 .foregroundStyle(theme.text)
             Spacer()
-
-            ForEach(profiles) { p in
-                Button {
-                    activeProfileIdString = p.id.uuidString
-                } label: {
-                    Text("\(p.name) · \(p.mode.rawValue)")
-                }
-                .tactile(.pill, fill: p.id == profile.id ? theme.accent : nil)
+            Button { showSettings = true } label: {
+                Image(systemName: "gearshape")
             }
-
-            if profiles.count < 2 {
-                Button { showAddProfile = true } label: { Text("+ Add") }
-                    .tactile(.pill)
-            }
+            .tactile(.ghost)
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 14)

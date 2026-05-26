@@ -4,6 +4,10 @@
 
 import Foundation
 import HealthKit
+import SwiftData
+#if canImport(UIKit)
+import UIKit
+#endif
 
 @MainActor
 public final class HealthKitService: ObservableObject {
@@ -13,6 +17,9 @@ public final class HealthKitService: ObservableObject {
 
     @Published public private(set) var isAuthorized: Bool = false
 
+    private var stepObserver: HKObserverQuery?
+    private var observerSink: ((Int) -> Void)?
+
     // Types we read
     private let readTypes: Set<HKObjectType> = {
         var s: Set<HKObjectType> = []
@@ -20,6 +27,7 @@ public final class HealthKitService: ObservableObject {
         if let t = HKObjectType.quantityType(forIdentifier: .bodyMass)             { s.insert(t) }
         if let t = HKObjectType.quantityType(forIdentifier: .restingHeartRate)     { s.insert(t) }
         if let t = HKObjectType.quantityType(forIdentifier: .activeEnergyBurned)   { s.insert(t) }
+        if let t = HKObjectType.quantityType(forIdentifier: .appleExerciseTime)    { s.insert(t) }
         return s
     }()
 
@@ -36,15 +44,53 @@ public final class HealthKitService: ObservableObject {
     public var isAvailable: Bool { HKHealthStore.isHealthDataAvailable() }
 
     /// Request all permissions at once. Idempotent — calling again after grant is cheap.
-    public func requestAuthorization() async {
-        guard isAvailable else { return }
+    /// Returns true if the system sheet completed without error (HealthKit never tells us
+    /// per-type read grants; the user toggles those in the sheet).
+    @discardableResult
+    public func requestAuthorization() async -> Bool {
+        guard isAvailable else { isAuthorized = false; return false }
         do {
             try await store.requestAuthorization(toShare: writeTypes, read: readTypes)
             isAuthorized = true
+            return true
         } catch {
             print("[HealthKit] auth failed:", error.localizedDescription)
             isAuthorized = false
+            return false
         }
+    }
+
+    /// Open iOS Settings → app entry. User adjusts per-metric Health toggles in Settings.app.
+    public func openSystemSettings() {
+        #if canImport(UIKit)
+        if let url = URL(string: UIApplication.openSettingsURLString) {
+            UIApplication.shared.open(url)
+        }
+        #endif
+    }
+
+    // MARK: - Background step observer
+
+    /// Register an HKObserverQuery for stepCount. On fire, fetches today's total
+    /// and invokes `onUpdate` on the main actor. Idempotent — replaces any prior observer.
+    public func beginStepObservation(onUpdate: @escaping (Int) -> Void) {
+        guard isAvailable,
+              let type = HKQuantityType.quantityType(forIdentifier: .stepCount) else { return }
+
+        if let prior = stepObserver { store.stop(prior) }
+        observerSink = onUpdate
+
+        let q = HKObserverQuery(sampleType: type, predicate: nil) { [weak self] _, completion, _ in
+            Task { @MainActor in
+                guard let self else { completion(); return }
+                let n = await self.steps()
+                self.observerSink?(n)
+                completion()
+            }
+        }
+        store.execute(q)
+        stepObserver = q
+        store.enableBackgroundDelivery(for: type, frequency: .hourly) { _, _ in }
     }
 
     // MARK: - Steps

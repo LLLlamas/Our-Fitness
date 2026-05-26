@@ -1,19 +1,20 @@
+// First-launch picker. Both profiles are already seeded; this only sets
+// `activeProfileId` for the device and walks the user through the
+// HealthKit permission sheet. No editing of vitals — that lives in Settings later.
+
 import SwiftUI
 
 struct OnboardingView: View {
-    let onCreate: (ProfileDTO) -> Void
+    let profiles: [ProfileDTO]
+    let onFinish: (_ chosen: ProfileDTO, _ healthGranted: Bool) -> Void
 
     @Environment(\.theme) private var theme
 
-    @State private var name: String = ""
-    @State private var mode: Mode = .build
-    @State private var sex: Sex = .male
-    @State private var heightIn: Double = 67
-    @State private var weightLb: Double = 150
-    @State private var age: Int = 30
-    @State private var activity: ActivityLevel = .moderate
-    @State private var lowAppetite: Bool = false
-    @State private var restrictionsCsv: String = ""
+    @State private var chosen: ProfileDTO?
+    @State private var step: Step = .pickProfile
+    @State private var requesting = false
+
+    private enum Step { case pickProfile, connectHealth }
 
     var body: some View {
         ScrollView {
@@ -21,75 +22,11 @@ struct OnboardingView: View {
                 Text("welcome.")
                     .font(.system(size: 56, weight: .regular))
                     .foregroundStyle(theme.text)
-                Text("Tell us about yourself. Two minutes. You can change anything later.")
-                    .foregroundStyle(theme.dim)
-                    .padding(.bottom, 12)
 
-                field("Name") {
-                    TextField("Lorenzo", text: $name)
-                        .textInputAutocapitalization(.words)
+                switch step {
+                case .pickProfile:    pickProfileStep
+                case .connectHealth:  connectHealthStep
                 }
-
-                field("Mode") {
-                    HStack(spacing: 8) {
-                        modeButton(.build, "Build — gain, fuel, play")
-                        modeButton(.reset, "Reset — drop, fix markers")
-                    }
-                }
-                .sensoryFeedback(.selection, trigger: mode)
-
-                HStack(spacing: 12) {
-                    field("Sex") {
-                        Picker("", selection: $sex) {
-                            Text("Male").tag(Sex.male)
-                            Text("Female").tag(Sex.female)
-                        }.pickerStyle(.segmented)
-                    }
-                    field("Age") {
-                        TextField("30", value: $age, format: .number)
-                            .keyboardType(.numberPad)
-                    }
-                }
-                .sensoryFeedback(.selection, trigger: sex)
-
-                HStack(spacing: 12) {
-                    field("Height (in)") {
-                        TextField("67", value: $heightIn, format: .number)
-                            .keyboardType(.decimalPad)
-                    }
-                    field("Weight (lb)") {
-                        TextField("150", value: $weightLb, format: .number)
-                            .keyboardType(.decimalPad)
-                    }
-                }
-
-                field("Activity") {
-                    Picker("", selection: $activity) {
-                        ForEach(ActivityLevel.allCases, id: \.self) { a in
-                            Text(a.label).tag(a)
-                        }
-                    }.pickerStyle(.menu)
-                }
-                .sensoryFeedback(.selection, trigger: activity)
-
-                if mode == .build {
-                    field("Low appetite?") {
-                        Toggle("Bias toward liquids + frequency", isOn: $lowAppetite)
-                            .foregroundStyle(theme.text)
-                    }
-                }
-
-                field("Restrictions (comma-separated, e.g. peanut, tree-nut)") {
-                    TextField("none", text: $restrictionsCsv)
-                        .textInputAutocapitalization(.never)
-                }
-
-                Button(action: submit) {
-                    Text("Let's go →")
-                }
-                .tactile(.primary, fullWidth: true)
-                .disabled(!canSubmit)
-                .padding(.top, 16)
             }
             .padding(.horizontal, 24)
             .padding(.vertical, 36)
@@ -97,56 +34,75 @@ struct OnboardingView: View {
         .background(theme.bg.ignoresSafeArea())
     }
 
-    private var canSubmit: Bool {
-        !name.trimmingCharacters(in: .whitespaces).isEmpty
-            && weightLb > 0 && heightIn > 0 && age > 0
-    }
-
-    private func submit() {
-        let vitals = Targets.ProfileVitals(
-            sex: sex, weightLb: weightLb, heightIn: heightIn, age: age, activity: activity
-        )
-        let targets = Targets.compute(mode: mode, vitals: vitals)
-        let restrictions = restrictionsCsv
-            .split(separator: ",")
-            .map { $0.trimmingCharacters(in: .whitespaces) }
-            .filter { !$0.isEmpty }
-
-        let dto = ProfileDTO(
-            name: name.trimmingCharacters(in: .whitespaces),
-            mode: mode, sex: sex,
-            heightIn: heightIn, weightLb: weightLb, age: age,
-            activity: activity,
-            lowAppetite: lowAppetite,
-            restrictions: restrictions,
-            computedTargets: targets
-        )
-        onCreate(dto)
-    }
-
-    // MARK: - Pieces
+    // MARK: - Step 1: pick
 
     @ViewBuilder
-    private func field<C: View>(_ label: String, @ViewBuilder _ content: () -> C) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(label.uppercased())
-                .font(.system(size: 10)).tracking(2)
-                .foregroundStyle(theme.dim)
-            content()
-                .padding(10)
-                .background(theme.card)
-                .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+    private var pickProfileStep: some View {
+        Text("Who is this device for?")
+            .foregroundStyle(theme.dim)
+            .padding(.bottom, 12)
+
+        ForEach(profiles) { p in
+            PressableCard(action: {
+                chosen = p
+                step = .connectHealth
+            }) {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(p.name)
+                        .font(.system(size: 22, weight: .semibold))
+                        .foregroundStyle(theme.text)
+                    Text(modeBlurb(p.mode))
+                        .font(.callout)
+                        .foregroundStyle(theme.dim)
+                }
+            }
+            .themed(p.mode)
+        }
+    }
+
+    // MARK: - Step 2: connect
+
+    @ViewBuilder
+    private var connectHealthStep: some View {
+        if let p = chosen {
+            Text("Connect Apple Health")
+                .font(.system(size: 28, weight: .semibold))
                 .foregroundStyle(theme.text)
+
+            Text("Steps, weight, resting heart rate, and active energy sync from Apple Health — including Apple Watch. You'll toggle each metric in the system sheet.")
+                .font(.callout)
+                .foregroundStyle(theme.dim)
+                .padding(.bottom, 8)
+
+            Button {
+                Task { await connect(grant: true, profile: p) }
+            } label: {
+                Text(requesting ? "Opening Apple Health…" : "Connect Apple Health")
+            }
+            .tactile(.primary, fullWidth: true)
+            .disabled(requesting)
+
+            Button {
+                onFinish(p, false)
+            } label: {
+                Text("Skip for now")
+            }
+            .tactile(.ghost)
+            .padding(.top, 4)
         }
     }
 
-    @ViewBuilder
-    private func modeButton(_ m: Mode, _ label: String) -> some View {
-        Button { mode = m } label: {
-            Text(label)
-                .font(.system(size: 13, weight: .medium))
-                .frame(maxWidth: .infinity, alignment: .leading)
+    private func connect(grant: Bool, profile: ProfileDTO) async {
+        requesting = true
+        let ok = await HealthKitService.shared.requestAuthorization()
+        requesting = false
+        onFinish(profile, ok)
+    }
+
+    private func modeBlurb(_ m: Mode) -> String {
+        switch m {
+        case .build: return "Build — gain lean mass, fuel hoops."
+        case .reset: return "Reset — drop weight, fix the markers."
         }
-        .tactile(.pill, fill: mode == m ? theme.accent : nil)
     }
 }

@@ -1,5 +1,5 @@
 // Idempotent seeding on app launch.
-// Profiles are NOT seeded — onboarding creates them.
+// Two fixed profiles (Build / Reset) are seeded once and never overwritten.
 
 import Foundation
 import SwiftData
@@ -7,10 +7,21 @@ import SwiftData
 public enum Seeder {
 
     public static func seedAll(_ ctx: ModelContext) {
+        seedProfiles(ctx)
         seedExercises(ctx)
         seedFoods(ctx)
         seedPrograms(ctx)
         try? ctx.save()
+    }
+
+    private static func seedProfiles(_ ctx: ModelContext) {
+        for p in SeedProfiles.all {
+            let target = p.id
+            let desc = FetchDescriptor<ProfileModel>(predicate: #Predicate { $0.id == target })
+            if (try? ctx.fetch(desc).first) == nil {
+                ctx.insert(ProfileModel(snapshot: p))
+            }
+        }
     }
 
     private static func seedExercises(_ ctx: ModelContext) {

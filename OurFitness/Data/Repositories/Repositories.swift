@@ -16,6 +16,16 @@ public enum Repos {
         return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
     }
 
+    public static func setHealthGranted(_ ctx: ModelContext, profileId: UUID, granted: Bool) {
+        let target = profileId
+        let desc = FetchDescriptor<ProfileModel>(predicate: #Predicate { $0.id == target })
+        if let existing = try? ctx.fetch(desc).first {
+            existing.healthGranted = granted
+            existing.updatedAt = Date()
+            try? ctx.save()
+        }
+    }
+
     public static func saveProfile(_ ctx: ModelContext, _ p: ProfileDTO) {
         let target = p.id
         let desc = FetchDescriptor<ProfileModel>(

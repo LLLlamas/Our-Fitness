@@ -24,6 +24,7 @@ public final class ProfileModel {
     public var budgetWeeklyUsd: Double?
     /// JSON-encoded MacroTargets. Targets recompute when profile vitals change.
     public var targetsJSON: Data
+    public var healthGranted: Bool = false
     public var createdAt: Date
     public var updatedAt: Date
 
@@ -40,6 +41,7 @@ public final class ProfileModel {
         self.restrictions = s.restrictions
         self.budgetWeeklyUsd = s.budgetWeeklyUsd
         self.targetsJSON = (try? JSONEncoder().encode(s.computedTargets)) ?? Data()
+        self.healthGranted = s.healthGranted
         self.createdAt = s.createdAt
         self.updatedAt = s.updatedAt
     }
@@ -56,6 +58,7 @@ public final class ProfileModel {
             budgetWeeklyUsd: budgetWeeklyUsd,
             computedTargets: (try? JSONDecoder().decode(MacroTargets.self, from: targetsJSON))
                 ?? MacroTargets(calories: 0, proteinG: 0, carbsG: 0, fatG: 0, stepsDaily: 0),
+            healthGranted: healthGranted,
             createdAt: createdAt, updatedAt: updatedAt
         )
     }
@@ -72,6 +75,7 @@ public final class ProfileModel {
         self.restrictions = s.restrictions
         self.budgetWeeklyUsd = s.budgetWeeklyUsd
         self.targetsJSON = (try? JSONEncoder().encode(s.computedTargets)) ?? Data()
+        self.healthGranted = s.healthGranted
         self.updatedAt = Date()
     }
 }

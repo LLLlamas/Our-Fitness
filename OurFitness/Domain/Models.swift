@@ -133,6 +133,7 @@ public struct ProfileDTO: Codable, Equatable, Sendable, Identifiable {
     public var restrictions: [String]
     public var budgetWeeklyUsd: Double?
     public var computedTargets: MacroTargets
+    public var healthGranted: Bool
     public var createdAt: Date
     public var updatedAt: Date
 
@@ -149,6 +150,7 @@ public struct ProfileDTO: Codable, Equatable, Sendable, Identifiable {
         restrictions: [String] = [],
         budgetWeeklyUsd: Double? = nil,
         computedTargets: MacroTargets,
+        healthGranted: Bool = false,
         createdAt: Date = Date(),
         updatedAt: Date = Date()
     ) {
@@ -164,6 +166,7 @@ public struct ProfileDTO: Codable, Equatable, Sendable, Identifiable {
         self.restrictions = restrictions
         self.budgetWeeklyUsd = budgetWeeklyUsd
         self.computedTargets = computedTargets
+        self.healthGranted = healthGranted
         self.createdAt = createdAt
         self.updatedAt = updatedAt
     }
