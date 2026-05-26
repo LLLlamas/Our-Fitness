@@ -183,7 +183,7 @@ If you want a real designed icon, swap in any 1024×1024 PNG and you're done.
 | `App not found on App Store Connect` | Step 2 was skipped | App Store Connect → My Apps → create the app record |
 | `Could not find action 'app_store_connect_api_key'` | Fastlane version drift | Bump the `~> 2.225` pin in `Gemfile` to latest |
 | `swift compiler error` in `compile.yml` | A real Swift bug | Open the run's "Build" step output — file + line are in the error message |
-| `xcrun simctl: ... iPhone 15 not found` | macOS runner image upgraded | Change `device: "iPhone 15"` in `fastlane/Fastfile` and the destination in `compile.yml` to whatever's available (e.g. `iPhone 16`) |
+| `xcrun simctl: ... iPhone 16 not found` (or similar) | macOS runner image upgraded; simulator device list changed | Change `device:` in `fastlane/Fastfile` and the `-destination name=` in `compile.yml` to a device present in the available destinations list printed in the error (e.g. `iPhone 17`) |
 | `HealthKit entitlement not allowed for this app` | App ID in step 1 doesn't have HealthKit enabled | Apple Developer → Identifiers → edit → tick HealthKit → save → re-run TestFlight workflow |
 
 ---

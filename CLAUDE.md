@@ -1,6 +1,6 @@
 # Our-Fitness — Foundation (iOS / SwiftUI)
 
-Native iOS app for two specific humans, two specific modes. **Build** (gain mass, fuel hoops) and **Reset** (drop weight, fix markers). One device per person, one mode per person, one philosophy: **show up, log honestly, let the numbers tell the truth over time.**
+Native iOS app for two specific humans, two specific modes. **Build** (gain mass, fuel hoops) and **Reset** (drop weight, fix markers). One device per person, one mode per person. **Show up, log honestly, let the numbers tell the truth.**
 
 Purpose-built for these two. Don't generalize for a third.
 
@@ -8,95 +8,20 @@ Purpose-built for these two. Don't generalize for a third.
 
 ## The two humans, the two modes
 
-**Build** — gain lean mass, keep playing. Picky-eater hardgainer, basketball 4–5×/week, struggles to eat enough. Enemy is *under-fueling*. Nut-free allergen lock. Food library: the familiar short list (smoothies, spam, rice, eggs, pizza, chocolate milk, nuggets — see [nutrition-plan-research.md](nutrition-plan-research.md)).
+**Build** — gain lean mass, keep playing. Picky-eater hardgainer, basketball 4–5×/week. Enemy is *under-fueling*. Nut-free allergen lock. Food library: short familiar list (smoothies, spam, rice, eggs, pizza, chocolate milk, nuggets — see [nutrition-plan-research.md](nutrition-plan-research.md)).
 
-**Reset** — drop weight, fix the markers. Real labs to move: elevated cholesterol, BP, blood sugar. Enemy is *dense empty calories + sodium creep*. **No food restrictions or allergies.** Food library: DASH + Mediterranean leaning — leafy greens, legumes, whole grains, oily fish, olive oil, nuts/seeds, low sodium, high fiber.
+**Reset** — drop weight, fix the markers (cholesterol, BP, blood sugar). Enemy is *dense empty calories + sodium creep*. **No food restrictions.** Food library: DASH + Mediterranean (leafy greens, legumes, whole grains, oily fish, olive oil, low sodium, high fiber).
 
 | | Build | Reset |
 |---|---|---|
 | Calories | TDEE + 400–600 | TDEE − 300–500 |
 | Protein g/lb | ~1.0 | 1.0–1.2 |
 | Caps | none beyond macros | sodium ≤1,500 mg, added sugar ≤25 g, sat fat <10%, fiber ≥35 g |
-| Steps/day | 8,000 baseline (hoops adds more) | 10,000 (#1 lever for BP/insulin/LDL) |
-| Suggestion bias | calorie-dense, liquid-friendly, frequency | fiber-dense, satiety, omega-3, low-sodium |
+| Steps/day | 8,000 baseline | 10,000 (#1 lever for BP/insulin/LDL) |
+| Suggestion bias | calorie-dense, liquid-friendly | fiber-dense, omega-3, low-sodium |
 | Workouts | hypertrophy, 6–12 reps, double-progression | 2–3 strength + 3–4 zone-2 cardio, RPE cap 7 |
 
-The two modes share **infrastructure**, not **content**. Resist merging the food libraries with a `mode` tag — they have different philosophies.
-
----
-
-## Tech stack (locked)
-
-- **SwiftUI** (iOS 17+) — declarative UI, native feel, free dark mode
-- **SwiftData** — persistence (SQLite under the hood, `@Model` classes, schema versioning via `VersionedSchema`)
-- **HealthKit** — steps, weight, resting HR, active energy ingest (and optional write-back for logged workouts)
-- **Swift Charts** — built-in trend visualization, no third-party deps
-- **XCTest** — domain layer fully unit-tested
-- **XcodeGen** (`project.yml` → `.xcodeproj`) — `.xcodeproj` is git-ignored; regenerated in CI every run
-- **Fastlane** (Fastfile lanes: `tests`, `compile`, `beta`) — handles signing via App Store Connect API key, no manual `.p12` ever
-- **GitHub Actions** — two workflows: `compile.yml` (every push, 3 min feedback) and `testflight.yml` (manual / `v*` tag, ships to TestFlight)
-- **No backend.** Each device is the source of truth. Future CloudKit sync is one entitlement away if we ever want it.
-
-### Mac-less workflow (lead dev is on Windows)
-
-There is no local Xcode. The dev loop is **push → CI tells you if it compiles → patch → push again**. Full setup and daily-loop instructions live in [README.md](README.md). Key implications for working in this codebase:
-
-- Don't add Mac-only steps to documentation (Xcode previews, local fastlane, `xcodegen generate` from a Mac, etc.) without flagging them as "optional, Mac-only."
-- The compile workflow is the source of truth for "does this build" — if it's green, ship it.
-- Strict concurrency is set to **minimal** in `project.yml` during scaffolding to avoid Sendable churn blocking iteration. Bump to `complete` later when the surface is stable.
-- **CI Xcode pin:** both workflows run `macos-26` with Xcode **26.x**, selected dynamically by the **Select Xcode 26** step (see "App Store Connect SDK version floor" section below for why). Xcode 26 ships the iphonesimulator26.x SDK — never pin `-sdk iphonesimulator<version>` explicitly; let xcodebuild resolve the SDK from the selected Xcode. `project.yml` no longer sets a hard `objectVersion` floor; XcodeGen emits whatever format the installed Xcode needs. The build/test destinations are `platform=iOS Simulator,name=iPhone 16` with no `OS=` suffix so xcodebuild picks whatever runtime the **Ensure iOS simulator runtime** step downloaded — **never `generic/platform=iOS Simulator`**. The build step also passes `ASSETCATALOG_COMPILER_SKIP_APP_STORE_DEPLOYMENT=YES` to suppress actool's SDK-version thinning pass.
-
-### Test target topology (do not regress)
-
-CI incidents, May 25, 2026: the app target built, but tests failed in two different ways from the same bad topology. In the compile workflow, `xcodebuild test` failed while linking `OurFitnessTests` with many `Undefined symbols for architecture arm64` errors for `OurFitness.*` domain symbols. In the TestFlight workflow, Fastlane `scan` launched `OurFitness` as the test host, waited almost four minutes, then failed with `operation never finished bootstrapping` before test execution. The root cause was test topology, not domain code: `TEST_HOST` was blank, while `BUNDLE_LOADER` pointed at `$(BUILT_PRODUCTS_DIR)/OurFitness.app/OurFitness`. With modern Xcode Debug builds, Swift app code can be emitted into `OurFitness.debug.dylib`, leaving the `.app/OurFitness` executable as a stub; linking or hosting through that executable is fragile and can trigger app lifecycle bootstrapping.
-
-Current rule: **Domain tests are hostless logic tests.** `OurFitnessTests` compiles `OurFitness/Domain` sources directly in `project.yml`; test files should not use `@testable import OurFitness` or `import OurFitness`. Keep `TEST_HOST` and `BUNDLE_LOADER` blank for these tests. Both `compile.yml` and `testflight.yml` run `scripts/validate-ci-invariants.sh` after XcodeGen; it fails if tests import the app module, if `Domain/` imports `SwiftUI`/`SwiftData`, if `OurFitness/Domain` is not a direct test source root, or if generated build settings make `TEST_HOST`/`BUNDLE_LOADER` nonblank.
-
-For future apps we build: put pure domain logic in a Swift Package/framework and test that target, or compile pure sources directly into a hostless test target. Do **not** use an iOS app executable as a `BUNDLE_LOADER` shortcut for SwiftUI app-module tests unless you intentionally want app-hosted UI/integration tests and are prepared for the app lifecycle to launch. Any release/TestFlight workflow must run the same test-topology guard as the fast compile workflow before invoking Fastlane.
-
-### TestFlight signing profile options
-
-CI incident, May 25, 2026: after tests passed, the TestFlight lane failed in `sigh` with `You can't enable both :developer_id and :adhoc`. The lane was trying to be explicit by passing `adhoc: false` and `developer_id: false` for an App Store profile, but Fastlane treats the presence of those mutually exclusive mode keys as a conflict. For this iOS app, App Store/TestFlight provisioning should omit `adhoc` and `developer_id` entirely and use `development: false` plus the App Store export method. `scripts/validate-ci-invariants.sh` guards against reintroducing false `sigh` mode flags.
-
-The same run warned that Fastlane support for Ruby 3.2 is ending, so `testflight.yml` uses Ruby **3.3** via `ruby/setup-ruby`. Keep the release workflow on a Fastlane-supported Ruby unless the Gemfile pin forces a deliberate change.
-
-### Persistent TestFlight signing (do not regress)
-
-CI incident, May 25, 2026: the next TestFlight run passed CI invariants and all 59 tests, then failed in `cert` before archive/upload. Fastlane found existing Apple Distribution certificates on the Apple account (`DV6GS882ZV`, `GHQHG29W56`, `WV27X2GA2Q`) but none of their private keys existed in the runner's temporary keychain. A GitHub-hosted macOS runner is disposable, and Apple does not let Fastlane download an existing certificate's private key from the Developer Portal. The old lane therefore tried to create a new Apple Distribution certificate, but the team had already hit Apple's Distribution certificate limit.
-
-Current rule: **TestFlight signing uses fastlane `match`, not direct `cert`/`sigh` calls.** The encrypted match repo is the persistent source of truth for the Apple Distribution certificate private key and the `OurFitness AppStore` provisioning profile. Normal CI runs set `MATCH_READONLY=true`, sync existing signing assets into the temporary keychain, and cannot consume another certificate slot. Only a manual `workflow_dispatch` run with `refresh_signing` checked sets `MATCH_READONLY=false`, and that should be used only to bootstrap or intentionally rotate signing assets.
-
-Required release secrets now include the Apple API/keychain secrets plus `MATCH_GIT_URL`, `MATCH_PASSWORD`, and `MATCH_GIT_BASIC_AUTHORIZATION` (base64 `github-user:token` for the private match repo). If a run fails with `Could not create another Distribution certificate, reached the maximum number`, manual cleanup is required in Apple Developer > Certificates: revoke stale unused **Apple Distribution** certificates, then run TestFlight once with `refresh_signing` checked to seed/refresh match. Leave it unchecked after that.
-
-The TestFlight workflow runs a **Preflight — signing mode + match repo readiness** step before tests/archive that prints the resolved signing mode (READONLY vs REFRESH) as a GitHub annotation and, in readonly mode, clones the match repo to confirm an Apple Distribution `.p12` exists. If the repo is empty it fails fast with an actionable message telling the user to re-run with `refresh_signing` checked. When `refresh_signing` is checked, the workflow runs `fastlane ios sync_signing` before XcodeGen/tests so Apple certificate-capacity failures happen before spending time on build/test work. This catches the operational mistake of dispatching a bootstrap run without ticking the checkbox and the Apple-side mistake of retrying refresh before freeing a Distribution certificate slot.
-
-For future apps we build: never rely on ephemeral CI `cert`/`sigh` as the long-term signing strategy. Either use `match` from day one or another persistent signing-store pattern that preserves the private key between runners. Keep the CI guard that rejects top-level `cert(` or `sigh(` calls in the release Fastfile unless there is a deliberate, documented exception.
-
-### GitHub Actions boolean inputs in workflow expressions (do not regress)
-
-CI incident, May 26, 2026: the TestFlight bootstrap run with `refresh_signing` checked still ran match in `readonly: true` mode. The `MATCH_READONLY` expression used `github.event.inputs.refresh_signing == 'true'` — a string comparison against a `boolean`-typed `workflow_dispatch` input. GitHub's expression engine passes the value as boolean `true`, not the string `"true"`, so the comparison always returned false and `MATCH_READONLY` was hardcoded to `true` on every run.
-
-Current rule: **access `workflow_dispatch` boolean inputs with `inputs.<name>` (not `github.event.inputs.<name>`) and compare with `== true` (not `== 'true'`).** The `inputs.` shorthand preserves the declared type. `github.event.inputs` coerces values to strings and makes boolean comparisons silently wrong.
-
-### App Store Connect SDK version floor + iPad multitasking requirements (do not regress)
-
-CI incident, May 26, 2026: archive and match succeeded, then `upload_to_testflight` failed with 3 altool errors: (1) SDK version: *"built with iOS 18.5 SDK — must be built with iOS 26 SDK or later"*; (2) no orientations in `UISupportedInterfaceOrientations`; (3) no launch-screen storyboard/`UILaunchScreen` for iPad multitasking. These are App Store Connect policy enforcement, not compiler errors — they surface only at upload time.
-
-Root causes: (1) Apple's App Store Connect now requires Xcode 26 / iOS 26 SDK for all uploads — Xcode 16.x / iOS 18.x SDK builds are permanently rejected. Both workflows were pinned to `macos-15` / Xcode 16.4. Fix: bump to `macos-26` / Xcode 26.0 and update all simulator destination pins to `OS=26.0`. (2) `Info.plist` had the all-four-orientations list under `UISupportedInterfaceOrientations~ipad` (the iPad override) but the base `UISupportedInterfaceOrientations` key only had Portrait — altool validates the base key for iPad multitasking too. Fix: include all four orientations in the base key as well; the `~ipad` override remains.
-
-Current rules:
-- Both workflows must run on `macos-26` and use Xcode 26.x. If Apple's SDK floor advances again, bump both together.
-- **Do not hard-code `Xcode_26.0.app`.** actions/runner-images installs Xcode as point-release names (`Xcode_26.0.1.app`, `Xcode_26.4.1.app`, etc.) and keeps the latest beta installed alongside the stable. Both workflows have a **Select Xcode 26** step that physically renames `Xcode_*beta*.app` directories (so they can't be picked up by PATH/SDK lookup), globs `/Applications/Xcode_26*.app`, drops dangling symlinks, picks the highest valid stable via `sort -V | tail -1`, and exports both `DEVELOPER_DIR` and `PATH` — `xcode-select` alone is not enough because beta `usr/bin` can stay on PATH and route `actool`/`clang`/`ld` to beta tooling even when DEVELOPER_DIR points elsewhere.
-- The runner ships Xcode but not the iOS simulator runtime. Both workflows have an **Ensure iOS simulator runtime** step that runs `sudo xcodebuild -runFirstLaunch` (mandatory — otherwise `-downloadPlatform` exits 70 with the misleading "not available for download" because the simulator catalog is uninitialized), then retries `xcodebuild -downloadPlatform iOS` up to 3 times with backoff (Apple's content endpoint is flaky from CI runners). **Do not pass `-buildVersion`** — let xcodebuild pick the runtime that matches the selected Xcode's iphonesimulator SDK.
-- Build/test destinations omit the `OS=` suffix (`platform=iOS Simulator,name=iPhone 16`) so xcodebuild picks whatever runtime was downloaded. The Fastfile `device` value is just `"iPhone 16"` for the same reason. **Never `generic/platform=iOS Simulator`** — that broke before.
-- `Info.plist` base `UISupportedInterfaceOrientations` must include all four orientations (Portrait, PortraitUpsideDown, LandscapeLeft, LandscapeRight) to satisfy iPad multitasking validation. Keep the `~ipad` variant in sync.
-- `UILaunchScreen` dict key (already present) satisfies the launch-screen requirement for iOS 14+ minimum — do not remove it.
-
-### Why native over web wrapper
-HealthKit only works in native iOS apps. Capacitor/PWA can't read step counts. We want phone-as-sensor passively, so native is the only path. Side benefits: real push notifications, Live Activities, Shortcuts intents, App Intents for Siri, Lock Screen widgets — all available later without re-platforming.
-
-### Why SwiftData over Core Data / GRDB
-SwiftData is Apple's modern wrapper, integrates natively with SwiftUI `@Query`, supports CloudKit sync via a single flag, has clean schema migration via `VersionedSchema`. Backing store is still SQLite — durability is identical. For an app this size, the dev velocity wins.
+Modes share **infrastructure**, not **content**. Don't merge food libraries with a `mode` tag — different philosophies.
 
 ---
 
@@ -104,62 +29,30 @@ SwiftData is Apple's modern wrapper, integrates natively with SwiftUI `@Query`, 
 
 ```
 OurFitness/
-  App/
-    OurFitnessApp.swift          ← @main entry, ModelContainer wiring
-    RootView.swift               ← profile gate, tab bar, theme injection
-  Domain/                        ← PURE Swift. No SwiftUI/SwiftData. Fully tested.
-    Models.swift                 ← Mode, Sex, ActivityLevel, MacroTargets, DTOs
-    Dates.swift                  ← dayKey, lastNDays, formatTimeAgo
-    Score.swift                  ← bell, rampUp, rampDown, macroFit (shared)
-    Targets.swift                ← Mifflin-St Jeor + mode adjustments
-    Suggestions.swift            ← filter + score meals (per-mode scoring)
-    Progression.swift            ← linear / double-prog / RPE strategies
-    Trends.swift                 ← rolling avg, weekly weight delta, marker stall
-    Streaks.swift                ← adherence (≥80% cal target days in a row)
-    Steps.swift                  ← step rollups + hit-rate + dense series
-  Data/
-    ModelContainer.swift         ← SwiftData container + ModelConfiguration
-    Schema.swift                 ← VersionedSchema + MigrationPlan
-    Models/                      ← @Model classes (one per entity)
-    Repositories/                ← Query helpers, batch operations, seeders
-    Seed/
-      Seeder.swift               ← idempotent on launch
-      FoodsBuild.swift           ← picky-friendly, nut-free
-      FoodsReset.swift           ← DASH + Mediterranean
-      Exercises.swift            ← full lift catalog
-      Programs.swift             ← starter programs per mode
-  Services/
-    HealthKitService.swift       ← steps, weight, RHR; auth + observers + writes
-    Theme.swift                  ← mode → color/font tokens (light + dark)
-  Features/
-    Onboarding/                  ← profile creation flow
-    Today/                       ← daily anchor view: bars + steps + suggestions + log
-    Nutrition/                   ← library browser, planner (later), grocery (later)
-    Workouts/                    ← program runner, set logger, history
-    Progress/                    ← weight, steps, markers, lift PRs
-  Components/                    ← ProgressBar, Banner, StatBlock, Card
-  Assets.xcassets/               ← AppIcon, AccentColor, LaunchBackground
-  Info.plist                     ← HealthKit usage strings (App Store requirement)
-  OurFitness.entitlements        ← HealthKit capability
-OurFitnessTests/                 ← Hostless XCTest suites for Domain/* only
-fastlane/
-  Fastfile                       ← lanes: tests, compile, beta
-  Appfile                        ← bundle id + team id wiring
-Gemfile                          ← Fastlane version pin
-scripts/
-  generate-icon.sh               ← idempotent AppIcon placeholder generator
-.github/workflows/
-  compile.yml                    ← every push/PR: build + test, no signing
-  testflight.yml                 ← manual or v* tag: sign + ship via fastlane
-project.yml                      ← XcodeGen — single source of truth for project layout
+  App/                ← @main, ModelContainer wiring, root shell
+  Domain/             ← PURE Swift. No SwiftUI/SwiftData. Fully tested.
+  Data/               ← SwiftData @Model classes + repositories + seeders
+    Seed/             ← idempotent food/exercise/program seeders, per mode
+  Services/           ← HealthKit, Theme, Haptics, ToastCenter (singletons)
+  Features/           ← One folder per tab: Onboarding/Today/Nutrition/Workouts/Progress
+  Components/         ← Reusable view atoms (ProgressBar, Card, Banner, AnimatedNumber…)
+  Assets.xcassets/    ← AppIcon, AccentColor, LaunchBackground
+  Info.plist          ← HealthKit usage strings; orientations (all 4 in base + ~ipad)
+  OurFitness.entitlements
+OurFitnessTests/      ← Hostless XCTest for Domain/* only. No app module import.
+fastlane/             ← Fastfile lanes: tests, compile, sync_signing, beta
+scripts/              ← validate-ci-invariants.sh, generate-icon.sh
+.github/workflows/    ← compile.yml (every push), testflight.yml (manual / v* tag)
+project.yml           ← XcodeGen — source of truth; .xcodeproj is gitignored
 ```
 
-**Architecture rules to keep clean:**
-1. **`Domain/` never imports `SwiftData` or `SwiftUI`.** Pure structs and functions, easy to test.
-2. **`Features/` never opens the SwiftData container directly.** Uses repositories or `@Query` projections.
-3. **HealthKit access goes through `HealthKitService`** — never call `HKHealthStore` from a view.
-4. **All `.swift` filenames within the target must be unique** (Swift compiler requirement). The persistence `@Model` classes live in `Data/PersistenceModels.swift` — don't name any new file `Models.swift`.
-5. **`OurFitnessTests` stays hostless and app-free.** It compiles `OurFitness/Domain` directly, keeps `TEST_HOST`/`BUNDLE_LOADER` blank, and never imports the `OurFitness` app module.
+**Hard architectural rules:**
+
+1. `Domain/` never imports `SwiftData` or `SwiftUI`. Pure structs/functions.
+2. `Features/` never opens the SwiftData container directly — use repositories or `@Query`.
+3. HealthKit access only through `Services/HealthKitService.swift`. Never call `HKHealthStore` from a view.
+4. `.swift` filenames within the target must be unique (Swift compiler requirement). Persistence `@Model` classes live in `Data/PersistenceModels.swift` — don't name any new file `Models.swift`.
+5. `OurFitnessTests` is hostless: compiles `OurFitness/Domain` directly, blank `TEST_HOST`/`BUNDLE_LOADER`, no `@testable import OurFitness`.
 
 ---
 
@@ -167,39 +60,53 @@ project.yml                      ← XcodeGen — single source of truth for pro
 
 | Goal | Files |
 |---|---|
-| Add a new exercise | `Data/Seed/Exercises.swift` |
-| Add a Build food | `Data/Seed/FoodsBuild.swift` |
-| Add a Reset food | `Data/Seed/FoodsReset.swift` |
-| New starter program | `Data/Seed/Programs.swift` |
+| Add a new exercise | `Data/Seed/SeedExercises.swift` |
+| Add a Build food | `Data/Seed/SeedFoodsBuild.swift` |
+| Add a Reset food | `Data/Seed/SeedFoodsReset.swift` |
+| New starter program | `Data/Seed/SeedPrograms.swift` |
 | Tweak mode caps (sodium/sugar/fiber) | `Domain/Targets.swift` (`ModeRules`) |
-| Change how meals are scored | `Domain/Score.swift` (shared) + `Domain/Suggestions.swift` (mode weights) |
+| Change meal scoring | `Domain/Score.swift` (shared) + `Domain/Suggestions.swift` (per-mode weights) |
 | Change calorie math | `Domain/Targets.swift` only |
-| New workout progression scheme | `Domain/Progression.swift` — add to the strategy switch |
-| Adjust 14-day auto-adjust thresholds | `Domain/Targets.swift` (`suggestAdjustment`) |
-| Add a tracked health marker | `Domain/Models.swift` (`HealthMarkerKind`) → `Features/Progress/ProgressView.swift` (`resetMarkers` array) |
-| Change daily steps goal | `Domain/Targets.swift` (`ModeRules.stepsDaily`) |
-| Wire a new HealthKit metric | `Services/HealthKitService.swift` + add `@Model` snapshot type if persisted |
-| New tab in the app shell | `App/RootView.swift` `Tab` enum + new folder under `Features/` |
-| Schema change | `Data/Schema.swift` — add a new `VersionedSchema` and migration stage. Never edit shipped schemas. |
-| Add HealthKit permission | `OurFitness.entitlements` (capability) + `Info.plist` (`NSHealthShareUsageDescription`) + `HealthKitService.requestAuth` |
-| Change press feel / variants | `Components/TactileButtonStyle.swift` (`resolved(theme:)` switch) |
-| Change haptic vocabulary | `Services/Haptics.swift` |
-| New toast accent / haptic pairing | `Services/ToastCenter.swift` (`ToastAccent` enum + `fireHaptic(for:)`) |
-| Tweak target-hit flash on bars | `Components/ProgressBar.swift` (`onChange(of: value)` block) |
+| New workout progression | `Domain/Progression.swift` strategy switch |
+| 14-day auto-adjust thresholds | `Domain/Targets.swift` (`suggestAdjustment`) |
+| Add a tracked health marker | `Domain/Models.swift` (`HealthMarkerKind`) + `Features/Progress/ProgressView.swift` |
+| Daily steps goal | `Domain/Targets.swift` (`ModeRules.stepsDaily`) |
+| New HealthKit metric | `Services/HealthKitService.swift` + `@Model` snapshot in `Data/PersistenceModels.swift` if persisted |
+| New tab | `App/RootView.swift` `Tab` enum + new folder under `Features/` |
+| Schema change | `Data/Schema.swift` — add new `VersionedSchema` + migration stage. Never edit shipped schemas. |
+| Add HealthKit permission | `OurFitness.entitlements` + `Info.plist` (`NSHealthShareUsageDescription`) + `HealthKitService.requestAuth` |
+| Press feel / button variant | `Components/TactileButtonStyle.swift` (`resolved(theme:)` switch) |
+| Haptic vocabulary | `Services/Haptics.swift` |
+| Toast accent / haptic pairing | `Services/ToastCenter.swift` (`ToastAccent` + `fireHaptic(for:)`) |
+| Bar target-hit flash | `Components/ProgressBar.swift` (`onChange(of: value)`) |
+
+---
+
+## Tech stack (locked)
+
+- **SwiftUI** (iOS 17+) — declarative UI, native dark mode
+- **SwiftData** — persistence (`@Model` + `VersionedSchema`); SQLite under the hood
+- **HealthKit** — steps, weight, RHR, active energy (+ workout write-back)
+- **Swift Charts** — trends, no third-party deps
+- **XCTest** — domain layer fully unit-tested
+- **XcodeGen** — `project.yml` → `.xcodeproj` (gitignored, regenerated in CI)
+- **Fastlane** — lanes: `tests`, `compile`, `sync_signing`, `beta`. Signs via App Store Connect API key + `match`.
+- **GitHub Actions** — `compile.yml` (every push, ~3 min), `testflight.yml` (manual / `v*` tag)
+- **No backend.** Each device is source of truth. Future CloudKit sync is one entitlement away.
 
 ---
 
 ## Data model essentials
 
-All entities namespaced per `Profile`. Append-only logs (sets, food entries, body metrics, markers). Daily/weekly/streak/trend figures are *derived*, never stored.
+All entities namespaced per `Profile`. Append-only logs (sets, food entries, body metrics, markers). Daily/weekly/streak/trend figures are **derived, never stored**.
 
-`Domain/Models.swift` holds the value-type DTOs used by domain functions and view state. `Data/PersistenceModels.swift` holds matching `@Model` classes used for persistence. A small adapter on each `@Model` (`var snapshot: ProfileDTO { ... }`) keeps the boundary explicit and tests cheap.
+`Domain/Models.swift` holds value-type DTOs. `Data/PersistenceModels.swift` holds matching `@Model` classes. Each `@Model` exposes a `snapshot` adapter so domain functions stay pure.
 
 Headline entities:
 - `Profile` — name, mode, biometrics, activity, restrictions, `computedTargets`
-- `MacroTargets` — calories/protein/carbs/fat + `stepsDaily`, plus optional Reset caps
-- `Exercise`, `WorkoutSet`, `Workout`, `Program` — full gym programming
-- `Food`, `FoodLogEntry` — `modeFit` gates suggestions; log entries denormalize macros
+- `MacroTargets` — calories/protein/carbs/fat + `stepsDaily` + optional Reset caps
+- `Exercise`, `WorkoutSet`, `Workout`, `Program` — gym programming
+- `Food`, `FoodLogEntry` — `modeFit` gates suggestions; entries denormalize macros
 - `BodyMetric` — weight, body-fat, waist
 - `HealthMarker` — BP, LDL/HDL, triglycerides, A1c, fasting glucose, resting HR (Reset-critical)
 - `StepCount` — one row per user per day (UPSERT); `source: .manual | .appleHealth`
@@ -208,82 +115,116 @@ Headline entities:
 
 ## Mode behaviors
 
-**Suggestion algorithm** (same shape, different scoring): filter by `modeFit`, allergens, slot; for Reset also filter against today's remaining sodium/sugar/sat-fat headroom. Score and return top 5. Build rewards calorie density + liquid (if `lowAppetite`) + cost + protein-gap fill. Reset rewards fiber + satiety + omega-3 + low sodium + protein-per-calorie.
+**Suggestion algorithm** (same shape, per-mode scoring): filter by `modeFit`, allergens, slot; for Reset also filter against today's remaining sodium/sugar/sat-fat headroom. Score, return top 5.
+- Build rewards: calorie density, liquid (if `lowAppetite`), cost, protein-gap fill
+- Reset rewards: fiber, satiety, omega-3, low sodium, protein-per-calorie
 
 **14-day auto-adjust** (suggests, never mutates):
 - Build stalled → +200 cal/day; gaining >0.75 lb/wk → drop a multiplier
-- Reset stalled → −150 cal/day or +1 cardio; losing >1.5 lb/wk → +150 cal (protect muscle); marker not moving after 8 weeks → flag for doctor, never prescribe
+- Reset stalled → −150 cal/day or +1 cardio; losing >1.5 lb/wk → +150 cal (protect muscle); marker stuck after 8 weeks → flag for doctor, never prescribe
 
 ---
 
 ## HealthKit integration
 
-`Services/HealthKitService.swift` owns all HealthKit access. Two modes of use:
+`Services/HealthKitService.swift` owns all HealthKit access. Two modes:
+1. **Pull on demand** — `todaySteps(for: profile)` for the Today card
+2. **Observers** — `HKObserverQuery` at launch wakes the app for background step updates → UPSERT into `StepCount`
 
-1. **Pull on demand** — `todaySteps(for: profile)` returns a fresh number for the Today card.
-2. **Observers** — registered at app launch to wake the app for background step updates (delivered via `HKObserverQuery`), then upsert into the `StepCount` table so trends/streaks just work.
+Permissions:
+- Read: `stepCount`, `bodyMass`, `restingHeartRate`, `activeEnergyBurned`
+- Write: `workouts` (logged sessions surface in Apple Health), `bodyMass`
 
-Permissions requested at onboarding:
-- Read: stepCount, bodyMass, restingHeartRate, activeEnergyBurned
-- Write: workouts (so logged sessions show up in Apple Health), bodyMass (so weighing in the app updates Health)
-
-The simulator can't return real Health data — develop UI in the sim, verify HealthKit on a real iPhone.
+Simulator returns no Health data — UI in sim, HealthKit on a real iPhone.
 
 ---
 
 ## Design direction
 
-Two visual personalities under one shell. Mode picks palette + energy. Typography shared via dynamic type with custom fonts (Bebas Neue for display numerals, Fraunces serif for accents, SF Mono for stat readouts — falls back to system fonts gracefully).
+Two visual personalities under one shell. Mode picks palette + energy. Typography shared via Dynamic Type with custom fonts (Bebas Neue display numerals, Fraunces serif accents, SF Mono stat readouts — system fallbacks).
 
-- **Build:** warm dark, orange/amber/cream (matches [nutrition-plan.html](nutrition-plan.html))
-- **Reset:** warm light, sage/terracotta — calmer, "steady reset"
+- **Build:** warm dark, orange/amber/cream
+- **Reset:** warm light, sage/terracotta
 
-Shared: large headlines, generous whitespace, weekly trend > daily pass/fail, no streak-shame, persistent banners (allergens on Build, caps remaining on Reset).
-
-System dark mode follows the user's iOS setting; mode tokens override at the screen root via `ThemeProvider`.
+Shared: large headlines, generous whitespace, weekly trend > daily pass/fail, no streak-shame, persistent banners (allergens on Build, caps remaining on Reset). System dark mode follows iOS; mode tokens override via `ThemeProvider`.
 
 ### Tactile UX (load-bearing — the app feels alive)
 
-The app is built to feel like a participant, not a form. Every meaningful interaction is multisensory: visible state change + spring animation + haptic + (for wins) a brief toast.
-
-**Components that own the feel:**
+Every interaction is multisensory: visible state change + spring animation + haptic + (for wins) brief toast.
 
 | Concern | Lives in | Notes |
 |---|---|---|
-| All button presses | `Components/TactileButtonStyle.swift` | Five variants (`primary`/`secondary`/`pill`/`bump`/`ghost`); subtle top-edge highlight at rest, spring scale-down on press, optional glare sweep on `primary`, light haptic tick on touch-down |
-| Tappable cards (whole card is the action) | `Components/PressableCard.swift` | Same press feel, no glare, accent stroke on press |
-| Number readouts (stats) | `Components/AnimatedNumber.swift` | `.contentTransition(.numericText())` + spring tween; never snaps |
-| Progress bars | `Components/ProgressBar.swift` | Smooth spring fill; **success haptic + bright flash** when value crosses target |
-| Confirmations | `Services/ToastCenter.swift` + `Components/ToastView.swift` | One-toast-at-a-time, animates from top, auto-dismiss ~1.8s; fires matching haptic |
-| All haptics | `Services/Haptics.swift` | Five named patterns (`tap`/`bump`/`success`/`warn`/`selection`) — keep the vocabulary small |
+| All button presses | `Components/TactileButtonStyle.swift` | 5 variants (`primary`/`secondary`/`pill`/`bump`/`ghost`); spring scale-down, light haptic tick |
+| Tappable cards | `Components/PressableCard.swift` | Same press feel, accent stroke on press |
+| Number readouts | `Components/AnimatedNumber.swift` | `.contentTransition(.numericText())` + spring tween |
+| Progress bars | `Components/ProgressBar.swift` | Spring fill; success haptic + flash on target cross |
+| Confirmations | `Services/ToastCenter.swift` + `Components/ToastView.swift` | One-at-a-time, ~1.8s, matching haptic |
+| All haptics | `Services/Haptics.swift` | 5 patterns: `tap`/`bump`/`success`/`warn`/`selection` |
 
-**Rules:**
+Rules:
+1. Every `Button` uses `.tactile(...)`. Never `buttonStyle(.plain)`.
+2. Every meaningful mutation fires a toast (`toasts.logged(...)`, `toasts.pr(...)`, `toasts.goalHit(...)`).
+3. Don't add a 6th button variant. Reuse one.
+4. Don't double-haptic. `.tactile()` already fires impact on press; only call `Haptics.bump/.success/.warn` for *outcome* feedback.
+5. Whole-card-as-button beats inline buttons inside a card — use `PressableCard` and drop the redundant action button.
 
-1. **Every `Button` uses `.tactile(...)`.** Never `buttonStyle(.plain)` or default styling.
-2. **Every meaningful mutation fires a toast.** Logged a meal → `toasts.logged(...)`. Beat a PR → `toasts.pr(...)`. Goal hit → `toasts.goalHit(...)`.
-3. **Don't add a 6th button variant.** Reuse one. Visual noise is the enemy of "wants to keep clicking."
-4. **Don't double-haptic.** `.tactile()` already fires `.sensoryFeedback(.impact)` on press. Don't also call `Haptics.tap()` in the action closure. Use `Haptics.bump()` / `.success()` / `.warn()` for *outcome* feedback, not press feedback.
-5. **Whole-card-as-button beats inline buttons inside a card.** Use `PressableCard` and drop the redundant "LOG IT" button.
+---
+
+## CI / TestFlight rules (do not regress)
+
+All "Current rule" entries below trace to a specific past incident; full incident narratives live in [docs/ci-history.md](docs/ci-history.md). Touch a rule only when you understand why it exists.
+
+### Mac-less workflow
+- No local Xcode. Loop is **push → `compile.yml` tells you → patch → push**. See [README.md](README.md) for setup.
+- Don't add Mac-only steps to docs without flagging them "optional, Mac-only."
+- Strict concurrency is **minimal** in `project.yml` during scaffolding. Bump to `complete` once surface is stable.
+
+### Test target topology
+- `OurFitnessTests` is **hostless**: compiles `OurFitness/Domain` sources directly. No `@testable import OurFitness`. `TEST_HOST` and `BUNDLE_LOADER` blank. `scripts/validate-ci-invariants.sh` enforces.
+- For future apps: put pure logic in a Swift Package, or compile pure sources directly into a hostless test target. **Do not** use the iOS app executable as a `BUNDLE_LOADER` shortcut — `.app/OurFitness` is often a stub for `OurFitness.debug.dylib` and hosting through it triggers the SwiftUI app lifecycle.
+
+### TestFlight signing — fastlane `match`, never raw `cert`/`sigh`
+- Signing assets live encrypted in a separate private repo (`LLLlamas/Our-Fitness-Certs`). CI runs `match` in **readonly mode** (`MATCH_READONLY=true`) by default — pulls existing assets, cannot consume an Apple Distribution cert slot.
+- For App Store/TestFlight provisioning, omit `adhoc`/`developer_id` entirely (passing them as `false` triggers Fastlane's mutex check). `validate-ci-invariants.sh` guards top-level `cert(` / `sigh(` calls and false sigh-mode flags.
+- Bootstrap or rotation only: dispatch with `refresh_signing` ✅ checked → `MATCH_READONLY=false` → `fastlane ios sync_signing` runs before XcodeGen/tests so cert-capacity failures fail fast.
+- **Preflight** step (`Preflight — signing mode + match repo readiness`) prints the resolved mode and, in readonly, clones the match repo to confirm a `.p12` exists; fails fast with actionable message if empty.
+- Required release secrets: `APPLE_TEAM_ID`, `APP_STORE_CONNECT_API_*`, `KEYCHAIN_PASSWORD`, `MATCH_GIT_URL`, `MATCH_PASSWORD`, `MATCH_GIT_BASIC_AUTHORIZATION` (base64 `github-user:token`).
+- If `Could not create another Distribution certificate, reached the maximum number`: revoke stale unused **Apple Distribution** certs at developer.apple.com (don't touch one signing a build under review), then run TestFlight once with `refresh_signing` checked. Leave it unchecked after that.
+- TestFlight workflow uses Ruby **3.3** (Fastlane dropped 3.2 support).
+
+### GitHub Actions boolean inputs
+- Access `workflow_dispatch` boolean inputs as `inputs.<name>` and compare with `== true` — **not** `github.event.inputs.<name> == 'true'`. The latter coerces typed booleans to strings and silently always returns false.
+
+### App Store Connect upload requirements
+- **Xcode 26+ / iOS 26 SDK** is mandatory for upload. Both workflows run on `macos-26`.
+- **Do not hard-code `Xcode_26.0.app`.** Runner images install point-release names (`Xcode_26.0.1.app`, etc.) and keep the latest beta alongside. The **Select Xcode 26** step disables `*beta*.app` by rename, globs `Xcode_26*.app`, drops dangling symlinks, picks the highest valid via `sort -V`, and exports both `DEVELOPER_DIR` **and** `PATH` (beta `usr/bin` can otherwise route `actool`/`clang`/`ld` to beta tooling even when DEVELOPER_DIR points elsewhere — symptom: ASC rejects external testing with "build is using a beta version of Xcode").
+- **Simulator runtime is not preinstalled.** The **Ensure iOS simulator runtime** step runs `sudo xcodebuild -runFirstLaunch` first (mandatory — otherwise `-downloadPlatform` exits 70 with the misleading "not available for download"), then retries `xcodebuild -downloadPlatform iOS` up to 3 times. **Do not pass `-buildVersion`** — let xcodebuild pick the runtime matching the selected Xcode's iphonesimulator SDK.
+- Build/test destinations: `platform=iOS Simulator,name=iPhone 17` with **no `OS=` suffix**. Fastfile `device:` is `"iPhone 17"`. Never `generic/platform=iOS Simulator`. When the runner image upgrades and drops the named device, update both to the newest iPhone model present in the available destinations list printed in the xcodebuild error.
+- `Info.plist` base `UISupportedInterfaceOrientations` must include all four orientations (Portrait, PortraitUpsideDown, LandscapeLeft, LandscapeRight) for iPad multitasking validation. Keep `~ipad` variant in sync. `UILaunchScreen` dict (already present) satisfies the launch-screen requirement.
+
+### Why native / Why SwiftData
+- **Native:** HealthKit only works in native iOS apps. Capacitor/PWA can't read step counts. Side benefits: real push, Live Activities, Shortcuts, App Intents, widgets.
+- **SwiftData:** SwiftUI-native `@Query`, CloudKit sync via one flag, clean `VersionedSchema` migration, SQLite backing — durability identical to Core Data, better dev velocity at this size.
 
 ---
 
 ## Non-goals (v1)
 
-No third user. No medical advice. No social/sharing/leaderboards. No barcode scan / restaurants / Instacart. No notifications until the daily loop is solid. No Apple Watch app (yet — likely v2 once daily loop is loved).
+No third user. No medical advice. No social/sharing/leaderboards. No barcode scan / restaurants / Instacart. No notifications until the daily loop is solid. No Apple Watch (likely v2).
 
 ---
 
 ## Build order
 
-1. Onboarding + profile creation + HealthKit permission request
-2. Today view (bars, steps from HealthKit, log a meal, log a set)
-3. Suggestion engine surfaced in Today
-4. Workouts: program picker → block runner → set logger with progression target
+1. Onboarding + profile + HealthKit permission
+2. Today view (bars, steps, log meal, log set)
+3. Suggestion engine in Today
+4. Workouts: program picker → block runner → set logger with progression
 5. Progress: weight + steps + markers + lift PRs
 6. Nutrition library browser
 7. Weekly planner + grocery list
-8. Export/import (JSON + SwiftData .store cold backup)
-9. 14-day auto-adjust signals as suggestion cards
+8. Export/import (JSON + SwiftData `.store` backup)
+9. 14-day auto-adjust as suggestion cards
 10. Apple Watch companion (post-v1)
 
 **Ship #1–4 before anything below. The daily loop is the product.**
@@ -292,7 +233,8 @@ No third user. No medical advice. No social/sharing/leaderboards. No barcode sca
 
 ## Foundation references
 
-- [RepCheck.md](RepCheck.md) — friction-free logging UX; the bar for one-tap actions
-- [nutrition-plan-research.md](nutrition-plan-research.md) — validated Build nutrition spec; food library, math, anchor schedule
-- [nutrition-plan.html](nutrition-plan.html) — Build visual reference (look/feel, not codebase)
-- [README.md](README.md) — local setup, XcodeGen, TestFlight CI
+- [README.md](README.md) — setup, XcodeGen, TestFlight CI, secrets
+- [docs/ci-history.md](docs/ci-history.md) — full incident narratives behind every "do not regress" rule
+- [RepCheck.md](RepCheck.md) — friction-free logging UX bar
+- [nutrition-plan-research.md](nutrition-plan-research.md) — Build nutrition spec
+- [nutrition-plan.html](nutrition-plan.html) — Build visual reference
