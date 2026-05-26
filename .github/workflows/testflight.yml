@@ -63,6 +63,28 @@ jobs:
             exit 1
           fi
 
+      - name: Preflight — signing mode + match repo readiness
+        run: |
+          if [ "$MATCH_READONLY" = "false" ]; then
+            echo "::warning title=Signing mode::REFRESH — match will create/rotate signing assets and push to $MATCH_GIT_URL. Only use for bootstrap or intentional rotation."
+            exit 0
+          fi
+          echo "::notice title=Signing mode::READONLY — match will sync existing signing assets from $MATCH_GIT_URL."
+          auth="$(printf '%s' "$MATCH_GIT_BASIC_AUTHORIZATION" | base64 -d 2>/dev/null || true)"
+          if [ -z "$auth" ]; then
+            echo "::error::MATCH_GIT_BASIC_AUTHORIZATION is not valid base64. Re-create it from 'github-user:token' and re-save the secret."
+            exit 1
+          fi
+          tmp="$(mktemp -d)"
+          if ! git -c http.extraHeader="Authorization: Basic $MATCH_GIT_BASIC_AUTHORIZATION" clone --depth=1 --quiet "$MATCH_GIT_URL" "$tmp"; then
+            echo "::error::Failed to clone match repo at $MATCH_GIT_URL. Check the URL has no leading/trailing spaces and the PAT in MATCH_GIT_BASIC_AUTHORIZATION can read the repo."
+            exit 1
+          fi
+          if ! ls "$tmp/certs/distribution/"*.p12 >/dev/null 2>&1; then
+            echo "::error::Match repo $MATCH_GIT_URL has no Apple Distribution cert yet — it has never been bootstrapped. Re-run this workflow with 'refresh_signing' checked to seed the cert + provisioning profile."
+            exit 1
+          fi
+
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode_${{ env.XCODE_VERSION }}.app
 

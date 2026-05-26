@@ -68,6 +68,8 @@ Current rule: **TestFlight signing uses fastlane `match`, not direct `cert`/`sig
 
 Required release secrets now include the Apple API/keychain secrets plus `MATCH_GIT_URL`, `MATCH_PASSWORD`, and `MATCH_GIT_BASIC_AUTHORIZATION` (base64 `github-user:token` for the private match repo). If a run fails with `Could not create another Distribution certificate, reached the maximum number`, manual cleanup is required in Apple Developer > Certificates: revoke stale unused **Apple Distribution** certificates, then run TestFlight once with `refresh_signing` checked to seed/refresh match. Leave it unchecked after that.
 
+The TestFlight workflow runs a **Preflight — signing mode + match repo readiness** step before tests/archive that prints the resolved signing mode (READONLY vs REFRESH) as a GitHub annotation and, in readonly mode, clones the match repo to confirm an Apple Distribution `.p12` exists. If the repo is empty it fails fast with an actionable message telling the user to re-run with `refresh_signing` checked. This catches the operational mistake of dispatching a bootstrap run without ticking the checkbox before four minutes of test execution.
+
 For future apps we build: never rely on ephemeral CI `cert`/`sigh` as the long-term signing strategy. Either use `match` from day one or another persistent signing-store pattern that preserves the private key between runners. Keep the CI guard that rejects top-level `cert(` or `sigh(` calls in the release Fastfile unless there is a deliberate, documented exception.
 
 ### GitHub Actions boolean inputs in workflow expressions (do not regress)
