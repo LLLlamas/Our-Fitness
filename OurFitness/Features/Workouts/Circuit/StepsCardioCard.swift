@@ -1,18 +1,17 @@
 // Circuit Train — Steps & Cardio card.
 //
-// - Big progress ring for today's steps vs goal
-// - Milestone toasts at 3k / 5k / 8k / 10k (one-shot per day; gate via @AppStorage)
+// - Progress ring for today's steps vs goal
+// - Tap "/ goal" in ring center to open goal picker (persists per profile in AppStorage)
+// - Milestone toasts at 3k / 5k / 8k / 10k (one-shot per day; gated via @AppStorage)
 // - "Ahead/behind yesterday at this hour" line (pure helper in Domain)
 // - 7-day mini-bar strip
-// - Tap → placeholder deep-dive sheet (real one lands in plan §7)
 
 import SwiftUI
 
 struct StepsCardioCard: View {
     let profile: ProfileDTO
     let todaysSteps: Int
-    let weeklySeries: [Trends.Point]   // 7 oldest-first
-    /// Cumulative hourly steps today (24 ints). Empty array = no intraday data.
+    let weeklySeries: [Trends.Point]
     let intradayToday: [Int]
     let intradayYesterday: [Int]
     let activeEnergyKcalThisWeek: Int
@@ -22,10 +21,11 @@ struct StepsCardioCard: View {
     @Environment(\.theme) private var theme
     @EnvironmentObject private var toasts: ToastCenter
     @State private var showDeepDive = false
+    @State private var showGoalPicker = false
+    @State private var pickerGoal: Int = 10_000
 
-    // One @AppStorage entry per day-key+profile so milestones fire only once
-    // per real-world day. Stored as a comma-joined string of milestone integers.
     @AppStorage private var firedRaw: String
+    @AppStorage private var customGoalRaw: Int
 
     init(
         profile: ProfileDTO,
@@ -45,13 +45,14 @@ struct StepsCardioCard: View {
         self.activeEnergyKcalThisWeek = activeEnergyKcalThisWeek
         self.exerciseMinutesThisWeek = exerciseMinutesThisWeek
         self.streakWeeks = streakWeeks
-        // Per-profile, per-day storage key keeps milestones isolated across
-        // device switches and rolls over automatically at midnight.
         let key = "milestonesFired.\(profile.id.uuidString).\(Dates.dayKey())"
         _firedRaw = AppStorage(wrappedValue: "", key)
+        _customGoalRaw = AppStorage(wrappedValue: 0, "stepsGoal.\(profile.id.uuidString)")
     }
 
-    private var goal: Int { profile.computedTargets.stepsDaily }
+    private var goal: Int {
+        customGoalRaw > 0 ? customGoalRaw : profile.computedTargets.stepsDaily
+    }
     private var pct: Double {
         guard goal > 0 else { return 0 }
         return min(1, Double(todaysSteps) / Double(goal))
@@ -67,16 +68,13 @@ struct StepsCardioCard: View {
                 secondaryStats
             }
         }
-        .onChange(of: todaysSteps) { _, newValue in
-            checkMilestones(steps: newValue)
-        }
-        .onAppear {
-            // Catch up if we cold-start past a milestone (e.g. background sync).
-            checkMilestones(steps: todaysSteps)
-        }
+        .onChange(of: todaysSteps) { _, newValue in checkMilestones(steps: newValue) }
+        .onAppear { checkMilestones(steps: todaysSteps) }
         .sheet(isPresented: $showDeepDive) {
-            stepsDeepDivePlaceholder
-                .themed(theme.mode)
+            stepsDeepDivePlaceholder.themed(theme.mode)
+        }
+        .sheet(isPresented: $showGoalPicker) {
+            goalPickerSheet.themed(theme.mode)
         }
     }
 
@@ -97,22 +95,23 @@ struct StepsCardioCard: View {
     private var ringRow: some View {
         HStack(spacing: 18) {
             ZStack {
-                Circle().stroke(theme.barBg, lineWidth: 12)
-                Circle()
-                    .trim(from: 0, to: pct)
-                    .stroke(theme.accent,
-                            style: StrokeStyle(lineWidth: 12, lineCap: .round))
-                    .rotationEffect(.degrees(-90))
-                    .animation(.spring(response: 0.55, dampingFraction: 0.85), value: pct)
-                VStack(spacing: 0) {
+                ProgressRing(pct: pct, color: theme.accent, trackColor: theme.barBg, lineWidth: 12)
+                VStack(spacing: 2) {
                     AnimatedNumber(
                         Double(todaysSteps),
                         font: .system(size: 28, weight: .semibold),
                         color: theme.text
                     )
-                    Text("/ \(goal)")
-                        .font(.system(.caption2, design: .monospaced))
-                        .foregroundStyle(theme.dim)
+                    Button {
+                        pickerGoal = goal
+                        showGoalPicker = true
+                    } label: {
+                        Text("/ \(goal.formatted())")
+                            .font(.system(.caption2, design: .monospaced))
+                            .foregroundStyle(theme.dim)
+                            .underline(color: theme.dim.opacity(0.5))
+                    }
+                    .tactile(.ghost)
                 }
             }
             .frame(width: 110, height: 110)
@@ -172,13 +171,13 @@ struct StepsCardioCard: View {
     @ViewBuilder
     private var secondaryStats: some View {
         HStack(spacing: 14) {
-            stat(label: "Active kcal · wk", value: "\(activeEnergyKcalThisWeek)")
-            stat(label: "Exercise min · wk", value: "\(exerciseMinutesThisWeek)")
+            statCell(label: "Active kcal · wk", value: "\(activeEnergyKcalThisWeek)")
+            statCell(label: "Exercise min · wk", value: "\(exerciseMinutesThisWeek)")
         }
     }
 
     @ViewBuilder
-    private func stat(label: String, value: String) -> some View {
+    private func statCell(label: String, value: String) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(label.uppercased())
                 .font(.system(size: 9, weight: .medium)).tracking(2)
@@ -199,6 +198,51 @@ struct StepsCardioCard: View {
         var updated = fired
         updated.insert(milestone)
         firedRaw = Movement.encode(firedSet: updated)
+    }
+
+    // MARK: - Goal picker sheet
+
+    @ViewBuilder
+    private var goalPickerSheet: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Daily Steps Goal")
+                    .font(.system(size: 28, weight: .regular))
+                    .foregroundStyle(theme.text)
+                Text("Tap a goal to set it. Mode default is \(profile.computedTargets.stepsDaily.formatted()).")
+                    .font(.caption)
+                    .foregroundStyle(theme.dim)
+            }
+            .padding(.top, 28)
+            .padding(.horizontal, 20)
+
+            Picker("Goal", selection: $pickerGoal) {
+                ForEach(Array(stride(from: 2000, through: 25000, by: 500)), id: \.self) { val in
+                    Text("\(val.formatted()) steps").tag(val)
+                }
+            }
+            .pickerStyle(.wheel)
+
+            HStack(spacing: 12) {
+                Button("Reset to default") {
+                    customGoalRaw = 0
+                    showGoalPicker = false
+                }
+                .tactile(.secondary, fullWidth: true)
+                Button("Save") {
+                    customGoalRaw = pickerGoal
+                    showGoalPicker = false
+                    Haptics.success()
+                }
+                .tactile(.primary, fullWidth: true)
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 28)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(theme.bg.ignoresSafeArea())
+        .presentationDetents([.medium])
+        .presentationDragIndicator(.visible)
     }
 
     // MARK: - Deep-dive placeholder

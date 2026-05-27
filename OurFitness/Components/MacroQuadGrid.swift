@@ -1,6 +1,6 @@
 // Macro progress display — four mini progress rings in a 2×2 grid.
 // Each ring shows current vs target with a circular arc fill.
-// An ⓘ popover on each cell explains why that target exists.
+// An ⓘ button on each cell opens a sheet explaining why that target exists.
 
 import SwiftUI
 
@@ -75,16 +75,7 @@ private struct MacroRingCell: View {
     var body: some View {
         VStack(spacing: 6) {
             ZStack {
-                // Track
-                Circle()
-                    .stroke(theme.barBg, lineWidth: 9)
-                // Fill arc
-                Circle()
-                    .trim(from: 0, to: pct)
-                    .stroke(ringColor, style: StrokeStyle(lineWidth: 9, lineCap: .round))
-                    .rotationEffect(.degrees(-90))
-                    .animation(.spring(response: 0.5, dampingFraction: 0.85), value: pct)
-                // Center text
+                ProgressRing(pct: pct, color: ringColor, trackColor: theme.barBg, lineWidth: 9)
                 VStack(spacing: 1) {
                     AnimatedNumber(
                         value,
@@ -100,20 +91,18 @@ private struct MacroRingCell: View {
             }
             .frame(width: 72, height: 72)
 
-            // Label row with ⓘ
             HStack(spacing: 3) {
                 Text(label.uppercased())
                     .font(.system(size: 9, weight: .medium)).tracking(2)
                     .foregroundStyle(theme.dim)
-                Button {
-                    showInfo = true
-                } label: {
+                Button { showInfo = true } label: {
                     Image(systemName: "info.circle")
                         .font(.system(size: 10))
                 }
                 .tactile(.ghost)
-                .popover(isPresented: $showInfo, attachmentAnchor: .point(.top)) {
-                    infoPopover
+                .sheet(isPresented: $showInfo) {
+                    MacroInfoSheet(label: label, infoText: infoText)
+                        .themed(theme.mode)
                 }
             }
 
@@ -126,26 +115,35 @@ private struct MacroRingCell: View {
         .background(theme.card)
         .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
         .onChange(of: value) { old, new in
-            // Flash success haptic when crossing into the on-target band
             let wasUnder = old < target * 0.9
             if wasUnder && hitTarget { Haptics.success() }
         }
     }
+}
 
-    @ViewBuilder
-    private var infoPopover: some View {
+// MARK: - Info sheet
+
+private struct MacroInfoSheet: View {
+    let label: String
+    let infoText: String
+    @Environment(\.theme) private var theme
+
+    var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 12) {
                 Text(label.uppercased())
                     .font(.caption).tracking(2)
                     .foregroundStyle(theme.dim)
                 Text(infoText)
                     .font(.callout)
+                    .foregroundStyle(theme.text)
                     .fixedSize(horizontal: false, vertical: true)
             }
-            .padding(16)
+            .padding(20)
         }
-        .frame(maxWidth: 280)
-        .presentationCompactAdaptation(.popover)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(theme.bg.ignoresSafeArea())
+        .presentationDetents([.medium])
+        .presentationDragIndicator(.visible)
     }
 }

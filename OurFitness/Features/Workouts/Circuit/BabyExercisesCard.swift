@@ -1,7 +1,7 @@
 // Inline quick-log for Circuit exercises (baby exercises and any user-added ones).
 // No sets, no targets, no sheet. Tap the button right here — it saves immediately.
 // Reps exercises get "+1" per tap. Duration exercises get "+1 min" and "+5 min".
-// Today's running total is shown below each exercise name.
+// Header ring shows how many distinct exercises were logged today / total available.
 
 import SwiftUI
 import SwiftData
@@ -34,13 +34,26 @@ struct BabyExercisesCard: View {
             .reduce(0) { $0 + $1.reps }
     }
 
+    private var exercisesDoneToday: Int {
+        myExercises.filter { todayReps(for: $0) > 0 }.count
+    }
+
+    private var completionPct: Double {
+        guard !myExercises.isEmpty else { return 0 }
+        return min(1, Double(exercisesDoneToday) / Double(myExercises.count))
+    }
+
+    private var todayTotalKcal: Double {
+        let uid = profile.id
+        return setModels
+            .filter { $0.userId == uid && Dates.dayKey($0.timestamp) == todayKey }
+            .reduce(0) { $0 + ($1.caloriesEst ?? 0) }
+    }
+
     var body: some View {
         Card {
             VStack(alignment: .leading, spacing: 14) {
-                Text("Movements")
-                    .font(.system(size: 22, weight: .regular))
-                    .foregroundStyle(theme.text)
-
+                header
                 if myExercises.isEmpty {
                     Text("No exercises yet. Head to Settings or ask to add one.")
                         .font(.callout).foregroundStyle(theme.dim)
@@ -58,6 +71,40 @@ struct BabyExercisesCard: View {
                     }
                 }
             }
+        }
+    }
+
+    @ViewBuilder
+    private var header: some View {
+        HStack(alignment: .center, spacing: 12) {
+            ZStack {
+                ProgressRing(pct: completionPct, color: theme.accent, trackColor: theme.barBg, lineWidth: 7)
+                VStack(spacing: 0) {
+                    Text("\(exercisesDoneToday)")
+                        .font(.system(size: 18, weight: .semibold, design: .monospaced))
+                        .foregroundStyle(theme.text)
+                    Text("/\(myExercises.count)")
+                        .font(.system(size: 9, design: .monospaced))
+                        .foregroundStyle(theme.dim)
+                }
+            }
+            .frame(width: 54, height: 54)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Movements")
+                    .font(.system(size: 22, weight: .regular))
+                    .foregroundStyle(theme.text)
+                if todayTotalKcal > 0 {
+                    Text("~\(Int(todayTotalKcal)) kcal burned today")
+                        .font(.caption)
+                        .foregroundStyle(theme.dim)
+                } else {
+                    Text("done today")
+                        .font(.caption)
+                        .foregroundStyle(theme.dim)
+                }
+            }
+            Spacer()
         }
     }
 
@@ -83,12 +130,13 @@ struct BabyExercisesCard: View {
         )
         Repos.addSet(ctx, dto)
 
-        let detail = exercise.kind == .duration
+        let unit = exercise.kind == .duration
             ? "+\(amount) min"
             : "+\(amount) rep\(amount == 1 ? "" : "s")"
+        let kcalStr = kcal >= 1 ? " · ~\(Int(kcal)) kcal" : ""
         toasts.show(Toast(
             title: exercise.name,
-            detail: detail,
+            detail: unit + kcalStr,
             accent: .win,
             symbol: "checkmark.seal.fill"
         ))
@@ -104,6 +152,7 @@ private struct ExerciseRow: View {
     let onLog: (Int) -> Void
 
     @Environment(\.theme) private var theme
+    @State private var showInfo = false
 
     private var loadLabel: String {
         guard let lb = exercise.loadLb else { return "" }
@@ -115,6 +164,19 @@ private struct ExerciseRow: View {
             return todayCount > 0 ? "\(todayCount) min today" : "not logged yet"
         } else {
             return todayCount > 0 ? "\(todayCount) reps today" : "not logged yet"
+        }
+    }
+
+    private var todayKcal: Double {
+        guard todayCount > 0 else { return 0 }
+        if exercise.kind == .duration {
+            return CalorieEstimator.caloriesForDuration(
+                minutes: Double(todayCount), loadLb: exercise.loadLb, bodyWeightLb: profile.weightLb
+            )
+        } else {
+            return CalorieEstimator.caloriesForReps(
+                reps: todayCount, loadLb: exercise.loadLb, bodyWeightLb: profile.weightLb
+            )
         }
     }
 
@@ -130,6 +192,21 @@ private struct ExerciseRow: View {
             }
             Spacer(minLength: 0)
 
+            Button { showInfo = true } label: {
+                Image(systemName: "info.circle")
+                    .font(.system(size: 13))
+                    .foregroundStyle(theme.dim)
+            }
+            .tactile(.ghost)
+            .sheet(isPresented: $showInfo) {
+                ExerciseInfoSheet(
+                    exercise: exercise,
+                    todayCount: todayCount,
+                    todayKcal: todayKcal
+                )
+                .themed(theme.mode)
+            }
+
             if exercise.kind == .duration {
                 HStack(spacing: 6) {
                     Button { onLog(1) } label: { Text("+1 min") }
@@ -143,5 +220,96 @@ private struct ExerciseRow: View {
             }
         }
         .padding(.vertical, 4)
+    }
+}
+
+// MARK: - Exercise info sheet
+
+private struct ExerciseInfoSheet: View {
+    let exercise: ExerciseDTO
+    let todayCount: Int
+    let todayKcal: Double
+
+    @Environment(\.theme) private var theme
+    @Environment(\.dismiss) private var dismiss
+
+    private var hint: Movement.PostExerciseHint {
+        Movement.postExerciseHint(for: exercise)
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                Text(exercise.name)
+                    .font(.system(size: 32, weight: .regular))
+                    .foregroundStyle(theme.text)
+
+                // Muscles worked
+                infoBlock(
+                    icon: "figure.strengthtraining.traditional",
+                    title: "Muscles worked",
+                    body: hint.musclesWorked.joined(separator: ", ")
+                )
+
+                // Today's activity
+                if todayCount > 0 {
+                    infoBlock(
+                        icon: "flame.fill",
+                        title: "Today",
+                        body: exercise.kind == .duration
+                            ? "\(todayCount) min · ~\(Int(todayKcal)) kcal burned"
+                            : "\(todayCount) reps · ~\(Int(todayKcal)) kcal burned"
+                    )
+                }
+
+                // Recovery nutrition
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "leaf.fill")
+                            .font(.system(size: 11))
+                            .foregroundStyle(theme.accent2)
+                        Text("Recovery (within \(hint.windowMinutes) min)")
+                            .font(.caption).tracking(2).textCase(.uppercase)
+                            .foregroundStyle(theme.dim)
+                    }
+                    Text(hint.primaryNeed)
+                        .font(.callout).foregroundStyle(theme.text)
+                    Text("Try: \(hint.recoveryFoods.joined(separator: " · "))")
+                        .font(.caption).italic()
+                        .foregroundStyle(theme.dim)
+                }
+                .padding(14)
+                .background(theme.card)
+                .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+
+                if let lb = exercise.loadLb {
+                    Text("Load: \(Int(lb)) lb — MET-based estimate uses actual body weight for accuracy.")
+                        .font(.caption2)
+                        .foregroundStyle(theme.dim)
+                }
+            }
+            .padding(20)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(theme.bg.ignoresSafeArea())
+        .presentationDetents([.medium, .large])
+        .presentationDragIndicator(.visible)
+    }
+
+    @ViewBuilder
+    private func infoBlock(icon: String, title: String, body: String) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 6) {
+                Image(systemName: icon)
+                    .font(.system(size: 11))
+                    .foregroundStyle(theme.accent)
+                Text(title.uppercased())
+                    .font(.caption).tracking(2)
+                    .foregroundStyle(theme.dim)
+            }
+            Text(body)
+                .font(.callout)
+                .foregroundStyle(theme.text)
+        }
     }
 }

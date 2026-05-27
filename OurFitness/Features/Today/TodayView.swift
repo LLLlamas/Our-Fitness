@@ -42,6 +42,7 @@ struct TodayView: View {
                 StepsCard(
                     steps: todaysSteps,
                     goal: profile.computedTargets.stepsDaily,
+                    profileId: profile.id,
                     healthGranted: profile.healthGranted,
                     onConnectHealth: connectHealth
                 )

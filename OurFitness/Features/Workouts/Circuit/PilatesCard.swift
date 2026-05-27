@@ -1,9 +1,10 @@
 // Circuit Train — Pilates card.
 //
+// - Progress ring showing sessions this week / weekly goal
 // - "Log Pilates" PressableCard → sheet (duration slider, focus chips, notes)
 // - Recent sessions strip (last 5)
-// - Weekly frequency vs goal (default 3x/wk)
 // - Weekly streak indicator (no streak-shame: missing weeks slide to 0)
+// - Info sheet: muscles worked + post-session nutrition hint
 
 import SwiftUI
 import SwiftData
@@ -35,6 +36,10 @@ struct PilatesCard: View {
     private var streakWeeks: Int {
         Movement.pilatesWeeklyStreak(sessions: sessions, goalSessions: weeklyGoal)
     }
+    private var weekPct: Double {
+        guard weeklyGoal > 0 else { return 0 }
+        return min(1, Double(thisWeek.count) / Double(weeklyGoal))
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -42,14 +47,11 @@ struct PilatesCard: View {
             PressableCard(action: { showLogSheet = true }) {
                 logCTA
             }
-            weeklyProgress
             recentStrip
         }
         .sheet(isPresented: $showLogSheet) {
             PilatesLogSheet(profileId: profile.id) { dto in
                 Repos.logPilatesSession(ctx, dto)
-                // toasts.pilatesLogged already fires the outcome haptic via
-                // ToastCenter.fireHaptic(for: .ok); don't double-tap.
                 toasts.pilatesLogged(minutes: dto.durationMinutes)
             }
             .themed(theme.mode)
@@ -60,10 +62,28 @@ struct PilatesCard: View {
 
     @ViewBuilder
     private var header: some View {
-        HStack(alignment: .firstTextBaseline) {
-            Text("Pilates")
-                .font(.system(size: 22, weight: .regular))
-                .foregroundStyle(theme.text)
+        HStack(alignment: .center, spacing: 12) {
+            ZStack {
+                ProgressRing(pct: weekPct, color: theme.accent2, trackColor: theme.barBg, lineWidth: 7)
+                VStack(spacing: 0) {
+                    Text("\(thisWeek.count)")
+                        .font(.system(size: 18, weight: .semibold, design: .monospaced))
+                        .foregroundStyle(theme.text)
+                    Text("/\(weeklyGoal)")
+                        .font(.system(size: 9, design: .monospaced))
+                        .foregroundStyle(theme.dim)
+                }
+            }
+            .frame(width: 54, height: 54)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Pilates")
+                    .font(.system(size: 22, weight: .regular))
+                    .foregroundStyle(theme.text)
+                Text("sessions this week")
+                    .font(.caption)
+                    .foregroundStyle(theme.dim)
+            }
             Spacer()
             StreakChip(weeks: streakWeeks, tint: theme.accent2)
         }
@@ -83,28 +103,6 @@ struct PilatesCard: View {
                     .font(.caption).foregroundStyle(theme.dim)
             }
             Spacer(minLength: 0)
-        }
-    }
-
-    @ViewBuilder
-    private var weeklyProgress: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack(alignment: .firstTextBaseline) {
-                Text("This week")
-                    .font(.caption).tracking(2).textCase(.uppercase)
-                    .foregroundStyle(theme.dim)
-                Spacer()
-                Text("\(thisWeek.count) / \(weeklyGoal)")
-                    .font(.system(.footnote, design: .monospaced))
-                    .foregroundStyle(theme.text)
-            }
-            HStack(spacing: 6) {
-                ForEach(0..<weeklyGoal, id: \.self) { idx in
-                    Rectangle()
-                        .fill(idx < thisWeek.count ? theme.accent2 : theme.barBg)
-                        .frame(height: 6)
-                }
-            }
         }
     }
 
@@ -149,6 +147,7 @@ private struct PilatesLogSheet: View {
     @State private var duration: Double = 30
     @State private var focusAreas: Set<PilatesFocusArea> = []
     @State private var notes: String = ""
+    @State private var showRecovery = false
 
     var body: some View {
         ScrollView {
@@ -159,14 +158,18 @@ private struct PilatesLogSheet: View {
 
                 durationSection
                 focusSection
+
+                if !focusAreas.isEmpty {
+                    recoveryHintSection
+                }
+
                 notesSection
 
                 Button {
                     let dto = PilatesSessionDTO(
                         profileId: profileId,
                         durationMinutes: Int(duration),
-                        focusAreas: PilatesFocusArea.allCases
-                            .filter { focusAreas.contains($0) },
+                        focusAreas: PilatesFocusArea.allCases.filter { focusAreas.contains($0) },
                         notes: notes.isEmpty ? nil : notes
                     )
                     onSave(dto)
@@ -211,11 +214,8 @@ private struct PilatesLogSheet: View {
             FlowLayout(spacing: 8) {
                 ForEach(PilatesFocusArea.allCases, id: \.self) { area in
                     Button {
-                        if focusAreas.contains(area) {
-                            focusAreas.remove(area)
-                        } else {
-                            focusAreas.insert(area)
-                        }
+                        if focusAreas.contains(area) { focusAreas.remove(area) }
+                        else { focusAreas.insert(area) }
                     } label: {
                         Text(area.label)
                     }
@@ -223,6 +223,33 @@ private struct PilatesLogSheet: View {
                 }
             }
         }
+    }
+
+    @ViewBuilder
+    private var recoveryHintSection: some View {
+        let hint = Movement.postPilatesHint(areas: Array(focusAreas))
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 6) {
+                Image(systemName: "leaf.fill")
+                    .font(.system(size: 11))
+                    .foregroundStyle(theme.accent2)
+                Text("Recovery")
+                    .font(.caption).tracking(2).textCase(.uppercase)
+                    .foregroundStyle(theme.dim)
+            }
+            Text("Muscles: \(hint.musclesWorked.joined(separator: ", "))")
+                .font(.caption)
+                .foregroundStyle(theme.text)
+            Text("\(hint.primaryNeed) within \(hint.windowMinutes) min.")
+                .font(.caption)
+                .foregroundStyle(theme.dim)
+            Text("Try: \(hint.recoveryFoods.joined(separator: " · "))")
+                .font(.caption).italic()
+                .foregroundStyle(theme.dim)
+        }
+        .padding(12)
+        .background(theme.card)
+        .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
     }
 
     @ViewBuilder
@@ -241,7 +268,7 @@ private struct PilatesLogSheet: View {
     }
 }
 
-// Simple flow layout for chip rows. Local to this file — only consumer.
+// Simple flow layout for chip rows.
 private struct FlowLayout: Layout {
     let spacing: CGFloat
 
@@ -265,9 +292,7 @@ private struct FlowLayout: Layout {
         for sub in subviews {
             let s = sub.sizeThatFits(.unspecified)
             if x + s.width > width && x > 0 {
-                x = 0
-                y += rowHeight + spacing
-                rowHeight = 0
+                x = 0; y += rowHeight + spacing; rowHeight = 0
             }
             positions.append(CGPoint(x: x, y: y))
             x += s.width + spacing

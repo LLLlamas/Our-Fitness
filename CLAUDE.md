@@ -226,6 +226,9 @@ All "Current rule" entries below trace to a specific past incident; full inciden
 ### GitHub Actions boolean inputs
 - Access `workflow_dispatch` boolean inputs as `inputs.<name>` and compare with `== true` — **not** `github.event.inputs.<name> == 'true'`. The latter coerces typed booleans to strings and silently always returns false.
 
+### Xcode 26 SDK constraints
+- `AppShortcutsProvider.appShortcuts` **requires `@AppShortcutsBuilder`** — returning a plain `[AppShortcut]` array literal without it is a compile error in the iOS 26 SDK. See `App/OurFitnessIntents.swift`.
+
 ### App Store Connect upload requirements
 - **Xcode 26+ / iOS 26 SDK** is mandatory for upload. Both workflows run on `macos-26`.
 - **Do not hard-code `Xcode_26.0.app`.** Runner images install point-release names (`Xcode_26.0.1.app`, etc.) and keep the latest beta alongside. The **Select Xcode 26** step disables `*beta*.app` by rename, globs `Xcode_26*.app`, drops dangling symlinks, picks the highest valid via `sort -V`, and exports both `DEVELOPER_DIR` **and** `PATH` (beta `usr/bin` can otherwise route `actool`/`clang`/`ld` to beta tooling even when DEVELOPER_DIR points elsewhere — symptom: ASC rejects external testing with "build is using a beta version of Xcode").

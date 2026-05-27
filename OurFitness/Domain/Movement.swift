@@ -174,6 +174,67 @@ public enum Movement {
         case steps, pilates, cardio
     }
 
+    // MARK: - Post-exercise nutrition hints
+
+    /// What the body needs after a given type of movement, and which muscles
+    /// were primarily worked. Surfaced in exercise info sheets.
+    public struct PostExerciseHint: Sendable {
+        public let musclesWorked: [String]
+        public let primaryNeed: String
+        public let recoveryFoods: [String]
+        public let windowMinutes: Int
+    }
+
+    public static func postExerciseHint(for exercise: ExerciseDTO) -> PostExerciseHint {
+        let muscles: [String] = exercise.muscleGroups.isEmpty
+            ? categoryMuscles(exercise.category)
+            : exercise.muscleGroups
+        let hasLoad = (exercise.loadLb ?? 0) > 0
+
+        if exercise.kind == .duration {
+            return PostExerciseHint(
+                musclesWorked: muscles,
+                primaryNeed: "Carbs + hydration to restock energy",
+                recoveryFoods: ["banana + nut butter", "smoothie", "oatmeal + berries"],
+                windowMinutes: 45
+            )
+        } else if hasLoad {
+            return PostExerciseHint(
+                musclesWorked: muscles,
+                primaryNeed: "Protein (20–30 g) to repair muscle",
+                recoveryFoods: ["Greek yogurt + fruit", "eggs + toast", "chicken + rice"],
+                windowMinutes: 30
+            )
+        } else {
+            return PostExerciseHint(
+                musclesWorked: muscles,
+                primaryNeed: "Protein + hydration",
+                recoveryFoods: ["cottage cheese", "turkey wrap", "protein shake"],
+                windowMinutes: 60
+            )
+        }
+    }
+
+    public static func postPilatesHint(areas: [PilatesFocusArea]) -> PostExerciseHint {
+        let muscles = Array(Set(areas.flatMap(\.muscles)))
+        return PostExerciseHint(
+            musclesWorked: muscles.isEmpty ? ["core", "posture stabilisers"] : muscles,
+            primaryNeed: "Anti-inflammatory protein (20–25 g)",
+            recoveryFoods: ["salmon + veg", "Greek yogurt", "berries + almonds"],
+            windowMinutes: 60
+        )
+    }
+
+    private static func categoryMuscles(_ cat: ExerciseCategory) -> [String] {
+        switch cat {
+        case .compound:   return ["multiple muscle groups"]
+        case .isolation:  return ["targeted muscle group"]
+        case .bodyweight: return ["core", "upper body", "lower body"]
+        case .cardio:     return ["cardiovascular system", "lower body"]
+        case .mobility:   return ["joints", "connective tissue"]
+        }
+    }
+
     /// Sessions falling inside the calendar week containing `now`.
     public static func sessionsThisWeek(
         _ sessions: [PilatesSessionDTO],
@@ -184,5 +245,19 @@ public enum Movement {
         cal.firstWeekday = 2
         guard let week = cal.dateInterval(of: .weekOfYear, for: now) else { return [] }
         return sessions.filter { week.contains($0.date) }
+    }
+}
+
+// MARK: - PilatesFocusArea muscle groups
+
+public extension PilatesFocusArea {
+    var muscles: [String] {
+        switch self {
+        case .core:        return ["transverse abdominis", "obliques", "rectus abdominis"]
+        case .lowerBack:   return ["erector spinae", "multifidus", "glutes"]
+        case .hips:        return ["hip flexors", "glutes", "piriformis"]
+        case .fullBody:    return ["core", "glutes", "upper back", "shoulders"]
+        case .flexibility: return ["hip flexors", "hamstrings", "thoracic extensors"]
+        }
     }
 }

@@ -68,7 +68,7 @@ struct CircuitWorkoutsView: View {
     }
 }
 
-// MARK: - Focus info button (ⓘ with popover)
+// MARK: - Focus info button (ⓘ opens full sheet — avoids popover clipping on iPhone)
 
 private struct FocusInfoButton: View {
     let kind: Movement.CircuitFocusKind
@@ -82,28 +82,40 @@ private struct FocusInfoButton: View {
                 .foregroundStyle(theme.dim)
         }
         .tactile(.ghost)
-        .popover(isPresented: $show, attachmentAnchor: .point(.top)) {
-            focusPopover
+        .sheet(isPresented: $show) {
+            FocusInfoSheet(kind: kind)
+                .themed(theme.mode)
         }
     }
+}
 
-    @ViewBuilder
-    private var focusPopover: some View {
+private struct FocusInfoSheet: View {
+    let kind: Movement.CircuitFocusKind
+    @Environment(\.theme) private var theme
+
+    var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 14) {
                 Text(kind.title.uppercased())
-                    .font(.caption).tracking(2).foregroundStyle(.secondary)
+                    .font(.caption).tracking(2)
+                    .foregroundStyle(theme.dim)
                 Text(kind.infoDetail)
                     .font(.callout)
+                    .foregroundStyle(theme.text)
                     .fixedSize(horizontal: false, vertical: true)
+                Divider()
+                    .background(theme.line)
                 Text(kind.citation)
-                    .font(.caption2).foregroundStyle(.secondary)
+                    .font(.caption2)
+                    .foregroundStyle(theme.dim)
                     .fixedSize(horizontal: false, vertical: true)
             }
-            .padding(16)
+            .padding(20)
         }
-        .frame(maxWidth: 290)
-        .presentationCompactAdaptation(.popover)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(theme.bg.ignoresSafeArea())
+        .presentationDetents([.medium])
+        .presentationDragIndicator(.visible)
     }
 }
 
@@ -119,11 +131,11 @@ private extension Movement.CircuitFocusKind {
     var infoDetail: String {
         switch self {
         case .steps:
-            return "Walking is dose-responsive: every additional 2,000 steps/day reduces cardiovascular mortality risk by ~8–11%. Even modest step increases (3,000–5,000 baseline → 7,000–10,000) measurably lower LDL cholesterol, systolic blood pressure, and fasting insulin — without requiring structured exercise."
+            return "Walking is dose-responsive: every additional 2,000 steps/day reduces cardiovascular mortality risk by ~8–11%. Even modest step increases (3,000–5,000 baseline → 7,000–10,000) measurably lower LDL cholesterol, systolic blood pressure, and fasting insulin — without requiring structured exercise.\n\nMuscles worked: calves, quads, glutes, hip flexors, core stabilisers. Over time: cardiovascular system, metabolic rate."
         case .pilates:
-            return "Core and postural strength from Pilates reduces lower-back pain, improves balance, and lowers resting blood pressure through parasympathetic activation. Mind-body practices showing ≥8 weeks of consistent training reduce systolic BP by 4–8 mmHg on average."
+            return "Core and postural strength from Pilates reduces lower-back pain, improves balance, and lowers resting blood pressure through parasympathetic activation. Mind-body practices showing ≥8 weeks of consistent training reduce systolic BP by 4–8 mmHg on average.\n\nMuscles worked: transverse abdominis, obliques, erector spinae, glutes, hip flexors — depends on focus area."
         case .cardio:
-            return "Zone-2 cardio (conversational pace) trains mitochondrial density, raises HDL, lowers triglycerides, and improves insulin sensitivity. As little as 150 min/week of moderate-intensity activity reduces cardiovascular disease risk by ~35%."
+            return "Zone-2 cardio (conversational pace) trains mitochondrial density, raises HDL, lowers triglycerides, and improves insulin sensitivity. As little as 150 min/week of moderate-intensity activity reduces cardiovascular disease risk by ~35%.\n\nMuscles worked: heart muscle (cardiac output), lower body (quads, hamstrings, calves), core stabilisers."
         }
     }
 

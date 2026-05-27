@@ -62,10 +62,10 @@ public enum Repos {
     /// with a matching name.
     private static func seedCircuitExercises(_ ctx: ModelContext, profileId: UUID) {
         let existing = Set(exercises(ctx, forProfile: profileId).map(\.name))
-        let seeds: [(name: String, loadLb: Double, kind: ExerciseKind)] = [
-            ("Lifted Baby",     30, .reps),
-            ("Lifted Stroller", 25, .reps),
-            ("Carried Baby",    30, .duration),
+        let seeds: [(name: String, loadLb: Double, kind: ExerciseKind, muscles: [String])] = [
+            ("Lifted Baby",     30, .reps,     ["biceps", "core", "upper back", "glutes"]),
+            ("Lifted Stroller", 25, .reps,     ["shoulders", "arms", "core"]),
+            ("Carried Baby",    30, .duration, ["core", "lower back", "posture stabilisers"]),
         ]
         for s in seeds where !existing.contains(s.name) {
             createExercise(
@@ -76,7 +76,8 @@ public enum Repos {
                 defaultRepsTop: 12,
                 tracksWeight: false,
                 loadLb: s.loadLb,
-                kind: s.kind
+                kind: s.kind,
+                muscleGroups: s.muscles
             )
         }
     }
@@ -120,13 +121,14 @@ public enum Repos {
         defaultRepsTop: Int,
         tracksWeight: Bool,
         loadLb: Double? = nil,
-        kind: ExerciseKind = .reps
+        kind: ExerciseKind = .reps,
+        muscleGroups: [String] = []
     ) -> ExerciseDTO {
         let dto = ExerciseDTO(
             id: "ex-\(profileId.uuidString.prefix(8))-\(UUID().uuidString.prefix(8))",
             name: name,
             category: tracksWeight ? .compound : .bodyweight,
-            muscleGroups: [],
+            muscleGroups: muscleGroups,
             equipment: tracksWeight ? [.dumbbell] : [.bodyweight],
             defaultRepRange: [defaultRepsBottom, defaultRepsTop],
             availableForMode: [.build, .circuit],
