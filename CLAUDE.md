@@ -43,7 +43,7 @@ OurFitness/
   Services/           ← HealthKit, Theme, Haptics, ToastCenter (singletons)
   Features/           ← Onboarding (ProfileCreationView), Today, Nutrition (meal log),
                         Workouts (Build flow + Circuit/ subfolder), Progress, Settings
-  Components/         ← Reusable view atoms (ProgressBar, Card, Banner, AnimatedNumber…)
+  Components/         ← Reusable view atoms (ProgressBar, ProgressRing, Card, Banner, AnimatedNumber…)
 _stashed/             ← Code excluded from the build target — see "Stashed surfaces"
 OurFitnessTests/      ← Hostless XCTest for Domain/* only. No app module import.
 fastlane/             ← Fastfile lanes: tests, compile, sync_signing, beta
@@ -86,6 +86,9 @@ revival but do not compile.
 | Pilates weekly goal / streak | `Domain/Movement.swift` (`pilatesWeeklyStreak`) |
 | Step-count milestone thresholds | `Domain/Movement.swift` (`defaultStepMilestones`) |
 | Circuit "why this matters" copy + citations | `Domain/Movement.swift` (`circuitFocusBlurb`) + `CircuitWorkoutsView.FocusInfoButton` |
+| Post-exercise recovery hint (muscles, food window, form cues) | `Domain/Movement.swift` (`PostExerciseHint`, `postExerciseHint(for:)`, `postPilatesHint(areas:)`, `namedParentingHint(_:)`) |
+| Circular progress arc (rings) | `Components/ProgressRing.swift` — reuse, never inline `Circle().trim` |
+| Per-profile steps goal override | `AppStorage` key `"stepsGoal.\(profileId.uuidString)"` — wheel picker 2000–25000 by 500; "Reset to default" reverts to `profile.computedTargets.stepsDaily`. Read in both `StepsCard` (Build) and `StepsCardioCard` (Circuit) |
 | Meal log natural language → nutrition | `Domain/FoodParser.swift` + `Domain/CommonFoods.swift` |
 | Add / update a common food entry | `Domain/CommonFoods.swift` (`CommonFoods.all`) |
 | Curated meal suggestions (Meals tab pill) | `Domain/SuggestedMeals.swift` — **TODO: personalise to user's cuisine patterns** |
@@ -97,7 +100,7 @@ revival but do not compile.
 | Add a tracked health marker | `Domain/Models.swift` (`HealthMarkerKind`) + `Features/Progress/ProgressView.swift` |
 | Daily steps goal | `Domain/Targets.swift` (`ModeRules.stepsDaily`) |
 | New HealthKit metric | `Services/HealthKitService.swift` + `@Model` snapshot in `Data/PersistenceModels.swift` if persisted |
-| New tab | `App/RootView.swift` `Tab` enum + new folder under `Features/` |
+| New tab | `App/RootView.swift` `Tab` enum + new folder under `Features/`. Tab set is mode-dependent: **Build** = Today / Meals / Workouts / Progress; **Circuit** = Today / Meals / Progress (Train surfaces are inlined into `TodayView` for Circuit) |
 | Schema change | `Data/Schema.swift` — add new `VersionedSchema` + migration stage. Never edit shipped schemas. Current is `SchemaV2`. |
 | Add HealthKit permission | `OurFitness.entitlements` + `Info.plist` (`NSHealthShareUsageDescription`) + `HealthKitService.requestAuth` |
 | Press feel / button variant | `Components/TactileButtonStyle.swift` (`resolved(theme:)` switch) |
@@ -173,6 +176,8 @@ Two visual personalities under one shell. Mode picks palette + energy. Typograph
 
 Shared: large headlines, generous whitespace, weekly trend > daily pass/fail, no streak-shame, persistent banners (allergens on Build, caps remaining on Reset). System dark mode follows iOS; mode tokens override via `ThemeProvider`.
 
+**Calorie unit copy:** UI says **"cal"** everywhere (colloquial kilocalorie). Never `"kcal"` in user-facing strings — the macro rings ⓘ clarifies "1 cal here = 1 kilocalorie (kcal)." Domain math (`CalorieEstimator`, `Targets`) still computes in kcal internally; the renaming is display-only.
+
 ### Tactile UX (load-bearing — the app feels alive)
 
 Every interaction is multisensory: visible state change + spring animation + haptic + (for wins) brief toast.
@@ -192,6 +197,7 @@ Rules:
 3. Don't add a 6th button variant. Reuse one.
 4. Don't double-haptic. `.tactile()` already fires impact on press; only call `Haptics.bump/.success/.warn` for *outcome* feedback.
 5. Whole-card-as-button beats inline buttons inside a card — use `PressableCard` and drop the redundant action button.
+6. ⓘ info buttons open `.sheet(isPresented:)` with `.presentationDetents([.medium])` (or `[.medium, .large]` for longer copy). Never `.popover(...attachmentAnchor: .point(.top))` — popover clips on iPhone.
 
 ---
 

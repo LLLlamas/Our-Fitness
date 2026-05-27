@@ -137,6 +137,101 @@ public enum SuggestedMeals {
             perServing: PerServing(calories: 380, proteinG: 30, carbsG: 30, fatG: 14, fiberG: 7),
             allergens: ["fish", "gluten"]
         ),
+        // Cholesterol / BP / insulin-sensitivity targeted meals.
+        // Mechanism citations live in descriptions so the rationale survives
+        // any future ranking changes (descriptions surface in the Meals tab UI).
+        SuggestedMeal(
+            id: "circuit-berry-cottage-cheese",
+            name: "Berry Cottage Cheese Bowl",
+            emoji: "🍓",
+            description: "½ cup cottage cheese + strawberries + blueberries. Lean protein and polyphenols shown to lower LDL oxidation.",
+            perServing: PerServing(calories: 210, proteinG: 20, carbsG: 22, fatG: 5, fiberG: 5),
+            allergens: ["dairy"]
+        ),
+        SuggestedMeal(
+            id: "circuit-oatmeal-blueberry",
+            name: "Blueberry Oat Milk Oatmeal",
+            emoji: "🫐",
+            description: "Oats cooked in oat milk + blueberries + 1 date for sweetness. Beta-glucan from oats + oat milk reduces LDL 5–10% (FDA claim).",
+            perServing: PerServing(calories: 270, proteinG: 8, carbsG: 53, fatG: 4, fiberG: 8),
+            allergens: ["gluten"]
+        ),
+        SuggestedMeal(
+            id: "circuit-salmon-sushi",
+            name: "Salmon Sushi Roll",
+            emoji: "🍣",
+            description: "1 salmon roll (8 pcs). EPA/DHA omega-3 reduces triglycerides 15–30%; AHA recommends 2× fatty fish/week.",
+            perServing: PerServing(calories: 380, proteinG: 18, carbsG: 40, fatG: 14, fiberG: 2),
+            allergens: ["fish"]
+        ),
+        SuggestedMeal(
+            id: "circuit-zucchini-noodles-chicken",
+            name: "Zucchini Noodles + Chicken Marinara",
+            emoji: "🍅",
+            description: "Spiralised zucchini + grilled chicken + tomato sauce. Lycopene from cooked tomatoes reduces LDL oxidation. Replaces pasta for lower glycemic load.",
+            perServing: PerServing(calories: 250, proteinG: 38, carbsG: 12, fatG: 5, fiberG: 3)
+        ),
+        SuggestedMeal(
+            id: "circuit-watermelon-cottage-cheese",
+            name: "Watermelon Cottage Cheese Bowl",
+            emoji: "🍉",
+            description: "1 cup watermelon + ½ cup cottage cheese. Citrulline → nitric oxide → lower BP; protein from cottage cheese keeps it filling.",
+            perServing: PerServing(calories: 156, proteinG: 14, carbsG: 17, fatG: 5, fiberG: 1),
+            allergens: ["dairy"]
+        ),
+        SuggestedMeal(
+            id: "circuit-seaweed-salad",
+            name: "Seaweed Salad + Cucumber",
+            emoji: "🌿",
+            description: "Seaweed salad + sliced cucumber + cherry tomatoes. Seaweed omega-3 ALAs and potassium from tomatoes/cucumber support BP reduction.",
+            perServing: PerServing(calories: 90, proteinG: 3, carbsG: 12, fatG: 3, fiberG: 3),
+            allergens: ["soy"]
+        ),
+        SuggestedMeal(
+            id: "circuit-egg-veggie",
+            name: "Egg & Veggie Scramble",
+            emoji: "🍳",
+            description: "2 eggs + diced tomatoes + zucchini. Lutein + lycopene are cardioprotective. ≤1 egg/day is safe for cardiovascular health per meta-analysis (BMJ 2020).",
+            perServing: PerServing(calories: 180, proteinG: 15, carbsG: 8, fatG: 11, fiberG: 2),
+            allergens: ["egg"]
+        ),
+        SuggestedMeal(
+            id: "circuit-berry-bowl",
+            name: "Mixed Berry Bowl",
+            emoji: "🍓",
+            description: "Strawberries + raspberries + blueberries + plum. Anthocyanins lower LDL 2–4% and reduce blood pressure in 8-week RCTs.",
+            perServing: PerServing(calories: 90, proteinG: 2, carbsG: 20, fatG: 1, fiberG: 6)
+        ),
+        SuggestedMeal(
+            id: "circuit-miso-seaweed",
+            name: "Miso Soup + Seaweed",
+            emoji: "🍜",
+            description: "Reduced-sodium miso soup + wakame. Soy isoflavones reduce LDL ~3–5%. Note: watch sodium if hypertensive.",
+            perServing: PerServing(calories: 55, proteinG: 4, carbsG: 7, fatG: 1, fiberG: 1),
+            allergens: ["soy"]
+        ),
+        SuggestedMeal(
+            id: "circuit-cucumber-tomato",
+            name: "Cucumber Tomato Salad",
+            emoji: "🥗",
+            description: "Cucumber + cherry tomatoes + drizzle of olive oil. Potassium-rich: DASH diet staple proven to lower systolic BP 8–14 mmHg.",
+            perServing: PerServing(calories: 75, proteinG: 2, carbsG: 11, fatG: 3, fiberG: 3)
+        ),
+        SuggestedMeal(
+            id: "circuit-chicken-soup",
+            name: "Chicken Soup (Homemade)",
+            emoji: "🍲",
+            description: "Lean chicken + carrots + celery in low-sodium broth. High protein, anti-inflammatory, low saturated fat.",
+            perServing: PerServing(calories: 150, proteinG: 20, carbsG: 8, fatG: 3, fiberG: 2)
+        ),
+        SuggestedMeal(
+            id: "circuit-sushi-seaweed",
+            name: "Sushi + Seaweed Salad",
+            emoji: "🍱",
+            description: "California roll + seaweed salad side. Omega-3 from fish/seaweed, nori fiber, low saturated fat.",
+            perServing: PerServing(calories: 305, proteinG: 10, carbsG: 45, fatG: 9, fiberG: 4),
+            allergens: ["fish", "soy"]
+        ),
     ]
 
     // MARK: - Shared / neutral

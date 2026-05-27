@@ -28,7 +28,7 @@ public struct CommonFood: Sendable, Equatable {
 public enum CommonFoods {
 
     public static let all: [CommonFood] = grains + proteins + eggsAndDairy
-        + vegetables + fruits + legumes + nutsAndFats + drinks + preparedMeals
+        + vegetables + fruits + legumes + nutsAndFats + drinks + soups + preparedMeals
 
     // MARK: - Grains & Starches
 
@@ -93,6 +93,30 @@ public enum CommonFoods {
             servingLabel: "1 medium (130 g)",
             calories: 103, proteinG: 2, carbsG: 24, fatG: 0, fiberG: 4
         ),
+        CommonFood(
+            id: "gnocchi", name: "Gnocchi",
+            aliases: ["gnocchi"],
+            servingLabel: "1 cup cooked (173 g)",
+            calories: 250, proteinG: 6, carbsG: 55, fatG: 1, fiberG: 2
+        ),
+        CommonFood(
+            id: "granola", name: "Granola",
+            aliases: ["granola", "granola bar"],
+            servingLabel: "½ cup (58 g)",
+            calories: 298, proteinG: 8, carbsG: 32, fatG: 15, fiberG: 4
+        ),
+        CommonFood(
+            id: "pancakes", name: "Pancakes",
+            aliases: ["pancake", "pancakes", "flapjacks"],
+            servingLabel: "2 medium (154 g)",
+            calories: 347, proteinG: 8, carbsG: 52, fatG: 11, fiberG: 1
+        ),
+        CommonFood(
+            id: "waffles", name: "Waffles",
+            aliases: ["waffle", "waffles"],
+            servingLabel: "2 waffles (210 g)",
+            calories: 406, proteinG: 11, carbsG: 56, fatG: 16, fiberG: 2
+        ),
     ]
 
     // MARK: - Proteins
@@ -140,6 +164,36 @@ public enum CommonFoods {
             servingLabel: "4 oz cooked (113 g)",
             calories: 112, proteinG: 22, carbsG: 0, fatG: 2, fiberG: 0
         ),
+        CommonFood(
+            id: "pepperoni", name: "Pepperoni",
+            aliases: ["pepperoni", "pepperoni slices"],
+            servingLabel: "1 oz (28 g)",
+            calories: 130, proteinG: 5, carbsG: 1, fatG: 12, fiberG: 0
+        ),
+        CommonFood(
+            id: "salami", name: "Salami",
+            aliases: ["salami"],
+            servingLabel: "1 oz (28 g)",
+            calories: 104, proteinG: 6, carbsG: 1, fatG: 9, fiberG: 0
+        ),
+        CommonFood(
+            id: "ham", name: "Ham",
+            aliases: ["ham", "deli ham", "cold cut", "cold cuts"],
+            servingLabel: "2 oz deli (57 g)",
+            calories: 68, proteinG: 11, carbsG: 0, fatG: 2, fiberG: 0
+        ),
+        CommonFood(
+            id: "sausage", name: "Sausage",
+            aliases: ["sausage", "breakfast sausage", "pork sausage"],
+            servingLabel: "1 link grilled (56 g)",
+            calories: 190, proteinG: 10, carbsG: 2, fatG: 16, fiberG: 0
+        ),
+        CommonFood(
+            id: "spam", name: "Spam",
+            aliases: ["spam", "canned meat", "luncheon meat"],
+            servingLabel: "2 oz (56 g)",
+            calories: 180, proteinG: 7, carbsG: 2, fatG: 16, fiberG: 0
+        ),
     ]
 
     // MARK: - Eggs & Dairy
@@ -175,6 +229,24 @@ public enum CommonFoods {
             servingLabel: "½ cup (113 g)",
             calories: 110, proteinG: 13, carbsG: 4, fatG: 5, fiberG: 0
         ),
+        CommonFood(
+            id: "string-cheese", name: "String cheese",
+            aliases: ["string cheese", "cheese stick", "mozzarella stick", "cheese string", "lactose free cheese stick"],
+            servingLabel: "1 stick (28 g)",
+            calories: 80, proteinG: 7, carbsG: 1, fatG: 6, fiberG: 0
+        ),
+        CommonFood(
+            id: "oat-milk", name: "Oat milk",
+            aliases: ["oat milk", "oatmilk", "oat drink"],
+            servingLabel: "1 cup (240 ml)",
+            calories: 130, proteinG: 4, carbsG: 24, fatG: 2, fiberG: 2
+        ),
+        CommonFood(
+            id: "almond-milk", name: "Almond milk (unsweetened)",
+            aliases: ["almond milk", "unsweetened almond milk"],
+            servingLabel: "1 cup (240 ml)",
+            calories: 40, proteinG: 1, carbsG: 2, fatG: 3, fiberG: 1
+        ),
     ]
 
     // MARK: - Vegetables
@@ -204,6 +276,36 @@ public enum CommonFoods {
             servingLabel: "½ medium (68 g)",
             calories: 160, proteinG: 2, carbsG: 9, fatG: 15, fiberG: 7
         ),
+        CommonFood(
+            id: "tomato", name: "Tomato",
+            aliases: ["tomato", "tomatoes", "roma tomato"],
+            servingLabel: "1 medium (123 g)",
+            calories: 22, proteinG: 1, carbsG: 5, fatG: 0, fiberG: 1
+        ),
+        CommonFood(
+            id: "cherry-tomatoes", name: "Cherry tomatoes",
+            aliases: ["cherry tomatoes", "cherry tomato", "grape tomatoes"],
+            servingLabel: "1 cup (149 g)",
+            calories: 27, proteinG: 1, carbsG: 6, fatG: 0, fiberG: 2
+        ),
+        CommonFood(
+            id: "cucumber", name: "Cucumber",
+            aliases: ["cucumber"],
+            servingLabel: "1 medium (201 g)",
+            calories: 30, proteinG: 1, carbsG: 7, fatG: 0, fiberG: 1
+        ),
+        CommonFood(
+            id: "zucchini", name: "Zucchini",
+            aliases: ["zucchini", "zucchini noodles", "courgette", "zoodles"],
+            servingLabel: "1 cup spiralized (124 g)",
+            calories: 20, proteinG: 2, carbsG: 4, fatG: 0, fiberG: 1
+        ),
+        CommonFood(
+            id: "seaweed-wakame", name: "Seaweed (wakame)",
+            aliases: ["seaweed", "wakame", "kelp", "nori"],
+            servingLabel: "1 cup rehydrated (80 g)",
+            calories: 36, proteinG: 2, carbsG: 6, fatG: 0, fiberG: 1
+        ),
     ]
 
     // MARK: - Fruits
@@ -229,15 +331,51 @@ public enum CommonFoods {
         ),
         CommonFood(
             id: "berries", name: "Mixed berries",
-            aliases: ["berries", "strawberry", "strawberries", "blueberries", "blueberry", "mixed berries"],
+            aliases: ["berries", "mixed berries"],
             servingLabel: "1 cup (150 g)",
             calories: 65, proteinG: 1, carbsG: 16, fatG: 0, fiberG: 4
+        ),
+        CommonFood(
+            id: "strawberries", name: "Strawberries",
+            aliases: ["strawberry", "strawberries"],
+            servingLabel: "1 cup (152 g)",
+            calories: 49, proteinG: 1, carbsG: 12, fatG: 0, fiberG: 3
+        ),
+        CommonFood(
+            id: "raspberries", name: "Raspberries",
+            aliases: ["raspberry", "raspberries"],
+            servingLabel: "1 cup (123 g)",
+            calories: 64, proteinG: 1, carbsG: 15, fatG: 1, fiberG: 8
+        ),
+        CommonFood(
+            id: "blueberries", name: "Blueberries",
+            aliases: ["blueberry", "blueberries"],
+            servingLabel: "1 cup (148 g)",
+            calories: 84, proteinG: 1, carbsG: 21, fatG: 0, fiberG: 4
         ),
         CommonFood(
             id: "mango", name: "Mango",
             aliases: ["mango"],
             servingLabel: "1 cup diced (165 g)",
             calories: 99, proteinG: 1, carbsG: 25, fatG: 1, fiberG: 3
+        ),
+        CommonFood(
+            id: "plum", name: "Plum",
+            aliases: ["plum", "plums"],
+            servingLabel: "1 medium (66 g)",
+            calories: 30, proteinG: 0, carbsG: 8, fatG: 0, fiberG: 1
+        ),
+        CommonFood(
+            id: "date-medjool", name: "Medjool date",
+            aliases: ["date", "dates", "medjool date"],
+            servingLabel: "1 date (24 g)",
+            calories: 66, proteinG: 0, carbsG: 18, fatG: 0, fiberG: 2
+        ),
+        CommonFood(
+            id: "watermelon", name: "Watermelon",
+            aliases: ["watermelon"],
+            servingLabel: "1 cup diced (152 g)",
+            calories: 46, proteinG: 1, carbsG: 11, fatG: 0, fiberG: 1
         ),
     ]
 
@@ -322,6 +460,35 @@ public enum CommonFoods {
         ),
     ]
 
+    // MARK: - Soups
+
+    private static let soups: [CommonFood] = [
+        CommonFood(
+            id: "chicken-noodle-soup", name: "Chicken noodle soup",
+            aliases: ["chicken noodle soup", "chicken soup", "canned soup"],
+            servingLabel: "1 cup canned (248 g)",
+            calories: 75, proteinG: 4, carbsG: 9, fatG: 2, fiberG: 1
+        ),
+        CommonFood(
+            id: "miso-soup", name: "Miso soup",
+            aliases: ["miso soup", "miso broth"],
+            servingLabel: "1 cup (240 ml)",
+            calories: 40, proteinG: 3, carbsG: 5, fatG: 1, fiberG: 0
+        ),
+        CommonFood(
+            id: "corn-soup", name: "Corn soup",
+            aliases: ["corn soup", "corn chowder", "cream of corn"],
+            servingLabel: "1 cup (240 ml)",
+            calories: 133, proteinG: 4, carbsG: 22, fatG: 4, fiberG: 2
+        ),
+        CommonFood(
+            id: "clam-chowder", name: "Clam chowder (New England)",
+            aliases: ["clam chowder", "clam soup", "new england chowder"],
+            servingLabel: "1 cup (248 g)",
+            calories: 190, proteinG: 9, carbsG: 18, fatG: 10, fiberG: 1
+        ),
+    ]
+
     // MARK: - Prepared meals
 
     private static let preparedMeals: [CommonFood] = [
@@ -357,7 +524,7 @@ public enum CommonFoods {
         ),
         CommonFood(
             id: "cereal", name: "Cereal",
-            aliases: ["cereal", "corn flakes", "cheerios", "granola"],
+            aliases: ["cereal", "corn flakes", "cheerios"],
             servingLabel: "1 cup with milk (~280 g)",
             calories: 210, proteinG: 9, carbsG: 40, fatG: 3, fiberG: 2
         ),
@@ -384,6 +551,54 @@ public enum CommonFoods {
             aliases: ["oatmeal and banana", "oatmeal with banana"],
             servingLabel: "1 cup oatmeal + 1 banana",
             calories: 271, proteinG: 7, carbsG: 55, fatG: 4, fiberG: 7
+        ),
+        CommonFood(
+            id: "grilled-cheese", name: "Grilled cheese",
+            aliases: ["grilled cheese", "toasted cheese sandwich"],
+            servingLabel: "1 sandwich (150 g)",
+            calories: 290, proteinG: 12, carbsG: 28, fatG: 15, fiberG: 1
+        ),
+        CommonFood(
+            id: "corndog", name: "Corndog",
+            aliases: ["corndog", "corn dog"],
+            servingLabel: "1 (175 g)",
+            calories: 258, proteinG: 8, carbsG: 22, fatG: 15, fiberG: 1
+        ),
+        CommonFood(
+            id: "sushi-salmon-roll", name: "Salmon sushi roll",
+            aliases: ["salmon roll", "sushi roll", "salmon sushi", "salmon maki"],
+            servingLabel: "1 roll / 8 pieces (235 g)",
+            calories: 380, proteinG: 18, carbsG: 40, fatG: 14, fiberG: 2
+        ),
+        CommonFood(
+            id: "sushi-california-roll", name: "California roll",
+            aliases: ["california roll", "crab roll", "sushi"],
+            servingLabel: "1 roll / 8 pieces (220 g)",
+            calories: 255, proteinG: 9, carbsG: 38, fatG: 7, fiberG: 3
+        ),
+        CommonFood(
+            id: "seaweed-salad", name: "Seaweed salad",
+            aliases: ["seaweed salad", "wakame salad"],
+            servingLabel: "½ cup dressed (70 g)",
+            calories: 50, proteinG: 1, carbsG: 7, fatG: 2, fiberG: 1
+        ),
+        CommonFood(
+            id: "zucchini-noodles-marinara", name: "Zucchini noodles & marinara",
+            aliases: ["zucchini noodles marinara", "zoodles marinara", "zucchini pasta"],
+            servingLabel: "1 cup noodles + ½ cup sauce (280 g)",
+            calories: 95, proteinG: 5, carbsG: 18, fatG: 1, fiberG: 4
+        ),
+        CommonFood(
+            id: "quesadilla", name: "Quesadilla",
+            aliases: ["quesadilla", "cheese quesadilla"],
+            servingLabel: "1 medium (170 g)",
+            calories: 360, proteinG: 18, carbsG: 36, fatG: 16, fiberG: 2
+        ),
+        CommonFood(
+            id: "fries", name: "French fries",
+            aliases: ["fries", "french fries", "chips"],
+            servingLabel: "Medium serving (117 g)",
+            calories: 365, proteinG: 4, carbsG: 48, fatG: 17, fiberG: 4
         ),
     ]
 
