@@ -14,4 +14,11 @@ final class HealthAccessTests: XCTestCase {
         XCTAssertEqual(HealthAccess.statusLabel(healthGranted: true), "Connected to Apple Health")
         XCTAssertTrue(HealthAccess.statusLabel(healthGranted: false).contains("Connect"))
     }
+
+    func test_shouldBackfill_onlyWhenGrantedAndNotYetDone() {
+        XCTAssertTrue(HealthAccess.shouldBackfill(healthGranted: true, hasBackfilled: false))
+        XCTAssertFalse(HealthAccess.shouldBackfill(healthGranted: true, hasBackfilled: true))
+        XCTAssertFalse(HealthAccess.shouldBackfill(healthGranted: false, hasBackfilled: false))
+        XCTAssertFalse(HealthAccess.shouldBackfill(healthGranted: false, hasBackfilled: true))
+    }
 }

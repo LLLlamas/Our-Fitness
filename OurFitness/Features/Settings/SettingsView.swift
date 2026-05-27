@@ -62,13 +62,8 @@ struct SettingsView: View {
             health.openSystemSettings()
         } else {
             Task {
-                let ok = await health.requestAuthorization()
-                Repos.setHealthGranted(ctx, profileId: profile.id, granted: ok)
-                if ok {
-                    toasts.show(Toast(title: "Apple Health connected",
-                                      detail: "Steps will sync automatically.",
-                                      accent: .ok, symbol: "heart.fill"))
-                }
+                _ = await health.connectAndPersist(profileId: profile.id, ctx: ctx, toasts: toasts)
+                // RootView's .task(id: StepObserverKey) re-fires on grant transition and arms the observer.
             }
         }
     }

@@ -25,6 +25,14 @@ public struct Toast: Identifiable, Equatable, Sendable {
     }
 }
 
+extension Toast {
+    public static var healthConnected: Toast {
+        Toast(title: "Apple Health connected",
+              detail: "Steps will sync automatically.",
+              accent: .ok, symbol: "heart.fill")
+    }
+}
+
 @MainActor
 public final class ToastCenter: ObservableObject {
     @Published public private(set) var current: Toast?
@@ -56,6 +64,18 @@ public final class ToastCenter: ObservableObject {
     public func goalHit(_ label: String) {
         show(Toast(title: "\(label) hit", detail: "Nice work — keep stacking.",
                    accent: .win, symbol: "flame.fill"), for: 2.4)
+    }
+
+    public func stepsMilestone(_ steps: Int) {
+        let kLabel = steps >= 1_000 ? "\(steps / 1_000)k" : "\(steps)"
+        show(Toast(title: "\(kLabel) steps", detail: "Keep moving — momentum compounds.",
+                   accent: .win, symbol: "figure.walk"), for: 2.0)
+    }
+
+    public func pilatesLogged(minutes: Int) {
+        show(Toast(title: "Pilates logged",
+                   detail: "\(minutes) min · locked in.",
+                   accent: .ok, symbol: "checkmark"))
     }
 
     public func pr(_ exercise: String, weightLb: Double?, reps: Int) {

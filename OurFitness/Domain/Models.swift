@@ -249,11 +249,16 @@ public struct ExerciseDTO: Codable, Equatable, Sendable, Identifiable {
     public var muscleGroups: [String]
     public var equipment: [Equipment]
     public var defaultRepRange: [Int]?  // [bottom, top]
+    /// Modes this exercise is offered in. Reset stripped strength in §5 of the
+    /// implementation plan; gate via this field rather than deleting seed rows.
+    /// Defaults to both modes when decoding legacy rows (mobility/cardio carry over).
+    public var availableForMode: [Mode]
 
     public init(
         id: String, name: String, category: ExerciseCategory,
         muscleGroups: [String], equipment: [Equipment],
-        defaultRepRange: [Int]? = nil
+        defaultRepRange: [Int]? = nil,
+        availableForMode: [Mode] = [.build, .reset]
     ) {
         self.id = id
         self.name = name
@@ -261,6 +266,60 @@ public struct ExerciseDTO: Codable, Equatable, Sendable, Identifiable {
         self.muscleGroups = muscleGroups
         self.equipment = equipment
         self.defaultRepRange = defaultRepRange
+        self.availableForMode = availableForMode
+    }
+
+    // Codable: tolerate older payloads with no availableForMode field.
+    private enum CodingKeys: String, CodingKey {
+        case id, name, category, muscleGroups, equipment, defaultRepRange, availableForMode
+    }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try c.decode(String.self, forKey: .id)
+        self.name = try c.decode(String.self, forKey: .name)
+        self.category = try c.decode(ExerciseCategory.self, forKey: .category)
+        self.muscleGroups = try c.decode([String].self, forKey: .muscleGroups)
+        self.equipment = try c.decode([Equipment].self, forKey: .equipment)
+        self.defaultRepRange = try c.decodeIfPresent([Int].self, forKey: .defaultRepRange)
+        self.availableForMode = try c.decodeIfPresent([Mode].self, forKey: .availableForMode)
+            ?? [.build, .reset]
+    }
+}
+
+// MARK: - Pilates (Reset)
+
+public enum PilatesFocusArea: String, Codable, CaseIterable, Sendable {
+    case core, lowerBack = "lower-back", hips, fullBody = "full-body", flexibility
+
+    public var label: String {
+        switch self {
+        case .core:        return "Core"
+        case .lowerBack:   return "Lower Back"
+        case .hips:        return "Hips"
+        case .fullBody:    return "Full Body"
+        case .flexibility: return "Flexibility"
+        }
+    }
+}
+
+public struct PilatesSessionDTO: Codable, Equatable, Sendable, Identifiable {
+    public var id: UUID
+    public var profileId: UUID
+    public var date: Date
+    public var durationMinutes: Int
+    public var focusAreas: [PilatesFocusArea]
+    public var notes: String?
+
+    public init(id: UUID = UUID(), profileId: UUID, date: Date = Date(),
+                durationMinutes: Int, focusAreas: [PilatesFocusArea],
+                notes: String? = nil) {
+        self.id = id
+        self.profileId = profileId
+        self.date = date
+        self.durationMinutes = durationMinutes
+        self.focusAreas = focusAreas
+        self.notes = notes
     }
 }
 

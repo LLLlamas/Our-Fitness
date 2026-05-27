@@ -60,7 +60,11 @@ project.yml           ← XcodeGen — source of truth; .xcodeproj is gitignored
 
 | Goal | Files |
 |---|---|
-| Add a new exercise | `Data/Seed/SeedExercises.swift` |
+| Add a new exercise | `Data/Seed/SeedExercises.swift` — set `availableForMode` (`[.build]` for strength; `[.build, .reset]` for cardio/mobility) |
+| Reset cap copy / sources | `Domain/CapExplanations.swift` (pure data per cap) |
+| Log a Pilates session | `Repos.logPilatesSession` + `PilatesSessionDTO` (Domain) / `PilatesSessionModel` (Data) |
+| Pilates weekly goal / streak | `Domain/Movement.swift` (`pilatesWeeklyStreak`) |
+| Step-count milestone thresholds | `Domain/Movement.swift` (`defaultStepMilestones`) |
 | Add a Build food | `Data/Seed/SeedFoodsBuild.swift` |
 | Add a Reset food | `Data/Seed/SeedFoodsReset.swift` |
 | New starter program | `Data/Seed/SeedPrograms.swift` |
@@ -132,7 +136,7 @@ Headline entities:
 2. **Observers** — `HKObserverQuery` at launch wakes the app for background step updates → UPSERT into `StepCount`
 
 Permissions:
-- Read: `stepCount`, `bodyMass`, `restingHeartRate`, `activeEnergyBurned`
+- Read: `stepCount`, `bodyMass`, `restingHeartRate`, `activeEnergyBurned`, `appleExerciseTime`
 - Write: `workouts` (logged sessions surface in Apple Health), `bodyMass`
 
 Simulator returns no Health data — UI in sim, HealthKit on a real iPhone.

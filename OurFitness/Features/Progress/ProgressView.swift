@@ -26,6 +26,7 @@ struct ProgressTabView: View {
     }
     private var exercises: [ExerciseDTO] {
         exerciseModels.map(\.snapshot)
+            .filter { $0.availableForMode.contains(profile.mode) }
     }
 
     private var weightSeries: [Trends.Point] {

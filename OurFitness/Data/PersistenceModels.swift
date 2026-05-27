@@ -90,6 +90,9 @@ public final class ExerciseModel {
     public var muscleGroups: [String]
     public var equipmentRaw: [String]
     public var defaultRepRange: [Int]?
+    /// Modes this exercise is offered in. Default covers existing rows so
+    /// pre-gating data (mobility, cardio) keeps showing in both modes.
+    public var availableForModeRaw: [String] = [Mode.build.rawValue, Mode.reset.rawValue]
 
     public init(snapshot s: ExerciseDTO) {
         self.id = s.id
@@ -98,6 +101,7 @@ public final class ExerciseModel {
         self.muscleGroups = s.muscleGroups
         self.equipmentRaw = s.equipment.map(\.rawValue)
         self.defaultRepRange = s.defaultRepRange
+        self.availableForModeRaw = s.availableForMode.map(\.rawValue)
     }
 
     public var snapshot: ExerciseDTO {
@@ -106,7 +110,8 @@ public final class ExerciseModel {
             category: ExerciseCategory(rawValue: categoryRaw) ?? .compound,
             muscleGroups: muscleGroups,
             equipment: equipmentRaw.compactMap(Equipment.init(rawValue:)),
-            defaultRepRange: defaultRepRange
+            defaultRepRange: defaultRepRange,
+            availableForMode: availableForModeRaw.compactMap(Mode.init(rawValue:))
         )
     }
 }
@@ -362,5 +367,43 @@ public final class StepCountModel {
         StepCountDTO(id: id, userId: userId, date: date, steps: steps,
                      source: StepSource(rawValue: sourceRaw) ?? .manual,
                      updatedAt: updatedAt)
+    }
+}
+
+// MARK: - Pilates sessions (Reset)
+
+@Model
+public final class PilatesSessionModel {
+    @Attribute(.unique) public var id: UUID
+    public var profileId: UUID
+    public var date: Date
+    public var durationMinutes: Int
+    public var focusAreasRaw: [String]
+    public var notes: String?
+
+    public init(snapshot s: PilatesSessionDTO) {
+        self.id = s.id
+        self.profileId = s.profileId
+        self.date = s.date
+        self.durationMinutes = s.durationMinutes
+        self.focusAreasRaw = s.focusAreas.map(\.rawValue)
+        self.notes = s.notes
+    }
+
+    public var snapshot: PilatesSessionDTO {
+        PilatesSessionDTO(
+            id: id, profileId: profileId, date: date,
+            durationMinutes: durationMinutes,
+            focusAreas: focusAreasRaw.compactMap(PilatesFocusArea.init(rawValue:)),
+            notes: notes
+        )
+    }
+
+    public func apply(_ s: PilatesSessionDTO) {
+        self.profileId = s.profileId
+        self.date = s.date
+        self.durationMinutes = s.durationMinutes
+        self.focusAreasRaw = s.focusAreas.map(\.rawValue)
+        self.notes = s.notes
     }
 }

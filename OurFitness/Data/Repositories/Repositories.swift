@@ -198,6 +198,41 @@ public enum Repos {
         return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
     }
 
+    // MARK: - Pilates sessions
+
+    public static func logPilatesSession(_ ctx: ModelContext, _ s: PilatesSessionDTO) {
+        ctx.insert(PilatesSessionModel(snapshot: s))
+        try? ctx.save()
+    }
+
+    public static func recentPilatesSessions(
+        _ ctx: ModelContext, profileId: UUID, limit: Int = 5
+    ) -> [PilatesSessionDTO] {
+        var desc = FetchDescriptor<PilatesSessionModel>(
+            predicate: #Predicate { $0.profileId == profileId },
+            sortBy: [SortDescriptor(\.date, order: .reverse)]
+        )
+        desc.fetchLimit = limit
+        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
+    }
+
+    public static func pilatesSessionsThisWeek(
+        _ ctx: ModelContext, profileId: UUID, now: Date = Date()
+    ) -> [PilatesSessionDTO] {
+        let all = listPilatesSessions(ctx, profileId: profileId)
+        return Movement.sessionsThisWeek(all, now: now)
+    }
+
+    public static func listPilatesSessions(
+        _ ctx: ModelContext, profileId: UUID
+    ) -> [PilatesSessionDTO] {
+        let desc = FetchDescriptor<PilatesSessionModel>(
+            predicate: #Predicate { $0.profileId == profileId },
+            sortBy: [SortDescriptor(\.date, order: .reverse)]
+        )
+        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
+    }
+
     /// UPSERT by (userId, date). Used by both manual entry and HealthKit sync.
     public static func setSteps(_ ctx: ModelContext, userId: UUID, date: String, steps: Int, source: StepSource) {
         let desc = FetchDescriptor<StepCountModel>(

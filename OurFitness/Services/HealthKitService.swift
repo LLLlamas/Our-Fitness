@@ -1,5 +1,5 @@
 // Single owner of HealthKit access. Views never touch HKHealthStore directly.
-// Read: steps, body mass, resting HR, active energy.
+// Read: steps, body mass, resting HR, active energy, apple exercise time.
 // Write: workouts, body mass (optional, mirrors in-app logs to Apple Health).
 
 import Foundation
@@ -19,6 +19,9 @@ public final class HealthKitService: ObservableObject {
 
     private var stepObserver: HKObserverQuery?
     private var observerSink: ((Int) -> Void)?
+    // (type identifier, frequency rawValue) pairs we've already armed this process.
+    // enableBackgroundDelivery isn't idempotent at the system level — track to avoid re-calling.
+    private var backgroundDeliveryArmed: Set<String> = []
 
     // Types we read
     private let readTypes: Set<HKObjectType> = {
@@ -90,7 +93,12 @@ public final class HealthKitService: ObservableObject {
         }
         store.execute(q)
         stepObserver = q
-        store.enableBackgroundDelivery(for: type, frequency: .hourly) { _, _ in }
+
+        let key = "\(type.identifier)#\(HKUpdateFrequency.hourly.rawValue)"
+        if !backgroundDeliveryArmed.contains(key) {
+            store.enableBackgroundDelivery(for: type, frequency: .hourly) { _, _ in }
+            backgroundDeliveryArmed.insert(key)
+        }
     }
 
     // MARK: - Steps
@@ -186,6 +194,19 @@ public final class HealthKitService: ObservableObject {
     }
 
     // MARK: - Helpers
+
+    // MARK: - Connect flow
+
+    /// Shared "Connect Apple Health" sequence: prompt → persist grant → toast.
+    /// The single `.task(id:)` in RootView's appShell re-arms the observer once
+    /// the grant flips, so callers do not need to start the observer themselves.
+    @discardableResult
+    public func connectAndPersist(profileId: UUID, ctx: ModelContext, toasts: ToastCenter) async -> Bool {
+        let ok = await requestAuthorization()
+        Repos.setHealthGranted(ctx, profileId: profileId, granted: ok)
+        if ok { toasts.show(.healthConnected) }
+        return ok
+    }
 
     private static func dayBounds(_ date: Date) -> (Date, Date) {
         let cal = Calendar.current

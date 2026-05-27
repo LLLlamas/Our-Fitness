@@ -14,6 +14,7 @@ struct TodayView: View {
     @Query private var stepModels: [StepCountModel]
 
     @State private var slot: Slot = .lunch
+    @AppStorage("hasBackfilled.steps") private var hasBackfilledRaw: String = ""
 
     private var today: String { Dates.dayKey() }
 
@@ -92,8 +93,11 @@ struct TodayView: View {
             .padding(.vertical, 18)
         }
         .background(theme.bg.ignoresSafeArea())
-        .task(id: profile.id) { await refreshHealthKit() }
-        .refreshable { await refreshHealthKit() }
+        .task(id: profile.id) {
+            await backfillIfNeeded()
+            await refreshToday()
+        }
+        .refreshable { await refreshToday() }
         .sensoryFeedback(.selection, trigger: slot)
     }
 
@@ -120,17 +124,10 @@ struct TodayView: View {
 
     private func connectHealth() {
         Task {
-            let ok = await health.requestAuthorization()
-            Repos.setHealthGranted(ctx, profileId: profile.id, granted: ok)
+            let ok = await health.connectAndPersist(profileId: profile.id, ctx: ctx, toasts: toasts)
             if ok {
-                toasts.show(Toast(title: "Apple Health connected",
-                                  detail: "Steps will sync automatically.",
-                                  accent: .ok, symbol: "heart.fill"))
-                health.beginStepObservation { steps in
-                    Repos.setSteps(ctx, userId: profile.id, date: today,
-                                   steps: steps, source: .appleHealth)
-                }
-                await refreshHealthKit()
+                await backfillIfNeeded()
+                await refreshToday()
             }
         }
     }
@@ -144,29 +141,51 @@ struct TodayView: View {
                 Text("**Allergen lock:** \(profile.restrictions.joined(separator: ", "))")
             }
         } else if profile.mode == .reset {
-            Banner { resetCapsBanner }
+            resetCapsSection
         }
     }
 
     @ViewBuilder
-    private var resetCapsBanner: some View {
+    private var resetCapsSection: some View {
         let t = profile.computedTargets
-        VStack(alignment: .leading, spacing: 2) {
-            Text("Caps today").font(.caption).foregroundStyle(theme.text).bold()
-            HStack(spacing: 12) {
-                if let max = t.sodiumMgMax {
-                    Text("sodium \(max - totals.sodiumMg)/\(max)mg")
-                }
-                if let max = t.addedSugarGMax {
-                    Text("sugar \(max - totals.addedSugarG)/\(max)g")
-                }
-                if let min = t.fiberGMin {
-                    Text("fiber \(totals.fiberG)/\(min)g floor")
-                }
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Caps today")
+                .font(.caption).tracking(2).textCase(.uppercase)
+                .foregroundStyle(theme.dim)
+            if let sodiumMax = t.sodiumMgMax {
+                CapBar(
+                    value: Double(totals.sodiumMg), target: Double(sodiumMax),
+                    label: "Sodium", unit: "mg", inverted: true,
+                    explanation: CapExplanations.sodium
+                )
             }
-            .font(.caption2)
-            .foregroundStyle(theme.dim)
+            if let sugarMax = t.addedSugarGMax {
+                CapBar(
+                    value: Double(totals.addedSugarG), target: Double(sugarMax),
+                    label: "Added Sugar", unit: "g", inverted: true,
+                    explanation: CapExplanations.addedSugar
+                )
+            }
+            // Sat-fat cap is derived once in Targets.compute (% of calories → g);
+            // read it from the resolved target so view + scoring stay in sync.
+            if let satFatMax = t.saturatedFatGMax {
+                CapBar(
+                    value: Double(totals.saturatedFatG), target: Double(satFatMax),
+                    label: "Saturated Fat", unit: "g", inverted: true,
+                    explanation: CapExplanations.saturatedFat
+                )
+            }
+            if let minFiber = t.fiberGMin {
+                CapBar(
+                    value: Double(totals.fiberG), target: Double(minFiber),
+                    label: "Fiber Floor", unit: "g", inverted: false,
+                    explanation: CapExplanations.fiber
+                )
+            }
         }
+        .padding(14)
+        .background(theme.card)
+        .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
     }
 
     // MARK: - Macros
@@ -254,13 +273,34 @@ struct TodayView: View {
         toasts.logged(food.name, calories: food.perServing.calories)
     }
 
-    private func refreshHealthKit() async {
-        guard profile.healthGranted else { return }
+    private var backfilledProfileIds: Set<String> {
+        Set(hasBackfilledRaw.split(separator: ",").map(String.init))
+    }
+
+    private func backfillIfNeeded() async {
+        let key = profile.id.uuidString
+        guard HealthAccess.shouldBackfill(
+            healthGranted: profile.healthGranted,
+            hasBackfilled: backfilledProfileIds.contains(key)
+        ) else { return }
         if !health.isAuthorized { await health.requestAuthorization() }
         let map = await health.dailySteps(days: 30)
         for (date, count) in map where count > 0 {
             Repos.setSteps(ctx, userId: profile.id, date: date,
                            steps: count, source: .appleHealth)
+        }
+        var ids = backfilledProfileIds
+        ids.insert(key)
+        hasBackfilledRaw = ids.sorted().joined(separator: ",")
+    }
+
+    private func refreshToday() async {
+        guard profile.healthGranted else { return }
+        if !health.isAuthorized { await health.requestAuthorization() }
+        let n = await health.steps()
+        if n > 0 {
+            Repos.setSteps(ctx, userId: profile.id, date: today,
+                           steps: n, source: .appleHealth)
         }
     }
 }

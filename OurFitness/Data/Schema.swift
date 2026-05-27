@@ -23,6 +23,7 @@ public enum SchemaV1: VersionedSchema {
             BodyMetricModel.self,
             HealthMarkerModel.self,
             StepCountModel.self,
+            PilatesSessionModel.self,
         ]
     }
 }

@@ -10,6 +10,7 @@ struct WorkoutsView: View {
 
     @Query private var programModels: [ProgramModel]
     @Query private var exerciseModels: [ExerciseModel]
+    @Query private var stepModels: [StepCountModel]
 
     @State private var programId: String? = nil
     @State private var dayIndex: Int = 0
@@ -19,7 +20,11 @@ struct WorkoutsView: View {
         programModels.map(\.snapshot).filter { $0.modeFit.contains(profile.mode) }
     }
     private var exercisesById: [String: ExerciseDTO] {
-        Dictionary(uniqueKeysWithValues: exerciseModels.map(\.snapshot).map { ($0.id, $0) })
+        // Gate by availableForMode so Reset never sees a strength block and
+        // a future Build-only utility never leaks into a mode that stripped it.
+        let pool = exerciseModels.map(\.snapshot)
+            .filter { $0.availableForMode.contains(profile.mode) }
+        return Dictionary(uniqueKeysWithValues: pool.map { ($0.id, $0) })
     }
     private var program: ProgramDTO? {
         programs.first { $0.id == programId } ?? programs.first
@@ -30,14 +35,26 @@ struct WorkoutsView: View {
     }
 
     var body: some View {
+        Group {
+            if profile.mode == .reset {
+                resetView
+            } else {
+                buildView
+            }
+        }
+        .background(theme.bg.ignoresSafeArea())
+    }
+
+    // MARK: - Build (unchanged strength flow)
+
+    @ViewBuilder
+    private var buildView: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 Text("train.")
                     .font(.system(size: 56, weight: .regular))
                     .foregroundStyle(theme.text)
-                Text(profile.mode == .build
-                     ? "Hypertrophy bias. Double-progression. Push hard, eat harder."
-                     : "Strength + zone-2 cardio. RPE cap 7 — recover hard, lose smart.")
+                Text("Hypertrophy bias. Double-progression. Push hard, eat harder.")
                     .font(.callout).foregroundStyle(theme.dim)
 
                 programRow
@@ -62,12 +79,82 @@ struct WorkoutsView: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 18)
         }
-        .background(theme.bg.ignoresSafeArea())
         .onAppear {
             if programId == nil { programId = programs.first?.id }
         }
         .sensoryFeedback(.selection, trigger: dayIndex)
         .sensoryFeedback(.selection, trigger: programId)
+    }
+
+    // MARK: - Reset (movement minutes + Pilates)
+
+    private var stepsForProfile: [StepCountDTO] {
+        stepModels.map(\.snapshot).filter { $0.userId == profile.id }
+    }
+
+    private var todaysSteps: Int {
+        Steps.stepsForDay(stepsForProfile, day: Dates.dayKey())
+    }
+
+    private var weeklySteps: [Trends.Point] {
+        Steps.series(stepsForProfile, days: 7)
+    }
+
+    private var stepStreakWeeks: Int {
+        Movement.stepWeeklyStreak(
+            steps: stepsForProfile,
+            dailyGoal: profile.computedTargets.stepsDaily
+        )
+    }
+
+    @ViewBuilder
+    private var resetView: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 18) {
+                Text("train.")
+                    .font(.system(size: 56, weight: .regular))
+                    .foregroundStyle(theme.text)
+                Text("Strength stripped. Steps, cardio, and Pilates move the markers.")
+                    .font(.callout).foregroundStyle(theme.dim)
+
+                movementSummary
+
+                // PressableCard inside StepsCardioCard already supplies background
+                // + stroke; don't wrap in an outer Card or the border doubles up.
+                StepsCardioCard(
+                    profile: profile,
+                    todaysSteps: todaysSteps,
+                    weeklySeries: weeklySteps,
+                    intradayToday: [],            // §7 will wire HK intraday
+                    intradayYesterday: [],
+                    activeEnergyKcalThisWeek: 0,  // §7 wires off HKActiveEnergy
+                    exerciseMinutesThisWeek: 0,
+                    streakWeeks: stepStreakWeeks
+                )
+
+                Card { PilatesCard(profile: profile) }
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 18)
+        }
+    }
+
+    @ViewBuilder
+    private var movementSummary: some View {
+        let stepsGoal = Double(profile.computedTargets.stepsDaily)
+        // Pilates + cardio minutes wire up in §7 alongside HK active-energy;
+        // for now the rings render at zero so the surface is honest.
+        ThreeRingSummary(rings: [
+            .init(label: "Steps", value: Double(todaysSteps),
+                  goal: stepsGoal, color: theme.accent),
+            .init(label: "Pilates · wk", value: 0,
+                  goal: 90, color: theme.accent2),
+            .init(label: "Cardio min · wk", value: 0,
+                  goal: 150, color: theme.ok)
+        ])
+        .padding(14)
+        .background(theme.card)
+        .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
     }
 
     private var programRow: some View {

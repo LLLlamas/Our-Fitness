@@ -17,4 +17,10 @@ public enum HealthAccess {
             ? "Connected to Apple Health"
             : "Connect Apple Health to track steps automatically"
     }
+
+    /// Whether to run the 30-day step backfill. Runs once per grant transition;
+    /// the per-profile "hasBackfilled" flag is persisted by the caller.
+    public static func shouldBackfill(healthGranted: Bool, hasBackfilled: Bool) -> Bool {
+        healthGranted && !hasBackfilled
+    }
 }

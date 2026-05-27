@@ -42,7 +42,15 @@ struct RootView: View {
 
     private var active: ProfileDTO? {
         guard let uuid = UUID(uuidString: activeProfileIdString) else { return nil }
+        // Falling through to nil here drops the user back into onboarding if their stored
+        // UUID no longer matches a seeded profile (schema/ID change). Re-seed is idempotent
+        // by name, so a future schema bump that re-keys profiles would otherwise strand them.
         return profiles.first(where: { $0.id == uuid })
+    }
+
+    private struct StepObserverKey: Hashable {
+        let profileId: UUID
+        let granted: Bool
     }
 
     var body: some View {
@@ -63,12 +71,8 @@ struct RootView: View {
             OnboardingView(profiles: profiles) { chosen, granted in
                 activeProfileIdString = chosen.id.uuidString
                 Repos.setHealthGranted(ctx, profileId: chosen.id, granted: granted)
-                if granted {
-                    health.beginStepObservation { steps in
-                        Repos.setSteps(ctx, userId: chosen.id, date: Dates.dayKey(),
-                                       steps: steps, source: .appleHealth)
-                    }
-                }
+                // Observer arm-up happens centrally in appShell's .task(id:) once the
+                // grant flip is reflected in the re-rendered profile snapshot.
                 Haptics.success()
                 toasts.show(Toast(title: "Welcome, \(chosen.name).",
                                   detail: granted ? "Apple Health connected." : "Targets locked. Let's go.",
@@ -108,7 +112,7 @@ struct RootView: View {
         .sheet(isPresented: $showSettings) {
             SettingsView(profile: profile, health: health)
         }
-        .task(id: profile.id) {
+        .task(id: StepObserverKey(profileId: profile.id, granted: profile.healthGranted)) {
             if profile.healthGranted {
                 health.beginStepObservation { steps in
                     Repos.setSteps(ctx, userId: profile.id, date: Dates.dayKey(),

@@ -55,7 +55,9 @@ Distilled from the 2026-05-26 planning conversation. This is the work to land be
 **Example copy (sodium):**
 > **Sodium ≤ 1,500 mg/day** — the American Heart Association's recommended cap for adults with elevated BP or a family history of heart disease. Most Americans hit this in a single restaurant meal. Lowering sodium directly lowers systolic BP by 5–6 mmHg on average — meaningful for cholesterol/heart-risk profile.
 
-**Files:** `Components/CapBar.swift`, `Components/CapExplanation.swift`, `Domain/CapExplanations.swift`, `Features/Nutrition/NutritionView.swift`.
+**Decision:** caps render on `TodayView` next to the live totals (the only place the gram counts mean anything in real time); `NutritionView` stays the library browser only.
+
+**Files:** `Components/CapBar.swift`, `Components/CapExplanationView.swift`, `Domain/CapExplanations.swift`, `Features/Today/TodayView.swift`.
 
 ---
 
