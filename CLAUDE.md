@@ -17,6 +17,8 @@ Native iOS app for a small TestFlight circle, two modes. **Build** (gain mass, f
 
 **Circuit** — cardiovascular markers (LDL/HDL/BP/A1c). Steps, cardio sessions, pilates, light rep counting. No strength program block.
 
+Circuit is themed around real-life parenting movement, not gym work. New Circuit profiles auto-seed three exercises (`Repos.seedCircuitExercises`): **Lifted Baby** (30 lb / reps), **Lifted Stroller** (25 lb / reps), **Carried Baby** (30 lb / duration). The premise: a parent's day already contains workouts — log them. `Domain/CalorieEstimator.swift` converts reps or minutes against a known `loadLb` into kcal (MET × kg × hours), and every `WorkoutSet`/`CardioSession` persists `caloriesEst`. When adding Circuit content, bias toward real-life loaded movement with a known weight — don't gym-ify it, and don't hardcode kcal/rep.
+
 | | Build | Circuit |
 |---|---|---|
 | Calories | TDEE + 400–600 | TDEE − 300–500 |
