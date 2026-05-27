@@ -1,63 +1,10 @@
-// Friction-free rep counter. Pick a custom exercise, tap +1 per rep, Save Set
-// commits a WorkoutSet. Big haptic per tap, success haptic on save. Lives
-// outside the per-mode folders so Build (sheet) and Circuit (card) both reuse.
+// Friction-free rep counter. Tap +1 per rep, Save Set commits a WorkoutSet.
+// Big haptic per tap, success haptic on save. Used by BuildWorkoutsView.
 
 import SwiftUI
 import SwiftData
 
-// MARK: - Circuit card variant
-
-struct RepCounterCard: View {
-    let profile: ProfileDTO
-
-    @Environment(\.modelContext) private var ctx
-    @Environment(\.theme) private var theme
-
-    @Query private var exerciseModels: [ExerciseModel]
-    @State private var activeExercise: ExerciseDTO?
-
-    private var myExercises: [ExerciseDTO] {
-        let target = profile.id
-        return exerciseModels.map(\.snapshot)
-            .filter { $0.profileId == target }
-            .sorted { $0.name < $1.name }
-    }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack {
-                Text("Rep counter")
-                    .font(.system(size: 22, weight: .regular))
-                    .foregroundStyle(theme.text)
-                Spacer()
-            }
-
-            if myExercises.isEmpty {
-                Text("Add an exercise from the Train tab — or stash one here, your call.")
-                    .font(.callout).foregroundStyle(theme.dim)
-                Text("Once you've got at least one exercise, tap-to-count and save sets.")
-                    .font(.caption).foregroundStyle(theme.dim)
-            } else {
-                ForEach(myExercises) { ex in
-                    PressableCard(action: { activeExercise = ex }) {
-                        HStack {
-                            Text(ex.name).foregroundStyle(theme.text)
-                            Spacer()
-                            Image(systemName: "hand.tap.fill")
-                                .foregroundStyle(theme.accent)
-                        }
-                    }
-                }
-            }
-        }
-        .sheet(item: $activeExercise) { ex in
-            RepCounterSheet(profile: profile, exercise: ex)
-                .themed(theme.mode)
-        }
-    }
-}
-
-// MARK: - Sheet (shared between Build and Circuit)
+// MARK: - Sheet
 
 struct RepCounterSheet: View {
     let profile: ProfileDTO
