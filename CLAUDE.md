@@ -214,6 +214,20 @@ All "Current rule" entries below trace to a specific past incident; full inciden
 - **Do not put an `info:` block on the OurFitness target in `project.yml`.** XcodeGen regenerates the file at `info.path` on every `xcodegen generate`, overwriting our orientations / HealthKit usage strings / UILaunchScreen with a minimal default. Point Xcode at the file via the `INFOPLIST_FILE` build setting only. `GENERATE_INFOPLIST_FILE: "NO"` stays at the project base.
 - **Do not put an `entitlements:` block on the OurFitness target in `project.yml`.** Identical trap: XcodeGen writes an empty plist to the path on every generate, wiping our HealthKit / Background Delivery declarations and producing an archive with only the 4 default entitlement keys (`application-identifier`, `beta-reports-active`, `team-identifier`, `get-task-allow`). The IPA signs cleanly and uploads to TestFlight, but the app fails on device with `Missing com.apple.developer.healthkit entitlement` because the binary's embedded entitlements don't include HealthKit even though the provisioning profile does. Point Xcode at the hand-written `.entitlements` file via the `CODE_SIGN_ENTITLEMENTS` build setting only. `scripts/validate-ci-invariants.sh` enforces the absence of the block.
 
+### Diagnosing "Missing com.apple.developer.X entitlement" on device
+
+This error appeared multiple times during the HealthKit rollout. Every time it had a different root cause, but always the same on-device symptom. Walk the ladder top-down — each rung is a strictly upstream layer of the previous one, so the first "missing" answer is the root cause.
+
+The two diagnostic steps in `testflight.yml` (**Dump archived .app entitlements (pre-export)** and **Dump signed IPA entitlements (post-export)**) plus the install-step diagnostic in `Fastfile.install_appstore_profile` answer each rung directly.
+
+1. **Is the app on the phone actually the latest TestFlight build?** Check the build number on the phone vs the latest workflow run number. Delete + reinstall before debugging anything else. (Wasted 1+ hour on this once.)
+2. **Does the App ID have the capability enabled in developer.apple.com?** Identifiers → `com.<bundle>.app` → Capabilities. For HealthKit, both the top-level checkbox AND the `Background Delivery` sub-option need to be on.
+3. **Does the manually-generated provisioning profile carry the entitlement?** Look at the `Fastfile.install_appstore_profile` diagnostic output — it lists every `com.apple.developer.*` key in the profile. If the entitlement isn't there, **delete the profile in developer.apple.com and create a new one** (Edit/Save does NOT refresh capabilities from the App ID — confirmed gotcha). Then base64 the new `.mobileprovision` and update `APPSTORE_PROFILE_BASE64`.
+4. **Does the .xcarchive's signed .app carry the entitlement?** Look at the **pre-export** dump. If the profile has it but the archive doesn't, the source of stripping is in the build itself — almost always XcodeGen overwriting the entitlements file (see `entitlements:` block rule above) or a wrong `CODE_SIGN_ENTITLEMENTS` path.
+5. **Does the IPA carry the entitlement?** Look at the **post-export** dump. If the archive has it but the IPA doesn't, the re-sign during fastlane gym's export step is stripping it — check `export_options.provisioningProfiles` and confirm the export profile UUID matches the archive profile UUID.
+
+`codesign -d --entitlements -` (without `--xml`) prints in Apple's old text format — `[Key] foo`, `[Bool] true` — not XML. When writing detection regexes, match `com\.apple\.developer\.<name>(\b|<)` to cover both formats.
+
 ### Why native / Why SwiftData
 - **Native:** HealthKit only works in native iOS apps. Capacitor/PWA can't read step counts. Side benefits: real push, Live Activities, Shortcuts, App Intents, widgets.
 - **SwiftData:** SwiftUI-native `@Query`, CloudKit sync via one flag, clean `VersionedSchema` migration, SQLite backing — durability identical to Core Data, better dev velocity at this size.
