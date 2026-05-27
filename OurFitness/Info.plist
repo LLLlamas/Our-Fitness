@@ -53,13 +53,14 @@
     <string>UIInterfaceOrientationLandscapeLeft</string>
     <string>UIInterfaceOrientationLandscapeRight</string>
   </array>
-  <!-- Background Modes: required so HKObserverQuery + enableBackgroundDelivery
-       can wake the app to UPSERT step counts. "processing" is the correct mode
-       for HealthKit background wakes; "fetch" is for URL-loading and does not
-       cover HKObserverQuery delivery. -->
+  <!-- Background Modes: "fetch" is the correct value for HKObserverQuery +
+       enableBackgroundDelivery — it lets the OS wake the app when HealthKit
+       has new data (steps, weight, RHR, active energy). "processing" is for
+       BGProcessingTask (long CPU work) and requires BGTaskSchedulerPermittedIdentifiers;
+       we don't use BGTaskScheduler, so using "processing" caused altool error 90771. -->
   <key>UIBackgroundModes</key>
   <array>
-    <string>processing</string>
+    <string>fetch</string>
   </array>
   <key>UIApplicationSceneManifest</key>
   <dict>
