@@ -8,14 +8,8 @@ struct WorkoutsView: View {
     @Environment(\.theme) private var theme
 
     var body: some View {
-        Group {
-            if profile.mode == .circuit {
-                CircuitWorkoutsView(profile: profile)
-            } else {
-                BuildWorkoutsView(profile: profile)
-            }
-        }
-        .background(theme.bg.ignoresSafeArea())
+        BuildWorkoutsView(profile: profile)
+            .background(theme.bg.ignoresSafeArea())
     }
 }
 
@@ -90,6 +84,7 @@ private struct BuildWorkoutsView: View {
                     tracksWeight: tracksWeight
                 )
                 Haptics.bump()
+                toasts.show(Toast(title: name, detail: "Exercise added", accent: .win, symbol: "plus.circle.fill"))
             }
             .themed(profile.mode)
         }

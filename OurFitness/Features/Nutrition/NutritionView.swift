@@ -13,15 +13,23 @@ struct NutritionView: View {
 
     @Query private var logModels: [FoodLogEntryModel]
     @State private var showLogSheet = false
+
+    init(profile: ProfileDTO) {
+        self.profile = profile
+        let uid = profile.id
+        _logModels = Query(
+            filter: #Predicate<FoodLogEntryModel> { $0.userId == uid },
+            sort: \.timestamp,
+            order: .forward
+        )
+    }
     @State private var showSuggestions = false
     @State private var showLibrary = false
 
     private var today: String { Dates.dayKey() }
 
     private var todaysLogs: [FoodLogEntryDTO] {
-        logModels.map(\.snapshot)
-            .filter { $0.userId == profile.id && $0.date == today }
-            .sorted { $0.timestamp < $1.timestamp }
+        logModels.map(\.snapshot).filter { $0.date == today }
     }
 
     private var totals: DailyTotals { DailyTotals.totals(from: todaysLogs) }
@@ -188,6 +196,7 @@ struct NutritionView: View {
                     LogRow(entry: e) {
                         Repos.deleteFoodLog(ctx, id: e.id)
                         Haptics.warn()
+                        toasts.show(Toast(title: "Removed", detail: e.customName ?? "Meal", accent: .warn, symbol: "minus.circle.fill"))
                     }
                 }
             }

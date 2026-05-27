@@ -21,16 +21,32 @@ struct TodayView: View {
 
     @AppStorage("hasBackfilled.steps") private var hasBackfilledRaw: String = ""
 
+    init(profile: ProfileDTO, health: HealthKitService) {
+        self.profile = profile
+        self._health = ObservedObject(wrappedValue: health)
+        let uid = profile.id
+        _logModels = Query(
+            filter: #Predicate<FoodLogEntryModel> { $0.userId == uid },
+            sort: \.timestamp,
+            order: .forward
+        )
+        _stepModels = Query(
+            filter: #Predicate<StepCountModel> { $0.userId == uid },
+            sort: \.date,
+            order: .reverse
+        )
+    }
+
     private var today: String { Dates.dayKey() }
 
     private var todaysLogs: [FoodLogEntryDTO] {
-        logModels.map(\.snapshot).filter { $0.userId == profile.id && $0.date == today }
+        logModels.map(\.snapshot).filter { $0.date == today }
     }
     private var totals: DailyTotals { DailyTotals.totals(from: todaysLogs) }
 
     // Step data — used by both Build (linear bar) and Circuit (ring + strip)
     private var allStepsForProfile: [StepCountDTO] {
-        stepModels.map(\.snapshot).filter { $0.userId == profile.id }
+        stepModels.map(\.snapshot)
     }
     private var todaysSteps: Int {
         Steps.stepsForDay(allStepsForProfile, day: today)
