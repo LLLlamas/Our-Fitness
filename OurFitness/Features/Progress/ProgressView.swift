@@ -123,7 +123,7 @@ struct ProgressTabView: View {
         case .weight:
             WeightLogSheet(
                 profile: profile,
-                body: body_,
+                metrics: body_,
                 onSave: { value in save(kind: .weight, value: value) }
             )
             .environmentObject(toasts)
@@ -593,7 +593,7 @@ private struct BPDetailSheet: View {
 /// without infecting every other stat that's happy with a text field.
 private struct WeightLogSheet: View {
     let profile: ProfileDTO
-    let body: [BodyMetricDTO]
+    let metrics: [BodyMetricDTO]
     let onSave: (Double) -> Void
 
     @Environment(\.theme) private var theme
@@ -606,7 +606,7 @@ private struct WeightLogSheet: View {
     private let maxHalfLb = 700   // 350.0 lb
 
     private var weightSeries: [Trends.Point] {
-        let pts = body.compactMap { b -> Trends.Point? in
+        let pts = metrics.compactMap { b -> Trends.Point? in
             guard let w = b.weightLb else { return nil }
             return Trends.Point(date: b.date, value: w)
         }
@@ -614,7 +614,7 @@ private struct WeightLogSheet: View {
     }
 
     private var recentEntries: [StatDetailEntry] {
-        body.compactMap { b -> StatDetailEntry? in
+        metrics.compactMap { b -> StatDetailEntry? in
             guard let w = b.weightLb else { return nil }
             return StatDetailEntry(id: b.id.uuidString, dateLabel: b.date,
                                    valueLabel: String(format: "%.1f lb", w))
@@ -750,7 +750,7 @@ private struct WeightLogSheet: View {
     /// weight, otherwise a sensible centre (170 lb).
     private func seedDraft() {
         let lb: Double
-        if let last = body.compactMap(\.weightLb).last {
+        if let last = metrics.compactMap(\.weightLb).last {
             lb = last
         } else if profile.weightLb > 0 {
             lb = profile.weightLb
