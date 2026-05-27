@@ -40,6 +40,15 @@ targets:
     # on every `xcodegen generate`, wiping the orientations, HealthKit
     # usage strings, and UILaunchScreen we keep in the file. Xcode finds
     # the file via the INFOPLIST_FILE build setting below.
+    #
+    # Same rule for `entitlements:` — DO NOT add an `entitlements:` block
+    # here. XcodeGen will write an empty plist to the path on every
+    # `xcodegen generate`, clobbering our HealthKit / Background Delivery
+    # entitlements. The archive will sign with only the 4 default keys
+    # (application-identifier, beta-reports-active, team-identifier,
+    # get-task-allow) and HealthKit silently drops out of the IPA — even
+    # if the provisioning profile has HealthKit attached correctly.
+    # CODE_SIGN_ENTITLEMENTS below points Xcode at the hand-written file.
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.ourfitness.app
@@ -72,8 +81,6 @@ targets:
           PROVISIONING_PROFILE_SPECIFIER: ""
           CODE_SIGNING_REQUIRED: "NO"
           CODE_SIGNING_ALLOWED: "NO"
-    entitlements:
-      path: OurFitness/OurFitness.entitlements
 
   OurFitnessTests:
     type: bundle.unit-test

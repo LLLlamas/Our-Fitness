@@ -28,6 +28,18 @@ if grep -n -E '^[[:space:]]*(cert|sigh)[[:space:]]*\(' fastlane/Fastfile; then
   exit 1
 fi
 
+# XcodeGen overwrites the file path on every `xcodegen generate` when an
+# `entitlements:` block is present on a target. That silently wipes our
+# HealthKit / Background Delivery declarations and produces an archive with
+# only the 4 default entitlement keys (no HealthKit → "Missing
+# com.apple.developer.healthkit entitlement" at runtime). Same trap as
+# `info:` block, which we already avoid. CODE_SIGN_ENTITLEMENTS in
+# `settings:` points Xcode at the file without XcodeGen touching it.
+if grep -n -E '^[[:space:]]*entitlements:[[:space:]]*$' project.yml; then
+  echo "::error::project.yml must NOT have an 'entitlements:' block on any target. XcodeGen regenerates the file on every generate, wiping declared capabilities. Use CODE_SIGN_ENTITLEMENTS in 'settings:' instead."
+  exit 1
+fi
+
 if command -v xcodebuild >/dev/null 2>&1 && [ -d "OurFitness.xcodeproj" ]; then
   settings_file="$(mktemp)"
   xcodebuild \
