@@ -178,19 +178,36 @@ struct NutritionView: View {
     private var nudgeSection: some View {
         let nudges = varietyNudges
         if !nudges.isEmpty {
-            VStack(alignment: .leading, spacing: 4) {
-                ForEach(nudges, id: \.message) { nudge in
-                    HStack(alignment: .top, spacing: 6) {
-                        Text(nudge.emoji)
-                            .font(.system(size: 12))
-                        Text(nudge.message)
-                            .font(.caption).italic()
+            VStack(alignment: .leading, spacing: 10) {
+                ForEach(nudges, id: \.headline) { nudge in
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack(spacing: 6) {
+                            Text(nudge.emoji)
+                                .font(.system(size: 12))
+                            Text(nudge.headline)
+                                .font(.caption).fontWeight(.medium)
+                                .foregroundStyle(theme.text)
+                        }
+                        Text(nudge.reason)
+                            .font(.caption2).italic()
                             .foregroundStyle(theme.dim)
                             .fixedSize(horizontal: false, vertical: true)
+                        HStack(alignment: .top, spacing: 4) {
+                            Text("→")
+                                .font(.caption2)
+                                .foregroundStyle(theme.accent2)
+                            Text(nudge.alternative)
+                                .font(.caption2)
+                                .foregroundStyle(theme.dim)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
                     }
+                    .padding(10)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(theme.card)
+                    .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
                 }
             }
-            .padding(.horizontal, 4)
         }
     }
 
