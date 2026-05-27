@@ -43,38 +43,37 @@ struct CheckTodayIntent: AppIntent {
 // MARK: - Shortcuts provider — auto-registers phrases with Siri
 
 struct OurFitnessShortcuts: AppShortcutsProvider {
+    @AppShortcutsBuilder
     static var appShortcuts: [AppShortcut] {
-        [
-            AppShortcut(
-                intent: LogMealIntent(),
-                phrases: [
-                    "Log a meal in \(.applicationName)",
-                    "Add food to \(.applicationName)",
-                    "Track what I ate in \(.applicationName)",
-                ],
-                shortTitle: "Log Meal",
-                systemImageName: "fork.knife"
-            ),
-            AppShortcut(
-                intent: LogWorkoutIntent(),
-                phrases: [
-                    "Log a workout in \(.applicationName)",
-                    "Track my workout in \(.applicationName)",
-                    "Open train tab in \(.applicationName)",
-                ],
-                shortTitle: "Log Workout",
-                systemImageName: "figure.walk"
-            ),
-            AppShortcut(
-                intent: CheckTodayIntent(),
-                phrases: [
-                    "Check my progress in \(.applicationName)",
-                    "Show today in \(.applicationName)",
-                    "How am I doing in \(.applicationName)",
-                ],
-                shortTitle: "Today's Progress",
-                systemImageName: "chart.bar.fill"
-            ),
-        ]
+        AppShortcut(
+            intent: LogMealIntent(),
+            phrases: [
+                "Log a meal in \(.applicationName)",
+                "Add food to \(.applicationName)",
+                "Track what I ate in \(.applicationName)",
+            ],
+            shortTitle: "Log Meal",
+            systemImageName: "fork.knife"
+        )
+        AppShortcut(
+            intent: LogWorkoutIntent(),
+            phrases: [
+                "Log a workout in \(.applicationName)",
+                "Track my workout in \(.applicationName)",
+                "Open train tab in \(.applicationName)",
+            ],
+            shortTitle: "Log Workout",
+            systemImageName: "figure.walk"
+        )
+        AppShortcut(
+            intent: CheckTodayIntent(),
+            phrases: [
+                "Check my progress in \(.applicationName)",
+                "Show today in \(.applicationName)",
+                "How am I doing in \(.applicationName)",
+            ],
+            shortTitle: "Today's Progress",
+            systemImageName: "chart.bar.fill"
+        )
     }
 }
