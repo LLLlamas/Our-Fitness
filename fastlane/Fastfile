@@ -57,6 +57,8 @@ def env_or_default(name, fallback)
 end
 
 def match_options(api_key)
+  refreshing = !match_readonly?
+
   options = {
     type: "appstore",
     api_key: api_key,
@@ -70,6 +72,16 @@ def match_options(api_key)
     keychain_name: KEYCHAIN,
     keychain_password: ENV.fetch("KEYCHAIN_PASSWORD"),
     profile_name: PROFILE_NAME,
+    # In refresh mode, regenerate the provisioning profile so it picks up
+    # any newly-enabled App ID capabilities (e.g. HealthKit, background
+    # delivery). Without `force: true`, match reuses the cached profile
+    # from the certs repo and silently ignores App ID capability changes —
+    # which manifests on device as "Missing com.apple.developer.<x>
+    # entitlement". `force_for_new_devices` is also enabled to cover
+    # device-list changes for ad-hoc style profiles (no-op for App Store
+    # profiles but harmless and documents intent).
+    force: refreshing,
+    force_for_new_devices: refreshing,
   }
 
   basic_auth = ENV["MATCH_GIT_BASIC_AUTHORIZATION"].to_s.strip
