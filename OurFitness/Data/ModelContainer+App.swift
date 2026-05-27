@@ -1,63 +1,55 @@
 // SwiftData ModelContainer factory + in-memory variant for tests/previews.
+//
+// Migration history note: builds 26 and 27 crashed on launch because SwiftData's
+// staged migration (V1→V2→V3) tripped NSLightweightMigrationStage's version-checksum
+// validator with an Obj-C NSException — uncatchable from Swift try/catch. The two
+// known TestFlight users had no recoverable path forward, so this file uses a fresh
+// store URL (`OurFitness.store`) and drops the migration plan entirely. The old
+// `default.store` is left on disk untouched; if anyone needs a forensic pull later
+// it's still there. Future schema bumps should ship a real custom-stage migration
+// rather than reusing the legacy default-URL store.
 
 import Foundation
 import SwiftData
 
 public enum AppModelContainer {
 
-    /// On-disk container persisted to the app's default location.
-    /// Automatically falls back to an in-memory store when running under XCTest
-    /// (detected via the XCTestConfigurationFilePath env var that xcodebuild injects
-    /// into the test host process), so the on-disk store never crashes the test runner.
-    ///
-    /// If the migration fails (e.g. a broken stage landed in TestFlight), the store
-    /// is deleted and rebuilt empty rather than leaving the app permanently unlaunchable.
     public static func make() -> ModelContainer {
         if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil {
             return makeInMemory()
         }
-        let config = ModelConfiguration()
         do {
             return try ModelContainer(
                 for: Schema(versionedSchema: SchemaV3.self),
-                migrationPlan: OurFitnessMigrationPlan.self,
-                configurations: [config]
+                configurations: [ModelConfiguration(url: storeURL())]
             )
         } catch {
-            // Migration failed — delete the corrupt/unmigrateable store and start fresh.
-            // Both TestFlight users lose local data only if migration itself is broken;
-            // a broken migration already means the app is unlaunchable without this path.
-            let storeURL = config.url
-            try? FileManager.default.removeItem(at: storeURL)
-            // SQLite WAL companions are named with a hyphen (default.store-shm / default.store-wal),
-            // not as a second extension, so appendingPathExtension would target the wrong files.
-            let dir = storeURL.deletingLastPathComponent()
-            let base = storeURL.lastPathComponent
-            try? FileManager.default.removeItem(at: dir.appendingPathComponent("\(base)-shm"))
-            try? FileManager.default.removeItem(at: dir.appendingPathComponent("\(base)-wal"))
-            do {
-                return try ModelContainer(
-                    for: Schema(versionedSchema: SchemaV3.self),
-                    migrationPlan: OurFitnessMigrationPlan.self,
-                    configurations: [ModelConfiguration()]
-                )
-            } catch {
-                fatalError("Could not initialize ModelContainer even after store reset: \(error)")
-            }
+            fatalError("Could not initialize ModelContainer: \(error)")
         }
     }
 
-    /// In-memory variant — used by tests, previews, and onboarding seed-only runs.
     public static func makeInMemory() -> ModelContainer {
         do {
             return try ModelContainer(
                 for: Schema(versionedSchema: SchemaV3.self),
-                configurations: [
-                    ModelConfiguration(isStoredInMemoryOnly: true)
-                ]
+                configurations: [ModelConfiguration(isStoredInMemoryOnly: true)]
             )
         } catch {
             fatalError("Could not initialize in-memory ModelContainer: \(error)")
         }
+    }
+
+    private static func storeURL() -> URL {
+        let fm = FileManager.default
+        let appSupport = try? fm.url(
+            for: .applicationSupportDirectory,
+            in: .userDomainMask,
+            appropriateFor: nil,
+            create: true
+        )
+        let dir = (appSupport ?? URL.documentsDirectory)
+            .appendingPathComponent("OurFitness", isDirectory: true)
+        try? fm.createDirectory(at: dir, withIntermediateDirectories: true)
+        return dir.appendingPathComponent("OurFitness.store")
     }
 }
