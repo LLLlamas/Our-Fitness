@@ -53,15 +53,43 @@ public enum SchemaV2: VersionedSchema {
     }
 }
 
+/// V3 adds: ExerciseModel.loadLb + ExerciseModel.kindRaw (for known-load
+/// exercises like carrying a baby/stroller), WorkoutSetModel.caloriesEst,
+/// and CardioSessionModel.caloriesEst. All new fields are optional / have
+/// safe defaults — V2 rows migrate lightweight with nil/"reps".
+public enum SchemaV3: VersionedSchema {
+    public static let versionIdentifier = Schema.Version(3, 0, 0)
+
+    public static var models: [any PersistentModel.Type] {
+        [
+            ProfileModel.self,
+            ExerciseModel.self,
+            ProgramModel.self,
+            WorkoutModel.self,
+            WorkoutSetModel.self,
+            FoodModel.self,
+            FoodLogEntryModel.self,
+            BodyMetricModel.self,
+            HealthMarkerModel.self,
+            StepCountModel.self,
+            PilatesSessionModel.self,
+            CardioSessionModel.self,
+        ]
+    }
+}
+
 public enum OurFitnessMigrationPlan: SchemaMigrationPlan {
     public static var schemas: [any VersionedSchema.Type] {
-        [SchemaV1.self, SchemaV2.self]
+        [SchemaV1.self, SchemaV2.self, SchemaV3.self]
     }
     public static var stages: [MigrationStage] {
-        [.lightweight(fromVersion: SchemaV1.self, toVersion: SchemaV2.self)]
+        [
+            .lightweight(fromVersion: SchemaV1.self, toVersion: SchemaV2.self),
+            .lightweight(fromVersion: SchemaV2.self, toVersion: SchemaV3.self),
+        ]
     }
 }
 
 public enum AppSchema {
-    public static let current: any VersionedSchema.Type = SchemaV2.self
+    public static let current: any VersionedSchema.Type = SchemaV3.self
 }

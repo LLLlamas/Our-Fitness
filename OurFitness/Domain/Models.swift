@@ -78,6 +78,10 @@ public enum Equipment: String, Codable, Sendable {
     case barbell, dumbbell, machine, cable, bodyweight, band, kettlebell, none
 }
 
+public enum ExerciseKind: String, Codable, CaseIterable, Sendable {
+    case reps, duration
+}
+
 public enum ProgressionScheme: String, Codable, Sendable {
     case linear
     case doubleProgression = "double-progression"
@@ -265,13 +269,17 @@ public struct ExerciseDTO: Codable, Equatable, Sendable, Identifiable {
     /// effectively informational; rep counter sources from `profileId`.
     public var availableForMode: [Mode]
     public var profileId: UUID?
+    public var loadLb: Double?
+    public var kind: ExerciseKind
 
     public init(
         id: String, name: String, category: ExerciseCategory,
         muscleGroups: [String], equipment: [Equipment],
         defaultRepRange: [Int]? = nil,
         availableForMode: [Mode] = [.build, .circuit],
-        profileId: UUID? = nil
+        profileId: UUID? = nil,
+        loadLb: Double? = nil,
+        kind: ExerciseKind = .reps
     ) {
         self.id = id
         self.name = name
@@ -281,11 +289,13 @@ public struct ExerciseDTO: Codable, Equatable, Sendable, Identifiable {
         self.defaultRepRange = defaultRepRange
         self.availableForMode = availableForMode
         self.profileId = profileId
+        self.loadLb = loadLb
+        self.kind = kind
     }
 
-    // Codable: tolerate older payloads with no availableForMode/profileId field.
+    // Codable: tolerate older payloads with no availableForMode/profileId/loadLb/kind field.
     private enum CodingKeys: String, CodingKey {
-        case id, name, category, muscleGroups, equipment, defaultRepRange, availableForMode, profileId
+        case id, name, category, muscleGroups, equipment, defaultRepRange, availableForMode, profileId, loadLb, kind
     }
 
     public init(from decoder: Decoder) throws {
@@ -299,6 +309,8 @@ public struct ExerciseDTO: Codable, Equatable, Sendable, Identifiable {
         self.availableForMode = try c.decodeIfPresent([Mode].self, forKey: .availableForMode)
             ?? [.build, .circuit]
         self.profileId = try c.decodeIfPresent(UUID.self, forKey: .profileId)
+        self.loadLb = try c.decodeIfPresent(Double.self, forKey: .loadLb)
+        self.kind = try c.decodeIfPresent(ExerciseKind.self, forKey: .kind) ?? .reps
     }
 }
 
@@ -394,10 +406,12 @@ public struct WorkoutSetDTO: Codable, Equatable, Sendable, Identifiable {
     public var rpe: Double?
     public var notes: String?
     public var timestamp: Date
+    public var caloriesEst: Double?
 
     public init(id: UUID = UUID(), userId: UUID, exerciseId: String,
                 workoutId: UUID? = nil, weightLb: Double? = nil, reps: Int,
-                rpe: Double? = nil, notes: String? = nil, timestamp: Date = Date()) {
+                rpe: Double? = nil, notes: String? = nil, timestamp: Date = Date(),
+                caloriesEst: Double? = nil) {
         self.id = id
         self.userId = userId
         self.exerciseId = exerciseId
@@ -407,6 +421,26 @@ public struct WorkoutSetDTO: Codable, Equatable, Sendable, Identifiable {
         self.rpe = rpe
         self.notes = notes
         self.timestamp = timestamp
+        self.caloriesEst = caloriesEst
+    }
+
+    // Codable: tolerate older payloads with no caloriesEst field.
+    private enum CodingKeys: String, CodingKey {
+        case id, userId, exerciseId, workoutId, weightLb, reps, rpe, notes, timestamp, caloriesEst
+    }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try c.decode(UUID.self, forKey: .id)
+        self.userId = try c.decode(UUID.self, forKey: .userId)
+        self.exerciseId = try c.decode(String.self, forKey: .exerciseId)
+        self.workoutId = try c.decodeIfPresent(UUID.self, forKey: .workoutId)
+        self.weightLb = try c.decodeIfPresent(Double.self, forKey: .weightLb)
+        self.reps = try c.decode(Int.self, forKey: .reps)
+        self.rpe = try c.decodeIfPresent(Double.self, forKey: .rpe)
+        self.notes = try c.decodeIfPresent(String.self, forKey: .notes)
+        self.timestamp = try c.decode(Date.self, forKey: .timestamp)
+        self.caloriesEst = try c.decodeIfPresent(Double.self, forKey: .caloriesEst)
     }
 }
 
@@ -577,11 +611,12 @@ public struct CardioSessionDTO: Codable, Equatable, Sendable, Identifiable {
     public var distanceMiles: Double?
     public var rpe: Double?
     public var notes: String?
+    public var caloriesEst: Double?
 
     public init(id: UUID = UUID(), profileId: UUID, date: Date = Date(),
                 type: CardioType, durationMinutes: Int,
                 distanceMiles: Double? = nil, rpe: Double? = nil,
-                notes: String? = nil) {
+                notes: String? = nil, caloriesEst: Double? = nil) {
         self.id = id
         self.profileId = profileId
         self.date = date
@@ -590,5 +625,24 @@ public struct CardioSessionDTO: Codable, Equatable, Sendable, Identifiable {
         self.distanceMiles = distanceMiles
         self.rpe = rpe
         self.notes = notes
+        self.caloriesEst = caloriesEst
+    }
+
+    // Codable: tolerate older payloads with no caloriesEst field.
+    private enum CodingKeys: String, CodingKey {
+        case id, profileId, date, type, durationMinutes, distanceMiles, rpe, notes, caloriesEst
+    }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try c.decode(UUID.self, forKey: .id)
+        self.profileId = try c.decode(UUID.self, forKey: .profileId)
+        self.date = try c.decode(Date.self, forKey: .date)
+        self.type = try c.decode(CardioType.self, forKey: .type)
+        self.durationMinutes = try c.decode(Int.self, forKey: .durationMinutes)
+        self.distanceMiles = try c.decodeIfPresent(Double.self, forKey: .distanceMiles)
+        self.rpe = try c.decodeIfPresent(Double.self, forKey: .rpe)
+        self.notes = try c.decodeIfPresent(String.self, forKey: .notes)
+        self.caloriesEst = try c.decodeIfPresent(Double.self, forKey: .caloriesEst)
     }
 }

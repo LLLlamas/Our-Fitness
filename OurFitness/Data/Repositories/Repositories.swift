@@ -51,7 +51,34 @@ public enum Repos {
         )
         ctx.insert(ProfileModel(snapshot: dto))
         try? ctx.save()
+        if mode == .circuit {
+            seedCircuitExercises(ctx, profileId: dto.id)
+        }
         return dto
+    }
+
+    /// Seeds the three parenting-flavored exercises Circuit mode is built
+    /// around. Idempotent: skips any exercise already present for the profile
+    /// with a matching name.
+    private static func seedCircuitExercises(_ ctx: ModelContext, profileId: UUID) {
+        let existing = Set(exercises(ctx, forProfile: profileId).map(\.name))
+        let seeds: [(name: String, loadLb: Double, kind: ExerciseKind)] = [
+            ("Lifted Baby",     30, .reps),
+            ("Lifted Stroller", 25, .reps),
+            ("Carried Baby",    30, .duration),
+        ]
+        for s in seeds where !existing.contains(s.name) {
+            createExercise(
+                ctx,
+                profileId: profileId,
+                name: s.name,
+                defaultRepsBottom: 8,
+                defaultRepsTop: 12,
+                tracksWeight: false,
+                loadLb: s.loadLb,
+                kind: s.kind
+            )
+        }
     }
 
     public static func saveProfile(_ ctx: ModelContext, _ p: ProfileDTO) {
@@ -91,7 +118,9 @@ public enum Repos {
         name: String,
         defaultRepsBottom: Int,
         defaultRepsTop: Int,
-        tracksWeight: Bool
+        tracksWeight: Bool,
+        loadLb: Double? = nil,
+        kind: ExerciseKind = .reps
     ) -> ExerciseDTO {
         let dto = ExerciseDTO(
             id: "ex-\(profileId.uuidString.prefix(8))-\(UUID().uuidString.prefix(8))",
@@ -101,7 +130,9 @@ public enum Repos {
             equipment: tracksWeight ? [.dumbbell] : [.bodyweight],
             defaultRepRange: [defaultRepsBottom, defaultRepsTop],
             availableForMode: [.build, .circuit],
-            profileId: profileId
+            profileId: profileId,
+            loadLb: loadLb,
+            kind: kind
         )
         ctx.insert(ExerciseModel(snapshot: dto))
         try? ctx.save()

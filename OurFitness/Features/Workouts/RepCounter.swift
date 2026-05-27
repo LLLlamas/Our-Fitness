@@ -176,11 +176,18 @@ struct RepCounterSheet: View {
 
     private func saveSet() {
         let weight = Double(weightStr)
+        let load = exercise.loadLb ?? (tracksWeight ? weight : nil)
+        let kcal = CalorieEstimator.caloriesForReps(
+            reps: reps,
+            loadLb: load,
+            bodyWeightLb: profile.weightLb
+        )
         let dto = WorkoutSetDTO(
             userId: profile.id,
             exerciseId: exercise.id,
             weightLb: tracksWeight ? weight : nil,
-            reps: reps
+            reps: reps,
+            caloriesEst: kcal
         )
         Repos.addSet(ctx, dto)
         setsLogged += 1

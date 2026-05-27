@@ -83,7 +83,7 @@ struct CardioLogCard: View {
             }
         }
         .sheet(isPresented: $showLogSheet) {
-            CardioLogSheet(profileId: profile.id) { dto in
+            CardioLogSheet(profileId: profile.id, bodyWeightLb: profile.weightLb) { dto in
                 Repos.logCardio(ctx, dto)
                 toasts.show(Toast(title: "Cardio logged",
                                   detail: "\(dto.type.label) · \(dto.durationMinutes) min",
@@ -96,6 +96,7 @@ struct CardioLogCard: View {
 
 private struct CardioLogSheet: View {
     let profileId: UUID
+    let bodyWeightLb: Double
     let onSave: (CardioSessionDTO) -> Void
 
     @Environment(\.theme) private var theme
@@ -121,12 +122,18 @@ private struct CardioLogSheet: View {
                 notesSection
 
                 Button {
+                    let kcal = CalorieEstimator.caloriesForDuration(
+                        minutes: duration,
+                        loadLb: nil,
+                        bodyWeightLb: bodyWeightLb
+                    )
                     let dto = CardioSessionDTO(
                         profileId: profileId, type: type,
                         durationMinutes: Int(duration),
                         distanceMiles: Double(distanceStr),
                         rpe: Double(rpeStr),
-                        notes: notes.isEmpty ? nil : notes
+                        notes: notes.isEmpty ? nil : notes,
+                        caloriesEst: kcal
                     )
                     onSave(dto)
                     dismiss()

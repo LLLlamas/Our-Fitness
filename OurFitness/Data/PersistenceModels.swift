@@ -96,6 +96,10 @@ public final class ExerciseModel {
     /// Owning profile. Per-profile custom exercises landed in SchemaV2;
     /// legacy V1 rows decode with `nil` and surface to no profile.
     public var profileId: UUID?
+    /// Known weight of the load being moved (e.g. baby, stroller). V3.
+    public var loadLb: Double?
+    /// "reps" or "duration". V3. String-backed for SwiftData friendliness.
+    public var kindRaw: String = ExerciseKind.reps.rawValue
 
     public init(snapshot s: ExerciseDTO) {
         self.id = s.id
@@ -106,6 +110,8 @@ public final class ExerciseModel {
         self.defaultRepRange = s.defaultRepRange
         self.availableForModeRaw = s.availableForMode.map(\.rawValue)
         self.profileId = s.profileId
+        self.loadLb = s.loadLb
+        self.kindRaw = s.kind.rawValue
     }
 
     public var snapshot: ExerciseDTO {
@@ -116,7 +122,9 @@ public final class ExerciseModel {
             equipment: equipmentRaw.compactMap(Equipment.init(rawValue:)),
             defaultRepRange: defaultRepRange,
             availableForMode: availableForModeRaw.compactMap(Mode.init(rawValue:)),
-            profileId: profileId
+            profileId: profileId,
+            loadLb: loadLb,
+            kind: ExerciseKind(rawValue: kindRaw) ?? .reps
         )
     }
 }
@@ -186,6 +194,8 @@ public final class WorkoutSetModel {
     public var rpe: Double?
     public var notes: String?
     public var timestamp: Date
+    /// MET-based kcal estimate computed at log time. V3.
+    public var caloriesEst: Double?
 
     public init(snapshot s: WorkoutSetDTO) {
         self.id = s.id
@@ -197,12 +207,14 @@ public final class WorkoutSetModel {
         self.rpe = s.rpe
         self.notes = s.notes
         self.timestamp = s.timestamp
+        self.caloriesEst = s.caloriesEst
     }
 
     public var snapshot: WorkoutSetDTO {
         WorkoutSetDTO(id: id, userId: userId, exerciseId: exerciseId,
                       workoutId: workoutId, weightLb: weightLb, reps: reps,
-                      rpe: rpe, notes: notes, timestamp: timestamp)
+                      rpe: rpe, notes: notes, timestamp: timestamp,
+                      caloriesEst: caloriesEst)
     }
 }
 
@@ -425,6 +437,8 @@ public final class CardioSessionModel {
     public var distanceMiles: Double?
     public var rpe: Double?
     public var notes: String?
+    /// MET-based kcal estimate computed at log time. V3.
+    public var caloriesEst: Double?
 
     public init(snapshot s: CardioSessionDTO) {
         self.id = s.id
@@ -435,6 +449,7 @@ public final class CardioSessionModel {
         self.distanceMiles = s.distanceMiles
         self.rpe = s.rpe
         self.notes = s.notes
+        self.caloriesEst = s.caloriesEst
     }
 
     public var snapshot: CardioSessionDTO {
@@ -442,7 +457,8 @@ public final class CardioSessionModel {
             id: id, profileId: profileId, date: date,
             type: CardioType(rawValue: typeRaw) ?? .walk,
             durationMinutes: durationMinutes,
-            distanceMiles: distanceMiles, rpe: rpe, notes: notes
+            distanceMiles: distanceMiles, rpe: rpe, notes: notes,
+            caloriesEst: caloriesEst
         )
     }
 }
