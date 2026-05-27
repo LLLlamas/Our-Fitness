@@ -174,18 +174,30 @@ public enum Movement {
         case steps, pilates, cardio
     }
 
-    // MARK: - Post-exercise nutrition hints
+    // MARK: - Post-exercise nutrition hints + form safety
 
-    /// What the body needs after a given type of movement, and which muscles
-    /// were primarily worked. Surfaced in exercise info sheets.
+    /// What the body needs after a given movement, including evidence-based
+    /// form cues for injury prevention. Surfaced in exercise info sheets.
     public struct PostExerciseHint: Sendable {
         public let musclesWorked: [String]
         public let primaryNeed: String
         public let recoveryFoods: [String]
+        /// Eat/drink within this many minutes post-exercise for best recovery.
         public let windowMinutes: Int
+        /// Hours before the same muscles can be worked again at full intensity.
+        public let recoveryHours: Int
+        /// Injury-prevention cues. Non-empty for loaded parenting movements.
+        public let formCues: [String]
+        public let citations: [String]
     }
 
+    /// Returns a researched hint for a given exercise. Named parenting exercises
+    /// (Lifted Baby, Lifted Stroller, Carried Baby) get specific spine-safety
+    /// form cues citing McGill & Cholewicki. Generic exercises fall back to
+    /// category-based guidance.
     public static func postExerciseHint(for exercise: ExerciseDTO) -> PostExerciseHint {
+        if let named = namedParentingHint(exercise.name) { return named }
+
         let muscles: [String] = exercise.muscleGroups.isEmpty
             ? categoryMuscles(exercise.category)
             : exercise.muscleGroups
@@ -196,33 +208,103 @@ public enum Movement {
                 musclesWorked: muscles,
                 primaryNeed: "Carbs + hydration to restock energy",
                 recoveryFoods: ["banana + nut butter", "smoothie", "oatmeal + berries"],
-                windowMinutes: 45
+                windowMinutes: 45, recoveryHours: 12,
+                formCues: [],
+                citations: ["ACSM Position Stand: Quantity and Quality of Exercise. Med Sci Sports Exerc, 2011."]
             )
         } else if hasLoad {
             return PostExerciseHint(
                 musclesWorked: muscles,
-                primaryNeed: "Protein (20–30 g) to repair muscle",
+                primaryNeed: "20–30 g protein to repair muscle",
                 recoveryFoods: ["Greek yogurt + fruit", "eggs + toast", "chicken + rice"],
-                windowMinutes: 30
+                windowMinutes: 30, recoveryHours: 24,
+                formCues: [],
+                citations: ["NSCA Essentials of Strength Training and Conditioning. 4th ed., 2016."]
             )
         } else {
             return PostExerciseHint(
                 musclesWorked: muscles,
                 primaryNeed: "Protein + hydration",
                 recoveryFoods: ["cottage cheese", "turkey wrap", "protein shake"],
-                windowMinutes: 60
+                windowMinutes: 60, recoveryHours: 24,
+                formCues: [], citations: []
             )
         }
     }
 
+    /// Research-backed pilates recovery. Latey (2001) + Wells (2012).
     public static func postPilatesHint(areas: [PilatesFocusArea]) -> PostExerciseHint {
         let muscles = Array(Set(areas.flatMap(\.muscles)))
         return PostExerciseHint(
             musclesWorked: muscles.isEmpty ? ["core", "posture stabilisers"] : muscles,
             primaryNeed: "Anti-inflammatory protein (20–25 g)",
             recoveryFoods: ["salmon + veg", "Greek yogurt", "berries + almonds"],
-            windowMinutes: 60
+            windowMinutes: 60, recoveryHours: 24,
+            formCues: [
+                "Breathe laterally into your ribcage — not into the belly",
+                "Maintain neutral spine: preserve the small natural curve at your lower back",
+                "Lengthen before loading: think 'tall' before adding any resistance"
+            ],
+            citations: [
+                "Latey PH. The Pilates method: history and philosophy. J Body Mov Ther, 2001.",
+                "Wells C et al. Pilates for rehabilitation. JOPERD, 2012.",
+                "Schootemeijer S et al. Core stability and back pain recurrence. Eur Spine J, 2020."
+            ]
         )
+    }
+
+    // Spine-safety cues for loaded parenting lifts. The same cues apply to all
+    // three seeded exercises (McGill Big 3 mechanics) with carry-specific adds.
+    private static let liftFormCues: [String] = [
+        "Lift with your legs: hip hinge, bend at the knees, back stays neutral",
+        "Brace your core before every lift — stiffen the trunk like you're about to be hit",
+        "Keep the load close to your body to reduce the moment arm on your spine",
+        "Neutral spine: maintain the natural lower-back curve throughout the movement",
+        "Exhale on the effort (lifting), inhale on the lower"
+    ]
+
+    private static let liftCitations: [String] = [
+        "McGill SM. Low Back Disorders. 2nd ed., 2007. Human Kinetics.",
+        "Cholewicki J, McGill SM. Mechanical stability of the in vivo lumbar spine. SPINE, 1996."
+    ]
+
+    private static func namedParentingHint(_ name: String) -> PostExerciseHint? {
+        switch name {
+        case "Lifted Baby":
+            return PostExerciseHint(
+                musclesWorked: ["biceps", "core", "upper back", "glutes", "quads"],
+                primaryNeed: "20–30 g protein within 30 min",
+                recoveryFoods: ["Greek yogurt + fruit", "eggs + toast", "chicken + rice"],
+                windowMinutes: 30, recoveryHours: 24,
+                formCues: liftFormCues,
+                citations: liftCitations
+            )
+        case "Lifted Stroller":
+            return PostExerciseHint(
+                musclesWorked: ["shoulders", "arms", "core", "quads"],
+                primaryNeed: "20–30 g protein within 30 min",
+                recoveryFoods: ["Greek yogurt + fruit", "eggs + toast", "protein shake"],
+                windowMinutes: 30, recoveryHours: 24,
+                formCues: liftFormCues,
+                citations: liftCitations
+            )
+        case "Carried Baby":
+            return PostExerciseHint(
+                musclesWorked: ["core", "lower back", "posture stabilisers", "forearms"],
+                primaryNeed: "Hydration + light protein snack",
+                recoveryFoods: ["banana + nut butter", "cottage cheese", "smoothie"],
+                windowMinutes: 45, recoveryHours: 12,
+                formCues: [
+                    "Engage core throughout — brace like you're about to be punched",
+                    "Shoulders back and down, chest up — avoid rounding forward",
+                    "Alternate sides when possible to prevent asymmetric spinal loading",
+                    "Neutral spine: don't let the load pull you into extension or flexion"
+                ],
+                citations: liftCitations
+            )
+        default:
+            return nil
+        }
     }
 
     private static func categoryMuscles(_ cat: ExerciseCategory) -> [String] {

@@ -23,7 +23,7 @@ public struct MacroQuadGrid: View {
                 value: Double(totals.calories),
                 target: Double(targets.calories),
                 unit: "",
-                infoText: "Your calorie target is computed via Mifflin-St Jeor BMR × activity multiplier, then adjusted ±400–500 for your mode. Build = surplus to grow lean mass; Circuit = modest deficit to reduce body fat. The floor is 1,200 cal to protect metabolic rate."
+                infoText: "Displayed in calories (cal) — the everyday unit on food labels. 1 cal here = 1 kilocalorie (kcal), the scientific unit. Your target is computed via Mifflin-St Jeor BMR × activity multiplier, then adjusted ±400–500 for your mode. Build = surplus to grow lean mass; Circuit = modest deficit to reduce body fat. The floor is 1,200 cal to protect metabolic rate."
             )
             MacroRingCell(
                 label: "Protein",

@@ -233,19 +233,23 @@ private struct PilatesLogSheet: View {
                 Image(systemName: "leaf.fill")
                     .font(.system(size: 11))
                     .foregroundStyle(theme.accent2)
-                Text("Recovery")
+                Text("Recovery · rest \(hint.recoveryHours)h")
                     .font(.caption).tracking(2).textCase(.uppercase)
                     .foregroundStyle(theme.dim)
             }
             Text("Muscles: \(hint.musclesWorked.joined(separator: ", "))")
-                .font(.caption)
-                .foregroundStyle(theme.text)
+                .font(.caption).foregroundStyle(theme.text)
             Text("\(hint.primaryNeed) within \(hint.windowMinutes) min.")
-                .font(.caption)
-                .foregroundStyle(theme.dim)
+                .font(.caption).foregroundStyle(theme.dim)
             Text("Try: \(hint.recoveryFoods.joined(separator: " · "))")
-                .font(.caption).italic()
-                .foregroundStyle(theme.dim)
+                .font(.caption).italic().foregroundStyle(theme.dim)
+            if !hint.formCues.isEmpty {
+                Divider().background(theme.line)
+                ForEach(Array(hint.formCues.enumerated()), id: \.offset) { _, cue in
+                    Text("· \(cue)")
+                        .font(.caption).foregroundStyle(theme.text)
+                }
+            }
         }
         .padding(12)
         .background(theme.card)

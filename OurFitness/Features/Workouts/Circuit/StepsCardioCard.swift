@@ -171,7 +171,7 @@ struct StepsCardioCard: View {
     @ViewBuilder
     private var secondaryStats: some View {
         HStack(spacing: 14) {
-            statCell(label: "Active kcal · wk", value: "\(activeEnergyKcalThisWeek)")
+            statCell(label: "Active cal · wk", value: "\(activeEnergyKcalThisWeek)")
             statCell(label: "Exercise min · wk", value: "\(exerciseMinutesThisWeek)")
         }
     }

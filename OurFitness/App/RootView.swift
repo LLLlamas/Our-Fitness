@@ -1,5 +1,9 @@
 // Top-level shell. User-created profiles; first launch routes to creation.
 // Theme follows the active profile's mode. Overlays the toast host.
+//
+// Tab layout is mode-dependent:
+//   Build:   Today | Meals | Train | Progress
+//   Circuit: Today | Meals | Progress   (Train is absorbed into Today)
 
 import SwiftUI
 import SwiftData
@@ -90,9 +94,12 @@ struct RootView: View {
                     .tag(Tab.meals)
                     .tabItem { Label(Tab.meals.label, systemImage: Tab.meals.icon) }
 
-                WorkoutsView(profile: profile)
-                    .tag(Tab.workouts)
-                    .tabItem { Label(Tab.workouts.label, systemImage: Tab.workouts.icon) }
+                // Train tab only for Build — Circuit workout content lives in Today
+                if profile.mode == .build {
+                    WorkoutsView(profile: profile)
+                        .tag(Tab.workouts)
+                        .tabItem { Label(Tab.workouts.label, systemImage: Tab.workouts.icon) }
+                }
 
                 ProgressTabView(profile: profile)
                     .tag(Tab.progress)
@@ -115,6 +122,10 @@ struct RootView: View {
                                   accent: .win, symbol: "checkmark.seal.fill"),
                             for: 2.0)
             }
+        }
+        .onChange(of: profile.mode) { _, _ in
+            // If switching from Build → Circuit while on the Train tab, land on Today
+            if tab == .workouts { tab = .today }
         }
         .task(id: StepObserverKey(profileId: profile.id, granted: profile.healthGranted)) {
             if profile.healthGranted {

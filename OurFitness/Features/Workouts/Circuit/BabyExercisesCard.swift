@@ -95,7 +95,7 @@ struct BabyExercisesCard: View {
                     .font(.system(size: 22, weight: .regular))
                     .foregroundStyle(theme.text)
                 if todayTotalKcal > 0 {
-                    Text("~\(Int(todayTotalKcal)) kcal burned today")
+                    Text("~\(Int(todayTotalKcal)) cal burned today")
                         .font(.caption)
                         .foregroundStyle(theme.dim)
                 } else {
@@ -110,13 +110,13 @@ struct BabyExercisesCard: View {
 
     private func logActivity(exercise: ExerciseDTO, amount: Int) {
         let load = exercise.loadLb
-        let kcal: Double
+        let cal: Double
         if exercise.kind == .duration {
-            kcal = CalorieEstimator.caloriesForDuration(
+            cal = CalorieEstimator.caloriesForDuration(
                 minutes: Double(amount), loadLb: load, bodyWeightLb: profile.weightLb
             )
         } else {
-            kcal = CalorieEstimator.caloriesForReps(
+            cal = CalorieEstimator.caloriesForReps(
                 reps: amount, loadLb: load, bodyWeightLb: profile.weightLb
             )
         }
@@ -126,17 +126,17 @@ struct BabyExercisesCard: View {
             exerciseId: exercise.id,
             weightLb: nil,
             reps: amount,
-            caloriesEst: kcal
+            caloriesEst: cal
         )
         Repos.addSet(ctx, dto)
 
         let unit = exercise.kind == .duration
             ? "+\(amount) min"
             : "+\(amount) rep\(amount == 1 ? "" : "s")"
-        let kcalStr = kcal >= 1 ? " · ~\(Int(kcal)) kcal" : ""
+        let calStr = cal >= 1 ? " · ~\(Int(cal)) cal" : ""
         toasts.show(Toast(
             title: exercise.name,
-            detail: unit + kcalStr,
+            detail: unit + calStr,
             accent: .win,
             symbol: "checkmark.seal.fill"
         ))
@@ -244,6 +244,34 @@ private struct ExerciseInfoSheet: View {
                     .font(.system(size: 32, weight: .regular))
                     .foregroundStyle(theme.text)
 
+                // Form & Safety — shown prominently for loaded movements
+                if !hint.formCues.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack(spacing: 6) {
+                            Image(systemName: "exclamationmark.shield.fill")
+                                .font(.system(size: 11))
+                                .foregroundStyle(theme.warn)
+                            Text("Form & Safety")
+                                .font(.caption).tracking(2).textCase(.uppercase)
+                                .foregroundStyle(theme.dim)
+                        }
+                        ForEach(Array(hint.formCues.enumerated()), id: \.offset) { _, cue in
+                            HStack(alignment: .top, spacing: 8) {
+                                Text("·")
+                                    .font(.callout)
+                                    .foregroundStyle(theme.warn)
+                                Text(cue)
+                                    .font(.callout)
+                                    .foregroundStyle(theme.text)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                        }
+                    }
+                    .padding(14)
+                    .background(theme.warn.opacity(0.08))
+                    .overlay(Rectangle().stroke(theme.warn.opacity(0.3), lineWidth: 1))
+                }
+
                 // Muscles worked
                 infoBlock(
                     icon: "figure.strengthtraining.traditional",
@@ -257,8 +285,8 @@ private struct ExerciseInfoSheet: View {
                         icon: "flame.fill",
                         title: "Today",
                         body: exercise.kind == .duration
-                            ? "\(todayCount) min · ~\(Int(todayKcal)) kcal burned"
-                            : "\(todayCount) reps · ~\(Int(todayKcal)) kcal burned"
+                            ? "\(todayCount) min · ~\(Int(todayKcal)) cal burned"
+                            : "\(todayCount) reps · ~\(Int(todayKcal)) cal burned"
                     )
                 }
 
@@ -268,7 +296,7 @@ private struct ExerciseInfoSheet: View {
                         Image(systemName: "leaf.fill")
                             .font(.system(size: 11))
                             .foregroundStyle(theme.accent2)
-                        Text("Recovery (within \(hint.windowMinutes) min)")
+                        Text("Recovery (within \(hint.windowMinutes) min · rest \(hint.recoveryHours)h)")
                             .font(.caption).tracking(2).textCase(.uppercase)
                             .foregroundStyle(theme.dim)
                     }
@@ -282,10 +310,14 @@ private struct ExerciseInfoSheet: View {
                 .background(theme.card)
                 .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
 
-                if let lb = exercise.loadLb {
-                    Text("Load: \(Int(lb)) lb — MET-based estimate uses actual body weight for accuracy.")
-                        .font(.caption2)
-                        .foregroundStyle(theme.dim)
+                if !hint.citations.isEmpty {
+                    VStack(alignment: .leading, spacing: 4) {
+                        ForEach(Array(hint.citations.enumerated()), id: \.offset) { _, cite in
+                            Text(cite)
+                                .font(.caption2)
+                                .foregroundStyle(theme.dim)
+                        }
+                    }
                 }
             }
             .padding(20)
