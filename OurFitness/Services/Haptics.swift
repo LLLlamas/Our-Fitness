@@ -7,7 +7,7 @@
 //
 // Vocabulary:
 //   tap     — every button press (light, ubiquitous)
-//   bump    — incremental controls (step +500, set logged)
+//   bump    — incremental controls (a logged set, a slot switch)
 //   success — goal hit, set logged that beat a PR
 //   warn    — destructive confirm, cap breach
 //   select  — picker/segmented change
@@ -26,7 +26,7 @@ public enum Haptics {
 
     /// Light press confirmation. Default for every button.
     public static func tap()     { light.prepare();  light.impactOccurred(intensity: 0.6) }
-    /// Discrete increment (a +500 step bump, a logged set, a slot switch).
+    /// Discrete increment (a logged set, a slot switch).
     public static func bump()    { medium.prepare(); medium.impactOccurred(intensity: 0.7) }
     /// Goal hit, PR beaten, session finished — meaningful win.
     public static func success() { notif.prepare();  notif.notificationOccurred(.success) }

@@ -128,7 +128,7 @@ Headline entities:
 - `Food`, `FoodLogEntry` — `modeFit` gates suggestions; entries denormalize macros
 - `BodyMetric` — weight, body-fat, waist
 - `HealthMarker` — BP, LDL/HDL, triglycerides, A1c, fasting glucose, resting HR (Reset-critical)
-- `StepCount` — one row per user per day (UPSERT); `source: .manual | .appleHealth`
+- `StepCount` — one row per user per day (UPSERT); `source: .appleHealth` is the only live writer (HealthKit observer + backfill). `.manual` is a retained enum case with no current writer (manual step entry was removed); kept for schema stability and a possible future Watch/airplane-mode path.
 
 ---
 
@@ -261,7 +261,7 @@ No third user. No medical advice. No social/sharing/leaderboards. No barcode sca
 2. Today view (bars, steps, log meal, log set)
 3. Suggestion engine in Today
 4. Workouts: program picker → block runner → set logger with progression
-5. Progress: weight + steps + markers + lift PRs
+5. Progress: weight + steps + markers
 6. Nutrition library browser
 7. Weekly planner + grocery list
 8. Export/import (JSON + SwiftData `.store` backup)

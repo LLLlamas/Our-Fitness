@@ -238,9 +238,9 @@ enum StatKind: String, CaseIterable, Identifiable {
 
     func isRelevant(for mode: Mode) -> Bool {
         switch self {
-        case .weight, .bodyFat, .waist, .restingHR, .stepsAvg:
+        case .weight, .bodyFat, .waist, .stepsAvg:
             return true
-        case .bp, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
+        case .restingHR, .bp, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
             return mode == .circuit
         }
     }

@@ -158,7 +158,7 @@ Use frontend-design agent for visual polish (see §10). Functional spec below.
 
 ### Other progress cards (existing, may need design polish)
 - Weight trend (Build emphasis)
-- Lift PRs (Build only)
+- ~~Lift PRs (Build only)~~ — not planned
 
 **Files:** `Features/Progress/ProgressView.swift`, `Features/Progress/Modals/StepsDeepDive.swift` (new), `Features/Progress/Modals/PilatesProgress.swift` (new), `Features/Progress/Modals/HealthMarkersDetail.swift` (new), `Components/CalendarHeatmap.swift` (new), `Components/RangeBandChart.swift` (new).
 
