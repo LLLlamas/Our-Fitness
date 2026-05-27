@@ -26,6 +26,34 @@ public enum Repos {
         }
     }
 
+    /// Create a brand-new profile. Computes MacroTargets from the supplied
+    /// vitals so callers don't need to thread Targets.compute themselves.
+    @discardableResult
+    public static func createProfile(
+        _ ctx: ModelContext,
+        name: String,
+        mode: Mode,
+        sex: Sex,
+        heightIn: Double,
+        weightLb: Double,
+        age: Int,
+        activity: ActivityLevel,
+        healthGranted: Bool = false
+    ) -> ProfileDTO {
+        let vitals = Targets.ProfileVitals(
+            sex: sex, weightLb: weightLb, heightIn: heightIn, age: age, activity: activity
+        )
+        let dto = ProfileDTO(
+            name: name, mode: mode, sex: sex,
+            heightIn: heightIn, weightLb: weightLb, age: age, activity: activity,
+            computedTargets: Targets.compute(mode: mode, vitals: vitals),
+            healthGranted: healthGranted
+        )
+        ctx.insert(ProfileModel(snapshot: dto))
+        try? ctx.save()
+        return dto
+    }
+
     public static func saveProfile(_ ctx: ModelContext, _ p: ProfileDTO) {
         let target = p.id
         let desc = FetchDescriptor<ProfileModel>(
@@ -77,6 +105,46 @@ public enum Repos {
             ctx.delete(existing)
         }
         ctx.insert(ExerciseModel(snapshot: e))
+    }
+
+    public static func exercises(_ ctx: ModelContext, forProfile profileId: UUID) -> [ExerciseDTO] {
+        let desc = FetchDescriptor<ExerciseModel>(
+            predicate: #Predicate { $0.profileId == profileId },
+            sortBy: [SortDescriptor(\.name)]
+        )
+        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
+    }
+
+    @discardableResult
+    public static func createExercise(
+        _ ctx: ModelContext,
+        profileId: UUID,
+        name: String,
+        defaultRepsBottom: Int,
+        defaultRepsTop: Int,
+        tracksWeight: Bool
+    ) -> ExerciseDTO {
+        let dto = ExerciseDTO(
+            id: "ex-\(profileId.uuidString.prefix(8))-\(UUID().uuidString.prefix(8))",
+            name: name,
+            category: tracksWeight ? .compound : .bodyweight,
+            muscleGroups: [],
+            equipment: tracksWeight ? [.dumbbell] : [.bodyweight],
+            defaultRepRange: [defaultRepsBottom, defaultRepsTop],
+            availableForMode: [.build, .circuit],
+            profileId: profileId
+        )
+        ctx.insert(ExerciseModel(snapshot: dto))
+        try? ctx.save()
+        return dto
+    }
+
+    public static func deleteExercise(_ ctx: ModelContext, id: String) {
+        let desc = FetchDescriptor<ExerciseModel>(predicate: #Predicate { $0.id == id })
+        if let target = try? ctx.fetch(desc).first {
+            ctx.delete(target)
+            try? ctx.save()
+        }
     }
 
     // MARK: - Programs
@@ -230,6 +298,24 @@ public enum Repos {
             predicate: #Predicate { $0.profileId == profileId },
             sortBy: [SortDescriptor(\.date, order: .reverse)]
         )
+        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
+    }
+
+    // MARK: - Cardio sessions
+
+    public static func logCardio(_ ctx: ModelContext, _ s: CardioSessionDTO) {
+        ctx.insert(CardioSessionModel(snapshot: s))
+        try? ctx.save()
+    }
+
+    public static func listCardio(
+        _ ctx: ModelContext, profileId: UUID, limit: Int = 50
+    ) -> [CardioSessionDTO] {
+        var desc = FetchDescriptor<CardioSessionModel>(
+            predicate: #Predicate { $0.profileId == profileId },
+            sortBy: [SortDescriptor(\.date, order: .reverse)]
+        )
+        desc.fetchLimit = limit
         return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
     }
 

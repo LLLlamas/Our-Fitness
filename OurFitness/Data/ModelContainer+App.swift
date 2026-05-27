@@ -15,7 +15,7 @@ public enum AppModelContainer {
         }
         do {
             return try ModelContainer(
-                for: Schema(versionedSchema: SchemaV1.self),
+                for: Schema(versionedSchema: SchemaV2.self),
                 migrationPlan: OurFitnessMigrationPlan.self,
                 configurations: [ModelConfiguration()]
             )
@@ -28,7 +28,7 @@ public enum AppModelContainer {
     public static func makeInMemory() -> ModelContainer {
         do {
             return try ModelContainer(
-                for: Schema(versionedSchema: SchemaV1.self),
+                for: Schema(versionedSchema: SchemaV2.self),
                 configurations: [
                     ModelConfiguration(isStoredInMemoryOnly: true)
                 ]

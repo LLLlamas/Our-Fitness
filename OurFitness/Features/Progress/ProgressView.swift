@@ -25,8 +25,9 @@ struct ProgressTabView: View {
         stepModels.map(\.snapshot).filter { $0.userId == profile.id }
     }
     private var exercises: [ExerciseDTO] {
-        exerciseModels.map(\.snapshot)
-            .filter { $0.availableForMode.contains(profile.mode) }
+        let target = profile.id
+        return exerciseModels.map(\.snapshot)
+            .filter { $0.profileId == target }
     }
 
     private var weightSeries: [Trends.Point] {
@@ -68,7 +69,7 @@ struct ProgressTabView: View {
                     stepsCard
                 }
 
-                if profile.mode == .reset { markersSection }
+                if profile.mode == .circuit { markersSection }
                 prsSection
             }
             .padding(.horizontal, 20)

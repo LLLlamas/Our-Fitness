@@ -6,358 +6,185 @@ struct WorkoutsView: View {
 
     @Environment(\.modelContext) private var ctx
     @Environment(\.theme) private var theme
-    @EnvironmentObject private var toasts: ToastCenter
-
-    @Query private var programModels: [ProgramModel]
-    @Query private var exerciseModels: [ExerciseModel]
-    @Query private var stepModels: [StepCountModel]
-
-    @State private var programId: String? = nil
-    @State private var dayIndex: Int = 0
-    @State private var sessionId: UUID? = nil
-
-    private var programs: [ProgramDTO] {
-        programModels.map(\.snapshot).filter { $0.modeFit.contains(profile.mode) }
-    }
-    private var exercisesById: [String: ExerciseDTO] {
-        // Gate by availableForMode so Reset never sees a strength block and
-        // a future Build-only utility never leaks into a mode that stripped it.
-        let pool = exerciseModels.map(\.snapshot)
-            .filter { $0.availableForMode.contains(profile.mode) }
-        return Dictionary(uniqueKeysWithValues: pool.map { ($0.id, $0) })
-    }
-    private var program: ProgramDTO? {
-        programs.first { $0.id == programId } ?? programs.first
-    }
-    private var day: ProgramDayDTO? {
-        guard let p = program, p.schedule.indices.contains(dayIndex) else { return nil }
-        return p.schedule[dayIndex]
-    }
 
     var body: some View {
         Group {
-            if profile.mode == .reset {
-                resetView
+            if profile.mode == .circuit {
+                CircuitWorkoutsView(profile: profile)
             } else {
-                buildView
+                BuildWorkoutsView(profile: profile)
             }
         }
         .background(theme.bg.ignoresSafeArea())
     }
-
-    // MARK: - Build (unchanged strength flow)
-
-    @ViewBuilder
-    private var buildView: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                Text("train.")
-                    .font(.system(size: 56, weight: .regular))
-                    .foregroundStyle(theme.text)
-                Text("Hypertrophy bias. Double-progression. Push hard, eat harder.")
-                    .font(.callout).foregroundStyle(theme.dim)
-
-                programRow
-                dayRow
-                sessionControls
-
-                if let day {
-                    ForEach(day.blocks.indices, id: \.self) { i in
-                        let spec = day.blocks[i]
-                        if let ex = exercisesById[spec.exerciseId], let program {
-                            ExerciseBlockView(
-                                profile: profile,
-                                exercise: ex,
-                                spec: spec,
-                                scheme: program.progression,
-                                sessionId: sessionId
-                            )
-                        }
-                    }
-                }
-            }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 18)
-        }
-        .onAppear {
-            if programId == nil { programId = programs.first?.id }
-        }
-        .sensoryFeedback(.selection, trigger: dayIndex)
-        .sensoryFeedback(.selection, trigger: programId)
-    }
-
-    // MARK: - Reset (movement minutes + Pilates)
-
-    private var stepsForProfile: [StepCountDTO] {
-        stepModels.map(\.snapshot).filter { $0.userId == profile.id }
-    }
-
-    private var todaysSteps: Int {
-        Steps.stepsForDay(stepsForProfile, day: Dates.dayKey())
-    }
-
-    private var weeklySteps: [Trends.Point] {
-        Steps.series(stepsForProfile, days: 7)
-    }
-
-    private var stepStreakWeeks: Int {
-        Movement.stepWeeklyStreak(
-            steps: stepsForProfile,
-            dailyGoal: profile.computedTargets.stepsDaily
-        )
-    }
-
-    @ViewBuilder
-    private var resetView: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 18) {
-                Text("train.")
-                    .font(.system(size: 56, weight: .regular))
-                    .foregroundStyle(theme.text)
-                Text("Strength stripped. Steps, cardio, and Pilates move the markers.")
-                    .font(.callout).foregroundStyle(theme.dim)
-
-                movementSummary
-
-                // PressableCard inside StepsCardioCard already supplies background
-                // + stroke; don't wrap in an outer Card or the border doubles up.
-                StepsCardioCard(
-                    profile: profile,
-                    todaysSteps: todaysSteps,
-                    weeklySeries: weeklySteps,
-                    intradayToday: [],            // §7 will wire HK intraday
-                    intradayYesterday: [],
-                    activeEnergyKcalThisWeek: 0,  // §7 wires off HKActiveEnergy
-                    exerciseMinutesThisWeek: 0,
-                    streakWeeks: stepStreakWeeks
-                )
-
-                Card { PilatesCard(profile: profile) }
-            }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 18)
-        }
-    }
-
-    @ViewBuilder
-    private var movementSummary: some View {
-        let stepsGoal = Double(profile.computedTargets.stepsDaily)
-        // Pilates + cardio minutes wire up in §7 alongside HK active-energy;
-        // for now the rings render at zero so the surface is honest.
-        ThreeRingSummary(rings: [
-            .init(label: "Steps", value: Double(todaysSteps),
-                  goal: stepsGoal, color: theme.accent),
-            .init(label: "Pilates · wk", value: 0,
-                  goal: 90, color: theme.accent2),
-            .init(label: "Cardio min · wk", value: 0,
-                  goal: 150, color: theme.ok)
-        ])
-        .padding(14)
-        .background(theme.card)
-        .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
-    }
-
-    private var programRow: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                ForEach(programs) { p in
-                    Button {
-                        programId = p.id
-                        dayIndex = 0
-                    } label: {
-                        Text(p.name)
-                    }
-                    .tactile(.pill, fill: p.id == program?.id ? theme.accent : nil)
-                }
-            }
-        }
-    }
-
-    @ViewBuilder
-    private var dayRow: some View {
-        if let program {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    ForEach(program.schedule.indices, id: \.self) { i in
-                        Button {
-                            dayIndex = i
-                        } label: {
-                            Text(program.schedule[i].label)
-                        }
-                        .tactile(.pill, fill: i == dayIndex ? theme.accent2 : nil)
-                    }
-                }
-            }
-        }
-    }
-
-    @ViewBuilder
-    private var sessionControls: some View {
-        if let day {
-            HStack {
-                Text(day.label)
-                    .font(.system(size: 22, weight: .regular))
-                    .foregroundStyle(theme.text)
-                Spacer()
-                if let id = sessionId {
-                    Button {
-                        Repos.endWorkout(ctx, id: id)
-                        sessionId = nil
-                        Haptics.success()
-                        toasts.show(Toast(title: "Session complete.",
-                                          detail: "Locked in. Recovery time.",
-                                          accent: .win, symbol: "flag.checkered"), for: 2.4)
-                    } label: {
-                        Text("Finish session")
-                    }
-                    .tactile(.primary, fill: theme.ok)
-                } else {
-                    Button {
-                        if let p = program {
-                            sessionId = Repos.startWorkout(ctx, userId: profile.id, programId: p.id)
-                            Haptics.bump()
-                        }
-                    } label: {
-                        Text("Start session")
-                    }
-                    .tactile(.primary)
-                }
-            }
-        }
-    }
 }
 
-// MARK: - ExerciseBlockView
+// MARK: - Build mode
 
-private struct ExerciseBlockView: View {
+private struct BuildWorkoutsView: View {
     let profile: ProfileDTO
-    let exercise: ExerciseDTO
-    let spec: ProgramSetSpec
-    let scheme: ProgressionScheme
-    let sessionId: UUID?
 
     @Environment(\.modelContext) private var ctx
     @Environment(\.theme) private var theme
     @EnvironmentObject private var toasts: ToastCenter
 
-    @State private var weightStr: String = ""
-    @State private var repsStr: String = ""
-    @State private var rpeStr: String = ""
-    @State private var history: [WorkoutSetDTO] = []
+    @Query private var exerciseModels: [ExerciseModel]
+    @State private var showAddSheet = false
+    @State private var activeRepCounter: ExerciseDTO?
 
-    private var target: Progression.Target {
-        Progression.nextTarget(scheme: scheme, spec: spec, history: history)
+    private var myExercises: [ExerciseDTO] {
+        let target = profile.id
+        return exerciseModels.map(\.snapshot)
+            .filter { $0.profileId == target }
+            .sorted { $0.name < $1.name }
     }
-    private var pr: WorkoutSetDTO? { Progression.personalRecord(history) }
 
     var body: some View {
-        Card {
-            VStack(alignment: .leading, spacing: 10) {
-                HStack(alignment: .firstTextBaseline) {
-                    Text(exercise.name)
-                        .font(.system(size: 18, weight: .semibold))
+        ScrollView {
+            VStack(alignment: .leading, spacing: 18) {
+                Text("train.")
+                    .font(.system(size: 56, weight: .regular))
+                    .foregroundStyle(theme.text)
+                Text("Hypertrophy bias. Add your lifts, count reps, log sets.")
+                    .font(.callout).foregroundStyle(theme.dim)
+
+                HStack {
+                    Text("Your exercises")
+                        .font(.system(size: 22, weight: .regular))
                         .foregroundStyle(theme.text)
                     Spacer()
-                    Text("\(spec.sets) × \(spec.repsBottom)–\(spec.repsTop)")
-                        .font(.system(.caption, design: .monospaced))
-                        .foregroundStyle(theme.dim)
-                }
-                Text("Next: \(targetDescription) — \(target.notes)")
-                    .font(.caption).italic()
-                    .foregroundStyle(theme.accent2)
-                if let pr {
-                    Text("PR: \(pr.weightLb.map { "\(Int($0)) lb × " } ?? "")\(pr.reps) reps")
-                        .font(.caption2)
-                        .foregroundStyle(theme.dim)
-                }
-
-                HStack(spacing: 8) {
-                    inputField("Weight", $weightStr).keyboardType(.decimalPad)
-                    inputField("Reps", $repsStr).keyboardType(.numberPad)
-                    inputField("RPE", $rpeStr).keyboardType(.decimalPad)
-                    Button(action: commit) {
-                        Text("Log")
+                    Button { showAddSheet = true } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "plus.circle.fill")
+                            Text("Add")
+                        }
                     }
-                    .tactile(.primary)
+                    .tactile(.pill, fill: theme.accent)
                 }
 
-                if !history.isEmpty {
-                    HStack(spacing: 8) {
-                        Text("RECENT:").font(.caption2).tracking(2).foregroundStyle(theme.dim)
-                        ForEach(history.prefix(5)) { s in
-                            Text(recentLabel(s))
-                                .font(.system(.caption2, design: .monospaced))
-                                .foregroundStyle(theme.dim)
+                if myExercises.isEmpty {
+                    Card {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("No exercises yet.")
+                                .font(.callout).foregroundStyle(theme.text)
+                            Text("Tap Add to build your list. Each entry remembers its rep range and whether it tracks weight.")
+                                .font(.caption).foregroundStyle(theme.dim)
+                        }
+                    }
+                } else {
+                    ForEach(myExercises) { ex in
+                        PressableCard(action: { activeRepCounter = ex }) {
+                            exerciseRow(ex)
                         }
                     }
                 }
             }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 18)
         }
-        .onAppear { refreshHistory() }
-        .onChange(of: spec.exerciseId) { _, _ in refreshHistory() }
-    }
-
-    private var targetDescription: String {
-        var parts: [String] = []
-        if let w = target.targetWeightLb { parts.append("\(Int(w)) lb ×") }
-        parts.append("\(target.targetReps)")
-        return parts.joined(separator: " ")
-    }
-
-    private func recentLabel(_ s: WorkoutSetDTO) -> String {
-        let weight = s.weightLb.map { String(Int($0)) } ?? "bw"
-        let rpe = s.rpe.map { "@\($0.formatted(.number.precision(.fractionLength(0...1))))" } ?? ""
-        return "\(weight)×\(s.reps)\(rpe)"
+        .sheet(isPresented: $showAddSheet) {
+            AddExerciseSheet(profileId: profile.id) { name, lo, hi, tracksWeight in
+                Repos.createExercise(
+                    ctx, profileId: profile.id, name: name,
+                    defaultRepsBottom: lo, defaultRepsTop: hi,
+                    tracksWeight: tracksWeight
+                )
+                Haptics.bump()
+            }
+            .themed(profile.mode)
+        }
+        .sheet(item: $activeRepCounter) { ex in
+            RepCounterSheet(profile: profile, exercise: ex)
+                .themed(profile.mode)
+        }
     }
 
     @ViewBuilder
-    private func inputField(_ label: String, _ binding: Binding<String>) -> some View {
+    private func exerciseRow(_ ex: ExerciseDTO) -> some View {
+        HStack(alignment: .top, spacing: 12) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(ex.name)
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(theme.text)
+                if let r = ex.defaultRepRange, r.count == 2 {
+                    Text("\(r[0])–\(r[1]) reps · \(ex.category == .compound ? "with weight" : "bodyweight")")
+                        .font(.caption).foregroundStyle(theme.dim)
+                }
+            }
+            Spacer()
+            Image(systemName: "hand.tap.fill")
+                .foregroundStyle(theme.accent)
+        }
+    }
+}
+
+private struct AddExerciseSheet: View {
+    let profileId: UUID
+    let onSave: (String, Int, Int, Bool) -> Void
+
+    @Environment(\.theme) private var theme
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var name: String = ""
+    @State private var lo: Int = 8
+    @State private var hi: Int = 12
+    @State private var tracksWeight: Bool = true
+
+    private var canSave: Bool {
+        !name.trimmingCharacters(in: .whitespaces).isEmpty && lo > 0 && hi >= lo
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 18) {
+                Text("add exercise.")
+                    .font(.system(size: 42, weight: .regular))
+                    .foregroundStyle(theme.text)
+
+                TextField("Name (e.g. Bench Press)", text: $name)
+                    .padding(10).background(theme.card)
+                    .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                    .foregroundStyle(theme.text)
+
+                HStack(spacing: 10) {
+                    numField("Min reps", value: $lo)
+                    numField("Max reps", value: $hi)
+                }
+
+                Toggle(isOn: $tracksWeight) {
+                    Text("Tracks weight")
+                        .foregroundStyle(theme.text)
+                }
+                .tint(theme.accent)
+
+                Button {
+                    onSave(name.trimmingCharacters(in: .whitespaces), lo, hi, tracksWeight)
+                    dismiss()
+                } label: {
+                    Text("Save")
+                }
+                .tactile(.primary, fullWidth: true)
+                .disabled(!canSave)
+                .opacity(canSave ? 1 : 0.6)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+        }
+        .background(theme.bg.ignoresSafeArea())
+        .presentationDetents([.medium, .large])
+    }
+
+    @ViewBuilder
+    private func numField(_ label: String, value: Binding<Int>) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(label.uppercased()).font(.system(size: 9)).tracking(2)
                 .foregroundStyle(theme.dim)
-            TextField("", text: binding)
-                .padding(8)
-                .background(theme.barBg)
+            TextField("", value: value, format: .number)
+                .keyboardType(.numberPad)
+                .padding(10).background(theme.card)
                 .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
                 .foregroundStyle(theme.text)
                 .font(.system(.callout, design: .monospaced))
         }
-    }
-
-    private func commit() {
-        guard let reps = Int(repsStr), reps > 0 else { return }
-        let weight = Double(weightStr)
-        let rpe = Double(rpeStr)
-
-        // Detect PR before insert
-        let priorPR = Progression.personalRecord(history)
-        let beatsPR: Bool = {
-            guard let priorPR else { return weight != nil }
-            let priorWeight = priorPR.weightLb ?? 0
-            let newWeight = weight ?? 0
-            if newWeight > priorWeight { return true }
-            if newWeight == priorWeight && reps > priorPR.reps { return true }
-            return false
-        }()
-
-        let dto = WorkoutSetDTO(
-            userId: profile.id, exerciseId: exercise.id, workoutId: sessionId,
-            weightLb: weight, reps: reps, rpe: rpe
-        )
-        Repos.addSet(ctx, dto)
-        rpeStr = ""
-        refreshHistory()
-
-        if beatsPR {
-            toasts.pr(exercise.name, weightLb: weight, reps: reps)
-        } else {
-            Haptics.bump()
-        }
-    }
-
-    private func refreshHistory() {
-        history = Repos.setHistory(ctx, userId: profile.id, exerciseId: exercise.id, limit: 20)
-        if let w = target.targetWeightLb, weightStr.isEmpty { weightStr = String(Int(w)) }
-        if repsStr.isEmpty { repsStr = String(target.targetReps) }
     }
 }
