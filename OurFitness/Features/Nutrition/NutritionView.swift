@@ -22,15 +22,7 @@ struct NutritionView: View {
             .sorted { $0.timestamp < $1.timestamp }
     }
 
-    private var totals: DailyTotals {
-        todaysLogs.reduce(into: DailyTotals.zero) { acc, e in
-            let p = e.perServing
-            acc.calories += p.calories
-            acc.proteinG += p.proteinG
-            acc.carbsG += p.carbsG
-            acc.fatG += p.fatG
-        }
-    }
+    private var totals: DailyTotals { DailyTotals.totals(from: todaysLogs) }
 
     var body: some View {
         ScrollView {
@@ -70,21 +62,12 @@ struct NutritionView: View {
 
     @ViewBuilder
     private var totalsCard: some View {
-        let t = profile.computedTargets
         Card {
             VStack(alignment: .leading, spacing: 10) {
                 Text("Today")
                     .font(.caption).tracking(2).textCase(.uppercase)
                     .foregroundStyle(theme.dim)
-                LazyVGrid(
-                    columns: Array(repeating: GridItem(.flexible(), spacing: 14), count: 2),
-                    spacing: 14
-                ) {
-                    ProgressBar(value: Double(totals.calories), target: Double(t.calories), label: "Calories")
-                    ProgressBar(value: Double(totals.proteinG), target: Double(t.proteinG), label: "Protein", unit: "g")
-                    ProgressBar(value: Double(totals.carbsG),   target: Double(t.carbsG),   label: "Carbs",   unit: "g")
-                    ProgressBar(value: Double(totals.fatG),     target: Double(t.fatG),     label: "Fat",     unit: "g")
-                }
+                MacroQuadGrid(totals: totals, targets: profile.computedTargets)
             }
         }
     }
@@ -102,7 +85,7 @@ struct NutritionView: View {
                 ForEach(todaysLogs) { e in
                     LogRow(entry: e) {
                         Repos.deleteFoodLog(ctx, id: e.id)
-                        Haptics.tap()
+                        Haptics.warn()
                     }
                 }
             }

@@ -70,7 +70,7 @@ struct ProfileCreationView: View {
                     Image(systemName: mode == m ? "largecircle.fill.circle" : "circle")
                         .foregroundStyle(theme.accent)
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(modeLabel(m))
+                        Text(m.displayName)
                             .font(.system(size: 17, weight: .semibold))
                             .foregroundStyle(theme.text)
                         Text(modeBlurb(m))
@@ -203,13 +203,6 @@ struct ProfileCreationView: View {
             Text(label.uppercased()).font(.system(size: 10)).tracking(2)
                 .foregroundStyle(theme.dim)
             content()
-        }
-    }
-
-    private func modeLabel(_ m: Mode) -> String {
-        switch m {
-        case .build:   return "Build"
-        case .circuit: return "Circuit"
         }
     }
 

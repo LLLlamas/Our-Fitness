@@ -39,7 +39,7 @@ struct SettingsView: View {
 
                     section("Profile") {
                         labeled("Name", profile.name)
-                        labeled("Mode", modeLabel(profile.mode))
+                        labeled("Mode", profile.mode.displayName)
                         labeled("Activity", profile.activity.label)
                     }
                 }
@@ -55,13 +55,6 @@ struct SettingsView: View {
             }
         }
         .themed(profile.mode)
-    }
-
-    private func modeLabel(_ m: Mode) -> String {
-        switch m {
-        case .build:   return "Build"
-        case .circuit: return "Circuit"
-        }
     }
 
     private func connectHealth() {

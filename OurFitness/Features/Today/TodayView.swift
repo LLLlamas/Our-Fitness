@@ -20,15 +20,7 @@ struct TodayView: View {
         logModels.map(\.snapshot).filter { $0.userId == profile.id && $0.date == today }
     }
 
-    private var totals: DailyTotals {
-        todaysLogs.reduce(into: DailyTotals.zero) { acc, e in
-            let p = e.perServing
-            acc.calories += p.calories
-            acc.proteinG += p.proteinG
-            acc.carbsG += p.carbsG
-            acc.fatG += p.fatG
-        }
-    }
+    private var totals: DailyTotals { DailyTotals.totals(from: todaysLogs) }
 
     private var todaysSteps: Int {
         stepModels.first(where: { $0.userId == profile.id && $0.date == today })?.steps ?? 0
@@ -45,7 +37,7 @@ struct TodayView: View {
                     .font(.system(size: 56, weight: .regular))
                     .foregroundStyle(theme.text)
 
-                macroGrid
+                MacroQuadGrid(totals: totals, targets: profile.computedTargets)
 
                 StepsCard(
                     steps: todaysSteps,
@@ -100,21 +92,6 @@ struct TodayView: View {
                 await backfillIfNeeded()
                 await refreshToday()
             }
-        }
-    }
-
-    // MARK: - Macros
-
-    private var macroGrid: some View {
-        let t = profile.computedTargets
-        return LazyVGrid(
-            columns: Array(repeating: GridItem(.flexible(), spacing: 14), count: 2),
-            spacing: 14
-        ) {
-            ProgressBar(value: Double(totals.calories), target: Double(t.calories), label: "Calories")
-            ProgressBar(value: Double(totals.proteinG), target: Double(t.proteinG), label: "Protein", unit: "g")
-            ProgressBar(value: Double(totals.carbsG),   target: Double(t.carbsG),   label: "Carbs",   unit: "g")
-            ProgressBar(value: Double(totals.fatG),     target: Double(t.fatG),     label: "Fat",     unit: "g")
         }
     }
 

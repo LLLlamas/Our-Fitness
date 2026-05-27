@@ -71,7 +71,6 @@ struct RootView: View {
                                   accent: .win, symbol: "checkmark.seal.fill"),
                             for: 2.4)
             }
-            .themed(.build)
         } else if let active {
             appShell(for: active)
                 .id(active.id)
@@ -116,7 +115,6 @@ struct RootView: View {
                                   accent: .win, symbol: "checkmark.seal.fill"),
                             for: 2.0)
             }
-            .themed(.build)
         }
         .task(id: StepObserverKey(profileId: profile.id, granted: profile.healthGranted)) {
             if profile.healthGranted {

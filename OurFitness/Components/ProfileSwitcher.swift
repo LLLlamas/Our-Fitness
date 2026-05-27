@@ -51,13 +51,6 @@ public struct ProfileSwitcher: View {
         String(active.name.prefix(1)).uppercased()
     }
 
-    private func modeLabel(_ m: Mode) -> String {
-        switch m {
-        case .build:   return "Build"
-        case .circuit: return "Circuit"
-        }
-    }
-
     @ViewBuilder
     private var sheet: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -74,7 +67,7 @@ public struct ProfileSwitcher: View {
                             Text(p.name)
                                 .font(.system(size: 17, weight: .semibold))
                                 .foregroundStyle(theme.text)
-                            Text(modeLabel(p.mode))
+                            Text(p.mode.displayName)
                                 .font(.caption).tracking(2)
                                 .foregroundStyle(theme.dim)
                         }

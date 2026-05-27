@@ -14,6 +14,13 @@ public enum Mode: String, Codable, CaseIterable, Sendable {
     // Circuit rename keep decoding cleanly. Symbol/UI copy renamed; bump a
     // schema version before changing this raw value.
     case circuit = "reset"
+
+    public var displayName: String {
+        switch self {
+        case .build:   return "Build"
+        case .circuit: return "Circuit"
+        }
+    }
 }
 
 public enum Sex: String, Codable, CaseIterable, Sendable {
@@ -504,6 +511,20 @@ public struct DailyTotals: Equatable, Sendable {
     public static let zero = DailyTotals()
 
     public init() {}
+
+    public static func totals(from entries: [FoodLogEntryDTO]) -> DailyTotals {
+        entries.reduce(into: DailyTotals.zero) { acc, e in
+            let p = e.perServing
+            acc.calories      += p.calories
+            acc.proteinG      += p.proteinG
+            acc.carbsG        += p.carbsG
+            acc.fatG          += p.fatG
+            acc.fiberG        += p.fiberG
+            acc.sodiumMg      += p.sodiumMg
+            acc.addedSugarG   += p.addedSugarG
+            acc.saturatedFatG += p.saturatedFatG
+        }
+    }
 }
 
 public struct RemainingMacros: Equatable, Sendable {
@@ -527,19 +548,6 @@ public struct RemainingMacros: Equatable, Sendable {
         self.addedSugarG = addedSugarG
         self.saturatedFatG = saturatedFatG
         self.fiberG = fiberG
-    }
-}
-
-public struct ScoredFood: Equatable, Sendable, Identifiable {
-    public var food: FoodDTO
-    public var score: Double
-    public var reasons: [String]
-    public var id: String { food.id }
-
-    public init(food: FoodDTO, score: Double, reasons: [String]) {
-        self.food = food
-        self.score = score
-        self.reasons = reasons
     }
 }
 

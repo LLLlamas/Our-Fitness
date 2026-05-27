@@ -67,28 +67,6 @@ public enum Repos {
         try? ctx.save()
     }
 
-    // MARK: - Foods
-
-    public static func listFoods(_ ctx: ModelContext) -> [FoodDTO] {
-        let desc = FetchDescriptor<FoodModel>(
-            sortBy: [SortDescriptor(\.name)]
-        )
-        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
-    }
-
-    public static func listFoods(_ ctx: ModelContext, forMode mode: Mode) -> [FoodDTO] {
-        listFoods(ctx).filter { $0.modeFit.contains(mode) }
-    }
-
-    public static func upsertFood(_ ctx: ModelContext, _ f: FoodDTO) {
-        let key = f.id
-        let desc = FetchDescriptor<FoodModel>(predicate: #Predicate { $0.id == key })
-        if let existing = try? ctx.fetch(desc).first {
-            ctx.delete(existing)
-        }
-        ctx.insert(FoodModel(snapshot: f))
-    }
-
     // MARK: - Exercises
 
     public static func listExercises(_ ctx: ModelContext) -> [ExerciseDTO] {
@@ -96,15 +74,6 @@ public enum Repos {
             sortBy: [SortDescriptor(\.name)]
         )
         return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
-    }
-
-    public static func upsertExercise(_ ctx: ModelContext, _ e: ExerciseDTO) {
-        let key = e.id
-        let desc = FetchDescriptor<ExerciseModel>(predicate: #Predicate { $0.id == key })
-        if let existing = try? ctx.fetch(desc).first {
-            ctx.delete(existing)
-        }
-        ctx.insert(ExerciseModel(snapshot: e))
     }
 
     public static func exercises(_ ctx: ModelContext, forProfile profileId: UUID) -> [ExerciseDTO] {
@@ -145,24 +114,6 @@ public enum Repos {
             ctx.delete(target)
             try? ctx.save()
         }
-    }
-
-    // MARK: - Programs
-
-    public static func listPrograms(_ ctx: ModelContext) -> [ProgramDTO] {
-        let desc = FetchDescriptor<ProgramModel>(
-            sortBy: [SortDescriptor(\.name)]
-        )
-        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
-    }
-
-    public static func upsertProgram(_ ctx: ModelContext, _ p: ProgramDTO) {
-        let key = p.id
-        let desc = FetchDescriptor<ProgramModel>(predicate: #Predicate { $0.id == key })
-        if let existing = try? ctx.fetch(desc).first {
-            ctx.delete(existing)
-        }
-        ctx.insert(ProgramModel(snapshot: p))
     }
 
     // MARK: - Food log

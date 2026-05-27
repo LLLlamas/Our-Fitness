@@ -57,9 +57,10 @@ target source path (which is `OurFitness/`). They stay in the repo for future
 revival but do not compile.
 
 - `Data/Seed/SeedFoodsBuild.swift`, `Data/Seed/SeedFoodsReset.swift`,
-  `Data/Seed/SeedExercises.swift` — seed libraries
+  `Data/Seed/SeedExercises.swift`, `Data/Seed/SeedPrograms.swift`,
+  `Data/Seed/SeedProfiles.swift` — seed libraries
 - `Domain/Suggestions.swift`, `Domain/Score.swift`,
-  `Domain/CapExplanations.swift` — meal scoring + Circuit cap explainers
+  `Domain/ScoredFood.swift`, `Domain/CapExplanations.swift` — meal scoring + Circuit cap explainers
 - `Components/CapBar.swift`, `Components/CapExplanationView.swift`
 - `OurFitnessTests/ScoreTests.swift`
 

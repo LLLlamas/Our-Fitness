@@ -33,7 +33,7 @@ struct RepCounterCard: View {
             }
 
             if myExercises.isEmpty {
-                Text("Add an exercise from the Build tab — or stash one here, your call.")
+                Text("Add an exercise from the Train tab — or stash one here, your call.")
                     .font(.callout).foregroundStyle(theme.dim)
                 Text("Once you've got at least one exercise, tap-to-count and save sets.")
                     .font(.caption).foregroundStyle(theme.dim)
@@ -152,7 +152,7 @@ struct RepCounterSheet: View {
                 reps = 0
                 Haptics.warn()
             } label: {
-                Text("Reset")
+                Text("Clear")
             }
             .tactile(.secondary)
 
