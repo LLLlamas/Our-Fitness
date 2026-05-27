@@ -33,7 +33,7 @@ final class TargetsTests: XCTestCase {
 
     func test_reset_targets_deficit_and_caps() {
         let v = Targets.ProfileVitals(sex: .male, weightLb: 220, heightIn: 70, age: 45, activity: .light)
-        let resetT = Targets.compute(mode: .reset, vitals: v)
+        let resetT = Targets.compute(mode: .circuit, vitals: v)
         let buildT = Targets.compute(mode: .build, vitals: v)
         XCTAssertLessThan(resetT.calories, buildT.calories)
         XCTAssertEqual(resetT.sodiumMgMax, 1_500)
@@ -45,7 +45,7 @@ final class TargetsTests: XCTestCase {
 
     func test_calorie_floor_1200() {
         let v = Targets.ProfileVitals(sex: .female, weightLb: 110, heightIn: 60, age: 65, activity: .sedentary)
-        let t = Targets.compute(mode: .reset, vitals: v)
+        let t = Targets.compute(mode: .circuit, vitals: v)
         XCTAssertGreaterThanOrEqual(t.calories, 1200)
     }
 
@@ -73,20 +73,20 @@ final class TargetsTests: XCTestCase {
     }
 
     func test_reset_stalled_suggests_cardio() {
-        XCTAssertEqual(Targets.suggestAdjustment(mode: .reset, weeklyDeltaLb: 0)?.direction, .addCardio)
+        XCTAssertEqual(Targets.suggestAdjustment(mode: .circuit, weeklyDeltaLb: 0)?.direction, .addCardio)
     }
 
     func test_reset_losing_fast_suggests_increase() {
-        XCTAssertEqual(Targets.suggestAdjustment(mode: .reset, weeklyDeltaLb: -2.0)?.direction, .increase)
+        XCTAssertEqual(Targets.suggestAdjustment(mode: .circuit, weeklyDeltaLb: -2.0)?.direction, .increase)
     }
 
     func test_reset_on_track_returns_nil() {
-        XCTAssertNil(Targets.suggestAdjustment(mode: .reset, weeklyDeltaLb: -0.6))
+        XCTAssertNil(Targets.suggestAdjustment(mode: .circuit, weeklyDeltaLb: -0.6))
     }
 
     func test_reset_markers_stalled_8w_flags_doctor() {
         XCTAssertEqual(
-            Targets.suggestAdjustment(mode: .reset, weeklyDeltaLb: -0.6, weeksStalledMarkers: 8)?.direction,
+            Targets.suggestAdjustment(mode: .circuit, weeklyDeltaLb: -0.6, weeksStalledMarkers: 8)?.direction,
             .flagDoctor
         )
     }
