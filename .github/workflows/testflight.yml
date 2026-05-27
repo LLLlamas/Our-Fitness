@@ -201,7 +201,7 @@ jobs:
           echo "::group::ARCHIVE embedded.mobileprovision profile UUID"
           security cms -D -i "$app/embedded.mobileprovision" 2>/dev/null | grep -A1 '<key>UUID</key>' | tail -1
           echo "::endgroup::"
-          if codesign -d --entitlements - "$app" 2>&1 | grep -q "com.apple.developer.healthkit</key>"; then
+          if codesign -d --entitlements - "$app" 2>&1 | grep -qE 'com\.apple\.developer\.healthkit(\b|<)'; then
             echo "::notice title=Archive::HealthKit IS present in the archived .app."
           else
             echo "::warning title=Archive::HealthKit is MISSING from the archived .app — bug is in the archive step, NOT in export. Check CODE_SIGN_ENTITLEMENTS resolution and the .entitlements file."
@@ -234,7 +234,7 @@ jobs:
           echo "::group::IPA embedded.mobileprovision profile UUID"
           security cms -D -i "$app/embedded.mobileprovision" 2>/dev/null | grep -A1 '<key>UUID</key>' | tail -1
           echo "::endgroup::"
-          if codesign -d --entitlements - "$app" 2>&1 | grep -q "com.apple.developer.healthkit</key>"; then
+          if codesign -d --entitlements - "$app" 2>&1 | grep -qE 'com\.apple\.developer\.healthkit(\b|<)'; then
             echo "::notice title=IPA::HealthKit IS present in the signed IPA."
           else
             echo "::error title=IPA::HealthKit is MISSING from the signed IPA. Compare against the archive dump above to localize which step dropped it."
