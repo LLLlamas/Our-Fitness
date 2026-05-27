@@ -34,11 +34,23 @@
     <key>UIColorName</key>
     <string>LaunchBackground</string>
   </dict>
-  <key>UIRequiredDeviceCapabilities</key>
-  <array>
-    <string>armv7</string>
-    <string>healthkit</string>
-  </array>
+  <!-- UIRequiredDeviceCapabilities intentionally omitted.
+       - "healthkit" here triggered ITMS-90863 (Mac w/ Apple Silicon) and
+         ITMS-90984 (visionOS) on upload, because the App Store automatically
+         makes iPhone/iPad apps available on those platforms unless we
+         opt out via build settings (see SUPPORTS_*_DESIGNED_FOR_IPHONE_IPAD
+         in project.yml). The HealthKit framework is weakly linked; on
+         platforms without it, HKHealthStore.isHealthDataAvailable() returns
+         false and our code degrades gracefully.
+       - "armv7" was meaningless for an iOS 17+ deployment target (32-bit
+         armv7 hardware tops out at iOS 10). arm64 is implicit. -->
+
+  <!-- Export Compliance: we use only standard iOS encryption (HTTPS via
+       URLSession, system HealthKit). Setting this to false tells App Store
+       Connect we qualify for the standard exemption, so TestFlight stops
+       prompting for export-compliance answers on every new build. -->
+  <key>ITSAppUsesNonExemptEncryption</key>
+  <false/>
   <key>UISupportedInterfaceOrientations</key>
   <array>
     <string>UIInterfaceOrientationPortrait</string>

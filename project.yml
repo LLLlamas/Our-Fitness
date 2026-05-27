@@ -50,6 +50,14 @@ targets:
         ENABLE_PREVIEWS: "YES"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        # iPhone/iPad only. Opt out of automatic "Designed for iPhone/iPad"
+        # availability on Mac (Apple Silicon) and visionOS — HealthKit doesn't
+        # exist on those platforms, and we don't want to ship there. Together
+        # with omitting "healthkit" from UIRequiredDeviceCapabilities in
+        # Info.plist, this clears ITMS-90863 + ITMS-90984.
+        SUPPORTS_MACCATALYST: "NO"
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: "NO"
+        SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD: "NO"
         # Manual signing — fastlane injects the right cert + profile in CI.
         CODE_SIGN_STYLE: Manual
         DEVELOPMENT_TEAM: "$(APPLE_TEAM_ID)"
