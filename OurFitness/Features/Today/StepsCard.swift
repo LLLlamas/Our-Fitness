@@ -3,17 +3,17 @@ import SwiftUI
 struct StepsCard: View {
     let steps: Int
     let goal: Int
-    let sourceLabel: String
-    let onManualSave: (Int) -> Void
+    let healthGranted: Bool
+    let onConnectHealth: () -> Void
 
     @Environment(\.theme) private var theme
-    @State private var lastSteps: Int = 0
 
     private var pct: Double {
         guard goal > 0 else { return 0 }
         return min(1, Double(steps) / Double(goal))
     }
     private var ok: Bool { steps >= goal }
+    private var hasData: Bool { steps > 0 }
 
     var body: some View {
         Card(padding: 16) {
@@ -24,30 +24,37 @@ struct StepsCard: View {
                         .tracking(2)
                         .foregroundStyle(theme.dim)
                     Spacer()
-                    Text("\(steps.formatted()) / \(goal.formatted())")
-                        .font(.system(.footnote, design: .monospaced))
-                        .foregroundStyle(ok ? theme.ok : theme.dim)
-                        .monospacedDigit()
-                        .contentTransition(.numericText())
-                }
-
-                HStack(alignment: .firstTextBaseline, spacing: 12) {
-                    AnimatedNumber(
-                        Double(steps),
-                        font: .system(size: 44, weight: .regular),
-                        color: theme.text
-                    )
-                    .tweenStat(steps)
-
-                    Spacer()
-                    HStack(spacing: 6) {
-                        bumpButton(500)
-                        bumpButton(1000)
-                        bumpButton(2500)
+                    if healthGranted && hasData {
+                        Text("\(steps.formatted()) / \(goal.formatted())")
+                            .font(.system(.footnote, design: .monospaced))
+                            .foregroundStyle(ok ? theme.ok : theme.dim)
+                            .monospacedDigit()
+                            .contentTransition(.numericText())
                     }
                 }
 
-                // Track + animated fill
+                HStack(alignment: .firstTextBaseline, spacing: 12) {
+                    if healthGranted {
+                        if hasData {
+                            AnimatedNumber(
+                                Double(steps),
+                                font: .system(size: 44, weight: .regular),
+                                color: theme.text
+                            )
+                            .tweenStat(steps)
+                        } else {
+                            Text("—")
+                                .font(.system(size: 44, weight: .regular))
+                                .foregroundStyle(theme.dim)
+                        }
+                    } else {
+                        Text("—")
+                            .font(.system(size: 44, weight: .regular))
+                            .foregroundStyle(theme.dim)
+                    }
+                    Spacer()
+                }
+
                 GeometryReader { geo in
                     ZStack(alignment: .leading) {
                         Rectangle().fill(theme.barBg)
@@ -59,34 +66,43 @@ struct StepsCard: View {
                 .frame(height: 5)
                 .animation(.spring(response: 0.5, dampingFraction: 0.85), value: pct)
 
-                HStack(spacing: 6) {
-                    Image(systemName: ok ? "checkmark.seal.fill" : "heart.text.square")
-                        .foregroundStyle(ok ? theme.ok : theme.dim)
-                        .contentTransition(.symbolEffect(.replace))
-                    Text(sourceLabel)
-                        .font(.caption2)
-                        .foregroundStyle(theme.dim)
-                }
+                footer
             }
         }
-        .onAppear { lastSteps = steps }
         .onChange(of: steps) { old, new in
-            // Cross the goal line → celebration
             if old < goal && new >= goal {
                 Haptics.success()
             }
-            lastSteps = new
         }
     }
 
     @ViewBuilder
-    private func bumpButton(_ delta: Int) -> some View {
-        Button {
-            onManualSave(max(0, steps + delta))
-            Haptics.bump()
-        } label: {
-            Text("+\(delta >= 1000 ? "\(delta / 1000)k" : "\(delta)")")
+    private var footer: some View {
+        if !healthGranted {
+            Button(action: onConnectHealth) {
+                HStack(spacing: 6) {
+                    Image(systemName: "heart.text.square")
+                    Text("Connect Apple Health")
+                }
+            }
+            .tactile(.pill, fill: theme.accent)
+        } else if !hasData {
+            HStack(spacing: 6) {
+                Image(systemName: "heart.text.square")
+                    .foregroundStyle(theme.dim)
+                Text("No data from Health yet.")
+                    .font(.caption2)
+                    .foregroundStyle(theme.dim)
+            }
+        } else {
+            HStack(spacing: 6) {
+                Image(systemName: ok ? "checkmark.seal.fill" : "heart.text.square")
+                    .foregroundStyle(ok ? theme.ok : theme.dim)
+                    .contentTransition(.symbolEffect(.replace))
+                Text("Synced from Apple Health")
+                    .font(.caption2)
+                    .foregroundStyle(theme.dim)
+            }
         }
-        .tactile(.bump)
     }
 }

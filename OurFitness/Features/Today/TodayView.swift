@@ -42,13 +42,8 @@ struct TodayView: View {
                 StepsCard(
                     steps: todaysSteps,
                     goal: profile.computedTargets.stepsDaily,
-                    sourceLabel: profile.healthGranted
-                        ? "Synced from Apple Health"
-                        : "Manual — tap a + or grant Health access",
-                    onManualSave: { n in
-                        Repos.setSteps(ctx, userId: profile.id, date: today,
-                                       steps: n, source: .manual)
-                    }
+                    healthGranted: profile.healthGranted,
+                    onConnectHealth: connectHealth
                 )
 
                 recentLogs
