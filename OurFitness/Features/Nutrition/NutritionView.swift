@@ -31,11 +31,16 @@ struct NutritionView: View {
     private var todaysLogs: [FoodLogEntryDTO] {
         logModels.map(\.snapshot).filter { $0.date == today }
     }
+    private var allLogs: [FoodLogEntryDTO] { logModels.map(\.snapshot) }
 
     private var totals: DailyTotals { DailyTotals.totals(from: todaysLogs) }
 
     private var rankedSuggestions: [SuggestedMeal] {
         SuggestedMeals.ranked(for: profile, totals: totals)
+    }
+
+    private var varietyNudges: [FoodVarietyNudge] {
+        FoodVarietyNudges.nudges(from: allLogs, mode: profile.mode)
     }
 
     private func logSuggested(_ meal: SuggestedMeal, slot: Slot = .lunch) {
@@ -87,6 +92,7 @@ struct NutritionView: View {
                 totalsCard
 
                 suggestionPillRow
+                nudgeSection
 
                 HStack(spacing: 10) {
                     Button {
@@ -163,6 +169,28 @@ struct NutritionView: View {
                     }
                 }
             }
+        }
+    }
+
+    // MARK: - Variety nudges
+
+    @ViewBuilder
+    private var nudgeSection: some View {
+        let nudges = varietyNudges
+        if !nudges.isEmpty {
+            VStack(alignment: .leading, spacing: 4) {
+                ForEach(nudges, id: \.message) { nudge in
+                    HStack(alignment: .top, spacing: 6) {
+                        Text(nudge.emoji)
+                            .font(.system(size: 12))
+                        Text(nudge.message)
+                            .font(.caption).italic()
+                            .foregroundStyle(theme.dim)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+            }
+            .padding(.horizontal, 4)
         }
     }
 
