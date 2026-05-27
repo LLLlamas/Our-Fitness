@@ -9,6 +9,7 @@ public struct ProfileSwitcher: View {
     public let active: ProfileDTO
     public let onSelect: (ProfileDTO) -> Void
     public let onOpenSettings: () -> Void
+    public let onAddProfile: () -> Void
 
     @Environment(\.theme) private var theme
     @State private var showSheet = false
@@ -17,12 +18,14 @@ public struct ProfileSwitcher: View {
         profiles: [ProfileDTO],
         active: ProfileDTO,
         onSelect: @escaping (ProfileDTO) -> Void,
-        onOpenSettings: @escaping () -> Void
+        onOpenSettings: @escaping () -> Void,
+        onAddProfile: @escaping () -> Void
     ) {
         self.profiles = profiles
         self.active = active
         self.onSelect = onSelect
         self.onOpenSettings = onOpenSettings
+        self.onAddProfile = onAddProfile
     }
 
     public var body: some View {
@@ -39,13 +42,20 @@ public struct ProfileSwitcher: View {
         .tactile(.ghost)
         .sheet(isPresented: $showSheet) {
             sheet
-                .presentationDetents([.height(260)])
+                .presentationDetents([.height(360), .medium])
                 .presentationDragIndicator(.visible)
         }
     }
 
     private var initial: String {
         String(active.name.prefix(1)).uppercased()
+    }
+
+    private func modeLabel(_ m: Mode) -> String {
+        switch m {
+        case .build:   return "Build"
+        case .circuit: return "Circuit"
+        }
     }
 
     @ViewBuilder
@@ -64,7 +74,7 @@ public struct ProfileSwitcher: View {
                             Text(p.name)
                                 .font(.system(size: 17, weight: .semibold))
                                 .foregroundStyle(theme.text)
-                            Text(p.mode.rawValue.capitalized)
+                            Text(modeLabel(p.mode))
                                 .font(.caption).tracking(2)
                                 .foregroundStyle(theme.dim)
                         }
@@ -78,6 +88,17 @@ public struct ProfileSwitcher: View {
             }
             Button {
                 showSheet = false
+                onAddProfile()
+            } label: {
+                HStack {
+                    Image(systemName: "plus.circle")
+                    Text("Add profile")
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .tactile(.secondary, fullWidth: true)
+            Button {
+                showSheet = false
                 onOpenSettings()
             } label: {
                 HStack {
@@ -86,7 +107,7 @@ public struct ProfileSwitcher: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .tactile(.secondary, fullWidth: true)
+            .tactile(.ghost)
             Spacer()
         }
         .padding(20)

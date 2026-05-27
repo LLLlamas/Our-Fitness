@@ -1,29 +1,28 @@
-// Top-level shell. Two seeded profiles; user picks one for this device on first launch.
-// Theme follows the active profile's mode.
-// Overlays the toast host so any view can fire a confirmation.
+// Top-level shell. User-created profiles; first launch routes to creation.
+// Theme follows the active profile's mode. Overlays the toast host.
 
 import SwiftUI
 import SwiftData
 
 private enum Tab: String, CaseIterable, Identifiable {
-    case today, nutrition, workouts, progress
+    case today, meals, workouts, progress
     var id: String { rawValue }
 
     var label: String {
         switch self {
-        case .today:     return "Today"
-        case .nutrition: return "Library"
-        case .workouts:  return "Train"
-        case .progress:  return "Progress"
+        case .today:    return "Today"
+        case .meals:    return "Meals"
+        case .workouts: return "Train"
+        case .progress: return "Progress"
         }
     }
 
     var icon: String {
         switch self {
-        case .today:     return "sun.max"
-        case .nutrition: return "fork.knife"
-        case .workouts:  return "dumbbell"
-        case .progress:  return "chart.line.uptrend.xyaxis"
+        case .today:    return "sun.max"
+        case .meals:    return "fork.knife"
+        case .workouts: return "dumbbell"
+        case .progress: return "chart.line.uptrend.xyaxis"
         }
     }
 }
@@ -37,15 +36,15 @@ struct RootView: View {
 
     @State private var tab: Tab = .today
     @State private var showSettings = false
+    @State private var showCreateProfile = false
 
     private var profiles: [ProfileDTO] { profileModels.map(\.snapshot) }
 
     private var active: ProfileDTO? {
-        guard let uuid = UUID(uuidString: activeProfileIdString) else { return nil }
-        // Falling through to nil here drops the user back into onboarding if their stored
-        // UUID no longer matches a seeded profile (schema/ID change). Re-seed is idempotent
-        // by name, so a future schema bump that re-keys profiles would otherwise strand them.
-        return profiles.first(where: { $0.id == uuid })
+        guard let uuid = UUID(uuidString: activeProfileIdString) else {
+            return profiles.first
+        }
+        return profiles.first(where: { $0.id == uuid }) ?? profiles.first
     }
 
     private struct StepObserverKey: Hashable {
@@ -64,22 +63,18 @@ struct RootView: View {
     @ViewBuilder
     private var content: some View {
         if profiles.isEmpty {
-            SwiftUI.ProgressView()
-        } else if let active {
-            appShell(for: active)
-        } else {
-            OnboardingView(profiles: profiles) { chosen, granted in
-                activeProfileIdString = chosen.id.uuidString
-                Repos.setHealthGranted(ctx, profileId: chosen.id, granted: granted)
-                // Observer arm-up happens centrally in appShell's .task(id:) once the
-                // grant flip is reflected in the re-rendered profile snapshot.
+            ProfileCreationView { dto in
+                activeProfileIdString = dto.id.uuidString
                 Haptics.success()
-                toasts.show(Toast(title: "Welcome, \(chosen.name).",
-                                  detail: granted ? "Apple Health connected." : "Targets locked. Let's go.",
+                toasts.show(Toast(title: "Welcome, \(dto.name).",
+                                  detail: "Targets locked. Let's go.",
                                   accent: .win, symbol: "checkmark.seal.fill"),
                             for: 2.4)
             }
-            .themed(active?.mode ?? .build)
+            .themed(.build)
+        } else if let active {
+            appShell(for: active)
+                .id(active.id)
         }
     }
 
@@ -93,8 +88,8 @@ struct RootView: View {
                     .tabItem { Label(Tab.today.label, systemImage: Tab.today.icon) }
 
                 NutritionView(profile: profile)
-                    .tag(Tab.nutrition)
-                    .tabItem { Label(Tab.nutrition.label, systemImage: Tab.nutrition.icon) }
+                    .tag(Tab.meals)
+                    .tabItem { Label(Tab.meals.label, systemImage: Tab.meals.icon) }
 
                 WorkoutsView(profile: profile)
                     .tag(Tab.workouts)
@@ -111,6 +106,17 @@ struct RootView: View {
         .themed(profile.mode)
         .sheet(isPresented: $showSettings) {
             SettingsView(profile: profile, health: health)
+        }
+        .sheet(isPresented: $showCreateProfile) {
+            ProfileCreationView { dto in
+                activeProfileIdString = dto.id.uuidString
+                Haptics.success()
+                toasts.show(Toast(title: "Profile created.",
+                                  detail: "Now active: \(dto.name).",
+                                  accent: .win, symbol: "checkmark.seal.fill"),
+                            for: 2.0)
+            }
+            .themed(.build)
         }
         .task(id: StepObserverKey(profileId: profile.id, granted: profile.healthGranted)) {
             if profile.healthGranted {
@@ -130,7 +136,8 @@ struct RootView: View {
                 profiles: profiles,
                 active: profile,
                 onSelect: { activeProfileIdString = $0.id.uuidString },
-                onOpenSettings: { showSettings = true }
+                onOpenSettings: { showSettings = true },
+                onAddProfile: { showCreateProfile = true }
             )
             Text("our-fitness.")
                 .font(.system(size: 22, weight: .regular))
