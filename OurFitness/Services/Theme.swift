@@ -44,8 +44,8 @@ public struct Theme: Equatable, Sendable {
         barOver: Color(red: 0.902, green: 0.224, blue: 0.275)
     )
 
-    public static let reset = Theme(
-        mode: .reset,
+    public static let circuit = Theme(
+        mode: .circuit,
         bg:      Color(red: 0.969, green: 0.953, blue: 0.925),
         card:    Color.white,
         card2:   Color(red: 0.941, green: 0.922, blue: 0.882),
@@ -63,7 +63,7 @@ public struct Theme: Equatable, Sendable {
     )
 
     public static func `for`(_ mode: Mode) -> Theme {
-        mode == .reset ? .reset : .build
+        mode == .circuit ? .circuit : .build
     }
 }
 

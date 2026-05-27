@@ -1,4 +1,4 @@
-// Shared weekly-streak chip used by Reset Train cards (Steps & Cardio, Pilates).
+// Shared weekly-streak chip used by Circuit Train cards (Steps & Cardio, Pilates).
 // Renders nothing when `weeks <= 0` so callers can drop it in unconditionally.
 //
 // Tint is caller-supplied (theme.accent for steps, theme.accent2 for Pilates)

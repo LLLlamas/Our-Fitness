@@ -52,9 +52,9 @@ public enum SeedPrograms {
         ),
 
         ProgramDTO(
-            id: "prog-reset-strength-cardio",
-            name: "Reset · Strength + Zone 2 (5-day)",
-            modeFit: [.reset],
+            id: "prog-circuit-strength-cardio",
+            name: "Circuit · Strength + Zone 2 (5-day)",
+            modeFit: [.circuit],
             schedule: [
                 ProgramDayDTO(label: "Full Body A", blocks: [
                     spec("ex-db-goblet-squat", sets: 3, 10, 12, rpe: 7, rest: 120),

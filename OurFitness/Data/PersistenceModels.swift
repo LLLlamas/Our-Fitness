@@ -92,7 +92,10 @@ public final class ExerciseModel {
     public var defaultRepRange: [Int]?
     /// Modes this exercise is offered in. Default covers existing rows so
     /// pre-gating data (mobility, cardio) keeps showing in both modes.
-    public var availableForModeRaw: [String] = [Mode.build.rawValue, Mode.reset.rawValue]
+    public var availableForModeRaw: [String] = [Mode.build.rawValue, Mode.circuit.rawValue]
+    /// Owning profile. Per-profile custom exercises landed in SchemaV2;
+    /// legacy V1 rows decode with `nil` and surface to no profile.
+    public var profileId: UUID?
 
     public init(snapshot s: ExerciseDTO) {
         self.id = s.id
@@ -102,6 +105,7 @@ public final class ExerciseModel {
         self.equipmentRaw = s.equipment.map(\.rawValue)
         self.defaultRepRange = s.defaultRepRange
         self.availableForModeRaw = s.availableForMode.map(\.rawValue)
+        self.profileId = s.profileId
     }
 
     public var snapshot: ExerciseDTO {
@@ -111,7 +115,8 @@ public final class ExerciseModel {
             muscleGroups: muscleGroups,
             equipment: equipmentRaw.compactMap(Equipment.init(rawValue:)),
             defaultRepRange: defaultRepRange,
-            availableForMode: availableForModeRaw.compactMap(Mode.init(rawValue:))
+            availableForMode: availableForModeRaw.compactMap(Mode.init(rawValue:)),
+            profileId: profileId
         )
     }
 }
@@ -370,7 +375,7 @@ public final class StepCountModel {
     }
 }
 
-// MARK: - Pilates sessions (Reset)
+// MARK: - Pilates sessions
 
 @Model
 public final class PilatesSessionModel {
@@ -405,5 +410,39 @@ public final class PilatesSessionModel {
         self.durationMinutes = s.durationMinutes
         self.focusAreasRaw = s.focusAreas.map(\.rawValue)
         self.notes = s.notes
+    }
+}
+
+// MARK: - Cardio sessions (Circuit)
+
+@Model
+public final class CardioSessionModel {
+    @Attribute(.unique) public var id: UUID
+    public var profileId: UUID
+    public var date: Date
+    public var typeRaw: String
+    public var durationMinutes: Int
+    public var distanceMiles: Double?
+    public var rpe: Double?
+    public var notes: String?
+
+    public init(snapshot s: CardioSessionDTO) {
+        self.id = s.id
+        self.profileId = s.profileId
+        self.date = s.date
+        self.typeRaw = s.type.rawValue
+        self.durationMinutes = s.durationMinutes
+        self.distanceMiles = s.distanceMiles
+        self.rpe = s.rpe
+        self.notes = s.notes
+    }
+
+    public var snapshot: CardioSessionDTO {
+        CardioSessionDTO(
+            id: id, profileId: profileId, date: date,
+            type: CardioType(rawValue: typeRaw) ?? .walk,
+            durationMinutes: durationMinutes,
+            distanceMiles: distanceMiles, rpe: rpe, notes: notes
+        )
     }
 }

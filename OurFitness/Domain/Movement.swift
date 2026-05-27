@@ -1,4 +1,4 @@
-// Pure helpers for the Reset Train tab.
+// Pure helpers for the Circuit Train tab.
 // Lives in Domain so it's unit-testable without standing up SwiftData/HealthKit.
 //
 //  - shouldFireMilestone: de-dupe step-count milestone toasts (3k / 5k / 8k / 10k)
@@ -11,7 +11,7 @@ public enum Movement {
 
     // MARK: - Step milestones
 
-    /// Default step-count milestones for Reset. Ordered ascending.
+    /// Default step-count milestones for Circuit. Ordered ascending.
     public static let defaultStepMilestones: [Int] = [3_000, 5_000, 8_000, 10_000]
 
     /// Which milestone (if any) should fire *now*, given current steps and the
@@ -153,6 +153,25 @@ public enum Movement {
             cursor = prev
         }
         return streak
+    }
+
+    // MARK: - Circuit copy
+
+    /// Short "why this matters" blurb shown under each Circuit card.
+    /// Cites the documented effect of the modality on cardiovascular markers.
+    public static func circuitFocusBlurb(for kind: CircuitFocusKind) -> String {
+        switch kind {
+        case .steps:
+            return "Daily steps are the #1 lever for BP, insulin sensitivity, and LDL."
+        case .pilates:
+            return "Pilates builds core strength and joint stability — supports BP regulation."
+        case .cardio:
+            return "Zone-2 cardio raises HDL, lowers triglycerides, and trains aerobic capacity."
+        }
+    }
+
+    public enum CircuitFocusKind: Sendable {
+        case steps, pilates, cardio
     }
 
     /// Sessions falling inside the calendar week containing `now`.

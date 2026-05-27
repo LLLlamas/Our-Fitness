@@ -13,7 +13,7 @@ public enum Targets {
         public let proteinPerLb: Double
         public let fatPctOfCals: Double
         public let stepsDaily: Int
-        // Reset-only:
+        // Legacy caps (formerly Reset-only). Math retained; UI does not render.
         public let sodiumMgMax: Int?
         public let addedSugarGMax: Int?
         public let saturatedFatPctMax: Double?
@@ -32,7 +32,7 @@ public enum Targets {
             saturatedFatPctMax: nil,
             fiberGMin: nil
         ),
-        .reset: ModeRules(
+        .circuit: ModeRules(
             calorieAdjust: -400,
             proteinPerLb: 1.1,
             fatPctOfCals: 0.28,
@@ -81,7 +81,7 @@ public enum Targets {
             calories: calories, proteinG: proteinG, carbsG: carbsG, fatG: fatG,
             stepsDaily: r.stepsDaily
         )
-        if mode == .reset {
+        if mode == .circuit {
             t.sodiumMgMax = r.sodiumMgMax
             t.addedSugarGMax = r.addedSugarGMax
             t.fiberGMin = r.fiberGMin
@@ -127,7 +127,7 @@ public enum Targets {
             }
             return nil
 
-        case .reset:
+        case .circuit:
             if weeksStalledMarkers >= 8 {
                 return TrendAdjustment(direction: .flagDoctor,
                                        reason: "Markers unchanged for 8 weeks — review with your doctor.")

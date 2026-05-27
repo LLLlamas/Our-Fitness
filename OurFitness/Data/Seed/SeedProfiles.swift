@@ -1,15 +1,14 @@
-// Two fixed profiles for the two humans this app exists for.
-// Stable IDs so both devices reference the same logical profile after a future CloudKit sync.
-// Idempotent: re-running the seeder never overwrites edited vitals.
+// Legacy seed profiles. Kept compiling for reference; no longer invoked by
+// Seeder. Multi-profile creation now goes through ProfileCreationView.
 
 import Foundation
 
 public enum SeedProfiles {
 
     public static let buildId = UUID(uuidString: "00000000-0000-0000-0000-0000000B0000")!
-    public static let resetId = UUID(uuidString: "00000000-0000-0000-0000-0000000E5E70")!
+    public static let circuitId = UUID(uuidString: "00000000-0000-0000-0000-0000000E5E70")!
 
-    public static let all: [ProfileDTO] = [build, reset]
+    public static let all: [ProfileDTO] = [build, circuit]
 
     public static let build: ProfileDTO = {
         let vitals = Targets.ProfileVitals(
@@ -30,14 +29,14 @@ public enum SeedProfiles {
         )
     }()
 
-    public static let reset: ProfileDTO = {
+    public static let circuit: ProfileDTO = {
         let vitals = Targets.ProfileVitals(
             sex: .female, weightLb: 175, heightIn: 64, age: 50, activity: .light
         )
         return ProfileDTO(
-            id: resetId,
-            name: "Reset",
-            mode: .reset,
+            id: circuitId,
+            name: "Circuit",
+            mode: .circuit,
             sex: vitals.sex,
             heightIn: vitals.heightIn,
             weightLb: vitals.weightLb,
@@ -45,7 +44,7 @@ public enum SeedProfiles {
             activity: vitals.activity,
             lowAppetite: false,
             restrictions: [],
-            computedTargets: Targets.compute(mode: .reset, vitals: vitals)
+            computedTargets: Targets.compute(mode: .circuit, vitals: vitals)
         )
     }()
 }

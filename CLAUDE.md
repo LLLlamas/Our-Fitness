@@ -1,27 +1,32 @@
 # Our-Fitness — Foundation (iOS / SwiftUI)
 
-Native iOS app for two specific humans, two specific modes. **Build** (gain mass, fuel hoops) and **Reset** (drop weight, fix markers). One device per person, one mode per person. **Show up, log honestly, let the numbers tell the truth.**
+Native iOS app for a small TestFlight circle, two modes. **Build** (gain mass, fuel hoops) and **Circuit** (drop weight, fix markers via cardio/pilates/steps). **Show up, log honestly, let the numbers tell the truth.**
 
-Purpose-built for these two. Don't generalize for a third.
+> **Refactor note (2026-05):** the mode formerly named *Reset* is now *Circuit*.
+> The Swift symbol is `Mode.circuit`; the SwiftData raw value is pinned to
+> `"reset"` for back-compat (do not rename without a schema bump). Multi-profile
+> creation replaced the two fixed seeded profiles. The food library, scoring,
+> and Reset cap surfaces were stashed under `_stashed/` pending a rework — see
+> "Stashed surfaces" below.
 
 ---
 
-## The two humans, the two modes
+## The modes
 
-**Build** — gain lean mass, keep playing. Picky-eater hardgainer, basketball 4–5×/week. Enemy is *under-fueling*. Nut-free allergen lock. Food library: short familiar list (smoothies, spam, rice, eggs, pizza, chocolate milk, nuggets — see [nutrition-plan-research.md](nutrition-plan-research.md)).
+**Build** — gain lean mass, keep playing. Hypertrophy bias, per-profile custom exercises, rep counter, set logger.
 
-**Reset** — drop weight, fix the markers (cholesterol, BP, blood sugar). Enemy is *dense empty calories + sodium creep*. **No food restrictions.** Food library: DASH + Mediterranean (leafy greens, legumes, whole grains, oily fish, olive oil, low sodium, high fiber).
+**Circuit** — cardiovascular markers (LDL/HDL/BP/A1c). Steps, cardio sessions, pilates, light rep counting. No strength program block.
 
-| | Build | Reset |
+| | Build | Circuit |
 |---|---|---|
 | Calories | TDEE + 400–600 | TDEE − 300–500 |
 | Protein g/lb | ~1.0 | 1.0–1.2 |
-| Caps | none beyond macros | sodium ≤1,500 mg, added sugar ≤25 g, sat fat <10%, fiber ≥35 g |
 | Steps/day | 8,000 baseline | 10,000 (#1 lever for BP/insulin/LDL) |
-| Suggestion bias | calorie-dense, liquid-friendly | fiber-dense, omega-3, low-sodium |
-| Workouts | hypertrophy, 6–12 reps, double-progression | 2–3 strength + 3–4 zone-2 cardio, RPE cap 7 |
+| Workouts | rep counter + set log on user's own exercises | cardio sessions, pilates, walks; rep counter optional |
 
-Modes share **infrastructure**, not **content**. Don't merge food libraries with a `mode` tag — different philosophies.
+`MacroTargets.{sodiumMgMax,addedSugarGMax,saturatedFatGMax,fiberGMin}` and
+`Targets.compute` still populate cap values for `.circuit` profiles, but no UI
+renders them. The math sits dormant for a future revival.
 
 ---
 
@@ -31,20 +36,32 @@ Modes share **infrastructure**, not **content**. Don't merge food libraries with
 OurFitness/
   App/                ← @main, ModelContainer wiring, root shell
   Domain/             ← PURE Swift. No SwiftUI/SwiftData. Fully tested.
-  Data/               ← SwiftData @Model classes + repositories + seeders
-    Seed/             ← idempotent food/exercise/program seeders, per mode
+  Data/               ← SwiftData @Model classes + repositories + (now-empty) seeders
+    Seed/             ← Seeder.seedAll is a no-op; profiles are user-created
   Services/           ← HealthKit, Theme, Haptics, ToastCenter (singletons)
-  Features/           ← One folder per tab: Onboarding/Today/Nutrition/Workouts/Progress
+  Features/           ← Onboarding (ProfileCreationView), Today, Nutrition (meal log),
+                        Workouts (Build flow + Circuit/ subfolder), Progress, Settings
   Components/         ← Reusable view atoms (ProgressBar, Card, Banner, AnimatedNumber…)
-  Assets.xcassets/    ← AppIcon, AccentColor, LaunchBackground
-  Info.plist          ← HealthKit usage strings; orientations (all 4 in base + ~ipad)
-  OurFitness.entitlements
+_stashed/             ← Code excluded from the build target — see "Stashed surfaces"
 OurFitnessTests/      ← Hostless XCTest for Domain/* only. No app module import.
 fastlane/             ← Fastfile lanes: tests, compile, sync_signing, beta
 scripts/              ← validate-ci-invariants.sh, generate-icon.sh
 .github/workflows/    ← compile.yml (every push), testflight.yml (manual / v* tag)
 project.yml           ← XcodeGen — source of truth; .xcodeproj is gitignored
 ```
+
+### Stashed surfaces (intentionally outside the build)
+
+These files live under `_stashed/` and are not referenced by `project.yml`'s
+target source path (which is `OurFitness/`). They stay in the repo for future
+revival but do not compile.
+
+- `Data/Seed/SeedFoodsBuild.swift`, `Data/Seed/SeedFoodsReset.swift`,
+  `Data/Seed/SeedExercises.swift` — seed libraries
+- `Domain/Suggestions.swift`, `Domain/Score.swift`,
+  `Domain/CapExplanations.swift` — meal scoring + Circuit cap explainers
+- `Components/CapBar.swift`, `Components/CapExplanationView.swift`
+- `OurFitnessTests/ScoreTests.swift`
 
 **Hard architectural rules:**
 
@@ -60,16 +77,13 @@ project.yml           ← XcodeGen — source of truth; .xcodeproj is gitignored
 
 | Goal | Files |
 |---|---|
-| Add a new exercise | `Data/Seed/SeedExercises.swift` — set `availableForMode` (`[.build]` for strength; `[.build, .reset]` for cardio/mobility) |
-| Reset cap copy / sources | `Domain/CapExplanations.swift` (pure data per cap) |
-| Log a Pilates session | `Repos.logPilatesSession` + `PilatesSessionDTO` (Domain) / `PilatesSessionModel` (Data) |
+| Add a per-profile exercise (runtime) | `Repos.createExercise(_:profileId:name:defaultRepsBottom:defaultRepsTop:tracksWeight:)` |
+| Log a Pilates session | `Repos.logPilatesSession` + `PilatesSessionDTO` / `PilatesSessionModel` |
+| Log a cardio session | `Repos.logCardio` + `CardioSessionDTO` / `CardioSessionModel` |
 | Pilates weekly goal / streak | `Domain/Movement.swift` (`pilatesWeeklyStreak`) |
 | Step-count milestone thresholds | `Domain/Movement.swift` (`defaultStepMilestones`) |
-| Add a Build food | `Data/Seed/SeedFoodsBuild.swift` |
-| Add a Reset food | `Data/Seed/SeedFoodsReset.swift` |
-| New starter program | `Data/Seed/SeedPrograms.swift` |
-| Tweak mode caps (sodium/sugar/fiber) | `Domain/Targets.swift` (`ModeRules`) |
-| Change meal scoring | `Domain/Score.swift` (shared) + `Domain/Suggestions.swift` (per-mode weights) |
+| Circuit "why this matters" copy | `Domain/Movement.swift` (`circuitFocusBlurb`) |
+| Tweak mode caps (sodium/sugar/fiber) | `Domain/Targets.swift` (`ModeRules`) — math only, no UI |
 | Change calorie math | `Domain/Targets.swift` only |
 | New workout progression | `Domain/Progression.swift` strategy switch |
 | 14-day auto-adjust thresholds | `Domain/Targets.swift` (`suggestAdjustment`) |
@@ -77,7 +91,7 @@ project.yml           ← XcodeGen — source of truth; .xcodeproj is gitignored
 | Daily steps goal | `Domain/Targets.swift` (`ModeRules.stepsDaily`) |
 | New HealthKit metric | `Services/HealthKitService.swift` + `@Model` snapshot in `Data/PersistenceModels.swift` if persisted |
 | New tab | `App/RootView.swift` `Tab` enum + new folder under `Features/` |
-| Schema change | `Data/Schema.swift` — add new `VersionedSchema` + migration stage. Never edit shipped schemas. |
+| Schema change | `Data/Schema.swift` — add new `VersionedSchema` + migration stage. Never edit shipped schemas. Current is `SchemaV2`. |
 | Add HealthKit permission | `OurFitness.entitlements` + `Info.plist` (`NSHealthShareUsageDescription`) + `HealthKitService.requestAuth` |
 | Press feel / button variant | `Components/TactileButtonStyle.swift` (`resolved(theme:)` switch) |
 | Haptic vocabulary | `Services/Haptics.swift` |

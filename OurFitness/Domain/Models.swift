@@ -9,7 +9,11 @@ import Foundation
 // MARK: - Enums
 
 public enum Mode: String, Codable, CaseIterable, Sendable {
-    case build, reset
+    case build
+    // Raw value pinned to "reset" so SwiftData rows persisted before the
+    // Circuit rename keep decoding cleanly. Symbol/UI copy renamed; bump a
+    // schema version before changing this raw value.
+    case circuit = "reset"
 }
 
 public enum Sex: String, Codable, CaseIterable, Sendable {
@@ -97,7 +101,7 @@ public struct MacroTargets: Codable, Equatable, Sendable {
     public var carbsG: Int
     public var fatG: Int
     public var stepsDaily: Int
-    // Reset-only caps:
+    // Legacy caps (formerly Reset-only). Retained on the data model; UI no longer renders them.
     public var sodiumMgMax: Int?
     public var addedSugarGMax: Int?
     public var saturatedFatGMax: Int?
@@ -249,16 +253,18 @@ public struct ExerciseDTO: Codable, Equatable, Sendable, Identifiable {
     public var muscleGroups: [String]
     public var equipment: [Equipment]
     public var defaultRepRange: [Int]?  // [bottom, top]
-    /// Modes this exercise is offered in. Reset stripped strength in §5 of the
-    /// implementation plan; gate via this field rather than deleting seed rows.
-    /// Defaults to both modes when decoding legacy rows (mobility/cardio carry over).
+    /// Modes this exercise is offered in. Defaults to both modes when decoding
+    /// legacy rows. Now that exercises are per-profile (V2), this field is
+    /// effectively informational; rep counter sources from `profileId`.
     public var availableForMode: [Mode]
+    public var profileId: UUID?
 
     public init(
         id: String, name: String, category: ExerciseCategory,
         muscleGroups: [String], equipment: [Equipment],
         defaultRepRange: [Int]? = nil,
-        availableForMode: [Mode] = [.build, .reset]
+        availableForMode: [Mode] = [.build, .circuit],
+        profileId: UUID? = nil
     ) {
         self.id = id
         self.name = name
@@ -267,11 +273,12 @@ public struct ExerciseDTO: Codable, Equatable, Sendable, Identifiable {
         self.equipment = equipment
         self.defaultRepRange = defaultRepRange
         self.availableForMode = availableForMode
+        self.profileId = profileId
     }
 
-    // Codable: tolerate older payloads with no availableForMode field.
+    // Codable: tolerate older payloads with no availableForMode/profileId field.
     private enum CodingKeys: String, CodingKey {
-        case id, name, category, muscleGroups, equipment, defaultRepRange, availableForMode
+        case id, name, category, muscleGroups, equipment, defaultRepRange, availableForMode, profileId
     }
 
     public init(from decoder: Decoder) throws {
@@ -283,11 +290,12 @@ public struct ExerciseDTO: Codable, Equatable, Sendable, Identifiable {
         self.equipment = try c.decode([Equipment].self, forKey: .equipment)
         self.defaultRepRange = try c.decodeIfPresent([Int].self, forKey: .defaultRepRange)
         self.availableForMode = try c.decodeIfPresent([Mode].self, forKey: .availableForMode)
-            ?? [.build, .reset]
+            ?? [.build, .circuit]
+        self.profileId = try c.decodeIfPresent(UUID.self, forKey: .profileId)
     }
 }
 
-// MARK: - Pilates (Reset)
+// MARK: - Pilates
 
 public enum PilatesFocusArea: String, Codable, CaseIterable, Sendable {
     case core, lowerBack = "lower-back", hips, fullBody = "full-body", flexibility
@@ -532,5 +540,47 @@ public struct ScoredFood: Equatable, Sendable, Identifiable {
         self.food = food
         self.score = score
         self.reasons = reasons
+    }
+}
+
+// MARK: - Cardio sessions (Circuit)
+
+public enum CardioType: String, Codable, CaseIterable, Sendable {
+    case walk, run, bike, swim, elliptical, other
+
+    public var label: String {
+        switch self {
+        case .walk:       return "Walk"
+        case .run:        return "Run"
+        case .bike:       return "Bike"
+        case .swim:       return "Swim"
+        case .elliptical: return "Elliptical"
+        case .other:      return "Other"
+        }
+    }
+}
+
+public struct CardioSessionDTO: Codable, Equatable, Sendable, Identifiable {
+    public var id: UUID
+    public var profileId: UUID
+    public var date: Date
+    public var type: CardioType
+    public var durationMinutes: Int
+    public var distanceMiles: Double?
+    public var rpe: Double?
+    public var notes: String?
+
+    public init(id: UUID = UUID(), profileId: UUID, date: Date = Date(),
+                type: CardioType, durationMinutes: Int,
+                distanceMiles: Double? = nil, rpe: Double? = nil,
+                notes: String? = nil) {
+        self.id = id
+        self.profileId = profileId
+        self.date = date
+        self.type = type
+        self.durationMinutes = durationMinutes
+        self.distanceMiles = distanceMiles
+        self.rpe = rpe
+        self.notes = notes
     }
 }

@@ -1,3 +1,6 @@
+// Stripped-down meal log. No library, no scoring, no suggestions — just a
+// custom-entry sheet (name + macros) and today's running list.
+
 import SwiftUI
 import SwiftData
 
@@ -7,170 +10,235 @@ struct NutritionView: View {
     @Environment(\.modelContext) private var ctx
     @Environment(\.theme) private var theme
     @EnvironmentObject private var toasts: ToastCenter
-    @Query private var foodModels: [FoodModel]
 
-    @State private var search: String = ""
-    @State private var category: FoodCategory? = nil
-    @State private var slot: Slot = .lunch
+    @Query private var logModels: [FoodLogEntryModel]
+    @State private var showLogSheet = false
 
-    private var allCategories: [FoodCategory] {
-        [.smoothie, .breakfast, .main, .bowl, .soup, .snack, .side, .drink]
+    private var today: String { Dates.dayKey() }
+
+    private var todaysLogs: [FoodLogEntryDTO] {
+        logModels.map(\.snapshot)
+            .filter { $0.userId == profile.id && $0.date == today }
+            .sorted { $0.timestamp < $1.timestamp }
     }
 
-    private var filtered: [FoodDTO] {
-        let q = search.trimmingCharacters(in: .whitespaces).lowercased()
-        return foodModels.map(\.snapshot)
-            .filter { $0.modeFit.contains(profile.mode) }
-            .filter { food in
-                if let category, food.category != category { return false }
-                if !profile.restrictions.allSatisfy({ !food.allergens.contains($0) }) { return false }
-                if !q.isEmpty {
-                    let inName = food.name.lowercased().contains(q)
-                    let inIng = food.ingredients.contains { $0.contains(q) }
-                    if !inName && !inIng { return false }
-                }
-                return true
-            }
-            .sorted { $0.name < $1.name }
+    private var totals: DailyTotals {
+        todaysLogs.reduce(into: DailyTotals.zero) { acc, e in
+            let p = e.perServing
+            acc.calories += p.calories
+            acc.proteinG += p.proteinG
+            acc.carbsG += p.carbsG
+            acc.fatG += p.fatG
+        }
     }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
-                Text("library.")
+                Text("meals.")
                     .font(.system(size: 56, weight: .regular))
                     .foregroundStyle(theme.text)
-                Text(profile.mode == .build
-                     ? "Foods you already love — calorie-dense, picky-friendly."
-                     : "DASH + Mediterranean leaning — fiber, lean protein, low sodium.")
+                Text("Log what you actually ate. Honesty > precision.")
                     .font(.callout).foregroundStyle(theme.dim)
 
-                searchBar
-                slotPicker
-                categoryRow
+                totalsCard
 
-                LazyVStack(spacing: 12) {
-                    ForEach(filtered) { food in
-                        PressableCard(action: { log(food) }) {
-                            FoodLibraryRow(food: food, modeIsReset: profile.mode == .reset, slot: slot)
-                        }
-                    }
-                    if filtered.isEmpty {
-                        Text("No matches. Try clearing filters.")
-                            .font(.callout).foregroundStyle(theme.dim)
-                            .padding(.top, 24)
+                Button {
+                    showLogSheet = true
+                } label: {
+                    HStack {
+                        Image(systemName: "plus.circle.fill")
+                        Text("Log a meal")
                     }
                 }
+                .tactile(.primary, fullWidth: true)
+
+                logList
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 18)
         }
         .background(theme.bg.ignoresSafeArea())
-        .sensoryFeedback(.selection, trigger: slot)
-        .sensoryFeedback(.selection, trigger: category)
-    }
-
-    private var searchBar: some View {
-        TextField("Search…", text: $search)
-            .textInputAutocapitalization(.never)
-            .padding(10)
-            .background(theme.card)
-            .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
-            .foregroundStyle(theme.text)
-    }
-
-    private var slotPicker: some View {
-        HStack(spacing: 6) {
-            Text("LOG TO:").font(.caption2).tracking(2).foregroundStyle(theme.dim)
-            Picker("", selection: $slot) {
-                ForEach([Slot.breakfast, .postWorkout, .lunch, .snack, .dinner], id: \.self) { s in
-                    Text(s.label.capitalized).tag(s)
-                }
+        .sheet(isPresented: $showLogSheet) {
+            MealLogSheet(profileId: profile.id) { dto in
+                Repos.addFoodLog(ctx, dto)
+                toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
             }
-            .pickerStyle(.menu)
-            .tint(theme.accent)
+            .themed(profile.mode)
         }
     }
 
-    private var categoryRow: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                pill(nil, "All")
-                ForEach(allCategories, id: \.self) { c in
-                    pill(c, c.rawValue.capitalized)
+    @ViewBuilder
+    private var totalsCard: some View {
+        let t = profile.computedTargets
+        Card {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Today")
+                    .font(.caption).tracking(2).textCase(.uppercase)
+                    .foregroundStyle(theme.dim)
+                LazyVGrid(
+                    columns: Array(repeating: GridItem(.flexible(), spacing: 14), count: 2),
+                    spacing: 14
+                ) {
+                    ProgressBar(value: Double(totals.calories), target: Double(t.calories), label: "Calories")
+                    ProgressBar(value: Double(totals.proteinG), target: Double(t.proteinG), label: "Protein", unit: "g")
+                    ProgressBar(value: Double(totals.carbsG),   target: Double(t.carbsG),   label: "Carbs",   unit: "g")
+                    ProgressBar(value: Double(totals.fatG),     target: Double(t.fatG),     label: "Fat",     unit: "g")
                 }
             }
         }
     }
 
     @ViewBuilder
-    private func pill(_ c: FoodCategory?, _ label: String) -> some View {
-        Button {
-            category = c
-        } label: {
-            Text(label)
+    private var logList: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Today's log")
+                .font(.system(size: 22, weight: .regular))
+                .foregroundStyle(theme.text)
+            if todaysLogs.isEmpty {
+                Text("Nothing logged yet.")
+                    .font(.callout).foregroundStyle(theme.dim)
+            } else {
+                ForEach(todaysLogs) { e in
+                    LogRow(entry: e) {
+                        Repos.deleteFoodLog(ctx, id: e.id)
+                        Haptics.tap()
+                    }
+                }
+            }
         }
-        .tactile(.pill, fill: category == c ? theme.accent : nil)
-    }
-
-    private func log(_ food: FoodDTO) {
-        let entry = FoodLogEntryDTO(
-            userId: profile.id, date: Dates.dayKey(), slot: slot,
-            foodId: food.id, servings: 1, perServing: food.perServing
-        )
-        Repos.addFoodLog(ctx, entry)
-        toasts.logged(food.name, calories: food.perServing.calories)
     }
 }
 
-// MARK: - Library row
-
-private struct FoodLibraryRow: View {
-    let food: FoodDTO
-    let modeIsReset: Bool
-    let slot: Slot
-
+private struct LogRow: View {
+    let entry: FoodLogEntryDTO
+    let onDelete: () -> Void
     @Environment(\.theme) private var theme
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(alignment: .top) {
-                Text(food.name)
-                    .font(.system(size: 17, weight: .semibold))
+        HStack(alignment: .top, spacing: 12) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(entry.customName ?? "Meal")
                     .foregroundStyle(theme.text)
-                Spacer()
-                Text(String(format: "$%.2f", food.costUsd))
-                    .font(.system(.caption, design: .monospaced))
-                    .foregroundStyle(theme.accent2)
+                Text("\(entry.perServing.calories) cal · \(entry.perServing.proteinG)p · \(entry.perServing.carbsG)c · \(entry.perServing.fatG)f")
+                    .font(.system(.caption2, design: .monospaced))
+                    .foregroundStyle(theme.dim)
             }
-            if let r = food.recipe {
-                Text(r).font(.caption).foregroundStyle(theme.dim).lineLimit(2)
+            Spacer(minLength: 0)
+            Button(action: onDelete) {
+                Image(systemName: "xmark")
             }
-            HStack(spacing: 12) {
-                Text("\(food.perServing.calories) cal").foregroundStyle(theme.accent)
-                Text("\(food.perServing.proteinG)p")
-                Text("\(food.perServing.carbsG)c")
-                Text("\(food.perServing.fatG)f")
-                if modeIsReset {
-                    Text("\(food.perServing.fiberG)fib")
-                    Text("\(food.perServing.sodiumMg)mg na").foregroundStyle(theme.dim)
+            .tactile(.ghost)
+        }
+        .padding(10)
+        .background(theme.card)
+        .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+    }
+}
+
+private struct MealLogSheet: View {
+    let profileId: UUID
+    let onSave: (FoodLogEntryDTO) -> Void
+
+    @Environment(\.theme) private var theme
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var name: String = ""
+    @State private var slot: Slot = .lunch
+    @State private var calories: Int = 0
+    @State private var protein: Int = 0
+    @State private var carbs: Int = 0
+    @State private var fat: Int = 0
+
+    private var canSave: Bool {
+        !name.trimmingCharacters(in: .whitespaces).isEmpty && calories > 0
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 18) {
+                Text("log a meal.")
+                    .font(.system(size: 42, weight: .regular))
+                    .foregroundStyle(theme.text)
+
+                field("Name") {
+                    TextField("e.g. Chicken bowl", text: $name)
+                        .padding(10).background(theme.card)
+                        .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                        .foregroundStyle(theme.text)
+                }
+
+                slotPicker
+
+                HStack(spacing: 10) {
+                    numField("Calories", value: $calories)
+                    numField("Protein g", value: $protein)
+                }
+                HStack(spacing: 10) {
+                    numField("Carbs g", value: $carbs)
+                    numField("Fat g", value: $fat)
+                }
+
+                Button {
+                    let dto = FoodLogEntryDTO(
+                        userId: profileId, date: Dates.dayKey(), slot: slot,
+                        customName: name.trimmingCharacters(in: .whitespaces),
+                        perServing: PerServing(
+                            calories: calories, proteinG: protein,
+                            carbsG: carbs, fatG: fat
+                        )
+                    )
+                    onSave(dto)
+                    dismiss()
+                } label: {
+                    Text("Save")
+                }
+                .tactile(.primary, fullWidth: true)
+                .disabled(!canSave)
+                .opacity(canSave ? 1 : 0.6)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+        }
+        .background(theme.bg.ignoresSafeArea())
+        .presentationDetents([.large])
+    }
+
+    @ViewBuilder
+    private var slotPicker: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Slot").font(.caption).tracking(2).foregroundStyle(theme.dim)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach([Slot.breakfast, .lunch, .snack, .dinner, .postWorkout], id: \.self) { s in
+                        Button { slot = s } label: { Text(s.label) }
+                            .tactile(.pill, fill: slot == s ? theme.accent : nil)
+                    }
                 }
             }
-            .font(.system(.caption2, design: .monospaced))
-            .foregroundStyle(theme.text)
+        }
+    }
 
-            if !food.tags.isEmpty {
-                Text(food.tags.prefix(3).joined(separator: " · "))
-                    .font(.caption2).italic().foregroundStyle(theme.dim)
-            }
-            HStack(spacing: 6) {
-                Image(systemName: "hand.tap.fill")
-                    .font(.caption2)
-                    .foregroundStyle(theme.accent)
-                Text("Tap to log to \(slot.label)")
-                    .font(.caption2).tracking(2)
-                    .foregroundStyle(theme.accent)
-            }
+    @ViewBuilder
+    private func field<C: View>(_ label: String, @ViewBuilder _ content: () -> C) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(label.uppercased()).font(.system(size: 10)).tracking(2)
+                .foregroundStyle(theme.dim)
+            content()
+        }
+    }
+
+    @ViewBuilder
+    private func numField(_ label: String, value: Binding<Int>) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(label.uppercased()).font(.system(size: 9)).tracking(2)
+                .foregroundStyle(theme.dim)
+            TextField("", value: value, format: .number)
+                .keyboardType(.numberPad)
+                .padding(10).background(theme.card)
+                .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                .foregroundStyle(theme.text)
+                .font(.system(.callout, design: .monospaced))
         }
     }
 }

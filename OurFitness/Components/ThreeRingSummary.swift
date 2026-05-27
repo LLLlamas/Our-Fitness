@@ -1,4 +1,4 @@
-// Three concentric arcs for the Reset Train "Movement Minutes" summary.
+// Three concentric arcs for the Circuit Train "Movement Minutes" summary.
 // Steps / Pilates minutes / Cardio active-energy minutes — each its own ring,
 // no shared scale (each has its own goal). Lightweight: pure Shape + Stroke,
 // no per-frame state, animates with the surrounding spring.
