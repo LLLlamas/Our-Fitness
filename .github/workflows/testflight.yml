@@ -177,11 +177,40 @@ jobs:
       - name: Ship to TestFlight
         run: bundle exec fastlane ios beta
 
+      # Diagnostic: dump the entitlements present in the .xcarchive
+      # (pre-export). If HealthKit is here but missing from the IPA below,
+      # the export/re-sign step is stripping it. If HealthKit is missing
+      # even from the archive, the archive build step never embedded it.
+      - name: Dump archived .app entitlements (pre-export)
+        if: always()
+        run: |
+          set +e
+          archive="$(ls -t -d ~/Library/Developer/Xcode/Archives/*/*.xcarchive 2>/dev/null | head -1)"
+          if [ -z "$archive" ]; then
+            echo "::warning::No .xcarchive found — skipping pre-export entitlement dump."
+            exit 0
+          fi
+          app="$(ls -d "$archive"/Products/Applications/*.app 2>/dev/null | head -1)"
+          if [ -z "$app" ]; then
+            echo "::warning::No .app inside archive — skipping."
+            exit 0
+          fi
+          echo "::group::ARCHIVE entitlements ($app)"
+          codesign -d --entitlements - "$app" 2>&1
+          echo "::endgroup::"
+          echo "::group::ARCHIVE embedded.mobileprovision profile UUID"
+          security cms -D -i "$app/embedded.mobileprovision" 2>/dev/null | grep -A1 '<key>UUID</key>' | tail -1
+          echo "::endgroup::"
+          if codesign -d --entitlements - "$app" 2>&1 | grep -q "com.apple.developer.healthkit</key>"; then
+            echo "::notice title=Archive::HealthKit IS present in the archived .app."
+          else
+            echo "::warning title=Archive::HealthKit is MISSING from the archived .app — bug is in the archive step, NOT in export. Check CODE_SIGN_ENTITLEMENTS resolution and the .entitlements file."
+          fi
+
       # Diagnostic: dump the entitlements that actually got signed into the IPA.
-      # Compare this against the .entitlements file to confirm signing didn't
-      # silently strip a capability (which happens when the provisioning
-      # profile doesn't include it). Cheap to keep on permanently — one second.
-      - name: Dump signed IPA entitlements
+      # Comparing this against the archive dump above tells us whether the
+      # export step (re-sign with the export profile) strips a capability.
+      - name: Dump signed IPA entitlements (post-export)
         if: always()
         run: |
           set +e
@@ -197,15 +226,18 @@ jobs:
             echo "::warning::No .app bundle inside IPA — skipping."
             exit 0
           fi
-          echo "::group::codesign entitlements for $(basename "$app")"
+          echo "::group::IPA entitlements ($(basename "$app"))"
           codesign -d --entitlements - --xml "$app" 2>/dev/null \
             | xmllint --format - 2>/dev/null \
             || codesign -d --entitlements - "$app"
           echo "::endgroup::"
-          if codesign -d --entitlements - "$app" 2>/dev/null | grep -q "com.apple.developer.healthkit</key>"; then
-            echo "::notice title=HealthKit::HealthKit entitlement IS present in the signed IPA."
+          echo "::group::IPA embedded.mobileprovision profile UUID"
+          security cms -D -i "$app/embedded.mobileprovision" 2>/dev/null | grep -A1 '<key>UUID</key>' | tail -1
+          echo "::endgroup::"
+          if codesign -d --entitlements - "$app" 2>&1 | grep -q "com.apple.developer.healthkit</key>"; then
+            echo "::notice title=IPA::HealthKit IS present in the signed IPA."
           else
-            echo "::error title=HealthKit::HealthKit entitlement is MISSING from the signed IPA. The provisioning profile likely doesn't include it. Regenerate the profile at developer.apple.com (delete + recreate, don't Edit) and update APPSTORE_PROFILE_BASE64."
+            echo "::error title=IPA::HealthKit is MISSING from the signed IPA. Compare against the archive dump above to localize which step dropped it."
           fi
 
       - name: Upload IPA artifact
