@@ -98,8 +98,9 @@ public final class ExerciseModel {
     public var profileId: UUID?
     /// Known weight of the load being moved (e.g. baby, stroller). V3.
     public var loadLb: Double?
-    /// "reps" or "duration". V3. String-backed for SwiftData friendliness.
-    public var kindRaw: String = ExerciseKind.reps.rawValue
+    /// "reps" or "duration". V3. Optional so the V2→V3 lightweight stage can
+    /// backfill nil into existing rows; snapshot treats nil as .reps.
+    public var kindRaw: String?
 
     public init(snapshot s: ExerciseDTO) {
         self.id = s.id
@@ -124,7 +125,7 @@ public final class ExerciseModel {
             availableForMode: availableForModeRaw.compactMap(Mode.init(rawValue:)),
             profileId: profileId,
             loadLb: loadLb,
-            kind: ExerciseKind(rawValue: kindRaw) ?? .reps
+            kind: ExerciseKind(rawValue: kindRaw ?? ExerciseKind.reps.rawValue) ?? .reps
         )
     }
 }
