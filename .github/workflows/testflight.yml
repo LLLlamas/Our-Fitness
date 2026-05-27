@@ -177,6 +177,37 @@ jobs:
       - name: Ship to TestFlight
         run: bundle exec fastlane ios beta
 
+      # Diagnostic: dump the entitlements that actually got signed into the IPA.
+      # Compare this against the .entitlements file to confirm signing didn't
+      # silently strip a capability (which happens when the provisioning
+      # profile doesn't include it). Cheap to keep on permanently — one second.
+      - name: Dump signed IPA entitlements
+        if: always()
+        run: |
+          set +e
+          ipa="$(ls build/ipa/*.ipa 2>/dev/null | head -1)"
+          if [ -z "$ipa" ]; then
+            echo "::warning::No IPA found at build/ipa/*.ipa — skipping entitlement dump."
+            exit 0
+          fi
+          tmp="$(mktemp -d)"
+          unzip -q "$ipa" -d "$tmp"
+          app="$(ls -d "$tmp"/Payload/*.app 2>/dev/null | head -1)"
+          if [ -z "$app" ]; then
+            echo "::warning::No .app bundle inside IPA — skipping."
+            exit 0
+          fi
+          echo "::group::codesign entitlements for $(basename "$app")"
+          codesign -d --entitlements - --xml "$app" 2>/dev/null \
+            | xmllint --format - 2>/dev/null \
+            || codesign -d --entitlements - "$app"
+          echo "::endgroup::"
+          if codesign -d --entitlements - "$app" 2>/dev/null | grep -q "com.apple.developer.healthkit</key>"; then
+            echo "::notice title=HealthKit::HealthKit entitlement IS present in the signed IPA."
+          else
+            echo "::error title=HealthKit::HealthKit entitlement is MISSING from the signed IPA. The provisioning profile likely doesn't include it. Regenerate the profile at developer.apple.com (delete + recreate, don't Edit) and update APPSTORE_PROFILE_BASE64."
+          fi
+
       - name: Upload IPA artifact
         if: success()
         uses: actions/upload-artifact@v4

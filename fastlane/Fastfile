@@ -163,6 +163,29 @@ platform :ios do
     dest = File.join(dir, "#{uuid}.mobileprovision")
     File.binwrite(dest, raw)
     UI.success("Installed profile '#{name}' (#{uuid}) → #{dest} (#{raw.bytesize} bytes)")
+
+    # Diagnostic: print which com.apple.developer.* entitlements the profile
+    # actually declares. If a capability is missing here (e.g. healthkit),
+    # signing will silently strip it from the IPA and the app will fail on
+    # device at runtime. This is the single most useful signal when chasing
+    # "Missing com.apple.developer.<x> entitlement" errors.
+    entitlements = plist.scan(/<key>(com\.apple\.developer\.[a-zA-Z0-9._-]+)<\/key>/).flatten.uniq.sort
+    if entitlements.empty?
+      UI.error("Profile declares ZERO com.apple.developer.* entitlements. " \
+               "This means the profile was generated without any capabilities " \
+               "attached. Regenerate at developer.apple.com → Profiles → +.")
+    else
+      UI.message("Profile entitlements (com.apple.developer.*):")
+      entitlements.each { |k| UI.message("  • #{k}") }
+      missing = %w[com.apple.developer.healthkit
+                   com.apple.developer.healthkit.background-delivery] - entitlements
+      if missing.any?
+        UI.error("Profile is MISSING these expected entitlements: #{missing.join(', ')}. " \
+                 "Signing will strip them from the IPA. Regenerate the profile in " \
+                 "developer.apple.com (delete the old one first, then create a new " \
+                 "one — Edit/Save on an existing profile does NOT refresh capabilities).")
+      end
+    end
   end
 
   desc "Ship a build to TestFlight. Syncs signing with match, archives, and uploads."
