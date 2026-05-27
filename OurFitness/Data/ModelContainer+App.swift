@@ -29,11 +29,12 @@ public enum AppModelContainer {
             // a broken migration already means the app is unlaunchable without this path.
             let storeURL = config.url
             try? FileManager.default.removeItem(at: storeURL)
-            // Also remove the accompanying WAL journal files (SwiftData uses .store-shm / .store-wal).
-            let shmURL = storeURL.appendingPathExtension("shm")
-            let walURL = storeURL.appendingPathExtension("wal")
-            try? FileManager.default.removeItem(at: shmURL)
-            try? FileManager.default.removeItem(at: walURL)
+            // SQLite WAL companions are named with a hyphen (default.store-shm / default.store-wal),
+            // not as a second extension, so appendingPathExtension would target the wrong files.
+            let dir = storeURL.deletingLastPathComponent()
+            let base = storeURL.lastPathComponent
+            try? FileManager.default.removeItem(at: dir.appendingPathComponent("\(base)-shm"))
+            try? FileManager.default.removeItem(at: dir.appendingPathComponent("\(base)-wal"))
             do {
                 return try ModelContainer(
                     for: Schema(versionedSchema: SchemaV3.self),
