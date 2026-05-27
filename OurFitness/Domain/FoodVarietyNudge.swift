@@ -66,7 +66,7 @@ public enum FoodVarietyNudges {
             circuitThreshold: 4,
             headline: { n in "Red meat \(n)× this week" },
             reason: "Red meat is fine in moderation — it just accumulates saturated fat quickly across a week.",
-            circuitReason: "Saturated fat from red meat is the dominant dietary driver of LDL elevation (NCEP ATP III). \(n) servings in a week pushes sat-fat well above AHA's 6%-of-calories ceiling for cardiovascular health.",
+            circuitReason: "Saturated fat from red meat is the dominant dietary driver of LDL elevation (NCEP ATP III). Eating red meat this often pushes sat-fat well above AHA's 6%-of-calories ceiling for cardiovascular health.",
             alternative: "Ground turkey or grilled chicken hit the same protein target with a fraction of the sat-fat.",
             circuitAlternative: "Salmon or a seaweed salad tomorrow — omega-3 EPA/DHA directly counters LDL oxidation and lowers triglycerides. The swap is the most targeted single meal you can make this week.",
             emoji: "🥩"
