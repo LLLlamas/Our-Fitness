@@ -24,6 +24,9 @@ public struct StatDetailSheet: View {
     public let placeholder: String
     public let logCopy: String
     public let canLog: Bool
+    /// Optional one-line reference range, e.g. "Optimal: <100 mg/dL (NCEP)".
+    /// Shown directly under the header. Nil for non-medical metrics.
+    public let rangeContext: String?
     /// Receives the parsed numeric value. Caller persists + fires toast.
     public let onSave: (Double) -> Void
 
@@ -39,6 +42,7 @@ public struct StatDetailSheet: View {
         placeholder: String,
         logCopy: String = "Log",
         canLog: Bool = true,
+        rangeContext: String? = nil,
         onSave: @escaping (Double) -> Void
     ) {
         self.title = title
@@ -48,6 +52,7 @@ public struct StatDetailSheet: View {
         self.placeholder = placeholder
         self.logCopy = logCopy
         self.canLog = canLog
+        self.rangeContext = rangeContext
         self.onSave = onSave
     }
 
@@ -75,6 +80,12 @@ public struct StatDetailSheet: View {
             Text(unit.uppercased())
                 .font(.system(size: 10, weight: .medium)).tracking(2)
                 .foregroundStyle(theme.dim)
+            if let rangeContext {
+                Text(rangeContext)
+                    .font(.footnote)
+                    .foregroundStyle(theme.dim)
+                    .padding(.top, 4)
+            }
         }
     }
 

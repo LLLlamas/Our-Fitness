@@ -9,6 +9,10 @@ public struct StatCard: View {
     public let value: String?
     public let unit: String?
     public let trend: String?
+    /// Optional tint for the big value text. Used by the Progress tab to flag
+    /// markers that are out of healthy range (theme.ok / theme.warn). When nil
+    /// the value falls back to `theme.text` — the original behaviour.
+    public let valueAccent: Color?
     public let action: () -> Void
 
     @Environment(\.theme) private var theme
@@ -18,12 +22,14 @@ public struct StatCard: View {
         value: String?,
         unit: String?,
         trend: String?,
+        valueAccent: Color? = nil,
         action: @escaping () -> Void
     ) {
         self.title = title
         self.value = value
         self.unit = unit
         self.trend = trend
+        self.valueAccent = valueAccent
         self.action = action
     }
 
@@ -38,7 +44,7 @@ public struct StatCard: View {
                 if let value {
                     Text(value)
                         .font(.system(size: 30, weight: .regular))
-                        .foregroundStyle(theme.text)
+                        .foregroundStyle(valueAccent ?? theme.text)
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
                 } else {

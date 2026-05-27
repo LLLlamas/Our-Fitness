@@ -68,13 +68,47 @@ struct ProgressTabView: View {
     private func statCard(for kind: StatKind) -> some View {
         let value = kind.displayValue(body: body_, markers: markers, steps: steps)
         let trend = kind.trendChip(body: body_, markers: markers, steps: steps)
+        let tint  = statusTint(for: kind)
         StatCard(
             title: kind.title,
             value: value,
             unit: kind.unit,
             trend: trend,
+            valueAccent: tint,
             action: { activeStat = kind }
         )
+    }
+
+    /// Maps the marker's RangeStatus to a Theme color. Returns nil for stats
+    /// without a medical reference range (weight, body fat, waist, steps)
+    /// so they fall back to the default text color.
+    private func statusTint(for kind: StatKind) -> Color? {
+        let status: HealthRanges.RangeStatus
+        switch kind {
+        case .bp:
+            let sys = latestMarkerValue(.bpSystolic)
+            let dia = latestMarkerValue(.bpDiastolic)
+            guard sys != nil || dia != nil else { return nil }
+            status = HealthRanges.bpStatus(systolic: sys, diastolic: dia)
+        case .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose, .restingHR:
+            guard let mk = kind.markerKind,
+                  let v = latestMarkerValue(mk) else { return nil }
+            status = HealthRanges.status(for: mk, value: v)
+        case .weight, .bodyFat, .waist, .stepsAvg:
+            return nil
+        }
+        switch status {
+        case .optimal:    return theme.ok
+        case .borderline: return theme.accent2
+        case .high:       return theme.warn
+        case .unknown:    return nil
+        }
+    }
+
+    private func latestMarkerValue(_ kind: HealthMarkerKind) -> Double? {
+        markers.filter { $0.kind == kind }
+            .sorted { $0.date < $1.date }
+            .last?.value
     }
 
     // MARK: - Detail sheets
@@ -86,6 +120,13 @@ struct ProgressTabView: View {
             stepsDetail
         case .bp:
             bpDetail
+        case .weight:
+            WeightLogSheet(
+                profile: profile,
+                body: body_,
+                onSave: { value in save(kind: .weight, value: value) }
+            )
+            .environmentObject(toasts)
         default:
             StatDetailSheet(
                 title: kind.title,
@@ -94,6 +135,7 @@ struct ProgressTabView: View {
                 entries: kind.entries(body: body_, markers: markers),
                 placeholder: kind.placeholder,
                 canLog: kind.canLog,
+                rangeContext: kind.markerKind.map(HealthRanges.context(for:)),
                 onSave: { value in
                     save(kind: kind, value: value)
                 }
@@ -438,6 +480,10 @@ private struct BPDetailSheet: View {
                     Text("MMHG · SYSTOLIC / DIASTOLIC")
                         .font(.system(size: 10, weight: .medium)).tracking(2)
                         .foregroundStyle(theme.dim)
+                    Text(HealthRanges.bpContext)
+                        .font(.footnote)
+                        .foregroundStyle(theme.dim)
+                        .padding(.top, 4)
                 }
 
                 if systolicSeries.isEmpty && diastolicSeries.isEmpty {
@@ -537,5 +583,181 @@ private struct BPDetailSheet: View {
         systolicDraft = ""
         diastolicDraft = ""
         dismiss()
+    }
+}
+
+// MARK: - Weight sheet (wheel picker)
+
+/// Dedicated weight-log sheet. Forked from the generic StatDetailSheet flow so
+/// the brief's wheel-picker spec (90–350 lb, 0.5 lb increments) can live here
+/// without infecting every other stat that's happy with a text field.
+private struct WeightLogSheet: View {
+    let profile: ProfileDTO
+    let body: [BodyMetricDTO]
+    let onSave: (Double) -> Void
+
+    @Environment(\.theme) private var theme
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var draftHalfLb: Int = 0  // weight in 0.5-lb increments; seeded in onAppear
+
+    // 90.0 … 350.0 in 0.5 steps → 521 values
+    private let minHalfLb = 180   // 90.0 lb
+    private let maxHalfLb = 700   // 350.0 lb
+
+    private var weightSeries: [Trends.Point] {
+        let pts = body.compactMap { b -> Trends.Point? in
+            guard let w = b.weightLb else { return nil }
+            return Trends.Point(date: b.date, value: w)
+        }
+        return Trends.rollingAverage(pts, window: 7)
+    }
+
+    private var recentEntries: [StatDetailEntry] {
+        body.compactMap { b -> StatDetailEntry? in
+            guard let w = b.weightLb else { return nil }
+            return StatDetailEntry(id: b.id.uuidString, dateLabel: b.date,
+                                   valueLabel: String(format: "%.1f lb", w))
+        }
+        .reversed()
+        .prefix(10)
+        .map { $0 }
+    }
+
+    private var draftLb: Double {
+        Double(draftHalfLb) * 0.5
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("weight.")
+                        .font(.system(size: 42, weight: .regular))
+                        .foregroundStyle(theme.text)
+                    Text("LB · 7-DAY AVERAGE")
+                        .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                }
+
+                chartSection
+                entriesSection
+                logSection
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+        }
+        .background(theme.bg.ignoresSafeArea())
+        .presentationDetents([.medium, .large])
+        .onAppear { seedDraft() }
+    }
+
+    @ViewBuilder
+    private var chartSection: some View {
+        if weightSeries.isEmpty {
+            VStack(spacing: 8) {
+                Text("No weight logged yet.")
+                    .font(.callout).foregroundStyle(theme.dim)
+                Text("Spin the wheel below and tap Log to start your trend.")
+                    .font(.footnote).foregroundStyle(theme.dim)
+                    .multilineTextAlignment(.center)
+            }
+            .frame(maxWidth: .infinity, minHeight: 120)
+            .padding(16)
+            .background(theme.card)
+            .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+        } else {
+            Chart(weightSeries, id: \.date) { p in
+                LineMark(x: .value("Day", p.date), y: .value("Weight", p.value))
+                    .foregroundStyle(theme.accent)
+                PointMark(x: .value("Day", p.date), y: .value("Weight", p.value))
+                    .foregroundStyle(theme.accent)
+            }
+            .frame(height: 160)
+        }
+    }
+
+    @ViewBuilder
+    private var entriesSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Recent entries")
+                .font(.caption).tracking(2).textCase(.uppercase)
+                .foregroundStyle(theme.dim)
+            if recentEntries.isEmpty {
+                Text("Nothing logged yet.")
+                    .font(.callout).foregroundStyle(theme.dim)
+            } else {
+                ForEach(recentEntries) { e in
+                    HStack {
+                        Text(e.dateLabel).foregroundStyle(theme.text)
+                        Spacer()
+                        Text(e.valueLabel)
+                            .font(.system(.footnote, design: .monospaced))
+                            .foregroundStyle(theme.accent)
+                    }
+                    .padding(10)
+                    .background(theme.card)
+                    .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var logSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Log new weight")
+                .font(.caption).tracking(2).textCase(.uppercase)
+                .foregroundStyle(theme.dim)
+
+            HStack {
+                Spacer()
+                Text(String(format: "%.1f", draftLb))
+                    .font(.system(size: 48, weight: .regular, design: .monospaced))
+                    .foregroundStyle(theme.accent)
+                    .contentTransition(.numericText())
+                    .animation(.spring(response: 0.3, dampingFraction: 0.7), value: draftHalfLb)
+                Text("lb")
+                    .font(.system(size: 18, design: .monospaced))
+                    .foregroundStyle(theme.dim)
+                    .padding(.leading, 4)
+                Spacer()
+            }
+
+            Picker("Weight", selection: $draftHalfLb) {
+                ForEach(minHalfLb...maxHalfLb, id: \.self) { half in
+                    Text(String(format: "%.1f", Double(half) * 0.5))
+                        .tag(half)
+                }
+            }
+            .pickerStyle(.wheel)
+            .frame(maxWidth: .infinity)
+            .frame(height: 140)
+            .background(theme.card)
+            .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+
+            Button {
+                onSave(draftLb)
+                dismiss()
+            } label: {
+                Text("Log weight").frame(maxWidth: .infinity)
+            }
+            .tactile(.primary)
+        }
+    }
+
+    /// Seed the wheel to the most recent logged weight, otherwise the profile
+    /// weight, otherwise a sensible centre (170 lb).
+    private func seedDraft() {
+        let lb: Double
+        if let last = body.compactMap(\.weightLb).last {
+            lb = last
+        } else if profile.weightLb > 0 {
+            lb = profile.weightLb
+        } else {
+            lb = 170
+        }
+        let half = Int((lb * 2).rounded())
+        draftHalfLb = max(minHalfLb, min(maxHalfLb, half))
     }
 }
