@@ -29,18 +29,6 @@ public enum Progression {
         }
     }
 
-    /// Heaviest weight at any rep count; ties broken by reps.
-    public static func personalRecord(_ history: [WorkoutSetDTO]) -> WorkoutSetDTO? {
-        guard !history.isEmpty else { return nil }
-        return history.reduce(history[0]) { best, s in
-            let sw = s.weightLb ?? 0
-            let bw = best.weightLb ?? 0
-            if sw > bw { return s }
-            if sw == bw && s.reps > best.reps { return s }
-            return best
-        }
-    }
-
     // MARK: - Strategies
 
     private static func linear(_ spec: ProgramSetSpec, _ history: [WorkoutSetDTO]) -> Target {

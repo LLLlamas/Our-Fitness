@@ -57,19 +57,4 @@ final class ProgressionTests: XCTestCase {
         XCTAssertEqual(t.targetWeightLb, 105)
     }
 
-    // MARK: PR
-
-    func test_pr_returns_nil_on_empty() {
-        XCTAssertNil(Progression.personalRecord([]))
-    }
-
-    func test_pr_picks_heaviest_then_most_reps() {
-        let a = UUID(), b = UUID(), c = UUID()
-        let pr = Progression.personalRecord([
-            set(reps: 5, weight: 200, id: a),
-            set(reps: 8, weight: 200, id: b),
-            set(reps: 10, weight: 180, id: c),
-        ])
-        XCTAssertEqual(pr?.id, b)
-    }
 }

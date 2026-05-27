@@ -213,7 +213,7 @@ The app is built to feel like a participant, not a form. Every meaningful intera
 **Rules:**
 
 1. **Every `Button` uses `.tactile(...)`.** Never `buttonStyle(.plain)` or default styling.
-2. **Every meaningful mutation fires a toast.** Logged a meal → `toasts.logged(...)`. Beat a PR → `toasts.pr(...)`. Goal hit → `toasts.goalHit(...)`.
+2. **Every meaningful mutation fires a toast.** Logged a meal → `toasts.logged(...)`. Goal hit → `toasts.goalHit(...)`.
 3. **Don't add a 6th button variant.** Reuse one. Visual noise is the enemy of "wants to keep clicking."
 4. **Don't double-haptic.** `.tactile()` already fires `.sensoryFeedback(.impact)` on press. Don't also call `Haptics.tap()` in the action closure. Use `Haptics.bump()` / `.success()` / `.warn()` for *outcome* feedback, not press feedback.
 5. **Whole-card-as-button beats inline buttons inside a card.** Use `PressableCard` and drop the redundant "LOG IT" button.

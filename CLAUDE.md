@@ -182,7 +182,7 @@ Every interaction is multisensory: visible state change + spring animation + hap
 
 Rules:
 1. Every `Button` uses `.tactile(...)`. Never `buttonStyle(.plain)`.
-2. Every meaningful mutation fires a toast (`toasts.logged(...)`, `toasts.pr(...)`, `toasts.goalHit(...)`).
+2. Every meaningful mutation fires a toast (`toasts.logged(...)`, `toasts.goalHit(...)`).
 3. Don't add a 6th button variant. Reuse one.
 4. Don't double-haptic. `.tactile()` already fires impact on press; only call `Haptics.bump/.success/.warn` for *outcome* feedback.
 5. Whole-card-as-button beats inline buttons inside a card — use `PressableCard` and drop the redundant action button.

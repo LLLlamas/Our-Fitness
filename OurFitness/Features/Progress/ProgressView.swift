@@ -13,10 +13,13 @@ struct ProgressTabView: View {
     @Query private var bodyModels: [BodyMetricModel]
     @Query private var markerModels: [HealthMarkerModel]
     @Query private var stepModels: [StepCountModel]
-    @Query private var exerciseModels: [ExerciseModel]
+
+    @State private var activeStat: StatKind?
 
     private var body_: [BodyMetricDTO] {
-        bodyModels.map(\.snapshot).filter { $0.userId == profile.id }
+        bodyModels.map(\.snapshot)
+            .filter { $0.userId == profile.id }
+            .sorted { $0.date < $1.date }
     }
     private var markers: [HealthMarkerDTO] {
         markerModels.map(\.snapshot).filter { $0.userId == profile.id }
@@ -24,35 +27,15 @@ struct ProgressTabView: View {
     private var steps: [StepCountDTO] {
         stepModels.map(\.snapshot).filter { $0.userId == profile.id }
     }
-    private var exercises: [ExerciseDTO] {
-        let target = profile.id
-        return exerciseModels.map(\.snapshot)
-            .filter { $0.profileId == target }
+
+    private var visibleStats: [StatKind] {
+        StatKind.allCases.filter { $0.isRelevant(for: profile.mode) }
     }
 
-    private var weightSeries: [Trends.Point] {
-        let pts = body_.compactMap { b -> Trends.Point? in
-            guard let w = b.weightLb else { return nil }
-            return Trends.Point(date: b.date, value: w)
-        }
-        return Trends.rollingAverage(pts, window: 7)
-    }
-
-    private var weeklyDelta: Double { Trends.weeklyWeightDelta(body_, days: 14) }
-    private var stepsSeries: [Trends.Point] { Steps.series(steps, days: 30) }
-
-    private var lifters: [(ExerciseDTO, WorkoutSetDTO)] {
-        exercises
-            .filter { $0.category == .compound || $0.category == .isolation || $0.category == .bodyweight }
-            .compactMap { ex in
-                let history = Repos.setHistory(ctx, userId: profile.id, exerciseId: ex.id, limit: 200)
-                if let pr = Progression.personalRecord(history) { return (ex, pr) }
-                return nil
-            }
-            .sorted { ($0.1.weightLb ?? 0) > ($1.1.weightLb ?? 0) }
-            .prefix(8)
-            .map { ($0.0, $0.1) }
-    }
+    private let columns = [
+        GridItem(.flexible(), spacing: 14),
+        GridItem(.flexible(), spacing: 14),
+    ]
 
     var body: some View {
         ScrollView {
@@ -63,255 +46,496 @@ struct ProgressTabView: View {
                 Text("Weekly trends > daily pass/fail. Show up, log honestly, watch the lines move.")
                     .font(.callout).foregroundStyle(theme.dim)
 
-                LazyVGrid(columns: [GridItem(.flexible(), spacing: 14),
-                                    GridItem(.flexible(), spacing: 14)], spacing: 14) {
-                    weightCard
-                    stepsCard
+                LazyVGrid(columns: columns, spacing: 14) {
+                    ForEach(visibleStats, id: \.self) { kind in
+                        statCard(for: kind)
+                    }
                 }
-
-                if profile.mode == .circuit { markersSection }
-                prsSection
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 18)
         }
         .background(theme.bg.ignoresSafeArea())
-    }
-
-    private var weightCard: some View {
-        Card {
-            VStack(alignment: .leading, spacing: 8) {
-                cardHeader(
-                    "Weight",
-                    subtitle: String(format: "%@%.2f lb/wk (14d)", weeklyDelta >= 0 ? "+" : "", weeklyDelta)
-                )
-                if weightSeries.isEmpty {
-                    emptyState
-                } else {
-                    Chart(weightSeries, id: \.date) { p in
-                        LineMark(x: .value("Day", p.date), y: .value("Weight", p.value))
-                            .foregroundStyle(theme.accent)
-                    }
-                    .frame(height: 140)
-                    .chartXAxis { AxisMarks(values: .stride(by: .day, count: 7)) }
-                }
-                QuickAddBody(profile: profile)
-            }
+        .sheet(item: $activeStat) { kind in
+            detailSheet(for: kind)
+                .themed(theme.mode)
         }
     }
 
-    private var stepsCard: some View {
-        Card {
-            VStack(alignment: .leading, spacing: 8) {
-                let avg7 = Steps.average(steps, days: 7)
-                let avg30 = Steps.average(steps, days: 30)
-                cardHeader(
-                    "Steps · 30d",
-                    subtitle: "7d avg \(avg7.formatted()) · 30d avg \(avg30.formatted())"
-                )
-                if stepsSeries.allSatisfy({ $0.value == 0 }) {
-                    emptyState
-                } else {
-                    Chart(stepsSeries, id: \.date) { p in
-                        BarMark(x: .value("Day", p.date), y: .value("Steps", p.value))
-                            .foregroundStyle(theme.accent)
-                    }
-                    .frame(height: 140)
-                    .chartXAxis { AxisMarks(values: .stride(by: .day, count: 7)) }
+    // MARK: - Cards
+
+    @ViewBuilder
+    private func statCard(for kind: StatKind) -> some View {
+        let value = kind.displayValue(body: body_, markers: markers, steps: steps)
+        let trend = kind.trendChip(body: body_, markers: markers, steps: steps)
+        StatCard(
+            title: kind.title,
+            value: value,
+            unit: kind.unit,
+            trend: trend,
+            action: { activeStat = kind }
+        )
+    }
+
+    // MARK: - Detail sheets
+
+    @ViewBuilder
+    private func detailSheet(for kind: StatKind) -> some View {
+        switch kind {
+        case .stepsAvg:
+            stepsDetail
+        case .bp:
+            bpDetail
+        default:
+            StatDetailSheet(
+                title: kind.title,
+                unit: kind.unit,
+                series: kind.series(body: body_, markers: markers, steps: steps),
+                entries: kind.entries(body: body_, markers: markers),
+                placeholder: kind.placeholder,
+                canLog: kind.canLog,
+                onSave: { value in
+                    save(kind: kind, value: value)
                 }
-                Text("Goal: \(profile.computedTargets.stepsDaily.formatted())/day")
-                    .font(.caption2).foregroundStyle(theme.dim)
-            }
+            )
         }
     }
 
     @ViewBuilder
-    private var markersSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Markers")
-                .font(.system(size: 22, weight: .regular))
-                .foregroundStyle(theme.text)
-
-            LazyVGrid(columns: [GridItem(.flexible(), spacing: 14),
-                                GridItem(.flexible(), spacing: 14)], spacing: 14) {
-                ForEach(HealthMarkerKind.allCases, id: \.self) { kind in
-                    markerCard(kind: kind)
-                }
-            }
-        }
+    private var stepsDetail: some View {
+        StatDetailSheet(
+            title: "Steps",
+            unit: "steps · daily",
+            series: Steps.series(steps, days: 30),
+            entries: steps
+                .sorted { $0.date > $1.date }
+                .prefix(10)
+                .map { s in
+                    StatDetailEntry(
+                        id: s.id.uuidString,
+                        dateLabel: s.date,
+                        valueLabel: s.steps.formatted()
+                    )
+                },
+            placeholder: "",
+            canLog: false,
+            onSave: { _ in }
+        )
     }
 
     @ViewBuilder
-    private func markerCard(kind: HealthMarkerKind) -> some View {
-        let series = Trends.markerSeries(markers, kind: kind)
-        let (label, unit) = markerLabel(kind)
-        Card {
-            VStack(alignment: .leading, spacing: 8) {
-                cardHeader(
-                    label,
-                    subtitle: series.last.map { "Latest: \(formattedValue($0.value)) \(unit)" } ?? "No data"
-                )
-                if series.isEmpty {
-                    emptyState
-                } else {
-                    Chart(series, id: \.date) { p in
-                        LineMark(x: .value("Day", p.date), y: .value("Value", p.value))
-                            .foregroundStyle(theme.accent2)
-                        PointMark(x: .value("Day", p.date), y: .value("Value", p.value))
-                            .foregroundStyle(theme.accent2)
-                    }
-                    .frame(height: 120)
-                }
-                QuickAddMarker(profile: profile, kind: kind, unit: unit)
-            }
+    private var bpDetail: some View {
+        BPDetailSheet(profile: profile, markers: markers)
+            .environmentObject(toasts)
+    }
+
+    // MARK: - Save
+
+    private func save(kind: StatKind, value: Double) {
+        let today = Dates.dayKey()
+        switch kind {
+        case .weight:
+            Repos.addBody(ctx, BodyMetricDTO(
+                userId: profile.id, date: today, weightLb: value
+            ))
+            Task { await HealthKitService.shared.writeWeightLb(value) }
+            toasts.show(Toast(title: "Weight logged",
+                              detail: String(format: "%.1f lb", value),
+                              accent: .ok, symbol: "scalemass.fill"))
+        case .bodyFat:
+            Repos.addBody(ctx, BodyMetricDTO(
+                userId: profile.id, date: today, bodyFatPct: value
+            ))
+            toasts.show(Toast(title: "Body fat logged",
+                              detail: String(format: "%.1f %%", value),
+                              accent: .ok, symbol: "scalemass.fill"))
+        case .waist:
+            Repos.addBody(ctx, BodyMetricDTO(
+                userId: profile.id, date: today, waistIn: value
+            ))
+            toasts.show(Toast(title: "Waist logged",
+                              detail: String(format: "%.1f in", value),
+                              accent: .ok, symbol: "ruler"))
+        case .restingHR, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
+            guard let markerKind = kind.markerKind else { return }
+            Repos.addMarker(ctx, HealthMarkerDTO(
+                userId: profile.id, date: today,
+                kind: markerKind, value: value, source: "manual"
+            ))
+            toasts.show(Toast(title: "\(kind.title) logged",
+                              detail: "\(formattedValue(value)) \(kind.unit)",
+                              accent: .ok, symbol: "heart.text.square.fill"))
+        case .bp, .stepsAvg:
+            break
+        }
+    }
+}
+
+// MARK: - StatKind
+
+enum StatKind: String, CaseIterable, Identifiable {
+    case weight, bodyFat, waist, restingHR, stepsAvg
+    case bp, ldl, hdl, totalCholesterol, a1c, fastingGlucose
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .weight:           return "Weight"
+        case .bodyFat:          return "Body Fat"
+        case .waist:            return "Waist"
+        case .restingHR:        return "Resting HR"
+        case .stepsAvg:         return "Steps · 7d avg"
+        case .bp:               return "BP"
+        case .ldl:              return "LDL"
+        case .hdl:              return "HDL"
+        case .totalCholesterol: return "Total Chol."
+        case .a1c:              return "A1c"
+        case .fastingGlucose:   return "Fasting Gluc."
         }
     }
 
-    @ViewBuilder
-    private var prsSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("Lift PRs")
-                .font(.system(size: 22, weight: .regular))
-                .foregroundStyle(theme.text)
+    var unit: String {
+        switch self {
+        case .weight:           return "lb"
+        case .bodyFat:          return "%"
+        case .waist:            return "in"
+        case .restingHR:        return "bpm"
+        case .stepsAvg:         return "steps"
+        case .bp:               return "mmHg"
+        case .ldl, .hdl, .totalCholesterol, .fastingGlucose: return "mg/dL"
+        case .a1c:              return "%"
+        }
+    }
 
-            if lifters.isEmpty {
-                Text("No sets logged yet. Train tab → log a set to start the PR board.")
-                    .font(.callout).foregroundStyle(theme.dim)
-            } else {
-                LazyVGrid(columns: [GridItem(.flexible(), spacing: 8),
-                                    GridItem(.flexible(), spacing: 8)], spacing: 8) {
-                    ForEach(lifters, id: \.0.id) { (ex, pr) in
-                        HStack {
-                            Text(ex.name).font(.callout).foregroundStyle(theme.text)
-                            Spacer()
-                            Text(pr.weightLb.map { "\(Int($0)) lb × \(pr.reps)" } ?? "\(pr.reps) reps")
-                                .font(.system(.footnote, design: .monospaced))
-                                .foregroundStyle(theme.accent)
-                        }
-                        .padding(10)
+    var placeholder: String {
+        switch self {
+        case .weight:           return "weight (lb)"
+        case .bodyFat:          return "body fat (%)"
+        case .waist:            return "waist (in)"
+        case .restingHR:        return "resting HR (bpm)"
+        case .ldl, .hdl, .totalCholesterol, .fastingGlucose: return "value (mg/dL)"
+        case .a1c:              return "A1c (%)"
+        case .bp, .stepsAvg:    return ""
+        }
+    }
+
+    var canLog: Bool {
+        self != .stepsAvg
+    }
+
+    var markerKind: HealthMarkerKind? {
+        switch self {
+        case .restingHR:        return .restingHR
+        case .ldl:              return .ldl
+        case .hdl:              return .hdl
+        case .totalCholesterol: return .totalCholesterol
+        case .a1c:              return .a1c
+        case .fastingGlucose:   return .fastingGlucose
+        default:                return nil
+        }
+    }
+
+    func isRelevant(for mode: Mode) -> Bool {
+        switch self {
+        case .weight, .bodyFat, .waist, .restingHR, .stepsAvg:
+            return true
+        case .bp, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
+            return mode == .circuit
+        }
+    }
+
+    func displayValue(
+        body: [BodyMetricDTO],
+        markers: [HealthMarkerDTO],
+        steps: [StepCountDTO]
+    ) -> String? {
+        switch self {
+        case .weight:
+            return body.compactMap(\.weightLb).last.map { formattedValue($0) }
+        case .bodyFat:
+            return body.compactMap(\.bodyFatPct).last.map { formattedValue($0) }
+        case .waist:
+            return body.compactMap(\.waistIn).last.map { formattedValue($0) }
+        case .restingHR:
+            return latestMarker(.restingHR, in: markers).map { formattedValue($0) }
+        case .stepsAvg:
+            let avg = Steps.average(steps, days: 7)
+            return avg > 0 ? avg.formatted() : nil
+        case .bp:
+            let s = latestMarker(.bpSystolic, in: markers)
+            let d = latestMarker(.bpDiastolic, in: markers)
+            if let s, let d { return "\(Int(s))/\(Int(d))" }
+            return nil
+        case .ldl:
+            return latestMarker(.ldl, in: markers).map { formattedValue($0) }
+        case .hdl:
+            return latestMarker(.hdl, in: markers).map { formattedValue($0) }
+        case .totalCholesterol:
+            return latestMarker(.totalCholesterol, in: markers).map { formattedValue($0) }
+        case .a1c:
+            return latestMarker(.a1c, in: markers).map { formattedValue($0) }
+        case .fastingGlucose:
+            return latestMarker(.fastingGlucose, in: markers).map { formattedValue($0) }
+        }
+    }
+
+    func trendChip(
+        body: [BodyMetricDTO],
+        markers: [HealthMarkerDTO],
+        steps: [StepCountDTO]
+    ) -> String? {
+        switch self {
+        case .weight:
+            let delta = Trends.weeklyWeightDelta(body, days: 14)
+            guard abs(delta) > 0.01 else { return nil }
+            return String(format: "%@%.2f/wk", delta >= 0 ? "+" : "", delta)
+        case .stepsAvg:
+            let avg30 = Steps.average(steps, days: 30)
+            return avg30 > 0 ? "30d \(avg30.formatted())" : nil
+        default:
+            return nil
+        }
+    }
+
+    func series(
+        body: [BodyMetricDTO],
+        markers: [HealthMarkerDTO],
+        steps: [StepCountDTO]
+    ) -> [Trends.Point] {
+        switch self {
+        case .weight:
+            let pts = body.compactMap { b -> Trends.Point? in
+                guard let w = b.weightLb else { return nil }
+                return Trends.Point(date: b.date, value: w)
+            }
+            return Trends.rollingAverage(pts, window: 7)
+        case .bodyFat:
+            return body.compactMap { b in
+                b.bodyFatPct.map { Trends.Point(date: b.date, value: $0) }
+            }
+        case .waist:
+            return body.compactMap { b in
+                b.waistIn.map { Trends.Point(date: b.date, value: $0) }
+            }
+        case .restingHR:
+            return Trends.markerSeries(markers, kind: .restingHR)
+        case .stepsAvg:
+            return Steps.series(steps, days: 30)
+        case .bp:
+            return Trends.markerSeries(markers, kind: .bpSystolic)
+        case .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
+            guard let k = markerKind else { return [] }
+            return Trends.markerSeries(markers, kind: k)
+        }
+    }
+
+    func entries(
+        body: [BodyMetricDTO],
+        markers: [HealthMarkerDTO]
+    ) -> [StatDetailEntry] {
+        switch self {
+        case .weight:
+            return body.compactMap { b -> StatDetailEntry? in
+                guard let w = b.weightLb else { return nil }
+                return StatDetailEntry(id: b.id.uuidString, dateLabel: b.date,
+                                       valueLabel: String(format: "%.1f lb", w))
+            }
+            .reversed()
+            .prefix(10)
+            .map { $0 }
+        case .bodyFat:
+            return body.compactMap { b -> StatDetailEntry? in
+                guard let v = b.bodyFatPct else { return nil }
+                return StatDetailEntry(id: b.id.uuidString, dateLabel: b.date,
+                                       valueLabel: String(format: "%.1f %%", v))
+            }
+            .reversed()
+            .prefix(10)
+            .map { $0 }
+        case .waist:
+            return body.compactMap { b -> StatDetailEntry? in
+                guard let v = b.waistIn else { return nil }
+                return StatDetailEntry(id: b.id.uuidString, dateLabel: b.date,
+                                       valueLabel: String(format: "%.1f in", v))
+            }
+            .reversed()
+            .prefix(10)
+            .map { $0 }
+        case .restingHR, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
+            guard let k = markerKind else { return [] }
+            return markers
+                .filter { $0.kind == k }
+                .sorted { $0.date > $1.date }
+                .prefix(10)
+                .map { m in
+                    StatDetailEntry(id: m.id.uuidString, dateLabel: m.date,
+                                    valueLabel: "\(formattedValue(m.value)) \(unit)")
+                }
+        case .bp:
+            return markers
+                .filter { $0.kind == .bpSystolic || $0.kind == .bpDiastolic }
+                .sorted { $0.date > $1.date }
+                .prefix(10)
+                .map { m in
+                    let label = m.kind == .bpSystolic ? "sys" : "dia"
+                    return StatDetailEntry(id: m.id.uuidString, dateLabel: m.date,
+                                           valueLabel: "\(Int(m.value)) \(label)")
+                }
+        case .stepsAvg:
+            return []
+        }
+    }
+
+    private func latestMarker(_ kind: HealthMarkerKind, in markers: [HealthMarkerDTO]) -> Double? {
+        markers.filter { $0.kind == kind }
+            .sorted { $0.date < $1.date }
+            .last?.value
+    }
+}
+
+private func formattedValue(_ v: Double) -> String {
+    v.truncatingRemainder(dividingBy: 1) == 0
+        ? String(Int(v)) : String(format: "%.1f", v)
+}
+
+// MARK: - BP sheet (composite)
+
+private struct BPDetailSheet: View {
+    let profile: ProfileDTO
+    let markers: [HealthMarkerDTO]
+
+    @Environment(\.modelContext) private var ctx
+    @Environment(\.theme) private var theme
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var toasts: ToastCenter
+
+    @State private var systolicDraft: String = ""
+    @State private var diastolicDraft: String = ""
+
+    private var systolicSeries: [Trends.Point] {
+        Trends.markerSeries(markers, kind: .bpSystolic)
+    }
+    private var diastolicSeries: [Trends.Point] {
+        Trends.markerSeries(markers, kind: .bpDiastolic)
+    }
+
+    private var recent: [HealthMarkerDTO] {
+        markers
+            .filter { $0.kind == .bpSystolic || $0.kind == .bpDiastolic }
+            .sorted { $0.date > $1.date }
+            .prefix(10)
+            .map { $0 }
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("bp.")
+                        .font(.system(size: 42, weight: .regular))
+                        .foregroundStyle(theme.text)
+                    Text("MMHG · SYSTOLIC / DIASTOLIC")
+                        .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                }
+
+                if systolicSeries.isEmpty && diastolicSeries.isEmpty {
+                    Text("No data yet.")
+                        .font(.callout).foregroundStyle(theme.dim)
+                        .frame(maxWidth: .infinity, minHeight: 120)
                         .background(theme.card)
                         .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                } else {
+                    Chart {
+                        ForEach(systolicSeries, id: \.date) { p in
+                            LineMark(x: .value("Day", p.date),
+                                     y: .value("Systolic", p.value),
+                                     series: .value("Series", "sys"))
+                                .foregroundStyle(theme.accent)
+                        }
+                        ForEach(diastolicSeries, id: \.date) { p in
+                            LineMark(x: .value("Day", p.date),
+                                     y: .value("Diastolic", p.value),
+                                     series: .value("Series", "dia"))
+                                .foregroundStyle(theme.accent2)
+                        }
+                    }
+                    .frame(height: 160)
+                }
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Recent entries")
+                        .font(.caption).tracking(2).textCase(.uppercase)
+                        .foregroundStyle(theme.dim)
+                    if recent.isEmpty {
+                        Text("Nothing logged yet.")
+                            .font(.callout).foregroundStyle(theme.dim)
+                    } else {
+                        ForEach(recent) { m in
+                            HStack {
+                                Text(m.date).foregroundStyle(theme.text)
+                                Spacer()
+                                Text("\(Int(m.value)) \(m.kind == .bpSystolic ? "sys" : "dia")")
+                                    .font(.system(.footnote, design: .monospaced))
+                                    .foregroundStyle(theme.accent)
+                            }
+                            .padding(10)
+                            .background(theme.card)
+                            .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                        }
+                    }
+                }
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Log new reading")
+                        .font(.caption).tracking(2).textCase(.uppercase)
+                        .foregroundStyle(theme.dim)
+                    HStack(spacing: 8) {
+                        TextField("systolic", text: $systolicDraft)
+                            .keyboardType(.decimalPad)
+                            .padding(10)
+                            .background(theme.card)
+                            .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                            .foregroundStyle(theme.text)
+                            .font(.system(.callout, design: .monospaced))
+                        Text("/").foregroundStyle(theme.dim)
+                        TextField("diastolic", text: $diastolicDraft)
+                            .keyboardType(.decimalPad)
+                            .padding(10)
+                            .background(theme.card)
+                            .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                            .foregroundStyle(theme.text)
+                            .font(.system(.callout, design: .monospaced))
+                        Button { save() } label: { Text("Log") }
+                            .tactile(.primary)
                     }
                 }
             }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
         }
+        .background(theme.bg.ignoresSafeArea())
+        .presentationDetents([.medium, .large])
     }
 
-    @ViewBuilder
-    private func cardHeader(_ title: String, subtitle: String?) -> some View {
-        HStack(alignment: .firstTextBaseline) {
-            Text(title)
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundStyle(theme.text)
-            Spacer()
-            if let subtitle {
-                Text(subtitle)
-                    .font(.system(.caption2, design: .monospaced))
-                    .foregroundStyle(theme.dim)
-            }
-        }
-    }
-
-    private var emptyState: some View {
-        Text("No data yet.")
-            .font(.caption).foregroundStyle(theme.dim)
-            .frame(maxWidth: .infinity, minHeight: 100)
-    }
-
-    private func formattedValue(_ v: Double) -> String {
-        v.truncatingRemainder(dividingBy: 1) == 0
-            ? String(Int(v)) : String(format: "%.1f", v)
-    }
-
-    private func markerLabel(_ k: HealthMarkerKind) -> (String, String) {
-        switch k {
-        case .bpSystolic:       return ("BP Systolic", "mmHg")
-        case .bpDiastolic:      return ("BP Diastolic", "mmHg")
-        case .ldl:              return ("LDL", "mg/dL")
-        case .hdl:              return ("HDL", "mg/dL")
-        case .triglycerides:    return ("Triglycerides", "mg/dL")
-        case .totalCholesterol: return ("Total Cholesterol", "mg/dL")
-        case .a1c:              return ("A1c", "%")
-        case .fastingGlucose:   return ("Fasting Glucose", "mg/dL")
-        case .restingHR:        return ("Resting HR", "bpm")
-        }
-    }
-}
-
-// MARK: - Quick-add sub-views
-
-private struct QuickAddBody: View {
-    let profile: ProfileDTO
-    @Environment(\.modelContext) private var ctx
-    @Environment(\.theme) private var theme
-    @EnvironmentObject private var toasts: ToastCenter
-    @State private var draft: String = ""
-
-    var body: some View {
-        HStack(spacing: 8) {
-            TextField("weight today (lb)", text: $draft)
-                .keyboardType(.decimalPad)
-                .padding(8)
-                .background(theme.barBg)
-                .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
-                .foregroundStyle(theme.text)
-                .font(.system(.caption, design: .monospaced))
-            Button {
-                guard let n = Double(draft), n > 0 else { return }
-                Repos.addBody(ctx, BodyMetricDTO(
-                    userId: profile.id, date: Dates.dayKey(), weightLb: n
-                ))
-                Task { await HealthKitService.shared.writeWeightLb(n) }
-                draft = ""
-                toasts.show(Toast(title: "Weight logged",
-                                  detail: String(format: "%.1f lb", n),
-                                  accent: .ok, symbol: "scalemass.fill"))
-            } label: {
-                Text("Log")
-            }
-            .tactile(.primary)
-        }
-    }
-}
-
-private struct QuickAddMarker: View {
-    let profile: ProfileDTO
-    let kind: HealthMarkerKind
-    let unit: String
-
-    @Environment(\.modelContext) private var ctx
-    @Environment(\.theme) private var theme
-    @EnvironmentObject private var toasts: ToastCenter
-    @State private var draft: String = ""
-
-    var body: some View {
-        HStack(spacing: 8) {
-            TextField("new reading (\(unit))", text: $draft)
-                .keyboardType(.decimalPad)
-                .padding(8)
-                .background(theme.barBg)
-                .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
-                .foregroundStyle(theme.text)
-                .font(.system(.caption, design: .monospaced))
-            Button {
-                guard let n = Double(draft), n > 0 else { return }
-                Repos.addMarker(ctx, HealthMarkerDTO(
-                    userId: profile.id, date: Dates.dayKey(),
-                    kind: kind, value: n, source: "lab"
-                ))
-                draft = ""
-                toasts.show(Toast(title: "Marker logged",
-                                  detail: "\(formattedValue(n)) \(unit)",
-                                  accent: .ok, symbol: "heart.text.square.fill"))
-            } label: {
-                Text("Log")
-            }
-            .tactile(.primary, fill: theme.accent2)
-        }
-    }
-
-    private func formattedValue(_ v: Double) -> String {
-        v.truncatingRemainder(dividingBy: 1) == 0
-            ? String(Int(v)) : String(format: "%.1f", v)
+    private func save() {
+        guard let sys = Double(systolicDraft), sys > 0,
+              let dia = Double(diastolicDraft), dia > 0 else { return }
+        let today = Dates.dayKey()
+        Repos.addMarker(ctx, HealthMarkerDTO(
+            userId: profile.id, date: today,
+            kind: .bpSystolic, value: sys, source: "manual"
+        ))
+        Repos.addMarker(ctx, HealthMarkerDTO(
+            userId: profile.id, date: today,
+            kind: .bpDiastolic, value: dia, source: "manual"
+        ))
+        toasts.show(Toast(title: "BP logged",
+                          detail: "\(Int(sys))/\(Int(dia)) mmHg",
+                          accent: .ok, symbol: "heart.text.square.fill"))
+        systolicDraft = ""
+        diastolicDraft = ""
+        dismiss()
     }
 }

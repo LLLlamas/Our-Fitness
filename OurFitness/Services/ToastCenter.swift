@@ -84,12 +84,6 @@ public final class ToastCenter: ObservableObject {
                    accent: .ok, symbol: "checkmark"))
     }
 
-    public func pr(_ exercise: String, weightLb: Double?, reps: Int) {
-        let line = weightLb.map { "\(Int($0)) lb × \(reps)" } ?? "\(reps) reps"
-        show(Toast(title: "New PR · \(exercise)", detail: line,
-                   accent: .win, symbol: "trophy.fill"), for: 2.6)
-    }
-
     public func warn(_ msg: String) {
         show(Toast(title: msg, accent: .warn, symbol: "exclamationmark.triangle.fill"))
     }
