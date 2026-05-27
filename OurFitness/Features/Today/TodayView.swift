@@ -283,7 +283,7 @@ struct TodayView: View {
             healthGranted: profile.healthGranted,
             hasBackfilled: backfilledProfileIds.contains(key)
         ) else { return }
-        if !health.isAuthorized { await health.requestAuthorization() }
+        if !health.isAuthorized { _ = await health.requestAuthorization() }
         let map = await health.dailySteps(days: 30)
         for (date, count) in map where count > 0 {
             Repos.setSteps(ctx, userId: profile.id, date: date,
@@ -296,7 +296,7 @@ struct TodayView: View {
 
     private func refreshToday() async {
         guard profile.healthGranted else { return }
-        if !health.isAuthorized { await health.requestAuthorization() }
+        if !health.isAuthorized { _ = await health.requestAuthorization() }
         let n = await health.steps()
         if n > 0 {
             Repos.setSteps(ctx, userId: profile.id, date: today,

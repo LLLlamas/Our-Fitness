@@ -94,9 +94,9 @@ struct OnboardingView: View {
 
     private func connect(grant: Bool, profile: ProfileDTO) async {
         requesting = true
-        let ok = await HealthKitService.shared.requestAuthorization()
+        let result = await HealthKitService.shared.requestAuthorization()
         requesting = false
-        onFinish(profile, ok)
+        onFinish(profile, result.isGranted)
     }
 
     private func modeBlurb(_ m: Mode) -> String {

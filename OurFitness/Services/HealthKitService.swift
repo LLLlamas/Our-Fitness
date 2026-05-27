@@ -46,20 +46,31 @@ public final class HealthKitService: ObservableObject {
 
     public var isAvailable: Bool { HKHealthStore.isHealthDataAvailable() }
 
+    /// Result of a permission request — granted, unavailable on this device,
+    /// or failed with an error message we can surface to the user.
+    public enum AuthResult: Equatable, Sendable {
+        case granted
+        case unavailable                  // simulator, iPad without Health, etc.
+        case failed(reason: String)       // entitlement missing, signing mismatch, etc.
+
+        public var isGranted: Bool { self == .granted }
+    }
+
     /// Request all permissions at once. Idempotent — calling again after grant is cheap.
-    /// Returns true if the system sheet completed without error (HealthKit never tells us
-    /// per-type read grants; the user toggles those in the sheet).
-    @discardableResult
-    public func requestAuthorization() async -> Bool {
-        guard isAvailable else { isAuthorized = false; return false }
+    /// HealthKit never tells us per-type read grants; the user toggles those in the sheet.
+    public func requestAuthorization() async -> AuthResult {
+        guard isAvailable else {
+            isAuthorized = false
+            return .unavailable
+        }
         do {
             try await store.requestAuthorization(toShare: writeTypes, read: readTypes)
             isAuthorized = true
-            return true
+            return .granted
         } catch {
             print("[HealthKit] auth failed:", error.localizedDescription)
             isAuthorized = false
-            return false
+            return .failed(reason: error.localizedDescription)
         }
     }
 
@@ -202,10 +213,21 @@ public final class HealthKitService: ObservableObject {
     /// the grant flips, so callers do not need to start the observer themselves.
     @discardableResult
     public func connectAndPersist(profileId: UUID, ctx: ModelContext, toasts: ToastCenter) async -> Bool {
-        let ok = await requestAuthorization()
-        Repos.setHealthGranted(ctx, profileId: profileId, granted: ok)
-        if ok { toasts.show(.healthConnected) }
-        return ok
+        let result = await requestAuthorization()
+        switch result {
+        case .granted:
+            Repos.setHealthGranted(ctx, profileId: profileId, granted: true)
+            toasts.show(.healthConnected)
+            return true
+        case .unavailable:
+            Repos.setHealthGranted(ctx, profileId: profileId, granted: false)
+            toasts.show(.healthConnectFailed("Apple Health isn't available on this device."))
+            return false
+        case .failed(let reason):
+            Repos.setHealthGranted(ctx, profileId: profileId, granted: false)
+            toasts.show(.healthConnectFailed(reason))
+            return false
+        }
     }
 
     private static func dayBounds(_ date: Date) -> (Date, Date) {

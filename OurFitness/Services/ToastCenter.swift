@@ -31,6 +31,12 @@ extension Toast {
               detail: "Steps will sync automatically.",
               accent: .ok, symbol: "heart.fill")
     }
+
+    public static func healthConnectFailed(_ reason: String) -> Toast {
+        Toast(title: "Couldn't connect Apple Health",
+              detail: reason,
+              accent: .warn, symbol: "exclamationmark.triangle.fill")
+    }
 }
 
 @MainActor

@@ -53,6 +53,14 @@
     <string>UIInterfaceOrientationLandscapeLeft</string>
     <string>UIInterfaceOrientationLandscapeRight</string>
   </array>
+  <!-- Background Modes: required so HKObserverQuery + enableBackgroundDelivery
+       can wake the app to UPSERT step counts. "processing" is the correct mode
+       for HealthKit background wakes; "fetch" is for URL-loading and does not
+       cover HKObserverQuery delivery. -->
+  <key>UIBackgroundModes</key>
+  <array>
+    <string>processing</string>
+  </array>
   <key>UIApplicationSceneManifest</key>
   <dict>
     <key>UIApplicationSupportsMultipleScenes</key>
