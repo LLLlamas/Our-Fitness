@@ -1,5 +1,5 @@
-// Stripped-down meal log. No library, no scoring, no suggestions — just a
-// custom-entry sheet (name + macros) and today's running list.
+// Meal log tab. Type what you ate; FoodParser resolves the nutrition.
+// Suggestions pill surfaces curated meals from the library.
 
 import SwiftUI
 import SwiftData
@@ -13,6 +13,7 @@ struct NutritionView: View {
 
     @Query private var logModels: [FoodLogEntryModel]
     @State private var showLogSheet = false
+    @State private var showSuggestions = false
 
     private var today: String { Dates.dayKey() }
 
@@ -27,11 +28,20 @@ struct NutritionView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
-                Text("meals.")
-                    .font(.system(size: 56, weight: .regular))
-                    .foregroundStyle(theme.text)
-                Text("Log what you actually ate. Honesty > precision.")
-                    .font(.callout).foregroundStyle(theme.dim)
+                // Header: "meals." + suggestions pill
+                HStack(alignment: .firstTextBaseline, spacing: 10) {
+                    Text("meals.")
+                        .font(.system(size: 56, weight: .regular))
+                        .foregroundStyle(theme.text)
+                    Button {
+                        showSuggestions = true
+                    } label: {
+                        Label("suggestions", systemImage: "sparkles")
+                            .font(.system(size: 11, weight: .medium))
+                    }
+                    .tactile(.pill, fill: theme.accent)
+                    Spacer(minLength: 0)
+                }
 
                 totalsCard
 
@@ -52,13 +62,23 @@ struct NutritionView: View {
         }
         .background(theme.bg.ignoresSafeArea())
         .sheet(isPresented: $showLogSheet) {
-            MealLogSheet(profileId: profile.id) { dto in
+            NLMealLogSheet(profile: profile) { dto in
                 Repos.addFoodLog(ctx, dto)
                 toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
             }
             .themed(profile.mode)
         }
+        .sheet(isPresented: $showSuggestions) {
+            SuggestionsSheet(profile: profile) { dto in
+                Repos.addFoodLog(ctx, dto)
+                toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
+                showSuggestions = false
+            }
+            .themed(profile.mode)
+        }
     }
+
+    // MARK: - Totals card
 
     @ViewBuilder
     private var totalsCard: some View {
@@ -71,6 +91,8 @@ struct NutritionView: View {
             }
         }
     }
+
+    // MARK: - Log list
 
     @ViewBuilder
     private var logList: some View {
@@ -92,6 +114,8 @@ struct NutritionView: View {
         }
     }
 }
+
+// MARK: - Log row
 
 private struct LogRow: View {
     let entry: FoodLogEntryDTO
@@ -119,22 +143,45 @@ private struct LogRow: View {
     }
 }
 
-private struct MealLogSheet: View {
-    let profileId: UUID
+// MARK: - NL Meal Log Sheet
+
+private struct NLMealLogSheet: View {
+    let profile: ProfileDTO
     let onSave: (FoodLogEntryDTO) -> Void
 
     @Environment(\.theme) private var theme
     @Environment(\.dismiss) private var dismiss
 
-    @State private var name: String = ""
+    @State private var input: String = ""
+    @State private var parseResult: FoodParser.ParseResult? = nil
     @State private var slot: Slot = .lunch
-    @State private var calories: Int = 0
-    @State private var protein: Int = 0
-    @State private var carbs: Int = 0
-    @State private var fat: Int = 0
+    // showManual starts true so the user can always enter values directly.
+    // It flips to false (show parsed summary) once the parser finds a match.
+    @State private var showManual = true
+
+    // Manual fields (also used as the editable override after parsing)
+    @State private var manualCalories: Int = 0
+    @State private var manualProtein: Int = 0
+    @State private var manualCarbs: Int = 0
+    @State private var manualFat: Int = 0
+
+    private var resolvedPerServing: PerServing {
+        if showManual {
+            return PerServing(
+                calories: manualCalories, proteinG: manualProtein,
+                carbsG: manualCarbs, fatG: manualFat
+            )
+        }
+        return parseResult?.totalPerServing ?? .zero
+    }
+
+    private var resolvedName: String {
+        if let r = parseResult, r.hasMatches { return r.bestName }
+        return input.trimmingCharacters(in: .whitespaces)
+    }
 
     private var canSave: Bool {
-        !name.trimmingCharacters(in: .whitespaces).isEmpty && calories > 0
+        !resolvedName.isEmpty && resolvedPerServing.calories > 0
     }
 
     var body: some View {
@@ -144,32 +191,40 @@ private struct MealLogSheet: View {
                     .font(.system(size: 42, weight: .regular))
                     .foregroundStyle(theme.text)
 
-                field("Name") {
-                    TextField("e.g. Chicken bowl", text: $name)
+                // Natural language input
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("What did you eat?".uppercased())
+                        .font(.system(size: 10)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                    TextField("e.g. a bowl of rice and some grilled chicken", text: $input, axis: .vertical)
+                        .lineLimit(1...3)
                         .padding(10).background(theme.card)
                         .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
                         .foregroundStyle(theme.text)
+                        .onSubmit { parseInput() }
+                        .onChange(of: input) { _, _ in
+                            // Auto-parse while typing (debounce effect: parse on each character)
+                            parseInput()
+                        }
+                }
+
+                // Parse results
+                if let result = parseResult, !input.trimmingCharacters(in: .whitespaces).isEmpty {
+                    parsedPreview(result)
                 }
 
                 slotPicker
 
-                HStack(spacing: 10) {
-                    numField("Calories", value: $calories)
-                    numField("Protein g", value: $protein)
-                }
-                HStack(spacing: 10) {
-                    numField("Carbs g", value: $carbs)
-                    numField("Fat g", value: $fat)
-                }
+                nutritionSummary
 
+                // Save
                 Button {
                     let dto = FoodLogEntryDTO(
-                        userId: profileId, date: Dates.dayKey(), slot: slot,
-                        customName: name.trimmingCharacters(in: .whitespaces),
-                        perServing: PerServing(
-                            calories: calories, proteinG: protein,
-                            carbsG: carbs, fatG: fat
-                        )
+                        userId: profile.id,
+                        date: Dates.dayKey(),
+                        slot: slot,
+                        customName: resolvedName,
+                        perServing: resolvedPerServing
                     )
                     onSave(dto)
                     dismiss()
@@ -178,7 +233,7 @@ private struct MealLogSheet: View {
                 }
                 .tactile(.primary, fullWidth: true)
                 .disabled(!canSave)
-                .opacity(canSave ? 1 : 0.6)
+                .opacity(canSave ? 1 : 0.5)
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
@@ -187,10 +242,112 @@ private struct MealLogSheet: View {
         .presentationDetents([.large])
     }
 
+    private func parseInput() {
+        let trimmed = input.trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty else { parseResult = nil; return }
+        let result = FoodParser.parse(text: trimmed)
+        parseResult = result
+        if result.hasMatches {
+            let ps = result.totalPerServing
+            manualCalories = ps.calories
+            manualProtein  = ps.proteinG
+            manualCarbs    = ps.carbsG
+            manualFat      = ps.fatG
+            // Switch to parsed summary view automatically when we have matches
+            showManual = false
+        }
+    }
+
+    @ViewBuilder
+    private func parsedPreview(_ result: FoodParser.ParseResult) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            if result.hasMatches {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Recognised".uppercased())
+                        .font(.system(size: 9, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                    ForEach(Array(result.recognized.enumerated()), id: \.offset) { _, item in
+                        HStack {
+                            Text(item.description)
+                                .font(.callout).foregroundStyle(theme.text)
+                            Spacer()
+                            Text("\(item.scaledCalories) cal")
+                                .font(.system(.caption2, design: .monospaced))
+                                .foregroundStyle(theme.accent)
+                        }
+                        .padding(.horizontal, 10).padding(.vertical, 6)
+                        .background(theme.card)
+                        .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                    }
+                }
+            }
+            if !result.unrecognized.isEmpty {
+                Text("Not recognised: \(result.unrecognized.joined(separator: ", ")) — fill in below.")
+                    .font(.caption).foregroundStyle(theme.dim)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var nutritionSummary: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Text("Nutrition".uppercased())
+                    .font(.system(size: 9, weight: .medium)).tracking(2)
+                    .foregroundStyle(theme.dim)
+                Spacer()
+                if parseResult?.hasMatches == true {
+                    Button {
+                        showManual.toggle()
+                    } label: {
+                        Text(showManual ? "use parsed" : "edit")
+                    }
+                    .tactile(.ghost)
+                }
+            }
+
+            if showManual {
+                HStack(spacing: 10) {
+                    numField("Calories", value: $manualCalories)
+                    numField("Protein g", value: $manualProtein)
+                }
+                HStack(spacing: 10) {
+                    numField("Carbs g", value: $manualCarbs)
+                    numField("Fat g", value: $manualFat)
+                }
+            } else {
+                let ps = resolvedPerServing
+                HStack(spacing: 14) {
+                    macroChip(label: "Cal", value: ps.calories)
+                    macroChip(label: "P", value: ps.proteinG)
+                    macroChip(label: "C", value: ps.carbsG)
+                    macroChip(label: "F", value: ps.fatG)
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func macroChip(label: String, value: Int) -> some View {
+        VStack(spacing: 2) {
+            Text("\(value)")
+                .font(.system(.callout, design: .monospaced))
+                .foregroundStyle(theme.text)
+            Text(label)
+                .font(.system(size: 9)).tracking(1)
+                .foregroundStyle(theme.dim)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 8)
+        .background(theme.card)
+        .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+    }
+
     @ViewBuilder
     private var slotPicker: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Slot").font(.caption).tracking(2).foregroundStyle(theme.dim)
+            Text("Slot".uppercased())
+                .font(.caption).tracking(2).foregroundStyle(theme.dim)
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
                     ForEach([Slot.breakfast, .lunch, .snack, .dinner, .postWorkout], id: \.self) { s in
@@ -199,15 +356,6 @@ private struct MealLogSheet: View {
                     }
                 }
             }
-        }
-    }
-
-    @ViewBuilder
-    private func field<C: View>(_ label: String, @ViewBuilder _ content: () -> C) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(label.uppercased()).font(.system(size: 10)).tracking(2)
-                .foregroundStyle(theme.dim)
-            content()
         }
     }
 
@@ -222,6 +370,88 @@ private struct MealLogSheet: View {
                 .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
                 .foregroundStyle(theme.text)
                 .font(.system(.callout, design: .monospaced))
+        }
+    }
+}
+
+// MARK: - Suggestions Sheet
+
+private struct SuggestionsSheet: View {
+    let profile: ProfileDTO
+    let onPick: (FoodLogEntryDTO) -> Void
+
+    @Environment(\.theme) private var theme
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var slot: Slot = .lunch
+
+    private var suggestions: [SuggestedMeal] {
+        SuggestedMeals.suggestions(for: profile.mode)
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 14) {
+                Text("suggestions.")
+                    .font(.system(size: 36, weight: .regular))
+                    .foregroundStyle(theme.text)
+                Text("Tap any meal to log it instantly.")
+                    .font(.callout).foregroundStyle(theme.dim)
+
+                slotPicker
+
+                ForEach(suggestions) { meal in
+                    PressableCard(action: { log(meal) }) {
+                        HStack(spacing: 12) {
+                            Text(meal.emoji)
+                                .font(.system(size: 28))
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(meal.name)
+                                    .font(.system(size: 15, weight: .semibold))
+                                    .foregroundStyle(theme.text)
+                                Text(meal.description)
+                                    .font(.caption).foregroundStyle(theme.dim)
+                                    .lineLimit(2)
+                                Text("\(meal.perServing.calories) cal · \(meal.perServing.proteinG)p · \(meal.perServing.carbsG)c · \(meal.perServing.fatG)f")
+                                    .font(.system(.caption2, design: .monospaced))
+                                    .foregroundStyle(theme.accent)
+                            }
+                            Spacer(minLength: 0)
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+        }
+        .background(theme.bg.ignoresSafeArea())
+        .presentationDetents([.large])
+    }
+
+    private func log(_ meal: SuggestedMeal) {
+        let dto = FoodLogEntryDTO(
+            userId: profile.id,
+            date: Dates.dayKey(),
+            slot: slot,
+            customName: meal.name,
+            perServing: meal.perServing
+        )
+        onPick(dto)
+    }
+
+    @ViewBuilder
+    private var slotPicker: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Logging as".uppercased())
+                .font(.caption).tracking(2).foregroundStyle(theme.dim)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach([Slot.breakfast, .lunch, .snack, .dinner, .postWorkout], id: \.self) { s in
+                        Button { slot = s } label: { Text(s.label) }
+                            .tactile(.pill, fill: slot == s ? theme.accent : nil)
+                    }
+                }
+            }
         }
     }
 }

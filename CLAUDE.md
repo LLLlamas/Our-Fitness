@@ -24,7 +24,7 @@ Circuit is themed around real-life parenting movement, not gym work. New Circuit
 | Calories | TDEE + 400–600 | TDEE − 300–500 |
 | Protein g/lb | ~1.0 | 1.0–1.2 |
 | Steps/day | 8,000 baseline | 10,000 (#1 lever for BP/insulin/LDL) |
-| Workouts | rep counter + set log on user's own exercises | cardio sessions, pilates, walks; rep counter optional |
+| Workouts | rep counter + set log on user's own exercises | inline baby exercise quick-log (no sets/targets), pilates; steps is primary tracker |
 
 `MacroTargets.{sodiumMgMax,addedSugarGMax,saturatedFatGMax,fiberGMin}` and
 `Targets.compute` still populate cap values for `.circuit` profiles, but no UI
@@ -82,10 +82,14 @@ revival but do not compile.
 |---|---|
 | Add a per-profile exercise (runtime) | `Repos.createExercise(_:profileId:name:defaultRepsBottom:defaultRepsTop:tracksWeight:)` |
 | Log a Pilates session | `Repos.logPilatesSession` + `PilatesSessionDTO` / `PilatesSessionModel` |
-| Log a cardio session | `Repos.logCardio` + `CardioSessionDTO` / `CardioSessionModel` |
+| Log a cardio session | `Repos.logCardio` + `CardioSessionDTO` / `CardioSessionModel` (backend only — no UI in Circuit) |
 | Pilates weekly goal / streak | `Domain/Movement.swift` (`pilatesWeeklyStreak`) |
 | Step-count milestone thresholds | `Domain/Movement.swift` (`defaultStepMilestones`) |
-| Circuit "why this matters" copy | `Domain/Movement.swift` (`circuitFocusBlurb`) |
+| Circuit "why this matters" copy + citations | `Domain/Movement.swift` (`circuitFocusBlurb`) + `CircuitWorkoutsView.FocusInfoButton` |
+| Meal log natural language → nutrition | `Domain/FoodParser.swift` + `Domain/CommonFoods.swift` |
+| Add / update a common food entry | `Domain/CommonFoods.swift` (`CommonFoods.all`) |
+| Curated meal suggestions (Meals tab pill) | `Domain/SuggestedMeals.swift` — **TODO: personalise to user's cuisine patterns** |
+| Apple Intelligence / Siri shortcuts | `App/OurFitnessIntents.swift` + `OurFitnessShortcuts` |
 | Tweak mode caps (sodium/sugar/fiber) | `Domain/Targets.swift` (`ModeRules`) — math only, no UI |
 | Change calorie math | `Domain/Targets.swift` only |
 | New workout progression | `Domain/Progression.swift` strategy switch |
