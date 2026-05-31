@@ -549,7 +549,7 @@ private struct BMIDetailSheet: View {
                     bmiRange(label: "Obese", range: "≥ 30.0")
                 }
 
-                Text("BMI is a screening tool, not a diagnostic. It doesn't distinguish muscle from fat — a muscular person may score "Overweight" with excellent body composition. Use alongside Body Fat % and Waist for a fuller picture.")
+                Text("BMI is a screening tool, not a diagnostic. It doesn't distinguish muscle from fat — a muscular person may score \"Overweight\" with excellent body composition. Use alongside Body Fat % and Waist for a fuller picture.")
                     .font(.footnote)
                     .foregroundStyle(theme.dim)
 
