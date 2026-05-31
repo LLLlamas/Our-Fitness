@@ -146,8 +146,8 @@ private struct CardioLogSheet: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
         }
-        .background(theme.bg.ignoresSafeArea())
         .presentationDetents([.large])
+        .presentationBackground(theme.bg)
     }
 
     @ViewBuilder

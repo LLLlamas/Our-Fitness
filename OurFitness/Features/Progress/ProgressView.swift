@@ -560,8 +560,8 @@ private struct BMIDetailSheet: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
         }
-        .background(theme.bg.ignoresSafeArea())
         .presentationDetents([.large])
+        .presentationBackground(theme.bg)
     }
 
     @ViewBuilder
@@ -692,8 +692,8 @@ private struct BodyFatDetailSheet: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
         }
-        .background(theme.bg.ignoresSafeArea())
         .presentationDetents([.large])
+        .presentationBackground(theme.bg)
     }
 
     @ViewBuilder
@@ -889,8 +889,8 @@ private struct BPDetailSheet: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
         }
-        .background(theme.bg.ignoresSafeArea())
         .presentationDetents([.medium, .large])
+        .presentationBackground(theme.bg)
     }
 
     private func save() {
@@ -973,8 +973,8 @@ private struct WeightLogSheet: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
         }
-        .background(theme.bg.ignoresSafeArea())
         .presentationDetents([.medium, .large])
+        .presentationBackground(theme.bg)
         .onAppear { seedDraft() }
     }
 

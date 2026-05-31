@@ -298,9 +298,9 @@ struct StepsCardioCard: View {
             .padding(.bottom, 28)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(theme.bg.ignoresSafeArea())
         .presentationDetents([.large])
         .presentationDragIndicator(.visible)
+        .presentationBackground(theme.bg)
     }
 
     // MARK: - Deep-dive placeholder
@@ -319,7 +319,7 @@ struct StepsCardioCard: View {
         }
         .padding(.top, 48)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(theme.bg.ignoresSafeArea())
         .presentationDetents([.medium])
+        .presentationBackground(theme.bg)
     }
 }

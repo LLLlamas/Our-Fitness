@@ -416,8 +416,8 @@ private struct MealDetailSheet: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
         }
-        .background(theme.bg.ignoresSafeArea())
         .presentationDetents([.large])
+        .presentationBackground(theme.bg)
     }
 
     @ViewBuilder
@@ -528,8 +528,8 @@ private struct NLMealLogSheet: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
         }
-        .background(theme.bg.ignoresSafeArea())
         .presentationDetents([.large])
+        .presentationBackground(theme.bg)
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
@@ -725,8 +725,8 @@ private struct SuggestionsSheet: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
         }
-        .background(theme.bg.ignoresSafeArea())
         .presentationDetents([.large])
+        .presentationBackground(theme.bg)
         .sheet(item: $selectedMeal) { meal in
             MealDetailSheet(meal: meal) { m, s, multiplier in
                 let ps = m.perServing
@@ -812,8 +812,8 @@ private struct FoodLibrarySheet: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
         }
-        .background(theme.bg.ignoresSafeArea())
         .presentationDetents([.large])
+        .presentationBackground(theme.bg)
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()

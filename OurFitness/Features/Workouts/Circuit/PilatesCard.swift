@@ -214,9 +214,9 @@ struct PilatesCard: View {
             .padding(.bottom, 28)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(theme.bg.ignoresSafeArea())
         .presentationDetents([.medium])
         .presentationDragIndicator(.visible)
+        .presentationBackground(theme.bg)
     }
 }
 
@@ -268,8 +268,8 @@ private struct PilatesLogSheet: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
         }
-        .background(theme.bg.ignoresSafeArea())
         .presentationDetents([.large])
+        .presentationBackground(theme.bg)
     }
 
     @ViewBuilder

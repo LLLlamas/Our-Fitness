@@ -331,8 +331,8 @@ private struct AddExerciseSheet: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
         }
-        .background(theme.bg.ignoresSafeArea())
         .presentationDetents([.medium, .large])
+        .presentationBackground(theme.bg)
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()

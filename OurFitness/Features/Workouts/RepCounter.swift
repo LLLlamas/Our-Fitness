@@ -55,8 +55,8 @@ private struct RepCounterView: View {
         .padding(.horizontal, 24)
         .padding(.vertical, 24)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(theme.bg.ignoresSafeArea())
         .presentationDetents([.large])
+        .presentationBackground(theme.bg)
         .sheet(isPresented: $showInfo) {
             BuildExerciseInfoSheet(exercise: exercise, profile: profile)
                 .themed(theme.mode)
@@ -228,8 +228,8 @@ private struct IsometricTimerView: View {
         .padding(.horizontal, 24)
         .padding(.vertical, 24)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(theme.bg.ignoresSafeArea())
         .presentationDetents([.large])
+        .presentationBackground(theme.bg)
         .onReceive(ticker) { _ in tick() }
         .sheet(isPresented: $showInfo) {
             BuildExerciseInfoSheet(exercise: exercise, profile: profile)
@@ -442,8 +442,8 @@ struct BuildExerciseInfoSheet: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
         }
-        .background(theme.bg.ignoresSafeArea())
         .presentationDetents([.large])
+        .presentationBackground(theme.bg)
     }
 
     @ViewBuilder

@@ -80,7 +80,10 @@ public extension EnvironmentValues {
 
 public extension View {
     /// Apply the mode's tokens to this subtree.
+    /// Also forces colorScheme so system UI (wheel pickers, etc.) renders correctly
+    /// against the mode's background regardless of the device's iOS setting.
     func themed(_ mode: Mode) -> some View {
         environment(\.theme, .for(mode))
+            .environment(\.colorScheme, mode == .build ? .dark : .light)
     }
 }

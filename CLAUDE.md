@@ -157,6 +157,26 @@ Rules:
 5. ⓘ info buttons open `.sheet` with `.presentationDetents([.medium])`. Never `.popover`.
 6. All numeric/decimal keyboards need a Done toolbar button (`ToolbarItemGroup(placement: .keyboard)`).
 
+### Corner radius + sheet backgrounds
+
+**Everything uses rounded corners.** Flat `Rectangle()` strokes/fills are reserved only for intentional divider lines (tab-bar separator, toast left-edge accent bar).
+
+| Surface | Shape |
+|---|---|
+| `Card`, `PressableCard`, `MacroQuadGrid` cells | `RoundedRectangle(cornerRadius: 16, style: .continuous)` |
+| Inline card borders in feature views | `RoundedRectangle(cornerRadius: 12, style: .continuous)` |
+| `TactileButtonStyle` primary/secondary | `cornerRadius: 10` |
+| `TactileButtonStyle` pill | `cornerRadius: 20` |
+| `TactileButtonStyle` bump | `cornerRadius: 8` |
+| `Banner`, `ToastView` | `cornerRadius: 12–14` |
+| `StreakChip` | `Capsule()` |
+| `ProgressBar` track | `Capsule()`, fill `cornerRadius: 3` |
+| Wheel picker containers | `theme.card2` background + `RoundedRectangle(cornerRadius: 12)` clip |
+
+**Sheet backgrounds:** use `.presentationBackground(theme.bg)` — NOT `.background(theme.bg.ignoresSafeArea())`. The latter only covers the content area; `.presentationBackground` replaces the system's default sheet material and eliminates the visible border/film at sheet edges. Root screen views (`TodayView`, `ProgressView`, etc.) still use `.background(theme.bg.ignoresSafeArea())` for their main body.
+
+**`themed(_:)` sets `colorScheme`:** `Services/Theme.swift → themed(_:)` sets both the `theme` environment key and `.environment(\.colorScheme, mode == .build ? .dark : .light)`. This ensures system UI elements (wheel pickers, keyboard, etc.) render correctly against the mode's background regardless of the device's iOS dark-mode setting. Do not override `colorScheme` individually — `themed()` handles it.
+
 ---
 
 ## CI / TestFlight rules (do not regress)

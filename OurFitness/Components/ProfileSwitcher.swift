@@ -44,6 +44,7 @@ public struct ProfileSwitcher: View {
             sheet
                 .presentationDetents([.height(360), .medium])
                 .presentationDragIndicator(.visible)
+                .presentationBackground(Theme.for(active.mode).bg)
         }
     }
 
@@ -104,7 +105,6 @@ public struct ProfileSwitcher: View {
             Spacer()
         }
         .padding(20)
-        .background(theme.bg.ignoresSafeArea())
         .themed(active.mode)
     }
 }

@@ -280,9 +280,9 @@ private struct FocusInfoSheet: View {
             .padding(20)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(theme.bg.ignoresSafeArea())
         .presentationDetents([.medium])
         .presentationDragIndicator(.visible)
+        .presentationBackground(theme.bg)
     }
 }
 
