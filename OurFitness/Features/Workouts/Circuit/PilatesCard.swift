@@ -1,9 +1,9 @@
 // Circuit Train — Pilates card.
 //
-// - Progress ring showing sessions this week / weekly goal
+// - Progress ring: sessions this week / weekly goal (editable — tap "/" in ring)
 // - "Log Pilates" PressableCard → sheet (duration slider, focus chips, notes)
-// - Recent sessions strip (last 5)
-// - Weekly streak indicator (no streak-shame: missing weeks slide to 0)
+// - Recent sessions strip with calorie estimates
+// - Weekly streak indicator (no streak-shame)
 // - Info sheet: muscles worked + post-session nutrition hint
 
 import SwiftUI
@@ -11,7 +11,6 @@ import SwiftData
 
 struct PilatesCard: View {
     let profile: ProfileDTO
-    let weeklyGoal: Int
 
     @Environment(\.modelContext) private var ctx
     @Environment(\.theme) private var theme
@@ -19,10 +18,17 @@ struct PilatesCard: View {
 
     @Query private var sessionModels: [PilatesSessionModel]
     @State private var showLogSheet = false
+    @State private var showGoalPicker = false
+    @State private var pickerGoal: Int = 3
 
-    init(profile: ProfileDTO, weeklyGoal: Int = 3) {
+    @AppStorage private var weeklyGoalRaw: Int
+
+    init(profile: ProfileDTO) {
         self.profile = profile
-        self.weeklyGoal = weeklyGoal
+        _weeklyGoalRaw = AppStorage(
+            wrappedValue: 3,
+            "pilatesWeeklyGoal.\(profile.id.uuidString)"
+        )
         let target = profile.id
         _sessionModels = Query(
             filter: #Predicate<PilatesSessionModel> { $0.profileId == target },
@@ -31,6 +37,7 @@ struct PilatesCard: View {
         )
     }
 
+    private var weeklyGoal: Int { weeklyGoalRaw }
     private var sessions: [PilatesSessionDTO] { sessionModels.map(\.snapshot) }
     private var thisWeek: [PilatesSessionDTO] { Movement.sessionsThisWeek(sessions) }
     private var streakWeeks: Int {
@@ -39,6 +46,14 @@ struct PilatesCard: View {
     private var weekPct: Double {
         guard weeklyGoal > 0 else { return 0 }
         return min(1, Double(thisWeek.count) / Double(weeklyGoal))
+    }
+    private var thisWeekCal: Double {
+        thisWeek.reduce(0) { acc, s in
+            acc + CalorieEstimator.caloriesForPilates(
+                minutes: Double(s.durationMinutes),
+                bodyWeightLb: profile.weightLb
+            )
+        }
     }
 
     var body: some View {
@@ -56,6 +71,9 @@ struct PilatesCard: View {
             }
             .themed(theme.mode)
         }
+        .sheet(isPresented: $showGoalPicker) {
+            goalPickerSheet.themed(theme.mode)
+        }
     }
 
     // MARK: - Sections
@@ -69,9 +87,16 @@ struct PilatesCard: View {
                     Text("\(thisWeek.count)")
                         .font(.system(size: 18, weight: .semibold, design: .monospaced))
                         .foregroundStyle(theme.text)
-                    Text("/\(weeklyGoal)")
-                        .font(.system(size: 9, design: .monospaced))
-                        .foregroundStyle(theme.dim)
+                    Button {
+                        pickerGoal = weeklyGoal
+                        showGoalPicker = true
+                    } label: {
+                        Text("/ \(weeklyGoal)")
+                            .font(.system(size: 9, design: .monospaced))
+                            .foregroundStyle(theme.dim)
+                            .underline(color: theme.dim.opacity(0.5))
+                    }
+                    .tactile(.ghost)
                 }
             }
             .frame(width: 54, height: 54)
@@ -80,9 +105,16 @@ struct PilatesCard: View {
                 Text("Pilates")
                     .font(.system(size: 22, weight: .regular))
                     .foregroundStyle(theme.text)
-                Text("sessions this week")
-                    .font(.caption)
-                    .foregroundStyle(theme.dim)
+                HStack(spacing: 6) {
+                    Text("sessions this week")
+                        .font(.caption)
+                        .foregroundStyle(theme.dim)
+                    if thisWeekCal > 0 {
+                        Text("· ~\(Int(thisWeekCal)) cal")
+                            .font(.system(size: 11, design: .monospaced))
+                            .foregroundStyle(theme.accent2)
+                    }
+                }
             }
             Spacer()
             StreakChip(weeks: streakWeeks, tint: theme.accent2)
@@ -125,13 +157,62 @@ struct PilatesCard: View {
                                 .font(.system(size: 9, weight: .medium)).tracking(2)
                                 .foregroundStyle(theme.dim)
                         }
-                        Text("\(s.durationMinutes) min")
+                        let cal = CalorieEstimator.caloriesForPilates(
+                            minutes: Double(s.durationMinutes),
+                            bodyWeightLb: profile.weightLb
+                        )
+                        Text("\(s.durationMinutes) min · ~\(Int(cal)) cal")
                             .font(.system(.caption, design: .monospaced))
                             .foregroundStyle(theme.accent2)
                     }
                 }
             }
         }
+    }
+
+    // MARK: - Goal picker sheet
+
+    @ViewBuilder
+    private var goalPickerSheet: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Weekly Pilates Goal")
+                    .font(.system(size: 28, weight: .regular))
+                    .foregroundStyle(theme.text)
+                Text("How many sessions per week to hit your streak.")
+                    .font(.caption)
+                    .foregroundStyle(theme.dim)
+            }
+            .padding(.top, 28)
+            .padding(.horizontal, 20)
+
+            Picker("Goal", selection: $pickerGoal) {
+                ForEach(1...14, id: \.self) { n in
+                    Text("\(n) session\(n == 1 ? "" : "s") / week").tag(n)
+                }
+            }
+            .pickerStyle(.wheel)
+
+            HStack(spacing: 12) {
+                Button("Reset to 3") {
+                    weeklyGoalRaw = 3
+                    showGoalPicker = false
+                }
+                .tactile(.secondary, fullWidth: true)
+                Button("Save") {
+                    weeklyGoalRaw = pickerGoal
+                    showGoalPicker = false
+                    Haptics.success()
+                }
+                .tactile(.primary, fullWidth: true)
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 28)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(theme.bg.ignoresSafeArea())
+        .presentationDetents([.medium])
+        .presentationDragIndicator(.visible)
     }
 }
 
@@ -147,7 +228,6 @@ private struct PilatesLogSheet: View {
     @State private var duration: Double = 30
     @State private var focusAreas: Set<PilatesFocusArea> = []
     @State private var notes: String = ""
-    @State private var showRecovery = false
 
     var body: some View {
         ScrollView {

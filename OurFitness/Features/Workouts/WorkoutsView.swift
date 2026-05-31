@@ -23,8 +23,11 @@ private struct BuildWorkoutsView: View {
     @EnvironmentObject private var toasts: ToastCenter
 
     @Query private var exerciseModels: [ExerciseModel]
+    @Query private var setModels: [WorkoutSetModel]
+
     @State private var showAddSheet = false
     @State private var activeRepCounter: ExerciseDTO?
+    @State private var activeInfo: ExerciseDTO?
 
     private var myExercises: [ExerciseDTO] {
         let target = profile.id
@@ -33,13 +36,46 @@ private struct BuildWorkoutsView: View {
             .sorted { $0.name < $1.name }
     }
 
+    private var mySets: [WorkoutSetDTO] {
+        setModels.map(\.snapshot).filter { $0.userId == profile.id }
+    }
+
+    // MARK: - Rep history helpers
+
+    private func repStats(for exercise: ExerciseDTO) -> (today: Int, yesterday: Int, week: Int, todayCal: Double) {
+        let cal = Calendar.current
+        let now = Date()
+        let todayStart = cal.startOfDay(for: now)
+        let yesterdayStart = cal.date(byAdding: .day, value: -1, to: todayStart) ?? todayStart
+        var isoCal = Calendar(identifier: .iso8601)
+        isoCal.firstWeekday = 2
+        let weekInterval = isoCal.dateInterval(of: .weekOfYear, for: now)
+
+        var today = 0, yesterday = 0, week = 0
+        var todayCal: Double = 0
+
+        for s in mySets where s.exerciseId == exercise.id {
+            let ts = s.timestamp
+            if ts >= todayStart {
+                today += s.reps
+                todayCal += s.caloriesEst ?? 0
+            } else if ts >= yesterdayStart {
+                yesterday += s.reps
+            }
+            if let w = weekInterval, w.contains(ts) {
+                week += s.reps
+            }
+        }
+        return (today, yesterday, week, todayCal)
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
                 Text("train.")
                     .font(.system(size: 56, weight: .regular))
                     .foregroundStyle(theme.text)
-                Text("Hypertrophy bias. Add your lifts, count reps, log sets.")
+                Text("Hypertrophy bias. Add your lifts, count reps, watch the numbers climb.")
                     .font(.callout).foregroundStyle(theme.dim)
 
                 HStack {
@@ -61,15 +97,13 @@ private struct BuildWorkoutsView: View {
                         VStack(alignment: .leading, spacing: 6) {
                             Text("No exercises yet.")
                                 .font(.callout).foregroundStyle(theme.text)
-                            Text("Tap Add to build your list. Each entry remembers its rep range and whether it tracks weight.")
+                            Text("Tap Add to build your list. Each entry tracks reps, calories, and muscle history.")
                                 .font(.caption).foregroundStyle(theme.dim)
                         }
                     }
                 } else {
                     ForEach(myExercises) { ex in
-                        PressableCard(action: { activeRepCounter = ex }) {
-                            exerciseRow(ex)
-                        }
+                        exerciseCard(ex)
                     }
                 }
             }
@@ -92,26 +126,76 @@ private struct BuildWorkoutsView: View {
             RepCounterSheet(profile: profile, exercise: ex)
                 .themed(profile.mode)
         }
+        .sheet(item: $activeInfo) { ex in
+            BuildExerciseInfoSheet(exercise: ex, profile: profile)
+                .themed(profile.mode)
+        }
     }
 
     @ViewBuilder
-    private func exerciseRow(_ ex: ExerciseDTO) -> some View {
-        HStack(alignment: .top, spacing: 12) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(ex.name)
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(theme.text)
-                if let r = ex.defaultRepRange, r.count == 2 {
-                    Text("\(r[0])–\(r[1]) reps · \(ex.category == .compound ? "with weight" : "bodyweight")")
-                        .font(.caption).foregroundStyle(theme.dim)
+    private func exerciseCard(_ ex: ExerciseDTO) -> some View {
+        let stats = repStats(for: ex)
+        let info = ExerciseInfo.meta(for: ex)
+
+        PressableCard(action: { activeRepCounter = ex }) {
+            VStack(alignment: .leading, spacing: 10) {
+                // Name row + info button
+                HStack(alignment: .top) {
+                    Text(ex.name)
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(theme.text)
+                    Spacer()
+                    Button { activeInfo = ex } label: {
+                        Image(systemName: "info.circle")
+                            .foregroundStyle(theme.dim)
+                    }
+                    .tactile(.ghost)
+                }
+
+                // Muscles
+                Text(info.muscleGroups.prefix(3).joined(separator: " · "))
+                    .font(.system(size: 11, weight: .medium)).tracking(1)
+                    .textCase(.uppercase)
+                    .foregroundStyle(theme.accent)
+
+                // Rep counters row
+                HStack(spacing: 0) {
+                    repCell(label: "Today", reps: stats.today,
+                            cal: stats.todayCal > 0 ? stats.todayCal : nil)
+                    Divider().frame(height: 32).background(theme.line).padding(.horizontal, 8)
+                    repCell(label: "Yesterday", reps: stats.yesterday, cal: nil)
+                    Divider().frame(height: 32).background(theme.line).padding(.horizontal, 8)
+                    repCell(label: "This week", reps: stats.week, cal: nil)
+                    Spacer()
+                    Image(systemName: "hand.tap.fill")
+                        .foregroundStyle(theme.accent.opacity(0.5))
+                        .font(.system(size: 16))
                 }
             }
-            Spacer()
-            Image(systemName: "hand.tap.fill")
-                .foregroundStyle(theme.accent)
+        }
+    }
+
+    @ViewBuilder
+    private func repCell(label: String, reps: Int, cal: Double?) -> some View {
+        VStack(alignment: .leading, spacing: 1) {
+            Text(label.uppercased())
+                .font(.system(size: 9, weight: .medium)).tracking(1.5)
+                .foregroundStyle(theme.dim)
+            Text(reps > 0 ? "\(reps)" : "—")
+                .font(.system(size: 20, weight: .semibold, design: .monospaced))
+                .foregroundStyle(reps > 0 ? theme.text : theme.dim)
+                .contentTransition(.numericText())
+                .animation(.spring(response: 0.3, dampingFraction: 0.7), value: reps)
+            if let c = cal, c > 0 {
+                Text("~\(Int(c)) cal")
+                    .font(.system(size: 10, design: .monospaced))
+                    .foregroundStyle(theme.accent)
+            }
         }
     }
 }
+
+// MARK: - Add exercise sheet
 
 private struct AddExerciseSheet: View {
     let profileId: UUID
@@ -136,7 +220,7 @@ private struct AddExerciseSheet: View {
                     .font(.system(size: 42, weight: .regular))
                     .foregroundStyle(theme.text)
 
-                TextField("Name (e.g. Bench Press)", text: $name)
+                TextField("Name (e.g. Pull-ups)", text: $name)
                     .padding(10).background(theme.card)
                     .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
                     .foregroundStyle(theme.text)

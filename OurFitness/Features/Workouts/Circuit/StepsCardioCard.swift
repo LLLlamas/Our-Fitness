@@ -1,10 +1,12 @@
 // Circuit Train — Steps & Cardio card.
 //
-// - Progress ring for today's steps vs goal
-// - Tap "/ goal" in ring center to open goal picker (persists per profile in AppStorage)
-// - Milestone toasts at 3k / 5k / 8k / 10k (one-shot per day; gated via @AppStorage)
-// - "Ahead/behind yesterday at this hour" line (pure helper in Domain)
+// - Progress ring for today's steps vs daily goal
+// - Tap "/ goal" in ring centre to open goal picker (daily steps + days/week target)
+// - Estimated calories for today's steps (body-weight-scaled MET formula)
+// - Milestone toasts at 3k / 5k / 8k / 10k (one-shot per day)
+// - "Ahead/behind yesterday at this hour" line
 // - 7-day mini-bar strip
+// - Weekly days goal: how many days/week to hit the daily step goal
 
 import SwiftUI
 
@@ -23,9 +25,11 @@ struct StepsCardioCard: View {
     @State private var showDeepDive = false
     @State private var showGoalPicker = false
     @State private var pickerGoal: Int = 10_000
+    @State private var pickerDays: Int = 5
 
     @AppStorage private var firedRaw: String
     @AppStorage private var customGoalRaw: Int
+    @AppStorage private var weeklyDaysGoalRaw: Int
 
     init(
         profile: ProfileDTO,
@@ -48,14 +52,19 @@ struct StepsCardioCard: View {
         let key = "milestonesFired.\(profile.id.uuidString).\(Dates.dayKey())"
         _firedRaw = AppStorage(wrappedValue: "", key)
         _customGoalRaw = AppStorage(wrappedValue: 0, "stepsGoal.\(profile.id.uuidString)")
+        _weeklyDaysGoalRaw = AppStorage(wrappedValue: 5, "stepsWeeklyDays.\(profile.id.uuidString)")
     }
 
     private var goal: Int {
         customGoalRaw > 0 ? customGoalRaw : profile.computedTargets.stepsDaily
     }
+    private var weeklyDaysGoal: Int { weeklyDaysGoalRaw }
     private var pct: Double {
         guard goal > 0 else { return 0 }
         return min(1, Double(todaysSteps) / Double(goal))
+    }
+    private var todaysCal: Int {
+        Int(CalorieEstimator.caloriesForSteps(steps: todaysSteps, bodyWeightLb: profile.weightLb))
     }
 
     var body: some View {
@@ -104,6 +113,7 @@ struct StepsCardioCard: View {
                     )
                     Button {
                         pickerGoal = goal
+                        pickerDays = weeklyDaysGoal
                         showGoalPicker = true
                     } label: {
                         Text("/ \(goal.formatted())")
@@ -120,9 +130,18 @@ struct StepsCardioCard: View {
                 Text("Today")
                     .font(.caption).tracking(2).textCase(.uppercase)
                     .foregroundStyle(theme.dim)
-                Text("\(Int(pct * 100))% of \(goal / 1000)k")
+                // Real numbers + percentage
+                Text("\(todaysSteps.formatted()) steps")
                     .font(.system(.callout, design: .monospaced))
                     .foregroundStyle(theme.text)
+                Text("\(Int(pct * 100))% of \(goal / 1000)k goal")
+                    .font(.system(size: 12, design: .monospaced))
+                    .foregroundStyle(theme.dim)
+                if todaysCal > 0 {
+                    Text("~\(todaysCal) cal")
+                        .font(.system(size: 11, design: .monospaced))
+                        .foregroundStyle(theme.accent)
+                }
             }
             Spacer(minLength: 0)
         }
@@ -146,15 +165,21 @@ struct StepsCardioCard: View {
     private func deltaText(_ delta: Int) -> String {
         if delta == 0 { return "Even with yesterday at this hour." }
         let sign = delta > 0 ? "+" : "−"
-        return "\(sign)\(abs(delta)) vs this time yesterday."
+        return "\(sign)\(abs(delta).formatted()) steps vs this time yesterday."
     }
 
     @ViewBuilder
     private var weeklyStrip: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Last 7 days")
-                .font(.caption).tracking(2).textCase(.uppercase)
-                .foregroundStyle(theme.dim)
+            HStack(alignment: .firstTextBaseline) {
+                Text("Last 7 days")
+                    .font(.caption).tracking(2).textCase(.uppercase)
+                    .foregroundStyle(theme.dim)
+                Spacer()
+                Text("Goal \(weeklyDaysGoal) of 7 days")
+                    .font(.system(size: 10, design: .monospaced))
+                    .foregroundStyle(theme.dim)
+            }
             HStack(alignment: .bottom, spacing: 6) {
                 let peak = max(Double(goal), weeklySeries.map(\.value).max() ?? 1)
                 ForEach(Array(weeklySeries.enumerated()), id: \.offset) { _, point in
@@ -206,31 +231,58 @@ struct StepsCardioCard: View {
     private var goalPickerSheet: some View {
         VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: 4) {
-                Text("Daily Steps Goal")
+                Text("Steps Goals")
                     .font(.system(size: 28, weight: .regular))
                     .foregroundStyle(theme.text)
-                Text("Tap a goal to set it. Mode default is \(profile.computedTargets.stepsDaily.formatted()).")
+                Text("Daily target + how many days/week to hit it.")
                     .font(.caption)
                     .foregroundStyle(theme.dim)
             }
             .padding(.top, 28)
             .padding(.horizontal, 20)
 
-            Picker("Goal", selection: $pickerGoal) {
-                ForEach(Array(stride(from: 2000, through: 25000, by: 500)), id: \.self) { val in
-                    Text("\(val.formatted()) steps").tag(val)
+            // Daily step goal picker
+            VStack(alignment: .leading, spacing: 4) {
+                Text("DAILY GOAL")
+                    .font(.system(size: 10, weight: .medium)).tracking(2)
+                    .foregroundStyle(theme.dim)
+                    .padding(.horizontal, 20)
+                Picker("Daily goal", selection: $pickerGoal) {
+                    ForEach(Array(stride(from: 2000, through: 25000, by: 500)), id: \.self) { val in
+                        Text("\(val.formatted()) steps").tag(val)
+                    }
                 }
+                .pickerStyle(.wheel)
+                .frame(height: 130)
             }
-            .pickerStyle(.wheel)
+
+            Divider().padding(.horizontal, 20)
+
+            // Weekly days goal
+            VStack(alignment: .leading, spacing: 4) {
+                Text("DAYS PER WEEK")
+                    .font(.system(size: 10, weight: .medium)).tracking(2)
+                    .foregroundStyle(theme.dim)
+                    .padding(.horizontal, 20)
+                Picker("Days per week", selection: $pickerDays) {
+                    ForEach(1...7, id: \.self) { d in
+                        Text("\(d) day\(d == 1 ? "" : "s") / week").tag(d)
+                    }
+                }
+                .pickerStyle(.wheel)
+                .frame(height: 130)
+            }
 
             HStack(spacing: 12) {
-                Button("Reset to default") {
+                Button("Reset to defaults") {
                     customGoalRaw = 0
+                    weeklyDaysGoalRaw = 5
                     showGoalPicker = false
                 }
                 .tactile(.secondary, fullWidth: true)
                 Button("Save") {
                     customGoalRaw = pickerGoal
+                    weeklyDaysGoalRaw = pickerDays
                     showGoalPicker = false
                     Haptics.success()
                 }
@@ -241,7 +293,7 @@ struct StepsCardioCard: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(theme.bg.ignoresSafeArea())
-        .presentationDetents([.medium])
+        .presentationDetents([.large])
         .presentationDragIndicator(.visible)
     }
 

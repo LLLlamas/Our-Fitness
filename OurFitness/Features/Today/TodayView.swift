@@ -21,6 +21,11 @@ struct TodayView: View {
 
     @AppStorage("hasBackfilled.steps") private var hasBackfilledRaw: String = ""
 
+    // Mirror the same AppStorage keys used in StepsCardioCard so the streak
+    // calculation here uses the user's configured goals, not the mode defaults.
+    @AppStorage private var customStepsGoalRaw: Int
+    @AppStorage private var customWeeklyDaysRaw: Int
+
     init(profile: ProfileDTO, health: HealthKitService) {
         self.profile = profile
         self._health = ObservedObject(wrappedValue: health)
@@ -35,6 +40,8 @@ struct TodayView: View {
             sort: \.date,
             order: .reverse
         )
+        _customStepsGoalRaw = AppStorage(wrappedValue: 0, "stepsGoal.\(uid.uuidString)")
+        _customWeeklyDaysRaw = AppStorage(wrappedValue: 5, "stepsWeeklyDays.\(uid.uuidString)")
     }
 
     private var today: String { Dates.dayKey() }
@@ -52,10 +59,14 @@ struct TodayView: View {
         Steps.stepsForDay(allStepsForProfile, day: today)
     }
     private var weeklySteps: [Trends.Point] { Steps.series(allStepsForProfile, days: 7) }
+    private var effectiveStepsGoal: Int {
+        customStepsGoalRaw > 0 ? customStepsGoalRaw : profile.computedTargets.stepsDaily
+    }
     private var stepStreakWeeks: Int {
         Movement.stepWeeklyStreak(
             steps: allStepsForProfile,
-            dailyGoal: profile.computedTargets.stepsDaily
+            dailyGoal: effectiveStepsGoal,
+            daysPerWeek: customWeeklyDaysRaw
         )
     }
 

@@ -66,8 +66,8 @@ struct ProgressTabView: View {
 
     @ViewBuilder
     private func statCard(for kind: StatKind) -> some View {
-        let value = kind.displayValue(body: body_, markers: markers, steps: steps)
-        let trend = kind.trendChip(body: body_, markers: markers, steps: steps)
+        let value = kind.displayValue(body: body_, markers: markers, steps: steps, profile: profile)
+        let trend = kind.trendChip(body: body_, markers: markers, steps: steps, profile: profile)
         let tint  = statusTint(for: kind)
         StatCard(
             title: kind.title,
@@ -79,9 +79,6 @@ struct ProgressTabView: View {
         )
     }
 
-    /// Maps the marker's RangeStatus to a Theme color. Returns nil for stats
-    /// without a medical reference range (weight, body fat, waist, steps)
-    /// so they fall back to the default text color.
     private func statusTint(for kind: StatKind) -> Color? {
         let status: HealthRanges.RangeStatus
         switch kind {
@@ -94,6 +91,11 @@ struct ProgressTabView: View {
             guard let mk = kind.markerKind,
                   let v = latestMarkerValue(mk) else { return nil }
             status = HealthRanges.status(for: mk, value: v)
+        case .bmi:
+            guard let w = body_.compactMap(\.weightLb).last else { return nil }
+            let bmi = BodyComposition.bmi(weightLb: w, heightIn: profile.heightIn)
+            if bmi < 18.5 || bmi >= 25 { return theme.warn }
+            return theme.ok
         case .weight, .bodyFat, .waist, .stepsAvg:
             return nil
         }
@@ -127,6 +129,15 @@ struct ProgressTabView: View {
                 onSave: { value in save(kind: .weight, value: value) }
             )
             .environmentObject(toasts)
+        case .bodyFat:
+            BodyFatDetailSheet(
+                profile: profile,
+                metrics: body_,
+                onSave: { value in save(kind: .bodyFat, value: value) }
+            )
+            .environmentObject(toasts)
+        case .bmi:
+            BMIDetailSheet(profile: profile, metrics: body_)
         default:
             StatDetailSheet(
                 title: kind.title,
@@ -207,7 +218,7 @@ struct ProgressTabView: View {
             toasts.show(Toast(title: "\(kind.title) logged",
                               detail: "\(formattedValue(value)) \(kind.unit)",
                               accent: .ok, symbol: "heart.text.square.fill"))
-        case .bp, .stepsAvg:
+        case .bp, .stepsAvg, .bmi:
             break
         }
     }
@@ -216,7 +227,7 @@ struct ProgressTabView: View {
 // MARK: - StatKind
 
 enum StatKind: String, CaseIterable, Identifiable {
-    case weight, bodyFat, waist, restingHR, stepsAvg
+    case weight, bodyFat, waist, bmi, restingHR, stepsAvg
     case bp, ldl, hdl, totalCholesterol, a1c, fastingGlucose
 
     var id: String { rawValue }
@@ -226,6 +237,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .weight:           return "Weight"
         case .bodyFat:          return "Body Fat"
         case .waist:            return "Waist"
+        case .bmi:              return "BMI"
         case .restingHR:        return "Resting HR"
         case .stepsAvg:         return "Steps · 7d avg"
         case .bp:               return "BP"
@@ -240,8 +252,9 @@ enum StatKind: String, CaseIterable, Identifiable {
     var unit: String {
         switch self {
         case .weight:           return "lb"
-        case .bodyFat:          return "%"
+        case .bodyFat:          return "% body fat"
         case .waist:            return "in"
+        case .bmi:              return "BMI"
         case .restingHR:        return "bpm"
         case .stepsAvg:         return "steps"
         case .bp:               return "mmHg"
@@ -258,12 +271,12 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .restingHR:        return "resting HR (bpm)"
         case .ldl, .hdl, .totalCholesterol, .fastingGlucose: return "value (mg/dL)"
         case .a1c:              return "A1c (%)"
-        case .bp, .stepsAvg:    return ""
+        case .bmi, .bp, .stepsAvg: return ""
         }
     }
 
     var canLog: Bool {
-        self != .stepsAvg
+        self != .stepsAvg && self != .bmi
     }
 
     var markerKind: HealthMarkerKind? {
@@ -280,7 +293,7 @@ enum StatKind: String, CaseIterable, Identifiable {
 
     func isRelevant(for mode: Mode) -> Bool {
         switch self {
-        case .weight, .bodyFat, .waist, .stepsAvg:
+        case .weight, .bodyFat, .waist, .bmi, .stepsAvg:
             return true
         case .restingHR, .bp, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
             return mode == .circuit
@@ -290,15 +303,22 @@ enum StatKind: String, CaseIterable, Identifiable {
     func displayValue(
         body: [BodyMetricDTO],
         markers: [HealthMarkerDTO],
-        steps: [StepCountDTO]
+        steps: [StepCountDTO],
+        profile: ProfileDTO? = nil
     ) -> String? {
         switch self {
         case .weight:
             return body.compactMap(\.weightLb).last.map { formattedValue($0) }
         case .bodyFat:
-            return body.compactMap(\.bodyFatPct).last.map { formattedValue($0) }
+            return body.compactMap(\.bodyFatPct).last.map { String(format: "%.1f%%", $0) }
         case .waist:
             return body.compactMap(\.waistIn).last.map { formattedValue($0) }
+        case .bmi:
+            guard let p = profile,
+                  let w = body.compactMap(\.weightLb).last,
+                  p.heightIn > 0 else { return nil }
+            let bmi = BodyComposition.bmi(weightLb: w, heightIn: p.heightIn)
+            return String(format: "%.1f", bmi)
         case .restingHR:
             return latestMarker(.restingHR, in: markers).map { formattedValue($0) }
         case .stepsAvg:
@@ -325,13 +345,27 @@ enum StatKind: String, CaseIterable, Identifiable {
     func trendChip(
         body: [BodyMetricDTO],
         markers: [HealthMarkerDTO],
-        steps: [StepCountDTO]
+        steps: [StepCountDTO],
+        profile: ProfileDTO? = nil
     ) -> String? {
         switch self {
         case .weight:
             let delta = Trends.weeklyWeightDelta(body, days: 14)
             guard abs(delta) > 0.01 else { return nil }
-            return String(format: "%@%.2f/wk", delta >= 0 ? "+" : "", delta)
+            return String(format: "%@%.2f lb/wk", delta >= 0 ? "+" : "", delta)
+        case .bodyFat:
+            // Show real lbs of fat and lean mass alongside %
+            guard let w = body.compactMap(\.weightLb).last,
+                  let bf = body.compactMap(\.bodyFatPct).last else { return nil }
+            let fat = BodyComposition.fatMassLb(weightLb: w, bodyFatPct: bf)
+            let lean = BodyComposition.leanMassLb(weightLb: w, bodyFatPct: bf)
+            return "\(Int(fat)) lb fat · \(Int(lean)) lb lean"
+        case .bmi:
+            guard let p = profile,
+                  let w = body.compactMap(\.weightLb).last,
+                  p.heightIn > 0 else { return nil }
+            let bmi = BodyComposition.bmi(weightLb: w, heightIn: p.heightIn)
+            return BodyComposition.bmiCategory(bmi).label
         case .stepsAvg:
             let avg30 = Steps.average(steps, days: 30)
             return avg30 > 0 ? "30d \(avg30.formatted())" : nil
@@ -369,6 +403,10 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
             guard let k = markerKind else { return [] }
             return Trends.markerSeries(markers, kind: k)
+        case .bmi:
+            // BMI computed from each weight entry against profile height.
+            // Height is static per profile so we can safely use it here.
+            return []
         }
     }
 
@@ -424,7 +462,7 @@ enum StatKind: String, CaseIterable, Identifiable {
                     return StatDetailEntry(id: m.id.uuidString, dateLabel: m.date,
                                            valueLabel: "\(Int(m.value)) \(label)")
                 }
-        case .stepsAvg:
+        case .stepsAvg, .bmi:
             return []
         }
     }
@@ -439,6 +477,287 @@ enum StatKind: String, CaseIterable, Identifiable {
 private func formattedValue(_ v: Double) -> String {
     v.truncatingRemainder(dividingBy: 1) == 0
         ? String(Int(v)) : String(format: "%.1f", v)
+}
+
+// MARK: - BMI detail sheet
+
+private struct BMIDetailSheet: View {
+    let profile: ProfileDTO
+    let metrics: [BodyMetricDTO]
+
+    @Environment(\.theme) private var theme
+
+    private var bmiSeries: [Trends.Point] {
+        guard profile.heightIn > 0 else { return [] }
+        return metrics.compactMap { b -> Trends.Point? in
+            guard let w = b.weightLb else { return nil }
+            let bmi = BodyComposition.bmi(weightLb: w, heightIn: profile.heightIn)
+            return Trends.Point(date: b.date, value: bmi)
+        }
+    }
+
+    private var currentBMI: Double? {
+        guard let w = metrics.compactMap(\.weightLb).last, profile.heightIn > 0 else { return nil }
+        return BodyComposition.bmi(weightLb: w, heightIn: profile.heightIn)
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("bmi.")
+                        .font(.system(size: 42, weight: .regular))
+                        .foregroundStyle(theme.text)
+                    Text("BODY MASS INDEX · COMPUTED FROM LOGGED WEIGHTS")
+                        .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                }
+
+                if let bmi = currentBMI {
+                    let (label, detail) = BodyComposition.bmiCategory(bmi)
+                    HStack(alignment: .firstTextBaseline, spacing: 10) {
+                        Text(String(format: "%.1f", bmi))
+                            .font(.system(size: 48, weight: .semibold, design: .monospaced))
+                            .foregroundStyle(bmi < 18.5 || bmi >= 25 ? theme.warn : theme.ok)
+                        Text(label)
+                            .font(.system(size: 18, weight: .regular))
+                            .foregroundStyle(theme.text)
+                    }
+                    Text(detail)
+                        .font(.callout)
+                        .foregroundStyle(theme.dim)
+                }
+
+                if bmiSeries.count >= 2 {
+                    Chart(bmiSeries, id: \.date) { p in
+                        LineMark(x: .value("Day", p.date), y: .value("BMI", p.value))
+                            .foregroundStyle(theme.accent)
+                        PointMark(x: .value("Day", p.date), y: .value("BMI", p.value))
+                            .foregroundStyle(theme.accent)
+                    }
+                    .frame(height: 140)
+                }
+
+                // Reference ranges
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Reference ranges")
+                        .font(.caption).tracking(2).textCase(.uppercase)
+                        .foregroundStyle(theme.dim)
+                    bmiRange(label: "Underweight", range: "< 18.5")
+                    bmiRange(label: "Healthy", range: "18.5 – 24.9")
+                    bmiRange(label: "Overweight", range: "25.0 – 29.9")
+                    bmiRange(label: "Obese", range: "≥ 30.0")
+                }
+
+                Text("BMI is a screening tool, not a diagnostic. It doesn't distinguish muscle from fat — a muscular person may score "Overweight" with excellent body composition. Use alongside Body Fat % and Waist for a fuller picture.")
+                    .font(.footnote)
+                    .foregroundStyle(theme.dim)
+
+                Text("Computed from your logged weights and the height you set in your profile. Log weight regularly to see the trend line.")
+                    .font(.footnote)
+                    .foregroundStyle(theme.dim)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+        }
+        .background(theme.bg.ignoresSafeArea())
+        .presentationDetents([.large])
+    }
+
+    @ViewBuilder
+    private func bmiRange(label: String, range: String) -> some View {
+        HStack {
+            Text(label).foregroundStyle(theme.text).font(.callout)
+            Spacer()
+            Text(range)
+                .font(.system(.callout, design: .monospaced))
+                .foregroundStyle(theme.accent)
+        }
+        .padding(10)
+        .background(theme.card)
+        .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+    }
+}
+
+// MARK: - Body fat detail sheet
+
+private struct BodyFatDetailSheet: View {
+    let profile: ProfileDTO
+    let metrics: [BodyMetricDTO]
+    let onSave: (Double) -> Void
+
+    @Environment(\.theme) private var theme
+    @Environment(\.dismiss) private var dismiss
+    @State private var draft: String = ""
+    @State private var showGuide = false
+
+    private var latestBF: Double? { metrics.compactMap(\.bodyFatPct).last }
+    private var latestWeight: Double? { metrics.compactMap(\.weightLb).last }
+
+    private var bfSeries: [Trends.Point] {
+        metrics.compactMap { b in
+            b.bodyFatPct.map { Trends.Point(date: b.date, value: $0) }
+        }
+    }
+
+    private var composition: (fat: Double, lean: Double)? {
+        guard let w = latestWeight, let bf = latestBF else { return nil }
+        return (
+            BodyComposition.fatMassLb(weightLb: w, bodyFatPct: bf),
+            BodyComposition.leanMassLb(weightLb: w, bodyFatPct: bf)
+        )
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("body fat.")
+                        .font(.system(size: 42, weight: .regular))
+                        .foregroundStyle(theme.text)
+                    Text("% · FAT MASS · LEAN MASS")
+                        .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                }
+
+                // Current value with real lbs breakdown
+                if let bf = latestBF {
+                    let (label, detail) = BodyComposition.bodyFatCategory(pct: bf, sex: profile.sex)
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack(alignment: .firstTextBaseline, spacing: 10) {
+                            Text(String(format: "%.1f%%", bf))
+                                .font(.system(size: 48, weight: .semibold, design: .monospaced))
+                                .foregroundStyle(theme.text)
+                            Text(label)
+                                .font(.system(size: 18, weight: .regular))
+                                .foregroundStyle(theme.accent)
+                        }
+                        Text(detail)
+                            .font(.callout)
+                            .foregroundStyle(theme.dim)
+                        if let c = composition {
+                            HStack(spacing: 16) {
+                                compCell(label: "Fat mass", value: String(format: "%.1f lb", c.fat))
+                                compCell(label: "Lean mass", value: String(format: "%.1f lb", c.lean))
+                            }
+                            .padding(.top, 4)
+                        }
+                    }
+                }
+
+                if bfSeries.count >= 2 {
+                    Chart(bfSeries, id: \.date) { p in
+                        LineMark(x: .value("Day", p.date), y: .value("BF%", p.value))
+                            .foregroundStyle(theme.accent)
+                        PointMark(x: .value("Day", p.date), y: .value("BF%", p.value))
+                            .foregroundStyle(theme.accent)
+                    }
+                    .frame(height: 140)
+                }
+
+                // Reference ranges by sex
+                referenceSection
+
+                // Log
+                logSection
+
+                // Measurement guide (expandable)
+                VStack(alignment: .leading, spacing: 8) {
+                    Button {
+                        showGuide.toggle()
+                    } label: {
+                        HStack {
+                            Text("How to measure body fat")
+                                .font(.callout)
+                                .foregroundStyle(theme.text)
+                            Spacer()
+                            Image(systemName: showGuide ? "chevron.up" : "chevron.down")
+                                .foregroundStyle(theme.dim)
+                        }
+                    }
+                    .tactile(.ghost)
+
+                    if showGuide {
+                        Text(BodyComposition.measurementGuide)
+                            .font(.callout)
+                            .foregroundStyle(theme.dim)
+                    }
+                }
+                .padding(12)
+                .background(theme.card)
+                .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+        }
+        .background(theme.bg.ignoresSafeArea())
+        .presentationDetents([.large])
+    }
+
+    @ViewBuilder
+    private func compCell(label: String, value: String) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(label.uppercased())
+                .font(.system(size: 9, weight: .medium)).tracking(2)
+                .foregroundStyle(theme.dim)
+            Text(value)
+                .font(.system(.title3, design: .monospaced))
+                .foregroundStyle(theme.text)
+        }
+        .padding(10)
+        .background(theme.card)
+        .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+    }
+
+    @ViewBuilder
+    private var referenceSection: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Reference ranges (\(profile.sex == .male ? "men" : "women"))")
+                .font(.caption).tracking(2).textCase(.uppercase)
+                .foregroundStyle(theme.dim)
+            let ranges: [(String, String)] = profile.sex == .male
+                ? [("Essential", "< 6%"), ("Athletic", "6–13%"), ("Fitness", "14–17%"), ("Acceptable", "18–24%"), ("High", "≥ 25%")]
+                : [("Essential", "< 14%"), ("Athletic", "14–20%"), ("Fitness", "21–24%"), ("Acceptable", "25–31%"), ("High", "≥ 32%")]
+            ForEach(ranges, id: \.0) { pair in
+                HStack {
+                    Text(pair.0).foregroundStyle(theme.text).font(.callout)
+                    Spacer()
+                    Text(pair.1)
+                        .font(.system(.callout, design: .monospaced))
+                        .foregroundStyle(theme.accent)
+                }
+                .padding(10)
+                .background(theme.card)
+                .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var logSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Log body fat %")
+                .font(.caption).tracking(2).textCase(.uppercase)
+                .foregroundStyle(theme.dim)
+            HStack(spacing: 8) {
+                TextField("e.g. 18.5", text: $draft)
+                    .keyboardType(.decimalPad)
+                    .padding(10)
+                    .background(theme.card)
+                    .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                    .foregroundStyle(theme.text)
+                    .font(.system(.callout, design: .monospaced))
+                Button {
+                    if let v = Double(draft), v > 0, v < 70 {
+                        onSave(v)
+                        draft = ""
+                        dismiss()
+                    }
+                } label: { Text("Log") }
+                    .tactile(.primary)
+            }
+        }
+    }
 }
 
 // MARK: - BP sheet (composite)
@@ -588,9 +907,7 @@ private struct BPDetailSheet: View {
 
 // MARK: - Weight sheet (wheel picker)
 
-/// Dedicated weight-log sheet. Forked from the generic StatDetailSheet flow so
-/// the brief's wheel-picker spec (90–350 lb, 0.5 lb increments) can live here
-/// without infecting every other stat that's happy with a text field.
+/// Dedicated weight-log sheet. Wheel picker (90–350 lb, 0.5 lb increments).
 private struct WeightLogSheet: View {
     let profile: ProfileDTO
     let metrics: [BodyMetricDTO]
@@ -599,7 +916,7 @@ private struct WeightLogSheet: View {
     @Environment(\.theme) private var theme
     @Environment(\.dismiss) private var dismiss
 
-    @State private var draftHalfLb: Int = 0  // weight in 0.5-lb increments; seeded in onAppear
+    @State private var draftHalfLb: Int = 0
 
     // 90.0 … 350.0 in 0.5 steps → 521 values
     private let minHalfLb = 180   // 90.0 lb
@@ -746,8 +1063,6 @@ private struct WeightLogSheet: View {
         }
     }
 
-    /// Seed the wheel to the most recent logged weight, otherwise the profile
-    /// weight, otherwise a sensible centre (170 lb).
     private func seedDraft() {
         let lb: Double
         if let last = metrics.compactMap(\.weightLb).last {
