@@ -575,7 +575,8 @@ private struct BMIDetailSheet: View {
         }
         .padding(10)
         .background(theme.card)
-        .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
     }
 }
 
@@ -685,7 +686,8 @@ private struct BodyFatDetailSheet: View {
                 }
                 .padding(12)
                 .background(theme.card)
-                .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
@@ -706,7 +708,8 @@ private struct BodyFatDetailSheet: View {
         }
         .padding(10)
         .background(theme.card)
-        .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
     }
 
     @ViewBuilder
@@ -728,7 +731,8 @@ private struct BodyFatDetailSheet: View {
                 }
                 .padding(10)
                 .background(theme.card)
-                .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
             }
         }
     }
@@ -744,7 +748,8 @@ private struct BodyFatDetailSheet: View {
                     .keyboardType(.decimalPad)
                     .padding(10)
                     .background(theme.card)
-                    .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                     .foregroundStyle(theme.text)
                     .font(.system(.callout, design: .monospaced))
                 Button {
@@ -810,7 +815,8 @@ private struct BPDetailSheet: View {
                         .font(.callout).foregroundStyle(theme.dim)
                         .frame(maxWidth: .infinity, minHeight: 120)
                         .background(theme.card)
-                        .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                 } else {
                     Chart {
                         ForEach(systolicSeries, id: \.date) { p in
@@ -847,7 +853,8 @@ private struct BPDetailSheet: View {
                             }
                             .padding(10)
                             .background(theme.card)
-                            .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                         }
                     }
                 }
@@ -861,7 +868,8 @@ private struct BPDetailSheet: View {
                             .keyboardType(.decimalPad)
                             .padding(10)
                             .background(theme.card)
-                            .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                             .foregroundStyle(theme.text)
                             .font(.system(.callout, design: .monospaced))
                         Text("/").foregroundStyle(theme.dim)
@@ -869,7 +877,8 @@ private struct BPDetailSheet: View {
                             .keyboardType(.decimalPad)
                             .padding(10)
                             .background(theme.card)
-                            .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                             .foregroundStyle(theme.text)
                             .font(.system(.callout, design: .monospaced))
                         Button { save() } label: { Text("Log") }
@@ -982,7 +991,8 @@ private struct WeightLogSheet: View {
             .frame(maxWidth: .infinity, minHeight: 120)
             .padding(16)
             .background(theme.card)
-            .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
         } else {
             Chart(weightSeries, id: \.date) { p in
                 LineMark(x: .value("Day", p.date), y: .value("Weight", p.value))
@@ -1014,7 +1024,8 @@ private struct WeightLogSheet: View {
                     }
                     .padding(10)
                     .background(theme.card)
-                    .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                 }
             }
         }
@@ -1051,7 +1062,8 @@ private struct WeightLogSheet: View {
             .frame(maxWidth: .infinity)
             .frame(height: 140)
             .background(theme.card)
-            .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
 
             Button {
                 onSave(draftLb)

@@ -68,14 +68,14 @@ public struct ProgressBar: View {
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
                     // Track
-                    Rectangle().fill(theme.barBg)
+                    Capsule().fill(theme.barBg)
                     // Fill
-                    Rectangle()
+                    RoundedRectangle(cornerRadius: 3, style: .continuous)
                         .fill(fillColor)
                         .frame(width: geo.size.width * pct)
                     // Hit flash (overlay)
                     if flashActive {
-                        Rectangle()
+                        RoundedRectangle(cornerRadius: 3, style: .continuous)
                             .fill(LinearGradient(
                                 colors: [.white.opacity(0.0), .white.opacity(0.55), .white.opacity(0.0)],
                                 startPoint: .leading, endPoint: .trailing

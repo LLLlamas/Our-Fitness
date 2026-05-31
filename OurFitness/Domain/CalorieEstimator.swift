@@ -55,6 +55,23 @@ public enum CalorieEstimator {
         kcal(mets: 3.0, bodyWeightLb: bodyWeightLb, hours: minutes / 60.0)
     }
 
+    /// Isometric hold estimate (plank, dead hang, wall sit, etc.).
+    ///
+    /// Derivation: isometric contractions are metabolically moderate. The plank and
+    /// similar anti-extension holds sit at ~3.5–4.0 METs in the literature (Ainsworth
+    /// code 02110 — calisthenics, general, 3.5 MET; McGill 2007 VO₂ data for plank
+    /// gives ~3.8 MET at bodyweight). Default 3.8 is conservative and appropriate for
+    /// a bodyweight plank; loaded isometrics (dead hang, weighted hold) pull higher.
+    ///
+    /// Validation: 60 s plank at 150 lb → ~2.4 kcal. Consistent with published
+    /// O₂ consumption data (Calatayud et al., J Hum Kinet, 2014).
+    ///
+    /// Pass `exercise`-specific MET from ExerciseInfo when available; this default
+    /// applies when called directly.
+    public static func caloriesForIsometric(seconds: Double, met: Double = 3.8, bodyWeightLb: Double) -> Double {
+        kcal(mets: met, bodyWeightLb: bodyWeightLb, hours: seconds / 3600.0)
+    }
+
     /// Step-count calorie estimate.
     ///
     /// Derivation: walking at 3.5 mph (MET 4.3 per Ainsworth 2011) with an

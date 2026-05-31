@@ -40,9 +40,18 @@ private struct BuildWorkoutsView: View {
         setModels.map(\.snapshot).filter { $0.userId == profile.id }
     }
 
-    // MARK: - Rep history helpers
+    // MARK: - Stats helpers
 
-    private func repStats(for exercise: ExerciseDTO) -> (today: Int, yesterday: Int, week: Int, todayCal: Double) {
+    private struct ExerciseStats {
+        var todayReps: Int = 0
+        var yesterdayReps: Int = 0
+        var weekReps: Int = 0
+        var todayCal: Double = 0
+        var todayHoldSec: Int = 0
+        var weekHoldSec: Int = 0
+    }
+
+    private func exerciseStats(for exercise: ExerciseDTO) -> ExerciseStats {
         let cal = Calendar.current
         let now = Date()
         let todayStart = cal.startOfDay(for: now)
@@ -51,22 +60,41 @@ private struct BuildWorkoutsView: View {
         isoCal.firstWeekday = 2
         let weekInterval = isoCal.dateInterval(of: .weekOfYear, for: now)
 
-        var today = 0, yesterday = 0, week = 0
-        var todayCal: Double = 0
-
+        var stats = ExerciseStats()
         for s in mySets where s.exerciseId == exercise.id {
             let ts = s.timestamp
-            if ts >= todayStart {
-                today += s.reps
-                todayCal += s.caloriesEst ?? 0
-            } else if ts >= yesterdayStart {
-                yesterday += s.reps
+            let inToday = ts >= todayStart
+            let inYesterday = !inToday && ts >= yesterdayStart
+            let inWeek = weekInterval?.contains(ts) ?? false
+
+            if inToday {
+                if exercise.isIsometric {
+                    stats.todayHoldSec += s.holdSeconds ?? 0
+                }
+                stats.todayReps += s.reps
+                stats.todayCal += s.caloriesEst ?? 0
+            } else if inYesterday {
+                stats.yesterdayReps += s.reps
             }
-            if let w = weekInterval, w.contains(ts) {
-                week += s.reps
+            if inWeek {
+                stats.weekReps += s.reps
+                if exercise.isIsometric {
+                    stats.weekHoldSec += s.holdSeconds ?? 0
+                }
             }
         }
-        return (today, yesterday, week, todayCal)
+        return stats
+    }
+
+    private func holdLabel(_ seconds: Int) -> String {
+        guard seconds > 0 else { return "—" }
+        if seconds < 90 { return "\(seconds)s" }
+        if seconds < 4200 {
+            let m = seconds / 60; let s = seconds % 60
+            return s > 0 ? "\(m)m \(s)s" : "\(m)m"
+        }
+        let h = seconds / 3600; let m = (seconds % 3600) / 60
+        return m > 0 ? "\(h)h \(m)m" : "\(h)h"
     }
 
     var body: some View {
@@ -111,11 +139,12 @@ private struct BuildWorkoutsView: View {
             .padding(.vertical, 18)
         }
         .sheet(isPresented: $showAddSheet) {
-            AddExerciseSheet(profileId: profile.id) { name, lo, hi, tracksWeight in
+            AddExerciseSheet(profileId: profile.id) { name, lo, hi, tracksWeight, isIsometric in
                 Repos.createExercise(
                     ctx, profileId: profile.id, name: name,
                     defaultRepsBottom: lo, defaultRepsTop: hi,
-                    tracksWeight: tracksWeight
+                    tracksWeight: tracksWeight,
+                    isIsometric: isIsometric
                 )
                 Haptics.bump()
                 toasts.show(Toast(title: name, detail: "Exercise added", accent: .win, symbol: "plus.circle.fill"))
@@ -134,16 +163,23 @@ private struct BuildWorkoutsView: View {
 
     @ViewBuilder
     private func exerciseCard(_ ex: ExerciseDTO) -> some View {
-        let stats = repStats(for: ex)
+        let stats = exerciseStats(for: ex)
         let info = ExerciseInfo.meta(for: ex)
 
         PressableCard(action: { activeRepCounter = ex }) {
             VStack(alignment: .leading, spacing: 10) {
-                // Name row + info button
                 HStack(alignment: .top) {
-                    Text(ex.name)
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundStyle(theme.text)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(ex.name)
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundStyle(theme.text)
+                        if ex.isIsometric {
+                            Text("Isometric")
+                                .font(.system(size: 10, weight: .medium)).tracking(1)
+                                .textCase(.uppercase)
+                                .foregroundStyle(theme.accent.opacity(0.7))
+                        }
+                    }
                     Spacer()
                     Button { activeInfo = ex } label: {
                         Image(systemName: "info.circle")
@@ -152,20 +188,26 @@ private struct BuildWorkoutsView: View {
                     .tactile(.ghost)
                 }
 
-                // Muscles
                 Text(info.muscleGroups.prefix(3).joined(separator: " · "))
                     .font(.system(size: 11, weight: .medium)).tracking(1)
                     .textCase(.uppercase)
                     .foregroundStyle(theme.accent)
 
-                // Rep counters row
                 HStack(spacing: 0) {
-                    repCell(label: "Today", reps: stats.today,
-                            cal: stats.todayCal > 0 ? stats.todayCal : nil)
-                    Divider().frame(height: 32).background(theme.line).padding(.horizontal, 8)
-                    repCell(label: "Yesterday", reps: stats.yesterday, cal: nil)
-                    Divider().frame(height: 32).background(theme.line).padding(.horizontal, 8)
-                    repCell(label: "This week", reps: stats.week, cal: nil)
+                    if ex.isIsometric {
+                        holdCell(label: "Today", seconds: stats.todayHoldSec,
+                                 holds: stats.todayReps, cal: stats.todayCal > 0 ? stats.todayCal : nil)
+                        Divider().frame(height: 32).background(theme.line).padding(.horizontal, 8)
+                        holdCell(label: "This week", seconds: stats.weekHoldSec,
+                                 holds: stats.weekReps, cal: nil)
+                    } else {
+                        repCell(label: "Today", reps: stats.todayReps,
+                                cal: stats.todayCal > 0 ? stats.todayCal : nil)
+                        Divider().frame(height: 32).background(theme.line).padding(.horizontal, 8)
+                        repCell(label: "Yesterday", reps: stats.yesterdayReps, cal: nil)
+                        Divider().frame(height: 32).background(theme.line).padding(.horizontal, 8)
+                        repCell(label: "This week", reps: stats.weekReps, cal: nil)
+                    }
                     Spacer()
                     Image(systemName: "hand.tap.fill")
                         .foregroundStyle(theme.accent.opacity(0.5))
@@ -193,24 +235,48 @@ private struct BuildWorkoutsView: View {
             }
         }
     }
+
+    @ViewBuilder
+    private func holdCell(label: String, seconds: Int, holds: Int, cal: Double?) -> some View {
+        VStack(alignment: .leading, spacing: 1) {
+            Text(label.uppercased())
+                .font(.system(size: 9, weight: .medium)).tracking(1.5)
+                .foregroundStyle(theme.dim)
+            Text(holdLabel(seconds))
+                .font(.system(size: 20, weight: .semibold, design: .monospaced))
+                .foregroundStyle(seconds > 0 ? theme.text : theme.dim)
+                .contentTransition(.numericText())
+                .animation(.spring(response: 0.3, dampingFraction: 0.7), value: seconds)
+            if holds > 0 {
+                Text("\(holds) hold\(holds == 1 ? "" : "s")")
+                    .font(.system(size: 10, design: .monospaced))
+                    .foregroundStyle(theme.accent)
+            }
+            if let c = cal, c > 0 {
+                Text("~\(Int(c)) cal")
+                    .font(.system(size: 10, design: .monospaced))
+                    .foregroundStyle(theme.accent)
+            }
+        }
+    }
 }
 
 // MARK: - Add exercise sheet
 
 private struct AddExerciseSheet: View {
     let profileId: UUID
-    let onSave: (String, Int, Int, Bool) -> Void
+    let onSave: (String, Int, Int, Bool, Bool) -> Void
 
     @Environment(\.theme) private var theme
     @Environment(\.dismiss) private var dismiss
 
     @State private var name: String = ""
-    @State private var lo: Int = 8
-    @State private var hi: Int = 12
     @State private var tracksWeight: Bool = true
+    @State private var isIsometric: Bool = false
+    @FocusState private var nameFocused: Bool
 
     private var canSave: Bool {
-        !name.trimmingCharacters(in: .whitespaces).isEmpty && lo > 0 && hi >= lo
+        !name.trimmingCharacters(in: .whitespaces).isEmpty
     }
 
     var body: some View {
@@ -222,22 +288,38 @@ private struct AddExerciseSheet: View {
 
                 TextField("Name (e.g. Pull-ups)", text: $name)
                     .padding(10).background(theme.card)
-                    .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                     .foregroundStyle(theme.text)
-
-                HStack(spacing: 10) {
-                    numField("Min reps", value: $lo)
-                    numField("Max reps", value: $hi)
-                }
+                    .focused($nameFocused)
 
                 Toggle(isOn: $tracksWeight) {
-                    Text("Tracks weight")
-                        .foregroundStyle(theme.text)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Tracks weight")
+                            .foregroundStyle(theme.text)
+                        Text("Shows a weight field when logging")
+                            .font(.caption).foregroundStyle(theme.dim)
+                    }
                 }
                 .tint(theme.accent)
+                .disabled(isIsometric)
+                .opacity(isIsometric ? 0.4 : 1)
+
+                Toggle(isOn: $isIsometric) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Isometric hold")
+                            .foregroundStyle(theme.text)
+                        Text("Plank, dead hang, wall sit — counts seconds, not reps")
+                            .font(.caption).foregroundStyle(theme.dim)
+                    }
+                }
+                .tint(theme.accent)
+                .onChange(of: isIsometric) { _, on in
+                    if on { tracksWeight = false }
+                }
 
                 Button {
-                    onSave(name.trimmingCharacters(in: .whitespaces), lo, hi, tracksWeight)
+                    onSave(name.trimmingCharacters(in: .whitespaces), 8, 12, tracksWeight, isIsometric)
                     dismiss()
                 } label: {
                     Text("Save")
@@ -251,19 +333,11 @@ private struct AddExerciseSheet: View {
         }
         .background(theme.bg.ignoresSafeArea())
         .presentationDetents([.medium, .large])
-    }
-
-    @ViewBuilder
-    private func numField(_ label: String, value: Binding<Int>) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(label.uppercased()).font(.system(size: 9)).tracking(2)
-                .foregroundStyle(theme.dim)
-            TextField("", value: value, format: .number)
-                .keyboardType(.numberPad)
-                .padding(10).background(theme.card)
-                .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
-                .foregroundStyle(theme.text)
-                .font(.system(.callout, design: .monospaced))
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") { nameFocused = false }
+            }
         }
     }
 }

@@ -254,9 +254,11 @@ struct StepsCardioCard: View {
                 }
                 .pickerStyle(.wheel)
                 .frame(height: 130)
+                .background(theme.card2)
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .padding(.horizontal, 20)
+                .padding(.vertical, 4)
             }
-
-            Divider().padding(.horizontal, 20)
 
             // Weekly days goal
             VStack(alignment: .leading, spacing: 4) {
@@ -271,6 +273,10 @@ struct StepsCardioCard: View {
                 }
                 .pickerStyle(.wheel)
                 .frame(height: 130)
+                .background(theme.card2)
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .padding(.horizontal, 20)
+                .padding(.vertical, 4)
             }
 
             HStack(spacing: 12) {

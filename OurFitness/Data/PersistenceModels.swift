@@ -101,6 +101,8 @@ public final class ExerciseModel {
     /// "reps" or "duration". V3. Optional so the V2→V3 lightweight stage can
     /// backfill nil into existing rows; snapshot treats nil as .reps.
     public var kindRaw: String?
+    /// True for isometric holds (plank, dead hang, etc.). Defaults false for all prior rows.
+    public var isIsometric: Bool = false
 
     public init(snapshot s: ExerciseDTO) {
         self.id = s.id
@@ -113,6 +115,7 @@ public final class ExerciseModel {
         self.profileId = s.profileId
         self.loadLb = s.loadLb
         self.kindRaw = s.kind.rawValue
+        self.isIsometric = s.isIsometric
     }
 
     public var snapshot: ExerciseDTO {
@@ -125,7 +128,8 @@ public final class ExerciseModel {
             availableForMode: availableForModeRaw.compactMap(Mode.init(rawValue:)),
             profileId: profileId,
             loadLb: loadLb,
-            kind: ExerciseKind(rawValue: kindRaw ?? ExerciseKind.reps.rawValue) ?? .reps
+            kind: ExerciseKind(rawValue: kindRaw ?? ExerciseKind.reps.rawValue) ?? .reps,
+            isIsometric: isIsometric
         )
     }
 }
@@ -197,6 +201,8 @@ public final class WorkoutSetModel {
     public var timestamp: Date
     /// MET-based kcal estimate computed at log time. V3.
     public var caloriesEst: Double?
+    /// Hold duration in seconds for isometric exercises. reps stores hold count (1 per hold).
+    public var holdSeconds: Int?
 
     public init(snapshot s: WorkoutSetDTO) {
         self.id = s.id
@@ -209,13 +215,14 @@ public final class WorkoutSetModel {
         self.notes = s.notes
         self.timestamp = s.timestamp
         self.caloriesEst = s.caloriesEst
+        self.holdSeconds = s.holdSeconds
     }
 
     public var snapshot: WorkoutSetDTO {
         WorkoutSetDTO(id: id, userId: userId, exerciseId: exerciseId,
                       workoutId: workoutId, weightLb: weightLb, reps: reps,
                       rpe: rpe, notes: notes, timestamp: timestamp,
-                      caloriesEst: caloriesEst)
+                      caloriesEst: caloriesEst, holdSeconds: holdSeconds)
     }
 }
 

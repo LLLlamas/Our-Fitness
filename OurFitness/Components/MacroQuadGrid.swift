@@ -113,7 +113,8 @@ private struct MacroRingCell: View {
         .padding(.vertical, 14)
         .frame(maxWidth: .infinity)
         .background(theme.card)
-        .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(theme.line, lineWidth: 1))
         .onChange(of: value) { old, new in
             let wasUnder = old < target * 0.9
             if wasUnder && hitTarget { Haptics.success() }

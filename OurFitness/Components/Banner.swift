@@ -29,6 +29,7 @@ public struct Banner<Content: View>: View {
         .padding(.horizontal, 14)
         .padding(.vertical, 10)
         .background(bg)
-        .overlay(Rectangle().stroke(stroke, lineWidth: 1))
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(stroke, lineWidth: 1))
     }
 }

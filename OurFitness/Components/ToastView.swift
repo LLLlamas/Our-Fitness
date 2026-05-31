@@ -43,7 +43,7 @@ public struct ToastView: View {
         .padding(.vertical, 12)
         .background {
             ZStack {
-                Rectangle().fill(theme.card)
+                RoundedRectangle(cornerRadius: 14, style: .continuous).fill(theme.card)
                 LinearGradient(
                     colors: [.white.opacity(0.10), .clear],
                     startPoint: .top, endPoint: .center
@@ -51,8 +51,9 @@ public struct ToastView: View {
                 .blendMode(.plusLighter)
             }
         }
+        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
         .overlay {
-            Rectangle().strokeBorder(stroke, lineWidth: 1)
+            RoundedRectangle(cornerRadius: 14, style: .continuous).strokeBorder(stroke, lineWidth: 1)
         }
         .overlay(alignment: .leading) {
             Rectangle().fill(stroke).frame(width: 3)

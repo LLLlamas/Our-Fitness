@@ -20,7 +20,7 @@ public struct PressableCard<Content: View>: View {
             content()
                 .padding(16)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .contentShape(Rectangle())
+                .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         }
         .buttonStyle(CardPressStyle(theme: theme))
     }
@@ -34,7 +34,7 @@ private struct CardPressStyle: ButtonStyle {
         configuration.label
             .background {
                 ZStack {
-                    Rectangle().fill(theme.card)
+                    RoundedRectangle(cornerRadius: 16, style: .continuous).fill(theme.card)
                     LinearGradient(
                         colors: [.white.opacity(pressed ? 0.03 : 0.10), .clear],
                         startPoint: .top,
@@ -44,8 +44,9 @@ private struct CardPressStyle: ButtonStyle {
                     .allowsHitTesting(false)
                 }
             }
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
             .overlay {
-                Rectangle().strokeBorder(
+                RoundedRectangle(cornerRadius: 16, style: .continuous).strokeBorder(
                     pressed ? theme.accent.opacity(0.7) : theme.line,
                     lineWidth: 1
                 )

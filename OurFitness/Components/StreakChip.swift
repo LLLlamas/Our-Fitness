@@ -25,7 +25,8 @@ public struct StreakChip: View {
             }
             .padding(.horizontal, 8).padding(.vertical, 4)
             .foregroundStyle(tint)
-            .overlay(Rectangle().stroke(tint.opacity(0.6), lineWidth: 1))
+            .clipShape(Capsule())
+            .overlay(Capsule().stroke(tint.opacity(0.6), lineWidth: 1))
         }
     }
 }

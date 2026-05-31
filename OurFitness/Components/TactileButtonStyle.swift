@@ -47,7 +47,8 @@ public struct TactileButtonStyle: ButtonStyle {
             .frame(maxWidth: fullWidth ? .infinity : nil)
             .background {
                 ZStack {
-                    Rectangle().fill(isEnabled ? style.bg : style.bg.opacity(0.55))
+                    RoundedRectangle(cornerRadius: style.cornerRadius, style: .continuous)
+                        .fill(isEnabled ? style.bg : style.bg.opacity(0.55))
                     if style.showTopHighlight {
                         topEdgeHighlight(pressed: pressed)
                     }
@@ -56,9 +57,11 @@ public struct TactileButtonStyle: ButtonStyle {
                     }
                 }
             }
+            .clipShape(RoundedRectangle(cornerRadius: style.cornerRadius, style: .continuous))
             .overlay {
                 if style.strokeWidth > 0 {
-                    Rectangle().strokeBorder(style.stroke, lineWidth: style.strokeWidth)
+                    RoundedRectangle(cornerRadius: style.cornerRadius, style: .continuous)
+                        .strokeBorder(style.stroke, lineWidth: style.strokeWidth)
                 }
             }
             .compositingGroup()
@@ -90,6 +93,7 @@ public struct TactileButtonStyle: ButtonStyle {
         var font: Font
         var tracking: CGFloat
         var textCase: Text.Case?
+        var cornerRadius: CGFloat
     }
 
     private func resolved(theme: Theme) -> ResolvedStyle {
@@ -104,7 +108,8 @@ public struct TactileButtonStyle: ButtonStyle {
                 strokeWidth: 0, shadowRadius: 10, shadowY: 4,
                 showTopHighlight: true, showGlare: true,
                 font: .system(size: 13, weight: .semibold),
-                tracking: 2, textCase: .uppercase
+                tracking: 2, textCase: .uppercase,
+                cornerRadius: 10
             )
         case .secondary:
             return .init(
@@ -116,7 +121,8 @@ public struct TactileButtonStyle: ButtonStyle {
                 strokeWidth: 1, shadowRadius: 6, shadowY: 2,
                 showTopHighlight: true, showGlare: false,
                 font: .system(size: 13, weight: .semibold),
-                tracking: 2, textCase: .uppercase
+                tracking: 2, textCase: .uppercase,
+                cornerRadius: 10
             )
         case .pill:
             return .init(
@@ -128,7 +134,8 @@ public struct TactileButtonStyle: ButtonStyle {
                 strokeWidth: 1, shadowRadius: 4, shadowY: 1,
                 showTopHighlight: fillColor != nil, showGlare: false,
                 font: .system(size: 11, weight: .medium),
-                tracking: 2, textCase: .uppercase
+                tracking: 2, textCase: .uppercase,
+                cornerRadius: 20
             )
         case .bump:
             return .init(
@@ -140,7 +147,8 @@ public struct TactileButtonStyle: ButtonStyle {
                 strokeWidth: 1, shadowRadius: 3, shadowY: 1,
                 showTopHighlight: false, showGlare: false,
                 font: .system(.caption2, design: .monospaced).weight(.medium),
-                tracking: 1, textCase: nil
+                tracking: 1, textCase: nil,
+                cornerRadius: 8
             )
         case .ghost:
             return .init(
@@ -152,7 +160,8 @@ public struct TactileButtonStyle: ButtonStyle {
                 strokeWidth: 0, shadowRadius: 0, shadowY: 0,
                 showTopHighlight: false, showGlare: false,
                 font: .system(size: 12, weight: .regular),
-                tracking: 0, textCase: nil
+                tracking: 0, textCase: nil,
+                cornerRadius: 0
             )
         }
     }

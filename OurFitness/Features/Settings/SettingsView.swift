@@ -87,6 +87,7 @@ struct SettingsView: View {
         }
         .padding(10)
         .background(theme.card)
-        .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
     }
 }

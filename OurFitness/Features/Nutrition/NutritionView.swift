@@ -13,6 +13,9 @@ struct NutritionView: View {
 
     @Query private var logModels: [FoodLogEntryModel]
     @State private var showLogSheet = false
+    @State private var showSuggestions = false
+    @State private var showLibrary = false
+    @State private var mealToDetail: SuggestedMeal?
 
     init(profile: ProfileDTO) {
         self.profile = profile
@@ -23,8 +26,6 @@ struct NutritionView: View {
             order: .forward
         )
     }
-    @State private var showSuggestions = false
-    @State private var showLibrary = false
 
     private var today: String { Dates.dayKey() }
 
@@ -43,16 +44,24 @@ struct NutritionView: View {
         FoodVarietyNudges.nudges(from: allLogs, mode: profile.mode)
     }
 
-    private func logSuggested(_ meal: SuggestedMeal, slot: Slot = .lunch) {
+    private func logMeal(_ meal: SuggestedMeal, slot: Slot = .lunch, multiplier: Double = 1.0) {
+        let ps = meal.perServing
+        let scaled = PerServing(
+            calories: Int(Double(ps.calories) * multiplier),
+            proteinG: Int(Double(ps.proteinG) * multiplier),
+            carbsG: Int(Double(ps.carbsG) * multiplier),
+            fatG: Int(Double(ps.fatG) * multiplier),
+            fiberG: Int(Double(ps.fiberG) * multiplier)
+        )
         let dto = FoodLogEntryDTO(
             userId: profile.id,
             date: today,
             slot: slot,
             customName: meal.name,
-            perServing: meal.perServing
+            perServing: scaled
         )
         Repos.addFoodLog(ctx, dto)
-        toasts.logged(meal.name, calories: meal.perServing.calories)
+        toasts.logged(meal.name, calories: scaled.calories)
     }
 
     private func logCommonFood(_ food: CommonFood) {
@@ -74,7 +83,6 @@ struct NutritionView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
-                // Header: "meals." + suggestions pill
                 HStack(alignment: .firstTextBaseline, spacing: 10) {
                     Text("meals.")
                         .font(.system(size: 56, weight: .regular))
@@ -90,7 +98,6 @@ struct NutritionView: View {
                 }
 
                 totalsCard
-
                 suggestionPillRow
                 nudgeSection
 
@@ -141,6 +148,13 @@ struct NutritionView: View {
             }
             .themed(profile.mode)
         }
+        .sheet(item: $mealToDetail) { meal in
+            MealDetailSheet(meal: meal) { meal, slot, multiplier in
+                logMeal(meal, slot: slot, multiplier: multiplier)
+                mealToDetail = nil
+            }
+            .themed(profile.mode)
+        }
     }
 
     // MARK: - Suggestion pill row
@@ -157,7 +171,7 @@ struct NutritionView: View {
                     HStack(spacing: 8) {
                         ForEach(meals) { meal in
                             Button {
-                                logSuggested(meal)
+                                mealToDetail = meal
                             } label: {
                                 HStack(spacing: 6) {
                                     Text(meal.emoji)
@@ -205,7 +219,8 @@ struct NutritionView: View {
                     .padding(10)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(theme.card)
-                    .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                 }
             }
         }
@@ -273,7 +288,153 @@ private struct LogRow: View {
         }
         .padding(10)
         .background(theme.card)
-        .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+    }
+}
+
+// MARK: - Meal detail sheet
+
+private struct MealDetailSheet: View {
+    let meal: SuggestedMeal
+    let onLog: (SuggestedMeal, Slot, Double) -> Void
+
+    @Environment(\.theme) private var theme
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var multiplier: Double = 1.0
+    @State private var slot: Slot = .lunch
+
+    private static let multipliers: [Double] = [0.5, 1.0, 1.5, 2.0]
+
+    private var adjusted: PerServing {
+        let ps = meal.perServing
+        return PerServing(
+            calories: Int(Double(ps.calories) * multiplier),
+            proteinG: Int(Double(ps.proteinG) * multiplier),
+            carbsG: Int(Double(ps.carbsG) * multiplier),
+            fatG: Int(Double(ps.fatG) * multiplier),
+            fiberG: Int(Double(ps.fiberG) * multiplier)
+        )
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                // Header
+                HStack(spacing: 12) {
+                    Text(meal.emoji)
+                        .font(.system(size: 44))
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(meal.name)
+                            .font(.system(size: 26, weight: .semibold))
+                            .foregroundStyle(theme.text)
+                        if !meal.allergens.isEmpty {
+                            Text(meal.allergens.joined(separator: " · "))
+                                .font(.caption).foregroundStyle(theme.dim)
+                        }
+                    }
+                }
+
+                Text(meal.description)
+                    .font(.callout).foregroundStyle(theme.dim)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                // How estimates are derived
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("About this estimate".uppercased())
+                        .font(.system(size: 9, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                    Text("Macros are based on a standard single serving from curated recipe or published USDA data. If your portion was different, adjust the multiplier below.")
+                        .font(.caption).foregroundStyle(theme.dim)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(10)
+                .background(theme.card)
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+
+                // Serving multiplier
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Serving size".uppercased())
+                        .font(.caption).tracking(2).foregroundStyle(theme.dim)
+                    HStack(spacing: 8) {
+                        ForEach(Self.multipliers, id: \.self) { m in
+                            Button {
+                                multiplier = m
+                            } label: {
+                                Text(m == 0.5 ? "½×" : "\(Int(m))×")
+                                    .font(.system(size: 14, weight: .medium))
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 10)
+                            }
+                            .tactile(.pill, fill: multiplier == m ? theme.accent : nil)
+                        }
+                    }
+                }
+
+                // Adjusted macros
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Nutrition".uppercased())
+                        .font(.caption).tracking(2).foregroundStyle(theme.dim)
+                    HStack(spacing: 8) {
+                        macroChip(label: "Cal", value: adjusted.calories)
+                        macroChip(label: "P", value: adjusted.proteinG)
+                        macroChip(label: "C", value: adjusted.carbsG)
+                        macroChip(label: "F", value: adjusted.fatG)
+                        if adjusted.fiberG > 0 {
+                            macroChip(label: "Fiber", value: adjusted.fiberG)
+                        }
+                    }
+                }
+
+                // Slot picker
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Log as".uppercased())
+                        .font(.caption).tracking(2).foregroundStyle(theme.dim)
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 8) {
+                            ForEach([Slot.breakfast, .lunch, .snack, .dinner, .postWorkout], id: \.self) { s in
+                                Button { slot = s } label: { Text(s.label) }
+                                    .tactile(.pill, fill: slot == s ? theme.accent : nil)
+                            }
+                        }
+                    }
+                }
+
+                // Log button
+                Button {
+                    onLog(meal, slot, multiplier)
+                    dismiss()
+                } label: {
+                    Text("Log \(meal.name)")
+                        .font(.system(size: 17, weight: .semibold))
+                        .frame(maxWidth: .infinity, minHeight: 52)
+                }
+                .tactile(.primary, fullWidth: true)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+        }
+        .background(theme.bg.ignoresSafeArea())
+        .presentationDetents([.large])
+    }
+
+    @ViewBuilder
+    private func macroChip(label: String, value: Int) -> some View {
+        VStack(spacing: 2) {
+            Text("\(value)")
+                .font(.system(.callout, design: .monospaced))
+                .foregroundStyle(theme.text)
+            Text(label)
+                .font(.system(size: 9)).tracking(1)
+                .foregroundStyle(theme.dim)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 8)
+        .background(theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
     }
 }
 
@@ -289,15 +450,15 @@ private struct NLMealLogSheet: View {
     @State private var input: String = ""
     @State private var parseResult: FoodParser.ParseResult? = nil
     @State private var slot: Slot = .lunch
-    // showManual starts true so the user can always enter values directly.
-    // It flips to false (show parsed summary) once the parser finds a match.
     @State private var showManual = true
 
-    // Manual fields (also used as the editable override after parsing)
     @State private var manualCalories: Int = 0
     @State private var manualProtein: Int = 0
     @State private var manualCarbs: Int = 0
     @State private var manualFat: Int = 0
+
+    private enum Field: Hashable { case input, cal, protein, carbs, fat }
+    @FocusState private var focused: Field?
 
     private var resolvedPerServing: PerServing {
         if showManual {
@@ -325,7 +486,6 @@ private struct NLMealLogSheet: View {
                     .font(.system(size: 42, weight: .regular))
                     .foregroundStyle(theme.text)
 
-                // Natural language input
                 VStack(alignment: .leading, spacing: 6) {
                     Text("What did you eat?".uppercased())
                         .font(.system(size: 10)).tracking(2)
@@ -333,25 +493,21 @@ private struct NLMealLogSheet: View {
                     TextField("e.g. a bowl of rice and some grilled chicken", text: $input, axis: .vertical)
                         .lineLimit(1...3)
                         .padding(10).background(theme.card)
-                        .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                         .foregroundStyle(theme.text)
+                        .focused($focused, equals: .input)
                         .onSubmit { parseInput() }
-                        .onChange(of: input) { _, _ in
-                            // Auto-parse while typing (debounce effect: parse on each character)
-                            parseInput()
-                        }
+                        .onChange(of: input) { _, _ in parseInput() }
                 }
 
-                // Parse results
                 if let result = parseResult, !input.trimmingCharacters(in: .whitespaces).isEmpty {
                     parsedPreview(result)
                 }
 
                 slotPicker
-
                 nutritionSummary
 
-                // Save
                 Button {
                     let dto = FoodLogEntryDTO(
                         userId: profile.id,
@@ -374,6 +530,12 @@ private struct NLMealLogSheet: View {
         }
         .background(theme.bg.ignoresSafeArea())
         .presentationDetents([.large])
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") { focused = nil }
+            }
+        }
     }
 
     private func parseInput() {
@@ -387,7 +549,6 @@ private struct NLMealLogSheet: View {
             manualProtein  = ps.proteinG
             manualCarbs    = ps.carbsG
             manualFat      = ps.fatG
-            // Switch to parsed summary view automatically when we have matches
             showManual = false
         }
     }
@@ -411,7 +572,8 @@ private struct NLMealLogSheet: View {
                         }
                         .padding(.horizontal, 10).padding(.vertical, 6)
                         .background(theme.card)
-                        .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                     }
                 }
             }
@@ -442,12 +604,12 @@ private struct NLMealLogSheet: View {
 
             if showManual {
                 HStack(spacing: 10) {
-                    numField("Calories", value: $manualCalories)
-                    numField("Protein g", value: $manualProtein)
+                    numField("Calories", value: $manualCalories, field: .cal)
+                    numField("Protein g", value: $manualProtein, field: .protein)
                 }
                 HStack(spacing: 10) {
-                    numField("Carbs g", value: $manualCarbs)
-                    numField("Fat g", value: $manualFat)
+                    numField("Carbs g", value: $manualCarbs, field: .carbs)
+                    numField("Fat g", value: $manualFat, field: .fat)
                 }
             } else {
                 let ps = resolvedPerServing
@@ -474,7 +636,8 @@ private struct NLMealLogSheet: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, 8)
         .background(theme.card)
-        .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
     }
 
     @ViewBuilder
@@ -494,16 +657,18 @@ private struct NLMealLogSheet: View {
     }
 
     @ViewBuilder
-    private func numField(_ label: String, value: Binding<Int>) -> some View {
+    private func numField(_ label: String, value: Binding<Int>, field: Field) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(label.uppercased()).font(.system(size: 9)).tracking(2)
                 .foregroundStyle(theme.dim)
             TextField("", value: value, format: .number)
                 .keyboardType(.numberPad)
                 .padding(10).background(theme.card)
-                .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                 .foregroundStyle(theme.text)
                 .font(.system(.callout, design: .monospaced))
+                .focused($focused, equals: field)
         }
     }
 }
@@ -518,7 +683,7 @@ private struct SuggestionsSheet: View {
     @Environment(\.theme) private var theme
     @Environment(\.dismiss) private var dismiss
 
-    @State private var slot: Slot = .lunch
+    @State private var selectedMeal: SuggestedMeal?
 
     private var suggestions: [SuggestedMeal] {
         SuggestedMeals.ranked(for: profile, totals: totals, limit: 10)
@@ -530,13 +695,11 @@ private struct SuggestionsSheet: View {
                 Text("suggestions.")
                     .font(.system(size: 36, weight: .regular))
                     .foregroundStyle(theme.text)
-                Text("Tap any meal to log it instantly.")
+                Text("Tap any meal to see info and adjust your portion.")
                     .font(.callout).foregroundStyle(theme.dim)
 
-                slotPicker
-
                 ForEach(suggestions) { meal in
-                    PressableCard(action: { log(meal) }) {
+                    PressableCard(action: { selectedMeal = meal }) {
                         HStack(spacing: 12) {
                             Text(meal.emoji)
                                 .font(.system(size: 28))
@@ -552,6 +715,9 @@ private struct SuggestionsSheet: View {
                                     .foregroundStyle(theme.accent)
                             }
                             Spacer(minLength: 0)
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 12))
+                                .foregroundStyle(theme.dim)
                         }
                     }
                 }
@@ -561,34 +727,30 @@ private struct SuggestionsSheet: View {
         }
         .background(theme.bg.ignoresSafeArea())
         .presentationDetents([.large])
-    }
-
-    private func log(_ meal: SuggestedMeal) {
-        let dto = FoodLogEntryDTO(
-            userId: profile.id,
-            date: Dates.dayKey(),
-            slot: slot,
-            customName: meal.name,
-            perServing: meal.perServing
-        )
-        onPick(dto)
-    }
-
-    @ViewBuilder
-    private var slotPicker: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("Logging as".uppercased())
-                .font(.caption).tracking(2).foregroundStyle(theme.dim)
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    ForEach([Slot.breakfast, .lunch, .snack, .dinner, .postWorkout], id: \.self) { s in
-                        Button { slot = s } label: { Text(s.label) }
-                            .tactile(.pill, fill: slot == s ? theme.accent : nil)
-                    }
-                }
+        .sheet(item: $selectedMeal) { meal in
+            MealDetailSheet(meal: meal) { m, s, multiplier in
+                let ps = m.perServing
+                let scaled = PerServing(
+                    calories: Int(Double(ps.calories) * multiplier),
+                    proteinG: Int(Double(ps.proteinG) * multiplier),
+                    carbsG: Int(Double(ps.carbsG) * multiplier),
+                    fatG: Int(Double(ps.fatG) * multiplier),
+                    fiberG: Int(Double(ps.fiberG) * multiplier)
+                )
+                let dto = FoodLogEntryDTO(
+                    userId: profile.id,
+                    date: Dates.dayKey(),
+                    slot: s,
+                    customName: m.name,
+                    perServing: scaled
+                )
+                onPick(dto)
+                selectedMeal = nil
             }
+            .themed(profile.mode)
         }
     }
+
 }
 
 // MARK: - Food Library Sheet
@@ -599,6 +761,7 @@ private struct FoodLibrarySheet: View {
     @Environment(\.theme) private var theme
     @Environment(\.dismiss) private var dismiss
     @State private var query: String = ""
+    @FocusState private var searchFocused: Bool
 
     private var results: [CommonFood] {
         let q = query.lowercased().trimmingCharacters(in: .whitespaces)
@@ -651,6 +814,12 @@ private struct FoodLibrarySheet: View {
         }
         .background(theme.bg.ignoresSafeArea())
         .presentationDetents([.large])
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") { searchFocused = false }
+            }
+        }
     }
 
     @ViewBuilder
@@ -662,6 +831,7 @@ private struct FoodLibrarySheet: View {
                 .foregroundStyle(theme.text)
                 .autocorrectionDisabled()
                 .textInputAutocapitalization(.never)
+                .focused($searchFocused)
             if !query.isEmpty {
                 Button { query = "" } label: { Image(systemName: "xmark") }
                     .tactile(.ghost)
@@ -669,6 +839,7 @@ private struct FoodLibrarySheet: View {
         }
         .padding(10)
         .background(theme.card)
-        .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
     }
 }

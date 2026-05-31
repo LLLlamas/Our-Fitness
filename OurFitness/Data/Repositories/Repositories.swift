@@ -122,7 +122,8 @@ public enum Repos {
         tracksWeight: Bool,
         loadLb: Double? = nil,
         kind: ExerciseKind = .reps,
-        muscleGroups: [String] = []
+        muscleGroups: [String] = [],
+        isIsometric: Bool = false
     ) -> ExerciseDTO {
         let dto = ExerciseDTO(
             id: "ex-\(profileId.uuidString.prefix(8))-\(UUID().uuidString.prefix(8))",
@@ -134,7 +135,8 @@ public enum Repos {
             availableForMode: [.build, .circuit],
             profileId: profileId,
             loadLb: loadLb,
-            kind: kind
+            kind: kind,
+            isIsometric: isIsometric
         )
         ctx.insert(ExerciseModel(snapshot: dto))
         try? ctx.save()

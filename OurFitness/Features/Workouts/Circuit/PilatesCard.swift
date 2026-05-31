@@ -192,6 +192,10 @@ struct PilatesCard: View {
                 }
             }
             .pickerStyle(.wheel)
+            .background(theme.card2)
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .padding(.horizontal, 20)
+            .padding(.vertical, 8)
 
             HStack(spacing: 12) {
                 Button("Reset to 3") {
@@ -333,7 +337,8 @@ private struct PilatesLogSheet: View {
         }
         .padding(12)
         .background(theme.card)
-        .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
     }
 
     @ViewBuilder
@@ -346,7 +351,8 @@ private struct PilatesLogSheet: View {
                 .lineLimit(2...4)
                 .padding(10)
                 .background(theme.card)
-                .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                 .foregroundStyle(theme.text)
         }
     }

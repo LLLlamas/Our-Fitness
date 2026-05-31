@@ -96,7 +96,8 @@ public struct StatDetailSheet: View {
                 .font(.callout).foregroundStyle(theme.dim)
                 .frame(maxWidth: .infinity, minHeight: 120)
                 .background(theme.card)
-                .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
         } else {
             Chart(series, id: \.date) { p in
                 LineMark(x: .value("Day", p.date), y: .value("Value", p.value))
@@ -128,7 +129,8 @@ public struct StatDetailSheet: View {
                     }
                     .padding(10)
                     .background(theme.card)
-                    .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                 }
             }
         }
@@ -145,7 +147,8 @@ public struct StatDetailSheet: View {
                     .keyboardType(.decimalPad)
                     .padding(10)
                     .background(theme.card)
-                    .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                     .foregroundStyle(theme.text)
                     .font(.system(.callout, design: .monospaced))
                 Button {

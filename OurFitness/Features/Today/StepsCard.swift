@@ -84,8 +84,8 @@ struct StepsCard: View {
 
                 GeometryReader { geo in
                     ZStack(alignment: .leading) {
-                        Rectangle().fill(theme.barBg)
-                        Rectangle()
+                        Capsule().fill(theme.barBg)
+                        RoundedRectangle(cornerRadius: 3, style: .continuous)
                             .fill(ok ? theme.barOk : theme.barFill)
                             .frame(width: geo.size.width * pct)
                     }
@@ -154,6 +154,10 @@ struct StepsCard: View {
                 }
             }
             .pickerStyle(.wheel)
+            .background(theme.card2)
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .padding(.horizontal, 20)
+            .padding(.vertical, 8)
 
             HStack(spacing: 12) {
                 Button("Reset to default") {

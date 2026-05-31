@@ -59,7 +59,8 @@ struct ProfileCreationView: View {
                 .textInputAutocapitalization(.words)
                 .padding(10)
                 .background(theme.card)
-                .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                 .foregroundStyle(theme.text)
         }
 
@@ -97,7 +98,8 @@ struct ProfileCreationView: View {
             TextField("", value: $heightIn, format: .number)
                 .keyboardType(.decimalPad)
                 .padding(10).background(theme.card)
-                .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                 .foregroundStyle(theme.text)
         }
 
@@ -105,7 +107,8 @@ struct ProfileCreationView: View {
             TextField("", value: $weightLb, format: .number)
                 .keyboardType(.decimalPad)
                 .padding(10).background(theme.card)
-                .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                 .foregroundStyle(theme.text)
         }
 
@@ -113,7 +116,8 @@ struct ProfileCreationView: View {
             TextField("", value: $age, format: .number)
                 .keyboardType(.numberPad)
                 .padding(10).background(theme.card)
-                .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                 .foregroundStyle(theme.text)
         }
 

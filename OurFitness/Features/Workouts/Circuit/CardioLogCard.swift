@@ -189,7 +189,8 @@ private struct CardioLogSheet: View {
             TextField("", text: $distanceStr)
                 .keyboardType(.decimalPad)
                 .padding(10).background(theme.card)
-                .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                 .foregroundStyle(theme.text)
         }
     }
@@ -202,7 +203,8 @@ private struct CardioLogSheet: View {
             TextField("", text: $rpeStr)
                 .keyboardType(.decimalPad)
                 .padding(10).background(theme.card)
-                .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                 .foregroundStyle(theme.text)
         }
     }
@@ -215,7 +217,8 @@ private struct CardioLogSheet: View {
             TextField("How did it feel?", text: $notes, axis: .vertical)
                 .lineLimit(2...4)
                 .padding(10).background(theme.card)
-                .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                 .foregroundStyle(theme.text)
         }
     }

@@ -271,6 +271,7 @@ public struct ExerciseDTO: Codable, Equatable, Sendable, Identifiable {
     public var profileId: UUID?
     public var loadLb: Double?
     public var kind: ExerciseKind
+    public var isIsometric: Bool
 
     public init(
         id: String, name: String, category: ExerciseCategory,
@@ -279,7 +280,8 @@ public struct ExerciseDTO: Codable, Equatable, Sendable, Identifiable {
         availableForMode: [Mode] = [.build, .circuit],
         profileId: UUID? = nil,
         loadLb: Double? = nil,
-        kind: ExerciseKind = .reps
+        kind: ExerciseKind = .reps,
+        isIsometric: Bool = false
     ) {
         self.id = id
         self.name = name
@@ -291,11 +293,12 @@ public struct ExerciseDTO: Codable, Equatable, Sendable, Identifiable {
         self.profileId = profileId
         self.loadLb = loadLb
         self.kind = kind
+        self.isIsometric = isIsometric
     }
 
-    // Codable: tolerate older payloads with no availableForMode/profileId/loadLb/kind field.
+    // Codable: tolerate older payloads with no availableForMode/profileId/loadLb/kind/isIsometric field.
     private enum CodingKeys: String, CodingKey {
-        case id, name, category, muscleGroups, equipment, defaultRepRange, availableForMode, profileId, loadLb, kind
+        case id, name, category, muscleGroups, equipment, defaultRepRange, availableForMode, profileId, loadLb, kind, isIsometric
     }
 
     public init(from decoder: Decoder) throws {
@@ -311,6 +314,7 @@ public struct ExerciseDTO: Codable, Equatable, Sendable, Identifiable {
         self.profileId = try c.decodeIfPresent(UUID.self, forKey: .profileId)
         self.loadLb = try c.decodeIfPresent(Double.self, forKey: .loadLb)
         self.kind = try c.decodeIfPresent(ExerciseKind.self, forKey: .kind) ?? .reps
+        self.isIsometric = try c.decodeIfPresent(Bool.self, forKey: .isIsometric) ?? false
     }
 }
 
@@ -407,11 +411,13 @@ public struct WorkoutSetDTO: Codable, Equatable, Sendable, Identifiable {
     public var notes: String?
     public var timestamp: Date
     public var caloriesEst: Double?
+    /// Seconds held for isometric exercises. `reps` stores hold count (1 per completed hold).
+    public var holdSeconds: Int?
 
     public init(id: UUID = UUID(), userId: UUID, exerciseId: String,
                 workoutId: UUID? = nil, weightLb: Double? = nil, reps: Int,
                 rpe: Double? = nil, notes: String? = nil, timestamp: Date = Date(),
-                caloriesEst: Double? = nil) {
+                caloriesEst: Double? = nil, holdSeconds: Int? = nil) {
         self.id = id
         self.userId = userId
         self.exerciseId = exerciseId
@@ -422,11 +428,12 @@ public struct WorkoutSetDTO: Codable, Equatable, Sendable, Identifiable {
         self.notes = notes
         self.timestamp = timestamp
         self.caloriesEst = caloriesEst
+        self.holdSeconds = holdSeconds
     }
 
-    // Codable: tolerate older payloads with no caloriesEst field.
+    // Codable: tolerate older payloads with no caloriesEst/holdSeconds field.
     private enum CodingKeys: String, CodingKey {
-        case id, userId, exerciseId, workoutId, weightLb, reps, rpe, notes, timestamp, caloriesEst
+        case id, userId, exerciseId, workoutId, weightLb, reps, rpe, notes, timestamp, caloriesEst, holdSeconds
     }
 
     public init(from decoder: Decoder) throws {
@@ -441,6 +448,7 @@ public struct WorkoutSetDTO: Codable, Equatable, Sendable, Identifiable {
         self.notes = try c.decodeIfPresent(String.self, forKey: .notes)
         self.timestamp = try c.decode(Date.self, forKey: .timestamp)
         self.caloriesEst = try c.decodeIfPresent(Double.self, forKey: .caloriesEst)
+        self.holdSeconds = try c.decodeIfPresent(Int.self, forKey: .holdSeconds)
     }
 }
 

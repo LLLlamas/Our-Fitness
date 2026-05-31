@@ -269,7 +269,8 @@ private struct ExerciseInfoSheet: View {
                     }
                     .padding(14)
                     .background(theme.warn.opacity(0.08))
-                    .overlay(Rectangle().stroke(theme.warn.opacity(0.3), lineWidth: 1))
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.warn.opacity(0.3), lineWidth: 1))
                 }
 
                 // Muscles worked
@@ -308,7 +309,8 @@ private struct ExerciseInfoSheet: View {
                 }
                 .padding(14)
                 .background(theme.card)
-                .overlay(Rectangle().stroke(theme.line, lineWidth: 1))
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
 
                 if !hint.citations.isEmpty {
                     VStack(alignment: .leading, spacing: 4) {
