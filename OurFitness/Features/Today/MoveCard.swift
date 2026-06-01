@@ -181,17 +181,13 @@ struct MoveCard: View {
         }
     }
 
-    private static let timeFormatter: DateFormatter = {
-        let f = DateFormatter(); f.dateFormat = "h:mm a"; return f
-    }()
-    private static let dateFormatter: DateFormatter = {
-        let f = DateFormatter(); f.dateFormat = "MMM d"; return f
-    }()
-
     private func asOfText(_ date: Date?) -> String {
         guard let date else { return "need new data" }
-        let f = Calendar.current.isDateInToday(date) ? Self.timeFormatter : Self.dateFormatter
-        return "as of \(f.string(from: date))"
+        // Delegate the "as of <time/date>" formatting to the tested Domain helper.
+        // Returns nil for just-taken readings (< 2 min) — show "just now" instead
+        // of a redundant timestamp. The 7-day staleness gate is handled upstream
+        // by isEnergyStale / isBpmStale.
+        return Freshness.label(for: date) ?? "just now"
     }
 
     @ViewBuilder
