@@ -8,9 +8,13 @@
 // today; the live container opens V3 from scratch.
 //
 // To migrate the schema going forward:
-//   1. Define a new VersionedSchema (SchemaV4) with the new model types
-//   2. Write a `.custom` MigrationStage that opens both stores manually —
-//      lightweight stages have proven fragile in this codebase
+//   1. Define a new VersionedSchema (e.g. SchemaV5) with the new model types
+//   2. For STRUCTURAL changes (renaming/splitting/retyping existing entities):
+//      write a `.custom` MigrationStage that opens both stores manually —
+//      lightweight *staged* migrations have proven fragile in this codebase.
+//      For purely ADDITIVE changes (a new optional column or a whole new entity,
+//      like WaterEntryModel in V4), no staged plan is needed — the container
+//      opens the new schema directly and SwiftData auto-migrates additively.
 //   3. Bump `AppSchema.current`
 // NEVER edit a shipped schema in place.
 
@@ -87,6 +91,36 @@ public enum SchemaV3: VersionedSchema {
     }
 }
 
+/// V4 adds `WaterEntryModel` (per-tap water intake log). Purely additive — a new
+/// entity, no changes to existing ones. SwiftData applies the new table via
+/// automatic lightweight migration when the container opens V4 against an
+/// existing V3 store; we deliberately ship NO staged `MigrationPlan` (the
+/// `NSLightweightMigrationStage` path is what threw the uncatchable Obj-C
+/// exception in builds 26/27 — see ModelContainer+App.swift). Automatic additive
+/// migration is the same mechanism that absorbed the `isIsometric`/`holdSeconds`
+/// field additions without a plan.
+public enum SchemaV4: VersionedSchema {
+    public static let versionIdentifier = Schema.Version(4, 0, 0)
+
+    public static var models: [any PersistentModel.Type] {
+        [
+            ProfileModel.self,
+            ExerciseModel.self,
+            ProgramModel.self,
+            WorkoutModel.self,
+            WorkoutSetModel.self,
+            FoodModel.self,
+            FoodLogEntryModel.self,
+            BodyMetricModel.self,
+            HealthMarkerModel.self,
+            StepCountModel.self,
+            PilatesSessionModel.self,
+            CardioSessionModel.self,
+            WaterEntryModel.self,
+        ]
+    }
+}
+
 public enum AppSchema {
-    public static let current: any VersionedSchema.Type = SchemaV3.self
+    public static let current: any VersionedSchema.Type = SchemaV4.self
 }

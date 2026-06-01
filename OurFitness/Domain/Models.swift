@@ -21,6 +21,19 @@ public enum Mode: String, Codable, CaseIterable, Sendable {
         case .circuit: return "Circuit"
         }
     }
+
+    /// One-line personality blurb. Shared by onboarding and the mode-switch sheet.
+    public var blurb: String {
+        switch self {
+        case .build:   return "Gain lean mass, fuel hoops. Calorie surplus + hypertrophy."
+        case .circuit: return "Drop weight, fix the markers. Steps, cardio, Pilates."
+        }
+    }
+
+    /// The opposite mode. With only two modes this is the single switch target.
+    public var toggled: Mode {
+        self == .build ? .circuit : .build
+    }
 }
 
 public enum Sex: String, Codable, CaseIterable, Sendable {
@@ -566,6 +579,22 @@ public struct DailyTotals: Equatable, Sendable {
             acc.addedSugarG   += p.addedSugarG
             acc.saturatedFatG += p.saturatedFatG
         }
+    }
+}
+
+public struct WaterEntryDTO: Codable, Equatable, Sendable, Identifiable {
+    public var id: UUID
+    public var userId: UUID
+    public var date: String      // YYYY-MM-DD local
+    public var flOz: Double
+    public var timestamp: Date
+
+    public init(id: UUID = UUID(), userId: UUID, date: String, flOz: Double, timestamp: Date = Date()) {
+        self.id = id
+        self.userId = userId
+        self.date = date
+        self.flOz = flOz
+        self.timestamp = timestamp
     }
 }
 

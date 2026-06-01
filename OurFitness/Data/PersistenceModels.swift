@@ -470,3 +470,26 @@ public final class CardioSessionModel {
         )
     }
 }
+
+// MARK: - Water intake (V4)
+
+@Model
+public final class WaterEntryModel {
+    @Attribute(.unique) public var id: UUID
+    public var userId: UUID
+    public var date: String      // YYYY-MM-DD local
+    public var flOz: Double
+    public var timestamp: Date
+
+    public init(snapshot s: WaterEntryDTO) {
+        self.id = s.id
+        self.userId = s.userId
+        self.date = s.date
+        self.flOz = s.flOz
+        self.timestamp = s.timestamp
+    }
+
+    public var snapshot: WaterEntryDTO {
+        WaterEntryDTO(id: id, userId: userId, date: date, flOz: flOz, timestamp: timestamp)
+    }
+}

@@ -144,3 +144,13 @@ public enum Targets {
         }
     }
 }
+
+public extension ProfileDTO {
+    /// Vitals slice consumed by `Targets.compute`. Single source so target math
+    /// and the mode-switch preview build the same input from a profile.
+    var vitals: Targets.ProfileVitals {
+        Targets.ProfileVitals(
+            sex: sex, weightLb: weightLb, heightIn: heightIn, age: age, activity: activity
+        )
+    }
+}

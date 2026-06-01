@@ -10,26 +10,67 @@ struct ProgressTabView: View {
     @Environment(\.theme) private var theme
     @EnvironmentObject private var toasts: ToastCenter
 
+    // Profile-scoped at the query level — never fetch another profile's rows.
     @Query private var bodyModels: [BodyMetricModel]
     @Query private var markerModels: [HealthMarkerModel]
     @Query private var stepModels: [StepCountModel]
 
     @State private var activeStat: StatKind?
+    @State private var showEditTrackers = false
 
-    private var body_: [BodyMetricDTO] {
-        bodyModels.map(\.snapshot)
-            .filter { $0.userId == profile.id }
-            .sorted { $0.date < $1.date }
+    /// Per-profile custom tracker visibility. Empty = use the mode defaults;
+    /// "none" = customized to show nothing; otherwise a CSV of StatKind raw values.
+    /// IMPORTANT: never add a StatKind whose rawValue is "none" — it collides with the sentinel.
+    @AppStorage private var enabledStatsRaw: String
+
+    init(profile: ProfileDTO) {
+        self.profile = profile
+        let uid = profile.id
+        _enabledStatsRaw = AppStorage(wrappedValue: "", "progressStats.\(uid.uuidString)")
+        _bodyModels = Query(
+            filter: #Predicate<BodyMetricModel> { $0.userId == uid },
+            sort: \.date, order: .forward
+        )
+        _markerModels = Query(
+            filter: #Predicate<HealthMarkerModel> { $0.userId == uid },
+            sort: \.date, order: .forward
+        )
+        // Date-ascending like bodyModels — the `Steps.*` helpers index by day so
+        // order is irrelevant to them, and stepsDetail re-sorts for display.
+        _stepModels = Query(
+            filter: #Predicate<StepCountModel> { $0.userId == uid },
+            sort: \.date, order: .forward
+        )
     }
-    private var markers: [HealthMarkerDTO] {
-        markerModels.map(\.snapshot).filter { $0.userId == profile.id }
-    }
-    private var steps: [StepCountDTO] {
-        stepModels.map(\.snapshot).filter { $0.userId == profile.id }
+
+    // Body metrics arrive date-ascending from the query (consumers take `.last`).
+    private var body_: [BodyMetricDTO] { bodyModels.map(\.snapshot) }
+    private var markers: [HealthMarkerDTO] { markerModels.map(\.snapshot) }
+    private var steps: [StepCountDTO] { stepModels.map(\.snapshot) }
+
+    /// The enabled tracker set: mode defaults until the user customizes, then
+    /// whatever they chose (including the empty "none" state).
+    private var enabledSet: Set<String> {
+        if enabledStatsRaw.isEmpty {
+            return Set(StatKind.allCases.filter { $0.isRelevant(for: profile.mode) }.map(\.rawValue))
+        }
+        if enabledStatsRaw == "none" { return [] }
+        return Set(enabledStatsRaw.split(separator: ",").map(String.init))
     }
 
     private var visibleStats: [StatKind] {
-        StatKind.allCases.filter { $0.isRelevant(for: profile.mode) }
+        StatKind.allCases.filter { enabledSet.contains($0.rawValue) }
+    }
+
+    private func persistEnabled(_ set: Set<String>) {
+        if set.isEmpty {
+            enabledStatsRaw = "none"
+        } else {
+            enabledStatsRaw = StatKind.allCases
+                .filter { set.contains($0.rawValue) }
+                .map(\.rawValue)
+                .joined(separator: ",")
+        }
     }
 
     private let columns = [
@@ -40,15 +81,29 @@ struct ProgressTabView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                Text("progress.")
-                    .font(.system(size: 56, weight: .regular))
-                    .foregroundStyle(theme.text)
+                HStack(alignment: .firstTextBaseline) {
+                    Text("progress.")
+                        .font(.system(size: 56, weight: .regular))
+                        .foregroundStyle(theme.text)
+                    Spacer()
+                    Button { showEditTrackers = true } label: {
+                        Image(systemName: "slider.horizontal.3")
+                    }
+                    .tactile(.ghost)
+                    .accessibilityLabel("Edit trackers")
+                }
                 Text("Weekly trends > daily pass/fail. Show up, log honestly, watch the lines move.")
                     .font(.callout).foregroundStyle(theme.dim)
 
-                LazyVGrid(columns: columns, spacing: 14) {
-                    ForEach(visibleStats, id: \.self) { kind in
-                        statCard(for: kind)
+                if visibleStats.isEmpty {
+                    Text("No trackers shown. Tap the sliders above to add some.")
+                        .font(.callout).foregroundStyle(theme.dim)
+                        .frame(maxWidth: .infinity, minHeight: 80)
+                } else {
+                    LazyVGrid(columns: columns, spacing: 14) {
+                        ForEach(visibleStats, id: \.self) { kind in
+                            statCard(for: kind)
+                        }
                     }
                 }
             }
@@ -59,6 +114,12 @@ struct ProgressTabView: View {
         .sheet(item: $activeStat) { kind in
             detailSheet(for: kind)
                 .themed(theme.mode)
+        }
+        .sheet(isPresented: $showEditTrackers) {
+            EditTrackersSheet(enabled: enabledSet, mode: profile.mode) { newSet in
+                persistEnabled(newSet)
+            }
+            .themed(profile.mode)
         }
     }
 

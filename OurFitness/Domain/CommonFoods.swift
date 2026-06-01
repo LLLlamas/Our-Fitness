@@ -247,6 +247,12 @@ public enum CommonFoods {
             servingLabel: "1 cup (240 ml)",
             calories: 40, proteinG: 1, carbsG: 2, fatG: 3, fiberG: 1
         ),
+        CommonFood(
+            id: "whipped-cream", name: "Whipped cream",
+            aliases: ["whipped cream", "whip cream", "whipped topping", "reddi wip", "cool whip"],
+            servingLabel: "2 tbsp (6 g)",
+            calories: 15, proteinG: 0, carbsG: 1, fatG: 1, fiberG: 0
+        ),
     ]
 
     // MARK: - Vegetables
@@ -377,6 +383,24 @@ public enum CommonFoods {
             servingLabel: "1 cup diced (152 g)",
             calories: 46, proteinG: 1, carbsG: 11, fatG: 0, fiberG: 1
         ),
+        CommonFood(
+            id: "dragonfruit", name: "Dragonfruit",
+            aliases: ["dragonfruit", "dragon fruit", "pitaya", "pitahaya"],
+            servingLabel: "1 cup cubed (227 g)",
+            calories: 136, proteinG: 3, carbsG: 29, fatG: 0, fiberG: 7
+        ),
+        CommonFood(
+            id: "lychee", name: "Lychee",
+            aliases: ["lychee", "lychees", "litchi", "leechee"],
+            servingLabel: "1 cup (190 g)",
+            calories: 125, proteinG: 2, carbsG: 31, fatG: 0, fiberG: 2
+        ),
+        CommonFood(
+            id: "acai-puree", name: "Açaí (unsweetened)",
+            aliases: ["acai", "açaí", "acai puree", "acai pack", "acai pulp"],
+            servingLabel: "1 pack (100 g, unsweetened)",
+            calories: 70, proteinG: 1, carbsG: 6, fatG: 5, fiberG: 3
+        ),
     ]
 
     // MARK: - Legumes
@@ -458,6 +482,24 @@ public enum CommonFoods {
             servingLabel: "16 oz (banana + milk + protein)",
             calories: 420, proteinG: 30, carbsG: 55, fatG: 8, fiberG: 4
         ),
+        CommonFood(
+            id: "bubble-tea", name: "Bubble tea (milk tea + boba)",
+            aliases: ["bubble tea", "boba", "boba tea", "milk tea", "pearl milk tea", "boba milk tea"],
+            servingLabel: "16 oz with tapioca pearls",
+            calories: 280, proteinG: 2, carbsG: 60, fatG: 5, fiberG: 0
+        ),
+        CommonFood(
+            id: "chocolate-milk", name: "Chocolate milk",
+            aliases: ["chocolate milk", "nesquik", "choccy milk", "chocolate nesquik"],
+            servingLabel: "1 cup (240 ml)",
+            calories: 190, proteinG: 8, carbsG: 30, fatG: 5, fiberG: 1
+        ),
+        CommonFood(
+            id: "milk-2percent", name: "2% milk",
+            aliases: ["2% milk", "two percent milk", "reduced fat milk", "semi-skimmed milk"],
+            servingLabel: "1 cup (244 ml)",
+            calories: 122, proteinG: 8, carbsG: 12, fatG: 5, fiberG: 0
+        ),
     ]
 
     // MARK: - Soups
@@ -515,6 +557,12 @@ public enum CommonFoods {
             aliases: ["burrito bowl", "chipotle bowl", "rice bowl", "burrito"],
             servingLabel: "1 bowl (~450 g)",
             calories: 650, proteinG: 40, carbsG: 65, fatG: 20, fiberG: 10
+        ),
+        CommonFood(
+            id: "acai-bowl", name: "Açaí bowl",
+            aliases: ["acai bowl", "açaí bowl", "acai smoothie bowl"],
+            servingLabel: "1 bowl (~350 g, with granola + fruit)",
+            calories: 450, proteinG: 6, carbsG: 80, fatG: 12, fiberG: 9
         ),
         CommonFood(
             id: "sandwich", name: "Turkey sandwich",

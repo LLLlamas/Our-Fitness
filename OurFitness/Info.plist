@@ -25,7 +25,7 @@
 
   <!-- HealthKit usage descriptions (required for App Store) -->
   <key>NSHealthShareUsageDescription</key>
-  <string>Our-Fitness reads your steps, weight, resting heart rate, active energy, and exercise time from Apple Health to show your daily progress and trends.</string>
+  <string>Our-Fitness reads your steps, weight, heart rate, resting heart rate, active energy, exercise time, body fat, waist, blood pressure, and blood glucose from Apple Health to show your daily progress and trends.</string>
   <key>NSHealthUpdateUsageDescription</key>
   <string>Our-Fitness can write workouts and body weight back to Apple Health so your data stays in one place.</string>
 

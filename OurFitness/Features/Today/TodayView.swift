@@ -83,6 +83,12 @@ struct TodayView: View {
 
                 MacroQuadGrid(totals: totals, targets: profile.computedTargets)
 
+                if profile.healthGranted {
+                    MoveCard(profile: profile, health: health)
+                }
+
+                WaterCard(profile: profile)
+
                 if profile.mode == .circuit {
                     circuitContent
                 } else {
@@ -96,8 +102,16 @@ struct TodayView: View {
         .task(id: profile.id) {
             await backfillIfNeeded()
             await refreshToday()
+            if profile.healthGranted {
+                await health.syncFromHealth(profileId: profile.id, ctx: ctx)
+            }
         }
-        .refreshable { await refreshToday() }
+        .refreshable {
+            await refreshToday()
+            if profile.healthGranted {
+                await health.syncFromHealth(profileId: profile.id, ctx: ctx)
+            }
+        }
     }
 
     // MARK: - Circuit content (absorbed from Train tab)

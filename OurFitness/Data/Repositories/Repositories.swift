@@ -95,6 +95,30 @@ public enum Repos {
         try? ctx.save()
     }
 
+    /// Switch a profile's mode at will. Recomputes macro/step targets from the
+    /// profile's existing vitals (logs are mode-agnostic and untouched) and, when
+    /// switching to Circuit, seeds the parenting exercises (idempotent). Returns
+    /// the updated DTO, or nil if the profile no longer exists.
+    @discardableResult
+    public static func updateMode(_ ctx: ModelContext, profileId: UUID, to newMode: Mode) -> ProfileDTO? {
+        let target = profileId
+        let desc = FetchDescriptor<ProfileModel>(predicate: #Predicate { $0.id == target })
+        guard let model = try? ctx.fetch(desc).first else { return nil }
+
+        let current = model.snapshot
+        guard current.mode != newMode else { return current }
+
+        model.modeRaw = newMode.rawValue
+        model.targetsJSON = (try? JSONEncoder().encode(Targets.compute(mode: newMode, vitals: current.vitals))) ?? model.targetsJSON
+        model.updatedAt = Date()
+        try? ctx.save()
+
+        if newMode == .circuit {
+            seedCircuitExercises(ctx, profileId: profileId)
+        }
+        return model.snapshot
+    }
+
     // MARK: - Exercises
 
     public static func listExercises(_ ctx: ModelContext) -> [ExerciseDTO] {
@@ -143,12 +167,20 @@ public enum Repos {
         return dto
     }
 
+    /// Deletes an exercise and cascade-deletes every set logged against it, so
+    /// no orphaned WorkoutSetModel rows linger (they reference exerciseId by string).
     public static func deleteExercise(_ ctx: ModelContext, id: String) {
-        let desc = FetchDescriptor<ExerciseModel>(predicate: #Predicate { $0.id == id })
-        if let target = try? ctx.fetch(desc).first {
-            ctx.delete(target)
-            try? ctx.save()
+        // Delete the sets first so we never risk leaving orphans if the save
+        // boundary moves (e.g. autosave) between the two deletes.
+        let setDesc = FetchDescriptor<WorkoutSetModel>(predicate: #Predicate { $0.exerciseId == id })
+        for s in (try? ctx.fetch(setDesc)) ?? [] {
+            ctx.delete(s)
         }
+        let exDesc = FetchDescriptor<ExerciseModel>(predicate: #Predicate { $0.id == id })
+        if let target = try? ctx.fetch(exDesc).first {
+            ctx.delete(target)
+        }
+        try? ctx.save()
     }
 
     // MARK: - Food log
@@ -213,6 +245,39 @@ public enum Repos {
         return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
     }
 
+    public static func deleteSet(_ ctx: ModelContext, id: UUID) {
+        let desc = FetchDescriptor<WorkoutSetModel>(predicate: #Predicate { $0.id == id })
+        if let target = try? ctx.fetch(desc).first {
+            ctx.delete(target)
+            try? ctx.save()
+        }
+    }
+
+    // MARK: - Water
+
+    public static func addWater(_ ctx: ModelContext, _ w: WaterEntryDTO) {
+        ctx.insert(WaterEntryModel(snapshot: w))
+        try? ctx.save()
+    }
+
+    public static func deleteWater(_ ctx: ModelContext, id: UUID) {
+        let desc = FetchDescriptor<WaterEntryModel>(predicate: #Predicate { $0.id == id })
+        if let target = try? ctx.fetch(desc).first {
+            ctx.delete(target)
+            try? ctx.save()
+        }
+    }
+
+    /// Imperative fetch for non-`@Query` consumers (tests, future export/sync).
+    /// The WaterCard reads via `@Query` directly; don't duplicate that here.
+    public static func listWater(_ ctx: ModelContext, userId: UUID) -> [WaterEntryDTO] {
+        let desc = FetchDescriptor<WaterEntryModel>(
+            predicate: #Predicate { $0.userId == userId },
+            sortBy: [SortDescriptor(\.timestamp, order: .forward)]
+        )
+        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
+    }
+
     // MARK: - Body + markers
 
     public static func listBody(_ ctx: ModelContext, userId: UUID) -> [BodyMetricDTO] {
@@ -225,6 +290,30 @@ public enum Repos {
 
     public static func addBody(_ ctx: ModelContext, _ b: BodyMetricDTO) {
         ctx.insert(BodyMetricModel(snapshot: b))
+        try? ctx.save()
+    }
+
+    /// Merge fields into the single body-metric row for (userId, day), creating it
+    /// if absent. Only fills fields that are currently nil, so it never clobbers a
+    /// value the user (or an earlier sync) already recorded. Used by Health sync to
+    /// keep one row per day instead of inserting a row per metric.
+    public static func upsertBodyMetric(
+        _ ctx: ModelContext, userId: UUID, day: String,
+        weightLb: Double? = nil, bodyFatPct: Double? = nil, waistIn: Double? = nil
+    ) {
+        let desc = FetchDescriptor<BodyMetricModel>(
+            predicate: #Predicate { $0.userId == userId && $0.date == day }
+        )
+        if let model = try? ctx.fetch(desc).first {
+            if let v = weightLb,   model.weightLb == nil   { model.weightLb = v }
+            if let v = bodyFatPct, model.bodyFatPct == nil { model.bodyFatPct = v }
+            if let v = waistIn,    model.waistIn == nil     { model.waistIn = v }
+        } else {
+            ctx.insert(BodyMetricModel(snapshot: BodyMetricDTO(
+                userId: userId, date: day,
+                weightLb: weightLb, bodyFatPct: bodyFatPct, waistIn: waistIn
+            )))
+        }
         try? ctx.save()
     }
 

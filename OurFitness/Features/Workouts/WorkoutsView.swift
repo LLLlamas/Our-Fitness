@@ -22,23 +22,31 @@ private struct BuildWorkoutsView: View {
     @Environment(\.theme) private var theme
     @EnvironmentObject private var toasts: ToastCenter
 
+    // Profile-scoped at the query level — never fetch another profile's rows.
     @Query private var exerciseModels: [ExerciseModel]
     @Query private var setModels: [WorkoutSetModel]
 
     @State private var showAddSheet = false
     @State private var activeRepCounter: ExerciseDTO?
     @State private var activeInfo: ExerciseDTO?
+    @State private var activeHistory: ExerciseDTO?
 
-    private var myExercises: [ExerciseDTO] {
-        let target = profile.id
-        return exerciseModels.map(\.snapshot)
-            .filter { $0.profileId == target }
-            .sorted { $0.name < $1.name }
+    init(profile: ProfileDTO) {
+        self.profile = profile
+        let uid = profile.id
+        _exerciseModels = Query(
+            filter: #Predicate<ExerciseModel> { $0.profileId == uid },
+            sort: \.name, order: .forward
+        )
+        _setModels = Query(
+            filter: #Predicate<WorkoutSetModel> { $0.userId == uid },
+            sort: \.timestamp, order: .forward
+        )
     }
 
-    private var mySets: [WorkoutSetDTO] {
-        setModels.map(\.snapshot).filter { $0.userId == profile.id }
-    }
+    // Exercises arrive name-sorted from the query.
+    private var myExercises: [ExerciseDTO] { exerciseModels.map(\.snapshot) }
+    private var mySets: [WorkoutSetDTO] { setModels.map(\.snapshot) }
 
     // MARK: - Stats helpers
 
@@ -159,6 +167,10 @@ private struct BuildWorkoutsView: View {
             BuildExerciseInfoSheet(exercise: ex, profile: profile)
                 .themed(profile.mode)
         }
+        .sheet(item: $activeHistory) { ex in
+            SetHistorySheet(profile: profile, exercise: ex)
+                .themed(profile.mode)
+        }
     }
 
     @ViewBuilder
@@ -181,6 +193,12 @@ private struct BuildWorkoutsView: View {
                         }
                     }
                     Spacer()
+                    Button { activeHistory = ex } label: {
+                        Image(systemName: "clock.arrow.circlepath")
+                            .foregroundStyle(theme.dim)
+                    }
+                    .tactile(.ghost)
+                    .accessibilityLabel("\(ex.name) logged sets")
                     Button { activeInfo = ex } label: {
                         Image(systemName: "info.circle")
                             .foregroundStyle(theme.dim)
@@ -339,5 +357,143 @@ private struct AddExerciseSheet: View {
                 Button("Done") { nameFocused = false }
             }
         }
+    }
+}
+
+// MARK: - Set history + delete sheet
+
+/// Lists every set logged against an exercise (newest first) with per-set delete,
+/// plus a destructive "delete exercise" action that cascade-removes its sets.
+/// Owns a profile+exercise-scoped @Query so the list refreshes as sets are removed.
+private struct SetHistorySheet: View {
+    let profile: ProfileDTO
+    let exercise: ExerciseDTO
+
+    @Environment(\.modelContext) private var ctx
+    @Environment(\.theme) private var theme
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var toasts: ToastCenter
+
+    @Query private var setModels: [WorkoutSetModel]
+    @State private var confirmDeleteExercise = false
+
+    init(profile: ProfileDTO, exercise: ExerciseDTO) {
+        self.profile = profile
+        self.exercise = exercise
+        let uid = profile.id
+        let exId = exercise.id
+        _setModels = Query(
+            filter: #Predicate<WorkoutSetModel> { $0.userId == uid && $0.exerciseId == exId },
+            sort: \.timestamp, order: .reverse
+        )
+    }
+
+    private var sets: [WorkoutSetDTO] { setModels.map(\.snapshot) }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 18) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(exercise.name.lowercased() + ".")
+                        .font(.system(size: 38, weight: .regular))
+                        .foregroundStyle(theme.text)
+                    Text("LOGGED SETS")
+                        .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                }
+
+                if sets.isEmpty {
+                    Card {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("No sets logged yet.")
+                                .font(.callout).foregroundStyle(theme.text)
+                            Text("Tap the exercise to start counting.")
+                                .font(.caption).foregroundStyle(theme.dim)
+                        }
+                    }
+                } else {
+                    ForEach(sets) { setRow($0) }
+                }
+
+                Button(role: .destructive) {
+                    confirmDeleteExercise = true
+                } label: {
+                    HStack {
+                        Image(systemName: "trash")
+                        Text("Delete exercise")
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .tactile(.secondary, fullWidth: true)
+                .padding(.top, 4)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+        }
+        .presentationDetents([.medium, .large])
+        .presentationBackground(theme.bg)
+        .confirmationDialog("Delete \(exercise.name)?",
+                            isPresented: $confirmDeleteExercise,
+                            titleVisibility: .visible) {
+            Button("Delete exercise and its \(sets.count) set\(sets.count == 1 ? "" : "s")", role: .destructive) {
+                Repos.deleteExercise(ctx, id: exercise.id)
+                Haptics.warn()
+                toasts.show(Toast(title: "\(exercise.name) deleted",
+                                  detail: "Exercise and its sets removed.",
+                                  accent: .warn, symbol: "trash.fill"))
+                dismiss()
+            }
+            Button("Cancel", role: .cancel) {}
+        }
+    }
+
+    @ViewBuilder
+    private func setRow(_ s: WorkoutSetDTO) -> some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(primaryLabel(s))
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(theme.text)
+                Text(secondaryLabel(s))
+                    .font(.caption).foregroundStyle(theme.dim)
+            }
+            Spacer()
+            Button(role: .destructive) {
+                Repos.deleteSet(ctx, id: s.id)
+                Haptics.warn()
+                toasts.show(Toast(title: "Set removed",
+                                  detail: primaryLabel(s),
+                                  accent: .warn, symbol: "trash.fill"))
+            } label: {
+                Image(systemName: "trash")
+                    .foregroundStyle(theme.warn)
+            }
+            .tactile(.ghost)
+            .accessibilityLabel("Delete set")
+        }
+        .padding(10)
+        .background(theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+    }
+
+    private func primaryLabel(_ s: WorkoutSetDTO) -> String {
+        if exercise.isIsometric {
+            let secs = s.holdSeconds ?? 0
+            return "\(secs)s hold"
+        }
+        var label = "\(s.reps) rep\(s.reps == 1 ? "" : "s")"
+        if let w = s.weightLb, w > 0 {
+            label += " · \(Int(w)) lb"
+        }
+        return label
+    }
+
+    private func secondaryLabel(_ s: WorkoutSetDTO) -> String {
+        var parts = [s.timestamp.formatted(date: .abbreviated, time: .shortened)]
+        if let c = s.caloriesEst, c > 0 {
+            parts.append("~\(Int(c)) cal")
+        }
+        return parts.joined(separator: " · ")
     }
 }

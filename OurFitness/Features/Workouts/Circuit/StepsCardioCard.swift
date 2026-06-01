@@ -180,16 +180,7 @@ struct StepsCardioCard: View {
                     .font(.system(size: 10, design: .monospaced))
                     .foregroundStyle(theme.dim)
             }
-            HStack(alignment: .bottom, spacing: 6) {
-                let peak = max(Double(goal), weeklySeries.map(\.value).max() ?? 1)
-                ForEach(Array(weeklySeries.enumerated()), id: \.offset) { _, point in
-                    let h = max(2, CGFloat(point.value / peak) * 36)
-                    Rectangle()
-                        .fill(point.value >= Double(goal) ? theme.accent : theme.dim.opacity(0.45))
-                        .frame(width: 18, height: h)
-                }
-            }
-            .frame(height: 38)
+            WeeklyBarStrip(series: weeklySeries, goal: Double(goal))
         }
     }
 

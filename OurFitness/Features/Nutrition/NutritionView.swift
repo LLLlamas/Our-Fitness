@@ -16,6 +16,8 @@ struct NutritionView: View {
     @State private var showSuggestions = false
     @State private var showLibrary = false
     @State private var mealToDetail: SuggestedMeal?
+    @State private var entryToDetail: FoodLogEntryDTO?
+    @State private var showNutritionTrend = false
 
     init(profile: ProfileDTO) {
         self.profile = profile
@@ -64,20 +66,23 @@ struct NutritionView: View {
         toasts.logged(meal.name, calories: scaled.calories)
     }
 
-    private func logCommonFood(_ food: CommonFood) {
+    private func logCommonFood(_ food: CommonFood, slot: Slot = .lunch, multiplier: Double = 1.0) {
         let dto = FoodLogEntryDTO(
             userId: profile.id,
             date: today,
-            slot: .lunch,
+            slot: slot,
             foodId: food.id,
             customName: food.name,
             perServing: PerServing(
-                calories: food.calories, proteinG: food.proteinG,
-                carbsG: food.carbsG, fatG: food.fatG, fiberG: food.fiberG
+                calories: Int((Double(food.calories) * multiplier).rounded()),
+                proteinG: Int((Double(food.proteinG) * multiplier).rounded()),
+                carbsG: Int((Double(food.carbsG) * multiplier).rounded()),
+                fatG: Int((Double(food.fatG) * multiplier).rounded()),
+                fiberG: Int((Double(food.fiberG) * multiplier).rounded())
             )
         )
         Repos.addFoodLog(ctx, dto)
-        toasts.logged(food.name, calories: food.calories)
+        toasts.logged(food.name, calories: dto.perServing.calories)
     }
 
     var body: some View {
@@ -98,6 +103,7 @@ struct NutritionView: View {
                 }
 
                 totalsCard
+                weeklyNutritionCard
                 suggestionPillRow
                 nudgeSection
 
@@ -142,9 +148,8 @@ struct NutritionView: View {
             .themed(profile.mode)
         }
         .sheet(isPresented: $showLibrary) {
-            FoodLibrarySheet { food in
-                logCommonFood(food)
-                showLibrary = false
+            FoodLibrarySheet { food, slot, multiplier in
+                logCommonFood(food, slot: slot, multiplier: multiplier)
             }
             .themed(profile.mode)
         }
@@ -154,6 +159,50 @@ struct NutritionView: View {
                 mealToDetail = nil
             }
             .themed(profile.mode)
+        }
+        .sheet(item: $entryToDetail) { entry in
+            LoggedEntryDetailSheet(entry: entry) {
+                Repos.deleteFoodLog(ctx, id: entry.id)
+                Haptics.warn()
+                toasts.show(Toast(title: "Removed", detail: entry.customName ?? "Meal",
+                                  accent: .warn, symbol: "minus.circle.fill"))
+                entryToDetail = nil
+            }
+            .themed(profile.mode)
+        }
+        .sheet(isPresented: $showNutritionTrend) {
+            NutritionTrendSheet(profile: profile, logs: allLogs)
+                .themed(profile.mode)
+        }
+    }
+
+    // MARK: - Weekly nutrition
+
+    @ViewBuilder
+    private var weeklyNutritionCard: some View {
+        let series = NutritionHistory.calorieSeries(allLogs, days: 7)
+        let logged = NutritionHistory.daysLogged(allLogs, days: 7)
+        let avg = NutritionHistory.averagePerLoggedDay(allLogs, days: 7)
+        let target = Double(profile.computedTargets.calories)
+        if logged > 0 {
+            PressableCard(action: { showNutritionTrend = true }) {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack {
+                        Text("This week")
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundStyle(theme.text)
+                        Spacer()
+                        Text("\(logged)/7 days")
+                            .font(.caption).foregroundStyle(theme.dim)
+                        Image(systemName: "chart.bar.xaxis")
+                            .font(.caption).foregroundStyle(theme.accent)
+                    }
+                    WeeklyBarStrip(series: series, goal: target, height: 42, barHeight: 40)
+                    Text("Avg \(avg.calories) cal · \(avg.proteinG)p · \(avg.carbsG)c · \(avg.fatG)f")
+                        .font(.system(.caption2, design: .monospaced))
+                        .foregroundStyle(theme.dim)
+                }
+            }
         }
     }
 
@@ -253,7 +302,7 @@ struct NutritionView: View {
                     .font(.callout).foregroundStyle(theme.dim)
             } else {
                 ForEach(todaysLogs) { e in
-                    LogRow(entry: e) {
+                    LogRow(entry: e, onTap: { entryToDetail = e }) {
                         Repos.deleteFoodLog(ctx, id: e.id)
                         Haptics.warn()
                         toasts.show(Toast(title: "Removed", detail: e.customName ?? "Meal", accent: .warn, symbol: "minus.circle.fill"))
@@ -268,28 +317,28 @@ struct NutritionView: View {
 
 private struct LogRow: View {
     let entry: FoodLogEntryDTO
+    let onTap: () -> Void
     let onDelete: () -> Void
     @Environment(\.theme) private var theme
 
     var body: some View {
-        HStack(alignment: .top, spacing: 12) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(entry.customName ?? "Meal")
-                    .foregroundStyle(theme.text)
-                Text("\(entry.perServing.calories) cal · \(entry.perServing.proteinG)p · \(entry.perServing.carbsG)c · \(entry.perServing.fatG)f")
-                    .font(.system(.caption2, design: .monospaced))
-                    .foregroundStyle(theme.dim)
+        PressableCard(action: onTap) {
+            HStack(alignment: .top, spacing: 12) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(entry.customName ?? "Meal")
+                        .foregroundStyle(theme.text)
+                    Text("\(entry.perServing.calories) cal · \(entry.perServing.proteinG)p · \(entry.perServing.carbsG)c · \(entry.perServing.fatG)f")
+                        .font(.system(.caption2, design: .monospaced))
+                        .foregroundStyle(theme.dim)
+                }
+                Spacer(minLength: 0)
+                Button(action: onDelete) {
+                    Image(systemName: "xmark")
+                }
+                .tactile(.ghost)
+                .accessibilityLabel("Remove \(entry.customName ?? "meal")")
             }
-            Spacer(minLength: 0)
-            Button(action: onDelete) {
-                Image(systemName: "xmark")
-            }
-            .tactile(.ghost)
         }
-        .padding(10)
-        .background(theme.card)
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
     }
 }
 
@@ -378,12 +427,12 @@ private struct MealDetailSheet: View {
                     Text("Nutrition".uppercased())
                         .font(.caption).tracking(2).foregroundStyle(theme.dim)
                     HStack(spacing: 8) {
-                        macroChip(label: "Cal", value: adjusted.calories)
-                        macroChip(label: "P", value: adjusted.proteinG)
-                        macroChip(label: "C", value: adjusted.carbsG)
-                        macroChip(label: "F", value: adjusted.fatG)
+                        MacroChip(label: "Cal", value: adjusted.calories)
+                        MacroChip(label: "P", value: adjusted.proteinG)
+                        MacroChip(label: "C", value: adjusted.carbsG)
+                        MacroChip(label: "F", value: adjusted.fatG)
                         if adjusted.fiberG > 0 {
-                            macroChip(label: "Fiber", value: adjusted.fiberG)
+                            MacroChip(label: "Fiber", value: adjusted.fiberG)
                         }
                     }
                 }
@@ -419,9 +468,18 @@ private struct MealDetailSheet: View {
         .presentationDetents([.large])
         .presentationBackground(theme.bg)
     }
+}
 
-    @ViewBuilder
-    private func macroChip(label: String, value: Int) -> some View {
+// MARK: - Shared macro chip
+
+/// Compact macro readout cell. Shared by the meal/food/logged-entry detail
+/// sheets and the weekly nutrition trend sheet.
+struct MacroChip: View {
+    let label: String
+    let value: Int
+    @Environment(\.theme) private var theme
+
+    var body: some View {
         VStack(spacing: 2) {
             Text("\(value)")
                 .font(.system(.callout, design: .monospaced))
@@ -434,7 +492,174 @@ private struct MealDetailSheet: View {
         .padding(.vertical, 8)
         .background(theme.card)
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+    }
+}
+
+// MARK: - Food detail sheet (library)
+
+/// Detail + portion adjuster for a library CommonFood. Mirrors MealDetailSheet
+/// but for a single food; the multiplier scales the listed serving.
+private struct FoodDetailSheet: View {
+    let food: CommonFood
+    let onLog: (Slot, Double) -> Void
+
+    @Environment(\.theme) private var theme
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var multiplier: Double = 1.0
+    @State private var slot: Slot = .lunch
+
+    private static let multipliers: [Double] = [0.5, 1.0, 1.5, 2.0]
+
+    private func scaled(_ v: Int) -> Int { Int((Double(v) * multiplier).rounded()) }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(food.name)
+                        .font(.system(size: 26, weight: .semibold))
+                        .foregroundStyle(theme.text)
+                    Text(food.servingLabel)
+                        .font(.callout).foregroundStyle(theme.dim)
+                }
+
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("About this estimate".uppercased())
+                        .font(.system(size: 9, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                    Text("Per-serving values from USDA FoodData Central and published references. Adjust the multiplier if your portion differed.")
+                        .font(.caption).foregroundStyle(theme.dim)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(10)
+                .background(theme.card)
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Serving size".uppercased())
+                        .font(.caption).tracking(2).foregroundStyle(theme.dim)
+                    HStack(spacing: 8) {
+                        ForEach(Self.multipliers, id: \.self) { m in
+                            Button { multiplier = m } label: {
+                                Text(m == 0.5 ? "½×" : "\(Int(m))×")
+                                    .font(.system(size: 14, weight: .medium))
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 10)
+                            }
+                            .tactile(.pill, fill: multiplier == m ? theme.accent : nil)
+                        }
+                    }
+                }
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Nutrition".uppercased())
+                        .font(.caption).tracking(2).foregroundStyle(theme.dim)
+                    HStack(spacing: 8) {
+                        MacroChip(label: "Cal", value: scaled(food.calories))
+                        MacroChip(label: "P", value: scaled(food.proteinG))
+                        MacroChip(label: "C", value: scaled(food.carbsG))
+                        MacroChip(label: "F", value: scaled(food.fatG))
+                        if food.fiberG > 0 {
+                            MacroChip(label: "Fiber", value: scaled(food.fiberG))
+                        }
+                    }
+                }
+
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Log as".uppercased())
+                        .font(.caption).tracking(2).foregroundStyle(theme.dim)
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 8) {
+                            ForEach([Slot.breakfast, .lunch, .snack, .dinner, .postWorkout], id: \.self) { s in
+                                Button { slot = s } label: { Text(s.label) }
+                                    .tactile(.pill, fill: slot == s ? theme.accent : nil)
+                            }
+                        }
+                    }
+                }
+
+                Button {
+                    onLog(slot, multiplier)
+                    dismiss()
+                } label: {
+                    Text("Log \(food.name)")
+                        .font(.system(size: 17, weight: .semibold))
+                        .frame(maxWidth: .infinity, minHeight: 52)
+                }
+                .tactile(.primary, fullWidth: true)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+        }
+        .presentationDetents([.medium, .large])
+        .presentationBackground(theme.bg)
+    }
+}
+
+// MARK: - Logged entry detail sheet
+
+/// Read-only nutrition breakdown for a meal already in the day's log, with a
+/// delete action. Opened by tapping a row in "Today's log".
+private struct LoggedEntryDetailSheet: View {
+    let entry: FoodLogEntryDTO
+    let onDelete: () -> Void
+
+    @Environment(\.theme) private var theme
+    @Environment(\.dismiss) private var dismiss
+
+    private var ps: PerServing { entry.perServing }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(entry.customName ?? "Meal")
+                        .font(.system(size: 26, weight: .semibold))
+                        .foregroundStyle(theme.text)
+                    Text("\(entry.slot.label.uppercased()) · \(entry.timestamp.formatted(date: .abbreviated, time: .shortened))")
+                        .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                }
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Nutrition".uppercased())
+                        .font(.caption).tracking(2).foregroundStyle(theme.dim)
+                    HStack(spacing: 8) {
+                        MacroChip(label: "Cal", value: ps.calories)
+                        MacroChip(label: "P", value: ps.proteinG)
+                        MacroChip(label: "C", value: ps.carbsG)
+                        MacroChip(label: "F", value: ps.fatG)
+                        if ps.fiberG > 0 { MacroChip(label: "Fiber", value: ps.fiberG) }
+                    }
+                    if ps.sodiumMg > 0 || ps.addedSugarG > 0 || ps.saturatedFatG > 0 {
+                        HStack(spacing: 8) {
+                            if ps.sodiumMg > 0 { MacroChip(label: "Sodium", value: ps.sodiumMg) }
+                            if ps.addedSugarG > 0 { MacroChip(label: "Add. sugar", value: ps.addedSugarG) }
+                            if ps.saturatedFatG > 0 { MacroChip(label: "Sat fat", value: ps.saturatedFatG) }
+                        }
+                    }
+                }
+
+                Button(role: .destructive) {
+                    onDelete()
+                    dismiss()
+                } label: {
+                    HStack {
+                        Image(systemName: "trash")
+                        Text("Remove from log")
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .tactile(.secondary, fullWidth: true)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+        }
+        .presentationDetents([.medium])
+        .presentationBackground(theme.bg)
     }
 }
 
@@ -756,11 +981,12 @@ private struct SuggestionsSheet: View {
 // MARK: - Food Library Sheet
 
 private struct FoodLibrarySheet: View {
-    let onPick: (CommonFood) -> Void
+    let onLog: (CommonFood, Slot, Double) -> Void
 
     @Environment(\.theme) private var theme
     @Environment(\.dismiss) private var dismiss
     @State private var query: String = ""
+    @State private var foodToDetail: CommonFood?
     @FocusState private var searchFocused: Bool
 
     private var results: [CommonFood] {
@@ -778,7 +1004,7 @@ private struct FoodLibrarySheet: View {
                 Text("library.")
                     .font(.system(size: 36, weight: .regular))
                     .foregroundStyle(theme.text)
-                Text("Search common foods. Tap to log one serving.")
+                Text("Search common foods. Tap one for details and to log.")
                     .font(.callout).foregroundStyle(theme.dim)
 
                 searchField
@@ -790,7 +1016,7 @@ private struct FoodLibrarySheet: View {
                 } else {
                     VStack(spacing: 8) {
                         ForEach(results, id: \.id) { food in
-                            PressableCard(action: { onPick(food) }) {
+                            PressableCard(action: { foodToDetail = food }) {
                                 HStack(alignment: .top, spacing: 12) {
                                     VStack(alignment: .leading, spacing: 4) {
                                         Text(food.name)
@@ -814,6 +1040,13 @@ private struct FoodLibrarySheet: View {
         }
         .presentationDetents([.large])
         .presentationBackground(theme.bg)
+        .sheet(item: $foodToDetail) { food in
+            FoodDetailSheet(food: food) { slot, multiplier in
+                onLog(food, slot, multiplier)
+                foodToDetail = nil
+            }
+            .themed(theme.mode)
+        }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()

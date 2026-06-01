@@ -20,7 +20,7 @@ public enum AppModelContainer {
         }
         do {
             return try ModelContainer(
-                for: Schema(versionedSchema: SchemaV3.self),
+                for: Schema(versionedSchema: SchemaV4.self),
                 configurations: [ModelConfiguration(url: storeURL())]
             )
         } catch {
@@ -31,7 +31,7 @@ public enum AppModelContainer {
     public static func makeInMemory() -> ModelContainer {
         do {
             return try ModelContainer(
-                for: Schema(versionedSchema: SchemaV3.self),
+                for: Schema(versionedSchema: SchemaV4.self),
                 configurations: [ModelConfiguration(isStoredInMemoryOnly: true)]
             )
         } catch {

@@ -40,7 +40,6 @@ struct RootView: View {
 
     @State private var tab: Tab = .today
     @State private var showSettings = false
-    @State private var showCreateProfile = false
 
     private var profiles: [ProfileDTO] { profileModels.map(\.snapshot) }
 
@@ -113,16 +112,6 @@ struct RootView: View {
         .sheet(isPresented: $showSettings) {
             SettingsView(profile: profile, health: health)
         }
-        .sheet(isPresented: $showCreateProfile) {
-            ProfileCreationView { dto in
-                activeProfileIdString = dto.id.uuidString
-                Haptics.success()
-                toasts.show(Toast(title: "Profile created.",
-                                  detail: "Now active: \(dto.name).",
-                                  accent: .win, symbol: "checkmark.seal.fill"),
-                            for: 2.0)
-            }
-        }
         .onChange(of: profile.mode) { _, _ in
             // If switching from Build → Circuit while on the Train tab, land on Today
             if tab == .workouts { tab = .today }
@@ -141,21 +130,11 @@ struct RootView: View {
     private func header(for profile: ProfileDTO) -> some View {
         let theme = Theme.for(profile.mode)
         HStack(spacing: 10) {
-            ProfileSwitcher(
-                profiles: profiles,
-                active: profile,
-                onSelect: { activeProfileIdString = $0.id.uuidString },
-                onOpenSettings: { showSettings = true },
-                onAddProfile: { showCreateProfile = true }
-            )
+            ProfileAvatar(profile: profile, onTap: { showSettings = true })
             Text("our-fitness.")
                 .font(.system(size: 22, weight: .regular))
                 .foregroundStyle(theme.text)
             Spacer()
-            Button { showSettings = true } label: {
-                Image(systemName: "gearshape")
-            }
-            .tactile(.ghost)
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 14)

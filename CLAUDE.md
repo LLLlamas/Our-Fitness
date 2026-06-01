@@ -1,8 +1,10 @@
 # Our-Fitness — Foundation (iOS / SwiftUI)
 
-Native iOS app for a small TestFlight circle. Two modes: **Build** (gain mass, fuel hoops) and **Circuit** (drop weight, fix cardiovascular markers). Show up, log honestly, let the numbers tell the truth.
+Native iOS app, now targeting an App Store release (was a small TestFlight circle). Two modes: **Build** (gain mass, fuel hoops) and **Circuit** (drop weight, fix cardiovascular markers). Show up, log honestly, let the numbers tell the truth.
 
-> **Rename note (2026-05):** *Reset* → *Circuit*. Swift symbol `Mode.circuit`; SwiftData raw value pinned to `"reset"` for back-compat. Multi-profile creation replaced fixed seeded profiles. Food library, scoring, and cap surfaces stashed under `_stashed/` pending rework.
+> **Rename note (2026-05):** *Reset* → *Circuit*. Swift symbol `Mode.circuit`; SwiftData raw value pinned to `"reset"` for back-compat. Food library, scoring, and cap surfaces stashed under `_stashed/` pending rework.
+>
+> **App Store expansion (2026-05):** Collapsed to **one profile per install** (the device is one person) — the old shared-device `ProfileSwitcher` / "Whose device is this?" picker is gone, replaced by `Components/ProfileAvatar.swift` (identity badge → Settings). First launch still routes to `ProfileCreationView`. **Mode is now changeable at will** in Settings (was immutable post-creation). The store layer keeps its per-profile scoping (every log carries `userId`/`profileId`), so multi-profile is dormant, not deleted. Full roadmap incl. iCloud/CloudKit sync (Phase 2) and store polish (Phase 3) in [app-expansion.md](app-expansion.md).
 
 ---
 
@@ -51,9 +53,10 @@ project.yml     ← XcodeGen — source of truth; .xcodeproj gitignored
 
 1. `Domain/` never imports `SwiftData` or `SwiftUI`. Pure structs/functions only.
 2. `Features/` never opens the SwiftData container directly — use repositories or `@Query`.
-3. HealthKit access only through `Services/HealthKitService.swift`.
-4. `.swift` filenames within the target must be unique. `@Model` classes live in `Data/PersistenceModels.swift` — don't name any new file `Models.swift`.
-5. `OurFitnessTests` is hostless: blank `TEST_HOST`/`BUNDLE_LOADER`, no `@testable import OurFitness`.
+3. **Per-profile `@Query` must be scoped in the predicate, not filtered client-side.** Give the view an `init(profile:)` that builds `Query(filter: #Predicate { $0.userId == uid })` (or `profileId`) — see `TodayView`, `NutritionView`, `ProgressTabView`, `WorkoutsView`. Never `@Query` everything and `.filter` in a computed property; it leaks across profiles and defeats the store-level isolation that iCloud sync (Phase 2) depends on.
+4. HealthKit access only through `Services/HealthKitService.swift`.
+5. `.swift` filenames within the target must be unique. `@Model` classes live in `Data/PersistenceModels.swift` — don't name any new file `Models.swift`.
+6. `OurFitnessTests` is hostless: blank `TEST_HOST`/`BUNDLE_LOADER`, no `@testable import OurFitness`.
 
 ---
 
@@ -65,6 +68,7 @@ project.yml     ← XcodeGen — source of truth; .xcodeproj gitignored
 | Isometric hold timer UI | `Features/Workouts/RepCounter.swift` → `IsometricTimerView` |
 | Isometric calorie math | `Domain/CalorieEstimator.caloriesForIsometric(seconds:met:bodyWeightLb:)` |
 | Rep counter (non-isometric) | `Features/Workouts/RepCounter.swift` → `RepCounterView` |
+| Delete a logged set / an exercise | `Repos.deleteSet` / `Repos.deleteExercise` (cascade-deletes its sets) + `SetHistorySheet` in `Features/Workouts/WorkoutsView.swift` (clock icon on each exercise card) |
 | Log a Pilates session | `Repos.logPilatesSession` + `PilatesSessionDTO` / `PilatesSessionModel` |
 | Log a cardio session | `Repos.logCardio` + `CardioSessionDTO` / `CardioSessionModel` |
 | Pilates weekly goal / streak | `Domain/Movement.swift` (`pilatesWeeklyStreak`) |
@@ -73,16 +77,25 @@ project.yml     ← XcodeGen — source of truth; .xcodeproj gitignored
 | Post-exercise recovery hint | `Domain/Movement.swift` (`postExerciseHint`, `postPilatesHint`, `namedParentingHint`) |
 | Circular progress arc | `Components/ProgressRing.swift` — reuse, never inline `Circle().trim` |
 | Per-profile steps goal override | `AppStorage` key `"stepsGoal.\(profileId.uuidString)"` |
+| Water intake tracker (daily + weekly) | `Domain/Water.swift` (cup presets, aggregation over `WaterEntryDTO`) + `Features/Today/WaterCard.swift` (`@Query` of `WaterEntryModel`). `Repos.addWater` / `listWater` / `deleteWater`. Daily goal in `AppStorage` `"waterGoalFlOz.\(profileId)"` |
 | Meal log natural language → nutrition | `Domain/FoodParser.swift` + `Domain/CommonFoods.swift` |
-| Add / update a common food | `Domain/CommonFoods.swift` (`CommonFoods.all`) |
+| Add / update a common food | `Domain/CommonFoods.swift` (`CommonFoods.all`) — pick the right category array; aliases drive parser matching |
 | Curated meal suggestions | `Domain/SuggestedMeals.swift` |
-| Meal detail modal (info + portion adjust) | `Features/Nutrition/NutritionView.swift` → `MealDetailSheet` |
+| Meal / food detail modal (info + portion adjust) | `Features/Nutrition/NutritionView.swift` → `MealDetailSheet` (suggested meals), `FoodDetailSheet` (library foods), `LoggedEntryDetailSheet` (tap a logged row). Shared `MacroChip` |
+| Weekly+ nutrition history | `Domain/NutritionHistory.swift` (per-day totals, calorie series from the persisted log) + `weeklyNutritionCard` in NutritionView + `Features/Nutrition/NutritionTrendSheet.swift` |
 | Change calorie math | `Domain/Targets.swift` only |
+| Switch a profile's mode at will | `Repos.updateMode(_:profileId:to:)` (recomputes targets, seeds Circuit exercises) + `ModeSwitchSheet` in `Features/Settings/SettingsView.swift` |
+| Profile identity / open Settings | `Components/ProfileAvatar.swift` (one profile per install; no switcher) |
+| Mode display copy / opposite mode | `Domain/Models.swift` (`Mode.blurb`, `Mode.toggled`) |
 | New workout progression | `Domain/Progression.swift` strategy switch |
-| Add a tracked health marker | `Domain/Models.swift` (`HealthMarkerKind`) + `Features/Progress/ProgressView.swift` |
+| Add a tracked health marker | `Domain/Models.swift` (`HealthMarkerKind`) + `Features/Progress/ProgressView.swift`. Adding a `HealthMarkerKind` case also requires updating the exhaustive switches in `Domain/HealthRanges.swift` (`status`, `context`) |
+| Show/hide progress trackers | `Features/Progress/EditTrackersSheet.swift` (sliders icon on Progress). Per-mode defaults via `StatKind.isRelevant`; user overrides in `AppStorage` `"progressStats.\(profileId)"` (empty = defaults, `"none"` = all hidden, else CSV of raw values) |
 | New HealthKit metric | `Services/HealthKitService.swift` + snapshot in `Data/PersistenceModels.swift` |
+| Sync a Health metric into logs | `HealthKitService.syncFromHealth(profileId:ctx:)` (deduped upsert of body fat/waist → BodyMetric, resting HR/BP/glucose → markers). Called from `TodayView`'s task/refresh when granted |
+| Apple Health "Move" card (active energy + HR) | `Features/Today/MoveCard.swift` + `HealthKitService.activeEnergy` / `latestHeartRate`. Also shows our MET estimate (`Domain/DailyBurn.metEstimate`) beside the Watch figure |
+| Today's MET burn estimate | `Domain/DailyBurn.metEstimate(steps:sets:cardio:pilates:bodyWeightLb:)` — sums via `CalorieEstimator`; never hardcode kcal |
 | New tab | `App/RootView.swift` `Tab` enum + new folder under `Features/` |
-| Schema change | `Data/Schema.swift` — new `VersionedSchema` + custom migration stage. Never edit shipped schemas. Current: `SchemaV3`. |
+| Schema change | `Data/Schema.swift` — new `VersionedSchema`. Never edit shipped schemas. Current: `SchemaV4`. Additive changes (new entity / optional field) ride automatic migration with NO staged plan; structural changes need a `.custom` stage. |
 | Add HealthKit permission | `OurFitness.entitlements` + `Info.plist` + `HealthKitService.requestAuth` |
 | Button variant | `Components/TactileButtonStyle.swift` — reuse existing 5 variants |
 | Haptic vocabulary | `Services/Haptics.swift` |
@@ -122,9 +135,11 @@ Append-only logs. Derived figures (daily/weekly/streak/trend) are never stored.
 
 `Domain/Models.swift` — value-type DTOs. `Data/PersistenceModels.swift` — matching `@Model` classes with `snapshot` adapters.
 
-Key entities: `Profile`, `ExerciseDTO` (has `isIsometric: Bool`), `WorkoutSetDTO` (has `holdSeconds: Int?` for isometric), `FoodLogEntryDTO`, `BodyMetricDTO`, `HealthMarkerDTO`, `StepCountDTO`, `PilatesSessionDTO`, `CardioSessionDTO`.
+Key entities: `Profile`, `ExerciseDTO` (has `isIsometric: Bool`), `WorkoutSetDTO` (has `holdSeconds: Int?` for isometric), `FoodLogEntryDTO`, `BodyMetricDTO`, `HealthMarkerDTO`, `StepCountDTO`, `PilatesSessionDTO`, `CardioSessionDTO`, `WaterEntryDTO`.
 
 `StepCount.source`: `.appleHealth` is the only live writer. `.manual` retained for schema stability.
+
+**HealthKit coverage.** `syncFromHealth` auto-fills body fat % + waist (`BodyMetricDTO`) and resting HR + blood pressure + blood glucose (`HealthMarkerDTO`, `source: "healthkit"`), deduped per day; steps + weight already sync. **LDL, HDL, total cholesterol, triglycerides, and A1c are NOT available from Apple Health** (lab values exposed only via clinical records / FHIR, out of scope) — they remain manual entry. Calorie *burn* is never replaced by Health: the Train tab keeps per-exercise MET estimates, and the `MoveCard` shows Apple Health's whole-day active energy **beside** our own whole-day MET estimate (`Domain/DailyBurn.metEstimate`) so the science-based number sits next to the Watch-measured one.
 
 ---
 
@@ -219,11 +234,13 @@ Walk this ladder top-down — first "missing" answer is root cause:
 - `workflow_dispatch` boolean inputs: compare with `inputs.<name> == true`, not `github.event.inputs.<name> == 'true'`.
 
 ### Schema migration
-Current: `SchemaV3`. History: V1–V3 lightweight migrations failed with uncatchable Obj-C exceptions; app now opens a fresh store URL (`OurFitness.store`). No migration plan runs today.
+Current: `SchemaV4`. History: V1–V3 lightweight *staged* migrations failed with uncatchable Obj-C exceptions; app moved to a fresh store URL (`OurFitness.store`). **No staged `MigrationPlan` runs today** — the container opens `AppSchema.current` directly and relies on SwiftData's *automatic* additive migration.
 
 **Adding new optional fields** (with `= default` or `?`) to existing `@Model` classes is safe — SwiftData applies lightweight column additions automatically. `isIsometric: Bool = false` on `ExerciseModel` and `holdSeconds: Int?` on `WorkoutSetModel` were added this way in 2026-05.
 
-**For structural changes**: define `SchemaV4`, write a `.custom` migration stage (not lightweight — those proved fragile), bump `AppSchema.current`.
+**Adding a new entity** is also additive and rides automatic migration with no plan: `WaterEntryModel` (SchemaV4, 2026-05) was added by listing it in `SchemaV4.models` and bumping `AppSchema.current` — no staged `NSLightweightMigrationStage` (the thing that threw in builds 26/27). ⚠️ Still test an upgrade-in-place on a device carrying existing data before shipping; the fallback on failure is delete + reinstall (data loss).
+
+**For structural changes** (renaming/splitting/retyping existing entities): define a new `SchemaV*`, write a `.custom` migration stage (not lightweight — those proved fragile), bump `AppSchema.current`.
 
 ---
 

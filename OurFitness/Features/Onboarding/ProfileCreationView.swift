@@ -74,7 +74,7 @@ struct ProfileCreationView: View {
                         Text(m.displayName)
                             .font(.system(size: 17, weight: .semibold))
                             .foregroundStyle(theme.text)
-                        Text(modeBlurb(m))
+                        Text(m.blurb)
                             .font(.callout).foregroundStyle(theme.dim)
                     }
                     Spacer(minLength: 0)
@@ -207,13 +207,6 @@ struct ProfileCreationView: View {
             Text(label.uppercased()).font(.system(size: 10)).tracking(2)
                 .foregroundStyle(theme.dim)
             content()
-        }
-    }
-
-    private func modeBlurb(_ m: Mode) -> String {
-        switch m {
-        case .build:   return "Gain lean mass, fuel hoops. Calorie surplus + hypertrophy."
-        case .circuit: return "Drop weight, fix the markers. Steps, cardio, Pilates."
         }
     }
 }
