@@ -32,14 +32,41 @@ private struct RepCounterView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var toasts: ToastCenter
 
+    // Profile + exercise scoped at the query level — drives the weekly volume
+    // milestone count (approximated per-exercise; see workoutSetMessage call site).
+    @Query private var weekSetModels: [WorkoutSetModel]
+
     @State private var reps: Int = 0
     @State private var weightStr: String = ""
     @State private var setsLogged: Int = 0
     @State private var showInfo = false
+    @State private var lastProjection: String?
     @FocusState private var weightFocused: Bool
+
+    init(profile: ProfileDTO, exercise: ExerciseDTO) {
+        self.profile = profile
+        self.exercise = exercise
+        let uid = profile.id
+        let exId = exercise.id
+        _weekSetModels = Query(
+            filter: #Predicate<WorkoutSetModel> { $0.userId == uid && $0.exerciseId == exId },
+            sort: \.timestamp, order: .reverse
+        )
+    }
 
     private var tracksWeight: Bool { exercise.category == .compound || exercise.category == .isolation }
     private var info: ExerciseInfo.Meta { ExerciseInfo.meta(for: exercise) }
+
+    // Sets logged this ISO week for this exercise (Monday-anchored, matching
+    // the WorkoutsView stats helper). Approximates per-muscle weekly volume.
+    private var setsThisWeekForMuscle: Int {
+        var isoCal = Calendar(identifier: .iso8601)
+        isoCal.firstWeekday = 2
+        guard let week = isoCal.dateInterval(of: .weekOfYear, for: Date()) else {
+            return 0
+        }
+        return weekSetModels.filter { week.contains($0.timestamp) }.count
+    }
 
     var body: some View {
         VStack(spacing: 18) {
@@ -50,6 +77,9 @@ private struct RepCounterView: View {
                 weightField
             }
             actionRow
+            if let projection = lastProjection {
+                ProjectionBar(text: projection)
+            }
             Spacer()
         }
         .padding(.horizontal, 24)
@@ -168,6 +198,14 @@ private struct RepCounterView: View {
             exercise: exercise,
             bodyWeightLb: profile.weightLb
         )
+
+        // Snapshot pre-save figures so the projection/milestone don't depend on
+        // @Query refresh timing (SwiftData may not reflect the new set this tick).
+        let caloriesTodayBefore = weekSetModels
+            .filter { Calendar.current.isDateInToday($0.timestamp) }
+            .reduce(0.0) { $0 + ($1.caloriesEst ?? 0) }
+        let weekCountAfter = setsThisWeekForMuscle + 1
+
         let dto = WorkoutSetDTO(
             userId: profile.id,
             exerciseId: exercise.id,
@@ -177,12 +215,30 @@ private struct RepCounterView: View {
         )
         Repos.addSet(ctx, dto)
         setsLogged += 1
-        toasts.show(Toast(
-            title: "Set saved",
-            detail: weight.map { "\(Int($0)) lb × \(reps)" } ?? "\(reps) reps · ~\(Int(kcal)) cal",
-            accent: .win,
-            symbol: "checkmark.seal.fill"
-        ))
+
+        lastProjection = EncouragementEngine.repProjection(
+            exercise: exercise,
+            repsLogged: reps,
+            totalCaloriesToday: caloriesTodayBefore,
+            bodyWeightLb: profile.weightLb
+        )
+
+        // Weekly volume milestone — fires only at defined set counts.
+        if let milestone = EncouragementEngine.workoutSetMessage(
+            exercise: exercise,
+            repsJustLogged: reps,
+            totalSetsThisWeekForMuscle: weekCountAfter,
+            mode: profile.mode
+        ) {
+            toasts.workoutMilestone(milestone)
+        } else {
+            toasts.show(Toast(
+                title: "Set saved",
+                detail: weight.map { "\(Int($0)) lb × \(reps)" } ?? "\(reps) reps · ~\(Int(kcal)) cal",
+                accent: .win,
+                symbol: "checkmark.seal.fill"
+            ))
+        }
         reps = 0
     }
 }

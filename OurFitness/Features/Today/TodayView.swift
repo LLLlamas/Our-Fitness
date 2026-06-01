@@ -21,6 +21,13 @@ struct TodayView: View {
 
     @AppStorage("hasBackfilled.steps") private var hasBackfilledRaw: String = ""
 
+    // One-shot-per-day flags for macro encouragement toasts. Comma-separated keys
+    // stored in AppStorage so cold-launch re-fires are suppressed. Reset when the
+    // day key rolls over. Same pattern as milestonesFired in StepsCardioCard.
+    // Keys: "protein-approaching", "protein-goal", "calorie-approaching", "calorie-goal"
+    @AppStorage private var macroFiredRaw: String
+    @AppStorage private var macroFlagDayKey: String
+
     // Mirror the same AppStorage keys used in StepsCardioCard so the streak
     // calculation here uses the user's configured goals, not the mode defaults.
     @AppStorage private var customStepsGoalRaw: Int
@@ -40,6 +47,8 @@ struct TodayView: View {
             sort: \.date,
             order: .reverse
         )
+        _macroFiredRaw = AppStorage(wrappedValue: "", "macroFired.\(uid.uuidString)")
+        _macroFlagDayKey = AppStorage(wrappedValue: "", "macroFiredDay.\(uid.uuidString)")
         _customStepsGoalRaw = AppStorage(wrappedValue: 0, "stepsGoal.\(uid.uuidString)")
         _customWeeklyDaysRaw = AppStorage(wrappedValue: 5, "stepsWeeklyDays.\(uid.uuidString)")
     }
@@ -110,6 +119,61 @@ struct TodayView: View {
             await refreshToday()
             if profile.healthGranted {
                 await health.syncFromHealth(profileId: profile.id, ctx: ctx)
+            }
+        }
+        .onChange(of: totals) { _, newTotals in
+            checkMacroMilestones(newTotals)
+        }
+    }
+
+    // MARK: - Macro encouragement
+
+    /// Fires approaching / goal-hit toasts for protein and calories, once per day
+    /// each. Protein takes priority over calories when both would fire at once.
+    /// Fired keys are stored in AppStorage so a cold launch on the same day does
+    /// not re-fire toasts the user already saw.
+    private func checkMacroMilestones(_ totals: DailyTotals) {
+        // Reset the fired set when the calendar day rolls over.
+        if macroFlagDayKey != today {
+            macroFlagDayKey = today
+            macroFiredRaw = ""
+        }
+
+        var fired = Set(macroFiredRaw.split(separator: ",").map(String.init))
+
+        func markFired(_ key: String) { fired.insert(key); macroFiredRaw = fired.joined(separator: ",") }
+
+        let targets = profile.computedTargets
+
+        // Protein takes priority — if a protein toast fires this pass, skip calories.
+        var proteinFiredThisPass = false
+        if targets.proteinG > 0 {
+            let pct = Double(totals.proteinG) / Double(targets.proteinG)
+            if pct >= 1.0, !fired.contains("protein-goal") {
+                markFired("protein-goal"); markFired("protein-approaching")
+                proteinFiredThisPass = true
+                toasts.macroGoalHit(EncouragementEngine.macroGoalHitMessage(macro: "protein", mode: profile.mode))
+            } else if pct >= 0.85, !fired.contains("protein-approaching") {
+                markFired("protein-approaching")
+                proteinFiredThisPass = true
+                let remaining = max(0, targets.proteinG - totals.proteinG)
+                toasts.macroApproaching(EncouragementEngine.macroApproachingMessage(
+                    macro: "protein", remaining: remaining, unit: "g", mode: profile.mode))
+            }
+        }
+
+        guard !proteinFiredThisPass else { return }
+
+        if targets.calories > 0 {
+            let pct = Double(totals.calories) / Double(targets.calories)
+            if pct >= 1.0, !fired.contains("calorie-goal") {
+                markFired("calorie-goal"); markFired("calorie-approaching")
+                toasts.macroGoalHit(EncouragementEngine.macroGoalHitMessage(macro: "calories", mode: profile.mode))
+            } else if pct >= 0.90, !fired.contains("calorie-approaching") {
+                markFired("calorie-approaching")
+                let remaining = max(0, targets.calories - totals.calories)
+                toasts.macroApproaching(EncouragementEngine.macroApproachingMessage(
+                    macro: "calories", remaining: remaining, unit: " cal", mode: profile.mode))
             }
         }
     }

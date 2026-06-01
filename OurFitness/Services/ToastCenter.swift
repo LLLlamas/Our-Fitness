@@ -72,16 +72,51 @@ public final class ToastCenter: ObservableObject {
                    accent: .win, symbol: "flame.fill"), for: 2.4)
     }
 
-    public func stepsMilestone(_ steps: Int) {
-        let kLabel = steps >= 1_000 ? "\(steps / 1_000)k" : "\(steps)"
-        show(Toast(title: "\(kLabel) steps", detail: "Keep moving — momentum compounds.",
-                   accent: .win, symbol: "figure.walk"), for: 2.0)
-    }
-
     public func pilatesLogged(minutes: Int) {
         show(Toast(title: "Pilates logged",
                    detail: "\(minutes) min · locked in.",
                    accent: .ok, symbol: "checkmark"))
+    }
+
+    // Encouragement-engine driven toasts (Phase 1). The engine owns the copy;
+    // these map a message's tone to the toast accent + duration.
+
+    // Step milestone — mode-aware copy from EncouragementEngine
+    public func stepMilestone(_ steps: Int, mode: Mode) {
+        let msg = EncouragementEngine.stepMilestoneMessage(steps: steps, mode: mode)
+        show(Toast(title: msg.headline, detail: msg.detail,
+                   accent: .win, symbol: msg.sfSymbol), for: 2.4)
+    }
+
+    // Workout volume milestone
+    public func workoutMilestone(_ msg: EncouragementMessage) {
+        show(Toast(title: msg.headline, detail: msg.detail,
+                   accent: msg.tone == .impressed ? .win : .ok,
+                   symbol: msg.sfSymbol), for: 2.4)
+    }
+
+    // Pilates weekly goal
+    public func pilatesGoalHit(_ msg: EncouragementMessage) {
+        show(Toast(title: msg.headline, detail: msg.detail,
+                   accent: .win, symbol: msg.sfSymbol), for: 2.4)
+    }
+
+    // Streak milestone
+    public func streakMilestone(_ msg: EncouragementMessage) {
+        show(Toast(title: msg.headline, detail: msg.detail,
+                   accent: .win, symbol: msg.sfSymbol), for: 3.0)
+    }
+
+    // Macro goal hit
+    public func macroGoalHit(_ msg: EncouragementMessage) {
+        show(Toast(title: msg.headline, detail: msg.detail,
+                   accent: .win, symbol: msg.sfSymbol), for: 2.4)
+    }
+
+    // Macro approaching (lighter — .ok not .win)
+    public func macroApproaching(_ msg: EncouragementMessage) {
+        show(Toast(title: msg.headline, detail: msg.detail,
+                   accent: .ok, symbol: msg.sfSymbol), for: 2.0)
     }
 
     public func warn(_ msg: String) {

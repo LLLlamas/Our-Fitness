@@ -72,6 +72,11 @@ struct StepsCardioCard: View {
             VStack(alignment: .leading, spacing: 16) {
                 header
                 ringRow
+                if let projection = EncouragementEngine.stepProjection(
+                    stepsToday: todaysSteps, goalSteps: goal, bodyWeightLb: profile.weightLb
+                ) {
+                    ProjectionBar(text: projection)
+                }
                 deltaLine
                 weeklyStrip
                 secondaryStats
@@ -210,7 +215,7 @@ struct StepsCardioCard: View {
         let fired = Movement.decode(firedSet: firedRaw)
         guard let milestone = Movement.shouldFireMilestone(steps: steps, firedSet: fired)
         else { return }
-        toasts.stepsMilestone(milestone)
+        toasts.stepMilestone(milestone, mode: profile.mode)
         var updated = fired
         updated.insert(milestone)
         firedRaw = Movement.encode(firedSet: updated)
