@@ -16,6 +16,7 @@ struct WaterCard: View {
 
     @Query private var entryModels: [WaterEntryModel]
     @AppStorage private var goalFlOz: Double
+    @State private var showInfo = false
 
     init(profile: ProfileDTO) {
         self.profile = profile
@@ -56,6 +57,20 @@ struct WaterCard: View {
     var body: some View {
         Card {
             VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Text("WATER")
+                        .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                    Spacer()
+                    Button { showInfo = true } label: {
+                        Image(systemName: "info.circle")
+                            .font(.system(size: 13))
+                            .foregroundStyle(theme.dim)
+                    }
+                    .tactile(.ghost)
+                    .accessibilityLabel("Water goal info")
+                }
+
                 ProgressBar(value: todayOz, target: goalFlOz, label: "Water", unit: " oz")
 
                 HStack {
@@ -83,6 +98,10 @@ struct WaterCard: View {
                     weeklyStrip
                 }
             }
+        }
+        .sheet(isPresented: $showInfo) {
+            WaterInfoSheet(profile: profile, goalFlOz: goalFlOz)
+                .themed(profile.mode)
         }
     }
 
@@ -173,5 +192,118 @@ private struct GlassIcon: View {
         DrinkingGlass()
             .stroke(lineWidth: 1.8)
             .frame(width: size.width, height: size.height)
+    }
+}
+
+// MARK: - Water info sheet
+
+private struct WaterInfoSheet: View {
+    let profile: ProfileDTO
+    let goalFlOz: Double
+
+    @Environment(\.theme) private var theme
+
+    private var weightKg: Int { Int(profile.weightLb * 0.4536) }
+
+    // ACSM base recommendation: ~0.5 oz per lb bodyweight
+    private var baseOz: Int { max(64, Int(profile.weightLb * 0.5)) }
+
+    private var activityBonus: Int {
+        switch profile.activity {
+        case .sedentary:  return 0
+        case .light:      return 8
+        case .moderate:   return 16
+        case .active:     return 24
+        case .veryActive: return 32
+        }
+    }
+
+    private var recommendedOz: Int { baseOz + activityBonus }
+    private var recommendedMl: Int { Int(Double(recommendedOz) * 29.57) }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("water.")
+                        .font(.system(size: 42, weight: .regular))
+                        .foregroundStyle(theme.text)
+                    Text("PERSONALIZED DAILY GOAL")
+                        .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                }
+
+                infoSection(title: "Your recommendation") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        calcRow(label: "Base (0.5 oz × \(Int(profile.weightLb)) lb)",
+                                detail: "\(baseOz) oz / day")
+                        calcRow(label: "Activity bonus (\(profile.activity.label))",
+                                detail: "+\(activityBonus) oz / day")
+                        calcRow(label: "Recommended total",
+                                detail: "\(recommendedOz) oz / day · \(recommendedMl) mL")
+                        if Int(goalFlOz) < recommendedOz {
+                            Text("Your current goal (\(Int(goalFlOz)) oz) is below the recommendation. Consider raising it with the +/− buttons.")
+                                .font(.caption)
+                                .foregroundStyle(theme.warn)
+                                .padding(.top, 4)
+                        } else {
+                            Text("Your current goal (\(Int(goalFlOz)) oz) meets your recommendation.")
+                                .font(.caption)
+                                .foregroundStyle(theme.ok)
+                                .padding(.top, 4)
+                        }
+                    }
+                }
+
+                infoSection(title: "Why hydration matters") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        bullet("Even 2% dehydration impairs cognitive performance, mood, and workout strength.")
+                        bullet("Adequate hydration reduces cortisol, which helps with fat metabolism and recovery.")
+                        bullet("Water aids in nutrient absorption — critical for protein synthesis post-training.")
+                        if profile.mode == .circuit {
+                            bullet("Circuit mode: consistent hydration measurably improves blood viscosity and reduces cardiovascular strain during higher step counts.")
+                        }
+                    }
+                }
+
+                Text("Formula: ACSM base 0.5 oz/lb + activity level adjustment. Individual needs vary.")
+                    .font(.caption2)
+                    .foregroundStyle(theme.dim)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+        }
+        .presentationDetents([.medium, .large])
+        .presentationBackground(theme.bg)
+    }
+
+    @ViewBuilder
+    private func infoSection<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title.uppercased()).font(.caption).tracking(2).foregroundStyle(theme.dim)
+            content()
+        }
+    }
+
+    @ViewBuilder
+    private func calcRow(label: String, detail: String) -> some View {
+        HStack {
+            Text(label).font(.callout).foregroundStyle(theme.text)
+            Spacer()
+            Text(detail).font(.system(.callout, design: .monospaced)).foregroundStyle(theme.accent)
+        }
+        .padding(10)
+        .background(theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+    }
+
+    @ViewBuilder
+    private func bullet(_ text: String) -> some View {
+        HStack(alignment: .top, spacing: 8) {
+            Text("·").foregroundStyle(theme.accent).font(.callout)
+            Text(text).font(.callout).foregroundStyle(theme.dim)
+                .fixedSize(horizontal: false, vertical: true)
+        }
     }
 }

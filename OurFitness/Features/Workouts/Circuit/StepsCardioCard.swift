@@ -24,6 +24,7 @@ struct StepsCardioCard: View {
     @EnvironmentObject private var toasts: ToastCenter
     @State private var showDeepDive = false
     @State private var showGoalPicker = false
+    @State private var showStepsInfo = false
     @State private var pickerGoal: Int = 10_000
     @State private var pickerDays: Int = 5
 
@@ -90,6 +91,10 @@ struct StepsCardioCard: View {
         .sheet(isPresented: $showGoalPicker) {
             goalPickerSheet.themed(theme.mode)
         }
+        .sheet(isPresented: $showStepsInfo) {
+            CircuitStepsInfoSheet(profile: profile, todaysSteps: todaysSteps, todaysCal: todaysCal)
+                .themed(profile.mode)
+        }
     }
 
     // MARK: - Sections
@@ -100,6 +105,13 @@ struct StepsCardioCard: View {
             Text("Steps & Cardio")
                 .font(.system(size: 22, weight: .regular))
                 .foregroundStyle(theme.text)
+            Button { showStepsInfo = true } label: {
+                Image(systemName: "info.circle")
+                    .font(.system(size: 13))
+                    .foregroundStyle(theme.dim)
+            }
+            .tactile(.ghost)
+            .accessibilityLabel("Steps & cardio health info")
             Spacer()
             StreakChip(weeks: streakWeeks, tint: theme.accent)
         }
@@ -317,5 +329,94 @@ struct StepsCardioCard: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .presentationDetents([.medium])
         .presentationBackground(theme.bg)
+    }
+}
+
+// MARK: - Circuit steps & cardio info sheet
+
+private struct CircuitStepsInfoSheet: View {
+    let profile: ProfileDTO
+    let todaysSteps: Int
+    let todaysCal: Int
+
+    @Environment(\.theme) private var theme
+
+    private var weightKg: Int { Int(profile.weightLb * 0.4536) }
+    private var fatGrams: Int { max(0, Int((Double(todaysCal) * 0.55 / 9.0).rounded())) }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("steps & cardio.")
+                        .font(.system(size: 36, weight: .regular))
+                        .foregroundStyle(theme.text)
+                    Text("CIRCUIT — PRIMARY HEALTH LEVERS")
+                        .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                }
+
+                infoSection(title: "Today's numbers") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        metRow(label: "Steps burn", detail: "MET 4.3 × \(weightKg)kg × \(todaysSteps.formatted())/7392 hr ≈ \(todaysCal) cal")
+                        metRow(label: "Fat burned (est.)", detail: "~\(fatGrams)g fat oxidized at walking intensity")
+                    }
+                }
+
+                infoSection(title: "Why 10,000 steps in Circuit") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        bullet("Daily walking is the single most accessible intervention for lowering LDL, blood pressure, and fasting glucose simultaneously.")
+                        bullet("10,000 steps/day reduces LDL cholesterol by ~5–8% within 8 weeks (Asikainen et al., Prev Med 2002).")
+                        bullet("Each 1,000 steps above baseline reduces all-cause mortality by ~6% (Saint-Maurice et al., JAMA 2020).")
+                        bullet("Consistent daily steps improve insulin sensitivity — effects visible within 2 weeks, persist as long as the habit holds.")
+                        bullet("Walking > blood pressure medication for stage 1 hypertension in multiple meta-analyses (Naci et al., BJSM 2019).")
+                    }
+                }
+
+                infoSection(title: "Cardio & LDL") {
+                    bullet("30+ minutes of zone-2 cardio (conversational pace) raises HDL by ~3–5 mg/dL and lowers triglycerides by ~10–20% within 8–12 weeks.")
+                    bullet("Consistent cardio is required alongside steps for the fastest LDL and BP improvements.")
+                }
+
+                Text("Sources: Asikainen et al. 2002; Saint-Maurice et al. JAMA 2020; Naci et al. BJSM 2019; Ainsworth 2011 Compendium.")
+                    .font(.caption2)
+                    .foregroundStyle(theme.dim)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+        }
+        .presentationDetents([.medium, .large])
+        .presentationBackground(theme.bg)
+    }
+
+    @ViewBuilder
+    private func infoSection<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title.uppercased()).font(.caption).tracking(2).foregroundStyle(theme.dim)
+            content()
+        }
+    }
+
+    @ViewBuilder
+    private func metRow(label: String, detail: String) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(label).font(.system(size: 13, weight: .medium)).foregroundStyle(theme.text)
+            Text(detail).font(.system(.footnote, design: .monospaced)).foregroundStyle(theme.accent)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(10)
+        .background(theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+    }
+
+    @ViewBuilder
+    private func bullet(_ text: String) -> some View {
+        HStack(alignment: .top, spacing: 8) {
+            Text("·").foregroundStyle(theme.accent).font(.callout)
+            Text(text).font(.callout).foregroundStyle(theme.dim)
+                .fixedSize(horizontal: false, vertical: true)
+        }
     }
 }

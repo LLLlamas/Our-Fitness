@@ -17,6 +17,7 @@ public struct ProgressBar: View {
 
     @State private var lastValue: Double = 0
     @State private var flashActive: Bool = false
+    @State private var displayPct: Double = 0
 
     public init(value: Double, target: Double, label: String,
                 unit: String = "", inverted: Bool = false) {
@@ -72,7 +73,7 @@ public struct ProgressBar: View {
                     // Fill
                     RoundedRectangle(cornerRadius: 3, style: .continuous)
                         .fill(fillColor)
-                        .frame(width: geo.size.width * pct)
+                        .frame(width: geo.size.width * displayPct)
                     // Hit flash (overlay)
                     if flashActive {
                         RoundedRectangle(cornerRadius: 3, style: .continuous)
@@ -80,7 +81,7 @@ public struct ProgressBar: View {
                                 colors: [.white.opacity(0.0), .white.opacity(0.55), .white.opacity(0.0)],
                                 startPoint: .leading, endPoint: .trailing
                             ))
-                            .frame(width: geo.size.width * pct)
+                            .frame(width: geo.size.width * displayPct)
                             .blendMode(.plusLighter)
                             .transition(.opacity)
                     }
@@ -89,10 +90,18 @@ public struct ProgressBar: View {
             .frame(height: 5)
             .clipped()
         }
-        .animation(.spring(response: 0.5, dampingFraction: 0.85), value: pct)
+        .animation(.spring(response: 0.45, dampingFraction: 0.82), value: displayPct)
         .animation(.easeOut(duration: 0.35), value: fillColor)
-        .onAppear { lastValue = value }
+        .onAppear {
+            lastValue = value
+            withAnimation(.spring(response: 0.7, dampingFraction: 0.85).delay(0.12)) {
+                displayPct = pct
+            }
+        }
         .onChange(of: value) { _, newValue in
+            withAnimation(.spring(response: 0.45, dampingFraction: 0.82)) {
+                displayPct = pct
+            }
             // Flash on transition into the on-target window.
             let wasUnder = inverted ? lastValue > target : lastValue < target * 0.95
             let nowAt = hitTarget

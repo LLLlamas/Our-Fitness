@@ -106,6 +106,7 @@ struct TodayView: View {
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 18)
+            .scrollHapticTicks()
         }
         .background(theme.bg.ignoresSafeArea())
         .task(id: profile.id) {
@@ -220,6 +221,8 @@ struct TodayView: View {
             goal: profile.computedTargets.stepsDaily,
             profileId: profile.id,
             healthGranted: profile.healthGranted,
+            weightLb: profile.weightLb,
+            mode: profile.mode,
             onConnectHealth: connectHealth
         )
         recentLogs

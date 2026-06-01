@@ -16,6 +16,11 @@ struct BabyExercisesCard: View {
     @Query private var exerciseModels: [ExerciseModel]
     @Query private var setModels: [WorkoutSetModel]
 
+    @State private var showAddMovement = false
+    @State private var ringPct: Double = 0
+    @State private var ringGlow: Bool = false
+    @State private var ringTrigger: Int = 0
+
     private var myExercises: [ExerciseDTO] {
         let id = profile.id
         return exerciseModels.map(\.snapshot)
@@ -36,11 +41,6 @@ struct BabyExercisesCard: View {
 
     private var exercisesDoneToday: Int {
         myExercises.filter { todayReps(for: $0) > 0 }.count
-    }
-
-    private var completionPct: Double {
-        guard !myExercises.isEmpty else { return 0 }
-        return min(1, Double(exercisesDoneToday) / Double(myExercises.count))
     }
 
     private var todayTotalKcal: Double {
@@ -64,7 +64,8 @@ struct BabyExercisesCard: View {
                             exercise: exercise,
                             todayCount: todayReps(for: exercise),
                             onLog: { amount in logActivity(exercise: exercise, amount: amount) },
-                            onUndo: { undoLastSet(for: exercise) }
+                            onUndo: { undoLastSet(for: exercise) },
+                            onDelete: { deleteExercise(exercise) }
                         )
                         if exercise.id != myExercises.last?.id {
                             Divider().background(theme.line)
@@ -73,23 +74,36 @@ struct BabyExercisesCard: View {
                 }
             }
         }
+        .sheet(isPresented: $showAddMovement) {
+            AddCircuitMovementSheet(profileId: profile.id) { name, kind, loadLb in
+                Repos.createExercise(
+                    ctx, profileId: profile.id, name: name,
+                    defaultRepsBottom: 1, defaultRepsTop: 20,
+                    tracksWeight: loadLb != nil,
+                    loadLb: loadLb,
+                    kind: kind
+                )
+                Haptics.bump()
+                toasts.show(Toast(title: name, detail: "Movement added", accent: .win, symbol: "plus.circle.fill"))
+            }
+            .themed(theme.mode)
+        }
     }
 
     @ViewBuilder
     private var header: some View {
         HStack(alignment: .center, spacing: 12) {
-            ZStack {
-                ProgressRing(pct: completionPct, color: theme.accent, trackColor: theme.barBg, lineWidth: 7)
-                VStack(spacing: 0) {
-                    Text("\(exercisesDoneToday)")
-                        .font(.system(size: 18, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(theme.text)
-                    Text("/\(myExercises.count)")
-                        .font(.system(size: 9, design: .monospaced))
-                        .foregroundStyle(theme.dim)
+            ProgressRing(pct: ringPct, color: theme.accent, trackColor: theme.barBg, lineWidth: 7)
+                .shadow(color: theme.accent.opacity(ringGlow ? 0.55 : 0), radius: ringGlow ? 10 : 0)
+                .animation(.spring(response: 0.35, dampingFraction: 0.65), value: ringGlow)
+                .frame(width: 54, height: 54)
+                .task(id: ringTrigger) {
+                    ringPct = 0
+                    try? await Task.sleep(nanoseconds: 60_000_000)
+                    withAnimation(.spring(response: 0.65, dampingFraction: 0.72)) {
+                        ringPct = 1.0
+                    }
                 }
-            }
-            .frame(width: 54, height: 54)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text("Movements")
@@ -99,13 +113,23 @@ struct BabyExercisesCard: View {
                     Text("~\(Int(todayTotalKcal)) cal burned today")
                         .font(.caption)
                         .foregroundStyle(theme.dim)
+                } else if exercisesDoneToday > 0 {
+                    Text("\(exercisesDoneToday) logged today")
+                        .font(.caption)
+                        .foregroundStyle(theme.dim)
                 } else {
-                    Text("done today")
+                    Text("tap + to log reps")
                         .font(.caption)
                         .foregroundStyle(theme.dim)
                 }
             }
             Spacer()
+            Button { showAddMovement = true } label: {
+                Image(systemName: "plus")
+                    .font(.system(size: 14, weight: .medium))
+            }
+            .tactile(.ghost)
+            .accessibilityLabel("Add movement")
         }
     }
 
@@ -130,6 +154,12 @@ struct BabyExercisesCard: View {
             caloriesEst: cal
         )
         Repos.addSet(ctx, dto)
+        ringTrigger += 1
+        Task { @MainActor in
+            ringGlow = true
+            try? await Task.sleep(nanoseconds: 450_000_000)
+            ringGlow = false
+        }
 
         let unit = exercise.kind == .duration
             ? "+\(amount) min"
@@ -157,6 +187,13 @@ struct BabyExercisesCard: View {
         toasts.show(Toast(title: "Undone", detail: "\(exercise.name) · last rep removed",
                           accent: .warn, symbol: "arrow.uturn.backward"))
     }
+
+    private func deleteExercise(_ exercise: ExerciseDTO) {
+        Repos.deleteExercise(ctx, id: exercise.id)
+        Haptics.warn()
+        toasts.show(Toast(title: "Removed", detail: "\(exercise.name) deleted",
+                          accent: .warn, symbol: "trash"))
+    }
 }
 
 // MARK: - Per-exercise row
@@ -167,6 +204,7 @@ private struct ExerciseRow: View {
     let todayCount: Int
     let onLog: (Int) -> Void
     let onUndo: () -> Void
+    let onDelete: () -> Void
 
     @Environment(\.theme) private var theme
     @State private var showInfo = false
@@ -247,6 +285,13 @@ private struct ExerciseRow: View {
             }
         }
         .padding(.vertical, 4)
+        .contextMenu {
+            Button(role: .destructive) {
+                onDelete()
+            } label: {
+                Label("Remove movement", systemImage: "trash")
+            }
+        }
     }
 }
 
@@ -372,5 +417,102 @@ private struct ExerciseInfoSheet: View {
                 .font(.callout)
                 .foregroundStyle(theme.text)
         }
+    }
+}
+
+// MARK: - Add movement sheet
+
+private struct AddCircuitMovementSheet: View {
+    let profileId: UUID
+    let onSave: (String, ExerciseKind, Double?) -> Void
+
+    @Environment(\.theme) private var theme
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var name = ""
+    @State private var kind: ExerciseKind = .reps
+    @State private var loadRaw = ""
+    @FocusState private var nameFocused: Bool
+
+    private var loadLb: Double? {
+        guard !loadRaw.isEmpty, let v = Double(loadRaw), v > 0 else { return nil }
+        return v
+    }
+
+    private var canSave: Bool { !name.trimmingCharacters(in: .whitespaces).isEmpty }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("add movement.")
+                        .font(.system(size: 36, weight: .regular))
+                        .foregroundStyle(theme.text)
+                    Text("CIRCUIT · QUICK-LOG")
+                        .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                }
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("NAME")
+                        .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                    TextField("e.g. Carried Baby", text: $name)
+                        .focused($nameFocused)
+                        .padding(12)
+                        .background(theme.card)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+                        .foregroundStyle(theme.text)
+                        .toolbar {
+                            ToolbarItemGroup(placement: .keyboard) {
+                                Spacer()
+                                Button("Done") { nameFocused = false }
+                            }
+                        }
+                }
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("TYPE")
+                        .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                    Picker("Type", selection: $kind) {
+                        Text("Reps").tag(ExerciseKind.reps)
+                        Text("Duration (min)").tag(ExerciseKind.duration)
+                    }
+                    .pickerStyle(.segmented)
+                }
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("LOAD (LB) · OPTIONAL")
+                        .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                    TextField("e.g. 30", text: $loadRaw)
+                        .keyboardType(.decimalPad)
+                        .padding(12)
+                        .background(theme.card)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+                        .foregroundStyle(theme.text)
+                }
+
+                Button {
+                    let trimmed = name.trimmingCharacters(in: .whitespaces)
+                    guard !trimmed.isEmpty else { return }
+                    onSave(trimmed, kind, loadLb)
+                    dismiss()
+                } label: {
+                    Text("Add movement").frame(maxWidth: .infinity)
+                }
+                .tactile(.primary)
+                .disabled(!canSave)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+        }
+        .presentationDetents([.medium, .large])
+        .presentationBackground(theme.bg)
+        .presentationDragIndicator(.visible)
+        .onAppear { nameFocused = true }
     }
 }

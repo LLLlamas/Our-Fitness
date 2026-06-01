@@ -12,6 +12,7 @@
 //   warn    — destructive confirm, cap breach
 //   select  — picker/segmented change
 
+import SwiftUI
 import UIKit
 
 @MainActor
@@ -42,4 +43,43 @@ public enum Haptics {
     public static func prepare() {
         light.prepare(); medium.prepare(); rigid.prepare(); notif.prepare(); select.prepare()
     }
+}
+
+// MARK: - Scroll haptic ticks
+
+extension View {
+    /// Fires a light haptic tick every `interval` points of scroll travel.
+    /// Apply to the primary content VStack inside a ScrollView.
+    public func scrollHapticTicks(interval: CGFloat = 80) -> some View {
+        modifier(ScrollHapticTickModifier(interval: interval))
+    }
+}
+
+private struct ScrollHapticTickModifier: ViewModifier {
+    let interval: CGFloat
+    @State private var lastStep: Int = 0
+
+    func body(content: Content) -> some View {
+        content
+            .background(
+                GeometryReader { proxy in
+                    Color.clear.preference(
+                        key: ScrollYOffsetKey.self,
+                        value: proxy.frame(in: .global).minY
+                    )
+                }
+            )
+            .onPreferenceChange(ScrollYOffsetKey.self) { y in
+                let step = Int(abs(y) / interval)
+                if step != lastStep {
+                    lastStep = step
+                    Task { @MainActor in Haptics.tick() }
+                }
+            }
+    }
+}
+
+private struct ScrollYOffsetKey: PreferenceKey {
+    static let defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { value = nextValue() }
 }

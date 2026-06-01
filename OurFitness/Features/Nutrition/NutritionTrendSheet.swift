@@ -1,5 +1,6 @@
-// 30-day calorie trend + weekly/monthly averages for the nutrition log.
-// Opened from the "This week" card in NutritionView. Mirrors the steps detail.
+// 30-day calorie trend for the nutrition log.
+// Opened from the "This week" card in NutritionView.
+// Recent day rows are tappable — tapping jumps back to that day's log in NutritionView.
 
 import SwiftUI
 import Charts
@@ -7,15 +8,17 @@ import Charts
 struct NutritionTrendSheet: View {
     let profile: ProfileDTO
     let logs: [FoodLogEntryDTO]
+    var onSelectDay: ((String) -> Void)? = nil
 
     @Environment(\.theme) private var theme
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var dayDetail: NutritionHistory.DayTotals? = nil
 
     private var series: [Trends.Point] { NutritionHistory.calorieSeries(logs, days: 30) }
     private var recent: [NutritionHistory.DayTotals] {
         NutritionHistory.byDay(logs, days: 14).filter { $0.totals.calories > 0 }.reversed()
     }
-    private var avg7: DailyTotals { NutritionHistory.averagePerLoggedDay(logs, days: 7) }
-    private var avg30: DailyTotals { NutritionHistory.averagePerLoggedDay(logs, days: 30) }
     private var target: Int { profile.computedTargets.calories }
 
     var body: some View {
@@ -41,14 +44,22 @@ struct NutritionTrendSheet: View {
                         .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                 }
 
-                averagesSection
                 recentSection
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
+            .scrollHapticTicks()
         }
         .presentationDetents([.large])
         .presentationBackground(theme.bg)
+        .sheet(item: $dayDetail) { day in
+            DayMealDetailSheet(day: day, logs: logs) { dayKey in
+                dayDetail = nil
+                onSelectDay?(dayKey)
+                dismiss()
+            }
+            .themed(profile.mode)
+        }
     }
 
     @ViewBuilder
@@ -70,30 +81,6 @@ struct NutritionTrendSheet: View {
     }
 
     @ViewBuilder
-    private var averagesSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Average per logged day".uppercased())
-                .font(.caption).tracking(2).foregroundStyle(theme.dim)
-            avgRow(label: "Last 7 days", t: avg7)
-            avgRow(label: "Last 30 days", t: avg30)
-        }
-    }
-
-    @ViewBuilder
-    private func avgRow(label: String, t: DailyTotals) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(label).font(.caption).foregroundStyle(theme.dim)
-            HStack(spacing: 8) {
-                MacroChip(label: "Cal", value: t.calories)
-                MacroChip(label: "P", value: t.proteinG)
-                MacroChip(label: "C", value: t.carbsG)
-                MacroChip(label: "F", value: t.fatG)
-                if t.fiberG > 0 { MacroChip(label: "Fiber", value: t.fiberG) }
-            }
-        }
-    }
-
-    @ViewBuilder
     private var recentSection: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Recent days".uppercased())
@@ -103,19 +90,97 @@ struct NutritionTrendSheet: View {
                     .font(.callout).foregroundStyle(theme.dim)
             } else {
                 ForEach(recent) { row in
-                    HStack {
-                        Text(row.day).foregroundStyle(theme.text)
-                        Spacer()
-                        Text("\(row.totals.calories) cal · \(row.totals.proteinG)p · \(row.totals.carbsG)c · \(row.totals.fatG)f")
-                            .font(.system(.footnote, design: .monospaced))
-                            .foregroundStyle(theme.accent)
+                    PressableCard(action: { dayDetail = row }) {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(Dates.formatLong(row.day))
+                                    .font(.system(size: 15, weight: .semibold))
+                                    .foregroundStyle(theme.text)
+                                Text("\(row.totals.calories) cal · \(row.totals.proteinG)g protein · \(row.totals.fatG)g fat")
+                                    .font(.system(.caption2, design: .monospaced))
+                                    .foregroundStyle(theme.accent)
+                            }
+                            Spacer(minLength: 0)
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 12))
+                                .foregroundStyle(theme.dim)
+                        }
                     }
-                    .padding(10)
-                    .background(theme.card)
-                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                    .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                 }
             }
         }
+    }
+}
+
+// MARK: - Day meal detail sheet
+
+private struct DayMealDetailSheet: View {
+    let day: NutritionHistory.DayTotals
+    let logs: [FoodLogEntryDTO]
+    let onViewInLog: (String) -> Void
+
+    @Environment(\.theme) private var theme
+    @Environment(\.dismiss) private var dismiss
+
+    private var dayLogs: [FoodLogEntryDTO] {
+        logs.filter { $0.date == day.id }.sorted { $0.timestamp < $1.timestamp }
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(Dates.formatLong(day.day))
+                        .font(.system(size: 32, weight: .regular))
+                        .foregroundStyle(theme.text)
+                    Text("\(day.totals.calories) cal logged")
+                        .font(.system(size: 11, weight: .medium)).tracking(2)
+                        .textCase(.uppercase)
+                        .foregroundStyle(theme.dim)
+                }
+
+                HStack(spacing: 8) {
+                    MacroChip(label: "Cal", value: day.totals.calories)
+                    MacroChip(label: "Protein", value: day.totals.proteinG)
+                    MacroChip(label: "Carbs", value: day.totals.carbsG)
+                    MacroChip(label: "Fat", value: day.totals.fatG)
+                    if day.totals.fiberG > 0 { MacroChip(label: "Fiber", value: day.totals.fiberG) }
+                }
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Meals logged".uppercased())
+                        .font(.caption).tracking(2).foregroundStyle(theme.dim)
+                    if dayLogs.isEmpty {
+                        Text("No individual meal records for this day.")
+                            .font(.callout).foregroundStyle(theme.dim)
+                    } else {
+                        ForEach(dayLogs) { entry in
+                            VStack(alignment: .leading, spacing: 4) {
+                                HStack {
+                                    Text(entry.customName ?? "Meal")
+                                        .font(.system(size: 15, weight: .semibold))
+                                        .foregroundStyle(theme.text)
+                                    Spacer()
+                                    Text(entry.slot.label)
+                                        .font(.caption)
+                                        .foregroundStyle(theme.dim)
+                                }
+                                Text("\(entry.perServing.calories) cal · \(entry.perServing.proteinG)g protein · \(entry.perServing.carbsG)g carbs · \(entry.perServing.fatG)g fat")
+                                    .font(.system(.caption2, design: .monospaced))
+                                    .foregroundStyle(theme.accent)
+                            }
+                            .padding(12)
+                            .background(theme.card)
+                            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                            .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+        }
+        .presentationDetents([.medium, .large])
+        .presentationBackground(theme.bg)
     }
 }

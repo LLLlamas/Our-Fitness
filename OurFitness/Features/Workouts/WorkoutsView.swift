@@ -145,6 +145,7 @@ private struct BuildWorkoutsView: View {
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 18)
+            .scrollHapticTicks()
         }
         .sheet(isPresented: $showAddSheet) {
             AddExerciseSheet(profileId: profile.id) { name, lo, hi, tracksWeight, isIsometric in

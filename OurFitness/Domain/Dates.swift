@@ -13,6 +13,19 @@ public enum Dates {
         return f
     }()
 
+    private static let longDateFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateStyle = .long
+        f.timeStyle = .none
+        return f
+    }()
+
+    private static let shortMonthDayFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "MMM d"
+        return f
+    }()
+
     /// Local YYYY-MM-DD for a given Date (defaults to now).
     public static func dayKey(_ date: Date = Date()) -> String {
         dayFormatter.string(from: date)
@@ -21,6 +34,19 @@ public enum Dates {
     /// Parse a YYYY-MM-DD back to a local-midnight Date. Returns nil on bad input.
     public static func date(fromDayKey key: String) -> Date? {
         dayFormatter.date(from: key)
+    }
+
+    /// Converts a "yyyy-MM-dd" dayKey to a localized long date string (e.g. "June 1, 2026").
+    /// Lexicographic sort on yyyy-MM-dd keys is chronologically correct — no Date conversion needed for ordering.
+    public static func formatLong(_ key: String) -> String {
+        guard let d = date(fromDayKey: key) else { return key }
+        return longDateFormatter.string(from: d)
+    }
+
+    /// Short month+day label for a dayKey, e.g. "Jun 1". Used for compact UI chips.
+    public static func formatShort(_ key: String) -> String {
+        guard let d = date(fromDayKey: key) else { return key }
+        return shortMonthDayFormatter.string(from: d)
     }
 
     /// Inclusive array of dayKeys ending at `end` (default today), `days` long, oldest first.

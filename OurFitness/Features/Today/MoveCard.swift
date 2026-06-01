@@ -102,10 +102,6 @@ struct MoveCard: View {
                     Spacer()
                 }
 
-                Text("≈\(metEstimate) cal · steps + training")
-                    .font(.system(size: 12, weight: .medium, design: .monospaced))
-                    .foregroundStyle(theme.text)
-
                 HStack(alignment: .top, spacing: 12) {
                     tappableMetricColumn(
                         icon: "flame.fill",
@@ -155,6 +151,8 @@ struct MoveCard: View {
         .sheet(isPresented: $showExercisesInfo) {
             ExercisesInfoSheet(
                 weightKg: weightKg,
+                todaySteps: todaySteps,
+                stepsKcal: stepsKcal,
                 setsKcal: setsKcal,
                 cardioKcal: cardioKcal,
                 pilatesKcal: pilatesKcal,
@@ -368,31 +366,86 @@ private struct AppleEnergyInfoSheet: View {
 
 private struct ExercisesInfoSheet: View {
     let weightKg: Int
+    let todaySteps: Int
+    let stepsKcal: Int
     let setsKcal: Int
     let cardioKcal: Int
     let pilatesKcal: Int
     let trainingMetEstimate: Int
 
+    @Environment(\.theme) private var theme
+
+    private var totalKcal: Int { stepsKcal + trainingMetEstimate }
+    // Fat oxidation: ~55% at walking intensity, ~50% for training — blended ~52%
+    private var fatGrams: Int { max(0, Int((Double(totalKcal) * 0.52 / 9.0).rounded())) }
+    // Sweat loss: training kcal / 50 ≈ oz lost (rough moderate-intensity proxy)
+    private var sweatOz: Double { Double(trainingMetEstimate) / 50.0 }
+
     var body: some View {
-        ColumnInfoScaffold(title: "exercises.", subtitle: "LOGGED ACTIVITY") {
-            ColumnInfoSection(title: "What it is") {
-                ColumnInfoBody(text: "Your estimated calorie burn from today's explicitly logged exercises, cardio sessions, and pilates — calculated using the MET formula (Metabolic Equivalent of Task × your weight × time). Steps are excluded because Apple Energy already counts walking.")
+        ColumnInfoScaffold(title: "exercises.", subtitle: "MET × WEIGHT × TIME = CALORIES") {
+            // Steps
+            ColumnInfoSection(title: "Steps") {
+                ColumnBreakdownRow(
+                    label: "MET 4.3 × \(weightKg)kg × \(todaySteps)/7392 hr",
+                    detail: "≈\(stepsKcal) cal burned from \(todaySteps.formatted()) steps"
+                )
             }
-            ColumnInfoSection(title: "Today's breakdown") {
-                VStack(alignment: .leading, spacing: 8) {
-                    ColumnBreakdownRow(label: "Strength & exercises",
-                                       detail: "MET 3.5–8.0 × \(weightKg)kg × session time ≈ \(setsKcal) cal")
-                    ColumnBreakdownRow(label: "Cardio (non-walk)",
-                                       detail: "MET 4.5 × \(weightKg)kg × duration ≈ \(cardioKcal) cal")
-                    ColumnBreakdownRow(label: "Pilates",
-                                       detail: "MET 3.0 × \(weightKg)kg × duration ≈ \(pilatesKcal) cal")
-                    ColumnBreakdownRow(label: "Total exercises",
-                                       detail: "≈\(trainingMetEstimate) cal burned today")
+
+            // Strength sets
+            if setsKcal > 0 {
+                ColumnInfoSection(title: "Strength & exercises") {
+                    ColumnBreakdownRow(
+                        label: "MET 3.5–8.0 × \(weightKg)kg × session time",
+                        detail: "≈\(setsKcal) cal — based on logged reps, exercise type, and weight"
+                    )
                 }
             }
-            ColumnInfoSection(title: "Formula") {
-                ColumnInfoBody(text: "Metabolic Equivalent of Task (MET) × body weight in kg × hours active = calories burned. Source: Ainsworth 2011 Compendium of Physical Activities.")
+
+            // Cardio
+            if cardioKcal > 0 {
+                ColumnInfoSection(title: "Cardio (non-walk)") {
+                    ColumnBreakdownRow(
+                        label: "MET 4.5 × \(weightKg)kg × session duration",
+                        detail: "≈\(cardioKcal) cal — walk sessions excluded (counted in Apple Energy)"
+                    )
+                }
             }
+
+            // Pilates
+            if pilatesKcal > 0 {
+                ColumnInfoSection(title: "Pilates") {
+                    ColumnBreakdownRow(
+                        label: "MET 3.0 × \(weightKg)kg × session duration",
+                        detail: "≈\(pilatesKcal) cal (Ainsworth code 06010)"
+                    )
+                }
+            }
+
+            // Total
+            ColumnInfoSection(title: "Total today") {
+                ColumnBreakdownRow(
+                    label: "Steps + training combined",
+                    detail: "≈\(totalKcal) cal burned (MET estimate)"
+                )
+            }
+
+            // Bonus estimates
+            ColumnInfoSection(title: "Estimated extras") {
+                VStack(alignment: .leading, spacing: 8) {
+                    ColumnBreakdownRow(
+                        label: "Fat burned",
+                        detail: "~\(fatGrams)g fat oxidized (≈52% fat at moderate intensity, 9 cal/g)"
+                    )
+                    if sweatOz > 0.5 {
+                        ColumnBreakdownRow(
+                            label: "Sweat loss (training)",
+                            detail: String(format: "~%.1f oz / %.0f mL lost — consider hydrating", sweatOz, sweatOz * 29.57)
+                        )
+                    }
+                }
+            }
+
+            ColumnInfoBody(text: "Formula: MET × body weight in kg × hours active = cal. Source: Ainsworth 2011 Compendium of Physical Activities.")
         }
     }
 }
@@ -448,7 +501,7 @@ private struct ColumnInfoScaffold<Content: View>: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
         }
-        .presentationDetents([.medium])
+        .presentationDetents([.medium, .large])
         .presentationBackground(theme.bg)
     }
 }

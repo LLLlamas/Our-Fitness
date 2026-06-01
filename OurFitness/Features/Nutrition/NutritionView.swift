@@ -18,6 +18,8 @@ struct NutritionView: View {
     @State private var mealToDetail: SuggestedMeal?
     @State private var entryToDetail: FoodLogEntryDTO?
     @State private var showNutritionTrend = false
+    @State private var showNutritionInsight = false
+    @State private var selectedDayKey: String = Dates.dayKey()
 
     init(profile: ProfileDTO) {
         self.profile = profile
@@ -31,12 +33,28 @@ struct NutritionView: View {
 
     private var today: String { Dates.dayKey() }
 
-    private var todaysLogs: [FoodLogEntryDTO] {
-        logModels.map(\.snapshot).filter { $0.date == today }
-    }
     private var allLogs: [FoodLogEntryDTO] { logModels.map(\.snapshot) }
 
-    private var totals: DailyTotals { DailyTotals.totals(from: todaysLogs) }
+    private var selectedDayLogs: [FoodLogEntryDTO] {
+        allLogs.filter { $0.date == selectedDayKey }
+    }
+
+    private var todaysLogs: [FoodLogEntryDTO] {
+        allLogs.filter { $0.date == today }
+    }
+
+    private var totals: DailyTotals { DailyTotals.totals(from: selectedDayLogs) }
+
+    private func dayPillLabel(_ key: String) -> String {
+        if key == today { return "Today" }
+        let yesterday = Dates.dayKey(Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date())
+        if key == yesterday { return "Yesterday" }
+        return Dates.formatShort(key)
+    }
+
+    private var recentDayKeys: [String] {
+        Array(Dates.lastNDays(8).reversed())
+    }
 
     private var rankedSuggestions: [SuggestedMeal] {
         SuggestedMeals.ranked(for: profile, totals: totals)
@@ -93,43 +111,58 @@ struct NutritionView: View {
                         .font(.system(size: 56, weight: .regular))
                         .foregroundStyle(theme.text)
                     Button {
+                        showNutritionInsight = true
+                    } label: {
+                        Image(systemName: "info.circle")
+                            .font(.system(size: 20))
+                            .foregroundStyle(theme.dim)
+                    }
+                    .tactile(.ghost)
+                    Spacer(minLength: 0)
+                    Button {
                         showSuggestions = true
                     } label: {
                         Label("suggestions", systemImage: "sparkles")
                             .font(.system(size: 11, weight: .medium))
                     }
                     .tactile(.pill, fill: theme.accent)
-                    Spacer(minLength: 0)
                 }
 
                 totalsCard
+                daySelector
                 weeklyNutritionCard
-                suggestionPillRow
-                nudgeSection
 
-                HStack(spacing: 10) {
-                    Button {
-                        showLogSheet = true
-                    } label: {
-                        HStack {
-                            Image(systemName: "plus.circle.fill")
-                            Text("Log a meal")
+                if selectedDayKey == today {
+                    suggestionPillRow
+                    nudgeSection
+                }
+
+                if selectedDayKey == today {
+                    HStack(spacing: 10) {
+                        Button {
+                            showLogSheet = true
+                        } label: {
+                            HStack {
+                                Image(systemName: "plus.circle.fill")
+                                Text("Log a meal")
+                            }
                         }
-                    }
-                    .tactile(.primary, fullWidth: true)
+                        .tactile(.primary, fullWidth: true)
 
-                    Button {
-                        showLibrary = true
-                    } label: {
-                        Label("Browse", systemImage: "magnifyingglass")
+                        Button {
+                            showLibrary = true
+                        } label: {
+                            Label("Browse", systemImage: "magnifyingglass")
+                        }
+                        .tactile(.secondary)
                     }
-                    .tactile(.secondary)
                 }
 
                 logList
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 18)
+            .scrollHapticTicks()
         }
         .background(theme.bg.ignoresSafeArea())
         .sheet(isPresented: $showLogSheet) {
@@ -171,7 +204,13 @@ struct NutritionView: View {
             .themed(profile.mode)
         }
         .sheet(isPresented: $showNutritionTrend) {
-            NutritionTrendSheet(profile: profile, logs: allLogs)
+            NutritionTrendSheet(profile: profile, logs: allLogs) { dayKey in
+                selectedDayKey = dayKey
+            }
+            .themed(profile.mode)
+        }
+        .sheet(isPresented: $showNutritionInsight) {
+            NutritionInsightSheet(profile: profile, logs: allLogs)
                 .themed(profile.mode)
         }
     }
@@ -182,7 +221,6 @@ struct NutritionView: View {
     private var weeklyNutritionCard: some View {
         let series = NutritionHistory.calorieSeries(allLogs, days: 7)
         let logged = NutritionHistory.daysLogged(allLogs, days: 7)
-        let avg = NutritionHistory.averagePerLoggedDay(allLogs, days: 7)
         let target = Double(profile.computedTargets.calories)
         if logged > 0 {
             PressableCard(action: { showNutritionTrend = true }) {
@@ -192,15 +230,32 @@ struct NutritionView: View {
                             .font(.system(size: 13, weight: .medium))
                             .foregroundStyle(theme.text)
                         Spacer()
-                        Text("\(logged)/7 days")
+                        Text("\(logged)/7 days logged")
                             .font(.caption).foregroundStyle(theme.dim)
                         Image(systemName: "chart.bar.xaxis")
                             .font(.caption).foregroundStyle(theme.accent)
                     }
                     WeeklyBarStrip(series: series, goal: target, height: 42, barHeight: 40)
-                    Text("Avg \(avg.calories) cal · \(avg.proteinG)p · \(avg.carbsG)c · \(avg.fatG)f")
-                        .font(.system(.caption2, design: .monospaced))
-                        .foregroundStyle(theme.dim)
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var daySelector: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(recentDayKeys, id: \.self) { key in
+                    Button {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                            selectedDayKey = key
+                        }
+                        Haptics.selection()
+                    } label: {
+                        Text(dayPillLabel(key))
+                            .font(.system(size: 13, weight: .medium))
+                    }
+                    .tactile(.pill, fill: selectedDayKey == key ? theme.accent : nil)
                 }
             }
         }
@@ -281,7 +336,7 @@ struct NutritionView: View {
     private var totalsCard: some View {
         Card {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Today")
+                Text(selectedDayKey == today ? "Today" : Dates.formatLong(selectedDayKey))
                     .font(.caption).tracking(2).textCase(.uppercase)
                     .foregroundStyle(theme.dim)
                 MacroQuadGrid(totals: totals, targets: profile.computedTargets)
@@ -294,15 +349,16 @@ struct NutritionView: View {
     @ViewBuilder
     private var logList: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Today's log")
+            Text(selectedDayKey == today ? "Today's log" : Dates.formatLong(selectedDayKey))
                 .font(.system(size: 22, weight: .regular))
                 .foregroundStyle(theme.text)
-            if todaysLogs.isEmpty {
-                Text("Nothing logged yet.")
+            if selectedDayLogs.isEmpty {
+                Text("Nothing logged \(selectedDayKey == today ? "yet" : "this day").")
                     .font(.callout).foregroundStyle(theme.dim)
             } else {
-                ForEach(todaysLogs) { e in
-                    LogRow(entry: e, onTap: { entryToDetail = e }) {
+                ForEach(selectedDayLogs) { e in
+                    LogRow(entry: e, onTap: { entryToDetail = e },
+                           canDelete: selectedDayKey == today) {
                         Repos.deleteFoodLog(ctx, id: e.id)
                         Haptics.warn()
                         toasts.show(Toast(title: "Removed", detail: e.customName ?? "Meal", accent: .warn, symbol: "minus.circle.fill"))
@@ -318,6 +374,7 @@ struct NutritionView: View {
 private struct LogRow: View {
     let entry: FoodLogEntryDTO
     let onTap: () -> Void
+    var canDelete: Bool = true
     let onDelete: () -> Void
     @Environment(\.theme) private var theme
 
@@ -327,16 +384,18 @@ private struct LogRow: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(entry.customName ?? "Meal")
                         .foregroundStyle(theme.text)
-                    Text("\(entry.perServing.calories) cal · \(entry.perServing.proteinG)p · \(entry.perServing.carbsG)c · \(entry.perServing.fatG)f")
+                    Text("\(entry.perServing.calories) cal · \(entry.perServing.proteinG)g protein · \(entry.perServing.carbsG)g carbs · \(entry.perServing.fatG)g fat")
                         .font(.system(.caption2, design: .monospaced))
                         .foregroundStyle(theme.dim)
                 }
                 Spacer(minLength: 0)
-                Button(action: onDelete) {
-                    Image(systemName: "xmark")
+                if canDelete {
+                    Button(action: onDelete) {
+                        Image(systemName: "xmark")
+                    }
+                    .tactile(.ghost)
+                    .accessibilityLabel("Remove \(entry.customName ?? "meal")")
                 }
-                .tactile(.ghost)
-                .accessibilityLabel("Remove \(entry.customName ?? "meal")")
             }
         }
     }
@@ -428,9 +487,9 @@ private struct MealDetailSheet: View {
                         .font(.caption).tracking(2).foregroundStyle(theme.dim)
                     HStack(spacing: 8) {
                         MacroChip(label: "Cal", value: adjusted.calories)
-                        MacroChip(label: "P", value: adjusted.proteinG)
-                        MacroChip(label: "C", value: adjusted.carbsG)
-                        MacroChip(label: "F", value: adjusted.fatG)
+                        MacroChip(label: "Protein", value: adjusted.proteinG)
+                        MacroChip(label: "Carbs", value: adjusted.carbsG)
+                        MacroChip(label: "Fat", value: adjusted.fatG)
                         if adjusted.fiberG > 0 {
                             MacroChip(label: "Fiber", value: adjusted.fiberG)
                         }
@@ -559,9 +618,9 @@ private struct FoodDetailSheet: View {
                         .font(.caption).tracking(2).foregroundStyle(theme.dim)
                     HStack(spacing: 8) {
                         MacroChip(label: "Cal", value: scaled(food.calories))
-                        MacroChip(label: "P", value: scaled(food.proteinG))
-                        MacroChip(label: "C", value: scaled(food.carbsG))
-                        MacroChip(label: "F", value: scaled(food.fatG))
+                        MacroChip(label: "Protein", value: scaled(food.proteinG))
+                        MacroChip(label: "Carbs", value: scaled(food.carbsG))
+                        MacroChip(label: "Fat", value: scaled(food.fatG))
                         if food.fiberG > 0 {
                             MacroChip(label: "Fiber", value: scaled(food.fiberG))
                         }
@@ -619,7 +678,7 @@ private struct LoggedEntryDetailSheet: View {
                     Text(entry.customName ?? "Meal")
                         .font(.system(size: 26, weight: .semibold))
                         .foregroundStyle(theme.text)
-                    Text("\(entry.slot.label.uppercased()) · \(entry.timestamp.formatted(date: .abbreviated, time: .shortened))")
+                    Text("\(entry.slot.label.uppercased()) · \(entry.timestamp.formatted(date: .long, time: .shortened))")
                         .font(.system(size: 10, weight: .medium)).tracking(2)
                         .foregroundStyle(theme.dim)
                 }
@@ -629,9 +688,9 @@ private struct LoggedEntryDetailSheet: View {
                         .font(.caption).tracking(2).foregroundStyle(theme.dim)
                     HStack(spacing: 8) {
                         MacroChip(label: "Cal", value: ps.calories)
-                        MacroChip(label: "P", value: ps.proteinG)
-                        MacroChip(label: "C", value: ps.carbsG)
-                        MacroChip(label: "F", value: ps.fatG)
+                        MacroChip(label: "Protein", value: ps.proteinG)
+                        MacroChip(label: "Carbs", value: ps.carbsG)
+                        MacroChip(label: "Fat", value: ps.fatG)
                         if ps.fiberG > 0 { MacroChip(label: "Fiber", value: ps.fiberG) }
                     }
                     if ps.sodiumMg > 0 || ps.addedSugarG > 0 || ps.saturatedFatG > 0 {
@@ -838,11 +897,11 @@ private struct NLMealLogSheet: View {
                 }
             } else {
                 let ps = resolvedPerServing
-                HStack(spacing: 14) {
+                HStack(spacing: 8) {
                     macroChip(label: "Cal", value: ps.calories)
-                    macroChip(label: "P", value: ps.proteinG)
-                    macroChip(label: "C", value: ps.carbsG)
-                    macroChip(label: "F", value: ps.fatG)
+                    macroChip(label: "Protein", value: ps.proteinG)
+                    macroChip(label: "Carbs", value: ps.carbsG)
+                    macroChip(label: "Fat", value: ps.fatG)
                 }
             }
         }
@@ -935,7 +994,7 @@ private struct SuggestionsSheet: View {
                                 Text(meal.description)
                                     .font(.caption).foregroundStyle(theme.dim)
                                     .lineLimit(2)
-                                Text("\(meal.perServing.calories) cal · \(meal.perServing.proteinG)p · \(meal.perServing.carbsG)c · \(meal.perServing.fatG)f")
+                                Text("\(meal.perServing.calories) cal · \(meal.perServing.proteinG)g protein · \(meal.perServing.carbsG)g carbs · \(meal.perServing.fatG)g fat")
                                     .font(.system(.caption2, design: .monospaced))
                                     .foregroundStyle(theme.accent)
                             }
@@ -1024,7 +1083,7 @@ private struct FoodLibrarySheet: View {
                                             .foregroundStyle(theme.text)
                                         Text(food.servingLabel)
                                             .font(.caption).foregroundStyle(theme.dim)
-                                        Text("\(food.calories) cal · \(food.proteinG)p · \(food.carbsG)c · \(food.fatG)f")
+                                        Text("\(food.calories) cal · \(food.proteinG)g protein · \(food.carbsG)g carbs · \(food.fatG)g fat")
                                             .font(.system(.caption2, design: .monospaced))
                                             .foregroundStyle(theme.accent)
                                     }
@@ -1074,5 +1133,180 @@ private struct FoodLibrarySheet: View {
         .background(theme.card)
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                         .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+    }
+}
+
+// MARK: - Nutrition Insight Sheet
+
+private struct NutritionInsightSheet: View {
+    let profile: ProfileDTO
+    let logs: [FoodLogEntryDTO]
+
+    @Environment(\.theme) private var theme
+    @Query private var markerModels: [HealthMarkerModel]
+
+    init(profile: ProfileDTO, logs: [FoodLogEntryDTO]) {
+        self.profile = profile
+        self.logs = logs
+        let uid = profile.id
+        // HealthMarkerModel.date is a "yyyy-MM-dd" String; lexicographic sort == chronological for this format.
+        _markerModels = Query(
+            filter: #Predicate<HealthMarkerModel> { $0.userId == uid },
+            sort: \.date, order: .reverse
+        )
+    }
+
+    private var targets: MacroTargets { profile.computedTargets }
+
+    private var avg7: DailyTotals { NutritionHistory.averagePerLoggedDay(logs, days: 7) }
+    private var logged7: Int { NutritionHistory.daysLogged(logs, days: 7) }
+
+    private var latestLDL: HealthMarkerDTO? {
+        markerModels.map(\.snapshot).first { $0.kind == .ldl }
+    }
+    private var latestBP: HealthMarkerDTO? {
+        markerModels.map(\.snapshot).first { $0.kind == .bpSystolic }
+    }
+
+    private var proteinStatus: String {
+        guard logged7 > 0 else { return "No data yet — log a few days to see your average." }
+        let pct = Int(Double(avg7.proteinG) / Double(targets.proteinG) * 100)
+        if pct >= 90 { return "You're hitting your protein target — great for muscle support." }
+        if pct >= 70 { return "Protein is a bit under target. Try adding eggs, Greek yogurt, or chicken." }
+        return "Protein is well below target. Prioritise protein-dense foods at each meal."
+    }
+
+    private var calorieStatus: String {
+        guard logged7 > 0 else { return "Log meals consistently to track your calorie pattern." }
+        let pct = Int(Double(avg7.calories) / Double(targets.calories) * 100)
+        switch profile.mode {
+        case .build:
+            if pct >= 95 { return "Calorie intake looks solid for muscle gain." }
+            if pct >= 80 { return "Slightly under target — add a snack or larger portion to hit your surplus." }
+            return "Calories are low for a building phase. Aim for the full \(targets.calories) cal daily."
+        case .circuit:
+            if pct <= 95 && pct >= 70 { return "Nice deficit — you're in the right calorie range for fat loss." }
+            if pct > 95 { return "You're near maintenance. A small additional reduction helps the deficit." }
+            return "Calories look very low. Make sure you're still fueling activity and recovery."
+        }
+    }
+
+    private var modeBlurb: String {
+        switch profile.mode {
+        case .build:
+            return "Build mode targets a ~400–600 cal surplus with high protein to maximise muscle protein synthesis. Every logged meal helps you stay consistent."
+        case .circuit:
+            return "Circuit mode targets a ~300–500 cal deficit. Protein stays high (1.0–1.2 g/lb) to protect muscle while you drop weight and improve cardiovascular markers."
+        }
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("nutrition goals.")
+                        .font(.system(size: 42, weight: .regular))
+                        .foregroundStyle(theme.text)
+                    Text("YOUR TARGETS · PLAIN ENGLISH")
+                        .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                }
+
+                infoBlock(icon: "target", title: "Your daily targets") {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("**\(targets.calories) calories** — \(profile.mode == .build ? "surplus" : "slight deficit") from your maintenance")
+                            .font(.callout).foregroundStyle(theme.text)
+                        Text("**\(targets.proteinG)g protein** — \(String(format: "%.1f", Double(targets.proteinG) / profile.weightLb))g per pound of body weight")
+                            .font(.callout).foregroundStyle(theme.text)
+                        Text("**\(targets.carbsG)g carbs** — primary fuel for movement and brain function")
+                            .font(.callout).foregroundStyle(theme.text)
+                        Text("**\(targets.fatG)g fat** — supports hormones, joint health, and fat-soluble vitamins")
+                            .font(.callout).foregroundStyle(theme.text)
+                    }
+                }
+
+                infoBlock(icon: "flame.fill", title: "What this means for you") {
+                    Text(modeBlurb)
+                        .font(.callout).foregroundStyle(theme.text)
+                }
+
+                if logged7 > 0 {
+                    infoBlock(icon: "chart.bar.fill", title: "Your last \(logged7) logged days") {
+                        VStack(alignment: .leading, spacing: 8) {
+                            statRow(label: "Average calories", value: "\(avg7.calories) cal", target: "\(targets.calories) cal")
+                            statRow(label: "Average protein", value: "\(avg7.proteinG)g", target: "\(targets.proteinG)g")
+                            statRow(label: "Average carbs", value: "\(avg7.carbsG)g", target: "\(targets.carbsG)g")
+                            statRow(label: "Average fat", value: "\(avg7.fatG)g", target: "\(targets.fatG)g")
+                        }
+                    }
+
+                    infoBlock(icon: "person.fill", title: "Reading your data") {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(calorieStatus).font(.callout).foregroundStyle(theme.text)
+                            Text(proteinStatus).font(.callout).foregroundStyle(theme.text)
+                        }
+                    }
+                }
+
+                if latestLDL != nil || latestBP != nil {
+                    infoBlock(icon: "heart.fill", title: "Dietary tips for your markers") {
+                        VStack(alignment: .leading, spacing: 8) {
+                            if latestLDL != nil {
+                                Text("**Cholesterol on file** — limit saturated fat, choose oats, legumes, and fatty fish. Soluble fiber (oats, beans) actively lowers LDL.")
+                                    .font(.callout).foregroundStyle(theme.text)
+                            }
+                            if latestBP != nil {
+                                Text("**Blood pressure on file** — reduce sodium, increase potassium-rich foods (bananas, sweet potato, spinach). DASH diet pattern is well-supported.")
+                                    .font(.callout).foregroundStyle(theme.text)
+                            }
+                        }
+                    }
+                }
+
+                Text("Targets are estimated from your height, weight, age, activity level, and mode. Log consistently for the most accurate picture.")
+                    .font(.caption).foregroundStyle(theme.dim)
+                    .padding(10)
+                    .background(theme.card)
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+        }
+        .presentationDetents([.large])
+        .presentationBackground(theme.bg)
+    }
+
+    @ViewBuilder
+    private func infoBlock<Content: View>(icon: String, title: String, @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 6) {
+                Image(systemName: icon)
+                    .font(.system(size: 11))
+                    .foregroundStyle(theme.accent)
+                Text(title.uppercased())
+                    .font(.caption).tracking(2)
+                    .foregroundStyle(theme.dim)
+            }
+            content()
+        }
+        .padding(14)
+        .background(theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+    }
+
+    @ViewBuilder
+    private func statRow(label: String, value: String, target: String) -> some View {
+        HStack {
+            Text(label).font(.callout).foregroundStyle(theme.text)
+            Spacer()
+            Text(value)
+                .font(.system(.callout, design: .monospaced))
+                .foregroundStyle(theme.accent)
+            Text("/ \(target)")
+                .font(.system(.caption, design: .monospaced))
+                .foregroundStyle(theme.dim)
+        }
     }
 }
