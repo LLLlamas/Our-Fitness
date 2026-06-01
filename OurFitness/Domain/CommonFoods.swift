@@ -13,7 +13,7 @@
 
 import Foundation
 
-public struct CommonFood: Sendable, Equatable {
+public struct CommonFood: Identifiable, Sendable, Equatable {
     public let id: String
     public let name: String
     public let aliases: [String]         // synonyms the parser should match

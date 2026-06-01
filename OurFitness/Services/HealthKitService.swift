@@ -341,8 +341,8 @@ public final class HealthKitService: ObservableObject {
     }
 
     // Type-safe units (string-initialized HKUnit(from:) crashes on a typo).
-    private static let bpmUnit = HKUnit.count().unitDivided(by: .minute())
-    private static let mgPerDLUnit = HKUnit.gramUnit(with: .milli).unitDivided(by: HKUnit.literUnit(with: .deci))
+    nonisolated private static let bpmUnit = HKUnit.count().unitDivided(by: .minute())
+    nonisolated private static let mgPerDLUnit = HKUnit.gramUnit(with: .milli).unitDivided(by: HKUnit.literUnit(with: .deci))
 
     // MARK: - Helpers
 
