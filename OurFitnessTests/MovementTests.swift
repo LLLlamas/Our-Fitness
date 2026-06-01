@@ -99,15 +99,20 @@ final class MovementTests: XCTestCase {
     func test_streak_current_week_exactly_meets_goal() {
         // Boundary: current week count equals goalSessions exactly → counts as 1.
         // Previous week has nothing, so chain ends there.
-        let s = [session(0), session(1), session(2)]
-        XCTAssertEqual(Movement.pilatesWeeklyStreak(sessions: s, goalSessions: 3), 1)
+        // Pin to Wednesday so days 0/1/2 all fall in the same ISO week (Mon–Sun).
+        let now = ISO8601DateFormatter().date(from: "2026-05-27T12:00:00Z")!
+        let s = [session(0, now: now), session(1, now: now), session(2, now: now)]
+        XCTAssertEqual(Movement.pilatesWeeklyStreak(sessions: s, goalSessions: 3, now: now), 1)
     }
 
     func test_streak_counts_consecutive_weeks_at_goal() {
         // 3 sessions this week + 3 last week → 2-week streak.
-        let s = [session(0), session(1), session(2),
-                 session(7), session(8), session(9)]
-        let n = Movement.pilatesWeeklyStreak(sessions: s, goalSessions: 3)
+        // Pin to Wednesday so days 0/1/2 stay in this ISO week and
+        // days 7/8/9 stay in the previous ISO week.
+        let now = ISO8601DateFormatter().date(from: "2026-05-27T12:00:00Z")!
+        let s = [session(0, now: now), session(1, now: now), session(2, now: now),
+                 session(7, now: now), session(8, now: now), session(9, now: now)]
+        let n = Movement.pilatesWeeklyStreak(sessions: s, goalSessions: 3, now: now)
         XCTAssertEqual(n, 2)
     }
 

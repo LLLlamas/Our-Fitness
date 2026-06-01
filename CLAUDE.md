@@ -204,6 +204,8 @@ Push → `compile.yml` tells you → patch → push. Don't add Mac-only steps wi
 ### Test target topology
 `OurFitnessTests` is **hostless**: compiles `OurFitness/Domain` sources directly. No `@testable import OurFitness`. `scripts/validate-ci-invariants.sh` enforces.
 
+**Never use bare `Date()` in time-sensitive tests.** Streak / weekly-bucketing / "this week" logic (`Movement.pilatesWeeklyStreak`, `stepWeeklyStreak`, `sessionsThisWeek`, anything keyed on ISO week or `Dates.lastNDays`) is day-of-week sensitive: a test that passes Tue–Sat fails when CI runs on a Sun/Mon because fixtures land in an adjacent ISO week. **Pin `now` to a fixed mid-week date (e.g. Wednesday `2026-05-27T12:00:00Z`) and thread it through BOTH the fixture/data-factory helper and the function under test** (these functions take a `now:`/`end:` parameter for exactly this). See `MovementTests` for the pattern. Same rule applies to any new Domain function that buckets by date — give it an injectable `now`/`end` default rather than calling `Date()` internally.
+
 ### TestFlight signing
 - Signing assets in private repo (`LLLlamas/Our-Fitness-Certs`). CI uses `match` in **readonly mode** by default.
 - Managed capabilities (HealthKit, Background Delivery) require a **manually generated App Store profile** — fastlane match can't attach capabilities post May 2025 ASC API v3.8.0.
