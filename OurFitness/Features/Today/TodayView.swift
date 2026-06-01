@@ -108,7 +108,11 @@ struct TodayView: View {
             if profile.healthGranted {
                 await health.syncFromHealth(profileId: profile.id, ctx: ctx)
             }
-            healthTick += 1
+            // MoveCard already reads active energy / HR in its own .task(id: 0) on
+            // first appear, and those reads don't depend on syncFromHealth (which
+            // only writes SwiftData markers), so no tick bump is needed here —
+            // avoids a redundant second HealthKit read. Pull-to-refresh + connect
+            // do bump the tick, since the user expects a fresh reading then.
         }
         .refreshable {
             await refreshToday()

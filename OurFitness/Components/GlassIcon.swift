@@ -59,14 +59,15 @@ struct GlassIcon: View {
         let d = dims
         return ZStack(alignment: .bottom) {
             // Glass body fill (faint) + water fill (stronger) clipped to the glass.
+            // The glass height `d.h` is known, so the water level is a fixed
+            // fraction of it — no GeometryReader needed (this renders per preset
+            // in a ForEach row, so we keep it allocation-light).
             GlassShape().fill(tint.opacity(0.14))
-            GeometryReader { geo in
-                Rectangle()
-                    .fill(tint.opacity(0.55))
-                    .frame(height: geo.size.height * 0.66)
-                    .frame(maxHeight: .infinity, alignment: .bottom)
-            }
-            .mask(GlassShape())
+            Rectangle()
+                .fill(tint.opacity(0.55))
+                .frame(height: d.h * 0.66)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+                .mask(GlassShape())
             // Rim + sides outline.
             GlassShape().stroke(tint, lineWidth: 1.5)
         }
