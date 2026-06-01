@@ -493,3 +493,35 @@ public final class WaterEntryModel {
         WaterEntryDTO(id: id, userId: userId, date: date, flOz: flOz, timestamp: timestamp)
     }
 }
+
+// MARK: - Custom water cup presets (V5)
+
+@Model
+public final class WaterCupPresetModel {
+    @Attribute(.unique) public var id: UUID
+    public var userId: UUID
+    public var name: String
+    public var flOz: Double
+    public var iconRaw: String   // Water.CupIcon raw value
+    public var sortOrder: Int
+    public var createdAt: Date
+
+    public init(snapshot s: WaterCupPresetDTO) {
+        self.id = s.id
+        self.userId = s.userId
+        self.name = s.name
+        self.flOz = s.flOz
+        self.iconRaw = s.icon.rawValue
+        self.sortOrder = s.sortOrder
+        self.createdAt = s.createdAt
+    }
+
+    public var snapshot: WaterCupPresetDTO {
+        WaterCupPresetDTO(
+            id: id, userId: userId, name: name, flOz: flOz,
+            // Fall back to a medium glass if an unknown raw ever lands here.
+            icon: Water.CupIcon(rawValue: iconRaw) ?? .glassMedium,
+            sortOrder: sortOrder, createdAt: createdAt
+        )
+    }
+}

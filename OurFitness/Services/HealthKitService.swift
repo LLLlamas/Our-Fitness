@@ -241,6 +241,15 @@ public final class HealthKitService: ObservableObject {
         return bpm.map { Int($0.value) }
     }
 
+    /// Most recent heart-rate reading with the sample's own timestamp, so the UI
+    /// can show how fresh it is ("as of 1:48 PM"). HealthKit only delivers new HR
+    /// samples periodically (continuous HR exists only during an active workout),
+    /// so this is a point-in-time read, not a live stream.
+    public func latestHeartRateSample() async -> (bpm: Int, date: Date)? {
+        guard let s = await latestQuantity(.heartRate, unit: Self.bpmUnit) else { return nil }
+        return (Int(s.value), s.date)
+    }
+
     /// Latest blood-pressure reading as a paired (systolic, diastolic) from the
     /// same correlation sample, so the two values can't come from different
     /// measurements.

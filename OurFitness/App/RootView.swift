@@ -100,7 +100,7 @@ struct RootView: View {
                         .tabItem { Label(Tab.workouts.label, systemImage: Tab.workouts.icon) }
                 }
 
-                ProgressTabView(profile: profile)
+                ProgressTabView(profile: profile, health: health)
                     .tag(Tab.progress)
                     .tabItem { Label(Tab.progress.label, systemImage: Tab.progress.icon) }
             }

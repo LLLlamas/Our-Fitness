@@ -15,6 +15,11 @@ public struct Theme: Equatable, Sendable {
     // Foregrounds
     public var text: Color
     public var dim: Color
+    /// Higher-contrast secondary text. Sits between `dim` and `text` so muted
+    /// labels stay legible — including when iOS dims a surface behind a presented
+    /// sheet (e.g. Settings cards under the mode-switch sheet). Use for sub-labels
+    /// that must remain readable; keep `dim` for purely decorative captions.
+    public var dim2: Color
     public var accent: Color
     public var accent2: Color
     public var ok: Color
@@ -34,6 +39,7 @@ public struct Theme: Equatable, Sendable {
         line:    Color(red: 0.149, green: 0.149, blue: 0.149),
         text:    Color(red: 0.961, green: 0.961, blue: 0.941),
         dim:     Color(red: 0.541, green: 0.541, blue: 0.510),
+        dim2:    Color(red: 0.745, green: 0.741, blue: 0.706),
         accent:  Color(red: 1.000, green: 0.420, blue: 0.208),
         accent2: Color(red: 1.000, green: 0.722, blue: 0.000),
         ok:      Color(red: 0.498, green: 0.690, blue: 0.412),
@@ -52,6 +58,7 @@ public struct Theme: Equatable, Sendable {
         line:    Color(red: 0.851, green: 0.824, blue: 0.773),
         text:    Color(red: 0.102, green: 0.086, blue: 0.078),
         dim:     Color(red: 0.478, green: 0.451, blue: 0.408),
+        dim2:    Color(red: 0.302, green: 0.282, blue: 0.255),
         accent:  Color(red: 0.498, green: 0.631, blue: 0.447),
         accent2: Color(red: 0.788, green: 0.482, blue: 0.353),
         ok:      Color(red: 0.302, green: 0.541, blue: 0.243),

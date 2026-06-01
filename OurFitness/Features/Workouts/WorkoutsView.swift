@@ -111,8 +111,11 @@ private struct BuildWorkoutsView: View {
                 Text("train.")
                     .font(.system(size: 56, weight: .regular))
                     .foregroundStyle(theme.text)
-                Text("Hypertrophy bias. Add your lifts, count reps, watch the numbers climb.")
-                    .font(.callout).foregroundStyle(theme.dim)
+                HStack(alignment: .firstTextBaseline, spacing: 6) {
+                    Text("Hypertrophy bias. Add your lifts, count reps, watch the numbers climb.")
+                        .font(.callout).foregroundStyle(theme.dim)
+                    CalorieInfoButton()
+                }
 
                 HStack {
                     Text("Your exercises")

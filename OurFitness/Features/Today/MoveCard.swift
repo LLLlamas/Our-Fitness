@@ -9,6 +9,9 @@ import SwiftData
 struct MoveCard: View {
     let profile: ProfileDTO
     @ObservedObject var health: HealthKitService
+    /// Bumped by TodayView on appear + pull-to-refresh so the card re-reads the
+    /// latest active energy / heart rate (reads only — never re-auth).
+    let refreshTick: Int
 
     @Environment(\.theme) private var theme
 
@@ -19,10 +22,12 @@ struct MoveCard: View {
 
     @State private var kcal: Double = 0
     @State private var bpm: Int?
+    @State private var bpmDate: Date?
 
-    init(profile: ProfileDTO, health: HealthKitService) {
+    init(profile: ProfileDTO, health: HealthKitService, refreshTick: Int = 0) {
         self.profile = profile
         self._health = ObservedObject(wrappedValue: health)
+        self.refreshTick = refreshTick
         let uid = profile.id
         // Scope each query to today so the fetch stays tiny regardless of history.
         let todayKey = Dates.dayKey()
@@ -47,10 +52,11 @@ struct MoveCard: View {
     var body: some View {
         Card {
             VStack(alignment: .leading, spacing: 10) {
-                HStack {
+                HStack(spacing: 6) {
                     Label("Move", systemImage: "flame.fill")
                         .font(.system(size: 13, weight: .semibold))
                         .foregroundStyle(theme.accent)
+                    CalorieInfoButton()
                     Spacer()
                     Text("APPLE HEALTH")
                         .font(.system(size: 9, weight: .medium)).tracking(2)
@@ -64,6 +70,14 @@ struct MoveCard: View {
                     }
                 }
 
+                // Heart rate is a point-in-time read (not live); show how fresh it
+                // is once it's meaningfully stale.
+                if bpm != nil, let date = bpmDate, let label = Freshness.label(for: date) {
+                    Label(label, systemImage: "clock")
+                        .font(.system(size: 10))
+                        .foregroundStyle(theme.dim)
+                }
+
                 // Our MET-based estimate, side by side with the Watch figure.
                 HStack(spacing: 6) {
                     Image(systemName: "function").font(.system(size: 11)).foregroundStyle(theme.dim)
@@ -73,18 +87,22 @@ struct MoveCard: View {
                     Text("(steps + training)")
                         .font(.caption2).foregroundStyle(theme.dim)
                 }
-
-                Text("Apple Health measures active energy from your Watch/iPhone. The MET estimate is our own science-based calculation (MET × weight × time) from your steps and logged training.")
-                    .font(.caption2).foregroundStyle(theme.dim)
-                    .fixedSize(horizontal: false, vertical: true)
+                // The Apple-Health-vs-MET explanation now lives behind the ⓘ in
+                // the header (CalorieInfoSheet) rather than as an always-on blurb.
             }
         }
-        .task(id: profile.id) { await load() }
+        .task(id: refreshTick) { await load() }
     }
 
     private func load() async {
         kcal = await health.activeEnergy()
-        bpm = await health.latestHeartRate()
+        if let sample = await health.latestHeartRateSample() {
+            bpm = sample.bpm
+            bpmDate = sample.date
+        } else {
+            bpm = nil
+            bpmDate = nil
+        }
     }
 
     @ViewBuilder

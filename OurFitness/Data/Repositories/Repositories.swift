@@ -51,6 +51,12 @@ public enum Repos {
         )
         ctx.insert(ProfileModel(snapshot: dto))
         try? ctx.save()
+        // Seed the signup weight as the first body-metric so Weight + BMI populate
+        // from day one instead of waiting for a manual log. A later HealthKit /
+        // manual weight for the same day merges via upsertBodyMetric's nil-only rule.
+        if weightLb > 0 {
+            upsertBodyMetric(ctx, userId: dto.id, day: Dates.dayKey(), weightLb: weightLb)
+        }
         if mode == .circuit {
             seedCircuitExercises(ctx, profileId: dto.id)
         }
@@ -274,6 +280,32 @@ public enum Repos {
         let desc = FetchDescriptor<WaterEntryModel>(
             predicate: #Predicate { $0.userId == userId },
             sortBy: [SortDescriptor(\.timestamp, order: .forward)]
+        )
+        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
+    }
+
+    // MARK: - Custom water presets
+
+    public static func addWaterPreset(_ ctx: ModelContext, _ p: WaterCupPresetDTO) {
+        ctx.insert(WaterCupPresetModel(snapshot: p))
+        try? ctx.save()
+    }
+
+    public static func deleteWaterPreset(_ ctx: ModelContext, id: UUID) {
+        let desc = FetchDescriptor<WaterCupPresetModel>(predicate: #Predicate { $0.id == id })
+        if let target = try? ctx.fetch(desc).first {
+            ctx.delete(target)
+            try? ctx.save()
+        }
+    }
+
+    /// Imperative fetch for non-`@Query` consumers (tests, export/sync). The
+    /// WaterCard reads custom presets via `@Query` directly.
+    public static func listWaterPresets(_ ctx: ModelContext, userId: UUID) -> [WaterCupPresetDTO] {
+        let desc = FetchDescriptor<WaterCupPresetModel>(
+            predicate: #Predicate { $0.userId == userId },
+            sortBy: [SortDescriptor(\.sortOrder, order: .forward),
+                     SortDescriptor(\.createdAt, order: .forward)]
         )
         return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
     }

@@ -10,6 +10,33 @@ exact files to touch, implementation notes, the architectural guardrails from
 `CLAUDE.md` that each change must respect, and acceptance criteria. Read
 `CLAUDE.md` first — every rule there still applies.
 
+## Implementation status (2026-06-01)
+
+All seven workstreams are **implemented** on `claude/health-tracking-ui-docs-r4FUH`.
+Notable realizations / deviations from the original spec:
+
+- **W1:** added a `theme.dim2` token (Services/Theme.swift) and switched the Settings
+  card sub-labels + profile rows to it — the centralized contrast fix.
+- **W2/W3:** one combined `Components/CalorieInfoSheet.swift` (+ reusable
+  `CalorieInfoButton`) surfaced on the Move card, the Today food-log header, and the
+  Train header. The Move card's always-on blurb moved into the sheet.
+- **W4:** `HealthKitService.latestHeartRateSample()` returns the sample date;
+  `Domain/Freshness.swift` (pure, injectable `now`) renders an absolute "as of …"
+  label, suppressed within 2 min. MoveCard re-reads on appear + pull-to-refresh via a
+  `refreshTick`. Note: Progress markers/body metrics are stored at **day** granularity
+  (no sample time), so the freshness label applies to the live HR read only.
+- **W5:** glasses are drawn **in code** (`Components/GlassIcon.swift`, tappable/tintable
+  `Shape`s) rather than asset-catalog PDFs — cleaner, scalable, theme-tinted, no binary
+  assets. Sizes 8/12/16/32. Custom presets persist in SwiftData
+  (`WaterCupPresetModel`, **SchemaV5**) with add/delete UI. Water added to Progress as
+  `StatKind.water` (today-vs-goal + 7-day avg) with a read-only detail sheet.
+- **W6:** signup weight seeded as the first BodyMetric in `Repos.createProfile`;
+  `syncFromHealth` now also fires immediately after the Connect flow (Today + Settings +
+  Progress); Progress shows a "Connect Apple Health" prompt when access isn't granted.
+- Domain tests added: `OurFitnessTests/FreshnessTests.swift`, `WaterPresetTests.swift`.
+
+The sections below are the original spec, retained for context.
+
 ## Global guardrails (apply to every workstream)
 
 - `Domain/` is pure Swift — no `SwiftUI`, no `SwiftData`. Formatting/aggregation
@@ -137,8 +164,8 @@ the Apple-Health-vs-MET distinction (the current blurb goes *inside* the sheet).
 **Files to touch:**
 - `Features/Today/MoveCard.swift` — remove the inline `Text(...)` blurb (≈ 77–79),
   add a `.tactile(.ghost)` ⓘ in the card header (near "APPLE HEALTH" / the MET row).
-- **New** `Components/MetInfoSheet.swift` (or a section within `CalorieInfoSheet` —
-  see below). Content:
+- Add a **"How we estimate burn (MET)"** section to `Components/CalorieInfoSheet.swift`
+  (CONFIRMED: one combined sheet, not a separate file). Content:
   - Plain-language MET definition ("MET = a multiple of resting energy; walking ≈
     4.3 METs means ~4× the energy of sitting still").
   - The formula in friendly terms: **calories ≈ MET × your body weight × time**
@@ -148,12 +175,12 @@ the Apple-Health-vs-MET distinction (the current blurb goes *inside* the sheet).
     steps + logged training so a science-based figure sits beside the measured one.
   - Cite that METs come from the Ainsworth 2011 Compendium (keep it light).
 
-**Implementation notes:**
-- **[ASSUMED]** Consolidate: a single shared sheet with two short sections —
-  "What's a calorie?" (Workstream 2) and "How we estimate burn (MET)" — is cleaner
-  than two separate sheets, since the Move card needs both. If you split them, the
-  Move card's one ⓘ should still reach the MET explanation. Confirm preference if
-  unsure; default to one combined sheet.
+**Implementation notes (CONFIRMED — one combined sheet):**
+- Use a **single shared sheet** with two short sections — "What's a calorie?"
+  (Workstream 2) and "How we estimate burn (MET)". The Move card's one ⓘ opens it;
+  the calorie-only surfaces (food total, workout figures) open the same sheet. Build
+  this as `Components/CalorieInfoSheet.swift` with both sections rather than a
+  separate `MetInfoSheet.swift`.
 - The MET math facts to surface (do not invent kcal/rep): formula `kcal = MET ×
   bodyWeightKg × hours`; sources/METs are tabulated in `CLAUDE.md` ("Calorie math")
   and `Domain/CalorieEstimator.swift` / `Domain/ExerciseInfo.swift`.
@@ -202,8 +229,10 @@ don't re-fetch needlessly).
 - Do **NOT** attach a timestamp to **whole-day cumulative** figures — steps and Apple
   Health active energy are day sums with no single sample time; a timestamp there is
   noise.
-- Suppress the label when the reading is essentially "now" (**[ASSUMED]** within the
-  last ~2 minutes) to avoid clutter; show it once it's meaningfully stale.
+- Suppress the label when the reading is essentially "now" (CONFIRMED: within the
+  last **2 minutes**) to avoid clutter; show it once it's meaningfully stale.
+- Time format is **absolute** (CONFIRMED), e.g. "as of 1:48 PM" via a localized
+  short time style — not relative ("12m ago").
 - Don't re-fetch on every render — fetch on appear + explicit refresh only.
 
 **Acceptance:** HR refreshes on appear/refresh and shows an honest "as of …";
@@ -235,9 +264,9 @@ and add a custom-size feature (5b).
     sfSymbol(String); case asset(String) }`) to `CupPreset` so the view can render
     either `Image(systemName:)` or `Image(_:)`. Keep `Domain` pure (no SwiftUI) — the
     enum is just data; the view decides which `Image` initializer to call.
-  - Update the default presets: Small/Medium/Large → glass assets; bottle → keep
-    `waterbottle.fill` (or a matching asset). **[ASSUMED]** keep current fl-oz values
-    (16 / 21 / 30 / 32) unless you want rounder numbers — confirm if changing.
+  - Update the default presets to **fl-oz 8 / 12 / 16 / 32** (CONFIRMED):
+    8 = small glass, 12 = medium glass, 16 = large glass, 32 = bottle. Small/Medium/
+    Large use the glass assets; bottle keeps `waterbottle.fill` (or a matching asset).
 - `Features/Today/WaterCard.swift` (≈ 89–107) — render asset vs symbol per the new
   `IconRef`; keep the same button layout, accessibility labels, haptics.
 
@@ -246,24 +275,41 @@ and add a custom-size feature (5b).
 **Decision (confirmed):** Tapping **"Add a size"** lets the user specify **a name +
 fl-oz amount + an icon** (pick from the glass/bottle set). Saved as a reusable preset.
 
+**Persistence (CONFIRMED — SwiftData, like reps/steps/meals):** Custom presets are
+**persisted in SwiftData**, the same way logged data lives in `@Model` classes — NOT
+AppStorage. This means a **new entity** and therefore a new schema version.
+
 **Files to touch:**
-- Persistence: store custom presets **per profile** as Codable JSON in `AppStorage`
-  (**[ASSUMED]** key `"waterCustomCups.\(profileId.uuidString)"`). This avoids a
-  SwiftData schema bump (water *entries* stay in SwiftData; presets are lightweight
-  UI convenience data). If you'd rather model them as a `@Model`, that's a new
-  entity → `SchemaV5` (additive, rides automatic migration) — **prefer AppStorage**
-  unless there's a reason to query them.
-- `Domain/Water.swift` — `CupPreset` is already `Codable`-friendly; make the full
-  preset list = built-in defaults + decoded custom presets. Keep aggregation
-  unchanged (entries are just `flOz`).
-- `Features/Today/WaterCard.swift` — add an "Add size" affordance (e.g. a trailing
-  `+` pill) opening a small sheet/form: name field, fl-oz stepper/field (with a Done
-  keyboard toolbar per the numeric-keyboard rule), icon picker (glasses + bottle).
-  On save, append to the AppStorage list. Allow deleting custom presets.
-  - **[ASSUMED]** cap the visible preset row sensibly (the card currently shows up to
-    4); with custom sizes added, consider a horizontally scrollable row or a
-    "more"/manage sheet so it doesn't overflow. Confirm layout preference; default to
-    a scrollable row.
+- `Data/PersistenceModels.swift` — add `WaterCupPresetModel` (a `@Model`), per-profile
+  scoped (`userId`/`profileId: UUID`), fields: `id: UUID`, `name: String`,
+  `flOz: Double`, `iconName: String`, `isAsset: Bool`, `sortOrder: Int`,
+  `createdAt: Date`. Built-in S/M/L/bottle stay as code constants; only **user-created**
+  presets are persisted here (mirrors how exercises/meals are user data while the
+  food *library* is code).
+- `Data/Schema.swift` — define **`SchemaV5`** listing all current models **plus**
+  `WaterCupPresetModel`, and bump `AppSchema.current` to it. This is an **additive**
+  change (new entity) → rides SwiftData's **automatic** migration with **NO staged
+  `MigrationPlan`** (same pattern as `WaterEntryModel` in SchemaV4). ⚠️ Do **not**
+  write a lightweight/staged stage — those threw uncatchable exceptions historically.
+  Test an upgrade-in-place on a device with existing data before shipping.
+- `Domain/Models.swift` — add a matching value-type `WaterCupPresetDTO` with a
+  `snapshot` adapter, consistent with the other DTO/@Model pairs. Keep `Domain` pure.
+- `Domain/Water.swift` — `CupPreset` stays the in-memory render model; the full preset
+  list the card shows = built-in defaults (8/12/16/32) + the user's persisted custom
+  presets mapped into `CupPreset`. Aggregation unchanged (entries are just `flOz`).
+- `Data/Repositories/Repositories.swift` — add `Repos.addWaterPreset(...)`,
+  `listWaterPresets(profileId:)`, `deleteWaterPreset(_:)` mirroring the existing
+  `addWater`/`listWater`/`deleteWater` surface.
+- `Features/Today/WaterCard.swift` — load custom presets via a **predicate-scoped
+  `@Query`** of `WaterCupPresetModel` (build `#Predicate { $0.userId == uid }` in
+  `init(profile:)`, per the scoping rule). Add an "Add size" affordance (a trailing
+  `+` pill) opening a small sheet/form: name field, fl-oz field (Done keyboard
+  toolbar per the numeric-keyboard rule), icon picker (glasses + bottle). On save →
+  `Repos.addWaterPreset` + toast. Allow deleting custom presets (swipe/long-press →
+  `Repos.deleteWaterPreset` + toast).
+  - **[ASSUMED]** with custom sizes the row can overflow — use a horizontally
+    scrollable preset row (built-ins first, then customs by `sortOrder`). Confirm if
+    you'd rather have a "manage sizes" sheet; default to the scrollable row.
 
 **Acceptance:** S/M/L show distinct glass icons; bottle remains; users can add a
 named custom size with an icon that persists per profile and is tappable like a
@@ -382,25 +428,28 @@ show a helpful prompt (connect vs log-first vs manual-only), never a bare blank/
   preset decoding, water aggregation tweaks) is pure and unit-tested with an
   **injected `now`** (never bare `Date()` in time-sensitive tests — pin to a mid-week
   date like `2026-05-27T12:00:00Z`).
-- No new schema unless you intentionally model custom water presets as a `@Model`
-  (prefer AppStorage JSON; if you do add an entity, it's `SchemaV5`, additive, no
-  staged plan).
+- Custom water presets are a **new `@Model` → `SchemaV5`** (CONFIRMED), additive, no
+  staged `MigrationPlan` (automatic migration, same as `WaterEntryModel` in V4). Test
+  upgrade-in-place on a device with existing data before shipping.
 - `project.yml` is the source of truth; don't add `info:`/`entitlements:` blocks to
   the OurFitness target. New asset catalog entries are fine.
 - Every meaningful mutation fires a toast; numeric inputs get a Done keyboard toolbar;
   ⓘ sheets use medium detents + `.presentationBackground(theme.bg)`; no `.popover`;
   no 6th button variant.
 
-## Open items to confirm with the product owner (defaults assumed if silent)
+## Confirmed decisions (2026-06-01)
 
-1. **One combined info sheet** (calorie + MET sections) vs two separate sheets.
-   Default: one combined sheet reachable from the Move card's single ⓘ.
-2. **Secondary-text token name/values** for the contrast fix (`dim2`?) — confirm the
-   exact colors meet contrast in both palettes.
-3. **Custom-water-preset storage**: AppStorage JSON (default) vs a SwiftData entity.
-4. **Water preset row layout** once custom sizes exist: scrollable row (default) vs a
-   "manage sizes" sheet.
-5. **Freshness suppression window** (~2 min default) and relative vs absolute time
-   format ("12m ago" vs "as of 1:48 PM").
-6. Whether to keep the **Owala/bottle** fl-oz values and the existing S/M/L amounts,
-   or round them.
+1. **One combined info sheet** (calorie + MET sections), reachable from the Move
+   card's single ⓘ and the calorie-only surfaces. ✅
+2. **Custom water presets persist in SwiftData** (like reps/steps/meals) → new
+   `WaterCupPresetModel` + `SchemaV5` (additive). ✅
+3. **Absolute** timestamps ("as of 1:48 PM"); freshness label suppressed within the
+   last **2 minutes**. ✅
+4. Water preset fl-oz sizes: **8 / 12 / 16 / 32**. ✅
+
+## Remaining minor items (defaults assumed if silent)
+
+1. **Secondary-text token name/values** for the contrast fix (`dim2`?) — confirm the
+   exact colors meet ≥ 4.5:1 contrast in both palettes.
+2. **Water preset row layout** once custom sizes exist: horizontally scrollable row
+   (default) vs a "manage sizes" sheet.

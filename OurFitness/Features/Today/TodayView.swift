@@ -21,6 +21,9 @@ struct TodayView: View {
 
     @AppStorage("hasBackfilled.steps") private var hasBackfilledRaw: String = ""
 
+    /// Bumped on appear + pull-to-refresh to nudge MoveCard to re-read Health.
+    @State private var healthTick = 0
+
     // Mirror the same AppStorage keys used in StepsCardioCard so the streak
     // calculation here uses the user's configured goals, not the mode defaults.
     @AppStorage private var customStepsGoalRaw: Int
@@ -84,7 +87,7 @@ struct TodayView: View {
                 MacroQuadGrid(totals: totals, targets: profile.computedTargets)
 
                 if profile.healthGranted {
-                    MoveCard(profile: profile, health: health)
+                    MoveCard(profile: profile, health: health, refreshTick: healthTick)
                 }
 
                 WaterCard(profile: profile)
@@ -105,12 +108,14 @@ struct TodayView: View {
             if profile.healthGranted {
                 await health.syncFromHealth(profileId: profile.id, ctx: ctx)
             }
+            healthTick += 1
         }
         .refreshable {
             await refreshToday()
             if profile.healthGranted {
                 await health.syncFromHealth(profileId: profile.id, ctx: ctx)
             }
+            healthTick += 1
         }
     }
 
@@ -164,9 +169,13 @@ struct TodayView: View {
     @ViewBuilder
     private var recentLogs: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Today's log")
-                .font(.system(size: 22, weight: .regular))
-                .foregroundStyle(theme.text)
+            HStack(spacing: 6) {
+                Text("Today's log")
+                    .font(.system(size: 22, weight: .regular))
+                    .foregroundStyle(theme.text)
+                CalorieInfoButton()
+                Spacer()
+            }
             if todaysLogs.isEmpty {
                 Text("Nothing logged yet. Head to Meals to add one.")
                     .font(.callout).foregroundStyle(theme.dim)
@@ -216,6 +225,11 @@ struct TodayView: View {
             if ok {
                 await backfillIfNeeded()
                 await refreshToday()
+                // Pull everything Health already has (body fat, waist, RHR, BP,
+                // glucose) right away so Progress cards fill without waiting for
+                // the next Today visit. Reads only — auth just happened above.
+                await health.syncFromHealth(profileId: profile.id, ctx: ctx)
+                healthTick += 1
             }
         }
     }

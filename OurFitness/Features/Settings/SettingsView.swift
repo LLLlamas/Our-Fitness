@@ -30,7 +30,7 @@ struct SettingsView: View {
                                     Text(profile.healthGranted
                                          ? "Tap to manage per-metric toggles in Settings.app"
                                          : "Tap to grant access")
-                                        .font(.caption).foregroundStyle(theme.dim)
+                                        .font(.caption).foregroundStyle(theme.dim2)
                                 }
                                 Spacer()
                                 Image(systemName: profile.healthGranted ? "checkmark.circle.fill" : "heart.text.square")
@@ -77,7 +77,7 @@ struct SettingsView: View {
                         .font(.system(size: 15, weight: .medium))
                         .foregroundStyle(theme.text)
                     Text("Tap to switch to \(profile.mode.toggled.displayName)")
-                        .font(.caption).foregroundStyle(theme.dim)
+                        .font(.caption).foregroundStyle(theme.dim2)
                 }
                 Spacer()
                 Image(systemName: "arrow.left.arrow.right")
@@ -100,8 +100,12 @@ struct SettingsView: View {
             health.openSystemSettings()
         } else {
             Task {
-                _ = await health.connectAndPersist(profileId: profile.id, ctx: ctx, toasts: toasts)
+                let ok = await health.connectAndPersist(profileId: profile.id, ctx: ctx, toasts: toasts)
                 // RootView's .task(id: StepObserverKey) re-fires on grant transition and arms the observer.
+                if ok {
+                    // Pull whatever Health already has so Progress fills immediately.
+                    await health.syncFromHealth(profileId: profile.id, ctx: ctx)
+                }
             }
         }
     }
@@ -119,7 +123,7 @@ struct SettingsView: View {
     @ViewBuilder
     private func labeled(_ k: String, _ v: String) -> some View {
         HStack {
-            Text(k).foregroundStyle(theme.dim)
+            Text(k).foregroundStyle(theme.dim2)
             Spacer()
             Text(v).foregroundStyle(theme.text)
         }

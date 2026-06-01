@@ -5,6 +5,7 @@ import Charts
 /// Named ProgressTabView to avoid collision with SwiftUI.ProgressView.
 struct ProgressTabView: View {
     let profile: ProfileDTO
+    @ObservedObject var health: HealthKitService
 
     @Environment(\.modelContext) private var ctx
     @Environment(\.theme) private var theme
@@ -14,6 +15,7 @@ struct ProgressTabView: View {
     @Query private var bodyModels: [BodyMetricModel]
     @Query private var markerModels: [HealthMarkerModel]
     @Query private var stepModels: [StepCountModel]
+    @Query private var waterModels: [WaterEntryModel]
 
     @State private var activeStat: StatKind?
     @State private var showEditTrackers = false
@@ -22,11 +24,14 @@ struct ProgressTabView: View {
     /// "none" = customized to show nothing; otherwise a CSV of StatKind raw values.
     /// IMPORTANT: never add a StatKind whose rawValue is "none" — it collides with the sentinel.
     @AppStorage private var enabledStatsRaw: String
+    @AppStorage private var waterGoalFlOz: Double
 
-    init(profile: ProfileDTO) {
+    init(profile: ProfileDTO, health: HealthKitService) {
         self.profile = profile
+        self._health = ObservedObject(wrappedValue: health)
         let uid = profile.id
         _enabledStatsRaw = AppStorage(wrappedValue: "", "progressStats.\(uid.uuidString)")
+        _waterGoalFlOz = AppStorage(wrappedValue: Water.defaultGoalFlOz, "waterGoalFlOz.\(uid.uuidString)")
         _bodyModels = Query(
             filter: #Predicate<BodyMetricModel> { $0.userId == uid },
             sort: \.date, order: .forward
@@ -41,12 +46,17 @@ struct ProgressTabView: View {
             filter: #Predicate<StepCountModel> { $0.userId == uid },
             sort: \.date, order: .forward
         )
+        _waterModels = Query(
+            filter: #Predicate<WaterEntryModel> { $0.userId == uid },
+            sort: \.timestamp, order: .forward
+        )
     }
 
     // Body metrics arrive date-ascending from the query (consumers take `.last`).
     private var body_: [BodyMetricDTO] { bodyModels.map(\.snapshot) }
     private var markers: [HealthMarkerDTO] { markerModels.map(\.snapshot) }
     private var steps: [StepCountDTO] { stepModels.map(\.snapshot) }
+    private var water: [WaterEntryDTO] { waterModels.map(\.snapshot) }
 
     /// The enabled tracker set: mode defaults until the user customizes, then
     /// whatever they chose (including the empty "none" state).
@@ -95,6 +105,10 @@ struct ProgressTabView: View {
                 Text("Weekly trends > daily pass/fail. Show up, log honestly, watch the lines move.")
                     .font(.callout).foregroundStyle(theme.dim)
 
+                if !profile.healthGranted {
+                    connectHealthPrompt
+                }
+
                 if visibleStats.isEmpty {
                     Text("No trackers shown. Tap the sliders above to add some.")
                         .font(.callout).foregroundStyle(theme.dim)
@@ -123,20 +137,70 @@ struct ProgressTabView: View {
         }
     }
 
+    // MARK: - Connect Apple Health prompt
+
+    @ViewBuilder
+    private var connectHealthPrompt: some View {
+        PressableCard(action: connectHealth) {
+            HStack(alignment: .top, spacing: 12) {
+                Image(systemName: "heart.text.square")
+                    .font(.system(size: 22))
+                    .foregroundStyle(theme.accent)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Connect Apple Health")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(theme.text)
+                    Text("Auto-fill body fat, waist, resting HR, blood pressure, and glucose where Health has data. Cholesterol and A1c stay manual (labs aren't in Apple Health).")
+                        .font(.caption).foregroundStyle(theme.dim2)
+                }
+                Spacer(minLength: 0)
+            }
+        }
+    }
+
+    private func connectHealth() {
+        Task {
+            let ok = await health.connectAndPersist(profileId: profile.id, ctx: ctx, toasts: toasts)
+            if ok {
+                await health.syncFromHealth(profileId: profile.id, ctx: ctx)
+            }
+        }
+    }
+
     // MARK: - Cards
 
     @ViewBuilder
     private func statCard(for kind: StatKind) -> some View {
-        let value = kind.displayValue(body: body_, markers: markers, steps: steps, profile: profile)
-        let trend = kind.trendChip(body: body_, markers: markers, steps: steps, profile: profile)
-        let tint  = statusTint(for: kind)
+        if kind == .water {
+            waterCard
+        } else {
+            let value = kind.displayValue(body: body_, markers: markers, steps: steps, profile: profile)
+            let trend = kind.trendChip(body: body_, markers: markers, steps: steps, profile: profile)
+            let tint  = statusTint(for: kind)
+            StatCard(
+                title: kind.title,
+                value: value,
+                unit: kind.unit,
+                trend: trend,
+                valueAccent: tint,
+                action: { activeStat = kind }
+            )
+        }
+    }
+
+    // Water shows both today-vs-goal (the big value) and the 7-day average (trend).
+    @ViewBuilder
+    private var waterCard: some View {
+        let todayOz = Water.total(water, on: Dates.dayKey())
+        let avg = Water.average(water, days: 7)
+        let logged = water.contains { $0.flOz > 0 }
         StatCard(
-            title: kind.title,
-            value: value,
-            unit: kind.unit,
-            trend: trend,
-            valueAccent: tint,
-            action: { activeStat = kind }
+            title: "Water",
+            value: logged ? "\(Int(todayOz))/\(Int(waterGoalFlOz))" : nil,
+            unit: "oz today",
+            trend: avg > 0 ? "7d avg \(Int(avg))" : nil,
+            valueAccent: logged && todayOz >= waterGoalFlOz ? theme.ok : nil,
+            action: { activeStat = .water }
         )
     }
 
@@ -157,7 +221,7 @@ struct ProgressTabView: View {
             let bmi = BodyComposition.bmi(weightLb: w, heightIn: profile.heightIn)
             if bmi < 18.5 || bmi >= 25 { return theme.warn }
             return theme.ok
-        case .weight, .bodyFat, .waist, .stepsAvg:
+        case .weight, .bodyFat, .waist, .stepsAvg, .water:
             return nil
         }
         switch status {
@@ -199,6 +263,8 @@ struct ProgressTabView: View {
             .environmentObject(toasts)
         case .bmi:
             BMIDetailSheet(profile: profile, metrics: body_)
+        case .water:
+            WaterProgressDetailSheet(entries: water, goalFlOz: waterGoalFlOz)
         default:
             StatDetailSheet(
                 title: kind.title,
@@ -279,7 +345,7 @@ struct ProgressTabView: View {
             toasts.show(Toast(title: "\(kind.title) logged",
                               detail: "\(formattedValue(value)) \(kind.unit)",
                               accent: .ok, symbol: "heart.text.square.fill"))
-        case .bp, .stepsAvg, .bmi:
+        case .bp, .stepsAvg, .bmi, .water:
             break
         }
     }
@@ -290,6 +356,7 @@ struct ProgressTabView: View {
 enum StatKind: String, CaseIterable, Identifiable {
     case weight, bodyFat, waist, bmi, restingHR, stepsAvg
     case bp, ldl, hdl, totalCholesterol, a1c, fastingGlucose
+    case water
 
     var id: String { rawValue }
 
@@ -307,6 +374,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .totalCholesterol: return "Total Chol."
         case .a1c:              return "A1c"
         case .fastingGlucose:   return "Fasting Gluc."
+        case .water:            return "Water"
         }
     }
 
@@ -321,6 +389,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .bp:               return "mmHg"
         case .ldl, .hdl, .totalCholesterol, .fastingGlucose: return "mg/dL"
         case .a1c:              return "%"
+        case .water:            return "oz today"
         }
     }
 
@@ -332,12 +401,13 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .restingHR:        return "resting HR (bpm)"
         case .ldl, .hdl, .totalCholesterol, .fastingGlucose: return "value (mg/dL)"
         case .a1c:              return "A1c (%)"
-        case .bmi, .bp, .stepsAvg: return ""
+        case .bmi, .bp, .stepsAvg, .water: return ""
         }
     }
 
     var canLog: Bool {
-        self != .stepsAvg && self != .bmi
+        // Water is logged on the Today card, not via the generic log sheet.
+        self != .stepsAvg && self != .bmi && self != .water
     }
 
     var markerKind: HealthMarkerKind? {
@@ -354,7 +424,7 @@ enum StatKind: String, CaseIterable, Identifiable {
 
     func isRelevant(for mode: Mode) -> Bool {
         switch self {
-        case .weight, .bodyFat, .waist, .bmi, .stepsAvg:
+        case .weight, .bodyFat, .waist, .bmi, .stepsAvg, .water:
             return true
         case .restingHR, .bp, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
             return mode == .circuit
@@ -400,6 +470,9 @@ enum StatKind: String, CaseIterable, Identifiable {
             return latestMarker(.a1c, in: markers).map { formattedValue($0) }
         case .fastingGlucose:
             return latestMarker(.fastingGlucose, in: markers).map { formattedValue($0) }
+        case .water:
+            // Rendered by ProgressTabView.waterCard (needs the water log).
+            return nil
         }
     }
 
@@ -468,6 +541,8 @@ enum StatKind: String, CaseIterable, Identifiable {
             // BMI computed from each weight entry against profile height.
             // Height is static per profile so we can safely use it here.
             return []
+        case .water:
+            return []
         }
     }
 
@@ -523,7 +598,7 @@ enum StatKind: String, CaseIterable, Identifiable {
                     return StatDetailEntry(id: m.id.uuidString, dateLabel: m.date,
                                            valueLabel: "\(Int(m.value)) \(label)")
                 }
-        case .stepsAvg, .bmi:
+        case .stepsAvg, .bmi, .water:
             return []
         }
     }
@@ -1147,5 +1222,99 @@ private struct WeightLogSheet: View {
         }
         let half = Int((lb * 2).rounded())
         draftHalfLb = max(minHalfLb, min(maxHalfLb, half))
+    }
+}
+
+// MARK: - Water detail sheet
+
+/// Read-only water trend: today vs goal + the 7-day average (the two figures the
+/// Progress card surfaces) plus a 30-day line. Water is logged on the Today tab,
+/// so there's no log control here.
+private struct WaterProgressDetailSheet: View {
+    let entries: [WaterEntryDTO]
+    let goalFlOz: Double
+
+    @Environment(\.theme) private var theme
+
+    private var todayOz: Double { Water.total(entries, on: Dates.dayKey()) }
+    private var weekAvg: Double { Water.average(entries, days: 7) }
+    private var weekSeries: [Trends.Point] { Water.series(entries, days: 7) }
+    private var monthSeries: [Trends.Point] { Water.series(entries, days: 30) }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("water.")
+                        .font(.system(size: 42, weight: .regular))
+                        .foregroundStyle(theme.text)
+                    Text("FL OZ · TODAY VS GOAL · 7-DAY AVERAGE")
+                        .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                }
+
+                if !weekSeries.contains(where: { $0.value > 0 }) && todayOz == 0 {
+                    Text("No water logged yet. Add a glass on the Today tab to start your trend.")
+                        .font(.callout).foregroundStyle(theme.dim)
+                        .frame(maxWidth: .infinity, minHeight: 100, alignment: .leading)
+                        .padding(16)
+                        .background(theme.card)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+                } else {
+                    ProgressBar(value: todayOz, target: goalFlOz, label: "Today", unit: " oz")
+
+                    HStack(spacing: 16) {
+                        cell(label: "Today", value: "\(Int(todayOz)) oz")
+                        cell(label: "7-day avg", value: weekAvg > 0 ? "\(Int(weekAvg)) oz" : "—")
+                        cell(label: "Goal", value: "\(Int(goalFlOz)) oz")
+                    }
+
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Last 7 days")
+                            .font(.system(size: 10, weight: .medium)).tracking(2)
+                            .foregroundStyle(theme.dim)
+                        WeeklyBarStrip(series: weekSeries, goal: goalFlOz)
+                    }
+
+                    if monthSeries.filter({ $0.value > 0 }).count >= 2 {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("Last 30 days")
+                                .font(.system(size: 10, weight: .medium)).tracking(2)
+                                .foregroundStyle(theme.dim)
+                            Chart(monthSeries, id: \.date) { p in
+                                LineMark(x: .value("Day", p.date), y: .value("oz", p.value))
+                                    .foregroundStyle(theme.accent)
+                            }
+                            .frame(height: 140)
+                        }
+                    }
+                }
+
+                Text("Water is logged on the Today tab. The daily goal is adjustable there too.")
+                    .font(.footnote).foregroundStyle(theme.dim)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+        }
+        .presentationDetents([.medium, .large])
+        .presentationBackground(theme.bg)
+    }
+
+    @ViewBuilder
+    private func cell(label: String, value: String) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(label.uppercased())
+                .font(.system(size: 9, weight: .medium)).tracking(2)
+                .foregroundStyle(theme.dim)
+            Text(value)
+                .font(.system(.title3, design: .monospaced))
+                .foregroundStyle(theme.text)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(10)
+        .background(theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
     }
 }
