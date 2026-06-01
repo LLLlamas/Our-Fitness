@@ -27,10 +27,17 @@ struct CardioLogCard: View {
     private var sessions: [CardioSessionDTO] { sessionModels.map(\.snapshot) }
     private var recent: [CardioSessionDTO] { Array(sessions.prefix(5)) }
     private var minutesThisWeek: Int {
-        let cal = Calendar(identifier: .iso8601)
+        var cal = Calendar(identifier: .iso8601)
+        cal.firstWeekday = 2  // Monday-anchored, matches Movement.sessionsThisWeek
         guard let week = cal.dateInterval(of: .weekOfYear, for: Date()) else { return 0 }
         return sessions.filter { week.contains($0.date) }
             .reduce(0) { $0 + $1.durationMinutes }
+    }
+
+    private func deleteSession(_ session: CardioSessionDTO) {
+        Repos.deleteCardioSession(ctx, id: session.id)
+        toasts.show(Toast(title: "Session removed", detail: "Cardio session deleted.",
+                          accent: .warn, symbol: "trash.fill"))
     }
 
     var body: some View {
@@ -76,6 +83,13 @@ struct CardioLogCard: View {
                             Text("\(s.durationMinutes) min")
                                 .font(.system(.caption, design: .monospaced))
                                 .foregroundStyle(theme.accent)
+                            Button(role: .destructive) { deleteSession(s) } label: {
+                                Image(systemName: "trash")
+                                    .font(.system(size: 12))
+                                    .foregroundStyle(theme.warn)
+                            }
+                            .tactile(.ghost)
+                            .accessibilityLabel("Delete this cardio session")
                         }
                         .font(.caption)
                     }
@@ -108,6 +122,7 @@ private struct CardioLogSheet: View {
     @State private var distanceStr: String = ""
     @State private var rpeStr: String = ""
     @State private var notes: String = ""
+    @FocusState private var focusedField: Bool
 
     var body: some View {
         ScrollView {
@@ -148,6 +163,12 @@ private struct CardioLogSheet: View {
         }
         .presentationDetents([.large])
         .presentationBackground(theme.bg)
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") { focusedField = false }
+            }
+        }
     }
 
     @ViewBuilder
@@ -188,6 +209,7 @@ private struct CardioLogSheet: View {
                 .font(.caption).tracking(2).foregroundStyle(theme.dim)
             TextField("", text: $distanceStr)
                 .keyboardType(.decimalPad)
+                .focused($focusedField)
                 .padding(10).background(theme.card)
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                 .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
@@ -202,6 +224,7 @@ private struct CardioLogSheet: View {
                 .font(.caption).tracking(2).foregroundStyle(theme.dim)
             TextField("", text: $rpeStr)
                 .keyboardType(.decimalPad)
+                .focused($focusedField)
                 .padding(10).background(theme.card)
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                 .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))

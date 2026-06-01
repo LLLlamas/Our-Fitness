@@ -86,12 +86,21 @@ struct WaterCard: View {
         }
     }
 
+    private func glassIcon(for presetId: String) -> GlassIcon.GlassSize {
+        switch presetId {
+        case "cup-small":  return .small
+        case "cup-medium": return .medium
+        default:           return .large
+        }
+    }
+
     private var presetRow: some View {
         HStack(spacing: 8) {
             ForEach(Water.presets) { preset in
                 Button { add(preset.flOz) } label: {
                     VStack(spacing: 4) {
-                        Image(systemName: preset.symbol).font(.system(size: 18))
+                        GlassIcon(size: glassIcon(for: preset.id))
+                            .frame(height: 36, alignment: .bottom)  // fixed slot, glass sits at bottom
                         Text(preset.label).font(.system(size: 11, weight: .medium))
                         Text("+\(Int(preset.flOz)) oz")
                             .font(.system(size: 9, design: .monospaced))
@@ -99,6 +108,7 @@ struct WaterCard: View {
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)
+                    .foregroundStyle(theme.accent)
                 }
                 .tactile(.bump)
                 .accessibilityLabel("Add \(preset.label) cup, \(Int(preset.flOz)) ounces")
@@ -129,5 +139,39 @@ struct WaterCard: View {
                 .foregroundStyle(theme.dim)
             WeeklyBarStrip(series: weekSeries, goal: goalFlOz)
         }
+    }
+}
+
+// MARK: - Custom glass icon
+
+/// A trapezoid glass: slightly wider at the top than the bottom.
+private struct DrinkingGlass: Shape {
+    func path(in rect: CGRect) -> Path {
+        var p = Path()
+        let taper: CGFloat = rect.width * 0.12  // bottom is 12% narrower on each side
+        let topLeft   = CGPoint(x: rect.minX,        y: rect.minY)
+        let topRight  = CGPoint(x: rect.maxX,        y: rect.minY)
+        let botRight  = CGPoint(x: rect.maxX - taper, y: rect.maxY)
+        let botLeft   = CGPoint(x: rect.minX + taper, y: rect.maxY)
+        p.move(to: topLeft)
+        p.addLine(to: topRight)
+        p.addLine(to: botRight)
+        p.addLine(to: botLeft)
+        p.closeSubpath()
+        return p
+    }
+}
+
+/// Stroked glass outline whose height scales with the preset size.
+private struct GlassIcon: View {
+    let size: GlassSize
+    enum GlassSize { case small, medium, large
+        var height: CGFloat { switch self { case .small: return 18; case .medium: return 26; case .large: return 34 } }
+        var width: CGFloat  { switch self { case .small: return 13; case .medium: return 18; case .large: return 22 } }
+    }
+    var body: some View {
+        DrinkingGlass()
+            .stroke(lineWidth: 1.8)
+            .frame(width: size.width, height: size.height)
     }
 }

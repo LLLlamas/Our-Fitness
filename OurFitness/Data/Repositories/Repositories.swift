@@ -376,11 +376,27 @@ public enum Repos {
         return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
     }
 
+    public static func deletePilatesSession(_ ctx: ModelContext, id: UUID) {
+        let desc = FetchDescriptor<PilatesSessionModel>(predicate: #Predicate { $0.id == id })
+        if let target = try? ctx.fetch(desc).first {
+            ctx.delete(target)
+            try? ctx.save()
+        }
+    }
+
     // MARK: - Cardio sessions
 
     public static func logCardio(_ ctx: ModelContext, _ s: CardioSessionDTO) {
         ctx.insert(CardioSessionModel(snapshot: s))
         try? ctx.save()
+    }
+
+    public static func deleteCardioSession(_ ctx: ModelContext, id: UUID) {
+        let desc = FetchDescriptor<CardioSessionModel>(predicate: #Predicate { $0.id == id })
+        if let target = try? ctx.fetch(desc).first {
+            ctx.delete(target)
+            try? ctx.save()
+        }
     }
 
     public static func listCardio(

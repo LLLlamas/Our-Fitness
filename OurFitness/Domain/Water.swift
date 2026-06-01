@@ -16,13 +16,12 @@ public enum Water {
         }
     }
 
-    /// Tap-to-add cup presets, in US fluid ounces.
-    ///   McDonald's: small 16, medium 21, large 30. Owala FreeSip: 32.
+    /// Tap-to-add cup presets, in US fluid ounces. `symbol` maps to the custom
+    /// glass icon by id in WaterCard, so the strings are placeholders.
     public static let presets: [CupPreset] = [
-        CupPreset(id: "cup-small",  label: "Small",  flOz: 16, symbol: "cup.and.saucer"),
-        CupPreset(id: "cup-medium", label: "Medium", flOz: 21, symbol: "cup.and.saucer.fill"),
-        CupPreset(id: "cup-large",  label: "Large",  flOz: 30, symbol: "takeoutbag.and.cup.and.straw.fill"),
-        CupPreset(id: "owala",      label: "Owala",  flOz: 32, symbol: "waterbottle.fill"),
+        CupPreset(id: "cup-small",  label: "S", flOz: 8,  symbol: "glass-small"),
+        CupPreset(id: "cup-medium", label: "M", flOz: 16, symbol: "glass-medium"),
+        CupPreset(id: "cup-large",  label: "L", flOz: 32, symbol: "glass-large"),
     ]
 
     /// Default daily goal (~2.4 L). User-adjustable.

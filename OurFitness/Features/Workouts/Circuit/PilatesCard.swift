@@ -138,6 +138,12 @@ struct PilatesCard: View {
         }
     }
 
+    private func deleteSession(_ session: PilatesSessionDTO) {
+        Repos.deletePilatesSession(ctx, id: session.id)
+        toasts.show(Toast(title: "Session removed", detail: "Pilates session deleted.",
+                          accent: .warn, symbol: "trash.fill"))
+    }
+
     @ViewBuilder
     private var recentStrip: some View {
         let recent = Array(sessions.prefix(5))
@@ -164,6 +170,13 @@ struct PilatesCard: View {
                         Text("\(s.durationMinutes) min · ~\(Int(cal)) cal")
                             .font(.system(.caption, design: .monospaced))
                             .foregroundStyle(theme.accent2)
+                        Button(role: .destructive) { deleteSession(s) } label: {
+                            Image(systemName: "trash")
+                                .font(.system(size: 12))
+                                .foregroundStyle(theme.warn)
+                        }
+                        .tactile(.ghost)
+                        .accessibilityLabel("Delete this pilates session")
                     }
                 }
             }

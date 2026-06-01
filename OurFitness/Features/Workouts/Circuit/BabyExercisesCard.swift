@@ -63,7 +63,8 @@ struct BabyExercisesCard: View {
                             profile: profile,
                             exercise: exercise,
                             todayCount: todayReps(for: exercise),
-                            onLog: { amount in logActivity(exercise: exercise, amount: amount) }
+                            onLog: { amount in logActivity(exercise: exercise, amount: amount) },
+                            onUndo: { undoLastSet(for: exercise) }
                         )
                         if exercise.id != myExercises.last?.id {
                             Divider().background(theme.line)
@@ -141,6 +142,21 @@ struct BabyExercisesCard: View {
             symbol: "checkmark.seal.fill"
         ))
     }
+
+    private func undoLastSet(for exercise: ExerciseDTO) {
+        let uid = profile.id
+        let exId = exercise.id
+        let today = Dates.dayKey()
+        // Find the most recently logged set today for this exercise
+        let todaySets = setModels
+            .filter { $0.exerciseId == exId && $0.userId == uid && Dates.dayKey($0.timestamp) == today }
+            .sorted { $0.timestamp > $1.timestamp }
+        guard let latest = todaySets.first else { return }
+        Repos.deleteSet(ctx, id: latest.id)
+        Haptics.warn()
+        toasts.show(Toast(title: "Undone", detail: "\(exercise.name) · last rep removed",
+                          accent: .warn, symbol: "arrow.uturn.backward"))
+    }
 }
 
 // MARK: - Per-exercise row
@@ -150,6 +166,7 @@ private struct ExerciseRow: View {
     let exercise: ExerciseDTO
     let todayCount: Int
     let onLog: (Int) -> Void
+    let onUndo: () -> Void
 
     @Environment(\.theme) private var theme
     @State private var showInfo = false
@@ -191,6 +208,16 @@ private struct ExerciseRow: View {
                     .foregroundStyle(theme.dim)
             }
             Spacer(minLength: 0)
+
+            if todayCount > 0 {
+                Button { onUndo() } label: {
+                    Image(systemName: "arrow.uturn.backward")
+                        .font(.system(size: 13))
+                        .foregroundStyle(theme.dim)
+                }
+                .tactile(.ghost)
+                .accessibilityLabel("Undo last \(exercise.name)")
+            }
 
             Button { showInfo = true } label: {
                 Image(systemName: "info.circle")
