@@ -241,6 +241,18 @@ public final class HealthKitService: ObservableObject {
         return bpm.map { Int($0.value) }
     }
 
+    /// Most recent heart-rate reading in bpm with its timestamp.
+    public func latestHeartRateWithDate() async -> (value: Int, date: Date)? {
+        guard let result = await latestQuantity(.heartRate, unit: Self.bpmUnit) else { return nil }
+        return (Int(result.value), result.date)
+    }
+
+    /// Date of the most recent active-energy sample (not the daily sum). Used to
+    /// detect staleness: if this is > 7 days ago, the Watch hasn't synced recently.
+    public func latestActiveEnergySampleDate() async -> Date? {
+        await latestQuantity(.activeEnergyBurned, unit: .kilocalorie())?.date
+    }
+
     /// Latest blood-pressure reading as a paired (systolic, diastolic) from the
     /// same correlation sample, so the two values can't come from different
     /// measurements.

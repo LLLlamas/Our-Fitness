@@ -14,6 +14,7 @@ struct ProgressTabView: View {
     @Query private var bodyModels: [BodyMetricModel]
     @Query private var markerModels: [HealthMarkerModel]
     @Query private var stepModels: [StepCountModel]
+    @Query private var setModels: [WorkoutSetModel]
 
     @State private var activeStat: StatKind?
     @State private var showEditTrackers = false
@@ -41,12 +42,17 @@ struct ProgressTabView: View {
             filter: #Predicate<StepCountModel> { $0.userId == uid },
             sort: \.date, order: .forward
         )
+        _setModels = Query(
+            filter: #Predicate<WorkoutSetModel> { $0.userId == uid },
+            sort: \.timestamp, order: .forward
+        )
     }
 
     // Body metrics arrive date-ascending from the query (consumers take `.last`).
     private var body_: [BodyMetricDTO] { bodyModels.map(\.snapshot) }
     private var markers: [HealthMarkerDTO] { markerModels.map(\.snapshot) }
     private var steps: [StepCountDTO] { stepModels.map(\.snapshot) }
+    private var sets: [WorkoutSetDTO] { setModels.map(\.snapshot) }
 
     /// The enabled tracker set: mode defaults until the user customizes, then
     /// whatever they chose (including the empty "none" state).
@@ -113,7 +119,7 @@ struct ProgressTabView: View {
         .background(theme.bg.ignoresSafeArea())
         .sheet(item: $activeStat) { kind in
             detailSheet(for: kind)
-                .themed(theme.mode)
+                .themed(profile.mode)
         }
         .sheet(isPresented: $showEditTrackers) {
             EditTrackersSheet(enabled: enabledSet, mode: profile.mode) { newSet in
@@ -127,8 +133,8 @@ struct ProgressTabView: View {
 
     @ViewBuilder
     private func statCard(for kind: StatKind) -> some View {
-        let value = kind.displayValue(body: body_, markers: markers, steps: steps, profile: profile)
-        let trend = kind.trendChip(body: body_, markers: markers, steps: steps, profile: profile)
+        let value = kind.displayValue(body: body_, markers: markers, steps: steps, sets: sets, profile: profile)
+        let trend = kind.trendChip(body: body_, markers: markers, steps: steps, sets: sets, profile: profile)
         let tint  = statusTint(for: kind)
         StatCard(
             title: kind.title,
@@ -157,7 +163,7 @@ struct ProgressTabView: View {
             let bmi = BodyComposition.bmi(weightLb: w, heightIn: profile.heightIn)
             if bmi < 18.5 || bmi >= 25 { return theme.warn }
             return theme.ok
-        case .weight, .bodyFat, .waist, .stepsAvg:
+        case .weight, .bodyFat, .waist, .stepsAvg, .trainingVolume:
             return nil
         }
         switch status {
@@ -199,11 +205,13 @@ struct ProgressTabView: View {
             .environmentObject(toasts)
         case .bmi:
             BMIDetailSheet(profile: profile, metrics: body_)
+        case .trainingVolume:
+            trainingVolumeDetail
         default:
             StatDetailSheet(
                 title: kind.title,
                 unit: kind.unit,
-                series: kind.series(body: body_, markers: markers, steps: steps),
+                series: kind.series(body: body_, markers: markers, steps: steps, sets: sets),
                 entries: kind.entries(body: body_, markers: markers),
                 placeholder: kind.placeholder,
                 canLog: kind.canLog,
@@ -243,6 +251,19 @@ struct ProgressTabView: View {
             .environmentObject(toasts)
     }
 
+    @ViewBuilder
+    private var trainingVolumeDetail: some View {
+        StatDetailSheet(
+            title: "Training",
+            unit: "sets · weekly",
+            series: StatKind.trainingVolume.series(body: [], markers: [], steps: [], sets: sets),
+            entries: [],
+            placeholder: "",
+            canLog: false,
+            onSave: { _ in }
+        )
+    }
+
     // MARK: - Save
 
     private func save(kind: StatKind, value: Double) {
@@ -279,7 +300,7 @@ struct ProgressTabView: View {
             toasts.show(Toast(title: "\(kind.title) logged",
                               detail: "\(formattedValue(value)) \(kind.unit)",
                               accent: .ok, symbol: "heart.text.square.fill"))
-        case .bp, .stepsAvg, .bmi:
+        case .bp, .stepsAvg, .bmi, .trainingVolume:
             break
         }
     }
@@ -289,6 +310,7 @@ struct ProgressTabView: View {
 
 enum StatKind: String, CaseIterable, Identifiable {
     case weight, bodyFat, waist, bmi, restingHR, stepsAvg
+    case trainingVolume
     case bp, ldl, hdl, totalCholesterol, a1c, fastingGlucose
 
     var id: String { rawValue }
@@ -301,6 +323,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .bmi:              return "BMI"
         case .restingHR:        return "Resting HR"
         case .stepsAvg:         return "Steps · 7d avg"
+        case .trainingVolume:   return "Training"
         case .bp:               return "BP"
         case .ldl:              return "LDL"
         case .hdl:              return "HDL"
@@ -318,6 +341,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .bmi:              return "BMI"
         case .restingHR:        return "bpm"
         case .stepsAvg:         return "steps"
+        case .trainingVolume:   return "sets · this wk"
         case .bp:               return "mmHg"
         case .ldl, .hdl, .totalCholesterol, .fastingGlucose: return "mg/dL"
         case .a1c:              return "%"
@@ -332,12 +356,12 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .restingHR:        return "resting HR (bpm)"
         case .ldl, .hdl, .totalCholesterol, .fastingGlucose: return "value (mg/dL)"
         case .a1c:              return "A1c (%)"
-        case .bmi, .bp, .stepsAvg: return ""
+        case .bmi, .bp, .stepsAvg, .trainingVolume: return ""
         }
     }
 
     var canLog: Bool {
-        self != .stepsAvg && self != .bmi
+        self != .stepsAvg && self != .bmi && self != .trainingVolume
     }
 
     var markerKind: HealthMarkerKind? {
@@ -354,7 +378,7 @@ enum StatKind: String, CaseIterable, Identifiable {
 
     func isRelevant(for mode: Mode) -> Bool {
         switch self {
-        case .weight, .bodyFat, .waist, .bmi, .stepsAvg:
+        case .weight, .bodyFat, .waist, .bmi, .stepsAvg, .trainingVolume:
             return true
         case .restingHR, .bp, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
             return mode == .circuit
@@ -365,6 +389,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         body: [BodyMetricDTO],
         markers: [HealthMarkerDTO],
         steps: [StepCountDTO],
+        sets: [WorkoutSetDTO] = [],
         profile: ProfileDTO? = nil
     ) -> String? {
         switch self {
@@ -385,6 +410,9 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .stepsAvg:
             let avg = Steps.average(steps, days: 7)
             return avg > 0 ? avg.formatted() : nil
+        case .trainingVolume:
+            let thisWeekSets = setsThisWeek(sets)
+            return thisWeekSets > 0 ? "\(thisWeekSets)" : nil
         case .bp:
             let s = latestMarker(.bpSystolic, in: markers)
             let d = latestMarker(.bpDiastolic, in: markers)
@@ -407,6 +435,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         body: [BodyMetricDTO],
         markers: [HealthMarkerDTO],
         steps: [StepCountDTO],
+        sets: [WorkoutSetDTO] = [],
         profile: ProfileDTO? = nil
     ) -> String? {
         switch self {
@@ -430,6 +459,12 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .stepsAvg:
             let avg30 = Steps.average(steps, days: 30)
             return avg30 > 0 ? "30d \(avg30.formatted())" : nil
+        case .trainingVolume:
+            let this = setsThisWeek(sets)
+            let last = setsLastWeek(sets)
+            guard last > 0 || this > 0 else { return nil }
+            let delta = this - last
+            return String(format: "%@%d vs last wk", delta >= 0 ? "+" : "", delta)
         default:
             return nil
         }
@@ -438,7 +473,8 @@ enum StatKind: String, CaseIterable, Identifiable {
     func series(
         body: [BodyMetricDTO],
         markers: [HealthMarkerDTO],
-        steps: [StepCountDTO]
+        steps: [StepCountDTO],
+        sets: [WorkoutSetDTO] = []
     ) -> [Trends.Point] {
         switch self {
         case .weight:
@@ -459,6 +495,8 @@ enum StatKind: String, CaseIterable, Identifiable {
             return Trends.markerSeries(markers, kind: .restingHR)
         case .stepsAvg:
             return Steps.series(steps, days: 30)
+        case .trainingVolume:
+            return trainingVolumeSeries(sets)
         case .bp:
             return Trends.markerSeries(markers, kind: .bpSystolic)
         case .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
@@ -523,7 +561,7 @@ enum StatKind: String, CaseIterable, Identifiable {
                     return StatDetailEntry(id: m.id.uuidString, dateLabel: m.date,
                                            valueLabel: "\(Int(m.value)) \(label)")
                 }
-        case .stepsAvg, .bmi:
+        case .stepsAvg, .bmi, .trainingVolume:
             return []
         }
     }
@@ -538,6 +576,39 @@ enum StatKind: String, CaseIterable, Identifiable {
 private func formattedValue(_ v: Double) -> String {
     v.truncatingRemainder(dividingBy: 1) == 0
         ? String(Int(v)) : String(format: "%.1f", v)
+}
+
+// MARK: - Training volume helpers
+
+private func setsThisWeek(_ sets: [WorkoutSetDTO]) -> Int {
+    let cal = Calendar.current
+    guard let weekStart = cal.date(from: cal.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date())) else { return 0 }
+    let key = Dates.dayKey(weekStart)
+    return sets.filter { Dates.dayKey($0.timestamp) >= key }.count
+}
+
+private func setsLastWeek(_ sets: [WorkoutSetDTO]) -> Int {
+    let cal = Calendar.current
+    guard let thisWeekStart = cal.date(from: cal.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date())),
+          let lastWeekStart = cal.date(byAdding: .weekOfYear, value: -1, to: thisWeekStart) else { return 0 }
+    let thisKey = Dates.dayKey(thisWeekStart)
+    let lastKey = Dates.dayKey(lastWeekStart)
+    return sets.filter { Dates.dayKey($0.timestamp) >= lastKey && Dates.dayKey($0.timestamp) < thisKey }.count
+}
+
+private func trainingVolumeSeries(_ sets: [WorkoutSetDTO]) -> [Trends.Point] {
+    let cal = Calendar.current
+    guard let cutoff = cal.date(byAdding: .weekOfYear, value: -12, to: Date()) else { return [] }
+    let cutoffKey = Dates.dayKey(cutoff)
+    var weekCounts: [String: Double] = [:]
+    for s in sets where Dates.dayKey(s.timestamp) >= cutoffKey {
+        let comps = cal.dateComponents([.yearForWeekOfYear, .weekOfYear], from: s.timestamp)
+        guard let weekStart = cal.date(from: comps) else { continue }
+        let key = Dates.dayKey(weekStart)
+        weekCounts[key, default: 0] += 1
+    }
+    return weekCounts.map { Trends.Point(date: $0.key, value: $0.value) }
+        .sorted { $0.date < $1.date }
 }
 
 // MARK: - BMI detail sheet

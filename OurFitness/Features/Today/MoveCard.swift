@@ -1,6 +1,7 @@
 // Apple Health "Move" glance: today's active energy (calories burned) + latest
 // heart rate, read live from HealthKit — alongside our own MET-based estimate of
-// today's burn (steps + logged training), so the science-based number sits next
+// today's training burn (logged sets + cardio + pilates, excluding steps since
+// Apple's active energy already counts those). The science-based number sits next
 // to the Watch-measured one. Only shown when the profile granted Health access.
 
 import SwiftUI
@@ -17,8 +18,11 @@ struct MoveCard: View {
     @Query private var cardioModels: [CardioSessionModel]
     @Query private var pilatesModels: [PilatesSessionModel]
 
-    @State private var kcal: Double = 0
-    @State private var bpm: Int?
+    @State private var appleEnergyKcal: Double = 0
+    @State private var appleEnergyDate: Date? = nil
+    @State private var bpm: Int? = nil
+    @State private var bpmDate: Date? = nil
+    @State private var showInfo = false
 
     init(profile: ProfileDTO, health: HealthKitService) {
         self.profile = profile
@@ -37,6 +41,7 @@ struct MoveCard: View {
     private var todaySets: [WorkoutSetDTO] { setModels.map(\.snapshot) }
     private var todayCardio: [CardioSessionDTO] { cardioModels.map(\.snapshot) }
     private var todayPilates: [PilatesSessionDTO] { pilatesModels.map(\.snapshot) }
+
     private var metEstimate: Int {
         DailyBurn.metEstimate(
             steps: todaySteps, sets: todaySets, cardio: todayCardio, pilates: todayPilates,
@@ -44,9 +49,34 @@ struct MoveCard: View {
         )
     }
 
+    private var stepsKcal: Int {
+        Int(CalorieEstimator.caloriesForSteps(steps: todaySteps, bodyWeightLb: profile.weightLb).rounded())
+    }
+
+    private var trainingMetEstimate: Int {
+        // Sets + cardio (no walks, no steps) + pilates. Never includes steps —
+        // Apple's active energy already counts walking, so adding it would double-count.
+        let setsKcal = todaySets.reduce(0.0) { $0 + ($1.caloriesEst ?? 0) }
+        let cardioKcal = todayCardio.reduce(0.0) { $0 + ($1.type == .walk ? 0 : ($1.caloriesEst ?? 0)) }
+        let pilatesKcal = todayPilates.reduce(0.0) {
+            $0 + CalorieEstimator.caloriesForPilates(minutes: Double($1.durationMinutes), bodyWeightLb: profile.weightLb)
+        }
+        return Int((setsKcal + cardioKcal + pilatesKcal).rounded())
+    }
+
+    private var isEnergyStale: Bool {
+        guard let d = appleEnergyDate else { return true }
+        return Date().timeIntervalSince(d) > 7 * 86400
+    }
+
+    private var isBpmStale: Bool {
+        guard let d = bpmDate else { return true }
+        return Date().timeIntervalSince(d) > 7 * 86400
+    }
+
     var body: some View {
         Card {
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 12) {
                 HStack {
                     Label("Move", systemImage: "flame.fill")
                         .font(.system(size: 13, weight: .semibold))
@@ -55,53 +85,215 @@ struct MoveCard: View {
                     Text("APPLE HEALTH")
                         .font(.system(size: 9, weight: .medium)).tracking(2)
                         .foregroundStyle(theme.dim)
-                }
-
-                HStack(alignment: .firstTextBaseline, spacing: 20) {
-                    metric(value: "\(Int(kcal))", unit: "cal burned", symbol: "flame.fill")
-                    if let bpm {
-                        metric(value: "\(bpm)", unit: "bpm", symbol: "heart.fill")
+                    Button { showInfo = true } label: {
+                        Image(systemName: "info.circle")
+                            .font(.system(size: 14))
                     }
+                    .tactile(.ghost)
+                    .accessibilityLabel("About the Move estimate")
                 }
 
-                // Our MET-based estimate, side by side with the Watch figure.
-                HStack(spacing: 6) {
-                    Image(systemName: "function").font(.system(size: 11)).foregroundStyle(theme.dim)
-                    Text("MET estimate: ≈\(metEstimate) cal")
-                        .font(.system(size: 12, weight: .medium, design: .monospaced))
-                        .foregroundStyle(theme.text)
-                    Text("(steps + training)")
-                        .font(.caption2).foregroundStyle(theme.dim)
-                }
+                Text("≈\(metEstimate) cal · steps + training")
+                    .font(.system(size: 12, weight: .medium, design: .monospaced))
+                    .foregroundStyle(theme.text)
 
-                Text("Apple Health measures active energy from your Watch/iPhone. The MET estimate is our own science-based calculation (MET × weight × time) from your steps and logged training.")
-                    .font(.caption2).foregroundStyle(theme.dim)
-                    .fixedSize(horizontal: false, vertical: true)
+                HStack(alignment: .top, spacing: 12) {
+                    metricColumn(
+                        icon: "flame.fill",
+                        title: "APPLE ENERGY",
+                        value: isEnergyStale ? "-" : "\(Int(appleEnergyKcal))",
+                        unit: "cal",
+                        subtext: isEnergyStale ? "need new data" : asOfText(appleEnergyDate)
+                    )
+                    metricColumn(
+                        icon: "dumbbell.fill",
+                        title: "TRAINING MET",
+                        value: "\(trainingMetEstimate)",
+                        unit: "cal",
+                        subtext: "today's logs"
+                    )
+                    metricColumn(
+                        icon: "heart.fill",
+                        title: "HEART RATE",
+                        value: (isBpmStale || bpm == nil) ? "-" : "\(bpm!)",
+                        unit: "bpm",
+                        subtext: isBpmStale ? "need new data" : asOfText(bpmDate)
+                    )
+                }
             }
         }
         .task(id: profile.id) { await load() }
+        .sheet(isPresented: $showInfo) {
+            MoveInfoSheet(
+                profile: profile,
+                metEstimate: metEstimate,
+                trainingMet: trainingMetEstimate,
+                todaySteps: todaySteps,
+                stepsKcal: stepsKcal
+            )
+            .themed(profile.mode)
+        }
     }
 
     private func load() async {
-        kcal = await health.activeEnergy()
-        bpm = await health.latestHeartRate()
+        appleEnergyKcal = await health.activeEnergy()
+        appleEnergyDate = await health.latestActiveEnergySampleDate()
+        if let hr = await health.latestHeartRateWithDate() {
+            bpm = hr.value
+            bpmDate = hr.date
+        } else {
+            bpm = nil
+            bpmDate = nil
+        }
+    }
+
+    private static let timeFormatter: DateFormatter = {
+        let f = DateFormatter(); f.dateFormat = "h:mm a"; return f
+    }()
+    private static let dateFormatter: DateFormatter = {
+        let f = DateFormatter(); f.dateFormat = "MMM d"; return f
+    }()
+
+    private func asOfText(_ date: Date?) -> String {
+        guard let date else { return "need new data" }
+        let f = Calendar.current.isDateInToday(date) ? Self.timeFormatter : Self.dateFormatter
+        return "as of \(f.string(from: date))"
     }
 
     @ViewBuilder
-    private func metric(value: String, unit: String, symbol: String) -> some View {
-        HStack(spacing: 6) {
-            Image(systemName: symbol)
-                .foregroundStyle(theme.accent)
-                .font(.system(size: 16))
-            VStack(alignment: .leading, spacing: 0) {
-                Text(value)
-                    .font(.system(size: 24, weight: .semibold, design: .monospaced))
-                    .foregroundStyle(theme.text)
-                    .contentTransition(.numericText())
-                Text(unit)
+    private func metricColumn(icon: String, title: String, value: String, unit: String, subtext: String) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            HStack(spacing: 4) {
+                Image(systemName: icon)
                     .font(.system(size: 10))
+                    .foregroundStyle(theme.accent)
+                Text(title)
+                    .font(.system(size: 8, weight: .medium)).tracking(1.5)
                     .foregroundStyle(theme.dim)
             }
+            Text(value)
+                .font(.system(size: 22, weight: .semibold, design: .monospaced))
+                .foregroundStyle(theme.text)
+                .contentTransition(.numericText())
+            Text(unit)
+                .font(.system(size: 9))
+                .foregroundStyle(theme.dim)
+            Text(subtext)
+                .font(.system(size: 9))
+                .foregroundStyle(theme.dim)
+                .lineLimit(1)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+// MARK: - Move info sheet
+
+private struct MoveInfoSheet: View {
+    let profile: ProfileDTO
+    let metEstimate: Int
+    let trainingMet: Int
+    let todaySteps: Int
+    let stepsKcal: Int
+
+    @Environment(\.theme) private var theme
+
+    private var weightKg: Int { Int(profile.weightLb * 0.4536) }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("move.")
+                        .font(.system(size: 42, weight: .regular))
+                        .foregroundStyle(theme.text)
+                    Text("MET × WEIGHT × TIME = CALORIES")
+                        .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                }
+
+                section(title: "What is MET?") {
+                    Text("MET (Metabolic Equivalent of Task) is a measure of exercise intensity. 1 MET = rest. Walking is ~4.3 METs; squats ~5.0; pull-ups ~8.0. MET × your weight in kg × hours active = calories burned.")
+                        .font(.callout)
+                        .foregroundStyle(theme.dim)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                section(title: "Today's estimate") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        breakdownRow(
+                            label: "Steps",
+                            detail: "MET 4.3 × \(weightKg)kg × \(todaySteps)/7392 hr ≈ \(stepsKcal) cal"
+                        )
+                        breakdownRow(
+                            label: "Training",
+                            detail: "MET 3.5–8.0 × \(weightKg)kg × session time ≈ \(trainingMet) cal"
+                        )
+                        breakdownRow(
+                            label: "Total",
+                            detail: "≈\(metEstimate) cal today (MET estimate)"
+                        )
+                    }
+                }
+
+                section(title: "Columns") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        columnNote(label: "Apple Energy", detail: "Measured by iPhone/Watch sensors directly.")
+                        columnNote(label: "Training MET", detail: "Our science-based estimate from your logged sets — excludes steps, since Apple already counts those.")
+                        columnNote(label: "Heart Rate", detail: "Your most recent reading from Apple Health.")
+                    }
+                }
+
+                Text("Source: Ainsworth 2011 Compendium of Physical Activities")
+                    .font(.caption2)
+                    .foregroundStyle(theme.dim)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+        }
+        .presentationDetents([.medium, .large])
+        .presentationBackground(theme.bg)
+    }
+
+    @ViewBuilder
+    private func section<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.caption).tracking(2).textCase(.uppercase)
+                .foregroundStyle(theme.dim)
+            content()
+        }
+    }
+
+    @ViewBuilder
+    private func breakdownRow(label: String, detail: String) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(label)
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(theme.text)
+            Text(detail)
+                .font(.system(.footnote, design: .monospaced))
+                .foregroundStyle(theme.accent)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(10)
+        .background(theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+    }
+
+    @ViewBuilder
+    private func columnNote(label: String, detail: String) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(label)
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(theme.text)
+            Text(detail)
+                .font(.footnote)
+                .foregroundStyle(theme.dim)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
