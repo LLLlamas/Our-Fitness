@@ -92,7 +92,7 @@ struct StepsCardioCard: View {
             goalPickerSheet.themed(theme.mode)
         }
         .sheet(isPresented: $showStepsInfo) {
-            CircuitStepsInfoSheet(profile: profile, todaysSteps: todaysSteps, todaysCal: todaysCal)
+            CircuitStepsInfoSheet(profile: profile, goal: goal, todaysSteps: todaysSteps, todaysCal: todaysCal)
                 .themed(profile.mode)
         }
     }
@@ -336,13 +336,14 @@ struct StepsCardioCard: View {
 
 private struct CircuitStepsInfoSheet: View {
     let profile: ProfileDTO
+    let goal: Int
     let todaysSteps: Int
     let todaysCal: Int
 
     @Environment(\.theme) private var theme
 
-    private var weightKg: Int { Int(profile.weightLb * 0.4536) }
-    private var fatGrams: Int { max(0, Int((Double(todaysCal) * 0.55 / 9.0).rounded())) }
+    // At an easy walking pace, roughly half your calories come from fat (~9 cal/g).
+    private var fatGrams: Int { max(0, Int((Double(todaysCal) * 0.50 / 9.0).rounded())) }
 
     var body: some View {
         ScrollView {
@@ -351,34 +352,39 @@ private struct CircuitStepsInfoSheet: View {
                     Text("steps & cardio.")
                         .font(.system(size: 36, weight: .regular))
                         .foregroundStyle(theme.text)
-                    Text("CIRCUIT — PRIMARY HEALTH LEVERS")
+                    Text("CIRCUIT — YOUR MOVEMENT ENGINE")
                         .font(.system(size: 10, weight: .medium)).tracking(2)
                         .foregroundStyle(theme.dim)
                 }
 
-                infoSection(title: "Today's numbers") {
+                infoSection(title: "Your numbers today") {
                     VStack(alignment: .leading, spacing: 8) {
-                        metRow(label: "Steps burn", detail: "MET 4.3 × \(weightKg)kg × \(todaysSteps.formatted())/7392 hr ≈ \(todaysCal) cal")
-                        metRow(label: "Fat burned (est.)", detail: "~\(fatGrams)g fat oxidized at walking intensity")
+                        metRow(label: "Calories burned walking", detail: "≈\(todaysCal) cal from \(todaysSteps.formatted()) steps")
+                        metRow(label: "Roughly how much was fat", detail: "~\(fatGrams)g — about half your walking calories come from fat at an easy pace")
                     }
                 }
 
-                infoSection(title: "Why 10,000 steps in Circuit") {
+                infoSection(title: "Why your \(goal.formatted())-step goal") {
+                    Text(TargetRationale.stepsWhy(mode: .circuit, goal: goal))
+                        .font(.callout).foregroundStyle(theme.text)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                infoSection(title: "What walking does for you") {
                     VStack(alignment: .leading, spacing: 8) {
-                        bullet("Daily walking is the single most accessible intervention for lowering LDL, blood pressure, and fasting glucose simultaneously.")
-                        bullet("10,000 steps/day reduces LDL cholesterol by ~5–8% within 8 weeks (Asikainen et al., Prev Med 2002).")
-                        bullet("Each 1,000 steps above baseline reduces all-cause mortality by ~6% (Saint-Maurice et al., JAMA 2020).")
-                        bullet("Consistent daily steps improve insulin sensitivity — effects visible within 2 weeks, persist as long as the habit holds.")
-                        bullet("Walking > blood pressure medication for stage 1 hypertension in multiple meta-analyses (Naci et al., BJSM 2019).")
+                        bullet("It's your most repeatable daily calorie burn — and the easiest to keep up while you're losing weight.")
+                        bullet("Walking regularly brings blood pressure down a few points over a couple of months.")
+                        bullet("Every extra 1,000–2,000 steps a day lowers your risk of dying early, with most of the gain by about 7,000–8,000 steps.")
+                        bullet("A single walk improves how your body handles blood sugar for the next day or two.")
                     }
                 }
 
-                infoSection(title: "Cardio & LDL") {
-                    bullet("30+ minutes of zone-2 cardio (conversational pace) raises HDL by ~3–5 mg/dL and lowers triglycerides by ~10–20% within 8–12 weeks.")
-                    bullet("Consistent cardio is required alongside steps for the fastest LDL and BP improvements.")
+                infoSection(title: "Add some cardio") {
+                    bullet("Easy, steady cardio — a pace where you can still talk — nudges your 'good' cholesterol (HDL) up a couple of points and lowers the fat in your blood (triglycerides) by about 10–20% over a couple of months.")
+                    bullet("Steps plus a little cardio together do more for your cholesterol and blood pressure than either alone — pair them with the food tips in Nutrition.")
                 }
 
-                Text("Sources: Asikainen et al. 2002; Saint-Maurice et al. JAMA 2020; Naci et al. BJSM 2019; Ainsworth 2011 Compendium.")
+                Text("Sources: Saint-Maurice et al., JAMA, 2020; Hanson & Jones, Br J Sports Med, 2015; Kodama et al., Arch Intern Med, 2007; Ainsworth et al., 2011 Compendium.")
                     .font(.caption2)
                     .foregroundStyle(theme.dim)
             }

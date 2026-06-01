@@ -305,8 +305,26 @@ private struct ExerciseInfoSheet: View {
     @Environment(\.theme) private var theme
     @Environment(\.dismiss) private var dismiss
 
+    // On-device AI fills in muscles + benefits for custom movements (not the
+    // seeded parenting lifts and not curated strength exercises).
+    @State private var ai: GeneratedExerciseInsight?
+    @State private var aiLoading = false
+
     private var hint: Movement.PostExerciseHint {
         Movement.postExerciseHint(for: exercise)
+    }
+
+    private var canUseAI: Bool {
+        !Movement.hasNamedHint(for: exercise) && !ExerciseInfo.hasCuratedMeta(for: exercise)
+    }
+    private var usingAI: Bool { ai != nil }
+
+    private var musclesText: String {
+        if let ai, !ai.primaryMuscles.isEmpty {
+            let all = ai.primaryMuscles + ai.secondaryMuscles
+            return ExerciseInfo.plainMuscleList(all, separator: ", ")
+        }
+        return ExerciseInfo.plainMuscleList(hint.musclesWorked, separator: ", ")
     }
 
     var body: some View {
@@ -315,6 +333,14 @@ private struct ExerciseInfoSheet: View {
                 Text(exercise.name)
                     .font(.system(size: 32, weight: .regular))
                     .foregroundStyle(theme.text)
+
+                if aiLoading {
+                    HStack(spacing: 8) {
+                        ProgressView().controlSize(.small)
+                        Text("Generating insights with Apple Intelligence…")
+                            .font(.caption).foregroundStyle(theme.dim)
+                    }
+                }
 
                 // Form & Safety — shown prominently for loaded movements
                 if !hint.formCues.isEmpty {
@@ -349,8 +375,27 @@ private struct ExerciseInfoSheet: View {
                 infoBlock(
                     icon: "figure.strengthtraining.traditional",
                     title: "Muscles worked",
-                    body: hint.musclesWorked.joined(separator: ", ")
+                    body: musclesText
                 )
+
+                // What it does (AI-generated for custom movements)
+                if let ai, !ai.benefits.isEmpty {
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack(spacing: 6) {
+                            Image(systemName: "sparkles")
+                                .font(.system(size: 11)).foregroundStyle(theme.accent)
+                            Text("WHAT IT DOES")
+                                .font(.caption).tracking(2).foregroundStyle(theme.dim)
+                        }
+                        ForEach(Array(ai.benefits.enumerated()), id: \.offset) { _, b in
+                            HStack(alignment: .top, spacing: 8) {
+                                Text("·").foregroundStyle(theme.accent)
+                                Text(b).font(.callout).foregroundStyle(theme.text)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                        }
+                    }
+                }
 
                 // Today's activity
                 if todayCount > 0 {
@@ -393,6 +438,16 @@ private struct ExerciseInfoSheet: View {
                         }
                     }
                 }
+
+                if usingAI {
+                    HStack(alignment: .top, spacing: 6) {
+                        Image(systemName: "sparkles")
+                            .font(.system(size: 10)).foregroundStyle(theme.accent)
+                        Text("Muscles and benefits for this custom movement were generated on-device by Apple Intelligence. General fitness guidance, not medical advice.")
+                            .font(.caption2).foregroundStyle(theme.dim)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
             }
             .padding(20)
         }
@@ -400,6 +455,19 @@ private struct ExerciseInfoSheet: View {
         .presentationDetents([.medium, .large])
         .presentationBackground(theme.bg)
         .presentationDragIndicator(.visible)
+        .task(id: exercise.id) { await loadAIIfNeeded() }
+    }
+
+    private func loadAIIfNeeded() async {
+        guard canUseAI, ai == nil else { return }
+        if let cached = ExerciseInsightService.shared.cached(for: exercise) {
+            ai = cached
+            return
+        }
+        guard ExerciseInsightService.shared.isAvailable else { return }
+        aiLoading = true
+        ai = await ExerciseInsightService.shared.insight(for: exercise)
+        aiLoading = false
     }
 
     @ViewBuilder

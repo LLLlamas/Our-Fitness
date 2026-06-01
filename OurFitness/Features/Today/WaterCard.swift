@@ -257,16 +257,16 @@ private struct WaterInfoSheet: View {
 
                 infoSection(title: "Why hydration matters") {
                     VStack(alignment: .leading, spacing: 8) {
-                        bullet("Even 2% dehydration impairs cognitive performance, mood, and workout strength.")
-                        bullet("Adequate hydration reduces cortisol, which helps with fat metabolism and recovery.")
-                        bullet("Water aids in nutrient absorption — critical for protein synthesis post-training.")
+                        bullet("Losing just 2% of your body weight in fluid can sap your endurance and mood, and may dull your focus.")
+                        bullet("Water helps your body absorb nutrients and recover after training.")
+                        bullet("Thirst is a good guide for most people — this goal is just a target to aim for, especially on hot or active days.")
                         if profile.mode == .circuit {
-                            bullet("Circuit mode: consistent hydration measurably improves blood viscosity and reduces cardiovascular strain during higher step counts.")
+                            bullet("Staying topped up makes the higher step counts in Circuit feel easier.")
                         }
                     }
                 }
 
-                Text("Formula: ACSM base 0.5 oz/lb + activity level adjustment. Individual needs vary.")
+                Text("This goal is a practical starting point (about half an ounce per pound, plus a little for activity). Official guidance (Institute of Medicine, 2005) is roughly 3.7 L for men and 2.7 L for women of total water per day — and that counts the water in your food, too. Individual needs vary.")
                     .font(.caption2)
                     .foregroundStyle(theme.dim)
             }

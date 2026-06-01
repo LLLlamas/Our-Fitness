@@ -34,6 +34,81 @@ public enum ExerciseInfo {
         return categoryDefaults(exercise.category, hasLoad: (exercise.loadLb ?? 0) > 0)
     }
 
+    /// Whether this exercise has hand-curated, citation-backed metadata.
+    /// Custom / user-invented exercises return `false` and are candidates for
+    /// on-device AI enrichment (see Services/ExerciseInsightService).
+    public static func hasCuratedMeta(for exercise: ExerciseDTO) -> Bool {
+        namedMeta(exercise.name.lowercased()) != nil
+    }
+
+    // MARK: - Plain-English muscle names
+
+    /// Anatomical muscle name → everyday gloss. Used to append a plain-English
+    /// "(what/where it is)" so non-experts understand the muscle list. Keep keys
+    /// lowercase; matching is by substring so "Lats" and "Latissimus dorsi" both hit.
+    private static let muscleGlossary: [(key: String, gloss: String)] = [
+        ("latissimus",        "the broad muscles down your back"),
+        ("lats",              "the broad muscles down your back that make the V-shape"),
+        ("pectoral",          "chest"),
+        ("anterior delt",     "front of your shoulders"),
+        ("lateral delt",      "sides of your shoulders"),
+        ("rear delt",         "back of your shoulders"),
+        ("deltoid",           "shoulders"),
+        ("triceps",           "back of your upper arm"),
+        ("biceps brachii",    "front of your upper arm"),
+        ("brachialis",        "a muscle just under the biceps"),
+        ("brachioradialis",   "a forearm muscle"),
+        ("forearm",           "forearm"),
+        ("rhomboid",          "between your shoulder blades"),
+        ("teres major",       "a small muscle under the armpit"),
+        ("trapezius",         "the muscle from neck to shoulders"),
+        ("upper trap",        "the muscle from neck to shoulders"),
+        ("middle trap",       "mid-upper back"),
+        ("levator scapulae",  "side of your neck"),
+        ("serratus anterior", "finger-like muscles along your ribs"),
+        ("coracobrachialis",  "a small front-of-shoulder muscle"),
+        ("rotator cuff",      "the small muscles that steady your shoulder"),
+        ("scapular",          "shoulder-blade muscles"),
+        ("quadriceps",        "front of your thighs"),
+        ("quads",             "front of your thighs"),
+        ("hamstring",         "back of your thighs"),
+        ("gluteus maximus",   "your main butt muscle"),
+        ("glute",             "your butt/seat muscles"),
+        ("adductor",          "inner thighs"),
+        ("hip flexor",        "front of your hips"),
+        ("hip stabil",        "muscles that steady your hips"),
+        ("erector spinae",    "the muscles running up either side of your spine"),
+        ("transverse abdominis", "the deep core muscle that wraps your waist like a belt"),
+        ("rectus abdominis",  "the \u{201C}six-pack\u{201D} muscle, the top layer of your abs"),
+        ("oblique",           "the sides of your waist"),
+        ("gastrocnemius",     "the bulky calf muscle"),
+        ("soleus",            "the deep calf muscle"),
+        ("tibialis",          "a shin muscle"),
+        ("peronei",           "outer lower-leg muscles"),
+        ("anconeus",          "a small muscle at the elbow"),
+    ]
+
+    /// Appends a plain-English gloss to an anatomical muscle name, e.g.
+    /// "Rectus abdominis" → "Rectus abdominis (the “six-pack” muscle…)".
+    /// Leaves names that already carry a parenthetical, or that have no known
+    /// gloss, untouched.
+    public static func plainName(forMuscle raw: String) -> String {
+        guard !raw.contains("(") else { return raw }   // already annotated
+        let lower = raw.lowercased()
+        // Longest key first so "gluteus maximus" wins over "glute".
+        if let match = muscleGlossary
+            .sorted(by: { $0.key.count > $1.key.count })
+            .first(where: { lower.contains($0.key) }) {
+            return "\(raw) (\(match.gloss))"
+        }
+        return raw
+    }
+
+    /// Glosses a list of muscle names, joined for display.
+    public static func plainMuscleList(_ muscles: [String], separator: String = " · ") -> String {
+        muscles.map(plainName(forMuscle:)).joined(separator: separator)
+    }
+
     // MARK: - Named library
 
     private static func namedMeta(_ lower: String) -> Meta? {
@@ -285,9 +360,9 @@ public enum ExerciseInfo {
                 muscleGroups: ["Multiple major muscle groups"],
                 secondaryMuscles: ["Core", "Stabilisers"],
                 benefits: [
-                    "Compound movements recruit the most total muscle mass per set.",
-                    "Greater hormonal response (testosterone, GH) compared to isolation work.",
-                    "Best time-efficiency for strength and hypertrophy gains."
+                    "Compound movements work the most muscle at once — the biggest bang for your time.",
+                    "More muscle worked per set means more strength and size built per session.",
+                    "Great time-efficiency: one lift trains several muscle groups together."
                 ],
                 met: 5.5, secondsPerRep: 3.5
             )

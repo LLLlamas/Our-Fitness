@@ -246,8 +246,8 @@ private struct MoveInfoSheet: View {
                         .foregroundStyle(theme.dim)
                 }
 
-                section(title: "What is MET?") {
-                    Text("MET (Metabolic Equivalent of Task) is a measure of exercise intensity. 1 MET = rest. Walking is ~4.3 METs; squats ~5.0; pull-ups ~8.0. MET × your weight in kg × hours active = calories burned.")
+                section(title: "How we estimate your burn") {
+                    Text("Every activity has an intensity score called a MET — basically how hard it is compared to sitting still (which is 1). Walking is about 4.3, squats about 5, pull-ups about 8. We multiply that score by your body weight and how long you moved to estimate the calories you burned. Heavier people and longer sessions burn more.")
                         .font(.callout)
                         .foregroundStyle(theme.dim)
                         .fixedSize(horizontal: false, vertical: true)

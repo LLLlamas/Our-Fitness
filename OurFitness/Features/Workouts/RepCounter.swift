@@ -466,7 +466,29 @@ struct BuildExerciseInfoSheet: View {
 
     @Environment(\.theme) private var theme
 
+    // On-device AI fills in muscles + benefits for custom exercises we don't
+    // have curated copy for. Nil until (and unless) generation succeeds.
+    @State private var ai: GeneratedExerciseInsight?
+    @State private var aiLoading = false
+
     private var info: ExerciseInfo.Meta { ExerciseInfo.meta(for: exercise) }
+
+    /// Custom exercise with no hand-written entry → eligible for AI enrichment.
+    private var canUseAI: Bool { !ExerciseInfo.hasCuratedMeta(for: exercise) }
+    private var usingAI: Bool { ai != nil }
+
+    private var displayPrimary: [String] {
+        if let ai, !ai.primaryMuscles.isEmpty { return ai.primaryMuscles }
+        return info.muscleGroups
+    }
+    private var displaySecondary: [String] {
+        if let ai { return ai.secondaryMuscles }
+        return info.secondaryMuscles
+    }
+    private var displayBenefits: [String] {
+        if let ai, !ai.benefits.isEmpty { return ai.benefits }
+        return info.benefits
+    }
 
     private var sampleCalLabel: String {
         if exercise.isIsometric {
@@ -491,15 +513,50 @@ struct BuildExerciseInfoSheet: View {
                         .foregroundStyle(theme.dim)
                 }
 
+                if aiLoading { aiLoadingRow }
                 muscleSection
                 benefitsSection
                 recoverySection
+                if usingAI { aiAttribution }
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
         }
         .presentationDetents([.large])
         .presentationBackground(theme.bg)
+        .task(id: exercise.id) { await loadAIIfNeeded() }
+    }
+
+    private func loadAIIfNeeded() async {
+        guard canUseAI, ai == nil else { return }
+        if let cached = ExerciseInsightService.shared.cached(for: exercise) {
+            ai = cached
+            return
+        }
+        guard ExerciseInsightService.shared.isAvailable else { return }
+        aiLoading = true
+        ai = await ExerciseInsightService.shared.insight(for: exercise)
+        aiLoading = false
+    }
+
+    @ViewBuilder
+    private var aiLoadingRow: some View {
+        HStack(spacing: 8) {
+            ProgressView().controlSize(.small)
+            Text("Generating insights with Apple Intelligence…")
+                .font(.caption).foregroundStyle(theme.dim)
+        }
+    }
+
+    @ViewBuilder
+    private var aiAttribution: some View {
+        HStack(alignment: .top, spacing: 6) {
+            Image(systemName: "sparkles")
+                .font(.system(size: 10)).foregroundStyle(theme.accent)
+            Text("Muscles and benefits for this custom exercise were generated on-device by Apple Intelligence. General fitness guidance, not medical advice.")
+                .font(.caption2).foregroundStyle(theme.dim)
+                .fixedSize(horizontal: false, vertical: true)
+        }
     }
 
     @ViewBuilder
@@ -508,13 +565,15 @@ struct BuildExerciseInfoSheet: View {
             Text("Muscles worked")
                 .font(.caption).tracking(2).textCase(.uppercase)
                 .foregroundStyle(theme.dim)
-            Text(info.muscleGroups.joined(separator: " · "))
+            Text(ExerciseInfo.plainMuscleList(displayPrimary))
                 .font(.system(size: 17, weight: .semibold))
                 .foregroundStyle(theme.text)
-            if !info.secondaryMuscles.isEmpty {
-                Text("Also: \(info.secondaryMuscles.joined(separator: ", "))")
+                .fixedSize(horizontal: false, vertical: true)
+            if !displaySecondary.isEmpty {
+                Text("Also: \(ExerciseInfo.plainMuscleList(displaySecondary, separator: ", "))")
                     .font(.caption)
                     .foregroundStyle(theme.dim)
+                    .fixedSize(horizontal: false, vertical: true)
             }
         }
         .padding(12)
@@ -529,7 +588,7 @@ struct BuildExerciseInfoSheet: View {
             Text("What it does")
                 .font(.caption).tracking(2).textCase(.uppercase)
                 .foregroundStyle(theme.dim)
-            ForEach(Array(info.benefits.enumerated()), id: \.offset) { _, b in
+            ForEach(Array(displayBenefits.enumerated()), id: \.offset) { _, b in
                 HStack(alignment: .top, spacing: 8) {
                     Text("·")
                         .foregroundStyle(theme.accent)

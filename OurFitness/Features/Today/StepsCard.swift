@@ -127,7 +127,7 @@ struct StepsCard: View {
             goalPickerSheet.themed(theme.mode)
         }
         .sheet(isPresented: $showInfo) {
-            StepsInfoSheet(steps: steps, stepsKcal: stepsKcal, weightKg: weightKg, mode: mode)
+            StepsInfoSheet(steps: steps, goal: goal, stepsKcal: stepsKcal, weightKg: weightKg, mode: mode)
                 .themed(mode)
         }
     }
@@ -214,28 +214,31 @@ struct StepsCard: View {
 
 private struct StepsInfoSheet: View {
     let steps: Int
+    let goal: Int
     let stepsKcal: Int
     let weightKg: Int
     let mode: Mode
 
     @Environment(\.theme) private var theme
 
-    // Fat burned: walking is ~55% fat oxidation at low-moderate intensity
-    private var fatGrams: Int { max(0, Int((Double(stepsKcal) * 0.55 / 9.0).rounded())) }
+    // Fat burned: at an easy walking pace roughly half your calories come from
+    // burning fat (the share drops as you speed up). Source: Achten & Jeukendrup,
+    // Nutrition, 2004. ~9 cal per gram of fat.
+    private var fatGrams: Int { max(0, Int((Double(stepsKcal) * 0.50 / 9.0).rounded())) }
 
-    // Step category per Tudor-Locke & Bassett (2004) classification
+    // Step category per Tudor-Locke & Bassett (2004) classification, in plain English.
     private var stepCategory: (label: String, description: String) {
         switch steps {
         case 0..<5000:
-            return ("Sedentary", "Under 5,000 steps/day is associated with increased cardiovascular disease risk, higher LDL, and insulin resistance.")
+            return ("Sedentary", "Under 5,000 steps so far. Adding a short daily walk is the single easiest health upgrade you can make.")
         case 5000..<7500:
-            return ("Low active", "5,000–7,499 steps/day. Better than sedentary — aim to add a 10-15 min walk to cross 7,500.")
+            return ("Low active", "5,000–7,499 steps. Better than sitting — a 10–15 minute walk gets you over 7,500, where the benefits really start to stack up.")
         case 7500..<10000:
-            return ("Somewhat active", "7,500–9,999 steps/day reduces metabolic syndrome risk by ~20% vs. sedentary. Close to optimal.")
+            return ("Somewhat active", "7,500–9,999 steps. You're in the sweet spot — most of walking's health payoff lands right around here.")
         case 10000..<12500:
-            return ("Active", "10,000+ steps/day: measurably reduces LDL, blood pressure, and fasting glucose within 2–4 weeks of consistency.")
+            return ("Active", "10,000+ steps. Strong, consistent movement that supports your heart and your everyday calorie burn.")
         default:
-            return ("Highly active", "12,500+ steps/day: associated with highest cardiovascular fitness scores. Strong longevity marker.")
+            return ("Highly active", "12,500+ steps. Excellent — among the most active step counts, linked with the best fitness and longevity numbers.")
         }
     }
 
@@ -246,19 +249,21 @@ private struct StepsInfoSheet: View {
                     Text("steps.")
                         .font(.system(size: 42, weight: .regular))
                         .foregroundStyle(theme.text)
-                    Text("TODAY'S MOVEMENT")
+                    Text("TODAY · \(steps.formatted()) STEPS")
                         .font(.system(size: 10, weight: .medium)).tracking(2)
                         .foregroundStyle(theme.dim)
                 }
 
-                infoSection(title: "Calorie formula") {
-                    infoRow(label: "MET 4.3 × \(weightKg)kg × \(steps.formatted())/7392 hr",
-                            detail: "≈\(stepsKcal) cal burned")
-                    infoRow(label: "Fat burned",
-                            detail: "~\(fatGrams)g fat oxidized (55% fat at walking intensity)")
+                infoSection(title: "Your numbers today") {
+                    VStack(spacing: 8) {
+                        infoRow(label: "Calories burned walking",
+                                detail: "≈\(stepsKcal) cal from \(steps.formatted()) steps")
+                        infoRow(label: "Roughly how much was fat",
+                                detail: "~\(fatGrams)g — about half your walking calories come from fat at an easy pace")
+                    }
                 }
 
-                infoSection(title: "Today's activity level") {
+                infoSection(title: "Your activity level") {
                     VStack(alignment: .leading, spacing: 6) {
                         Text(stepCategory.label)
                             .font(.system(size: 16, weight: .semibold))
@@ -274,18 +279,21 @@ private struct StepsInfoSheet: View {
                     .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                 }
 
-                infoSection(title: "Health research") {
+                infoSection(title: "Why your \(goal.formatted())-step goal") {
+                    Text(TargetRationale.stepsWhy(mode: mode, goal: goal))
+                        .font(.callout).foregroundStyle(theme.text)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                infoSection(title: "What walking does for you") {
                     VStack(alignment: .leading, spacing: 8) {
-                        researchRow("Each 1,000 additional daily steps reduces all-cause mortality by ~6% (Saint-Maurice et al., JAMA 2020).")
-                        researchRow("10,000 steps/day lowers resting blood pressure by 3–5 mmHg within 4 weeks of consistency.")
-                        researchRow("30+ minutes of walking improves insulin sensitivity for 24–48 hours post-walk.")
-                        if mode == .circuit {
-                            researchRow("Circuit target: 10,000 steps/day is the #1 lever for reducing LDL, blood pressure, and fasting glucose simultaneously.")
-                        }
+                        researchRow("Every extra 1,000–2,000 steps a day lowers your risk of dying early — with most of the gain showing up by about 7,000–8,000 steps.")
+                        researchRow("Walking regularly brings blood pressure down a few points over a couple of months.")
+                        researchRow("A single walk improves how your body handles blood sugar for the next day or two.")
                     }
                 }
 
-                Text("Sources: Tudor-Locke & Bassett 2004; Saint-Maurice et al. JAMA 2020; Ainsworth 2011 Compendium.")
+                Text("Sources: Tudor-Locke & Bassett, Sports Med, 2004; Saint-Maurice et al., JAMA, 2020; Hanson & Jones, Br J Sports Med, 2015; Ainsworth et al., 2011 Compendium.")
                     .font(.caption2)
                     .foregroundStyle(theme.dim)
             }

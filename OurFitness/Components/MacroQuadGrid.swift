@@ -1,16 +1,19 @@
 // Macro progress display — four mini progress rings in a 2×2 grid.
 // Each ring shows current vs target with a circular arc fill.
-// An ⓘ button on each cell opens a sheet explaining why that target exists.
+// An ⓘ button on each cell opens a sheet that leads with YOUR number, explains
+// in plain English why that target is what it is, and ties it to your goal.
 
 import SwiftUI
 
 public struct MacroQuadGrid: View {
     public let totals: DailyTotals
     public let targets: MacroTargets
+    public let profile: ProfileDTO
 
-    public init(totals: DailyTotals, targets: MacroTargets) {
+    public init(totals: DailyTotals, targets: MacroTargets, profile: ProfileDTO) {
         self.totals = totals
         self.targets = targets
+        self.profile = profile
     }
 
     public var body: some View {
@@ -18,34 +21,29 @@ public struct MacroQuadGrid: View {
             columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 2),
             spacing: 12
         ) {
-            MacroRingCell(
-                label: "Calories",
-                value: Double(totals.calories),
-                target: Double(targets.calories),
-                unit: "",
-                infoText: "Displayed in calories (cal) — the everyday unit on food labels. 1 cal here = 1 kilocalorie (kcal), the scientific unit. Your target is computed via Mifflin-St Jeor BMR × activity multiplier, then adjusted ±400–500 for your mode. Build = surplus to grow lean mass; Circuit = modest deficit to reduce body fat. The floor is 1,200 cal to protect metabolic rate."
-            )
-            MacroRingCell(
-                label: "Protein",
-                value: Double(totals.proteinG),
-                target: Double(targets.proteinG),
-                unit: "g",
-                infoText: "Protein at 1.0–1.1 g/lb preserves muscle during a deficit and drives synthesis in a surplus. It's the most thermogenic macro — 25–30% of its calories are burned just digesting it. Source: Helms et al., ISSN Position Stand, 2014."
-            )
-            MacroRingCell(
-                label: "Carbs",
-                value: Double(totals.carbsG),
-                target: Double(targets.carbsG),
-                unit: "g",
-                infoText: "Carbs fill remaining calorie budget after protein and fat. They fuel training, support thyroid function, and keep cortisol in check. Chronically low carbs can suppress leptin and impair the HPA axis."
-            )
-            MacroRingCell(
-                label: "Fat",
-                value: Double(totals.fatG),
-                target: Double(targets.fatG),
-                unit: "g",
-                infoText: "Fat is held at ~27–28% of calories — the minimum for hormone production (testosterone, estrogen) and fat-soluble vitamin absorption (A, D, E, K). Below ~20% of calories, hormonal health and recovery suffer."
-            )
+            MacroRingCell(macro: .calories, value: Double(totals.calories),
+                          target: Double(targets.calories), unit: "", profile: profile)
+            MacroRingCell(macro: .protein, value: Double(totals.proteinG),
+                          target: Double(targets.proteinG), unit: "g", profile: profile)
+            MacroRingCell(macro: .carbs, value: Double(totals.carbsG),
+                          target: Double(targets.carbsG), unit: "g", profile: profile)
+            MacroRingCell(macro: .fat, value: Double(totals.fatG),
+                          target: Double(targets.fatG), unit: "g", profile: profile)
+        }
+    }
+}
+
+// MARK: - Macro kind
+
+private enum Macro {
+    case calories, protein, carbs, fat
+
+    var label: String {
+        switch self {
+        case .calories: return "Calories"
+        case .protein:  return "Protein"
+        case .carbs:    return "Carbs"
+        case .fat:      return "Fat"
         }
     }
 }
@@ -53,11 +51,11 @@ public struct MacroQuadGrid: View {
 // MARK: - Ring cell
 
 private struct MacroRingCell: View {
-    let label: String
+    let macro: Macro
     let value: Double
     let target: Double
     let unit: String
-    let infoText: String
+    let profile: ProfileDTO
 
     @State private var showInfo = false
     @Environment(\.theme) private var theme
@@ -92,7 +90,7 @@ private struct MacroRingCell: View {
             .frame(width: 72, height: 72)
 
             HStack(spacing: 3) {
-                Text(label.uppercased())
+                Text(macro.label.uppercased())
                     .font(.system(size: 9, weight: .medium)).tracking(2)
                     .foregroundStyle(theme.dim)
                 Button { showInfo = true } label: {
@@ -101,7 +99,7 @@ private struct MacroRingCell: View {
                 }
                 .tactile(.ghost)
                 .sheet(isPresented: $showInfo) {
-                    MacroInfoSheet(label: label, infoText: infoText)
+                    MacroInfoSheet(macro: macro, profile: profile)
                         .themed(theme.mode)
                 }
             }
@@ -125,26 +123,116 @@ private struct MacroRingCell: View {
 // MARK: - Info sheet
 
 private struct MacroInfoSheet: View {
-    let label: String
-    let infoText: String
+    let macro: Macro
+    let profile: ProfileDTO
+
     @Environment(\.theme) private var theme
+
+    private var targets: MacroTargets { profile.computedTargets }
+
+    /// The headline number for this macro.
+    private var headline: String {
+        switch macro {
+        case .calories: return "\(targets.calories) cal"
+        case .protein:  return "\(targets.proteinG)g"
+        case .carbs:    return "\(targets.carbsG)g"
+        case .fat:      return "\(targets.fatG)g"
+        }
+    }
+
+    private var why: String {
+        switch macro {
+        case .calories: return TargetRationale.calorieWhy(for: profile)
+        case .protein:  return TargetRationale.proteinWhy(for: profile)
+        case .carbs:    return TargetRationale.carbsWhy(for: profile)
+        case .fat:      return TargetRationale.fatWhy(for: profile)
+        }
+    }
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 12) {
-                Text(label.uppercased())
-                    .font(.caption).tracking(2)
-                    .foregroundStyle(theme.dim)
-                Text(infoText)
-                    .font(.callout)
-                    .foregroundStyle(theme.text)
+            VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("\(macro.label.lowercased()).")
+                        .font(.system(size: 42, weight: .regular))
+                        .foregroundStyle(theme.text)
+                    Text("YOUR DAILY TARGET · \(headline.uppercased())")
+                        .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                }
+
+                Text(TargetRationale.goalLine(for: profile.mode))
+                    .font(.callout).foregroundStyle(theme.text)
                     .fixedSize(horizontal: false, vertical: true)
+
+                // Calories get a full from-the-ground-up breakdown of how the
+                // number was built (rest → maintenance → goal).
+                if macro == .calories { calorieBreakdown }
+
+                infoSection(title: "Why this number") {
+                    Text(why)
+                        .font(.callout).foregroundStyle(theme.text)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                Text(footnote)
+                    .font(.caption2)
+                    .foregroundStyle(theme.dim)
             }
-            .padding(20)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .presentationDetents([.medium])
+        .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
         .presentationBackground(theme.bg)
+    }
+
+    @ViewBuilder
+    private var calorieBreakdown: some View {
+        let c = TargetRationale.calories(for: profile)
+        infoSection(title: "How we got your number") {
+            VStack(alignment: .leading, spacing: 8) {
+                calcRow(label: "At complete rest (your body's baseline)", detail: "\(c.bmr) cal")
+                calcRow(label: "On a normal day · \(c.activityLabel)", detail: "\(c.tdee) cal")
+                calcRow(label: c.isSurplus ? "Surplus to build" : "Deficit to lose fat",
+                        detail: "\(c.isSurplus ? "+" : "−")\(abs(c.delta)) cal")
+                calcRow(label: "Your daily goal", detail: "\(c.target) cal")
+            }
+        }
+    }
+
+    private var footnote: String {
+        switch macro {
+        case .calories:
+            return "Estimated with the Mifflin-St Jeor formula from your height, weight, age, sex, and activity. It's the best available estimate — your real number can vary by about 10%. Source: Frankenfield et al., J Am Diet Assoc, 2005."
+        case .protein:
+            return "Source: International Society of Sports Nutrition protein position stand (Jäger et al., 2017)."
+        case .carbs:
+            return "Carbs fill the calories left after your protein and fat are set."
+        case .fat:
+            return "Source: Whittaker & Wu, J Steroid Biochem Mol Biol, 2021 (dietary fat and testosterone)."
+        }
+    }
+
+    @ViewBuilder
+    private func infoSection<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title.uppercased()).font(.caption).tracking(2).foregroundStyle(theme.dim)
+            content()
+        }
+    }
+
+    @ViewBuilder
+    private func calcRow(label: String, detail: String) -> some View {
+        HStack {
+            Text(label).font(.callout).foregroundStyle(theme.text)
+                .fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 8)
+            Text(detail).font(.system(.callout, design: .monospaced)).foregroundStyle(theme.accent)
+        }
+        .padding(10)
+        .background(theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
     }
 }

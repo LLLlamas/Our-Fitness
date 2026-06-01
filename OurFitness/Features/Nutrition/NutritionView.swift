@@ -339,7 +339,7 @@ struct NutritionView: View {
                 Text(selectedDayKey == today ? "Today" : Dates.formatLong(selectedDayKey))
                     .font(.caption).tracking(2).textCase(.uppercase)
                     .foregroundStyle(theme.dim)
-                MacroQuadGrid(totals: totals, targets: profile.computedTargets)
+                MacroQuadGrid(totals: totals, targets: profile.computedTargets, profile: profile)
             }
         }
     }
@@ -1192,12 +1192,8 @@ private struct NutritionInsightSheet: View {
     }
 
     private var modeBlurb: String {
-        switch profile.mode {
-        case .build:
-            return "Build mode targets a ~400–600 cal surplus with high protein to maximise muscle protein synthesis. Every logged meal helps you stay consistent."
-        case .circuit:
-            return "Circuit mode targets a ~300–500 cal deficit. Protein stays high (1.0–1.2 g/lb) to protect muscle while you drop weight and improve cardiovascular markers."
-        }
+        // Personalized to the user's own maintenance + surplus/deficit numbers.
+        TargetRationale.goalLine(for: profile.mode) + "\n\n" + TargetRationale.calorieWhy(for: profile)
     }
 
     var body: some View {

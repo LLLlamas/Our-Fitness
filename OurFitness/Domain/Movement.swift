@@ -268,6 +268,13 @@ public enum Movement {
         "Cholewicki J, McGill SM. Mechanical stability of the in vivo lumbar spine. SPINE, 1996."
     ]
 
+    /// Whether this exercise has a hand-curated parenting-movement hint.
+    /// Custom / user-invented Circuit movements return `false` and are
+    /// candidates for on-device AI enrichment (Services/ExerciseInsightService).
+    public static func hasNamedHint(for exercise: ExerciseDTO) -> Bool {
+        namedParentingHint(exercise.name) != nil
+    }
+
     private static func namedParentingHint(_ name: String) -> PostExerciseHint? {
         switch name {
         case "Lifted Baby":

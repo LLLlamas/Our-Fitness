@@ -27,6 +27,9 @@ public struct StatDetailSheet: View {
     /// Optional one-line reference range, e.g. "Optimal: <100 mg/dL (NCEP)".
     /// Shown directly under the header. Nil for non-medical metrics.
     public let rangeContext: String?
+    /// Optional plain-English "what your latest number means + what moves it",
+    /// personalized to the user's value and goal. Shown in a card under the chart.
+    public let personalNote: String?
     /// Receives the parsed numeric value. Caller persists + fires toast.
     public let onSave: (Double) -> Void
 
@@ -43,6 +46,7 @@ public struct StatDetailSheet: View {
         logCopy: String = "Log",
         canLog: Bool = true,
         rangeContext: String? = nil,
+        personalNote: String? = nil,
         onSave: @escaping (Double) -> Void
     ) {
         self.title = title
@@ -53,6 +57,7 @@ public struct StatDetailSheet: View {
         self.logCopy = logCopy
         self.canLog = canLog
         self.rangeContext = rangeContext
+        self.personalNote = personalNote
         self.onSave = onSave
     }
 
@@ -60,6 +65,7 @@ public struct StatDetailSheet: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 header
+                if let personalNote { noteCard(personalNote) }
                 chartSection
                 entriesSection
                 if canLog { logSection }
@@ -87,6 +93,25 @@ public struct StatDetailSheet: View {
                     .padding(.top, 4)
             }
         }
+    }
+
+    @ViewBuilder
+    private func noteCard(_ text: String) -> some View {
+        HStack(alignment: .top, spacing: 8) {
+            Image(systemName: "person.fill")
+                .font(.system(size: 11))
+                .foregroundStyle(theme.accent)
+                .padding(.top, 2)
+            Text(text)
+                .font(.callout)
+                .foregroundStyle(theme.text)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(12)
+        .background(theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
     }
 
     @ViewBuilder

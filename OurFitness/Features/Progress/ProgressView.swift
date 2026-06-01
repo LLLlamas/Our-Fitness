@@ -216,6 +216,9 @@ struct ProgressTabView: View {
                 placeholder: kind.placeholder,
                 canLog: kind.canLog,
                 rangeContext: kind.markerKind.map(HealthRanges.context(for:)),
+                personalNote: kind.markerKind.flatMap { mk in
+                    latestMarkerValue(mk).map { TargetRationale.markerMeaning(kind: mk, value: $0, mode: profile.mode) }
+                },
                 onSave: { value in
                     save(kind: kind, value: value)
                 }
@@ -926,6 +929,10 @@ private struct BPDetailSheet: View {
             .map { $0 }
     }
 
+    private var latestSystolic: Double? {
+        markers.filter { $0.kind == .bpSystolic }.sorted { $0.date < $1.date }.last?.value
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
@@ -940,6 +947,24 @@ private struct BPDetailSheet: View {
                         .font(.footnote)
                         .foregroundStyle(theme.dim)
                         .padding(.top, 4)
+                }
+
+                if let sys = latestSystolic {
+                    HStack(alignment: .top, spacing: 8) {
+                        Image(systemName: "person.fill")
+                            .font(.system(size: 11))
+                            .foregroundStyle(theme.accent)
+                            .padding(.top, 2)
+                        Text(TargetRationale.markerMeaning(kind: .bpSystolic, value: sys, mode: profile.mode))
+                            .font(.callout)
+                            .foregroundStyle(theme.text)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(12)
+                    .background(theme.card)
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                 }
 
                 if systolicSeries.isEmpty && diastolicSeries.isEmpty {

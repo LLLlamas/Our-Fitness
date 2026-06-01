@@ -90,7 +90,7 @@ struct TodayView: View {
                     .font(.system(size: 56, weight: .regular))
                     .foregroundStyle(theme.text)
 
-                MacroQuadGrid(totals: totals, targets: profile.computedTargets)
+                MacroQuadGrid(totals: totals, targets: profile.computedTargets, profile: profile)
 
                 if profile.healthGranted {
                     MoveCard(profile: profile, health: health)
@@ -385,22 +385,22 @@ private extension Movement.CircuitFocusKind {
     var infoDetail: String {
         switch self {
         case .steps:
-            return "Walking is dose-responsive: every additional 2,000 steps/day reduces cardiovascular mortality risk by ~8–11%. Even modest increases (3,000–5,000 → 7,000–10,000) measurably lower LDL, systolic BP, and fasting insulin — without structured exercise.\n\nMuscles worked: calves, quads, glutes, hip flexors, core stabilisers. Long-term: cardiovascular system, metabolic rate, bone density."
+            return "Walking is the easiest health win there is, and more is better. Every extra 1,000–2,000 steps a day lowers your risk of dying early, with most of the payoff landing by about 7,000–8,000 steps. Walking reliably brings blood pressure down a few points; effects on cholesterol and blood sugar are smaller and show up best when you also do some cardio.\n\nWorks: calves, thighs (quads), glutes (your seat muscles), hip flexors, and the deep core muscles that keep you upright. Over time: your heart, your everyday calorie burn, and your bones."
         case .pilates:
-            return "Core and postural strength from Pilates reduces lower-back pain, improves balance, and lowers resting BP through parasympathetic activation. ≥8 weeks of consistent training reduces systolic BP by 4–8 mmHg on average.\n\nMuscles worked: transverse abdominis, obliques, erector spinae, glutes, hip flexors — depends on focus area."
+            return "Pilates builds core and posture strength, helps your balance, and eases lower-back pain. Doing it consistently for two months or more lowers the top blood-pressure number by about 4–5 points on average.\n\nWorks: the deep stomach muscle that acts like a built-in belt (transverse abdominis), the side-of-waist muscles (obliques), the muscles running up your spine (erector spinae), your glutes, and hip flexors — which ones depend on the focus area."
         case .cardio:
-            return "Zone-2 cardio (conversational pace) trains mitochondrial density, raises HDL, lowers triglycerides, and improves insulin sensitivity. As little as 150 min/week of moderate activity reduces cardiovascular disease risk by ~35%.\n\nMuscles worked: heart (cardiac output), lower body (quads, hamstrings, calves), core stabilisers."
+            return "Easy, steady cardio — a pace where you can still hold a conversation — strengthens your heart, nudges your 'good' cholesterol (HDL) up a couple of points, and lowers the fat circulating in your blood (triglycerides). Hitting the recommended 150 minutes a week lowers heart-disease risk by roughly 15–20%, with bigger drops as you do more.\n\nWorks: your heart most of all, plus your lower body (thighs, hamstrings, calves) and core."
         }
     }
 
     var citation: String {
         switch self {
         case .steps:
-            return "Source: Paluch et al., JAMA Network Open, 2021. Steps-per-day and all-cause mortality."
+            return "Sources: Saint-Maurice et al., JAMA, 2020; Ding et al., Lancet Public Health, 2025 (steps and mortality); Hanson & Jones, Br J Sports Med, 2015 (blood pressure)."
         case .pilates:
-            return "Source: Kloubec JA, J Strength Cond Res, 2010; Bernardo LM, Clin J Oncol Nurs, 2007."
+            return "Source: Pilates and blood pressure meta-analysis, J Hum Hypertens, 2024."
         case .cardio:
-            return "Source: U.S. Physical Activity Guidelines Advisory Committee, 2018."
+            return "Sources: Sattelmair et al., Circulation, 2011; U.S. Physical Activity Guidelines, 2nd ed., 2018."
         }
     }
 }
