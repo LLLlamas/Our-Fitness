@@ -39,7 +39,11 @@ public final class HealthKitService: ObservableObject {
         if let t = HKObjectType.quantityType(forIdentifier: .bloodPressureSystolic)  { s.insert(t) }
         if let t = HKObjectType.quantityType(forIdentifier: .bloodPressureDiastolic) { s.insert(t) }
         if let t = HKObjectType.quantityType(forIdentifier: .bloodGlucose)           { s.insert(t) }
-        if let t = HKObjectType.correlationType(forIdentifier: .bloodPressure)       { s.insert(t) }
+        // NOTE: do NOT add the bloodPressure *correlation* type here. Authorizing
+        // its component quantity types (systolic/diastolic, above) is sufficient to
+        // run the correlation query in latestBloodPressure(); including the
+        // correlation type in the auth request can trip HealthKit's request
+        // validation and raise an uncatchable Obj-C exception.
         return s
     }()
 

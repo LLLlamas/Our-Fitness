@@ -141,6 +141,10 @@ Key entities: `Profile`, `ExerciseDTO` (has `isIsometric: Bool`), `WorkoutSetDTO
 
 **HealthKit coverage.** `syncFromHealth` auto-fills body fat % + waist (`BodyMetricDTO`) and resting HR + blood pressure + blood glucose (`HealthMarkerDTO`, `source: "healthkit"`), deduped per day; steps + weight already sync. **LDL, HDL, total cholesterol, triglycerides, and A1c are NOT available from Apple Health** (lab values exposed only via clinical records / FHIR, out of scope) — they remain manual entry. Calorie *burn* is never replaced by Health: the Train tab keeps per-exercise MET estimates, and the `MoveCard` shows Apple Health's whole-day active energy **beside** our own whole-day MET estimate (`Domain/DailyBurn.metEstimate`) so the science-based number sits next to the Watch-measured one.
 
+**HealthKit authorization — crash traps (these caused a launch SIGABRT in build 37):**
+- `requestAuthorization(toShare:read:)` can raise a **synchronous Obj-C `NSException`** that Swift `do/catch` **cannot catch** → instant `SIGABRT`. So: **only call it from the explicit, user-initiated Connect flow** (`connectAndPersist`, onboarding, Settings). **Never** call it from `.task`/`.onAppear`/pull-to-refresh — `isAuthorized` is per-process (always false at cold launch), so an auto-request there fires on every launch and any validation failure crashes the app. Reads (`steps()`, `latestQuantity`, etc.) work without re-requesting because Health authorization persists across launches; just read.
+- **Only add quantity types to `readTypes`/`writeTypes`.** To read a **correlation** type (e.g. blood pressure), authorize its component quantity types and run the correlation *query* — do NOT put the correlation type itself in the auth request; it can trip request validation and raise the uncatchable exception.
+
 ---
 
 ## Design and UX rules

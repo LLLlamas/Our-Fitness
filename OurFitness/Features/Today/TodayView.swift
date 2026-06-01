@@ -232,7 +232,9 @@ struct TodayView: View {
             healthGranted: profile.healthGranted,
             hasBackfilled: backfilledProfileIds.contains(key)
         ) else { return }
-        if !health.isAuthorized { _ = await health.requestAuthorization() }
+        // No requestAuthorization() here — see refreshToday(). Authorization
+        // persists across launches; reads work without it, and auto-requesting
+        // on launch risks an uncatchable Obj-C exception / SIGABRT.
         let map = await health.dailySteps(days: 30)
         for (date, count) in map where count > 0 {
             Repos.setSteps(ctx, userId: profile.id, date: date,
@@ -245,7 +247,11 @@ struct TodayView: View {
 
     private func refreshToday() async {
         guard profile.healthGranted else { return }
-        if !health.isAuthorized { _ = await health.requestAuthorization() }
+        // Do NOT call requestAuthorization() here. HealthKit authorization
+        // persists across launches, so reads work without re-requesting — and
+        // requestAuthorization can raise a synchronous Obj-C NSException that
+        // Swift try/catch cannot catch, which would crash on launch. Auth is
+        // established only via the explicit, user-initiated Connect flow.
         let n = await health.steps()
         if n > 0 {
             Repos.setSteps(ctx, userId: profile.id, date: today,
