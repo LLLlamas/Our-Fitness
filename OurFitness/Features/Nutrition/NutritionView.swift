@@ -852,13 +852,18 @@ private struct NLMealLogSheet: View {
     /// silently to the string result already on screen on any failure / unavailability.
     private func aiRefine() async {
         let trimmed = input.trimmingCharacters(in: .whitespaces)
-        guard !trimmed.isEmpty, MealParseService.shared.isAvailable else { return }
+        // Re-entrancy guard: pressing Return fires both .onSubmit and the
+        // focus-change trigger for one gesture — the second await-enqueued call
+        // must no-op rather than race to overwrite the result. (@MainActor runs
+        // the synchronous `aiParsing = true` before either call suspends.)
+        guard !aiParsing, !trimmed.isEmpty, MealParseService.shared.isAvailable else { return }
         aiParsing = true
         defer { aiParsing = false }
         guard let items = await MealParseService.shared.parse(trimmed) else { return }
         let resolved = FoodParser.resolve(items: items)
         guard resolved.hasMatches else { return }
         parsedWithAI = true
+        aiParsing = false   // hide the spinner atomically with the result swap
         applyResult(resolved)
     }
 

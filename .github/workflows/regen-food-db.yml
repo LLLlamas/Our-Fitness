@@ -43,11 +43,17 @@ jobs:
           python-version: "3.12"
 
       - name: Regenerate usda-foods.json
+        env:
+          # Inputs go through env vars (never interpolated into the script body)
+          # so a crafted input string can't inject shell commands.
+          MAX_ROWS: ${{ inputs.max_rows }}
+          FOUNDATION_URL: ${{ inputs.foundation_url }}
+          SR_LEGACY_URL: ${{ inputs.sr_legacy_url }}
         run: |
           set -euo pipefail
-          args=( "--max" "${{ inputs.max_rows }}" )
-          if [ -n "${{ inputs.foundation_url }}" ]; then args+=( "--foundation-url" "${{ inputs.foundation_url }}" ); fi
-          if [ -n "${{ inputs.sr_legacy_url }}" ]; then args+=( "--sr-legacy-url" "${{ inputs.sr_legacy_url }}" ); fi
+          args=( "--max" "$MAX_ROWS" )
+          if [ -n "$FOUNDATION_URL" ]; then args+=( "--foundation-url" "$FOUNDATION_URL" ); fi
+          if [ -n "$SR_LEGACY_URL" ]; then args+=( "--sr-legacy-url" "$SR_LEGACY_URL" ); fi
           python3 scripts/build-food-db.py "${args[@]}"
 
       - name: Open a PR if the dataset changed
@@ -64,7 +70,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
           git add OurFitness/Resources/usda-foods.json
-          count=$(grep -c '"id"' OurFitness/Resources/usda-foods.json || echo "?")
+          count=$(python3 -c "import json; print(len(json.load(open('OurFitness/Resources/usda-foods.json'))))")
           git commit -m "chore: regenerate USDA food database ($count foods)"
           git push origin "$branch"
           gh pr create \
