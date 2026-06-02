@@ -1,21 +1,18 @@
-// Offline USDA-backed food database.
+// In-memory food database — used by tests and as a value-type building block.
 //
-// Bundled, public-domain nutrition data sourced from USDA FoodData Central
-// (Foundation Foods + SR Legacy, https://fdc.nal.usda.gov, CC0 / public domain).
-// Loaded from a compact JSON resource at launch and indexed by name + aliases
-// for fast offline lookup — NO runtime network, no backend.
+// PRODUCTION use: `SQLiteFoodDatabase` (Domain/SQLiteFoodDatabase.swift) is the
+// live implementation — it queries the bundled `usda-foods.db` (SQLite/FTS5) on
+// disk so RAM stays low at ~270k entries. `FoodParser.parse(text:)` and
+// `resolve(items:)` use `SQLiteFoodDatabase.shared`.
 //
-// Two roles:
-//   1. `FoodDatabaseEntry` / index + match — PURE Foundation, fully testable
-//      WITHOUT the bundle (pass entries in directly).
-//   2. `FoodDatabase.shared` — lazily loads the bundled `usda-foods.json` via
-//      `Bundle.main`. Degrades gracefully to an EMPTY database when the
-//      resource is absent (e.g. the hostless test target compiles this file
-//      but ships no bundle) so nothing crashes.
-//
-// The seed shipped in-repo is small. The full dataset is produced by
-// `scripts/build-food-db.py` (run on a Mac/CI with network) which downloads
-// the USDA bulk datasets and regenerates `Resources/usda-foods.json`.
+// THIS FILE serves two purposes:
+//   1. `FoodDatabaseEntry` — the shared value type both implementations return.
+//      Pure Foundation, fully testable without any bundle resource.
+//   2. `FoodDatabase` (in-memory struct + token index) — injected via
+//      `parse(text:database:)` / `resolve(items:database:)` in `OurFitnessTests`
+//      so the parser can be exercised without the bundled `.db` (the hostless
+//      test target ships no resources). `FoodDatabase.shared` still degrades
+//      gracefully to empty; no test or live path depends on it for matching.
 //
 // Resolution authority: curated `CommonFoods` always wins; this DB is the
 // broader-coverage fallback (see `FoodParser`). Numbers are never invented —
@@ -65,26 +62,60 @@ public struct FoodDatabase: Sendable {
 
     public let entries: [FoodDatabaseEntry]
 
-    /// Lowercased alias/name → entry index, longest aliases preferred at match time.
-    private let index: [(alias: String, entry: FoodDatabaseEntry)]
+    /// First-token bucket: the leading word of each lowercased alias/name → the
+    /// (alias, entry) pairs that start with it. Lets `bestMatch` narrow to a tiny
+    /// candidate set instead of scanning every alias in the database.
+    ///
+    /// Soundness: if `chunk.contains(alias)` then `chunk` contains `alias`'s leading
+    /// token, so the chunk's word list always reaches the right bucket — narrowing by
+    /// first token never drops a match the flat scan would have found.
+    ///
+    /// Buckets are appended in `entries` order, preserving the flat scan's "first wins
+    /// among equal-length aliases" tie-break.
+    private let tokenIndex: [String: [(alias: String, entry: FoodDatabaseEntry)]]
 
     public init(entries: [FoodDatabaseEntry]) {
         self.entries = entries
-        self.index = entries.flatMap { entry -> [(String, FoodDatabaseEntry)] in
+
+        var buckets: [String: [(alias: String, entry: FoodDatabaseEntry)]] = [:]
+        for entry in entries {
             let names = [entry.name.lowercased()] + entry.aliases.map { $0.lowercased() }
-            return names.map { ($0, entry) }
+            for alias in names {
+                guard let token = FoodDatabase.firstToken(of: alias) else { continue }
+                buckets[token, default: []].append((alias: alias, entry: entry))
+            }
         }
+        self.tokenIndex = buckets
     }
 
     public var isEmpty: Bool { entries.isEmpty }
 
+    /// Leading whitespace-delimited word of a lowercased string, or nil if blank.
+    private static func firstToken(of text: String) -> String? {
+        text.split(separator: " ", maxSplits: 1, omittingEmptySubsequences: true)
+            .first
+            .map(String.init)
+    }
+
     /// Best substring match for a chunk of meal text: the entry whose alias is the
     /// LONGEST alias contained in `chunk` (mirrors `FoodParser`'s longest-alias rule).
+    ///
+    /// Narrows via `tokenIndex` — only aliases whose leading word appears as a word in
+    /// `chunk` are tested for containment, so cost scales with the chunk's word count
+    /// and bucket sizes, not the full alias count.
     public func bestMatch(in chunk: String) -> FoodDatabaseEntry? {
         var best: (alias: String, entry: FoodDatabaseEntry)? = nil
-        for candidate in index where chunk.contains(candidate.alias) {
-            if best == nil || candidate.alias.count > best!.alias.count {
-                best = candidate
+        var seenAliases = Set<String>()
+        for word in chunk.split(separator: " ", omittingEmptySubsequences: true) {
+            guard let candidates = tokenIndex[String(word)] else { continue }
+            for candidate in candidates {
+                // A bucket can be reached by more than one chunk word when an alias
+                // repeats a token; dedup so each alias is tested at most once.
+                guard seenAliases.insert(candidate.alias).inserted else { continue }
+                if chunk.contains(candidate.alias),
+                   best == nil || candidate.alias.count > best!.alias.count {
+                    best = candidate
+                }
             }
         }
         return best?.entry

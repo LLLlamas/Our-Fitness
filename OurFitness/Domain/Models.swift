@@ -230,6 +230,21 @@ public struct PerServing: Codable, Equatable, Sendable {
     }
 }
 
+extension PerServing {
+    public static func + (lhs: PerServing, rhs: PerServing) -> PerServing {
+        PerServing(
+            calories: lhs.calories + rhs.calories,
+            proteinG: lhs.proteinG + rhs.proteinG,
+            carbsG: lhs.carbsG + rhs.carbsG,
+            fatG: lhs.fatG + rhs.fatG,
+            fiberG: lhs.fiberG + rhs.fiberG,
+            sodiumMg: lhs.sodiumMg + rhs.sodiumMg,
+            addedSugarG: lhs.addedSugarG + rhs.addedSugarG,
+            saturatedFatG: lhs.saturatedFatG + rhs.saturatedFatG
+        )
+    }
+}
+
 public struct FoodDTO: Codable, Equatable, Sendable, Identifiable {
     public var id: String
     public var name: String
@@ -465,6 +480,77 @@ public struct WorkoutSetDTO: Codable, Equatable, Sendable, Identifiable {
     }
 }
 
+public struct MealIngredient: Codable, Equatable, Sendable, Identifiable {
+    public var id: UUID
+    public var foodId: String?
+    public var name: String
+    public var servingLabel: String
+    public var quantity: Double   // steps of 0.5; 1.0 = one canonical serving
+    public var perServing: PerServing  // nutrition at quantity == 1.0
+
+    public var scaledPerServing: PerServing {
+        PerServing(
+            calories: Int((Double(perServing.calories) * quantity).rounded()),
+            proteinG: Int((Double(perServing.proteinG) * quantity).rounded()),
+            carbsG: Int((Double(perServing.carbsG) * quantity).rounded()),
+            fatG: Int((Double(perServing.fatG) * quantity).rounded()),
+            fiberG: Int((Double(perServing.fiberG) * quantity).rounded()),
+            sodiumMg: Int((Double(perServing.sodiumMg) * quantity).rounded()),
+            addedSugarG: Int((Double(perServing.addedSugarG) * quantity).rounded()),
+            saturatedFatG: Int((Double(perServing.saturatedFatG) * quantity).rounded())
+        )
+    }
+
+    public init(id: UUID = UUID(), foodId: String? = nil, name: String,
+                servingLabel: String, quantity: Double = 1.0, perServing: PerServing) {
+        self.id = id
+        self.foodId = foodId
+        self.name = name
+        self.servingLabel = servingLabel
+        self.quantity = quantity
+        self.perServing = perServing
+    }
+
+    public static func from(_ food: CommonFood, quantity: Double = 1.0) -> MealIngredient {
+        MealIngredient(
+            foodId: food.id,
+            name: food.name,
+            servingLabel: food.servingLabel,
+            quantity: quantity,
+            perServing: PerServing(
+                calories: food.calories,
+                proteinG: food.proteinG,
+                carbsG: food.carbsG,
+                fatG: food.fatG,
+                fiberG: food.fiberG
+            )
+        )
+    }
+}
+
+public struct SavedMealTemplateDTO: Codable, Equatable, Sendable, Identifiable {
+    public var id: UUID
+    public var userId: UUID
+    public var name: String
+    public var emoji: String
+    public var ingredients: [MealIngredient]
+    public var createdAt: Date
+
+    public init(id: UUID = UUID(), userId: UUID, name: String, emoji: String,
+                ingredients: [MealIngredient], createdAt: Date = Date()) {
+        self.id = id
+        self.userId = userId
+        self.name = name
+        self.emoji = emoji
+        self.ingredients = ingredients
+        self.createdAt = createdAt
+    }
+
+    public var totalPerServing: PerServing {
+        ingredients.map(\.scaledPerServing).reduce(.zero, +)
+    }
+}
+
 public struct FoodLogEntryDTO: Codable, Equatable, Sendable, Identifiable {
     public var id: UUID
     public var userId: UUID
@@ -475,10 +561,12 @@ public struct FoodLogEntryDTO: Codable, Equatable, Sendable, Identifiable {
     public var servings: Double
     public var perServing: PerServing  // denormalized snapshot
     public var timestamp: Date
+    public var ingredients: [MealIngredient]?
 
     public init(id: UUID = UUID(), userId: UUID, date: String, slot: Slot,
                 foodId: String? = nil, customName: String? = nil, servings: Double = 1,
-                perServing: PerServing, timestamp: Date = Date()) {
+                perServing: PerServing, timestamp: Date = Date(),
+                ingredients: [MealIngredient]? = nil) {
         self.id = id
         self.userId = userId
         self.date = date
@@ -488,6 +576,7 @@ public struct FoodLogEntryDTO: Codable, Equatable, Sendable, Identifiable {
         self.servings = servings
         self.perServing = perServing
         self.timestamp = timestamp
+        self.ingredients = ingredients
     }
 }
 

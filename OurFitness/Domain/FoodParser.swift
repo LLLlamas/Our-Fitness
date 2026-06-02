@@ -84,12 +84,33 @@ public enum FoodParser {
     // MARK: - Parse
 
     public static func parse(text: String) -> ParseResult {
-        parse(text: text, database: FoodDatabase.shared)
+        parse(text: text, dbLookup: SQLiteFoodDatabase.shared.bestMatch(in:))
     }
 
-    /// Parse against an injectable database — used by tests so the matcher can be
-    /// exercised without the bundled resource (which the hostless test target lacks).
+    /// Keystroke-vs-submit control over whether the big USDA database is consulted.
+    ///
+    /// The LIVE per-keystroke path passes `includeDatabase: false` so matching hits
+    /// only the small curated `CommonFoods` (size-independent, always instant); the
+    /// big database is reserved for the submit path (`resolve`) and library search,
+    /// where one disk-backed FTS5 query per submit is fast even at ~270k entries.
+    public static func parse(text: String, includeDatabase: Bool) -> ParseResult {
+        let lookup: (String) -> FoodDatabaseEntry? = includeDatabase
+            ? SQLiteFoodDatabase.shared.bestMatch(in:)
+            : { _ in nil }
+        return parse(text: text, dbLookup: lookup)
+    }
+
+    /// Parse against an injectable in-memory database — used by tests so the matcher
+    /// can be exercised without the bundled resource (which the hostless test target
+    /// lacks). Semantics are unchanged from the original `database:` overload.
     public static func parse(text: String, database: FoodDatabase) -> ParseResult {
+        parse(text: text, dbLookup: database.bestMatch(in:))
+    }
+
+    /// Shared parse implementation. `dbLookup` is the fallback consulted only when
+    /// the curated `CommonFoods` match misses — it abstracts over the in-memory
+    /// `FoodDatabase` (tests) and the on-disk `SQLiteFoodDatabase` (production).
+    private static func parse(text: String, dbLookup: (String) -> FoodDatabaseEntry?) -> ParseResult {
         let lower = text.lowercased()
 
         // Split into candidate chunks at natural separators
@@ -106,7 +127,7 @@ public enum FoodParser {
 
         for chunk in chunks {
             let qty = resolveQuantity(from: chunk)
-            if let food = matchFood(in: chunk, database: database) {
+            if let food = matchFood(in: chunk, dbLookup: dbLookup) {
                 recognized.append(scaled(food: food, by: qty))
             } else if !chunk.isEmpty {
                 unrecognized.append(chunk)
@@ -116,7 +137,7 @@ public enum FoodParser {
         // Fallback: try the whole text if we got nothing
         if recognized.isEmpty {
             let qty = resolveQuantity(from: lower)
-            if let food = matchFood(in: lower, database: database) {
+            if let food = matchFood(in: lower, dbLookup: dbLookup) {
                 recognized.append(scaled(food: food, by: qty))
                 return ParseResult(inputText: text, recognized: recognized, unrecognized: [])
             }
@@ -165,11 +186,18 @@ public enum FoodParser {
     /// `unrecognized`. This is the single bridge the AI parser uses so its output is
     /// indistinguishable from (and as safe as) the string path downstream.
     public static func resolve(items: [ExtractedItem]) -> ParseResult {
-        resolve(items: items, database: FoodDatabase.shared)
+        resolve(items: items, dbLookup: SQLiteFoodDatabase.shared.bestMatch(in:))
     }
 
-    /// Injectable-database variant for the hostless tests (no bundled resource).
+    /// Injectable in-memory-database variant for the hostless tests (no bundle).
     public static func resolve(items: [ExtractedItem], database: FoodDatabase) -> ParseResult {
+        resolve(items: items, dbLookup: database.bestMatch(in:))
+    }
+
+    /// Shared resolver. `dbLookup` abstracts over the in-memory `FoodDatabase`
+    /// (tests) and the on-disk `SQLiteFoodDatabase` (production), consulted only as
+    /// the curated-miss fallback inside `matchFood`.
+    private static func resolve(items: [ExtractedItem], dbLookup: (String) -> FoodDatabaseEntry?) -> ParseResult {
         var recognized: [ParsedItem] = []
         var unrecognized: [String] = []
 
@@ -177,7 +205,7 @@ public enum FoodParser {
             let name = item.name.trimmingCharacters(in: .whitespaces)
             guard name.count > 1 else { continue }
             let qty = item.quantity > 0 ? item.quantity : 1.0
-            if let food = matchFood(in: name.lowercased(), database: database) {
+            if let food = matchFood(in: name.lowercased(), dbLookup: dbLookup) {
                 recognized.append(scaled(food: food, by: qty))
             } else {
                 unrecognized.append(name)
@@ -190,7 +218,9 @@ public enum FoodParser {
 
     // MARK: - Food matching
 
-    private static func matchFood(in chunk: String, database: FoodDatabase) -> CommonFood? {
+    /// Curated `CommonFoods` wins; the `dbLookup` fallback (in-memory or SQLite)
+    /// supplies breadth the curated set misses.
+    private static func matchFood(in chunk: String, dbLookup: (String) -> FoodDatabaseEntry?) -> CommonFood? {
         // Curated CommonFoods first — hand-tuned aliases/servings are authoritative.
         struct Candidate { let food: CommonFood; let alias: String }
         var best: Candidate? = nil
@@ -208,7 +238,7 @@ public enum FoodParser {
         if let best { return best.food }
 
         // Fall back to the broader USDA database for coverage curated foods miss.
-        return database.bestMatch(in: chunk)?.asCommonFood
+        return dbLookup(chunk)?.asCommonFood
     }
 
     // MARK: - Scaling

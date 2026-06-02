@@ -29,7 +29,7 @@ public enum CommonFoods {
 
     public static let all: [CommonFood] = grains + proteins + eggsAndDairy
         + vegetables + fruits + legumes + nutsAndFats + drinks + soups + preparedMeals
-        + snacksAndSweets
+        + snacksAndSweets + fastFood
 
     // MARK: - Grains & Starches
 
@@ -967,6 +967,165 @@ public enum CommonFoods {
             aliases: ["dark chocolate", "70% chocolate"],
             servingLabel: "1 oz (28 g)",
             calories: 170, proteinG: 2, carbsG: 13, fatG: 12, fiberG: 3
+        ),
+    ]
+
+    // MARK: - Fast food & restaurant (curated, brand-official / USDA)
+    //
+    // These iconic chain items are not cleanly in the USDA DB, so they're
+    // curated here from each brand's OFFICIAL published nutrition (or USDA
+    // SR Legacy "Restaurant, Chinese, …" rows for the generic takeout
+    // representatives). Curated entries shadow the USDA DB by alias — intended,
+    // so a typed "big mac" resolves to the real Big Mac. Source URL noted per
+    // entry; values verified to pass the 4·P + 4·C + 9·F ≈ kcal sanity check.
+
+    private static let fastFood: [CommonFood] = [
+        // — McDonald's — https://www.mcdonalds.com/us/en-us/about-our-food/nutrition-calculator.html
+        // (values mirrored from fastfoodnutrition.org/mcdonalds/*)
+        CommonFood(
+            id: "ff-mcd-big-mac", name: "Big Mac",
+            aliases: ["big mac", "bigmac", "mcdonalds big mac", "mcdonald's big mac"],
+            servingLabel: "1 burger (215 g)",
+            calories: 540, proteinG: 25, carbsG: 46, fatG: 28, fiberG: 3
+        ),
+        CommonFood(
+            id: "ff-mcd-quarter-pounder", name: "Quarter Pounder with Cheese",
+            aliases: ["quarter pounder", "quarter pounder with cheese", "qpc", "mcdonalds quarter pounder"],
+            servingLabel: "1 burger (202 g)",
+            calories: 540, proteinG: 31, carbsG: 42, fatG: 28, fiberG: 3
+        ),
+        CommonFood(
+            id: "ff-mcd-mcnuggets-10", name: "Chicken McNuggets (10 pc)",
+            aliases: ["chicken mcnuggets", "mcnuggets", "10 piece mcnuggets", "10 piece nuggets", "chicken nuggets mcdonalds"],
+            servingLabel: "10 pieces (162 g)",
+            calories: 440, proteinG: 24, carbsG: 26, fatG: 27, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-mcd-fries-medium", name: "McDonald's medium fries",
+            aliases: ["mcdonalds fries", "mcdonald's fries", "mcdonalds medium fries", "mcdonalds french fries", "world famous fries"],
+            servingLabel: "Medium (111 g)",
+            calories: 340, proteinG: 4, carbsG: 44, fatG: 16, fiberG: 4
+        ),
+
+        // — Burger King — https://www.bk.com/menu (Whopper Sandwich; medium onion rings)
+        CommonFood(
+            id: "ff-bk-whopper", name: "Whopper",
+            aliases: ["whopper", "burger king whopper", "bk whopper"],
+            servingLabel: "1 sandwich (270 g)",
+            calories: 670, proteinG: 28, carbsG: 49, fatG: 40, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-bk-onion-rings", name: "Onion rings (Burger King)",
+            aliases: ["onion rings", "burger king onion rings", "bk onion rings"],
+            servingLabel: "Medium (91 g)",
+            calories: 360, proteinG: 4, carbsG: 48, fatG: 16, fiberG: 5
+        ),
+
+        // — Wendy's — https://www.wendys.com/menu (values via fastfoodnutrition.org/wendys/*)
+        CommonFood(
+            id: "ff-wendys-daves-single", name: "Dave's Single",
+            aliases: ["daves single", "dave's single", "wendys daves single", "wendy's single"],
+            servingLabel: "1 cheeseburger (284 g)",
+            calories: 570, proteinG: 29, carbsG: 38, fatG: 34, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-wendys-fries-medium", name: "Wendy's medium fries",
+            aliases: ["wendys fries", "wendy's fries", "wendys medium fries", "natural cut fries"],
+            servingLabel: "Medium (150 g)",
+            calories: 350, proteinG: 5, carbsG: 47, fatG: 16, fiberG: 4
+        ),
+        CommonFood(
+            id: "ff-wendys-frosty-small", name: "Frosty (small)",
+            aliases: ["frosty", "wendys frosty", "wendy's frosty", "small frosty", "chocolate frosty"],
+            servingLabel: "Small (227 g)",
+            calories: 350, proteinG: 10, carbsG: 58, fatG: 9, fiberG: 0
+        ),
+
+        // — White Castle — https://www.whitecastle.com/menu (Original Slider)
+        CommonFood(
+            id: "ff-white-castle-slider", name: "White Castle slider",
+            aliases: ["white castle slider", "slider", "white castle", "original slider"],
+            servingLabel: "1 slider (58 g)",
+            calories: 140, proteinG: 6, carbsG: 16, fatG: 7, fiberG: 1
+        ),
+
+        // — Panda Express — https://www.pandaexpress.com/nutritioninformation
+        CommonFood(
+            id: "ff-panda-orange-chicken", name: "Orange Chicken (Panda Express)",
+            aliases: ["orange chicken", "panda express orange chicken", "panda orange chicken"],
+            servingLabel: "1 serving (5.7 oz / 162 g)",
+            calories: 370, proteinG: 19, carbsG: 38, fatG: 17, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-panda-rangoon", name: "Cream Cheese Rangoon (Panda Express)",
+            aliases: ["cream cheese rangoon", "crab rangoon", "rangoon", "cheese rangoon", "panda rangoon"],
+            servingLabel: "3 pieces (78 g)",
+            calories: 190, proteinG: 5, carbsG: 24, fatG: 8, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-panda-chow-mein", name: "Chow Mein (Panda Express)",
+            aliases: ["chow mein", "panda express chow mein", "panda chow mein"],
+            servingLabel: "1 side (9.4 oz / 267 g)",
+            calories: 510, proteinG: 13, carbsG: 80, fatG: 20, fiberG: 6
+        ),
+
+        // — Chick-fil-A — https://www.chick-fil-a.com/menu (values via fastfoodnutrition.org/chick-fil-a/*)
+        CommonFood(
+            id: "ff-cfa-chicken-sandwich", name: "Chick-fil-A Chicken Sandwich",
+            aliases: ["chick fil a sandwich", "chick-fil-a chicken sandwich", "cfa sandwich", "chickfila sandwich"],
+            servingLabel: "1 sandwich (183 g)",
+            calories: 440, proteinG: 29, carbsG: 41, fatG: 17, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-cfa-nuggets-8", name: "Chick-fil-A Nuggets (8 ct)",
+            aliases: ["chick fil a nuggets", "chick-fil-a nuggets", "cfa nuggets", "chickfila nuggets", "8 count nuggets"],
+            servingLabel: "8 count (113 g)",
+            calories: 250, proteinG: 27, carbsG: 11, fatG: 11, fiberG: 0
+        ),
+        CommonFood(
+            id: "ff-cfa-waffle-fries", name: "Chick-fil-A Waffle Fries",
+            aliases: ["waffle fries", "chick fil a fries", "chick-fil-a waffle fries", "waffle potato fries"],
+            servingLabel: "Medium (125 g)",
+            calories: 420, proteinG: 5, carbsG: 45, fatG: 24, fiberG: 5
+        ),
+
+        // — Generic Chinese takeout — USDA FoodData Central SR Legacy
+        //   "Restaurant, Chinese, …" rows (nutritionvalue.org mirrors the same data).
+        //   Generic representatives, not any single restaurant's recipe.
+        CommonFood(
+            id: "ff-chinese-lo-mein", name: "Lo mein",
+            // https://www.nutritionvalue.org/Restaurant,_without_meat,_vegetable_lo_mein,_Chinese_nutritional_value.html
+            aliases: ["lo mein", "lomein", "vegetable lo mein", "chinese lo mein"],
+            servingLabel: "1 cup (136 g)",
+            calories: 165, proteinG: 7, carbsG: 28, fatG: 3, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-chinese-wonton-soup", name: "Wonton soup",
+            // https://www.nutritionvalue.org/Soup,_Chinese_restaurant,_wonton_nutritional_value.html
+            aliases: ["wonton soup", "wanton soup", "won ton soup"],
+            servingLabel: "1 cup (223 g)",
+            calories: 71, proteinG: 5, carbsG: 12, fatG: 1, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-chinese-fried-rice", name: "Vegetable fried rice",
+            // https://www.nutritionvalue.org/Restaurant,_without_meat,_fried_rice,_Chinese_nutritional_value.html
+            aliases: ["fried rice", "vegetable fried rice", "chinese fried rice", "veggie fried rice"],
+            servingLabel: "1 cup (137 g)",
+            calories: 238, proteinG: 6, carbsG: 45, fatG: 4, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-chinese-beef-broccoli", name: "Beef and broccoli",
+            // https://www.nutritionvalue.org/Beef_and_broccoli_27415110_nutritional_value.html
+            aliases: ["beef and broccoli", "beef broccoli", "beef with broccoli", "beef & broccoli"],
+            servingLabel: "1 cup (217 g)",
+            calories: 347, proteinG: 23, carbsG: 11, fatG: 23, fiberG: 3
+        ),
+        CommonFood(
+            id: "ff-chinese-general-tso", name: "General Tso's chicken",
+            // https://www.nutritionvalue.org/Restaurant,_general_tso's_chicken,_Chinese_nutritional_value.html
+            aliases: ["general tso", "general tso's chicken", "general tsos chicken", "general tao chicken"],
+            servingLabel: "1 cup (163 g)",
+            calories: 482, proteinG: 21, carbsG: 39, fatG: 27, fiberG: 1
         ),
     ]
 
