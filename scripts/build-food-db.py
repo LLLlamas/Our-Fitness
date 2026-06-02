@@ -410,7 +410,7 @@ def iter_branded(zf: zipfile.ZipFile):
         f"({', '.join(BRANDED_TOP_KEYS)}).")
 
 
-def select_branded(zf: zipfile.ZipFile, cap: int) -> list[dict]:
+def select_branded(zf: zipfile.ZipFile, cap: int, max_per_brand: int) -> list[dict]:
     """Stream the Branded dataset and return a trimmed, deduped, per-brand-capped
     list of entries (<= cap). Selection strategy:
       1. Build a valid entry (real labelNutrients.calories, sane description,
@@ -441,14 +441,14 @@ def select_branded(zf: zipfile.ZipFile, cap: int) -> list[dict]:
             dup_dropped += 1
             continue
         bkey = (brand_owner or "").lower()
-        if bkey and per_brand.get(bkey, 0) >= MAX_PER_BRAND:
+        if max_per_brand > 0 and bkey and per_brand.get(bkey, 0) >= max_per_brand:
             brand_capped += 1
             continue
         seen_keys.add(dedup_key)
         if bkey:
             per_brand[bkey] = per_brand.get(bkey, 0) + 1
         kept.append(entry)
-        if len(kept) >= cap:
+        if cap > 0 and len(kept) >= cap:
             log(f"  Branded cap of {cap} reached — stopping scan early.")
             break
 
@@ -584,6 +584,12 @@ def main() -> int:
         help="Output format. 'sqlite' (default) emits usda-foods.db (FTS5); 'json' "
              "emits usda-foods.json; 'both' emits both.",
     )
+    ap.add_argument("--max-per-brand", type=int, default=MAX_PER_BRAND,
+                    help="Max entries per brandOwner (0 = unlimited).")
+    ap.add_argument("--count-only", action="store_true",
+                    help="Parse + dedup + report counts, but DO NOT write the resource. "
+                         "Use with --branded-cap 0 --max-per-brand 0 --max 0 to measure the "
+                         "true unique deduped food count.")
     args = ap.parse_args()
 
     # Foundation + SR Legacy (per-100 g foodNutrients). These are required.
@@ -631,7 +637,7 @@ def main() -> int:
             branded_zip = None
         if branded_zip is not None:
             try:
-                for entry in select_branded(branded_zip, args.branded_cap):
+                for entry in select_branded(branded_zip, args.branded_cap, args.max_per_brand):
                     if entry["id"] not in by_id:
                         branded_kept += 1
                     by_id[entry["id"]] = entry
@@ -641,6 +647,12 @@ def main() -> int:
 
     log(f"per-source kept: foundation+sr={foundation_sr_kept}, branded={branded_kept}, "
         f"total-unique={len(by_id)}")
+
+    if args.count_only:
+        log(f"COUNT-ONLY: {len(by_id)} genuinely-unique foods "
+            f"(foundation+sr={foundation_sr_kept}, branded={branded_kept}). "
+            "No file written.")
+        return 0
 
     all_entries = sorted(by_id.values(), key=lambda e: e["name"].lower())
 
