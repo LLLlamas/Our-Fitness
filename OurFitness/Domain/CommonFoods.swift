@@ -90,7 +90,7 @@ public enum CommonFoods {
         ),
         CommonFood(
             id: "sweet-potato", name: "Sweet potato",
-            aliases: ["sweet potato", "yam", "sweet potato"],
+            aliases: ["sweet potato", "yam"],
             servingLabel: "1 medium (130 g)",
             calories: 103, proteinG: 2, carbsG: 24, fatG: 0, fiberG: 4
         ),
@@ -873,7 +873,9 @@ public enum CommonFoods {
         ),
         CommonFood(
             id: "fries", name: "French fries",
-            aliases: ["fries", "french fries", "chips"],
+            // "chips" intentionally omitted — it belongs to potato-chips (US English);
+            // leaving it here created an ambiguous bare-"chips" tie resolved to fries.
+            aliases: ["fries", "french fries"],
             servingLabel: "Medium serving (117 g)",
             calories: 365, proteinG: 4, carbsG: 48, fatG: 17, fiberG: 4
         ),
