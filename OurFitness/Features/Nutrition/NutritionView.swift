@@ -1051,10 +1051,20 @@ private struct FoodLibrarySheet: View {
     private var results: [CommonFood] {
         let q = query.lowercased().trimmingCharacters(in: .whitespaces)
         guard !q.isEmpty else { return CommonFoods.all }
-        return CommonFoods.all.filter { food in
+        let curated = CommonFoods.all.filter { food in
             food.name.lowercased().contains(q)
                 || food.aliases.contains { $0.lowercased().contains(q) }
         }
+        // Broaden with the offline USDA database; curated entries win on name.
+        let curatedNames = Set(curated.map { $0.name.lowercased() })
+        let usda = FoodDatabase.shared.entries
+            .filter { entry in
+                entry.name.lowercased().contains(q)
+                    || entry.aliases.contains { $0.lowercased().contains(q) }
+            }
+            .map { $0.asCommonFood }
+            .filter { !curatedNames.contains($0.name.lowercased()) }
+        return curated + usda
     }
 
     var body: some View {
@@ -1144,8 +1154,7 @@ private struct NutritionInsightSheet: View {
 
     @Environment(\.theme) private var theme
     @Query private var markerModels: [HealthMarkerModel]
-    @AppStorage(UnitSystem.storageKey) private var unitSystemRaw = UnitSystem.imperial.rawValue
-    private var unitSystem: UnitSystem { UnitSystem(rawValue: unitSystemRaw) ?? .imperial }
+    @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
     init(profile: ProfileDTO, logs: [FoodLogEntryDTO]) {
         self.profile = profile

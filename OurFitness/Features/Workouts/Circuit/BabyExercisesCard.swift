@@ -209,8 +209,7 @@ private struct ExerciseRow: View {
     @Environment(\.theme) private var theme
     @State private var showInfo = false
 
-    @AppStorage(UnitSystem.storageKey) private var unitSystemRaw = UnitSystem.imperial.rawValue
-    private var unitSystem: UnitSystem { UnitSystem(rawValue: unitSystemRaw) ?? .imperial }
+    @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
     private var loadLabel: String {
         guard let lb = exercise.loadLb else { return "" }
@@ -506,8 +505,7 @@ private struct AddCircuitMovementSheet: View {
     @FocusState private var nameFocused: Bool
     @FocusState private var loadFocused: Bool
 
-    @AppStorage(UnitSystem.storageKey) private var unitSystemRaw = UnitSystem.imperial.rawValue
-    private var unitSystem: UnitSystem { UnitSystem(rawValue: unitSystemRaw) ?? .imperial }
+    @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
     private var loadLb: Double? {
         // Field is in the active unit; persist canonical lb.

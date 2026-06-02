@@ -17,6 +17,7 @@ struct MoveCard: View {
     @Query private var setModels: [WorkoutSetModel]
     @Query private var cardioModels: [CardioSessionModel]
     @Query private var pilatesModels: [PilatesSessionModel]
+    @Query private var activityModels: [ActivitySessionModel]
 
     @State private var appleEnergyKcal: Double = 0
     @State private var appleEnergyDate: Date? = nil
@@ -38,17 +39,19 @@ struct MoveCard: View {
         _setModels = Query(filter: #Predicate<WorkoutSetModel> { $0.userId == uid && $0.timestamp >= dayStart }, sort: \.timestamp)
         _cardioModels = Query(filter: #Predicate<CardioSessionModel> { $0.profileId == uid && $0.date >= dayStart }, sort: \.date)
         _pilatesModels = Query(filter: #Predicate<PilatesSessionModel> { $0.profileId == uid && $0.date >= dayStart }, sort: \.date)
+        _activityModels = Query(filter: #Predicate<ActivitySessionModel> { $0.profileId == uid && $0.date >= dayStart }, sort: \.date)
     }
 
     private var todaySteps: Int { stepModels.first?.steps ?? 0 }
     private var todaySets: [WorkoutSetDTO] { setModels.map(\.snapshot) }
     private var todayCardio: [CardioSessionDTO] { cardioModels.map(\.snapshot) }
     private var todayPilates: [PilatesSessionDTO] { pilatesModels.map(\.snapshot) }
+    private var todayActivities: [ActivitySessionDTO] { activityModels.map(\.snapshot) }
 
     private var metEstimate: Int {
         DailyBurn.metEstimate(
             steps: todaySteps, sets: todaySets, cardio: todayCardio, pilates: todayPilates,
-            bodyWeightLb: profile.weightLb
+            activities: todayActivities, bodyWeightLb: profile.weightLb
         )
     }
 
@@ -67,11 +70,17 @@ struct MoveCard: View {
             $0 + CalorieEstimator.caloriesForPilates(minutes: Double($1.durationMinutes), bodyWeightLb: profile.weightLb)
         }.rounded())
     }
+    private var activitiesKcal: Int {
+        // Exclude the Walking activity — already counted via steps (mirrors DailyBurn).
+        Int(todayActivities.reduce(0.0) {
+            $0 + ($1.activityId == "activity-walking" ? 0 : ($1.caloriesEst ?? 0))
+        }.rounded())
+    }
 
     private var trainingMetEstimate: Int {
-        // Reuses the three sub-values already computed above — no duplicate reduce closures.
+        // Reuses the sub-values already computed above — no duplicate reduce closures.
         // Steps excluded: Apple's active energy already counts walking.
-        setsKcal + cardioKcal + pilatesKcal
+        setsKcal + cardioKcal + pilatesKcal + activitiesKcal
     }
 
     private var weightKg: Int { Int(profile.weightLb * 0.4536) }
@@ -156,6 +165,7 @@ struct MoveCard: View {
                 setsKcal: setsKcal,
                 cardioKcal: cardioKcal,
                 pilatesKcal: pilatesKcal,
+                activitiesKcal: activitiesKcal,
                 trainingMetEstimate: trainingMetEstimate
             )
             .themed(profile.mode)
@@ -367,6 +377,7 @@ private struct ExercisesInfoSheet: View {
     let setsKcal: Int
     let cardioKcal: Int
     let pilatesKcal: Int
+    let activitiesKcal: Int
     let trainingMetEstimate: Int
 
     @Environment(\.theme) private var theme
@@ -413,6 +424,16 @@ private struct ExercisesInfoSheet: View {
                     ColumnBreakdownRow(
                         label: "MET 3.0 × \(weightKg)kg × session duration",
                         detail: "≈\(pilatesKcal) cal (Ainsworth code 06010)"
+                    )
+                }
+            }
+
+            // Live sessions
+            if activitiesKcal > 0 {
+                ColumnInfoSection(title: "Live sessions") {
+                    ColumnBreakdownRow(
+                        label: "MET (per activity) × \(weightKg)kg × elapsed time",
+                        detail: "≈\(activitiesKcal) cal — timed activities like games, swims, classes"
                     )
                 }
             }

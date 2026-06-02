@@ -471,6 +471,45 @@ public final class CardioSessionModel {
     }
 }
 
+// MARK: - Live activity sessions (V5)
+
+@Model
+public final class ActivitySessionModel {
+    @Attribute(.unique) public var id: UUID
+    public var profileId: UUID
+    public var date: Date            // session start
+    public var activityId: String
+    public var activityName: String
+    public var met: Double
+    public var durationMinutes: Int  // actual elapsed
+    public var expectedMinutes: Int  // planned
+    /// MET-based kcal estimate computed at log time.
+    public var caloriesEst: Double?
+    public var notes: String?
+
+    public init(snapshot s: ActivitySessionDTO) {
+        self.id = s.id
+        self.profileId = s.profileId
+        self.date = s.date
+        self.activityId = s.activityId
+        self.activityName = s.activityName
+        self.met = s.met
+        self.durationMinutes = s.durationMinutes
+        self.expectedMinutes = s.expectedMinutes
+        self.caloriesEst = s.caloriesEst
+        self.notes = s.notes
+    }
+
+    public var snapshot: ActivitySessionDTO {
+        ActivitySessionDTO(
+            id: id, profileId: profileId, date: date,
+            activityId: activityId, activityName: activityName, met: met,
+            durationMinutes: durationMinutes, expectedMinutes: expectedMinutes,
+            caloriesEst: caloriesEst, notes: notes
+        )
+    }
+}
+
 // MARK: - Water intake (V4)
 
 @Model

@@ -121,6 +121,36 @@ public enum SchemaV4: VersionedSchema {
     }
 }
 
+/// V5 adds `ActivitySessionModel` (Live Sessions — timed, duration-based
+/// activities like basketball/soccer/swimming). Purely additive — a new entity,
+/// no changes to existing ones, exactly like `WaterEntryModel` in V4. SwiftData
+/// applies the new table via automatic lightweight migration when the container
+/// opens V5 against an existing V4 store; we deliberately ship NO staged
+/// `MigrationPlan` (the `NSLightweightMigrationStage` path is what threw the
+/// uncatchable Obj-C exception in builds 26/27 — see ModelContainer+App.swift).
+public enum SchemaV5: VersionedSchema {
+    public static let versionIdentifier = Schema.Version(5, 0, 0)
+
+    public static var models: [any PersistentModel.Type] {
+        [
+            ProfileModel.self,
+            ExerciseModel.self,
+            ProgramModel.self,
+            WorkoutModel.self,
+            WorkoutSetModel.self,
+            FoodModel.self,
+            FoodLogEntryModel.self,
+            BodyMetricModel.self,
+            HealthMarkerModel.self,
+            StepCountModel.self,
+            PilatesSessionModel.self,
+            CardioSessionModel.self,
+            WaterEntryModel.self,
+            ActivitySessionModel.self,
+        ]
+    }
+}
+
 public enum AppSchema {
-    public static let current: any VersionedSchema.Type = SchemaV4.self
+    public static let current: any VersionedSchema.Type = SchemaV5.self
 }

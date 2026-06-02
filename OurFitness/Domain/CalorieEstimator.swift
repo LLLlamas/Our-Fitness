@@ -55,6 +55,13 @@ public enum CalorieEstimator {
         kcal(mets: 3.0, bodyWeightLb: bodyWeightLb, hours: minutes / 60.0)
     }
 
+    /// Timed live-session estimate (basketball, soccer, swimming, etc.). The MET
+    /// comes from the chosen `Activity` in `ActivityCatalog`; minutes is the
+    /// ACTUAL elapsed time of the session. Deterministic — never AI-adjusted.
+    public static func caloriesForActivity(met: Double, minutes: Double, bodyWeightLb: Double) -> Double {
+        kcal(mets: met, bodyWeightLb: bodyWeightLb, hours: minutes / 60.0)
+    }
+
     /// Isometric hold estimate (plank, dead hang, wall sit, etc.).
     ///
     /// Derivation: isometric contractions are metabolically moderate. The plank and

@@ -473,6 +473,32 @@ public enum Repos {
         return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
     }
 
+    // MARK: - Live activity sessions
+
+    public static func logActivitySession(_ ctx: ModelContext, _ s: ActivitySessionDTO) {
+        ctx.insert(ActivitySessionModel(snapshot: s))
+        try? ctx.save()
+    }
+
+    public static func listActivitySessions(
+        _ ctx: ModelContext, userId: UUID, limit: Int = 50
+    ) -> [ActivitySessionDTO] {
+        var desc = FetchDescriptor<ActivitySessionModel>(
+            predicate: #Predicate { $0.profileId == userId },
+            sortBy: [SortDescriptor(\.date, order: .reverse)]
+        )
+        desc.fetchLimit = limit
+        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
+    }
+
+    public static func deleteActivitySession(_ ctx: ModelContext, id: UUID) {
+        let desc = FetchDescriptor<ActivitySessionModel>(predicate: #Predicate { $0.id == id })
+        if let target = try? ctx.fetch(desc).first {
+            ctx.delete(target)
+            try? ctx.save()
+        }
+    }
+
     /// UPSERT by (userId, date). Used by both manual entry and HealthKit sync.
     public static func setSteps(_ ctx: ModelContext, userId: UUID, date: String, steps: Int, source: StepSource) {
         let desc = FetchDescriptor<StepCountModel>(

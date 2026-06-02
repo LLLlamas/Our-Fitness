@@ -25,8 +25,7 @@ struct ProfileCreationView: View {
     @State private var created: ProfileDTO?
 
     @FocusState private var fieldFocused: Bool
-    @AppStorage(UnitSystem.storageKey) private var unitSystemRaw = UnitSystem.imperial.rawValue
-    private var unitSystem: UnitSystem { UnitSystem(rawValue: unitSystemRaw) ?? .imperial }
+    @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
     // Vitals are stored canonically (lb / inches); the fields display + parse
     // in the active unit so the onboarding default (150 lb / 67 in) shows

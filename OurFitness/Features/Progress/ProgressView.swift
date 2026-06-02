@@ -19,8 +19,7 @@ struct ProgressTabView: View {
     @State private var activeStat: StatKind?
     @State private var showEditTrackers = false
 
-    @AppStorage(UnitSystem.storageKey) private var unitSystemRaw = UnitSystem.imperial.rawValue
-    private var unitSystem: UnitSystem { UnitSystem(rawValue: unitSystemRaw) ?? .imperial }
+    @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
     /// Per-profile custom tracker visibility. Empty = use the mode defaults;
     /// "none" = customized to show nothing; otherwise a CSV of StatKind raw values.

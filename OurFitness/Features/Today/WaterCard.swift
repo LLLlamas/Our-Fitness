@@ -16,10 +16,8 @@ struct WaterCard: View {
 
     @Query private var entryModels: [WaterEntryModel]
     @AppStorage private var goalFlOz: Double
-    @AppStorage(UnitSystem.storageKey) private var unitSystemRaw = UnitSystem.imperial.rawValue
+    @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
     @State private var showInfo = false
-
-    private var unitSystem: UnitSystem { UnitSystem(rawValue: unitSystemRaw) ?? .imperial }
 
     init(profile: ProfileDTO) {
         self.profile = profile

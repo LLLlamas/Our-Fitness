@@ -683,3 +683,59 @@ public struct CardioSessionDTO: Codable, Equatable, Sendable, Identifiable {
         self.caloriesEst = try c.decodeIfPresent(Double.self, forKey: .caloriesEst)
     }
 }
+
+// MARK: - Live activity sessions (timed, duration-based)
+
+/// A completed timed session for a duration-based activity (basketball, soccer,
+/// swimming, etc.), logged when the user ends a Live Session. `durationMinutes`
+/// is the ACTUAL elapsed time (derived from the persisted start date), not the
+/// planned `expectedMinutes`. `caloriesEst` is MET × current bodyweight × actual
+/// elapsed time, computed once at log time. `activityId`/`met` are denormalized
+/// off the catalog so a later catalog edit never retro-changes a logged session.
+public struct ActivitySessionDTO: Codable, Equatable, Sendable, Identifiable {
+    public var id: UUID
+    public var profileId: UUID
+    public var date: Date            // session start
+    public var activityId: String
+    public var activityName: String
+    public var met: Double
+    public var durationMinutes: Int  // actual elapsed
+    public var expectedMinutes: Int  // planned
+    public var caloriesEst: Double?
+    public var notes: String?
+
+    public init(id: UUID = UUID(), profileId: UUID, date: Date = Date(),
+                activityId: String, activityName: String, met: Double,
+                durationMinutes: Int, expectedMinutes: Int,
+                caloriesEst: Double? = nil, notes: String? = nil) {
+        self.id = id
+        self.profileId = profileId
+        self.date = date
+        self.activityId = activityId
+        self.activityName = activityName
+        self.met = met
+        self.durationMinutes = durationMinutes
+        self.expectedMinutes = expectedMinutes
+        self.caloriesEst = caloriesEst
+        self.notes = notes
+    }
+
+    // Codable: tolerate older payloads missing the optional fields.
+    private enum CodingKeys: String, CodingKey {
+        case id, profileId, date, activityId, activityName, met, durationMinutes, expectedMinutes, caloriesEst, notes
+    }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try c.decode(UUID.self, forKey: .id)
+        self.profileId = try c.decode(UUID.self, forKey: .profileId)
+        self.date = try c.decode(Date.self, forKey: .date)
+        self.activityId = try c.decode(String.self, forKey: .activityId)
+        self.activityName = try c.decode(String.self, forKey: .activityName)
+        self.met = try c.decode(Double.self, forKey: .met)
+        self.durationMinutes = try c.decode(Int.self, forKey: .durationMinutes)
+        self.expectedMinutes = try c.decodeIfPresent(Int.self, forKey: .expectedMinutes) ?? 0
+        self.caloriesEst = try c.decodeIfPresent(Double.self, forKey: .caloriesEst)
+        self.notes = try c.decodeIfPresent(String.self, forKey: .notes)
+    }
+}

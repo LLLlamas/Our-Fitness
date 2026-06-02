@@ -124,8 +124,7 @@ private struct CardioLogSheet: View {
     @State private var notes: String = ""
     @FocusState private var focusedField: Bool
 
-    @AppStorage(UnitSystem.storageKey) private var unitSystemRaw = UnitSystem.imperial.rawValue
-    private var unitSystem: UnitSystem { UnitSystem(rawValue: unitSystemRaw) ?? .imperial }
+    @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
     var body: some View {
         ScrollView {

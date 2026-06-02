@@ -114,6 +114,8 @@ private struct BuildWorkoutsView: View {
                 Text("Hypertrophy bias. Add your lifts, count reps, watch the numbers climb.")
                     .font(.callout).foregroundStyle(theme.dim)
 
+                LiveSessionCard(profile: profile)
+
                 HStack {
                     Text("Your exercises")
                         .font(.system(size: 22, weight: .regular))
@@ -378,8 +380,7 @@ private struct SetHistorySheet: View {
     @Query private var setModels: [WorkoutSetModel]
     @State private var confirmDeleteExercise = false
 
-    @AppStorage(UnitSystem.storageKey) private var unitSystemRaw = UnitSystem.imperial.rawValue
-    private var unitSystem: UnitSystem { UnitSystem(rawValue: unitSystemRaw) ?? .imperial }
+    @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
     init(profile: ProfileDTO, exercise: ExerciseDTO) {
         self.profile = profile

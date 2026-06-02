@@ -13,8 +13,7 @@ struct SettingsView: View {
     @State private var showModeSwitch = false
     @State private var showEditVitals = false
 
-    @AppStorage(UnitSystem.storageKey) private var unitSystemRaw = UnitSystem.imperial.rawValue
-    private var unitSystem: UnitSystem { UnitSystem(rawValue: unitSystemRaw) ?? .imperial }
+    @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
     var body: some View {
         NavigationStack {
@@ -137,7 +136,7 @@ struct SettingsView: View {
 
     private func setUnitSystem(_ system: UnitSystem) {
         guard system != unitSystem else { return }
-        unitSystemRaw = system.rawValue
+        unitSystem = system
         Haptics.success()
         toasts.show(Toast(title: "\(system.displayName) units",
                           detail: "Measurements now shown in \(system.displayName.lowercased()).",

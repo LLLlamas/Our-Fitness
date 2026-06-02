@@ -13,6 +13,7 @@ public enum DailyBurn {
         sets: [WorkoutSetDTO],
         cardio: [CardioSessionDTO],
         pilates: [PilatesSessionDTO],
+        activities: [ActivitySessionDTO] = [],
         bodyWeightLb: Double
     ) -> Int {
         var total = CalorieEstimator.caloriesForSteps(steps: steps, bodyWeightLb: bodyWeightLb)
@@ -24,6 +25,12 @@ public enum DailyBurn {
         // Pilates has no stored estimate — derive from duration (MET 3.0).
         total += pilates.reduce(0) {
             $0 + CalorieEstimator.caloriesForPilates(minutes: Double($1.durationMinutes), bodyWeightLb: bodyWeightLb)
+        }
+        // Live sessions store their MET estimate at log time. The Walking activity
+        // overlaps with steps, so exclude it here to avoid double-counting (mirrors
+        // the cardio .walk exclusion above).
+        total += activities.reduce(0) {
+            $0 + ($1.activityId == "activity-walking" ? 0 : ($1.caloriesEst ?? 0))
         }
         return Int(total.rounded())
     }
