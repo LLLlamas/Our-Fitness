@@ -23,6 +23,14 @@
   <key>LSRequiresIPhoneOS</key>
   <true/>
 
+  <!-- ActivityKit Live Activities (Live Sessions Lock Screen / Dynamic Island).
+       This is the ONLY thing the app needs to start a Live Activity: no special
+       entitlement, no user prompt. The widget UI lives in the OurFitnessWidgets
+       extension; LiveSessionActivityController drives it and fails soft if the
+       user has Live Activities turned off. -->
+  <key>NSSupportsLiveActivities</key>
+  <true/>
+
   <!-- HealthKit usage descriptions (required for App Store) -->
   <key>NSHealthShareUsageDescription</key>
   <string>Our-Fitness reads your steps, weight, heart rate, resting heart rate, active energy, exercise time, body fat, waist, blood pressure, and blood glucose from Apple Health to show your daily progress and trends.</string>

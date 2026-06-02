@@ -36,6 +36,11 @@ targets:
           - "**/.DS_Store"
           # Bundled as a resource below, not a compile source.
           - "Resources/usda-foods.json"
+      # Shared ActivityKit attributes — compiled into BOTH the app (to start/
+      # update/end the Live Activity) and the OurFitnessWidgets extension (to
+      # render it). Single source of truth; the file is #if canImport(ActivityKit)
+      # gated so it's inert where the framework is absent.
+      - path: Shared/LiveSessionAttributes.swift
     resources:
       - path: OurFitness/Assets.xcassets
       # Offline USDA FoodData Central seed/dataset, bundled into the app only
@@ -87,6 +92,56 @@ targets:
           PROVISIONING_PROFILE_SPECIFIER: ""
           CODE_SIGNING_REQUIRED: "NO"
           CODE_SIGNING_ALLOWED: "NO"
+    # Embed the widget extension into the app bundle (Plug-Ins/). Without this the
+    # Live Activity has nowhere to render and App Store upload of a half-embedded
+    # archive fails. `embed: true` puts it under Contents/PlugIns and code-signs it.
+    dependencies:
+      - target: OurFitnessWidgets
+        embed: true
+
+  # Widget extension hosting the Live Sessions ActivityKit Live Activity (Lock
+  # Screen + Dynamic Island). No Home Screen widgets. The widget Info.plist is
+  # hand-written (NSExtension → widgetkit-extension) and wired via INFOPLIST_FILE
+  # — NO `info:`/`entitlements:` block, same XcodeGen-clobber trap as the app.
+  # ActivityKit needs no entitlement; only the app's NSSupportsLiveActivities.
+  OurFitnessWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: OurFitnessWidgets
+        excludes:
+          - "**/.DS_Store"
+          # Info.plist is referenced via INFOPLIST_FILE, not compiled.
+          - "Info.plist"
+      # Same shared attributes file the app compiles — the contract between the
+      # app (sender) and this extension (renderer).
+      - path: Shared/LiveSessionAttributes.swift
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.ourfitness.app.widgets
+        PRODUCT_NAME: OurFitnessWidgets
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        INFOPLIST_FILE: OurFitnessWidgets/Info.plist
+        # Match the app: iPhone/iPad only, opt out of Mac/visionOS availability.
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SUPPORTS_MACCATALYST: "NO"
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: "NO"
+        SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD: "NO"
+        # Manual signing — the widget needs its OWN App Store provisioning profile
+        # (see docs/live-activity-setup.md). The placeholder below must match the
+        # profile name the user generates; CI injects the right one.
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: "Apple Distribution"
+        PROVISIONING_PROFILE_SPECIFIER: "OurFitnessWidgets AppStore"
+      configs:
+        Debug:
+          # Mirror the app: PR compile workflow runs with signing off.
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: ""
+          PROVISIONING_PROFILE_SPECIFIER: ""
+          CODE_SIGNING_REQUIRED: "NO"
+          CODE_SIGNING_ALLOWED: "NO"
 
   OurFitnessTests:
     type: bundle.unit-test
@@ -113,6 +168,7 @@ schemes:
     build:
       targets:
         OurFitness: all
+        OurFitnessWidgets: all
         OurFitnessTests: [test]
     test:
       gatherCoverageData: true

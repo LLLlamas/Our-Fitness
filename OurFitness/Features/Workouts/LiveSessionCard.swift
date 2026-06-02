@@ -292,11 +292,20 @@ private struct ActivityPicker: View {
             expectedMinutes: expectedMinutes,
             profileId: profile.id
         )
-        // TODO (Phase 2): ActivityKit Live Activity for Lock Screen / Dynamic
-        // Island. Needs a separate Widget Extension target + project.yml changes
-        // + on-device verification. The timestamp anchor + local notification
-        // already guarantee the session survives backgrounding and relaunch.
         LiveSessionStore.save(state)
+        // ActivityKit Live Activity (Lock Screen / Dynamic Island). Best-effort:
+        // requesting needs no prompt and no entitlement, only NSSupportsLiveActivities
+        // in the app Info.plist, and it fails soft if the user disabled Live
+        // Activities — the session, timestamp anchor, and end-notification all work
+        // regardless. The widget timer is system-driven off state.startDate.
+        if #available(iOS 16.2, *) {
+            LiveSessionActivityController.start(
+                activityName: activity.name,
+                symbol: activity.symbol,
+                startDate: state.startDate,
+                expectedMinutes: expectedMinutes
+            )
+        }
         Task {
             // Permission is requested ONLY here, from the explicit Start tap.
             // A denial does not block the session — it just means no end ping.
@@ -470,6 +479,11 @@ private struct LiveSessionRunner: View {
             expectedMinutes: newExpected,
             from: state.startDate
         )
+        // Push the new planned length to the Live Activity so the Lock Screen /
+        // Dynamic Island target time tracks the adjustment. No-op if none active.
+        if #available(iOS 16.2, *) {
+            LiveSessionActivityController.update(expectedMinutes: newExpected)
+        }
         Haptics.bump()
     }
 
@@ -507,6 +521,10 @@ private struct LiveSessionRunner: View {
 
         LiveSessionNotifier.cancel()
         LiveSessionStore.clear()
+        // Dismiss the Lock Screen / Dynamic Island activity. No-op if none active.
+        if #available(iOS 16.2, *) {
+            LiveSessionActivityController.end()
+        }
 
         toasts.show(Toast(
             title: "\(state.activityName) logged",
