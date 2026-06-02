@@ -521,12 +521,6 @@ struct ManualIngredientSheet: View {
                 proteinG: Int(protein) ?? 0,
                 carbsG: Int(carbs) ?? 0,
                 fatG: Int(fat) ?? 0
-            ),
-            scaledPerServing: PerServing(
-                calories: Int(calories) ?? 0,
-                proteinG: Int(protein) ?? 0,
-                carbsG: Int(carbs) ?? 0,
-                fatG: Int(fat) ?? 0
             )
         )
         ingredients.append(ingredient)
