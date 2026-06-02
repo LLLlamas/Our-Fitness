@@ -34,6 +34,18 @@ on:
         description: "Override USDA Branded Foods JSON zip URL (optional; reissued ~monthly)"
         required: false
         default: ""
+      branded_cap:
+        description: "Max branded entries (0 = unlimited). Default 18000."
+        required: false
+        default: ""
+      max_per_brand:
+        description: "Max entries per brand (0 = unlimited). Default 60."
+        required: false
+        default: ""
+      count_only:
+        description: "Measure only: parse + dedup + log the unique count, write nothing. Set 'true' to measure."
+        required: false
+        default: "false"
 
 permissions:
   contents: write
@@ -60,12 +72,18 @@ jobs:
           FOUNDATION_URL: ${{ inputs.foundation_url }}
           SR_LEGACY_URL: ${{ inputs.sr_legacy_url }}
           BRANDED_URL: ${{ inputs.branded_url }}
+          BRANDED_CAP: ${{ inputs.branded_cap }}
+          MAX_PER_BRAND: ${{ inputs.max_per_brand }}
+          COUNT_ONLY: ${{ inputs.count_only }}
         run: |
           set -euo pipefail
           args=( "--max" "$MAX_ROWS" )
           if [ -n "$FOUNDATION_URL" ]; then args+=( "--foundation-url" "$FOUNDATION_URL" ); fi
           if [ -n "$SR_LEGACY_URL" ]; then args+=( "--sr-legacy-url" "$SR_LEGACY_URL" ); fi
           if [ -n "$BRANDED_URL" ]; then args+=( "--branded-url" "$BRANDED_URL" ); fi
+          if [ -n "$BRANDED_CAP" ]; then args+=( "--branded-cap" "$BRANDED_CAP" ); fi
+          if [ -n "$MAX_PER_BRAND" ]; then args+=( "--max-per-brand" "$MAX_PER_BRAND" ); fi
+          if [ "$COUNT_ONLY" = "true" ]; then args+=( "--count-only" ); fi
           python3 scripts/build-food-db.py "${args[@]}"
 
       - name: Open a PR if the dataset changed
