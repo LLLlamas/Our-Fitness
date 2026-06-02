@@ -99,4 +99,24 @@ final class FoodParserTests: XCTestCase {
         XCTAssertFalse(r.hasMatches)
         XCTAssertFalse(r.unrecognized.isEmpty)
     }
+
+    // MARK: - Keystroke-vs-submit database gating
+
+    /// `includeDatabase: false` (the keystroke path) consults curated CommonFoods
+    /// only — equivalent to parsing against an empty database, so curated foods still
+    /// resolve. The hostless target's `FoodDatabase.shared` is empty anyway, so this
+    /// asserts on the curated outcome that is stable in CI.
+    func test_includeDatabaseFalse_resolvesCuratedFoods() {
+        let r = FoodParser.parse(text: "grilled chicken", includeDatabase: false)
+        XCTAssertEqual(r.recognized.first?.food.id, "chicken-breast")
+    }
+
+    /// The keystroke (curated-only) overload and an explicit empty-database parse are
+    /// the same operation — curated matching is identical, DB coverage is skipped.
+    func test_includeDatabaseFalse_matchesEmptyDatabaseParse() {
+        let viaFlag = FoodParser.parse(text: "a bowl of rice and grilled chicken", includeDatabase: false)
+        let viaEmpty = FoodParser.parse(text: "a bowl of rice and grilled chicken", database: emptyDB)
+        XCTAssertEqual(viaFlag.recognized.map(\.food.id), viaEmpty.recognized.map(\.food.id))
+        XCTAssertEqual(viaFlag.totalPerServing.calories, viaEmpty.totalPerServing.calories)
+    }
 }

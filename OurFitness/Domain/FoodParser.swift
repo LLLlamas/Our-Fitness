@@ -87,6 +87,16 @@ public enum FoodParser {
         parse(text: text, database: FoodDatabase.shared)
     }
 
+    /// Keystroke-vs-submit control over whether the big USDA database is consulted.
+    ///
+    /// The LIVE per-keystroke path passes `includeDatabase: false` so matching hits
+    /// only the small curated `CommonFoods` (size-independent, always instant); the
+    /// big database is reserved for the submit path (`resolve`) and library search,
+    /// where one scan per submit is fine even at 15–20k entries.
+    public static func parse(text: String, includeDatabase: Bool) -> ParseResult {
+        parse(text: text, database: includeDatabase ? FoodDatabase.shared : FoodDatabase(entries: []))
+    }
+
     /// Parse against an injectable database — used by tests so the matcher can be
     /// exercised without the bundled resource (which the hostless test target lacks).
     public static func parse(text: String, database: FoodDatabase) -> ParseResult {

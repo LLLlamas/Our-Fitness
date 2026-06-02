@@ -65,26 +65,60 @@ public struct FoodDatabase: Sendable {
 
     public let entries: [FoodDatabaseEntry]
 
-    /// Lowercased alias/name → entry index, longest aliases preferred at match time.
-    private let index: [(alias: String, entry: FoodDatabaseEntry)]
+    /// First-token bucket: the leading word of each lowercased alias/name → the
+    /// (alias, entry) pairs that start with it. Lets `bestMatch` narrow to a tiny
+    /// candidate set instead of scanning every alias in the database.
+    ///
+    /// Soundness: if `chunk.contains(alias)` then `chunk` contains `alias`'s leading
+    /// token, so the chunk's word list always reaches the right bucket — narrowing by
+    /// first token never drops a match the flat scan would have found.
+    ///
+    /// Buckets are appended in `entries` order, preserving the flat scan's "first wins
+    /// among equal-length aliases" tie-break.
+    private let tokenIndex: [String: [(alias: String, entry: FoodDatabaseEntry)]]
 
     public init(entries: [FoodDatabaseEntry]) {
         self.entries = entries
-        self.index = entries.flatMap { entry -> [(String, FoodDatabaseEntry)] in
+
+        var buckets: [String: [(alias: String, entry: FoodDatabaseEntry)]] = [:]
+        for entry in entries {
             let names = [entry.name.lowercased()] + entry.aliases.map { $0.lowercased() }
-            return names.map { ($0, entry) }
+            for alias in names {
+                guard let token = FoodDatabase.firstToken(of: alias) else { continue }
+                buckets[token, default: []].append((alias: alias, entry: entry))
+            }
         }
+        self.tokenIndex = buckets
     }
 
     public var isEmpty: Bool { entries.isEmpty }
 
+    /// Leading whitespace-delimited word of a lowercased string, or nil if blank.
+    private static func firstToken(of text: String) -> String? {
+        text.split(separator: " ", maxSplits: 1, omittingEmptySubsequences: true)
+            .first
+            .map(String.init)
+    }
+
     /// Best substring match for a chunk of meal text: the entry whose alias is the
     /// LONGEST alias contained in `chunk` (mirrors `FoodParser`'s longest-alias rule).
+    ///
+    /// Narrows via `tokenIndex` — only aliases whose leading word appears as a word in
+    /// `chunk` are tested for containment, so cost scales with the chunk's word count
+    /// and bucket sizes, not the full alias count.
     public func bestMatch(in chunk: String) -> FoodDatabaseEntry? {
         var best: (alias: String, entry: FoodDatabaseEntry)? = nil
-        for candidate in index where chunk.contains(candidate.alias) {
-            if best == nil || candidate.alias.count > best!.alias.count {
-                best = candidate
+        var seenAliases = Set<String>()
+        for word in chunk.split(separator: " ", omittingEmptySubsequences: true) {
+            guard let candidates = tokenIndex[String(word)] else { continue }
+            for candidate in candidates {
+                // A bucket can be reached by more than one chunk word when an alias
+                // repeats a token; dedup so each alias is tested at most once.
+                guard seenAliases.insert(candidate.alias).inserted else { continue }
+                if chunk.contains(candidate.alias),
+                   best == nil || candidate.alias.count > best!.alias.count {
+                    best = candidate
+                }
             }
         }
         return best?.entry
