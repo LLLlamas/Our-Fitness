@@ -124,6 +124,9 @@ private struct CardioLogSheet: View {
     @State private var notes: String = ""
     @FocusState private var focusedField: Bool
 
+    @AppStorage(UnitSystem.storageKey) private var unitSystemRaw = UnitSystem.imperial.rawValue
+    private var unitSystem: UnitSystem { UnitSystem(rawValue: unitSystemRaw) ?? .imperial }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
@@ -146,7 +149,7 @@ private struct CardioLogSheet: View {
                     let dto = CardioSessionDTO(
                         profileId: profileId, type: type,
                         durationMinutes: Int(duration),
-                        distanceMiles: Double(distanceStr),
+                        distanceMiles: Units.parseDistanceToMiles(distanceStr, system: unitSystem),
                         rpe: Double(rpeStr),
                         notes: notes.isEmpty ? nil : notes,
                         caloriesEst: kcal
@@ -205,7 +208,7 @@ private struct CardioLogSheet: View {
     @ViewBuilder
     private var distanceSection: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Distance (mi, optional)")
+            Text("Distance (\(Units.distanceUnit(unitSystem)), optional)")
                 .font(.caption).tracking(2).foregroundStyle(theme.dim)
             TextField("", text: $distanceStr)
                 .keyboardType(.decimalPad)

@@ -82,6 +82,69 @@ public enum Repos {
         }
     }
 
+    /// Update mutable vitals on a profile and recompute its macro/step targets
+    /// from the new values. Pass only the fields that changed; the rest are kept.
+    /// This is the single write path that keeps `profile.weightLb` (and the other
+    /// vitals) current, so every recommendation surface that reads them — calorie
+    /// targets, protein, water goal, step/rep/isometric calorie burn — tracks the
+    /// user's actual current numbers instead of the onboarding snapshot.
+    /// Returns the updated DTO, or nil if the profile no longer exists.
+    @discardableResult
+    public static func updateVitals(
+        _ ctx: ModelContext,
+        profileId: UUID,
+        weightLb: Double? = nil,
+        heightIn: Double? = nil,
+        age: Int? = nil,
+        sex: Sex? = nil,
+        activity: ActivityLevel? = nil
+    ) -> ProfileDTO? {
+        let target = profileId
+        let desc = FetchDescriptor<ProfileModel>(predicate: #Predicate { $0.id == target })
+        guard let model = try? ctx.fetch(desc).first else { return nil }
+
+        if let v = weightLb { model.weightLb = v }
+        if let v = heightIn { model.heightIn = v }
+        if let v = age      { model.age = v }
+        if let v = sex      { model.sexRaw = v.rawValue }
+        if let v = activity { model.activityRaw = v.rawValue }
+
+        let updated = model.snapshot
+        model.targetsJSON = (try? JSONEncoder().encode(
+            Targets.compute(mode: updated.mode, vitals: updated.vitals)
+        )) ?? model.targetsJSON
+        model.updatedAt = Date()
+        try? ctx.save()
+        return model.snapshot
+    }
+
+    /// Re-point `profile.weightLb` at the user's latest known body weight,
+    /// recomputing targets. Call after a weight is logged (Progress tab) or synced
+    /// from Apple Health so the profile — the single source recommendations read —
+    /// reflects current weight.
+    ///
+    /// Pass `weightLb` when the caller already holds the authoritative latest value
+    /// (e.g. the freshest Apple Health sample, which aggregates app-logged weights
+    /// too — see `ProgressView` writing back via `writeWeightLb`). Omit it to derive
+    /// the value from the most recent logged `BodyMetric` row instead.
+    ///
+    /// No-op when no weight is known or it already matches (0.1 lb tolerance avoids a
+    /// needless recompute on float noise). Returns the updated DTO, or nil if nothing changed.
+    @discardableResult
+    public static func syncCurrentWeight(
+        _ ctx: ModelContext, profileId: UUID, weightLb: Double? = nil
+    ) -> ProfileDTO? {
+        // `listBody` sorts by the `YYYY-MM-DD` date string ascending, so `.last`
+        // (the last non-nil weight) is the most recent logged reading.
+        guard let latest = weightLb ?? listBody(ctx, userId: profileId).compactMap(\.weightLb).last
+        else { return nil }
+        let target = profileId
+        let desc = FetchDescriptor<ProfileModel>(predicate: #Predicate { $0.id == target })
+        guard let model = try? ctx.fetch(desc).first else { return nil }
+        guard abs(model.weightLb - latest) >= 0.1 else { return nil }
+        return updateVitals(ctx, profileId: profileId, weightLb: latest)
+    }
+
     public static func saveProfile(_ ctx: ModelContext, _ p: ProfileDTO) {
         let target = p.id
         let desc = FetchDescriptor<ProfileModel>(

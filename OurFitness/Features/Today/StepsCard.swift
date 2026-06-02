@@ -38,7 +38,7 @@ struct StepsCard: View {
     private var stepsKcal: Int {
         Int(CalorieEstimator.caloriesForSteps(steps: steps, bodyWeightLb: weightLb).rounded())
     }
-    private var weightKg: Int { Int(weightLb * 0.4536) }
+    private var weightKg: Int { Int(weightLb * Units.kgPerLb) }
     private var pct: Double {
         guard goal > 0 else { return 0 }
         return min(1, Double(steps) / Double(goal))

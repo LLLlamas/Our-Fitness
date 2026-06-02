@@ -24,6 +24,26 @@ struct ProfileCreationView: View {
     @State private var requesting = false
     @State private var created: ProfileDTO?
 
+    @FocusState private var fieldFocused: Bool
+    @AppStorage(UnitSystem.storageKey) private var unitSystemRaw = UnitSystem.imperial.rawValue
+    private var unitSystem: UnitSystem { UnitSystem(rawValue: unitSystemRaw) ?? .imperial }
+
+    // Vitals are stored canonically (lb / inches); the fields display + parse
+    // in the active unit so the onboarding default (150 lb / 67 in) shows
+    // sensibly in metric too.
+    private var weightDisplay: Binding<Double> {
+        Binding(
+            get: { Units.weightValue(lb: weightLb, system: unitSystem) },
+            set: { weightLb = Units.weightToLb($0, system: unitSystem) }
+        )
+    }
+    private var heightDisplay: Binding<Double> {
+        Binding(
+            get: { unitSystem == .metric ? heightIn * Units.cmPerInch : heightIn },
+            set: { heightIn = unitSystem == .metric ? $0 / Units.cmPerInch : $0 }
+        )
+    }
+
     private enum Step { case vitals, connectHealth }
 
     private var canSubmit: Bool {
@@ -48,6 +68,12 @@ struct ProfileCreationView: View {
         }
         .background(theme.bg.ignoresSafeArea())
         .themed(mode)
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") { fieldFocused = false }
+            }
+        }
     }
 
     // MARK: - Vitals
@@ -94,18 +120,20 @@ struct ProfileCreationView: View {
             }
         }
 
-        labeledField("Height (in)") {
-            TextField("", value: $heightIn, format: .number)
+        labeledField("Height (\(unitSystem == .metric ? "cm" : "in"))") {
+            TextField("", value: heightDisplay, format: .number)
                 .keyboardType(.decimalPad)
+                .focused($fieldFocused)
                 .padding(10).background(theme.card)
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                 .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                 .foregroundStyle(theme.text)
         }
 
-        labeledField("Weight (lb)") {
-            TextField("", value: $weightLb, format: .number)
+        labeledField("Weight (\(Units.weightUnit(unitSystem)))") {
+            TextField("", value: weightDisplay, format: .number)
                 .keyboardType(.decimalPad)
+                .focused($fieldFocused)
                 .padding(10).background(theme.card)
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                 .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
@@ -115,6 +143,7 @@ struct ProfileCreationView: View {
         labeledField("Age") {
             TextField("", value: $age, format: .number)
                 .keyboardType(.numberPad)
+                .focused($fieldFocused)
                 .padding(10).background(theme.card)
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                 .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))

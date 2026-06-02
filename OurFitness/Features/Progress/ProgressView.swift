@@ -19,6 +19,9 @@ struct ProgressTabView: View {
     @State private var activeStat: StatKind?
     @State private var showEditTrackers = false
 
+    @AppStorage(UnitSystem.storageKey) private var unitSystemRaw = UnitSystem.imperial.rawValue
+    private var unitSystem: UnitSystem { UnitSystem(rawValue: unitSystemRaw) ?? .imperial }
+
     /// Per-profile custom tracker visibility. Empty = use the mode defaults;
     /// "none" = customized to show nothing; otherwise a CSV of StatKind raw values.
     /// IMPORTANT: never add a StatKind whose rawValue is "none" — it collides with the sentinel.
@@ -133,13 +136,13 @@ struct ProgressTabView: View {
 
     @ViewBuilder
     private func statCard(for kind: StatKind) -> some View {
-        let value = kind.displayValue(body: body_, markers: markers, steps: steps, sets: sets, profile: profile)
-        let trend = kind.trendChip(body: body_, markers: markers, steps: steps, sets: sets, profile: profile)
+        let value = kind.displayValue(body: body_, markers: markers, steps: steps, sets: sets, profile: profile, system: unitSystem)
+        let trend = kind.trendChip(body: body_, markers: markers, steps: steps, sets: sets, profile: profile, system: unitSystem)
         let tint  = statusTint(for: kind)
         StatCard(
             title: kind.title,
             value: value,
-            unit: kind.unit,
+            unit: kind.unit(system: unitSystem),
             trend: trend,
             valueAccent: tint,
             action: { activeStat = kind }
@@ -193,6 +196,7 @@ struct ProgressTabView: View {
             WeightLogSheet(
                 profile: profile,
                 metrics: body_,
+                unitSystem: unitSystem,
                 onSave: { value in save(kind: .weight, value: value) }
             )
             .environmentObject(toasts)
@@ -200,6 +204,7 @@ struct ProgressTabView: View {
             BodyFatDetailSheet(
                 profile: profile,
                 metrics: body_,
+                unitSystem: unitSystem,
                 onSave: { value in save(kind: .bodyFat, value: value) }
             )
             .environmentObject(toasts)
@@ -210,17 +215,21 @@ struct ProgressTabView: View {
         default:
             StatDetailSheet(
                 title: kind.title,
-                unit: kind.unit,
-                series: kind.series(body: body_, markers: markers, steps: steps, sets: sets),
-                entries: kind.entries(body: body_, markers: markers),
-                placeholder: kind.placeholder,
+                unit: kind.unit(system: unitSystem),
+                series: kind.series(body: body_, markers: markers, steps: steps, sets: sets, system: unitSystem),
+                entries: kind.entries(body: body_, markers: markers, system: unitSystem),
+                placeholder: kind.placeholder(system: unitSystem),
                 canLog: kind.canLog,
                 rangeContext: kind.markerKind.map(HealthRanges.context(for:)),
                 personalNote: kind.markerKind.flatMap { mk in
                     latestMarkerValue(mk).map { TargetRationale.markerMeaning(kind: mk, value: $0, mode: profile.mode) }
                 },
                 onSave: { value in
-                    save(kind: kind, value: value)
+                    // Waist is entered in the active unit; convert back to canonical inches.
+                    let canonical = kind == .waist
+                        ? Units.lengthToInches(value, system: unitSystem)
+                        : value
+                    save(kind: kind, value: canonical)
                 }
             )
         }
@@ -276,9 +285,12 @@ struct ProgressTabView: View {
             Repos.addBody(ctx, BodyMetricDTO(
                 userId: profile.id, date: today, weightLb: value
             ))
+            // Re-point the profile (the source recommendations read) at this weight
+            // and recompute targets so calorie/protein/water goals track current weight.
+            Repos.syncCurrentWeight(ctx, profileId: profile.id)
             Task { await HealthKitService.shared.writeWeightLb(value) }
             toasts.show(Toast(title: "Weight logged",
-                              detail: String(format: "%.1f lb", value),
+                              detail: Units.formatWeightWithUnit(lb: value, system: unitSystem),
                               accent: .ok, symbol: "scalemass.fill"))
         case .bodyFat:
             Repos.addBody(ctx, BodyMetricDTO(
@@ -292,7 +304,7 @@ struct ProgressTabView: View {
                 userId: profile.id, date: today, waistIn: value
             ))
             toasts.show(Toast(title: "Waist logged",
-                              detail: String(format: "%.1f in", value),
+                              detail: Units.formatLengthWithUnit(inches: value, system: unitSystem),
                               accent: .ok, symbol: "ruler"))
         case .restingHR, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
             guard let markerKind = kind.markerKind else { return }
@@ -301,7 +313,7 @@ struct ProgressTabView: View {
                 kind: markerKind, value: value, source: "manual"
             ))
             toasts.show(Toast(title: "\(kind.title) logged",
-                              detail: "\(formattedValue(value)) \(kind.unit)",
+                              detail: "\(formattedValue(value)) \(kind.unit(system: unitSystem))",
                               accent: .ok, symbol: "heart.text.square.fill"))
         case .bp, .stepsAvg, .bmi, .trainingVolume:
             break
@@ -336,11 +348,11 @@ enum StatKind: String, CaseIterable, Identifiable {
         }
     }
 
-    var unit: String {
+    func unit(system: UnitSystem = .imperial) -> String {
         switch self {
-        case .weight:           return "lb"
+        case .weight:           return Units.weightUnit(system)
         case .bodyFat:          return "% body fat"
-        case .waist:            return "in"
+        case .waist:            return Units.lengthUnit(system)
         case .bmi:              return "BMI"
         case .restingHR:        return "bpm"
         case .stepsAvg:         return "steps"
@@ -351,11 +363,11 @@ enum StatKind: String, CaseIterable, Identifiable {
         }
     }
 
-    var placeholder: String {
+    func placeholder(system: UnitSystem = .imperial) -> String {
         switch self {
-        case .weight:           return "weight (lb)"
+        case .weight:           return "weight (\(Units.weightUnit(system)))"
         case .bodyFat:          return "body fat (%)"
-        case .waist:            return "waist (in)"
+        case .waist:            return "waist (\(Units.lengthUnit(system)))"
         case .restingHR:        return "resting HR (bpm)"
         case .ldl, .hdl, .totalCholesterol, .fastingGlucose: return "value (mg/dL)"
         case .a1c:              return "A1c (%)"
@@ -393,15 +405,16 @@ enum StatKind: String, CaseIterable, Identifiable {
         markers: [HealthMarkerDTO],
         steps: [StepCountDTO],
         sets: [WorkoutSetDTO] = [],
-        profile: ProfileDTO? = nil
+        profile: ProfileDTO? = nil,
+        system: UnitSystem = .imperial
     ) -> String? {
         switch self {
         case .weight:
-            return body.compactMap(\.weightLb).last.map { formattedValue($0) }
+            return body.compactMap(\.weightLb).last.map { Units.formatWeight(lb: $0, system: system) }
         case .bodyFat:
             return body.compactMap(\.bodyFatPct).last.map { String(format: "%.1f%%", $0) }
         case .waist:
-            return body.compactMap(\.waistIn).last.map { formattedValue($0) }
+            return body.compactMap(\.waistIn).last.map { Units.formatLength(inches: $0, system: system) }
         case .bmi:
             guard let p = profile,
                   let w = body.compactMap(\.weightLb).last,
@@ -439,20 +452,23 @@ enum StatKind: String, CaseIterable, Identifiable {
         markers: [HealthMarkerDTO],
         steps: [StepCountDTO],
         sets: [WorkoutSetDTO] = [],
-        profile: ProfileDTO? = nil
+        profile: ProfileDTO? = nil,
+        system: UnitSystem = .imperial
     ) -> String? {
         switch self {
         case .weight:
             let delta = Trends.weeklyWeightDelta(body, days: 14)
             guard abs(delta) > 0.01 else { return nil }
-            return String(format: "%@%.2f lb/wk", delta >= 0 ? "+" : "", delta)
+            let displayDelta = Units.weightValue(lb: delta, system: system)
+            return String(format: "%@%.2f %@/wk", displayDelta >= 0 ? "+" : "", displayDelta, Units.weightUnit(system))
         case .bodyFat:
-            // Show real lbs of fat and lean mass alongside %
+            // Show real fat and lean mass (in the active unit) alongside %
             guard let w = body.compactMap(\.weightLb).last,
                   let bf = body.compactMap(\.bodyFatPct).last else { return nil }
             let fat = BodyComposition.fatMassLb(weightLb: w, bodyFatPct: bf)
             let lean = BodyComposition.leanMassLb(weightLb: w, bodyFatPct: bf)
-            return "\(Int(fat)) lb fat · \(Int(lean)) lb lean"
+            let u = Units.weightUnit(system)
+            return "\(Units.formatWeight(lb: fat, system: system, decimals: 0)) \(u) fat · \(Units.formatWeight(lb: lean, system: system, decimals: 0)) \(u) lean"
         case .bmi:
             guard let p = profile,
                   let w = body.compactMap(\.weightLb).last,
@@ -477,13 +493,14 @@ enum StatKind: String, CaseIterable, Identifiable {
         body: [BodyMetricDTO],
         markers: [HealthMarkerDTO],
         steps: [StepCountDTO],
-        sets: [WorkoutSetDTO] = []
+        sets: [WorkoutSetDTO] = [],
+        system: UnitSystem = .imperial
     ) -> [Trends.Point] {
         switch self {
         case .weight:
             let pts = body.compactMap { b -> Trends.Point? in
                 guard let w = b.weightLb else { return nil }
-                return Trends.Point(date: b.date, value: w)
+                return Trends.Point(date: b.date, value: Units.weightValue(lb: w, system: system))
             }
             return Trends.rollingAverage(pts, window: 7)
         case .bodyFat:
@@ -492,7 +509,7 @@ enum StatKind: String, CaseIterable, Identifiable {
             }
         case .waist:
             return body.compactMap { b in
-                b.waistIn.map { Trends.Point(date: b.date, value: $0) }
+                b.waistIn.map { Trends.Point(date: b.date, value: system == .metric ? $0 * Units.cmPerInch : $0) }
             }
         case .restingHR:
             return Trends.markerSeries(markers, kind: .restingHR)
@@ -514,14 +531,15 @@ enum StatKind: String, CaseIterable, Identifiable {
 
     func entries(
         body: [BodyMetricDTO],
-        markers: [HealthMarkerDTO]
+        markers: [HealthMarkerDTO],
+        system: UnitSystem = .imperial
     ) -> [StatDetailEntry] {
         switch self {
         case .weight:
             return body.compactMap { b -> StatDetailEntry? in
                 guard let w = b.weightLb else { return nil }
                 return StatDetailEntry(id: b.id.uuidString, dateLabel: b.date,
-                                       valueLabel: String(format: "%.1f lb", w))
+                                       valueLabel: Units.formatWeightWithUnit(lb: w, system: system))
             }
             .reversed()
             .prefix(10)
@@ -539,7 +557,7 @@ enum StatKind: String, CaseIterable, Identifiable {
             return body.compactMap { b -> StatDetailEntry? in
                 guard let v = b.waistIn else { return nil }
                 return StatDetailEntry(id: b.id.uuidString, dateLabel: b.date,
-                                       valueLabel: String(format: "%.1f in", v))
+                                       valueLabel: Units.formatLengthWithUnit(inches: v, system: system))
             }
             .reversed()
             .prefix(10)
@@ -552,7 +570,7 @@ enum StatKind: String, CaseIterable, Identifiable {
                 .prefix(10)
                 .map { m in
                     StatDetailEntry(id: m.id.uuidString, dateLabel: m.date,
-                                    valueLabel: "\(formattedValue(m.value)) \(unit)")
+                                    valueLabel: "\(formattedValue(m.value)) \(unit(system: system))")
                 }
         case .bp:
             return markers
@@ -720,12 +738,14 @@ private struct BMIDetailSheet: View {
 private struct BodyFatDetailSheet: View {
     let profile: ProfileDTO
     let metrics: [BodyMetricDTO]
+    let unitSystem: UnitSystem
     let onSave: (Double) -> Void
 
     @Environment(\.theme) private var theme
     @Environment(\.dismiss) private var dismiss
     @State private var draft: String = ""
     @State private var showGuide = false
+    @FocusState private var draftFocused: Bool
 
     private var latestBF: Double? { metrics.compactMap(\.bodyFatPct).last }
     private var latestWeight: Double? { metrics.compactMap(\.weightLb).last }
@@ -773,8 +793,8 @@ private struct BodyFatDetailSheet: View {
                             .foregroundStyle(theme.dim)
                         if let c = composition {
                             HStack(spacing: 16) {
-                                compCell(label: "Fat mass", value: String(format: "%.1f lb", c.fat))
-                                compCell(label: "Lean mass", value: String(format: "%.1f lb", c.lean))
+                                compCell(label: "Fat mass", value: Units.formatWeightWithUnit(lb: c.fat, system: unitSystem))
+                                compCell(label: "Lean mass", value: Units.formatWeightWithUnit(lb: c.lean, system: unitSystem))
                             }
                             .padding(.top, 4)
                         }
@@ -881,12 +901,19 @@ private struct BodyFatDetailSheet: View {
             HStack(spacing: 8) {
                 TextField("e.g. 18.5", text: $draft)
                     .keyboardType(.decimalPad)
+                    .focused($draftFocused)
                     .padding(10)
                     .background(theme.card)
                     .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                     .foregroundStyle(theme.text)
                     .font(.system(.callout, design: .monospaced))
+                    .toolbar {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            Spacer()
+                            Button("Done") { draftFocused = false }
+                        }
+                    }
                 Button {
                     if let v = Double(draft), v > 0, v < 70 {
                         onSave(v)
@@ -1077,21 +1104,22 @@ private struct BPDetailSheet: View {
 private struct WeightLogSheet: View {
     let profile: ProfileDTO
     let metrics: [BodyMetricDTO]
+    let unitSystem: UnitSystem
     let onSave: (Double) -> Void
 
     @Environment(\.theme) private var theme
     @Environment(\.dismiss) private var dismiss
 
+    // Canonical wheel domain: 90.0 … 350.0 lb in 0.5 lb steps. The wheel rows
+    // and big readout display in the active unit; save sends canonical lb.
     @State private var draftHalfLb: Int = 0
-
-    // 90.0 … 350.0 in 0.5 steps → 521 values
     private let minHalfLb = 180   // 90.0 lb
     private let maxHalfLb = 700   // 350.0 lb
 
     private var weightSeries: [Trends.Point] {
         let pts = metrics.compactMap { b -> Trends.Point? in
             guard let w = b.weightLb else { return nil }
-            return Trends.Point(date: b.date, value: w)
+            return Trends.Point(date: b.date, value: Units.weightValue(lb: w, system: unitSystem))
         }
         return Trends.rollingAverage(pts, window: 7)
     }
@@ -1100,7 +1128,7 @@ private struct WeightLogSheet: View {
         metrics.compactMap { b -> StatDetailEntry? in
             guard let w = b.weightLb else { return nil }
             return StatDetailEntry(id: b.id.uuidString, dateLabel: b.date,
-                                   valueLabel: String(format: "%.1f lb", w))
+                                   valueLabel: Units.formatWeightWithUnit(lb: w, system: unitSystem))
         }
         .reversed()
         .prefix(10)
@@ -1111,6 +1139,11 @@ private struct WeightLogSheet: View {
         Double(draftHalfLb) * 0.5
     }
 
+    /// The draft weight in the active unit, for the big readout + wheel rows.
+    private func displayWeight(halfLb: Int) -> String {
+        Units.formatWeight(lb: Double(halfLb) * 0.5, system: unitSystem)
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
@@ -1118,7 +1151,7 @@ private struct WeightLogSheet: View {
                     Text("weight.")
                         .font(.system(size: 42, weight: .regular))
                         .foregroundStyle(theme.text)
-                    Text("LB · 7-DAY AVERAGE")
+                    Text("\(Units.weightUnit(unitSystem).uppercased()) · 7-DAY AVERAGE")
                         .font(.system(size: 10, weight: .medium)).tracking(2)
                         .foregroundStyle(theme.dim)
                 }
@@ -1197,12 +1230,12 @@ private struct WeightLogSheet: View {
 
             HStack {
                 Spacer()
-                Text(String(format: "%.1f", draftLb))
+                Text(displayWeight(halfLb: draftHalfLb))
                     .font(.system(size: 48, weight: .regular, design: .monospaced))
                     .foregroundStyle(theme.accent)
                     .contentTransition(.numericText())
                     .animation(.spring(response: 0.3, dampingFraction: 0.7), value: draftHalfLb)
-                Text("lb")
+                Text(Units.weightUnit(unitSystem))
                     .font(.system(size: 18, design: .monospaced))
                     .foregroundStyle(theme.dim)
                     .padding(.leading, 4)
@@ -1211,7 +1244,7 @@ private struct WeightLogSheet: View {
 
             Picker("Weight", selection: $draftHalfLb) {
                 ForEach(minHalfLb...maxHalfLb, id: \.self) { half in
-                    Text(String(format: "%.1f", Double(half) * 0.5))
+                    Text(displayWeight(halfLb: half))
                         .tag(half)
                 }
             }

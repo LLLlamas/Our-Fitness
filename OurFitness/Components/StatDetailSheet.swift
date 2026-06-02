@@ -36,6 +36,7 @@ public struct StatDetailSheet: View {
     @Environment(\.theme) private var theme
     @Environment(\.dismiss) private var dismiss
     @State private var draft: String = ""
+    @FocusState private var fieldFocused: Bool
 
     public init(
         title: String,
@@ -75,6 +76,12 @@ public struct StatDetailSheet: View {
         }
         .presentationDetents([.medium, .large])
         .presentationBackground(theme.bg)
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") { fieldFocused = false }
+            }
+        }
     }
 
     @ViewBuilder
@@ -170,6 +177,7 @@ public struct StatDetailSheet: View {
             HStack(spacing: 8) {
                 TextField(placeholder, text: $draft)
                     .keyboardType(.decimalPad)
+                    .focused($fieldFocused)
                     .padding(10)
                     .background(theme.card)
                     .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))

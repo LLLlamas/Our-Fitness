@@ -111,6 +111,11 @@ struct TodayView: View {
         .background(theme.bg.ignoresSafeArea())
         .task(id: profile.id) {
             await backfillIfNeeded()
+            // Anchor the profile (the source recommendations read) to the latest
+            // logged body weight. No-op when nothing has been logged or it already
+            // matches — also self-heals installs whose weight was logged before this
+            // path existed. HealthKit sync below refreshes it further when granted.
+            Repos.syncCurrentWeight(ctx, profileId: profile.id)
             await refreshToday()
             if profile.healthGranted {
                 await health.syncFromHealth(profileId: profile.id, ctx: ctx)

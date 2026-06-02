@@ -177,20 +177,8 @@ public final class HealthKitService: ObservableObject {
 
     // MARK: - Body mass
 
-    /// Most recent body-mass reading in pounds, if any.
-    public func latestWeightLb() async -> Double? {
-        guard let type = HKQuantityType.quantityType(forIdentifier: .bodyMass) else { return nil }
-        let sort = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: false)
-        return await withCheckedContinuation { cont in
-            let q = HKSampleQuery(sampleType: type, predicate: nil, limit: 1, sortDescriptors: [sort]) { _, samples, _ in
-                let sample = (samples as? [HKQuantitySample])?.first
-                let lb = sample?.quantity.doubleValue(for: .pound())
-                cont.resume(returning: lb)
-            }
-            store.execute(q)
-        }
-    }
-
+    /// Write a body-mass sample to Apple Health (so app-logged weights flow back to
+    /// Health and feed `latestQuantity(.bodyMass, ...)` reads in `syncFromHealth`).
     public func writeWeightLb(_ lb: Double, date: Date = Date()) async {
         guard let type = HKQuantityType.quantityType(forIdentifier: .bodyMass) else { return }
         let q = HKQuantity(unit: .pound(), doubleValue: lb)
@@ -329,6 +317,16 @@ public final class HealthKitService: ObservableObject {
     public func syncFromHealth(profileId: UUID, ctx: ModelContext) async {
         guard isAvailable else { return }
 
+        if let w = await latestQuantity(.bodyMass, unit: .pound()) {
+            // Record under the reading's own day for history (upsert won't clobber a
+            // value already logged that day), then re-point the profile (the source
+            // all recommendations read) at this HealthKit value directly — it's the
+            // authoritative latest measurement across sources (app-logged weights are
+            // written back to Health too), so pass it explicitly rather than re-deriving
+            // from the body-metric log, which the upsert may not have updated.
+            Repos.upsertBodyMetric(ctx, userId: profileId, day: Dates.dayKey(w.date), weightLb: w.value)
+            Repos.syncCurrentWeight(ctx, profileId: profileId, weightLb: w.value)
+        }
         if let bf = await latestQuantity(.bodyFatPercentage, unit: .percent()) {
             // HK stores body fat as a fraction (0.20 == 20%); the app stores the percent number.
             Repos.upsertBodyMetric(ctx, userId: profileId, day: Dates.dayKey(bf.date), bodyFatPct: bf.value * 100)

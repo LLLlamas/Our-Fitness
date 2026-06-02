@@ -378,6 +378,9 @@ private struct SetHistorySheet: View {
     @Query private var setModels: [WorkoutSetModel]
     @State private var confirmDeleteExercise = false
 
+    @AppStorage(UnitSystem.storageKey) private var unitSystemRaw = UnitSystem.imperial.rawValue
+    private var unitSystem: UnitSystem { UnitSystem(rawValue: unitSystemRaw) ?? .imperial }
+
     init(profile: ProfileDTO, exercise: ExerciseDTO) {
         self.profile = profile
         self.exercise = exercise
@@ -485,7 +488,7 @@ private struct SetHistorySheet: View {
         }
         var label = "\(s.reps) rep\(s.reps == 1 ? "" : "s")"
         if let w = s.weightLb, w > 0 {
-            label += " · \(Int(w)) lb"
+            label += " · \(Units.formatWeightWithUnit(lb: w, system: unitSystem, decimals: 0))"
         }
         return label
     }

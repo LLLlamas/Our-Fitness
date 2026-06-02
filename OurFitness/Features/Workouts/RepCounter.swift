@@ -43,6 +43,9 @@ private struct RepCounterView: View {
     @State private var lastProjection: String?
     @FocusState private var weightFocused: Bool
 
+    @AppStorage(UnitSystem.storageKey) private var unitSystemRaw = UnitSystem.imperial.rawValue
+    private var unitSystem: UnitSystem { UnitSystem(rawValue: unitSystemRaw) ?? .imperial }
+
     init(profile: ProfileDTO, exercise: ExerciseDTO) {
         self.profile = profile
         self.exercise = exercise
@@ -149,7 +152,7 @@ private struct RepCounterView: View {
     @ViewBuilder
     private var weightField: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Weight lifted (lb)")
+            Text("Weight lifted (\(Units.weightUnit(unitSystem)))")
                 .font(.caption).tracking(2).foregroundStyle(theme.dim)
             TextField("", text: $weightStr)
                 .keyboardType(.decimalPad)
@@ -192,7 +195,8 @@ private struct RepCounterView: View {
     }
 
     private func saveSet() {
-        let weight = Double(weightStr)
+        // Field shows the active unit; persist canonical lb.
+        let weight = Units.parseWeightToLb(weightStr, system: unitSystem)
         let kcal = CalorieEstimator.caloriesForReps(
             reps: reps,
             exercise: exercise,
@@ -234,7 +238,7 @@ private struct RepCounterView: View {
         } else {
             toasts.show(Toast(
                 title: "Set saved",
-                detail: weight.map { "\(Int($0)) lb × \(reps)" } ?? "\(reps) reps · ~\(Int(kcal)) cal",
+                detail: weight.map { "\(Units.formatWeightWithUnit(lb: $0, system: unitSystem, decimals: 0)) × \(reps)" } ?? "\(reps) reps · ~\(Int(kcal)) cal",
                 accent: .win,
                 symbol: "checkmark.seal.fill"
             ))

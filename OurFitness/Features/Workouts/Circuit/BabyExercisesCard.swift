@@ -209,9 +209,12 @@ private struct ExerciseRow: View {
     @Environment(\.theme) private var theme
     @State private var showInfo = false
 
+    @AppStorage(UnitSystem.storageKey) private var unitSystemRaw = UnitSystem.imperial.rawValue
+    private var unitSystem: UnitSystem { UnitSystem(rawValue: unitSystemRaw) ?? .imperial }
+
     private var loadLabel: String {
         guard let lb = exercise.loadLb else { return "" }
-        return " · \(Int(lb)) lb"
+        return " · \(Units.formatWeightWithUnit(lb: lb, system: unitSystem, decimals: 0))"
     }
 
     private var countLabel: String {
@@ -501,10 +504,15 @@ private struct AddCircuitMovementSheet: View {
     @State private var kind: ExerciseKind = .reps
     @State private var loadRaw = ""
     @FocusState private var nameFocused: Bool
+    @FocusState private var loadFocused: Bool
+
+    @AppStorage(UnitSystem.storageKey) private var unitSystemRaw = UnitSystem.imperial.rawValue
+    private var unitSystem: UnitSystem { UnitSystem(rawValue: unitSystemRaw) ?? .imperial }
 
     private var loadLb: Double? {
+        // Field is in the active unit; persist canonical lb.
         guard !loadRaw.isEmpty, let v = Double(loadRaw), v > 0 else { return nil }
-        return v
+        return Units.weightToLb(v, system: unitSystem)
     }
 
     private var canSave: Bool { !name.trimmingCharacters(in: .whitespaces).isEmpty }
@@ -535,7 +543,7 @@ private struct AddCircuitMovementSheet: View {
                         .toolbar {
                             ToolbarItemGroup(placement: .keyboard) {
                                 Spacer()
-                                Button("Done") { nameFocused = false }
+                                Button("Done") { nameFocused = false; loadFocused = false }
                             }
                         }
                 }
@@ -552,11 +560,12 @@ private struct AddCircuitMovementSheet: View {
                 }
 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("LOAD (LB) · OPTIONAL")
+                    Text("LOAD (\(Units.weightUnit(unitSystem).uppercased())) · OPTIONAL")
                         .font(.system(size: 10, weight: .medium)).tracking(2)
                         .foregroundStyle(theme.dim)
-                    TextField("e.g. 30", text: $loadRaw)
+                    TextField(unitSystem == .metric ? "e.g. 14" : "e.g. 30", text: $loadRaw)
                         .keyboardType(.decimalPad)
+                        .focused($loadFocused)
                         .padding(12)
                         .background(theme.card)
                         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))

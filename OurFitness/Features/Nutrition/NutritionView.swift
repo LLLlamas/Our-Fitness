@@ -1144,6 +1144,8 @@ private struct NutritionInsightSheet: View {
 
     @Environment(\.theme) private var theme
     @Query private var markerModels: [HealthMarkerModel]
+    @AppStorage(UnitSystem.storageKey) private var unitSystemRaw = UnitSystem.imperial.rawValue
+    private var unitSystem: UnitSystem { UnitSystem(rawValue: unitSystemRaw) ?? .imperial }
 
     init(profile: ProfileDTO, logs: [FoodLogEntryDTO]) {
         self.profile = profile
@@ -1212,7 +1214,9 @@ private struct NutritionInsightSheet: View {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("**\(targets.calories) calories** — \(profile.mode == .build ? "surplus" : "slight deficit") from your maintenance")
                             .font(.callout).foregroundStyle(theme.text)
-                        Text("**\(targets.proteinG)g protein** — \(String(format: "%.1f", Double(targets.proteinG) / profile.weightLb))g per pound of body weight")
+                        Text(unitSystem == .metric
+                             ? "**\(targets.proteinG)g protein** — \(String(format: "%.1f", Double(targets.proteinG) / (profile.weightLb * Units.kgPerLb)))g per kilogram of body weight"
+                             : "**\(targets.proteinG)g protein** — \(String(format: "%.1f", Double(targets.proteinG) / profile.weightLb))g per pound of body weight")
                             .font(.callout).foregroundStyle(theme.text)
                         Text("**\(targets.carbsG)g carbs** — primary fuel for movement and brain function")
                             .font(.callout).foregroundStyle(theme.text)

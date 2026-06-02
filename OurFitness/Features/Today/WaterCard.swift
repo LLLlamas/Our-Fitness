@@ -16,7 +16,10 @@ struct WaterCard: View {
 
     @Query private var entryModels: [WaterEntryModel]
     @AppStorage private var goalFlOz: Double
+    @AppStorage(UnitSystem.storageKey) private var unitSystemRaw = UnitSystem.imperial.rawValue
     @State private var showInfo = false
+
+    private var unitSystem: UnitSystem { UnitSystem(rawValue: unitSystemRaw) ?? .imperial }
 
     init(profile: ProfileDTO) {
         self.profile = profile
@@ -39,7 +42,7 @@ struct WaterCard: View {
     // ProgressBar fires a success haptic when the day crosses the goal (outcome).
     private func add(_ oz: Double) {
         Repos.addWater(ctx, WaterEntryDTO(userId: profile.id, date: today, flOz: oz))
-        toasts.show(Toast(title: "+\(Int(oz)) oz", detail: "Water logged",
+        toasts.show(Toast(title: "+\(Units.formatVolumeWithUnit(flOz: oz, system: unitSystem))", detail: "Water logged",
                           accent: .ok, symbol: "drop.fill"))
     }
 
@@ -50,8 +53,11 @@ struct WaterCard: View {
                           accent: .warn, symbol: "arrow.uturn.backward"))
     }
 
-    private func adjustGoal(_ delta: Double) {
-        goalFlOz = min(Water.maxGoalFlOz, max(Water.minGoalFlOz, goalFlOz + delta))
+    private func adjustGoal(_ direction: Double) {
+        // Step by a unit-natural amount (~250 mL in metric, 8 oz imperial),
+        // expressed in canonical fl oz so stored semantics never change.
+        let step = Units.goalStepFlOz(Water.goalStepFlOz, system: unitSystem)
+        goalFlOz = min(Water.maxGoalFlOz, max(Water.minGoalFlOz, goalFlOz + direction * step))
     }
 
     var body: some View {
@@ -71,11 +77,16 @@ struct WaterCard: View {
                     .accessibilityLabel("Water goal info")
                 }
 
-                ProgressBar(value: todayOz, target: goalFlOz, label: "Water", unit: " oz")
+                ProgressBar(
+                    value: Units.volumeValue(flOz: todayOz, system: unitSystem),
+                    target: Units.volumeValue(flOz: goalFlOz, system: unitSystem),
+                    label: "Water",
+                    unit: " \(Units.volumeUnit(unitSystem))"
+                )
 
                 HStack {
                     if weekAvg > 0 {
-                        Text("7-day avg \(Int(weekAvg)) oz")
+                        Text("7-day avg \(Units.formatVolumeWithUnit(flOz: weekAvg, system: unitSystem))")
                             .font(.caption2).foregroundStyle(theme.dim)
                     }
                     Spacer()
@@ -100,7 +111,7 @@ struct WaterCard: View {
             }
         }
         .sheet(isPresented: $showInfo) {
-            WaterInfoSheet(profile: profile, goalFlOz: goalFlOz)
+            WaterInfoSheet(profile: profile, goalFlOz: goalFlOz, unitSystem: unitSystem)
                 .themed(profile.mode)
         }
     }
@@ -121,7 +132,7 @@ struct WaterCard: View {
                         GlassIcon(size: glassIcon(for: preset.id))
                             .frame(height: 36, alignment: .bottom)  // fixed slot, glass sits at bottom
                         Text(preset.label).font(.system(size: 11, weight: .medium))
-                        Text("+\(Int(preset.flOz)) oz")
+                        Text("+\(Units.formatVolumeWithUnit(flOz: preset.flOz, system: unitSystem))")
                             .font(.system(size: 9, design: .monospaced))
                             .foregroundStyle(theme.dim)
                     }
@@ -130,7 +141,7 @@ struct WaterCard: View {
                     .foregroundStyle(theme.accent)
                 }
                 .tactile(.bump)
-                .accessibilityLabel("Add \(preset.label) cup, \(Int(preset.flOz)) ounces")
+                .accessibilityLabel("Add \(preset.label) cup, \(Units.formatVolumeWithUnit(flOz: preset.flOz, system: unitSystem))")
             }
         }
     }
@@ -139,13 +150,13 @@ struct WaterCard: View {
         HStack(spacing: 10) {
             Text("Goal").font(.caption).foregroundStyle(theme.dim)
             Spacer()
-            Button { adjustGoal(-Water.goalStepFlOz) } label: { Image(systemName: "minus") }
+            Button { adjustGoal(-1) } label: { Image(systemName: "minus") }
                 .tactile(.ghost)
                 .accessibilityLabel("Lower water goal")
-            Text("\(Int(goalFlOz)) oz")
+            Text(Units.formatVolumeWithUnit(flOz: goalFlOz, system: unitSystem))
                 .font(.system(.caption, design: .monospaced))
                 .foregroundStyle(theme.text)
-            Button { adjustGoal(Water.goalStepFlOz) } label: { Image(systemName: "plus") }
+            Button { adjustGoal(1) } label: { Image(systemName: "plus") }
                 .tactile(.ghost)
                 .accessibilityLabel("Raise water goal")
         }
@@ -200,12 +211,12 @@ private struct GlassIcon: View {
 private struct WaterInfoSheet: View {
     let profile: ProfileDTO
     let goalFlOz: Double
+    let unitSystem: UnitSystem
 
     @Environment(\.theme) private var theme
 
-    private var weightKg: Int { Int(profile.weightLb * 0.4536) }
-
-    // ACSM base recommendation: ~0.5 oz per lb bodyweight
+    // ACSM base recommendation: ~0.5 oz per lb bodyweight, floored at 64 oz so very
+    // light users still get a sane minimum (IOM adequate-intake lower bound).
     private var baseOz: Int { max(64, Int(profile.weightLb * 0.5)) }
 
     private var activityBonus: Int {
@@ -221,6 +232,14 @@ private struct WaterInfoSheet: View {
     private var recommendedOz: Int { baseOz + activityBonus }
     private var recommendedMl: Int { Int(Double(recommendedOz) * 29.57) }
 
+    /// Imperial keeps the oz · mL dual readout; metric shows mL only.
+    private var recommendedDetail: String {
+        if unitSystem == .metric {
+            return "\(Units.formatVolumeWithUnit(flOz: Double(recommendedOz), system: .metric)) / day"
+        }
+        return "\(recommendedOz) oz / day · \(recommendedMl) mL"
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
@@ -235,19 +254,25 @@ private struct WaterInfoSheet: View {
 
                 infoSection(title: "Your recommendation") {
                     VStack(alignment: .leading, spacing: 8) {
-                        calcRow(label: "Base (0.5 oz × \(Int(profile.weightLb)) lb)",
-                                detail: "\(baseOz) oz / day")
+                        // Base rule is the ACSM 0.5 oz/lb heuristic. Imperial states it
+                        // literally; metric just names the body weight (the oz/lb
+                        // coefficient doesn't translate to a clean round metric number),
+                        // and the resulting daily totals render in the active unit.
+                        calcRow(label: unitSystem == .metric
+                                    ? "Base (body weight \(Units.formatWeightWithUnit(lb: profile.weightLb, system: unitSystem)))"
+                                    : "Base (0.5 oz × \(Int(profile.weightLb)) lb)",
+                                detail: "\(Units.formatVolumeWithUnit(flOz: Double(baseOz), system: unitSystem)) / day")
                         calcRow(label: "Activity bonus (\(profile.activity.label))",
-                                detail: "+\(activityBonus) oz / day")
+                                detail: "+\(Units.formatVolumeWithUnit(flOz: Double(activityBonus), system: unitSystem)) / day")
                         calcRow(label: "Recommended total",
-                                detail: "\(recommendedOz) oz / day · \(recommendedMl) mL")
+                                detail: recommendedDetail)
                         if Int(goalFlOz) < recommendedOz {
-                            Text("Your current goal (\(Int(goalFlOz)) oz) is below the recommendation. Consider raising it with the +/− buttons.")
+                            Text("Your current goal (\(Units.formatVolumeWithUnit(flOz: goalFlOz, system: unitSystem))) is below the recommendation. Consider raising it with the +/− buttons.")
                                 .font(.caption)
                                 .foregroundStyle(theme.warn)
                                 .padding(.top, 4)
                         } else {
-                            Text("Your current goal (\(Int(goalFlOz)) oz) meets your recommendation.")
+                            Text("Your current goal (\(Units.formatVolumeWithUnit(flOz: goalFlOz, system: unitSystem))) meets your recommendation.")
                                 .font(.caption)
                                 .foregroundStyle(theme.ok)
                                 .padding(.top, 4)
