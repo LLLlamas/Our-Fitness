@@ -123,6 +123,10 @@ targets:
         MARKETING_VERSION: "0.1.0"
         CURRENT_PROJECT_VERSION: "1"
         INFOPLIST_FILE: OurFitnessWidgets/Info.plist
+        # App-extension targets must SKIP_INSTALL so `xcodebuild archive` embeds
+        # the .appex inside the app rather than installing it as a standalone
+        # product (a malformed archive otherwise fails App Store upload).
+        SKIP_INSTALL: "YES"
         # Match the app: iPhone/iPad only, opt out of Mac/visionOS availability.
         TARGETED_DEVICE_FAMILY: "1,2"
         SUPPORTS_MACCATALYST: "NO"
