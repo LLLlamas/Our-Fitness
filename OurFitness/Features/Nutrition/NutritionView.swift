@@ -12,11 +12,13 @@ struct NutritionView: View {
     @EnvironmentObject private var toasts: ToastCenter
 
     @Query private var logModels: [FoodLogEntryModel]
+    @Query private var savedTemplates: [SavedMealTemplateModel]
     @State private var showLogSheet = false
     @State private var showSuggestions = false
     @State private var showLibrary = false
     @State private var mealToDetail: SuggestedMeal?
     @State private var entryToDetail: FoodLogEntryDTO?
+    @State private var savedTemplateToLog: SavedMealTemplateDTO?
     @State private var showNutritionTrend = false
     @State private var showNutritionInsight = false
     @State private var selectedDayKey: String = Dates.dayKey()
@@ -28,6 +30,10 @@ struct NutritionView: View {
             filter: #Predicate<FoodLogEntryModel> { $0.userId == uid },
             sort: \.timestamp,
             order: .forward
+        )
+        _savedTemplates = Query(
+            filter: #Predicate<SavedMealTemplateModel> { $0.userId == uid },
+            sort: \.createdAt, order: .reverse
         )
     }
 
@@ -114,7 +120,7 @@ struct NutritionView: View {
                         showNutritionInsight = true
                     } label: {
                         Image(systemName: "info.circle")
-                            .font(.system(size: 20))
+                            .font(.system(size: 14))
                             .foregroundStyle(theme.dim)
                     }
                     .tactile(.ghost)
@@ -181,26 +187,43 @@ struct NutritionView: View {
             .themed(profile.mode)
         }
         .sheet(isPresented: $showLibrary) {
-            FoodLibrarySheet { food, slot, multiplier in
+            FoodLibrarySheet(profile: profile) { food, slot, multiplier in
                 logCommonFood(food, slot: slot, multiplier: multiplier)
             }
             .themed(profile.mode)
         }
         .sheet(item: $mealToDetail) { meal in
-            MealDetailSheet(meal: meal) { meal, slot, multiplier in
-                logMeal(meal, slot: slot, multiplier: multiplier)
-                mealToDetail = nil
-            }
+            MealIngredientDetailSheet(
+                mode: .logging(
+                    name: meal.name,
+                    emoji: meal.emoji,
+                    defaultSlot: .lunch,
+                    ingredients: meal.resolvedIngredients()
+                ),
+                profile: profile,
+                onDone: { mealToDetail = nil }
+            )
             .themed(profile.mode)
         }
         .sheet(item: $entryToDetail) { entry in
-            LoggedEntryDetailSheet(entry: entry) {
-                Repos.deleteFoodLog(ctx, id: entry.id)
-                Haptics.warn()
-                toasts.show(Toast(title: "Removed", detail: entry.customName ?? "Meal",
-                                  accent: .warn, symbol: "minus.circle.fill"))
-                entryToDetail = nil
-            }
+            MealIngredientDetailSheet(
+                mode: .editing(entry: entry),
+                profile: profile,
+                onDone: { entryToDetail = nil }
+            )
+            .themed(profile.mode)
+        }
+        .sheet(item: $savedTemplateToLog) { template in
+            MealIngredientDetailSheet(
+                mode: .logging(
+                    name: template.name,
+                    emoji: template.emoji,
+                    defaultSlot: .lunch,
+                    ingredients: template.ingredients
+                ),
+                profile: profile,
+                onDone: { savedTemplateToLog = nil }
+            )
             .themed(profile.mode)
         }
         .sheet(isPresented: $showNutritionTrend) {
@@ -266,13 +289,31 @@ struct NutritionView: View {
     @ViewBuilder
     private var suggestionPillRow: some View {
         let meals = rankedSuggestions
-        if !meals.isEmpty {
+        if !meals.isEmpty || !savedTemplates.isEmpty {
             VStack(alignment: .leading, spacing: 6) {
                 Text("For you".uppercased())
                     .font(.system(size: 10)).tracking(2)
                     .foregroundStyle(theme.dim)
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
+                        ForEach(savedTemplates) { template in
+                            Button {
+                                savedTemplateToLog = template.snapshot
+                            } label: {
+                                HStack(spacing: 6) {
+                                    Text(template.emoji)
+                                    Text(template.name)
+                                }
+                            }
+                            .tactile(.pill)
+                            .contextMenu {
+                                Button(role: .destructive) {
+                                    Repos.deleteSavedTemplate(ctx, id: template.id)
+                                } label: {
+                                    Label("Remove recipe", systemImage: "trash")
+                                }
+                            }
+                        }
                         ForEach(meals) { meal in
                             Button {
                                 mealToDetail = meal
@@ -555,173 +596,6 @@ struct MacroChip: View {
     }
 }
 
-// MARK: - Food detail sheet (library)
-
-/// Detail + portion adjuster for a library CommonFood. Mirrors MealDetailSheet
-/// but for a single food; the multiplier scales the listed serving.
-private struct FoodDetailSheet: View {
-    let food: CommonFood
-    let onLog: (Slot, Double) -> Void
-
-    @Environment(\.theme) private var theme
-    @Environment(\.dismiss) private var dismiss
-
-    @State private var multiplier: Double = 1.0
-    @State private var slot: Slot = .lunch
-
-    private static let multipliers: [Double] = [0.5, 1.0, 1.5, 2.0]
-
-    private func scaled(_ v: Int) -> Int { Int((Double(v) * multiplier).rounded()) }
-
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(food.name)
-                        .font(.system(size: 26, weight: .semibold))
-                        .foregroundStyle(theme.text)
-                    Text(food.servingLabel)
-                        .font(.callout).foregroundStyle(theme.dim)
-                }
-
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("About this estimate".uppercased())
-                        .font(.system(size: 9, weight: .medium)).tracking(2)
-                        .foregroundStyle(theme.dim)
-                    Text("Per-serving values from USDA FoodData Central and published references. Adjust the multiplier if your portion differed.")
-                        .font(.caption).foregroundStyle(theme.dim)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                .padding(10)
-                .background(theme.card)
-                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Serving size".uppercased())
-                        .font(.caption).tracking(2).foregroundStyle(theme.dim)
-                    HStack(spacing: 8) {
-                        ForEach(Self.multipliers, id: \.self) { m in
-                            Button { multiplier = m } label: {
-                                Text(m == 0.5 ? "½×" : "\(Int(m))×")
-                                    .font(.system(size: 14, weight: .medium))
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 10)
-                            }
-                            .tactile(.pill, fill: multiplier == m ? theme.accent : nil)
-                        }
-                    }
-                }
-
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Nutrition".uppercased())
-                        .font(.caption).tracking(2).foregroundStyle(theme.dim)
-                    HStack(spacing: 8) {
-                        MacroChip(label: "Cal", value: scaled(food.calories))
-                        MacroChip(label: "Protein", value: scaled(food.proteinG))
-                        MacroChip(label: "Carbs", value: scaled(food.carbsG))
-                        MacroChip(label: "Fat", value: scaled(food.fatG))
-                        if food.fiberG > 0 {
-                            MacroChip(label: "Fiber", value: scaled(food.fiberG))
-                        }
-                    }
-                }
-
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("Log as".uppercased())
-                        .font(.caption).tracking(2).foregroundStyle(theme.dim)
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 8) {
-                            ForEach([Slot.breakfast, .lunch, .snack, .dinner, .postWorkout], id: \.self) { s in
-                                Button { slot = s } label: { Text(s.label) }
-                                    .tactile(.pill, fill: slot == s ? theme.accent : nil)
-                            }
-                        }
-                    }
-                }
-
-                Button {
-                    onLog(slot, multiplier)
-                    dismiss()
-                } label: {
-                    Text("Log \(food.name)")
-                        .font(.system(size: 17, weight: .semibold))
-                        .frame(maxWidth: .infinity, minHeight: 52)
-                }
-                .tactile(.primary, fullWidth: true)
-            }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
-        }
-        .presentationDetents([.medium, .large])
-        .presentationBackground(theme.bg)
-    }
-}
-
-// MARK: - Logged entry detail sheet
-
-/// Read-only nutrition breakdown for a meal already in the day's log, with a
-/// delete action. Opened by tapping a row in "Today's log".
-private struct LoggedEntryDetailSheet: View {
-    let entry: FoodLogEntryDTO
-    let onDelete: () -> Void
-
-    @Environment(\.theme) private var theme
-    @Environment(\.dismiss) private var dismiss
-
-    private var ps: PerServing { entry.perServing }
-
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(entry.customName ?? "Meal")
-                        .font(.system(size: 26, weight: .semibold))
-                        .foregroundStyle(theme.text)
-                    Text("\(entry.slot.label.uppercased()) · \(entry.timestamp.formatted(date: .long, time: .shortened))")
-                        .font(.system(size: 10, weight: .medium)).tracking(2)
-                        .foregroundStyle(theme.dim)
-                }
-
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Nutrition".uppercased())
-                        .font(.caption).tracking(2).foregroundStyle(theme.dim)
-                    HStack(spacing: 8) {
-                        MacroChip(label: "Cal", value: ps.calories)
-                        MacroChip(label: "Protein", value: ps.proteinG)
-                        MacroChip(label: "Carbs", value: ps.carbsG)
-                        MacroChip(label: "Fat", value: ps.fatG)
-                        if ps.fiberG > 0 { MacroChip(label: "Fiber", value: ps.fiberG) }
-                    }
-                    if ps.sodiumMg > 0 || ps.addedSugarG > 0 || ps.saturatedFatG > 0 {
-                        HStack(spacing: 8) {
-                            if ps.sodiumMg > 0 { MacroChip(label: "Sodium", value: ps.sodiumMg) }
-                            if ps.addedSugarG > 0 { MacroChip(label: "Add. sugar", value: ps.addedSugarG) }
-                            if ps.saturatedFatG > 0 { MacroChip(label: "Sat fat", value: ps.saturatedFatG) }
-                        }
-                    }
-                }
-
-                Button(role: .destructive) {
-                    onDelete()
-                    dismiss()
-                } label: {
-                    HStack {
-                        Image(systemName: "trash")
-                        Text("Remove from log")
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .tactile(.secondary, fullWidth: true)
-            }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
-        }
-        .presentationDetents([.medium])
-        .presentationBackground(theme.bg)
-    }
-}
-
 // MARK: - NL Meal Log Sheet
 
 private struct NLMealLogSheet: View {
@@ -807,12 +681,16 @@ private struct NLMealLogSheet: View {
                 nutritionSummary
 
                 Button {
+                    let mealIngredients = parseResult?.recognized.map {
+                        MealIngredient.from($0.food, quantity: $0.quantity)
+                    }
                     let dto = FoodLogEntryDTO(
                         userId: profile.id,
                         date: Dates.dayKey(),
                         slot: slot,
                         customName: resolvedName,
-                        perServing: resolvedPerServing
+                        perServing: resolvedPerServing,
+                        ingredients: mealIngredients
                     )
                     onSave(dto)
                     dismiss()
@@ -843,7 +721,10 @@ private struct NLMealLogSheet: View {
         let trimmed = input.trimmingCharacters(in: .whitespaces)
         guard !trimmed.isEmpty else { parseResult = nil; parsedWithAI = false; return }
         parsedWithAI = false
-        applyResult(FoodParser.parse(text: trimmed))
+        // Keystroke path: curated CommonFoods only — instant regardless of how large
+        // the bundled USDA database grows. The full database is consulted on submit
+        // (`aiRefine`) and in the library search, not on every keypress.
+        applyResult(FoodParser.parse(text: trimmed, includeDatabase: false))
     }
 
     /// On end-editing/submit, ask the on-device model to re-parse the sentence into
@@ -856,12 +737,28 @@ private struct NLMealLogSheet: View {
         // focus-change trigger for one gesture — the second await-enqueued call
         // must no-op rather than race to overwrite the result. (@MainActor runs
         // the synchronous `aiParsing = true` before either call suspends.)
-        guard !aiParsing, !trimmed.isEmpty, MealParseService.shared.isAvailable else { return }
+        guard !aiParsing, !trimmed.isEmpty else { return }
+
+        // Submit path always consults the FULL database. When Apple Intelligence is
+        // unavailable, do a one-shot full-DB string parse so submit still benefits
+        // from USDA coverage the curated-only keystroke path skipped.
+        guard MealParseService.shared.isAvailable else {
+            applyResult(FoodParser.parse(text: trimmed, includeDatabase: true))
+            return
+        }
+
         aiParsing = true
         defer { aiParsing = false }
-        guard let items = await MealParseService.shared.parse(trimmed) else { return }
+        guard let items = await MealParseService.shared.parse(trimmed) else {
+            // AI ran but yielded nothing usable — fall back to the full-DB string parse.
+            applyResult(FoodParser.parse(text: trimmed, includeDatabase: true))
+            return
+        }
         let resolved = FoodParser.resolve(items: items)
-        guard resolved.hasMatches else { return }
+        guard resolved.hasMatches else {
+            applyResult(FoodParser.parse(text: trimmed, includeDatabase: true))
+            return
+        }
         parsedWithAI = true
         aiParsing = false   // hide the spinner atomically with the result swap
         applyResult(resolved)
@@ -1093,15 +990,19 @@ private struct SuggestionsSheet: View {
 // MARK: - Food Library Sheet
 
 private struct FoodLibrarySheet: View {
+    let profile: ProfileDTO
     let onLog: (CommonFood, Slot, Double) -> Void
 
     @Environment(\.theme) private var theme
     @Environment(\.dismiss) private var dismiss
     @State private var query: String = ""
+    @State private var displayedResults: [CommonFood] = CommonFoods.all
     @State private var foodToDetail: CommonFood?
     @FocusState private var searchFocused: Bool
 
-    private var results: [CommonFood] {
+    /// Pure search over curated + USDA foods. Static so the `.task` debounce can call
+    /// it off the render path without capturing view state beyond the query string.
+    private static func search(_ query: String) -> [CommonFood] {
         let q = query.lowercased().trimmingCharacters(in: .whitespaces)
         guard !q.isEmpty else { return CommonFoods.all }
         let curated = CommonFoods.all.filter { food in
@@ -1109,12 +1010,10 @@ private struct FoodLibrarySheet: View {
                 || food.aliases.contains { $0.lowercased().contains(q) }
         }
         // Broaden with the offline USDA database; curated entries win on name.
+        // SQLite FTS5 query on disk — called off the render path by the debounced
+        // `.task`, so it never scans synchronously in `body`.
         let curatedNames = Set(curated.map { $0.name.lowercased() })
-        let usda = FoodDatabase.shared.entries
-            .filter { entry in
-                entry.name.lowercased().contains(q)
-                    || entry.aliases.contains { $0.lowercased().contains(q) }
-            }
+        let usda = SQLiteFoodDatabase.shared.search(query: q, limit: 40)
             .map { $0.asCommonFood }
             .filter { !curatedNames.contains($0.name.lowercased()) }
         return curated + usda
@@ -1131,13 +1030,13 @@ private struct FoodLibrarySheet: View {
 
                 searchField
 
-                if results.isEmpty {
+                if displayedResults.isEmpty {
                     Text("No matches. Try a simpler term.")
                         .font(.callout).foregroundStyle(theme.dim)
                         .padding(.top, 8)
                 } else {
                     VStack(spacing: 8) {
-                        ForEach(results, id: \.id) { food in
+                        ForEach(displayedResults, id: \.id) { food in
                             PressableCard(action: { foodToDetail = food }) {
                                 HStack(alignment: .top, spacing: 12) {
                                     VStack(alignment: .leading, spacing: 4) {
@@ -1162,12 +1061,27 @@ private struct FoodLibrarySheet: View {
         }
         .presentationDetents([.large])
         .presentationBackground(theme.bg)
+        // Debounce the USDA scan off the hot render path: each keystroke restarts this
+        // task (cancelling the prior one); only after a short pause does the heavy
+        // search run, so typing never rescans 15–20k entries synchronously in `body`.
+        .task(id: query) {
+            let q = query
+            try? await Task.sleep(nanoseconds: 180_000_000)   // 180 ms
+            guard !Task.isCancelled else { return }
+            displayedResults = Self.search(q)
+        }
         .sheet(item: $foodToDetail) { food in
-            FoodDetailSheet(food: food) { slot, multiplier in
-                onLog(food, slot, multiplier)
-                foodToDetail = nil
-            }
-            .themed(theme.mode)
+            MealIngredientDetailSheet(
+                mode: .logging(
+                    name: food.name,
+                    emoji: "🍽️",
+                    defaultSlot: .lunch,
+                    ingredients: [MealIngredient.from(food)]
+                ),
+                profile: profile,
+                onDone: { foodToDetail = nil }
+            )
+            .themed(profile.mode)
         }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {

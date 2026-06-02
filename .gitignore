@@ -46,3 +46,10 @@ ExportOptions.plist
 .vscode/
 .idea/
 *.swp
+
+# Claude Code — local session data and agent worktrees (user-specific)
+.claude/settings.local.json
+.claude/worktrees/
+
+# Python bytecode cache
+scripts/__pycache__/

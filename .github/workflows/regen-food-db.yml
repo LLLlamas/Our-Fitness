@@ -1,10 +1,10 @@
-# Regenerate the bundled offline USDA food database (OurFitness/Resources/usda-foods.json).
+# Regenerate the bundled offline USDA food database (OurFitness/Resources/usda-foods.db).
 #
 # Runs scripts/build-food-db.py on a plain Ubuntu runner (Python only — NO Mac needed),
 # which downloads USDA FoodData Central (Foundation Foods + SR Legacy + Branded Foods),
 # prunes to whole/recognizable foods + the macro fields the app uses, and rewrites the
-# bundled JSON. If the file changed, it opens a PR for review so a human eyeballs the
-# diff before it ships.
+# bundled SQLite/FTS5 database (the script's default --format). If the file changed, it
+# opens a PR for review so a human eyeballs the diff before it ships.
 #
 # Trigger: Actions tab → "Regenerate Food DB" → Run workflow.
 # If the default dated USDA URLs 404 (USDA reposts datasets under new dates — Branded is
@@ -52,7 +52,7 @@ jobs:
       - name: Install ijson (stream-parses the huge Branded Foods dataset)
         run: pip install ijson
 
-      - name: Regenerate usda-foods.json
+      - name: Regenerate usda-foods.db
         env:
           # Inputs go through env vars (never interpolated into the script body)
           # so a crafted input string can't inject shell commands.
@@ -73,19 +73,19 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          if git diff --quiet -- OurFitness/Resources/usda-foods.json; then
-            echo "No change to usda-foods.json — nothing to open."
+          if git diff --quiet -- OurFitness/Resources/usda-foods.db; then
+            echo "No change to usda-foods.db — nothing to open."
             exit 0
           fi
           branch="food-db/regen-${{ github.run_id }}"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add OurFitness/Resources/usda-foods.json
-          count=$(python3 -c "import json; print(len(json.load(open('OurFitness/Resources/usda-foods.json'))))")
+          git add OurFitness/Resources/usda-foods.db
+          count=$(python3 -c "import sqlite3; c=sqlite3.connect('OurFitness/Resources/usda-foods.db'); print(c.execute('SELECT COUNT(*) FROM foods').fetchone()[0])")
           git commit -m "chore: regenerate USDA food database ($count foods)"
           git push origin "$branch"
           gh pr create \
             --base main --head "$branch" \
             --title "Regenerate USDA food database ($count foods)" \
-            --body "Automated regeneration of \`OurFitness/Resources/usda-foods.json\` from USDA FoodData Central (Foundation + SR Legacy) via \`scripts/build-food-db.py\`. All values are real USDA data (public-domain/CC0). Review the diff and merge to ship the full offline dataset."
+            --body "Automated regeneration of \`OurFitness/Resources/usda-foods.db\` (SQLite/FTS5 database) from USDA FoodData Central (Foundation + SR Legacy + Branded) via \`scripts/build-food-db.py\`. All values are real USDA data (public-domain/CC0). Review the diff and merge to ship the full offline dataset."

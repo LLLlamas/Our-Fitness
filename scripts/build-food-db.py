@@ -6,12 +6,14 @@ WHAT IT DOES
   Downloads the USDA FoodData Central bulk datasets (Foundation Foods + SR
   Legacy + Branded Foods), prunes them to whole/common/recognizable foods,
   extracts ONLY the fields the app uses (calories, protein, carbs, fat, fiber,
-  a sensible serving size, name, and a few aliases), and writes the compact JSON
-  the app loads at runtime:
+  a sensible serving size, name, and a few aliases), and writes the database the
+  app queries at runtime. Default output is a SQLite/FTS5 database:
 
-      OurFitness/Resources/usda-foods.json
+      OurFitness/Resources/usda-foods.db   (--format sqlite, the default)
+      OurFitness/Resources/usda-foods.json (--format json — legacy JSON)
 
-  The app reads this via Domain/FoodDatabase.swift. NO runtime network — this is
+  The app reads the .db via Domain/SQLiteFoodDatabase.swift (queried on disk via
+  FTS5, so RAM stays low at ~270k entries). NO runtime network — this is
   a build-time, offline-first pipeline. USDA FoodData Central is public domain
   (CC0): https://fdc.nal.usda.gov/download-datasets/
 
@@ -30,8 +32,12 @@ DATA SOURCES (three, all USDA, all CC0)
     Huge (~400k+ items), so it is STREAM-parsed with ijson — never json.load'd.
 
 USAGE
-  # Default: download all three datasets, emit the resource.
+  # Default: download all three datasets, emit the SQLite/FTS5 database.
   python3 scripts/build-food-db.py
+
+  # Emit the legacy JSON instead (or both):
+  python3 scripts/build-food-db.py --format json
+  python3 scripts/build-food-db.py --format both
 
   # Limit the row count (useful for a quick smoke test):
   python3 scripts/build-food-db.py --max 1500
@@ -67,13 +73,15 @@ import argparse
 import io
 import json
 import re
+import sqlite3
 import sys
 import urllib.request
 import zipfile
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-OUTPUT = REPO_ROOT / "OurFitness" / "Resources" / "usda-foods.json"
+OUTPUT_JSON = REPO_ROOT / "OurFitness" / "Resources" / "usda-foods.json"
+OUTPUT_DB = REPO_ROOT / "OurFitness" / "Resources" / "usda-foods.db"
 
 # USDA nutrient numbers (stable across datasets):
 # Energy: prefer classic Energy (kcal, #208); Foundation Foods frequently report
@@ -449,6 +457,92 @@ def select_branded(zf: zipfile.ZipFile, cap: int) -> list[dict]:
     return kept
 
 
+# Guard: a failed/empty download or a parse mismatch must NOT silently overwrite
+# the bundled dataset with an empty file. The real USDA Foundation + SR Legacy
+# whole-foods set is thousands of rows; a tiny count means something failed.
+MIN_FOODS = 100
+
+
+def write_json(entries: list[dict]) -> None:
+    OUTPUT_JSON.parent.mkdir(parents=True, exist_ok=True)
+    OUTPUT_JSON.write_text(
+        json.dumps(entries, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
+    log(f"wrote {len(entries)} foods → {OUTPUT_JSON.relative_to(REPO_ROOT)}")
+
+
+def write_sqlite(entries: list[dict]) -> None:
+    """Emit the SQLite/FTS5 database the app queries on disk. Schema mirrors
+    Domain/SQLiteFoodDatabase.swift: a `foods` content table + an external-content
+    `foods_fts` FTS5 index (no text duplication → ~30% smaller). Aliases are stored
+    pipe-joined in one column. Rebuilt + VACUUMed for a compact, reviewable file."""
+    OUTPUT_DB.parent.mkdir(parents=True, exist_ok=True)
+    # Start clean so re-runs don't append onto a stale db.
+    if OUTPUT_DB.exists():
+        OUTPUT_DB.unlink()
+
+    conn = sqlite3.connect(OUTPUT_DB)
+    try:
+        cur = conn.cursor()
+        cur.execute("PRAGMA journal_mode = DELETE;")
+        cur.execute("PRAGMA page_size = 4096;")
+        cur.execute(
+            """
+            CREATE TABLE IF NOT EXISTS foods (
+                id TEXT NOT NULL,
+                name TEXT NOT NULL,
+                aliases TEXT NOT NULL,
+                serving_label TEXT NOT NULL,
+                calories INTEGER NOT NULL,
+                protein_g INTEGER NOT NULL,
+                carbs_g INTEGER NOT NULL,
+                fat_g INTEGER NOT NULL,
+                fiber_g INTEGER NOT NULL
+            );
+            """
+        )
+        cur.execute(
+            """
+            CREATE VIRTUAL TABLE IF NOT EXISTS foods_fts USING fts5(
+                name,
+                aliases,
+                content=foods,
+                content_rowid=rowid
+            );
+            """
+        )
+        cur.executemany(
+            """
+            INSERT INTO foods
+                (id, name, aliases, serving_label,
+                 calories, protein_g, carbs_g, fat_g, fiber_g)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            [
+                (
+                    e["id"],
+                    e["name"],
+                    "|".join(e["aliases"]),
+                    e["servingLabel"],
+                    e["calories"],
+                    e["proteinG"],
+                    e["carbsG"],
+                    e["fatG"],
+                    e["fiberG"],
+                )
+                for e in entries
+            ],
+        )
+        # Build the FTS5 index from the content table, then compact the file.
+        cur.execute("INSERT INTO foods_fts(foods_fts) VALUES('rebuild');")
+        conn.commit()
+        cur.execute("VACUUM;")
+        conn.commit()
+    finally:
+        conn.close()
+    log(f"wrote {len(entries)} foods → {OUTPUT_DB.relative_to(REPO_ROOT)}")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Build the offline USDA food DB resource.")
     ap.add_argument("--foundation", help="Path to a Foundation Foods JSON zip (skips download).")
@@ -485,6 +579,11 @@ def main() -> int:
         help=f"Max Branded rows to keep after dedup/per-brand cap (default {DEFAULT_BRANDED_CAP}).",
     )
     ap.add_argument("--max", type=int, default=0, help="Cap the number of output rows (0 = no cap).")
+    ap.add_argument(
+        "--format", choices=("json", "sqlite", "both"), default="sqlite",
+        help="Output format. 'sqlite' (default) emits usda-foods.db (FTS5); 'json' "
+             "emits usda-foods.json; 'both' emits both.",
+    )
     args = ap.parse_args()
 
     # Foundation + SR Legacy (per-100 g foodNutrients). These are required.
@@ -549,10 +648,9 @@ def main() -> int:
     # the bundled dataset with an empty file. The real USDA Foundation + SR Legacy
     # whole-foods set is thousands of rows; a tiny count means something failed.
     # Refuse to write, and log enough to localize the cause. (Before --max capping.)
-    MIN_FOODS = 100
     if len(all_entries) < MIN_FOODS:
         log(f"ERROR: only {len(all_entries)} foods kept from {raw_count} raw rows "
-            f"(< {MIN_FOODS}). Refusing to overwrite {OUTPUT.relative_to(REPO_ROOT)}.")
+            f"(< {MIN_FOODS}). Refusing to write the food database.")
         log(f"  dataTypes seen: {datatypes_seen}")
         if raw_count == 0:
             log("  raw_count == 0 → iter_foods found no food array. Check the JSON "
@@ -567,9 +665,10 @@ def main() -> int:
 
     entries = all_entries[: args.max] if args.max > 0 else all_entries
 
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT.write_text(json.dumps(entries, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    log(f"wrote {len(entries)} foods → {OUTPUT.relative_to(REPO_ROOT)}")
+    if args.format in ("sqlite", "both"):
+        write_sqlite(entries)
+    if args.format in ("json", "both"):
+        write_json(entries)
     log("done. Commit the regenerated resource and rebuild via XcodeGen/CI.")
     return 0
 
