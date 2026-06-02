@@ -151,6 +151,39 @@ public enum SchemaV5: VersionedSchema {
     }
 }
 
+/// V6 adds `SavedMealTemplateModel` (personal, reusable ingredient-level meal
+/// templates). Purely additive — a new entity, exactly like `WaterEntryModel` in
+/// V4 and `ActivitySessionModel` in V5. The new optional `FoodLogEntryModel
+/// .ingredientsJSON` column is a lightweight addition that does NOT itself need a
+/// version bump (SwiftData adds it automatically) — only the new entity triggers
+/// V6. SwiftData applies both via automatic lightweight migration when the
+/// container opens V6 against an existing V5 store; we deliberately ship NO staged
+/// `MigrationPlan` (the `NSLightweightMigrationStage` path is what threw the
+/// uncatchable Obj-C exception in builds 26/27 — see ModelContainer+App.swift).
+public enum SchemaV6: VersionedSchema {
+    public static let versionIdentifier = Schema.Version(6, 0, 0)
+
+    public static var models: [any PersistentModel.Type] {
+        [
+            ProfileModel.self,
+            ExerciseModel.self,
+            ProgramModel.self,
+            WorkoutModel.self,
+            WorkoutSetModel.self,
+            FoodModel.self,
+            FoodLogEntryModel.self,
+            BodyMetricModel.self,
+            HealthMarkerModel.self,
+            StepCountModel.self,
+            PilatesSessionModel.self,
+            CardioSessionModel.self,
+            WaterEntryModel.self,
+            ActivitySessionModel.self,
+            SavedMealTemplateModel.self,
+        ]
+    }
+}
+
 public enum AppSchema {
-    public static let current: any VersionedSchema.Type = SchemaV5.self
+    public static let current: any VersionedSchema.Type = SchemaV6.self
 }

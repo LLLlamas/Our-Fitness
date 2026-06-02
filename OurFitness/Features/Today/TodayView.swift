@@ -19,6 +19,8 @@ struct TodayView: View {
     @Query private var logModels: [FoodLogEntryModel]
     @Query private var stepModels: [StepCountModel]
 
+    @State private var entryToDetail: FoodLogEntryDTO?
+
     @AppStorage("hasBackfilled.steps") private var hasBackfilledRaw: String = ""
 
     // One-shot-per-day flags for macro encouragement toasts. Comma-separated keys
@@ -129,6 +131,14 @@ struct TodayView: View {
         }
         .onChange(of: totals) { _, newTotals in
             checkMacroMilestones(newTotals)
+        }
+        .sheet(item: $entryToDetail) { entry in
+            MealIngredientDetailSheet(
+                mode: .editing(entry: entry),
+                profile: profile,
+                onDone: { entryToDetail = nil }
+            )
+            .themed(profile.mode)
         }
     }
 
@@ -246,18 +256,16 @@ struct TodayView: View {
                     .font(.callout).foregroundStyle(theme.dim)
             } else {
                 ForEach(todaysLogs) { e in
-                    HStack {
-                        Text(e.customName ?? "Meal")
-                            .foregroundStyle(theme.text)
-                        Spacer()
-                        Text("\(e.perServing.calories) cal")
-                            .font(.system(.footnote, design: .monospaced))
-                            .foregroundStyle(theme.accent)
+                    PressableCard(action: { entryToDetail = e }) {
+                        HStack {
+                            Text(e.customName ?? "Meal")
+                                .foregroundStyle(theme.text)
+                            Spacer()
+                            Text("\(e.perServing.calories) cal")
+                                .font(.system(.footnote, design: .monospaced))
+                                .foregroundStyle(theme.accent)
+                        }
                     }
-                    .padding(10)
-                    .background(theme.card)
-                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                    .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                 }
             }
         }

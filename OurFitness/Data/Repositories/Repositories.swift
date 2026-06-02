@@ -277,6 +277,46 @@ public enum Repos {
         }
     }
 
+    public static func updateFoodLog(_ ctx: ModelContext, _ entry: FoodLogEntryDTO) {
+        let id = entry.id
+        let descriptor = FetchDescriptor<FoodLogEntryModel>(
+            predicate: #Predicate { $0.id == id }
+        )
+        guard let model = (try? ctx.fetch(descriptor))?.first else { return }
+        model.slotRaw = entry.slot.rawValue
+        model.customName = entry.customName
+        model.servings = entry.servings
+        model.perServingJSON = (try? JSONEncoder().encode(entry.perServing)) ?? model.perServingJSON
+        model.ingredientsJSON = entry.ingredients.flatMap { try? JSONEncoder().encode($0) }
+        try? ctx.save()
+    }
+
+    // MARK: - Saved meal templates
+
+    public static func addSavedTemplate(_ ctx: ModelContext, _ template: SavedMealTemplateDTO) {
+        ctx.insert(SavedMealTemplateModel(snapshot: template))
+        try? ctx.save()
+    }
+
+    public static func listSavedTemplates(_ ctx: ModelContext, userId: UUID) -> [SavedMealTemplateDTO] {
+        let descriptor = FetchDescriptor<SavedMealTemplateModel>(
+            predicate: #Predicate { $0.userId == userId },
+            sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
+        )
+        return (try? ctx.fetch(descriptor))?.map(\.snapshot) ?? []
+    }
+
+    public static func deleteSavedTemplate(_ ctx: ModelContext, id: UUID) {
+        let id = id
+        let descriptor = FetchDescriptor<SavedMealTemplateModel>(
+            predicate: #Predicate { $0.id == id }
+        )
+        if let model = (try? ctx.fetch(descriptor))?.first {
+            ctx.delete(model)
+            try? ctx.save()
+        }
+    }
+
     // MARK: - Workouts + sets
 
     public static func startWorkout(_ ctx: ModelContext, userId: UUID, programId: String?) -> UUID {

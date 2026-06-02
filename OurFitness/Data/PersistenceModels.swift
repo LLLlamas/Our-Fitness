@@ -289,6 +289,9 @@ public final class FoodLogEntryModel {
     public var servings: Double
     public var perServingJSON: Data
     public var timestamp: Date
+    /// JSON-encoded [MealIngredient] for ingredient-level entries. Nil for legacy /
+    /// single-food rows. Optional → automatic lightweight column addition (no schema bump).
+    public var ingredientsJSON: Data?
 
     public init(snapshot s: FoodLogEntryDTO) {
         self.id = s.id
@@ -300,6 +303,7 @@ public final class FoodLogEntryModel {
         self.servings = s.servings
         self.perServingJSON = (try? JSONEncoder().encode(s.perServing)) ?? Data()
         self.timestamp = s.timestamp
+        self.ingredientsJSON = s.ingredients.flatMap { try? JSONEncoder().encode($0) }
     }
 
     public var snapshot: FoodLogEntryDTO {
@@ -309,7 +313,8 @@ public final class FoodLogEntryModel {
             foodId: foodId, customName: customName,
             servings: servings,
             perServing: (try? JSONDecoder().decode(PerServing.self, from: perServingJSON)) ?? .zero,
-            timestamp: timestamp
+            timestamp: timestamp,
+            ingredients: ingredientsJSON.flatMap { try? JSONDecoder().decode([MealIngredient].self, from: $0) }
         )
     }
 }
@@ -530,5 +535,37 @@ public final class WaterEntryModel {
 
     public var snapshot: WaterEntryDTO {
         WaterEntryDTO(id: id, userId: userId, date: date, flOz: flOz, timestamp: timestamp)
+    }
+}
+
+// MARK: - Saved meal templates (V6)
+
+@Model
+final class SavedMealTemplateModel {
+    @Attribute(.unique) var id: UUID
+    var userId: UUID
+    var name: String
+    var emoji: String
+    var ingredientsJSON: Data
+    var createdAt: Date
+
+    var snapshot: SavedMealTemplateDTO {
+        SavedMealTemplateDTO(
+            id: id,
+            userId: userId,
+            name: name,
+            emoji: emoji,
+            ingredients: (try? JSONDecoder().decode([MealIngredient].self, from: ingredientsJSON)) ?? [],
+            createdAt: createdAt
+        )
+    }
+
+    init(snapshot s: SavedMealTemplateDTO) {
+        self.id = s.id
+        self.userId = s.userId
+        self.name = s.name
+        self.emoji = s.emoji
+        self.ingredientsJSON = (try? JSONEncoder().encode(s.ingredients)) ?? Data()
+        self.createdAt = s.createdAt
     }
 }
