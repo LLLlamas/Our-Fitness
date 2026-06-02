@@ -32,9 +32,10 @@ USAGE
       --foundation /path/FoodData_Central_foundation_food_json_*.zip \
       --sr-legacy  /path/FoodData_Central_sr_legacy_food_json_*.zip
 
-DATASET URLs (check the download page for the current dated filenames):
-  https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_foundation_food_json_<date>.zip
-  https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_sr_legacy_food_json_<date>.zip
+DATASET URLs (hosted at www.ars.usda.gov; check the download page for the
+current dated Foundation filename — https://fdc.nal.usda.gov/download-datasets/):
+  https://www.ars.usda.gov/fdc-datasets/FoodData_Central_foundation_food_json_<date>.zip
+  https://www.ars.usda.gov/fdc-datasets/FoodData_Central_sr_legacy_food_json_<date>.zip
 
 NOTES
   * Numbers are NEVER invented — every value comes straight from USDA.
@@ -208,14 +209,19 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Build the offline USDA food DB resource.")
     ap.add_argument("--foundation", help="Path to a Foundation Foods JSON zip (skips download).")
     ap.add_argument("--sr-legacy", help="Path to an SR Legacy JSON zip (skips download).")
+    # USDA hosts the dataset zips at www.ars.usda.gov/fdc-datasets/ (the older
+    # fdc.nal.usda.gov/fdc-datasets/ host now 404s). Foundation Foods is reissued
+    # ~twice a year (Apr/Oct) under a new date; SR Legacy is a frozen 2018 final
+    # release. If a default 404s, grab the current link from
+    # https://fdc.nal.usda.gov/download-datasets/ and pass --foundation-url.
     ap.add_argument(
         "--foundation-url",
-        default="https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_foundation_food_json_2024-10-31.zip",
-        help="Override Foundation download URL (update the date as needed).",
+        default="https://www.ars.usda.gov/fdc-datasets/FoodData_Central_foundation_food_json_2026-04-30.zip",
+        help="Override Foundation download URL (update the date as USDA reissues it).",
     )
     ap.add_argument(
         "--sr-legacy-url",
-        default="https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_sr_legacy_food_json_2018-04.zip",
+        default="https://www.ars.usda.gov/fdc-datasets/FoodData_Central_sr_legacy_food_json_2018-04.zip",
         help="Override SR Legacy download URL.",
     )
     ap.add_argument("--max", type=int, default=0, help="Cap the number of output rows (0 = no cap).")
