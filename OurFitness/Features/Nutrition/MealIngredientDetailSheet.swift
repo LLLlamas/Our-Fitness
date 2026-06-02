@@ -21,6 +21,7 @@ struct MealIngredientDetailSheet: View {
     let mode: Mode
     let profile: ProfileDTO
     var onDone: () -> Void
+    var onDeleteTemplate: (() -> Void)?
 
     @Environment(\.modelContext) private var ctx
     @Environment(\.dismiss) private var dismiss
@@ -36,10 +37,11 @@ struct MealIngredientDetailSheet: View {
     @State private var showFoodSearch = false
     @State private var showSaveTemplate = false
 
-    init(mode: Mode, profile: ProfileDTO, onDone: @escaping () -> Void) {
+    init(mode: Mode, profile: ProfileDTO, onDone: @escaping () -> Void, onDeleteTemplate: (() -> Void)? = nil) {
         self.mode = mode
         self.profile = profile
         self.onDone = onDone
+        self.onDeleteTemplate = onDeleteTemplate
 
         switch mode {
         case let .logging(name, emoji, defaultSlot, ingredients):
@@ -76,6 +78,12 @@ struct MealIngredientDetailSheet: View {
             .background(theme.bg.ignoresSafeArea())
             .navigationTitle(isEditing ? "Edit Meal" : "Log Meal")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") { dismiss() }
+                        .tactile(.ghost)
+                }
+            }
         }
         .presentationDetents([.large])
         .presentationDragIndicator(.visible)
@@ -170,12 +178,14 @@ struct MealIngredientDetailSheet: View {
 
     private var actions: some View {
         VStack(spacing: 12) {
-            Button {
-                showSaveTemplate = true
-            } label: {
-                Label("Save as My Recipe", systemImage: "bookmark")
+            if !isEditing {
+                Button {
+                    showSaveTemplate = true
+                } label: {
+                    Label("Save as My Recipe", systemImage: "bookmark")
+                }
+                .tactile(.ghost)
             }
-            .tactile(.ghost)
 
             if isEditing {
                 Button("Save Changes") { saveChanges() }
@@ -188,6 +198,14 @@ struct MealIngredientDetailSheet: View {
                 Button("Log Meal") { logMeal() }
                     .tactile(.primary, fullWidth: true)
                     .disabled(ingredients.isEmpty)
+            }
+
+            if let deleteTemplate = onDeleteTemplate {
+                Button(role: .destructive) { deleteTemplate() } label: {
+                    Label("Delete Recipe", systemImage: "trash")
+                }
+                .tactile(.ghost)
+                .tint(.red)
             }
         }
         .padding(.top, 4)
@@ -290,9 +308,15 @@ private struct IngredientRow: View {
                         .foregroundStyle(theme.dim)
                 }
                 Spacer(minLength: 8)
-                Text("\(ingredient.scaledPerServing.calories) cal · \(ingredient.scaledPerServing.proteinG)g")
-                    .font(.system(.caption, design: .monospaced))
-                    .foregroundStyle(theme.dim)
+                VStack(alignment: .trailing, spacing: 2) {
+                    let s = ingredient.scaledPerServing
+                    Text("\(s.calories) cal")
+                        .font(.system(.caption, design: .monospaced))
+                        .foregroundStyle(theme.text)
+                    Text("\(s.proteinG)g pro · \(s.carbsG)g carbs · \(s.fatG)g fat")
+                        .font(.system(.caption2, design: .monospaced))
+                        .foregroundStyle(theme.dim)
+                }
             }
 
             HStack(spacing: 10) {
@@ -399,6 +423,12 @@ struct IngredientFoodSearchSheet: View {
             .background(theme.bg.ignoresSafeArea())
             .navigationTitle("Add Ingredient")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Cancel") { dismiss() }
+                        .tactile(.ghost)
+                }
+            }
         }
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
@@ -479,6 +509,10 @@ struct ManualIngredientSheet: View {
             .navigationTitle("Manual Ingredient")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Cancel") { dismiss() }
+                        .tactile(.ghost)
+                }
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
                     Button("Done") { fieldFocused = false }
@@ -602,6 +636,10 @@ struct SaveTemplateSheet: View {
             .navigationTitle("Save Recipe")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Cancel") { dismiss() }
+                        .tactile(.ghost)
+                }
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
                     Button("Done") { fieldFocused = false }

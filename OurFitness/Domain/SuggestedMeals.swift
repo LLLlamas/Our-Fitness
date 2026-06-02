@@ -426,6 +426,31 @@ public enum SuggestedMeals {
         ),
     ]
 
+    // MARK: - Composite food ingredient map
+    //
+    // Maps CommonFood IDs that represent multi-ingredient foods (smoothies, bowls)
+    // to their constituent ingredient templates. Used by the food library to expand
+    // a single composite food into a full ingredient-level breakdown when the user
+    // taps it, so they can see and adjust banana, milk, protein separately.
+
+    public static let compositeIngredients: [String: [MealIngredientTemplate]] = [
+        "smoothie-banana-milk": [
+            MealIngredientTemplate(foodId: "protein-shake", quantity: 1.0, customName: "Whey protein"),
+            MealIngredientTemplate(foodId: "banana", quantity: 1.0),
+            MealIngredientTemplate(foodId: "milk-whole", quantity: 1.0),
+        ],
+        "acai-bowl": [
+            MealIngredientTemplate(foodId: "acai-bowl", quantity: 1.0),
+        ],
+        "burrito-bowl": [
+            MealIngredientTemplate(foodId: "rice-white", quantity: 1.0),
+            MealIngredientTemplate(foodId: "black-beans", quantity: 0.5),
+            MealIngredientTemplate(foodId: "chicken-breast", quantity: 1.0),
+            MealIngredientTemplate(foodId: "avocado", quantity: 1.0),
+            MealIngredientTemplate(foodId: "cheese-cheddar", quantity: 1.0),
+        ],
+    ]
+
     // MARK: - Mode-filtered shortcut
 
     public static func suggestions(for mode: Mode) -> [SuggestedMeal] {

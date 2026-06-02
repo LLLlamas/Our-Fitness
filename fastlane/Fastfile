@@ -88,6 +88,24 @@ def install_one_profile(profile_b64, label, expect_healthkit: false)
   File.binwrite(dest, raw)
   UI.success("Installed #{label} profile '#{name}' (#{uuid}) → #{dest} (#{raw.bytesize} bytes)")
 
+  # Extract and log the certificate SHA1(s) embedded in this profile so a
+  # cert-mismatch failure at archive time can be diagnosed immediately here
+  # instead of 10 minutes later. Compare against the cert match just installed:
+  #   security find-identity -v -p codesigning
+  require "openssl"
+  cert_shas = []
+  raw.scan(/-----BEGIN CERTIFICATE-----.*?-----END CERTIFICATE-----/m) do |pem|
+    cert = OpenSSL::X509::Certificate.new(pem) rescue nil
+    next unless cert
+    sha1 = OpenSSL::Digest::SHA1.new(cert.to_der).hexdigest.upcase.scan(/../).join(":")
+    cert_shas << "#{cert.subject.to_s.scan(/CN=([^,\/]+)/).flatten.first || "unknown"} [#{sha1[0..29]}…]"
+  end
+  if cert_shas.empty?
+    UI.warning("#{label} profile: could not extract embedded certificates (unexpected format).")
+  else
+    UI.message("#{label} profile embedded cert(s): #{cert_shas.join(', ')}")
+  end
+
   entitlements = plist.scan(/<key>(com\.apple\.developer\.[a-zA-Z0-9._-]+)<\/key>/).flatten.uniq.sort
   unless expect_healthkit
     # Widget has no managed capabilities — zero entitlements is correct here.

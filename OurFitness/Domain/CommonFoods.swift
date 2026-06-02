@@ -896,6 +896,56 @@ public enum CommonFoods {
             servingLabel: "1 oz (28 g, ~10 chips)",
             calories: 138, proteinG: 2, carbsG: 18, fatG: 7, fiberG: 2
         ),
+        // — Frito-Lay branded chips — https://www.fritolay.com/products
+        CommonFood(
+            id: "cheetos-crunchy", name: "Cheetos Crunchy",
+            aliases: ["cheetos", "cheetos crunchy", "crunchy cheetos"],
+            servingLabel: "1 oz (28 g, ~21 pieces)",
+            calories: 160, proteinG: 2, carbsG: 15, fatG: 10, fiberG: 0
+        ),
+        CommonFood(
+            id: "cheetos-puffs", name: "Cheetos Puffs",
+            aliases: ["cheetos puffs", "puffs cheetos"],
+            servingLabel: "1 oz (28 g, ~13 pieces)",
+            calories: 150, proteinG: 2, carbsG: 15, fatG: 9, fiberG: 0
+        ),
+        CommonFood(
+            id: "lays-classic", name: "Lays Classic",
+            aliases: ["lays", "lays classic", "lay's", "lays potato chips"],
+            servingLabel: "1 oz (28 g, ~15 chips)",
+            calories: 160, proteinG: 2, carbsG: 15, fatG: 10, fiberG: 1
+        ),
+        CommonFood(
+            id: "lays-sour-cream", name: "Lays Sour Cream & Onion",
+            aliases: ["lays sour cream", "sour cream and onion chips", "sour cream onion chips"],
+            servingLabel: "1 oz (28 g, ~15 chips)",
+            calories: 160, proteinG: 2, carbsG: 15, fatG: 10, fiberG: 1
+        ),
+        CommonFood(
+            id: "doritos-nacho", name: "Doritos Nacho Cheese",
+            aliases: ["doritos", "doritos nacho cheese", "nacho cheese doritos"],
+            servingLabel: "1 oz (28 g, ~12 chips)",
+            calories: 140, proteinG: 2, carbsG: 18, fatG: 7, fiberG: 1
+        ),
+        CommonFood(
+            id: "sunchips-original", name: "Sun Chips Original",
+            aliases: ["sun chips", "sunchips", "sunchips original"],
+            servingLabel: "1 oz (28 g, ~14 chips)",
+            calories: 140, proteinG: 2, carbsG: 19, fatG: 6, fiberG: 2
+        ),
+        CommonFood(
+            id: "fritos-original", name: "Fritos Original",
+            aliases: ["fritos", "fritos original", "corn chips fritos"],
+            servingLabel: "1 oz (28 g, ~32 pieces)",
+            calories: 160, proteinG: 2, carbsG: 15, fatG: 10, fiberG: 1
+        ),
+        // — Pringles — https://www.pringles.com/us (values from official US label)
+        CommonFood(
+            id: "pringles-original", name: "Pringles Original",
+            aliases: ["pringles", "pringles original"],
+            servingLabel: "15 crisps (28 g)",
+            calories: 150, proteinG: 1, carbsG: 15, fatG: 9, fiberG: 1
+        ),
         CommonFood(
             id: "popcorn", name: "Popcorn",
             aliases: ["popcorn", "popped corn"],

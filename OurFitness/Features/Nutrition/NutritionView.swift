@@ -4,6 +4,14 @@
 import SwiftUI
 import SwiftData
 
+/// Lightweight carrier for opening MealIngredientDetailSheet from a favorite food or recent log.
+private struct QuickMealLog: Identifiable {
+    let id = UUID()
+    let name: String
+    let emoji: String
+    let ingredients: [MealIngredient]
+}
+
 struct NutritionView: View {
     let profile: ProfileDTO
 
@@ -13,10 +21,12 @@ struct NutritionView: View {
 
     @Query private var logModels: [FoodLogEntryModel]
     @Query private var savedTemplates: [SavedMealTemplateModel]
+    @AppStorage private var favoriteIdsString: String
     @State private var showLogSheet = false
     @State private var showSuggestions = false
     @State private var showLibrary = false
     @State private var mealToDetail: SuggestedMeal?
+    @State private var mealToLog: QuickMealLog?
     @State private var entryToDetail: FoodLogEntryDTO?
     @State private var savedTemplateToLog: SavedMealTemplateDTO?
     @State private var showNutritionTrend = false
@@ -26,6 +36,7 @@ struct NutritionView: View {
     init(profile: ProfileDTO) {
         self.profile = profile
         let uid = profile.id
+        _favoriteIdsString = AppStorage(wrappedValue: "", "favoriteFoodIds.\(uid.uuidString)")
         _logModels = Query(
             filter: #Predicate<FoodLogEntryModel> { $0.userId == uid },
             sort: \.timestamp,
@@ -35,6 +46,28 @@ struct NutritionView: View {
             filter: #Predicate<SavedMealTemplateModel> { $0.userId == uid },
             sort: \.createdAt, order: .reverse
         )
+    }
+
+    private var favoriteIds: Set<String> {
+        Set(favoriteIdsString.split(separator: ",").map(String.init).filter { !$0.isEmpty })
+    }
+
+    private var favoriteFoods: [CommonFood] {
+        let ids = favoriteIds
+        return CommonFoods.all.filter { ids.contains($0.id) }
+    }
+
+    private var recentlyLogged: [FoodLogEntryDTO] {
+        var seen = Set<String>()
+        var result: [FoodLogEntryDTO] = []
+        for log in allLogs.reversed() {
+            let key = log.foodId ?? log.customName ?? log.id.uuidString
+            if seen.insert(key).inserted {
+                result.append(log)
+                if result.count >= 6 { break }
+            }
+        }
+        return result
     }
 
     private var today: String { Dates.dayKey() }
@@ -205,6 +238,19 @@ struct NutritionView: View {
             )
             .themed(profile.mode)
         }
+        .sheet(item: $mealToLog) { meal in
+            MealIngredientDetailSheet(
+                mode: .logging(
+                    name: meal.name,
+                    emoji: meal.emoji,
+                    defaultSlot: .lunch,
+                    ingredients: meal.ingredients
+                ),
+                profile: profile,
+                onDone: { mealToLog = nil }
+            )
+            .themed(profile.mode)
+        }
         .sheet(item: $entryToDetail) { entry in
             MealIngredientDetailSheet(
                 mode: .editing(entry: entry),
@@ -222,7 +268,13 @@ struct NutritionView: View {
                     ingredients: template.ingredients
                 ),
                 profile: profile,
-                onDone: { savedTemplateToLog = nil }
+                onDone: { savedTemplateToLog = nil },
+                onDeleteTemplate: {
+                    Repos.deleteSavedTemplate(ctx, id: template.id)
+                    Haptics.warn()
+                    toasts.show(Toast(title: "Recipe deleted", detail: template.name, accent: .warn, symbol: "trash"))
+                    savedTemplateToLog = nil
+                }
             )
             .themed(profile.mode)
         }
@@ -289,13 +341,13 @@ struct NutritionView: View {
     @ViewBuilder
     private var suggestionPillRow: some View {
         let meals = rankedSuggestions
-        if !meals.isEmpty || !savedTemplates.isEmpty {
-            VStack(alignment: .leading, spacing: 6) {
-                Text("For you".uppercased())
-                    .font(.system(size: 10)).tracking(2)
-                    .foregroundStyle(theme.dim)
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
+        let favorites = favoriteFoods
+        let recents = recentlyLogged
+        let hasContent = !savedTemplates.isEmpty || !favorites.isEmpty || !recents.isEmpty || !meals.isEmpty
+        if hasContent {
+            VStack(alignment: .leading, spacing: 14) {
+                if !savedTemplates.isEmpty {
+                    pillSection(header: "My Recipes") {
                         ForEach(savedTemplates) { template in
                             Button {
                                 savedTemplateToLog = template.snapshot
@@ -309,11 +361,55 @@ struct NutritionView: View {
                             .contextMenu {
                                 Button(role: .destructive) {
                                     Repos.deleteSavedTemplate(ctx, id: template.id)
+                                    Haptics.warn()
+                                    toasts.show(Toast(title: "Recipe deleted", detail: template.name, accent: .warn, symbol: "trash"))
                                 } label: {
-                                    Label("Remove recipe", systemImage: "trash")
+                                    Label("Delete Recipe", systemImage: "trash")
                                 }
                             }
                         }
+                    }
+                }
+
+                if !favorites.isEmpty {
+                    pillSection(header: "Favorites") {
+                        ForEach(favorites) { food in
+                            Button {
+                                let ingredients: [MealIngredient] = SuggestedMeals.compositeIngredients[food.id]?
+                                    .compactMap { $0.resolve() } ?? [MealIngredient.from(food)]
+                                mealToLog = QuickMealLog(name: food.name, emoji: "🍽️", ingredients: ingredients)
+                            } label: {
+                                Text(food.name)
+                            }
+                            .tactile(.pill)
+                        }
+                    }
+                }
+
+                if !recents.isEmpty {
+                    pillSection(header: "Recently Logged") {
+                        ForEach(recents) { entry in
+                            Button {
+                                let ingredients: [MealIngredient]
+                                if let ings = entry.ingredients, !ings.isEmpty {
+                                    ingredients = ings
+                                } else if let fid = entry.foodId,
+                                          let food = CommonFoods.all.first(where: { $0.id == fid }) {
+                                    ingredients = [MealIngredient.from(food)]
+                                } else {
+                                    ingredients = []
+                                }
+                                mealToLog = QuickMealLog(name: entry.customName ?? "Meal", emoji: "🍽️", ingredients: ingredients)
+                            } label: {
+                                Text(entry.customName ?? "Meal")
+                            }
+                            .tactile(.pill)
+                        }
+                    }
+                }
+
+                if !meals.isEmpty {
+                    pillSection(header: "For You") {
                         ForEach(meals) { meal in
                             Button {
                                 mealToDetail = meal
@@ -326,6 +422,20 @@ struct NutritionView: View {
                             .tactile(.pill)
                         }
                     }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func pillSection<Content: View>(header: String, @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(header.uppercased())
+                .font(.system(size: 10, weight: .medium)).tracking(2)
+                .foregroundStyle(theme.dim)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    content()
                 }
             }
         }
@@ -468,102 +578,145 @@ private struct MealDetailSheet: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                // Header
-                HStack(spacing: 12) {
-                    Text(meal.emoji)
-                        .font(.system(size: 44))
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(meal.name)
-                            .font(.system(size: 26, weight: .semibold))
-                            .foregroundStyle(theme.text)
-                        if !meal.allergens.isEmpty {
-                            Text(meal.allergens.joined(separator: " · "))
-                                .font(.caption).foregroundStyle(theme.dim)
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    // Header
+                    HStack(spacing: 12) {
+                        Text(meal.emoji)
+                            .font(.system(size: 44))
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(meal.name)
+                                .font(.system(size: 26, weight: .semibold))
+                                .foregroundStyle(theme.text)
+                            if !meal.allergens.isEmpty {
+                                Text(meal.allergens.joined(separator: " · "))
+                                    .font(.caption).foregroundStyle(theme.dim)
+                            }
                         }
                     }
-                }
 
-                Text(meal.description)
-                    .font(.callout).foregroundStyle(theme.dim)
-                    .fixedSize(horizontal: false, vertical: true)
-
-                // How estimates are derived
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("About this estimate".uppercased())
-                        .font(.system(size: 9, weight: .medium)).tracking(2)
-                        .foregroundStyle(theme.dim)
-                    Text("Macros are based on a standard single serving from curated recipe or published USDA data. If your portion was different, adjust the multiplier below.")
-                        .font(.caption).foregroundStyle(theme.dim)
+                    Text(meal.description)
+                        .font(.callout).foregroundStyle(theme.dim)
                         .fixedSize(horizontal: false, vertical: true)
-                }
-                .padding(10)
-                .background(theme.card)
-                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
 
-                // Serving multiplier
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Serving size".uppercased())
-                        .font(.caption).tracking(2).foregroundStyle(theme.dim)
-                    HStack(spacing: 8) {
-                        ForEach(Self.multipliers, id: \.self) { m in
-                            Button {
-                                multiplier = m
-                            } label: {
-                                Text(m == 0.5 ? "½×" : "\(Int(m))×")
-                                    .font(.system(size: 14, weight: .medium))
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 10)
+                    // Ingredients breakdown (if available)
+                    let resolved = meal.resolvedIngredients()
+                    if !resolved.isEmpty {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Ingredients".uppercased())
+                                .font(.system(size: 9, weight: .medium)).tracking(2)
+                                .foregroundStyle(theme.dim)
+                            ForEach(resolved) { ing in
+                                let s = ing.scaledPerServing
+                                HStack {
+                                    Text(ing.name)
+                                        .font(.callout).foregroundStyle(theme.text)
+                                    Text(ing.servingLabel)
+                                        .font(.caption).foregroundStyle(theme.dim)
+                                    Spacer()
+                                    VStack(alignment: .trailing, spacing: 1) {
+                                        Text("\(s.calories) cal")
+                                            .font(.system(.caption, design: .monospaced))
+                                            .foregroundStyle(theme.text)
+                                        Text("\(s.proteinG)g pro · \(s.carbsG)g carbs · \(s.fatG)g fat")
+                                            .font(.system(.caption2, design: .monospaced))
+                                            .foregroundStyle(theme.dim)
+                                    }
+                                }
+                                .padding(.horizontal, 12).padding(.vertical, 8)
+                                .background(theme.card)
+                                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                             }
-                            .tactile(.pill, fill: multiplier == m ? theme.accent : nil)
                         }
                     }
-                }
 
-                // Adjusted macros
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Nutrition".uppercased())
-                        .font(.caption).tracking(2).foregroundStyle(theme.dim)
-                    HStack(spacing: 8) {
-                        MacroChip(label: "Cal", value: adjusted.calories)
-                        MacroChip(label: "Protein", value: adjusted.proteinG)
-                        MacroChip(label: "Carbs", value: adjusted.carbsG)
-                        MacroChip(label: "Fat", value: adjusted.fatG)
-                        if adjusted.fiberG > 0 {
-                            MacroChip(label: "Fiber", value: adjusted.fiberG)
-                        }
+                    // How estimates are derived
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("About this estimate".uppercased())
+                            .font(.system(size: 9, weight: .medium)).tracking(2)
+                            .foregroundStyle(theme.dim)
+                        Text("Macros are based on a standard single serving from curated recipe or published USDA data. If your portion was different, adjust the multiplier below.")
+                            .font(.caption).foregroundStyle(theme.dim)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
-                }
+                    .padding(10)
+                    .background(theme.card)
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
 
-                // Slot picker
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("Log as".uppercased())
-                        .font(.caption).tracking(2).foregroundStyle(theme.dim)
-                    ScrollView(.horizontal, showsIndicators: false) {
+                    // Serving multiplier
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Serving size".uppercased())
+                            .font(.caption).tracking(2).foregroundStyle(theme.dim)
                         HStack(spacing: 8) {
-                            ForEach([Slot.breakfast, .lunch, .snack, .dinner, .postWorkout], id: \.self) { s in
-                                Button { slot = s } label: { Text(s.label) }
-                                    .tactile(.pill, fill: slot == s ? theme.accent : nil)
+                            ForEach(Self.multipliers, id: \.self) { m in
+                                Button {
+                                    multiplier = m
+                                } label: {
+                                    Text(m == 0.5 ? "½×" : "\(Int(m))×")
+                                        .font(.system(size: 14, weight: .medium))
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 10)
+                                }
+                                .tactile(.pill, fill: multiplier == m ? theme.accent : nil)
                             }
                         }
                     }
-                }
 
-                // Log button
-                Button {
-                    onLog(meal, slot, multiplier)
-                    dismiss()
-                } label: {
-                    Text("Log \(meal.name)")
-                        .font(.system(size: 17, weight: .semibold))
-                        .frame(maxWidth: .infinity, minHeight: 52)
+                    // Adjusted macros
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Nutrition".uppercased())
+                            .font(.caption).tracking(2).foregroundStyle(theme.dim)
+                        HStack(spacing: 8) {
+                            MacroChip(label: "Cal", value: adjusted.calories)
+                            MacroChip(label: "Protein", value: adjusted.proteinG)
+                            MacroChip(label: "Carbs", value: adjusted.carbsG)
+                            MacroChip(label: "Fat", value: adjusted.fatG)
+                            if adjusted.fiberG > 0 {
+                                MacroChip(label: "Fiber", value: adjusted.fiberG)
+                            }
+                        }
+                    }
+
+                    // Slot picker
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Log as".uppercased())
+                            .font(.caption).tracking(2).foregroundStyle(theme.dim)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) {
+                                ForEach([Slot.breakfast, .lunch, .snack, .dinner, .postWorkout], id: \.self) { s in
+                                    Button { slot = s } label: { Text(s.label) }
+                                        .tactile(.pill, fill: slot == s ? theme.accent : nil)
+                                }
+                            }
+                        }
+                    }
+
+                    // Log button
+                    Button {
+                        onLog(meal, slot, multiplier)
+                        dismiss()
+                    } label: {
+                        Text("Log \(meal.name)")
+                            .font(.system(size: 17, weight: .semibold))
+                            .frame(maxWidth: .infinity, minHeight: 52)
+                    }
+                    .tactile(.primary, fullWidth: true)
                 }
-                .tactile(.primary, fullWidth: true)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 24)
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
+            .background(theme.bg.ignoresSafeArea())
+            .navigationTitle(meal.name)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Back") { dismiss() }
+                        .tactile(.ghost)
+                }
+            }
         }
         .presentationDetents([.large])
         .presentationBackground(theme.bg)
@@ -640,6 +793,7 @@ private struct NLMealLogSheet: View {
     }
 
     var body: some View {
+        NavigationStack {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
                 Text("log a meal.")
@@ -704,14 +858,22 @@ private struct NLMealLogSheet: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
         }
-        .presentationDetents([.large])
-        .presentationBackground(theme.bg)
+        .background(theme.bg.ignoresSafeArea())
+        .navigationTitle("Log Meal")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button("Cancel") { dismiss() }
+                    .tactile(.ghost)
+            }
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
                 Button("Done") { focused = nil }
             }
         }
+        }
+        .presentationDetents([.large])
+        .presentationBackground(theme.bg)
     }
 
     /// Instant, deterministic string parse on every keystroke. Always the source of
@@ -924,40 +1086,48 @@ private struct SuggestionsSheet: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 14) {
-                Text("suggestions.")
-                    .font(.system(size: 36, weight: .regular))
-                    .foregroundStyle(theme.text)
-                Text("Tap any meal to see info and adjust your portion.")
-                    .font(.callout).foregroundStyle(theme.dim)
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 14) {
+                    Text("Tap any meal to see info and adjust your portion.")
+                        .font(.callout).foregroundStyle(theme.dim)
 
-                ForEach(suggestions) { meal in
-                    PressableCard(action: { selectedMeal = meal }) {
-                        HStack(spacing: 12) {
-                            Text(meal.emoji)
-                                .font(.system(size: 28))
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(meal.name)
-                                    .font(.system(size: 15, weight: .semibold))
-                                    .foregroundStyle(theme.text)
-                                Text(meal.description)
-                                    .font(.caption).foregroundStyle(theme.dim)
-                                    .lineLimit(2)
-                                Text("\(meal.perServing.calories) cal · \(meal.perServing.proteinG)g protein · \(meal.perServing.carbsG)g carbs · \(meal.perServing.fatG)g fat")
-                                    .font(.system(.caption2, design: .monospaced))
-                                    .foregroundStyle(theme.accent)
+                    ForEach(suggestions) { meal in
+                        PressableCard(action: { selectedMeal = meal }) {
+                            HStack(spacing: 12) {
+                                Text(meal.emoji)
+                                    .font(.system(size: 28))
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(meal.name)
+                                        .font(.system(size: 15, weight: .semibold))
+                                        .foregroundStyle(theme.text)
+                                    Text(meal.description)
+                                        .font(.caption).foregroundStyle(theme.dim)
+                                        .lineLimit(2)
+                                    Text("\(meal.perServing.calories) cal · \(meal.perServing.proteinG)g pro · \(meal.perServing.carbsG)g carbs · \(meal.perServing.fatG)g fat")
+                                        .font(.system(.caption2, design: .monospaced))
+                                        .foregroundStyle(theme.accent)
+                                }
+                                Spacer(minLength: 0)
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 12))
+                                    .foregroundStyle(theme.dim)
                             }
-                            Spacer(minLength: 0)
-                            Image(systemName: "chevron.right")
-                                .font(.system(size: 12))
-                                .foregroundStyle(theme.dim)
                         }
                     }
                 }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 24)
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
+            .background(theme.bg.ignoresSafeArea())
+            .navigationTitle("Suggestions")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") { dismiss() }
+                        .tactile(.ghost)
+                }
+            }
         }
         .presentationDetents([.large])
         .presentationBackground(theme.bg)
@@ -993,12 +1163,30 @@ private struct FoodLibrarySheet: View {
     let profile: ProfileDTO
     let onLog: (CommonFood, Slot, Double) -> Void
 
+    @AppStorage private var favoriteIdsString: String
     @Environment(\.theme) private var theme
     @Environment(\.dismiss) private var dismiss
     @State private var query: String = ""
     @State private var displayedResults: [CommonFood] = CommonFoods.all
     @State private var foodToDetail: CommonFood?
     @FocusState private var searchFocused: Bool
+
+    init(profile: ProfileDTO, onLog: @escaping (CommonFood, Slot, Double) -> Void) {
+        self.profile = profile
+        self.onLog = onLog
+        _favoriteIdsString = AppStorage(wrappedValue: "", "favoriteFoodIds.\(profile.id.uuidString)")
+    }
+
+    private var favoriteIds: Set<String> {
+        Set(favoriteIdsString.split(separator: ",").map(String.init).filter { !$0.isEmpty })
+    }
+
+    private func toggleFavorite(_ id: String) {
+        var ids = favoriteIds
+        if ids.contains(id) { ids.remove(id) } else { ids.insert(id) }
+        favoriteIdsString = ids.joined(separator: ",")
+        Haptics.bump()
+    }
 
     /// Pure search over curated + USDA foods. Static so the `.task` debounce can call
     /// it off the render path without capturing view state beyond the query string.
@@ -1020,47 +1208,66 @@ private struct FoodLibrarySheet: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 14) {
-                Text("library.")
-                    .font(.system(size: 36, weight: .regular))
-                    .foregroundStyle(theme.text)
-                Text("Search common foods. Tap one for details and to log.")
-                    .font(.callout).foregroundStyle(theme.dim)
-
-                searchField
-
-                if displayedResults.isEmpty {
-                    Text("No matches. Try a simpler term.")
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 14) {
+                    Text("Search common foods. Tap one for details and to log.")
                         .font(.callout).foregroundStyle(theme.dim)
-                        .padding(.top, 8)
-                } else {
-                    VStack(spacing: 8) {
-                        ForEach(displayedResults, id: \.id) { food in
-                            PressableCard(action: { foodToDetail = food }) {
-                                HStack(alignment: .top, spacing: 12) {
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text(food.name)
-                                            .font(.system(size: 15, weight: .semibold))
-                                            .foregroundStyle(theme.text)
-                                        Text(food.servingLabel)
-                                            .font(.caption).foregroundStyle(theme.dim)
-                                        Text("\(food.calories) cal · \(food.proteinG)g protein · \(food.carbsG)g carbs · \(food.fatG)g fat")
-                                            .font(.system(.caption2, design: .monospaced))
-                                            .foregroundStyle(theme.accent)
+
+                    searchField
+
+                    if displayedResults.isEmpty {
+                        Text("No matches. Try a simpler term.")
+                            .font(.callout).foregroundStyle(theme.dim)
+                            .padding(.top, 8)
+                    } else {
+                        let ids = favoriteIds
+                        VStack(spacing: 8) {
+                            ForEach(displayedResults, id: \.id) { food in
+                                PressableCard(action: { foodToDetail = food }) {
+                                    HStack(alignment: .top, spacing: 12) {
+                                        VStack(alignment: .leading, spacing: 4) {
+                                            Text(food.name)
+                                                .font(.system(size: 15, weight: .semibold))
+                                                .foregroundStyle(theme.text)
+                                            Text(food.servingLabel)
+                                                .font(.caption).foregroundStyle(theme.dim)
+                                            Text("\(food.calories) cal · \(food.proteinG)g pro · \(food.carbsG)g carbs · \(food.fatG)g fat")
+                                                .font(.system(.caption2, design: .monospaced))
+                                                .foregroundStyle(theme.accent)
+                                        }
+                                        Spacer(minLength: 0)
+                                        Button {
+                                            toggleFavorite(food.id)
+                                        } label: {
+                                            Image(systemName: ids.contains(food.id) ? "heart.fill" : "heart")
+                                                .foregroundStyle(ids.contains(food.id) ? theme.accent : theme.dim)
+                                                .font(.system(size: 16))
+                                        }
+                                        .tactile(.ghost)
                                     }
-                                    Spacer(minLength: 0)
                                 }
                             }
                         }
                     }
                 }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 24)
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
+            .background(theme.bg.ignoresSafeArea())
+            .navigationTitle("Library")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") { dismiss() }
+                        .tactile(.ghost)
+                }
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") { searchFocused = false }
+                }
+            }
         }
-        .presentationDetents([.large])
-        .presentationBackground(theme.bg)
         // Debounce the USDA scan off the hot render path: each keystroke restarts this
         // task (cancelling the prior one); only after a short pause does the heavy
         // search run, so typing never rescans 15–20k entries synchronously in `body`.
@@ -1070,24 +1277,22 @@ private struct FoodLibrarySheet: View {
             guard !Task.isCancelled else { return }
             displayedResults = Self.search(q)
         }
+        .presentationDetents([.large])
+        .presentationBackground(theme.bg)
         .sheet(item: $foodToDetail) { food in
+            let ingredients: [MealIngredient] = SuggestedMeals.compositeIngredients[food.id]?
+                .compactMap { $0.resolve() } ?? [MealIngredient.from(food)]
             MealIngredientDetailSheet(
                 mode: .logging(
                     name: food.name,
                     emoji: "🍽️",
                     defaultSlot: .lunch,
-                    ingredients: [MealIngredient.from(food)]
+                    ingredients: ingredients
                 ),
                 profile: profile,
                 onDone: { foodToDetail = nil }
             )
             .themed(profile.mode)
-        }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") { searchFocused = false }
-            }
         }
     }
 
@@ -1109,7 +1314,7 @@ private struct FoodLibrarySheet: View {
         .padding(10)
         .background(theme.card)
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
     }
 }
 
