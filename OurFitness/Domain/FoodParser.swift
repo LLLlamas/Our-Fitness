@@ -143,6 +143,51 @@ public enum FoodParser {
         return 1.0
     }
 
+    // MARK: - Resolving pre-extracted items (shared with the AI parser)
+
+    /// A food name + quantity that some upstream stage already isolated (e.g. the
+    /// on-device AI meal parser in `Services/MealParseService.swift`). The AI is
+    /// only allowed to produce TEXT — it never supplies nutrition numbers. We hand
+    /// those names straight back through this resolver so every calorie/macro value
+    /// still comes from `CommonFoods`/`FoodDatabase`, never from the model.
+    public struct ExtractedItem: Equatable, Sendable {
+        public let name: String
+        public let quantity: Double
+        public init(name: String, quantity: Double) {
+            self.name = name
+            self.quantity = max(0, quantity)
+        }
+    }
+
+    /// Resolve a list of already-split items into the SAME `ParseResult` the string
+    /// parser produces. Each name is matched against the curated + USDA databases and
+    /// scaled with the identical per-serving math; unmatched names land in
+    /// `unrecognized`. This is the single bridge the AI parser uses so its output is
+    /// indistinguishable from (and as safe as) the string path downstream.
+    public static func resolve(items: [ExtractedItem]) -> ParseResult {
+        resolve(items: items, database: FoodDatabase.shared)
+    }
+
+    /// Injectable-database variant for the hostless tests (no bundled resource).
+    public static func resolve(items: [ExtractedItem], database: FoodDatabase) -> ParseResult {
+        var recognized: [ParsedItem] = []
+        var unrecognized: [String] = []
+
+        for item in items {
+            let name = item.name.trimmingCharacters(in: .whitespaces)
+            guard name.count > 1 else { continue }
+            let qty = item.quantity > 0 ? item.quantity : 1.0
+            if let food = matchFood(in: name.lowercased(), database: database) {
+                recognized.append(scaled(food: food, by: qty))
+            } else {
+                unrecognized.append(name)
+            }
+        }
+
+        let joined = items.map(\.name).joined(separator: ", ")
+        return ParseResult(inputText: joined, recognized: recognized, unrecognized: unrecognized)
+    }
+
     // MARK: - Food matching
 
     private static func matchFood(in chunk: String, database: FoodDatabase) -> CommonFood? {
