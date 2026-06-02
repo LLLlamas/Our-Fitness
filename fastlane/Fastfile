@@ -101,7 +101,7 @@ def install_one_profile(profile_b64, label, expect_healthkit: false)
     cert_shas << "#{cert.subject.to_s.scan(/CN=([^,\/]+)/).flatten.first || "unknown"} [#{sha1[0..29]}…]"
   end
   if cert_shas.empty?
-    UI.warning("#{label} profile: could not extract embedded certificates (unexpected format).")
+    UI.important("#{label} profile: could not extract embedded certificates (unexpected format).")
   else
     UI.message("#{label} profile embedded cert(s): #{cert_shas.join(', ')}")
   end
