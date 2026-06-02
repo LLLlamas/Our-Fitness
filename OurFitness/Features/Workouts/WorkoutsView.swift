@@ -114,6 +114,8 @@ private struct BuildWorkoutsView: View {
                 Text("Hypertrophy bias. Add your lifts, count reps, watch the numbers climb.")
                     .font(.callout).foregroundStyle(theme.dim)
 
+                LiveSessionCard(profile: profile)
+
                 HStack {
                     Text("Your exercises")
                         .font(.system(size: 22, weight: .regular))

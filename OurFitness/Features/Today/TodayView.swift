@@ -188,6 +188,8 @@ struct TodayView: View {
 
     @ViewBuilder
     private var circuitContent: some View {
+        LiveSessionCard(profile: profile)
+
         StepsCardioCard(
             profile: profile,
             todaysSteps: todaysSteps,
