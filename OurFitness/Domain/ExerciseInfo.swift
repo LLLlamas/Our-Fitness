@@ -159,6 +159,21 @@ public enum ExerciseInfo {
             )
         }
 
+        // Chest fly / pec fly (chest isolation). Excludes "reverse fly" (rear delt —
+        // handled in the face-pull branch below).
+        if lower.contains("fly") && !lower.contains("reverse") {
+            return Meta(
+                muscleGroups: ["Pectorals"],
+                secondaryMuscles: ["Anterior delts", "Biceps"],
+                benefits: [
+                    "Isolates the chest through horizontal adduction — a deeper stretch than the bench press loads directly.",
+                    "Adds chest volume without taxing the triceps, so it pairs well after pressing work.",
+                    "Keep the elbows softly bent and the weight moderate — flyes load the shoulder at full stretch."
+                ],
+                met: 3.5, secondsPerRep: 3.0
+            )
+        }
+
         // Overhead press / shoulder press
         if lower.contains("overhead") || lower.contains("ohp") ||
            lower.contains("shoulder press") || lower.contains("military") ||
@@ -176,6 +191,25 @@ public enum ExerciseInfo {
             )
         }
 
+        // Lateral / front raise (shoulder isolation)
+        if lower.contains("lateral raise") || lower.contains("lat raise")
+            || lower.contains("side raise") || lower.contains("front raise")
+            || lower.contains("delt raise") {
+            let isFront = lower.contains("front")
+            return Meta(
+                muscleGroups: isFront ? ["Anterior delts"] : ["Lateral delts"],
+                secondaryMuscles: ["Upper traps", "Rotator cuff"],
+                benefits: [
+                    isFront
+                        ? "Targets the front of the shoulder through flexion — fills out the cap from the front."
+                        : "Targets the side delts — the muscle that creates shoulder width and the round, capped look.",
+                    "Pure isolation: light weight with strict control beats heavy swinging here.",
+                    "Balanced delt development improves posture and shoulder-joint stability."
+                ],
+                met: 3.5, secondsPerRep: 2.5
+            )
+        }
+
         // Squat
         if lower.contains("squat") {
             let isFront = lower.contains("front") || lower.contains("goblet")
@@ -189,6 +223,29 @@ public enum ExerciseInfo {
                     "Squat strength in midlife is a strong predictor of functional independence and longevity."
                 ],
                 met: 5.0, secondsPerRep: 3.0
+            )
+        }
+
+        // Leg press / leg extension / leg curl (machines). Placed before the tricep
+        // "extension" branch so "leg extension" reads as quads, not triceps.
+        if lower.contains("leg press") || lower.contains("leg extension")
+            || lower.contains("leg curl") || lower.contains("hamstring curl") {
+            let isCurl = lower.contains("curl")
+            let isExtension = lower.contains("extension")
+            return Meta(
+                muscleGroups: isCurl ? ["Hamstrings"]
+                    : (isExtension ? ["Quads"] : ["Quads", "Glutes", "Hamstrings"]),
+                secondaryMuscles: isCurl ? ["Calves"] : ["Adductors", "Calves"],
+                benefits: [
+                    isCurl
+                        ? "Isolates the hamstrings through knee flexion — balances the quad-dominant work most lower bodies get."
+                        : (isExtension
+                            ? "Isolates the quads with no balance demand — useful for adding knee-extension volume after compound lifts."
+                            : "Machine pressing loads the quads and glutes on a fixed path — easy to progress and low on technique risk."),
+                    "Machines let you push close to failure safely without a spotter, which drives hypertrophy.",
+                    "Stronger legs raise resting metabolic rate and protect the knee and hip joints over time."
+                ],
+                met: lower.contains("leg press") ? 5.0 : 3.5, secondsPerRep: 3.0
             )
         }
 
@@ -281,6 +338,63 @@ public enum ExerciseInfo {
                     "Horizontal force production from this pattern improves sprint speed and jump height.",
                     "Low spinal compressive load — accessible even with lower-back issues.",
                     "Strong glutes reduce anterior pelvic tilt and chronic lower-back pain."
+                ],
+                met: 4.0, secondsPerRep: 3.0
+            )
+        }
+
+        // Reverse plank (posterior-chain hold) — before the plank branch so it does
+        // not inherit the anterior-core plank muscle list.
+        if lower.contains("reverse plank") {
+            return Meta(
+                muscleGroups: ["Glutes", "Hamstrings", "Erector spinae"],
+                secondaryMuscles: ["Rear delts", "Core"],
+                benefits: [
+                    "Trains the whole back of the body in one hold — glutes, hamstrings, and spinal erectors together.",
+                    "A direct counter to all-day sitting and the forward, hunched posture it builds.",
+                    "No equipment, low joint stress — hold for time and progress the seconds."
+                ],
+                met: 3.8, secondsPerRep: 3.0
+            )
+        }
+
+        // Wall sit (isometric quad/glute hold)
+        if lower.contains("wall sit") {
+            return Meta(
+                muscleGroups: ["Quads", "Glutes"],
+                secondaryMuscles: ["Hamstrings", "Calves"],
+                benefits: [
+                    "Builds quad and glute endurance under constant tension — a joint-friendly way to load the legs.",
+                    "No equipment and easy to scale: hold longer or sink lower.",
+                    "Isometric leg holds are associated with improved knee stability."
+                ],
+                met: 4.0, secondsPerRep: 3.0
+            )
+        }
+
+        // Dead hang (grip + shoulder decompression hold)
+        if lower.contains("dead hang") || lower.contains("bar hang") {
+            return Meta(
+                muscleGroups: ["Forearms/Grip", "Lats"],
+                secondaryMuscles: ["Shoulders", "Core"],
+                benefits: [
+                    "Builds grip and forearm strength — grip strongly correlates with overall strength and healthy aging.",
+                    "Decompresses the spine and stretches the shoulders and lats after pressing work.",
+                    "A simple progression toward your first pull-up: hold for time, then add reps."
+                ],
+                met: 4.0, secondsPerRep: 3.0
+            )
+        }
+
+        // L-sit (anterior-core + hip-flexor hold)
+        if lower.contains("l-sit") || lower.contains("l sit") {
+            return Meta(
+                muscleGroups: ["Rectus abdominis", "Hip flexors"],
+                secondaryMuscles: ["Triceps", "Quads", "Shoulders"],
+                benefits: [
+                    "One of the most demanding ab holds — braces the core hard while the hip flexors hold the legs out straight.",
+                    "Also loads the triceps and shoulders to stay propped up, training the whole front line.",
+                    "Scale down with bent knees or feet supported, then work toward straight legs."
                 ],
                 met: 4.0, secondsPerRep: 3.0
             )
