@@ -32,10 +32,10 @@ USAGE
       --foundation /path/FoodData_Central_foundation_food_json_*.zip \
       --sr-legacy  /path/FoodData_Central_sr_legacy_food_json_*.zip
 
-DATASET URLs (hosted at www.ars.usda.gov; check the download page for the
-current dated Foundation filename — https://fdc.nal.usda.gov/download-datasets/):
-  https://www.ars.usda.gov/fdc-datasets/FoodData_Central_foundation_food_json_<date>.zip
-  https://www.ars.usda.gov/fdc-datasets/FoodData_Central_sr_legacy_food_json_<date>.zip
+DATASET URLs (check the download page for the current dated Foundation filename —
+https://fdc.nal.usda.gov/download-datasets/):
+  https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_foundation_food_json_<date>.zip
+  https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_sr_legacy_food_json_<date>.zip
 
 NOTES
   * Numbers are NEVER invented — every value comes straight from USDA.
@@ -59,14 +59,14 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 OUTPUT = REPO_ROOT / "OurFitness" / "Resources" / "usda-foods.json"
 
 # USDA nutrient numbers (stable across datasets):
-N_ENERGY_KCAL = "208"
+# Energy: prefer classic Energy (kcal, #208); Foundation Foods frequently report
+# energy ONLY as Atwater (#957 general / #958 specific) — also kcal — so fall back
+# to those. Without this, most Foundation rows have no #208 and get dropped → 0 foods.
+ENERGY_NUMBERS_KCAL = ("208", "957", "958")
 N_PROTEIN = "203"
 N_CARB = "205"
 N_FAT = "204"
 N_FIBER = "291"
-
-# Data types we keep. Foundation + SR Legacy are whole/standard reference foods.
-KEEP_DATATYPES = {"foundation_food", "sr_legacy_food"}
 
 # Foods we drop by keyword — supplements, infant formula, fast-food brands, and
 # fortified/odd reference rows that pollute natural-language matching.
@@ -140,6 +140,20 @@ def nutrient_value(food: dict, number: str) -> float | None:
     return None
 
 
+def energy_kcal(food: dict) -> float | None:
+    """Energy in kcal, preferring classic Energy (#208) then Atwater (#957/#958)."""
+    found: dict[str, float] = {}
+    for n in food.get("foodNutrients", []):
+        num = str(n.get("nutrient", {}).get("number"))
+        amt = n.get("amount")
+        if num in ENERGY_NUMBERS_KCAL and amt is not None:
+            found.setdefault(num, float(amt))
+    for num in ENERGY_NUMBERS_KCAL:
+        if num in found:
+            return found[num]
+    return None
+
+
 def serving_for(name_lower: str) -> tuple[str, float]:
     for pattern, label, grams in SERVING_RULES:
         if pattern.search(name_lower):
@@ -176,7 +190,7 @@ def build_entry(food: dict) -> dict | None:
     if any(k in low for k in DROP_KEYWORDS):
         return None
 
-    kcal = nutrient_value(food, N_ENERGY_KCAL)
+    kcal = energy_kcal(food)
     protein = nutrient_value(food, N_PROTEIN)
     carb = nutrient_value(food, N_CARB)
     fat = nutrient_value(food, N_FAT)
@@ -209,19 +223,20 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Build the offline USDA food DB resource.")
     ap.add_argument("--foundation", help="Path to a Foundation Foods JSON zip (skips download).")
     ap.add_argument("--sr-legacy", help="Path to an SR Legacy JSON zip (skips download).")
-    # USDA hosts the dataset zips at www.ars.usda.gov/fdc-datasets/ (the older
-    # fdc.nal.usda.gov/fdc-datasets/ host now 404s). Foundation Foods is reissued
-    # ~twice a year (Apr/Oct) under a new date; SR Legacy is a frozen 2018 final
-    # release. If a default 404s, grab the current link from
-    # https://fdc.nal.usda.gov/download-datasets/ and pass --foundation-url.
+    # Dataset zips live under https://fdc.nal.usda.gov/fdc-datasets/ (the host the
+    # download page's own links resolve to, and the host the original run already
+    # downloaded from successfully). Foundation Foods is reissued ~twice a year
+    # under a new date; SR Legacy is a frozen 2018 final release. If a default 404s,
+    # grab the current dated link from https://fdc.nal.usda.gov/download-datasets/
+    # and pass it via --foundation-url / --sr-legacy-url.
     ap.add_argument(
         "--foundation-url",
-        default="https://www.ars.usda.gov/fdc-datasets/FoodData_Central_foundation_food_json_2026-04-30.zip",
+        default="https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_foundation_food_json_2024-10-31.zip",
         help="Override Foundation download URL (update the date as USDA reissues it).",
     )
     ap.add_argument(
         "--sr-legacy-url",
-        default="https://www.ars.usda.gov/fdc-datasets/FoodData_Central_sr_legacy_food_json_2018-04.zip",
+        default="https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_sr_legacy_food_json_2018-04.zip",
         help="Override SR Legacy download URL.",
     )
     ap.add_argument("--max", type=int, default=0, help="Cap the number of output rows (0 = no cap).")
@@ -232,9 +247,19 @@ def main() -> int:
     zips.append(load_zip(args.sr_legacy) if args.sr_legacy else fetch_zip(args.sr_legacy_url))
 
     by_id: dict[str, dict] = {}
+    raw_count = 0
+    datatypes_seen: dict[str, int] = {}
     for zf in zips:
         for food in iter_foods(zf):
-            if food.get("dataType") and food["dataType"] not in KEEP_DATATYPES:
+            raw_count += 1
+            # Normalize dataType (USDA uses "foundation_food"/"sr_legacy_food", but
+            # casing/spacing varies and some exports omit it). Keep foods with no
+            # dataType (the zips are already type-specific) and accept any
+            # foundation/SR-legacy variant — a strict exact-match here was silently
+            # dropping every food.
+            dt = (food.get("dataType") or "").lower().replace(" ", "_")
+            datatypes_seen[dt or "(none)"] = datatypes_seen.get(dt or "(none)", 0) + 1
+            if dt and not any(k in dt for k in ("foundation", "sr_legacy", "srlegacy", "legacy")):
                 continue
             entry = build_entry(food)
             if entry:
@@ -242,18 +267,24 @@ def main() -> int:
 
     all_entries = sorted(by_id.values(), key=lambda e: e["name"].lower())
 
-    # Guard: a failed/empty download must NOT silently overwrite the bundled
-    # dataset with an empty file. The real USDA Foundation + SR Legacy whole-foods
-    # set is thousands of rows; a tiny count means the download or parse failed —
-    # most often a 404 because USDA reposted the dataset under a newer date. Refuse
-    # to write rather than ship an empty food DB. (Checked before --max capping.)
+    # Guard: a failed/empty download or a parse mismatch must NOT silently overwrite
+    # the bundled dataset with an empty file. The real USDA Foundation + SR Legacy
+    # whole-foods set is thousands of rows; a tiny count means something failed.
+    # Refuse to write, and log enough to localize the cause. (Before --max capping.)
     MIN_FOODS = 100
     if len(all_entries) < MIN_FOODS:
-        log(f"ERROR: only {len(all_entries)} foods parsed (< {MIN_FOODS}). The USDA "
-            "download or parse likely failed (usually a 404 on a dated dataset URL). "
-            f"Refusing to overwrite {OUTPUT.relative_to(REPO_ROOT)} with an empty set. "
-            "Pass current URLs via --foundation-url / --sr-legacy-url (or local zips via "
-            "--foundation / --sr-legacy) from https://fdc.nal.usda.gov/download-datasets/.")
+        log(f"ERROR: only {len(all_entries)} foods kept from {raw_count} raw rows "
+            f"(< {MIN_FOODS}). Refusing to overwrite {OUTPUT.relative_to(REPO_ROOT)}.")
+        log(f"  dataTypes seen: {datatypes_seen}")
+        if raw_count == 0:
+            log("  raw_count == 0 → iter_foods found no food array. Check the JSON "
+                "top-level key (expected FoundationFoods / SRLegacyFoods) or the zip URL.")
+        else:
+            log("  raw rows were read but almost all dropped → the dataType filter, "
+                "energy lookup, or DROP_KEYWORDS removed them. Inspect a sample food's keys.")
+        log("  Datasets: https://fdc.nal.usda.gov/download-datasets/ — pass current "
+            "links via --foundation-url / --sr-legacy-url or local zips via "
+            "--foundation / --sr-legacy if a URL 404s.")
         return 1
 
     entries = all_entries[: args.max] if args.max > 0 else all_entries
