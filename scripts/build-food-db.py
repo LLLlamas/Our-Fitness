@@ -4,9 +4,10 @@ build-food-db.py — regenerate the bundled offline USDA food database.
 
 WHAT IT DOES
   Downloads the USDA FoodData Central bulk datasets (Foundation Foods + SR
-  Legacy), prunes them to whole/common foods, extracts ONLY the fields the app
-  uses (calories, protein, carbs, fat, fiber, a sensible serving size, name, and
-  a few aliases), and writes the compact JSON the app loads at runtime:
+  Legacy + Branded Foods), prunes them to whole/common/recognizable foods,
+  extracts ONLY the fields the app uses (calories, protein, carbs, fat, fiber,
+  a sensible serving size, name, and a few aliases), and writes the compact JSON
+  the app loads at runtime:
 
       OurFitness/Resources/usda-foods.json
 
@@ -15,32 +16,48 @@ WHAT IT DOES
   (CC0): https://fdc.nal.usda.gov/download-datasets/
 
 WHY A SCRIPT (and why the repo ships only a small seed)
-  The bulk datasets are hundreds of MB and cannot be downloaded on the dev's
-  Windows host. The repo ships a hand-verified seed of real USDA values so the
-  app compiles, runs, and tests pass today. Run THIS script on a Mac/CI with
-  network to populate the full dataset before a release build.
+  The bulk datasets are hundreds of MB (Branded is ~GB uncompressed) and cannot
+  be downloaded on the dev's Windows host. The repo ships a hand-verified seed of
+  real USDA values so the app compiles, runs, and tests pass today. Run THIS
+  script on a Mac/CI with network to populate the full dataset before a release
+  build.
+
+DATA SOURCES (three, all USDA, all CC0)
+  * Foundation Foods + SR Legacy — per-100 g `foodNutrients` arrays. Scaled to a
+    friendly serving (see SERVING_RULES).
+  * Branded Foods — per-SERVING `labelNutrients` (the Nutrition Facts panel). NOT
+    scaled: the label values are used as-is against the product's stated serving.
+    Huge (~400k+ items), so it is STREAM-parsed with ijson — never json.load'd.
 
 USAGE
-  # Default: download both datasets, emit the resource.
+  # Default: download all three datasets, emit the resource.
   python3 scripts/build-food-db.py
 
   # Limit the row count (useful for a quick smoke test):
   python3 scripts/build-food-db.py --max 1500
 
+  # Skip the (large) Branded download — Foundation + SR Legacy only:
+  python3 scripts/build-food-db.py --no-branded
+
   # Point at already-downloaded dataset zips instead of fetching:
   python3 scripts/build-food-db.py \
       --foundation /path/FoodData_Central_foundation_food_json_*.zip \
-      --sr-legacy  /path/FoodData_Central_sr_legacy_food_json_*.zip
+      --sr-legacy  /path/FoodData_Central_sr_legacy_food_json_*.zip \
+      --branded    /path/FoodData_Central_branded_food_json_*.zip
 
-DATASET URLs (check the download page for the current dated Foundation filename —
+DATASET URLs (check the download page for the current dated filenames —
 https://fdc.nal.usda.gov/download-datasets/):
   https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_foundation_food_json_<date>.zip
   https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_sr_legacy_food_json_<date>.zip
+  https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_branded_food_json_<date>.zip
 
 NOTES
   * Numbers are NEVER invented — every value comes straight from USDA.
-  * Per-100g USDA values are scaled to a friendly serving (see SERVING_RULES).
-  * Branded Foods is intentionally excluded (noisy, not CC0-uniform, huge).
+  * Per-100g USDA values are scaled to a friendly serving (see SERVING_RULES);
+    Branded label values are used per-serving, unscaled.
+  * Branded is filtered/deduped/per-brand-capped down to a recognizable subset
+    (see select_branded) so it doesn't flood the bundle with UPC duplicates.
+  * A failed Branded download is non-fatal: Foundation + SR Legacy still write.
   * Output is sorted + pretty-printed so diffs are reviewable.
 """
 
@@ -68,11 +85,15 @@ N_CARB = "205"
 N_FAT = "204"
 N_FIBER = "291"
 
-# Foods we drop by keyword — supplements, infant formula, fast-food brands, and
-# fortified/odd reference rows that pollute natural-language matching.
+# Foods we drop by keyword — genuine noise that pollutes natural-language
+# matching: supplements, infant formula, imitation/commodity reference rows.
+# NOTE (2026-06): "fortified", "restaurant", "fast food", and the chain brands
+# (mcdonald/burger king/taco bell) were intentionally REMOVED so SR Legacy's
+# generic "Fast foods, …" / "Restaurant, Chinese, …" and fortified-cereal rows
+# come through — they're real USDA whole-meal entries people search for. The
+# kept terms below are the genuinely unhelpful ones.
 DROP_KEYWORDS = [
-    "infant formula", "baby food", "supplement", "fortified", "imitation",
-    "restaurant", "fast food", "mcdonald", "burger king", "taco bell",
+    "infant formula", "baby food", "supplement", "imitation",
     "school lunch", "usda commodity", "nfs", "babyfood", "puree, junior",
 ]
 
@@ -94,6 +115,17 @@ DEFAULT_SERVING = ("1 cup (150 g)", 150.0)
 
 # Up to this many aliases per food, derived from the USDA description.
 MAX_ALIASES = 4
+
+# Branded Foods tuning. The raw dataset is ~400k+ items dominated by UPC
+# duplicates and obscure SKUs, so we trim it hard before merging:
+#   * DEFAULT_BRANDED_CAP — total Branded rows kept (the rest of the bundle is
+#     the few-thousand Foundation + SR Legacy whole foods).
+#   * MAX_PER_BRAND — no single brandOwner may exceed this, so one mega-brand
+#     (e.g. a store label) can't crowd out everything else.
+#   * BRANDED_DESC_MAX_LEN — drop absurdly long/garbled marketing descriptions.
+DEFAULT_BRANDED_CAP = 18000
+MAX_PER_BRAND = 60
+BRANDED_DESC_MAX_LEN = 60
 
 
 def log(msg: str) -> None:
@@ -219,6 +251,204 @@ def build_entry(food: dict) -> dict | None:
     }
 
 
+# ---------------------------------------------------------------------------
+# Branded Foods (per-serving labelNutrients, streamed with ijson)
+# ---------------------------------------------------------------------------
+# Branded items differ structurally from Foundation/SR: instead of a per-100 g
+# `foodNutrients` array, each carries `labelNutrients` = the Nutrition Facts
+# panel, PER SERVING. We use those values directly (no per-100g scaling) against
+# the product's stated serving. Fields we read:
+#   description, brandOwner, brandName, servingSize, servingSizeUnit,
+#   householdServingFullText, brandedFoodCategory, labelNutrients{calories,
+#   protein, carbohydrates, fat, fiber}{value}, fdcId.
+# The top-level JSON key is "BrandedFoods" (an array of these items).
+
+BRANDED_TOP_KEYS = ("BrandedFoods", "BrandedFoodItems", "foods")
+
+
+def _label_value(label: dict, key: str) -> float | None:
+    node = label.get(key)
+    if isinstance(node, dict):
+        v = node.get("value")
+        if v is not None:
+            try:
+                return float(v)
+            except (TypeError, ValueError):
+                return None
+    return None
+
+
+def _clean_branded_name(brand: str, desc: str) -> str:
+    """A short human label like 'Cheetos Crunchy'. Use the first description
+    segment (USDA branded descriptions are often a single phrase) and prefix the
+    brand if it isn't already in there."""
+    core = desc.split(",")[0].strip()
+    brand = (brand or "").strip()
+    if brand and brand.lower() not in core.lower():
+        name = f"{brand} {core}".strip()
+    else:
+        name = core or brand
+    # Collapse SHOUTING brand strings to title-ish case without touching mixed
+    # case the brand chose deliberately.
+    if name.isupper():
+        name = name.title()
+    return name
+
+
+def _branded_dedup_key(brand: str, desc: str) -> str:
+    """Normalized identity used to collapse UPC duplicates: brand + the core of
+    the description, lowercased and stripped of punctuation/whitespace runs."""
+    core = desc.split(",")[0].strip()
+    raw = f"{(brand or '').strip()} {core}".lower()
+    return re.sub(r"[^a-z0-9]+", " ", raw).strip()
+
+
+def build_branded_entry(food: dict) -> tuple[dict, str, str] | None:
+    """Return (entry, brandOwner, dedup_key) or None. Values come straight from
+    USDA labelNutrients (per serving) — never scaled, never invented."""
+    desc = (food.get("description") or "").strip()
+    if not desc:
+        return None
+    low = desc.lower()
+    if any(k in low for k in DROP_KEYWORDS):
+        return None
+    if len(desc) > BRANDED_DESC_MAX_LEN:
+        return None  # garbled/marketing-bloat description
+
+    label = food.get("labelNutrients") or {}
+    kcal = _label_value(label, "calories")
+    if kcal is None or kcal <= 0:
+        return None  # require real per-serving energy
+
+    brand_name = (food.get("brandName") or "").strip()
+    brand_owner = (food.get("brandOwner") or "").strip()
+    brand = brand_name or brand_owner
+
+    serving_size = food.get("servingSize")
+    serving_unit = (food.get("servingSizeUnit") or "").strip()
+    household = (food.get("householdServingFullText") or "").strip()
+    if household:
+        label_text = household
+    elif serving_size is not None:
+        size_str = f"{serving_size:g}" if isinstance(serving_size, (int, float)) else str(serving_size)
+        label_text = f"{size_str}{serving_unit}".strip() or "1 serving"
+    else:
+        label_text = "1 serving"
+
+    name = _clean_branded_name(brand, desc)
+    if not name:
+        return None
+
+    # Aliases: full description + brand words + category, deduped, capped.
+    aliases: list[str] = []
+    seen: set[str] = set()
+    for cand in (desc, brand, food.get("brandedFoodCategory") or ""):
+        key = cand.strip().lower()
+        if key and key not in seen and len(key) > 2:
+            seen.add(key)
+            aliases.append(key)
+        if len(aliases) >= MAX_ALIASES:
+            break
+
+    fdc_id = food.get("fdcId", slugify(name))
+
+    def g(v: float | None) -> int:
+        return int(round(v or 0.0))
+
+    entry = {
+        "id": f"usda-{fdc_id}",
+        "name": name,
+        "aliases": aliases,
+        "servingLabel": label_text,
+        "calories": g(kcal),
+        "proteinG": g(_label_value(label, "protein")),
+        "carbsG": g(_label_value(label, "carbohydrates")),
+        "fatG": g(_label_value(label, "fat")),
+        "fiberG": g(_label_value(label, "fiber")),
+    }
+    return entry, (brand_owner or brand_name), _branded_dedup_key(brand, desc)
+
+
+def iter_branded(zf: zipfile.ZipFile):
+    """Yield raw Branded food dicts by STREAM-parsing the zip's JSON with ijson.
+    The dataset is ~GB uncompressed and ~400k+ items, so it is NEVER json.load'd.
+    ijson reads incrementally from the still-compressed zip entry's file object."""
+    try:
+        import ijson  # local import: only required when Branded is enabled
+    except ImportError:
+        log("  ijson not installed — cannot stream Branded Foods. "
+            "Run `pip install ijson`. Skipping Branded.")
+        return
+
+    name = next((n for n in zf.namelist() if n.lower().endswith(".json")), None)
+    if not name:
+        log("  no JSON found in Branded zip — skipping")
+        return
+
+    # Try each known top-level array key until one yields items. zf.open returns
+    # a streaming file object; ijson.items consumes it without buffering the doc.
+    for key in BRANDED_TOP_KEYS:
+        with zf.open(name) as fh:
+            try:
+                produced = False
+                for item in ijson.items(fh, f"{key}.item"):
+                    produced = True
+                    yield item
+                if produced:
+                    return
+            except Exception as exc:  # noqa: BLE001 — log and try the next key
+                log(f"  ijson parse under key '{key}' failed: {exc}")
+    log("  no Branded array found under any known top-level key "
+        f"({', '.join(BRANDED_TOP_KEYS)}).")
+
+
+def select_branded(zf: zipfile.ZipFile, cap: int) -> list[dict]:
+    """Stream the Branded dataset and return a trimmed, deduped, per-brand-capped
+    list of entries (<= cap). Selection strategy:
+      1. Build a valid entry (real labelNutrients.calories, sane description,
+         passes DROP_KEYWORDS) — invalid items are skipped.
+      2. Dedup by normalized (brand + core description) → collapses UPC dupes to
+         the first occurrence.
+      3. Cap each brandOwner at MAX_PER_BRAND so no brand floods the bundle.
+      4. Stop once `cap` unique entries are kept. (Streaming order is the
+         dataset's own order; we prefer concise non-empty-brand items implicitly
+         by skipping garbled/long descriptions in build_branded_entry.)
+    Returns the kept entries; logs how many were scanned / kept / dropped."""
+    kept: list[dict] = []
+    seen_keys: set[str] = set()
+    per_brand: dict[str, int] = {}
+    scanned = 0
+    dup_dropped = 0
+    brand_capped = 0
+    invalid = 0
+
+    for food in iter_branded(zf):
+        scanned += 1
+        built = build_branded_entry(food)
+        if built is None:
+            invalid += 1
+            continue
+        entry, brand_owner, dedup_key = built
+        if dedup_key in seen_keys:
+            dup_dropped += 1
+            continue
+        bkey = (brand_owner or "").lower()
+        if bkey and per_brand.get(bkey, 0) >= MAX_PER_BRAND:
+            brand_capped += 1
+            continue
+        seen_keys.add(dedup_key)
+        if bkey:
+            per_brand[bkey] = per_brand.get(bkey, 0) + 1
+        kept.append(entry)
+        if len(kept) >= cap:
+            log(f"  Branded cap of {cap} reached — stopping scan early.")
+            break
+
+    log(f"  Branded scanned={scanned} kept={len(kept)} "
+        f"(invalid/dropped={invalid}, upc-dups={dup_dropped}, brand-capped={brand_capped})")
+    return kept
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Build the offline USDA food DB resource.")
     ap.add_argument("--foundation", help="Path to a Foundation Foods JSON zip (skips download).")
@@ -239,17 +469,34 @@ def main() -> int:
         default="https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_sr_legacy_food_json_2018-04.zip",
         help="Override SR Legacy download URL.",
     )
+    # Branded Foods is reissued ~monthly under a new date — UPDATE this when the
+    # default 404s (grab the current link from the download-datasets page). The
+    # date below is a best-effort current value and MUST be verified on the first
+    # real run; a 404 here is non-fatal (Foundation + SR still write).
+    ap.add_argument(
+        "--branded-url",
+        default="https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_branded_food_json_2026-04.zip",
+        help="Override Branded Foods download URL (update the date — reissued ~monthly).",
+    )
+    ap.add_argument("--branded", help="Path to a Branded Foods JSON zip (skips download).")
+    ap.add_argument("--no-branded", action="store_true", help="Skip the Branded Foods dataset entirely.")
+    ap.add_argument(
+        "--branded-cap", type=int, default=DEFAULT_BRANDED_CAP,
+        help=f"Max Branded rows to keep after dedup/per-brand cap (default {DEFAULT_BRANDED_CAP}).",
+    )
     ap.add_argument("--max", type=int, default=0, help="Cap the number of output rows (0 = no cap).")
     args = ap.parse_args()
 
-    zips: list[zipfile.ZipFile] = []
-    zips.append(load_zip(args.foundation) if args.foundation else fetch_zip(args.foundation_url))
-    zips.append(load_zip(args.sr_legacy) if args.sr_legacy else fetch_zip(args.sr_legacy_url))
+    # Foundation + SR Legacy (per-100 g foodNutrients). These are required.
+    base_zips: list[zipfile.ZipFile] = []
+    base_zips.append(load_zip(args.foundation) if args.foundation else fetch_zip(args.foundation_url))
+    base_zips.append(load_zip(args.sr_legacy) if args.sr_legacy else fetch_zip(args.sr_legacy_url))
 
     by_id: dict[str, dict] = {}
     raw_count = 0
     datatypes_seen: dict[str, int] = {}
-    for zf in zips:
+    foundation_sr_kept = 0
+    for zf in base_zips:
         for food in iter_foods(zf):
             raw_count += 1
             # Normalize dataType (USDA uses "foundation_food"/"sr_legacy_food", but
@@ -263,7 +510,38 @@ def main() -> int:
                 continue
             entry = build_entry(food)
             if entry:
+                if entry["id"] not in by_id:
+                    foundation_sr_kept += 1
                 by_id[entry["id"]] = entry
+
+    # Branded Foods (per-serving labelNutrients, streamed). A download/parse
+    # failure here is NON-FATAL — log and continue so a Branded 404 never wipes
+    # out a successful Foundation + SR run. The <100 guard below still protects
+    # against an overall-empty result.
+    branded_kept = 0
+    if args.no_branded:
+        log("Branded Foods skipped (--no-branded).")
+    else:
+        try:
+            branded_zip = load_zip(args.branded) if args.branded else fetch_zip(args.branded_url)
+        except Exception as exc:  # noqa: BLE001 — download/open failure is non-fatal
+            log(f"WARNING: Branded Foods download/open failed ({exc}). "
+                "Continuing with Foundation + SR Legacy only. "
+                "If this is a 404, grab the current dated link from "
+                "https://fdc.nal.usda.gov/download-datasets/ and pass --branded-url.")
+            branded_zip = None
+        if branded_zip is not None:
+            try:
+                for entry in select_branded(branded_zip, args.branded_cap):
+                    if entry["id"] not in by_id:
+                        branded_kept += 1
+                    by_id[entry["id"]] = entry
+            except Exception as exc:  # noqa: BLE001 — parse failure is non-fatal
+                log(f"WARNING: Branded Foods parse failed ({exc}). "
+                    "Continuing with Foundation + SR Legacy only.")
+
+    log(f"per-source kept: foundation+sr={foundation_sr_kept}, branded={branded_kept}, "
+        f"total-unique={len(by_id)}")
 
     all_entries = sorted(by_id.values(), key=lambda e: e["name"].lower())
 

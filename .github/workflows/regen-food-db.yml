@@ -1,14 +1,17 @@
 # Regenerate the bundled offline USDA food database (OurFitness/Resources/usda-foods.json).
 #
 # Runs scripts/build-food-db.py on a plain Ubuntu runner (Python only — NO Mac needed),
-# which downloads USDA FoodData Central (Foundation Foods + SR Legacy), prunes to whole
-# foods + the macro fields the app uses, and rewrites the bundled JSON. If the file
-# changed, it opens a PR for review so a human eyeballs the diff before it ships.
+# which downloads USDA FoodData Central (Foundation Foods + SR Legacy + Branded Foods),
+# prunes to whole/recognizable foods + the macro fields the app uses, and rewrites the
+# bundled JSON. If the file changed, it opens a PR for review so a human eyeballs the
+# diff before it ships.
 #
 # Trigger: Actions tab → "Regenerate Food DB" → Run workflow.
-# If the default dated USDA URLs 404 (USDA reposts datasets under new dates), grab the
-# current links from https://fdc.nal.usda.gov/download-datasets/ and paste them into the
-# foundation_url / sr_legacy_url inputs.
+# If the default dated USDA URLs 404 (USDA reposts datasets under new dates — Branded is
+# reissued ~monthly), grab the current links from https://fdc.nal.usda.gov/download-datasets/
+# and paste them into the foundation_url / sr_legacy_url / branded_url inputs.
+# Branded is huge (~GB uncompressed) and stream-parsed with ijson; a Branded 404 is
+# non-fatal (Foundation + SR Legacy still produce a bundle).
 
 name: Regenerate Food DB
 
@@ -18,13 +21,17 @@ on:
       max_rows:
         description: "Cap number of foods in the bundle (0 = no cap). Keeps the app resource small."
         required: false
-        default: "2000"
+        default: "20000"
       foundation_url:
         description: "Override USDA Foundation Foods JSON zip URL (optional)"
         required: false
         default: ""
       sr_legacy_url:
         description: "Override USDA SR Legacy JSON zip URL (optional)"
+        required: false
+        default: ""
+      branded_url:
+        description: "Override USDA Branded Foods JSON zip URL (optional; reissued ~monthly)"
         required: false
         default: ""
 
@@ -42,6 +49,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install ijson (stream-parses the huge Branded Foods dataset)
+        run: pip install ijson
+
       - name: Regenerate usda-foods.json
         env:
           # Inputs go through env vars (never interpolated into the script body)
@@ -49,11 +59,13 @@ jobs:
           MAX_ROWS: ${{ inputs.max_rows }}
           FOUNDATION_URL: ${{ inputs.foundation_url }}
           SR_LEGACY_URL: ${{ inputs.sr_legacy_url }}
+          BRANDED_URL: ${{ inputs.branded_url }}
         run: |
           set -euo pipefail
           args=( "--max" "$MAX_ROWS" )
           if [ -n "$FOUNDATION_URL" ]; then args+=( "--foundation-url" "$FOUNDATION_URL" ); fi
           if [ -n "$SR_LEGACY_URL" ]; then args+=( "--sr-legacy-url" "$SR_LEGACY_URL" ); fi
+          if [ -n "$BRANDED_URL" ]; then args+=( "--branded-url" "$BRANDED_URL" ); fi
           python3 scripts/build-food-db.py "${args[@]}"
 
       - name: Open a PR if the dataset changed
