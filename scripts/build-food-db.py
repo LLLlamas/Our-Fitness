@@ -234,9 +234,23 @@ def main() -> int:
             if entry:
                 by_id[entry["id"]] = entry
 
-    entries = sorted(by_id.values(), key=lambda e: e["name"].lower())
-    if args.max > 0:
-        entries = entries[: args.max]
+    all_entries = sorted(by_id.values(), key=lambda e: e["name"].lower())
+
+    # Guard: a failed/empty download must NOT silently overwrite the bundled
+    # dataset with an empty file. The real USDA Foundation + SR Legacy whole-foods
+    # set is thousands of rows; a tiny count means the download or parse failed —
+    # most often a 404 because USDA reposted the dataset under a newer date. Refuse
+    # to write rather than ship an empty food DB. (Checked before --max capping.)
+    MIN_FOODS = 100
+    if len(all_entries) < MIN_FOODS:
+        log(f"ERROR: only {len(all_entries)} foods parsed (< {MIN_FOODS}). The USDA "
+            "download or parse likely failed (usually a 404 on a dated dataset URL). "
+            f"Refusing to overwrite {OUTPUT.relative_to(REPO_ROOT)} with an empty set. "
+            "Pass current URLs via --foundation-url / --sr-legacy-url (or local zips via "
+            "--foundation / --sr-legacy) from https://fdc.nal.usda.gov/download-datasets/.")
+        return 1
+
+    entries = all_entries[: args.max] if args.max > 0 else all_entries
 
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT.write_text(json.dumps(entries, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
