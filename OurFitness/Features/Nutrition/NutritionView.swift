@@ -1144,8 +1144,7 @@ private struct NutritionInsightSheet: View {
 
     @Environment(\.theme) private var theme
     @Query private var markerModels: [HealthMarkerModel]
-    @AppStorage(UnitSystem.storageKey) private var unitSystemRaw = UnitSystem.imperial.rawValue
-    private var unitSystem: UnitSystem { UnitSystem(rawValue: unitSystemRaw) ?? .imperial }
+    @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
     init(profile: ProfileDTO, logs: [FoodLogEntryDTO]) {
         self.profile = profile
