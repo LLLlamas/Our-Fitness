@@ -1,6 +1,13 @@
 // On-device natural-language meal parser.
-// No network required — matches user input against CommonFoods.all using
-// simple tokenisation and quantity-word resolution.
+// No network required — matches user input against the curated CommonFoods.all
+// AND the bundled USDA FoodDatabase using simple tokenisation and quantity-word
+// resolution.
+//
+// Resolution order per chunk: prefer the curated CommonFoods match (hand-tuned
+// aliases/servings); if none matches, fall back to the broader USDA FoodDatabase.
+// When both match, the longer alias wins so the more specific phrase is chosen,
+// but ties go to the curated entry. Behaviour for foods already in CommonFoods
+// is unchanged.
 //
 // Usage:
 //   let result = FoodParser.parse("a bowl of rice and some grilled chicken")
@@ -77,6 +84,12 @@ public enum FoodParser {
     // MARK: - Parse
 
     public static func parse(text: String) -> ParseResult {
+        parse(text: text, database: FoodDatabase.shared)
+    }
+
+    /// Parse against an injectable database — used by tests so the matcher can be
+    /// exercised without the bundled resource (which the hostless test target lacks).
+    public static func parse(text: String, database: FoodDatabase) -> ParseResult {
         let lower = text.lowercased()
 
         // Split into candidate chunks at natural separators
@@ -93,7 +106,7 @@ public enum FoodParser {
 
         for chunk in chunks {
             let qty = resolveQuantity(from: chunk)
-            if let food = matchFood(in: chunk) {
+            if let food = matchFood(in: chunk, database: database) {
                 recognized.append(scaled(food: food, by: qty))
             } else if !chunk.isEmpty {
                 unrecognized.append(chunk)
@@ -103,7 +116,7 @@ public enum FoodParser {
         // Fallback: try the whole text if we got nothing
         if recognized.isEmpty {
             let qty = resolveQuantity(from: lower)
-            if let food = matchFood(in: lower) {
+            if let food = matchFood(in: lower, database: database) {
                 recognized.append(scaled(food: food, by: qty))
                 return ParseResult(inputText: text, recognized: recognized, unrecognized: [])
             }
@@ -132,8 +145,8 @@ public enum FoodParser {
 
     // MARK: - Food matching
 
-    private static func matchFood(in chunk: String) -> CommonFood? {
-        // Build sorted (longest alias first) candidate list once
+    private static func matchFood(in chunk: String, database: FoodDatabase) -> CommonFood? {
+        // Curated CommonFoods first — hand-tuned aliases/servings are authoritative.
         struct Candidate { let food: CommonFood; let alias: String }
         var best: Candidate? = nil
 
@@ -147,7 +160,10 @@ public enum FoodParser {
                 }
             }
         }
-        return best?.food
+        if let best { return best.food }
+
+        // Fall back to the broader USDA database for coverage curated foods miss.
+        return database.bestMatch(in: chunk)?.asCommonFood
     }
 
     // MARK: - Scaling

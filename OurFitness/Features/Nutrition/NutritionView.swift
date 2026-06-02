@@ -1051,10 +1051,20 @@ private struct FoodLibrarySheet: View {
     private var results: [CommonFood] {
         let q = query.lowercased().trimmingCharacters(in: .whitespaces)
         guard !q.isEmpty else { return CommonFoods.all }
-        return CommonFoods.all.filter { food in
+        let curated = CommonFoods.all.filter { food in
             food.name.lowercased().contains(q)
                 || food.aliases.contains { $0.lowercased().contains(q) }
         }
+        // Broaden with the offline USDA database; curated entries win on name.
+        let curatedNames = Set(curated.map { $0.name.lowercased() })
+        let usda = FoodDatabase.shared.entries
+            .filter { entry in
+                entry.name.lowercased().contains(q)
+                    || entry.aliases.contains { $0.lowercased().contains(q) }
+            }
+            .map { $0.asCommonFood }
+            .filter { !curatedNames.contains($0.name.lowercased()) }
+        return curated + usda
     }
 
     var body: some View {
