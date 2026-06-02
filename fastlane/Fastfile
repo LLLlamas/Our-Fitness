@@ -18,6 +18,12 @@ SCHEME       = "OurFitness"
 PROJECT      = "OurFitness.xcodeproj"
 BUNDLE_ID    = "com.ourfitness.app"
 PROFILE_NAME = "OurFitness AppStore"
+# Widget extension (Live Sessions Live Activity) — a second signed binary embedded
+# in the app. Its profile name must match PROVISIONING_PROFILE_SPECIFIER for the
+# OurFitnessWidgets target in project.yml. Profile base64 lives in the
+# APPSTORE_WIDGET_PROFILE_BASE64 secret. See docs/live-activity-setup.md.
+WIDGET_BUNDLE_ID    = "com.ourfitness.app.widgets"
+WIDGET_PROFILE_NAME = "OurFitnessWidgets AppStore"
 KEYCHAIN     = "ourfitness-ci.keychain-db"
 OUTPUT_DIR   = "build"
 
@@ -54,6 +60,57 @@ end
 def env_or_default(name, fallback)
   value = ENV[name].to_s.strip
   value.empty? ? fallback : value
+end
+
+# Install one manually-generated provisioning profile (decoded from a base64
+# secret) into Xcode's profiles dir, keyed by the UUID inside the profile so the
+# provisioning subsystem indexes it. `expect_healthkit:` runs the app-only
+# entitlement diagnostic; the widget profile legitimately carries ZERO managed
+# capabilities, so that check is skipped for it.
+def install_one_profile(profile_b64, label, expect_healthkit: false)
+  UI.user_error!(
+    "#{label} profile base64 is empty. Generate the App Store profile in " \
+    "developer.apple.com → Profiles, base64-encode the .mobileprovision, and " \
+    "save it as the matching GitHub repository secret."
+  ) if profile_b64.empty?
+
+  dir = File.expand_path("~/Library/MobileDevice/Provisioning Profiles")
+  FileUtils.mkdir_p(dir)
+
+  raw = Base64.decode64(profile_b64)
+  plist = raw[/<\?xml.*<\/plist>/m] ||
+    UI.user_error!("Could not extract plist payload from the #{label} .mobileprovision blob.")
+  uuid = plist[/<key>UUID<\/key>\s*<string>([0-9A-Fa-f-]+)<\/string>/, 1] ||
+    UI.user_error!("Could not find UUID inside the #{label} provisioning profile.")
+  name = plist[/<key>Name<\/key>\s*<string>([^<]+)<\/string>/, 1] || "unknown"
+
+  dest = File.join(dir, "#{uuid}.mobileprovision")
+  File.binwrite(dest, raw)
+  UI.success("Installed #{label} profile '#{name}' (#{uuid}) → #{dest} (#{raw.bytesize} bytes)")
+
+  entitlements = plist.scan(/<key>(com\.apple\.developer\.[a-zA-Z0-9._-]+)<\/key>/).flatten.uniq.sort
+  unless expect_healthkit
+    # Widget has no managed capabilities — zero entitlements is correct here.
+    UI.message("#{label} profile entitlements: #{entitlements.empty? ? '(none — expected for the widget)' : entitlements.join(', ')}")
+    return
+  end
+
+  if entitlements.empty?
+    UI.error("#{label} profile declares ZERO com.apple.developer.* entitlements. " \
+             "This means the profile was generated without any capabilities " \
+             "attached. Regenerate at developer.apple.com → Profiles → +.")
+  else
+    UI.message("#{label} profile entitlements (com.apple.developer.*):")
+    entitlements.each { |k| UI.message("  • #{k}") }
+    missing = %w[com.apple.developer.healthkit
+                 com.apple.developer.healthkit.background-delivery] - entitlements
+    if missing.any?
+      UI.error("#{label} profile is MISSING these expected entitlements: #{missing.join(', ')}. " \
+               "Signing will strip them from the IPA. Regenerate the profile in " \
+               "developer.apple.com (delete the old one first, then create a new " \
+               "one — Edit/Save on an existing profile does NOT refresh capabilities).")
+    end
+  end
 end
 
 def match_options(api_key)
@@ -140,52 +197,18 @@ platform :ios do
        "Apple Developer portal — fastlane match cannot generate capability- " \
        "bearing profiles since Apple removed the API in May 2025."
   lane :install_appstore_profile do
-    profile_b64 = ENV.fetch("APPSTORE_PROFILE_BASE64", "").to_s.strip
-    UI.user_error!(
-      "APPSTORE_PROFILE_BASE64 is empty. Generate the App Store profile in " \
-      "developer.apple.com → Profiles, base64-encode the .mobileprovision, " \
-      "and save it as a GitHub repository secret."
-    ) if profile_b64.empty?
-
-    dir = File.expand_path("~/Library/MobileDevice/Provisioning Profiles")
-    FileUtils.mkdir_p(dir)
-
-    # Apple's Xcode finds profiles by UUID, not filename. Read the UUID out
-    # of the decoded plist payload so the on-disk filename matches what the
-    # provisioning subsystem indexes.
-    raw = Base64.decode64(profile_b64)
-    plist = raw[/<\?xml.*<\/plist>/m] ||
-      UI.user_error!("Could not extract plist payload from the .mobileprovision blob.")
-    uuid = plist[/<key>UUID<\/key>\s*<string>([0-9A-Fa-f-]+)<\/string>/, 1] ||
-      UI.user_error!("Could not find UUID inside the provisioning profile.")
-    name = plist[/<key>Name<\/key>\s*<string>([^<]+)<\/string>/, 1] || "unknown"
-
-    dest = File.join(dir, "#{uuid}.mobileprovision")
-    File.binwrite(dest, raw)
-    UI.success("Installed profile '#{name}' (#{uuid}) → #{dest} (#{raw.bytesize} bytes)")
-
-    # Diagnostic: print which com.apple.developer.* entitlements the profile
-    # actually declares. If a capability is missing here (e.g. healthkit),
-    # signing will silently strip it from the IPA and the app will fail on
-    # device at runtime. This is the single most useful signal when chasing
-    # "Missing com.apple.developer.<x> entitlement" errors.
-    entitlements = plist.scan(/<key>(com\.apple\.developer\.[a-zA-Z0-9._-]+)<\/key>/).flatten.uniq.sort
-    if entitlements.empty?
-      UI.error("Profile declares ZERO com.apple.developer.* entitlements. " \
-               "This means the profile was generated without any capabilities " \
-               "attached. Regenerate at developer.apple.com → Profiles → +.")
-    else
-      UI.message("Profile entitlements (com.apple.developer.*):")
-      entitlements.each { |k| UI.message("  • #{k}") }
-      missing = %w[com.apple.developer.healthkit
-                   com.apple.developer.healthkit.background-delivery] - entitlements
-      if missing.any?
-        UI.error("Profile is MISSING these expected entitlements: #{missing.join(', ')}. " \
-                 "Signing will strip them from the IPA. Regenerate the profile in " \
-                 "developer.apple.com (delete the old one first, then create a new " \
-                 "one — Edit/Save on an existing profile does NOT refresh capabilities).")
-      end
-    end
+    # Apple's Xcode finds profiles by UUID, not filename — install_one_profile
+    # writes each under its UUID. Install BOTH embedded binaries' profiles: the
+    # app (HealthKit/Background-Delivery capabilities expected) and the widget
+    # extension (no managed capabilities). See docs/live-activity-setup.md.
+    install_one_profile(
+      ENV.fetch("APPSTORE_PROFILE_BASE64", "").to_s.strip,
+      "app (#{BUNDLE_ID})", expect_healthkit: true
+    )
+    install_one_profile(
+      ENV.fetch("APPSTORE_WIDGET_PROFILE_BASE64", "").to_s.strip,
+      "widget (#{WIDGET_BUNDLE_ID})", expect_healthkit: false
+    )
   end
 
   desc "Ship a build to TestFlight. Syncs signing with match, archives, and uploads."
@@ -225,7 +248,8 @@ platform :ios do
         method: "app-store",
         signingStyle: "manual",
         provisioningProfiles: {
-          BUNDLE_ID => PROFILE_NAME,
+          BUNDLE_ID        => PROFILE_NAME,
+          WIDGET_BUNDLE_ID => WIDGET_PROFILE_NAME,
         },
       },
     )
