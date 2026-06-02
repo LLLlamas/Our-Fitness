@@ -22,6 +22,10 @@ import Foundation
 #if canImport(ActivityKit)
 import ActivityKit
 
+// NOTE: the app already declares `struct Activity` in Domain/ActivityCatalog.swift,
+// which shadows ActivityKit's `Activity` inside this module. Every ActivityKit
+// reference below is fully qualified as `ActivityKit.Activity` to disambiguate.
+
 @available(iOS 16.2, *)
 enum LiveSessionActivityController {
 
@@ -42,7 +46,7 @@ enum LiveSessionActivityController {
         let state = LiveSessionAttributes.ContentState(expectedMinutes: expectedMinutes)
 
         do {
-            _ = try Activity.request(
+            _ = try ActivityKit.Activity.request(
                 attributes: attributes,
                 content: .init(state: state, staleDate: nil)
             )
@@ -56,7 +60,7 @@ enum LiveSessionActivityController {
     static func update(expectedMinutes: Int) {
         Task {
             let state = LiveSessionAttributes.ContentState(expectedMinutes: expectedMinutes)
-            for activity in Activity<LiveSessionAttributes>.activities {
+            for activity in ActivityKit.Activity<LiveSessionAttributes>.activities {
                 await activity.update(.init(state: state, staleDate: nil))
             }
         }
@@ -66,7 +70,7 @@ enum LiveSessionActivityController {
     /// activity dismisses immediately rather than lingering on the Lock Screen.
     static func end() {
         Task {
-            for activity in Activity<LiveSessionAttributes>.activities {
+            for activity in ActivityKit.Activity<LiveSessionAttributes>.activities {
                 await activity.end(nil, dismissalPolicy: .immediate)
             }
         }
@@ -76,7 +80,7 @@ enum LiveSessionActivityController {
     /// at most one. Detached so it doesn't block the synchronous start path.
     private static func endAllSync() {
         Task {
-            for activity in Activity<LiveSessionAttributes>.activities {
+            for activity in ActivityKit.Activity<LiveSessionAttributes>.activities {
                 await activity.end(nil, dismissalPolicy: .immediate)
             }
         }
