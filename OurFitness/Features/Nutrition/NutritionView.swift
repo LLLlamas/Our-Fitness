@@ -733,6 +733,8 @@ private struct NLMealLogSheet: View {
 
     @State private var input: String = ""
     @State private var parseResult: FoodParser.ParseResult? = nil
+    @State private var parsedWithAI = false
+    @State private var aiParsing = false
     @State private var slot: Slot = .lunch
     @State private var showManual = true
 
@@ -781,12 +783,24 @@ private struct NLMealLogSheet: View {
                         .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                         .foregroundStyle(theme.text)
                         .focused($focused, equals: .input)
-                        .onSubmit { parseInput() }
+                        .onSubmit { Task { await aiRefine() } }
                         .onChange(of: input) { _, _ in parseInput() }
+                        .onChange(of: focused) { old, new in
+                            if old == .input && new != .input { Task { await aiRefine() } }
+                        }
+                }
+
+                if aiParsing {
+                    HStack(spacing: 8) {
+                        ProgressView().controlSize(.small)
+                        Text("Reading your meal with Apple Intelligence…")
+                            .font(.caption).foregroundStyle(theme.dim)
+                    }
                 }
 
                 if let result = parseResult, !input.trimmingCharacters(in: .whitespaces).isEmpty {
                     parsedPreview(result)
+                    if parsedWithAI { aiAttribution }
                 }
 
                 slotPicker
@@ -822,10 +836,33 @@ private struct NLMealLogSheet: View {
         }
     }
 
+    /// Instant, deterministic string parse on every keystroke. Always the source of
+    /// truth below iOS 26 / without Apple Intelligence, and the live preview while
+    /// the user is still typing.
     private func parseInput() {
         let trimmed = input.trimmingCharacters(in: .whitespaces)
-        guard !trimmed.isEmpty else { parseResult = nil; return }
-        let result = FoodParser.parse(text: trimmed)
+        guard !trimmed.isEmpty else { parseResult = nil; parsedWithAI = false; return }
+        parsedWithAI = false
+        applyResult(FoodParser.parse(text: trimmed))
+    }
+
+    /// On end-editing/submit, ask the on-device model to re-parse the sentence into
+    /// items, then resolve those names back through `FoodParser` so the NUMBERS stay
+    /// from the food database (the model never supplies nutrition). Falls back
+    /// silently to the string result already on screen on any failure / unavailability.
+    private func aiRefine() async {
+        let trimmed = input.trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty, MealParseService.shared.isAvailable else { return }
+        aiParsing = true
+        defer { aiParsing = false }
+        guard let items = await MealParseService.shared.parse(trimmed) else { return }
+        let resolved = FoodParser.resolve(items: items)
+        guard resolved.hasMatches else { return }
+        parsedWithAI = true
+        applyResult(resolved)
+    }
+
+    private func applyResult(_ result: FoodParser.ParseResult) {
         parseResult = result
         if result.hasMatches {
             let ps = result.totalPerServing
@@ -834,6 +871,17 @@ private struct NLMealLogSheet: View {
             manualCarbs    = ps.carbsG
             manualFat      = ps.fatG
             showManual = false
+        }
+    }
+
+    @ViewBuilder
+    private var aiAttribution: some View {
+        HStack(alignment: .top, spacing: 6) {
+            Image(systemName: "sparkles")
+                .font(.system(size: 10)).foregroundStyle(theme.accent)
+            Text("Items parsed on-device by Apple Intelligence. Calories and macros come from the food database, not the model.")
+                .font(.caption2).foregroundStyle(theme.dim)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 

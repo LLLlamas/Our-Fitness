@@ -1,0 +1,73 @@
+# Regenerate the bundled offline USDA food database (OurFitness/Resources/usda-foods.json).
+#
+# Runs scripts/build-food-db.py on a plain Ubuntu runner (Python only — NO Mac needed),
+# which downloads USDA FoodData Central (Foundation Foods + SR Legacy), prunes to whole
+# foods + the macro fields the app uses, and rewrites the bundled JSON. If the file
+# changed, it opens a PR for review so a human eyeballs the diff before it ships.
+#
+# Trigger: Actions tab → "Regenerate Food DB" → Run workflow.
+# If the default dated USDA URLs 404 (USDA reposts datasets under new dates), grab the
+# current links from https://fdc.nal.usda.gov/download-datasets/ and paste them into the
+# foundation_url / sr_legacy_url inputs.
+
+name: Regenerate Food DB
+
+on:
+  workflow_dispatch:
+    inputs:
+      max_rows:
+        description: "Cap number of foods in the bundle (0 = no cap). Keeps the app resource small."
+        required: false
+        default: "2000"
+      foundation_url:
+        description: "Override USDA Foundation Foods JSON zip URL (optional)"
+        required: false
+        default: ""
+      sr_legacy_url:
+        description: "Override USDA SR Legacy JSON zip URL (optional)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  regen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Regenerate usda-foods.json
+        run: |
+          set -euo pipefail
+          args=( "--max" "${{ inputs.max_rows }}" )
+          if [ -n "${{ inputs.foundation_url }}" ]; then args+=( "--foundation-url" "${{ inputs.foundation_url }}" ); fi
+          if [ -n "${{ inputs.sr_legacy_url }}" ]; then args+=( "--sr-legacy-url" "${{ inputs.sr_legacy_url }}" ); fi
+          python3 scripts/build-food-db.py "${args[@]}"
+
+      - name: Open a PR if the dataset changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- OurFitness/Resources/usda-foods.json; then
+            echo "No change to usda-foods.json — nothing to open."
+            exit 0
+          fi
+          branch="food-db/regen-${{ github.run_id }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add OurFitness/Resources/usda-foods.json
+          count=$(grep -c '"id"' OurFitness/Resources/usda-foods.json || echo "?")
+          git commit -m "chore: regenerate USDA food database ($count foods)"
+          git push origin "$branch"
+          gh pr create \
+            --base main --head "$branch" \
+            --title "Regenerate USDA food database ($count foods)" \
+            --body "Automated regeneration of \`OurFitness/Resources/usda-foods.json\` from USDA FoodData Central (Foundation + SR Legacy) via \`scripts/build-food-db.py\`. All values are real USDA data (public-domain/CC0). Review the diff and merge to ship the full offline dataset."
