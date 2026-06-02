@@ -197,7 +197,7 @@ private struct ActivityPicker: View {
                     .stroke(isSel ? theme.accent : theme.line, lineWidth: 1)
             )
         }
-        .buttonStyle(.plain)
+        .buttonStyle(TilePressStyle())
         .accessibilityLabel(activity.name)
         .accessibilityAddTraits(isSel ? .isSelected : [])
     }
@@ -483,17 +483,27 @@ private struct LiveSessionRunner: View {
             met: state.met, minutes: Double(elapsedSeconds) / 60.0, bodyWeightLb: profile.weightLb
         )
 
-        let dto = ActivitySessionDTO(
-            profileId: profile.id,
-            date: state.startDate,
-            activityId: state.activityId,
-            activityName: state.activityName,
-            met: state.met,
-            durationMinutes: actualMinutes,
-            expectedMinutes: state.expectedMinutes,
-            caloriesEst: cal
-        )
-        Repos.logActivitySession(ctx, dto)
+        // Pilates routes to its own model so it credits the pilates weekly streak +
+        // existing pilates surfaces (and is counted once, via DailyBurn's pilates path).
+        if state.activityId == ActivityCatalog.pilatesId {
+            Repos.logPilatesSession(ctx, PilatesSessionDTO(
+                profileId: profile.id,
+                date: state.startDate,
+                durationMinutes: actualMinutes,
+                focusAreas: []
+            ))
+        } else {
+            Repos.logActivitySession(ctx, ActivitySessionDTO(
+                profileId: profile.id,
+                date: state.startDate,
+                activityId: state.activityId,
+                activityName: state.activityName,
+                met: state.met,
+                durationMinutes: actualMinutes,
+                expectedMinutes: state.expectedMinutes,
+                caloriesEst: cal
+            ))
+        }
 
         LiveSessionNotifier.cancel()
         LiveSessionStore.clear()
@@ -582,5 +592,20 @@ private struct RecentActivitySessions: View {
         .background(theme.card)
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+    }
+}
+
+// MARK: - Tile press style
+
+/// Press feedback for the activity grid tiles: spring scale only, no chrome —
+/// the tiles draw their own selected/unselected fill and fire a selection haptic
+/// in their action, so this just adds the tactile lift without overriding visuals.
+/// (Avoids `.buttonStyle(.plain)`, which is banned, and `.tactile`, which would
+/// restyle the custom tile background/foreground.)
+private struct TilePressStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
+            .animation(.spring(response: 0.28, dampingFraction: 0.6), value: configuration.isPressed)
     }
 }

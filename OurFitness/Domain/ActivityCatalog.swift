@@ -33,6 +33,12 @@ public enum ActivityCatalog {
     public static let otherId = "activity-other"
     public static let otherDefaultMET: Double = 5.0
 
+    /// Pilates has its own logging model + weekly streak (`PilatesSessionModel`,
+    /// `Movement.pilatesWeeklyStreak`). When a live session uses this id it is saved
+    /// as a `PilatesSessionDTO` so it credits that streak instead of becoming an
+    /// orthogonal `ActivitySession` that the streak can't see.
+    public static let pilatesId = "activity-pilates"
+
     /// All offered activities. Ordered roughly most-common first. MET values are
     /// Ainsworth 2011 general-effort codes; see comments per entry.
     public static let all: [Activity] = [
@@ -54,7 +60,7 @@ public enum ActivityCatalog {
         Activity(id: "activity-inline-skating",      name: "Inline skating",      met: 7.5,  symbol: "figure.skating"),          // 19252 general
         // Studio / low-impact
         Activity(id: "activity-dancing",             name: "Dancing",             met: 5.5,  symbol: "figure.dance"),            // 03025 general
-        Activity(id: "activity-pilates",             name: "Pilates",             met: 3.0,  symbol: "figure.pilates"),          // 06010 general
+        Activity(id: pilatesId,                      name: "Pilates",             met: 3.0,  symbol: "figure.pilates"),          // 06010 general
         Activity(id: "activity-yoga",                name: "Yoga",                met: 2.8,  symbol: "figure.yoga"),             // 02105 hatha
         // Catch-all
         Activity(id: otherId,                        name: "Other",               met: otherDefaultMET, symbol: "figure.mixed.cardio"),
