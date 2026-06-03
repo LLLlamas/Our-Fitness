@@ -14,6 +14,8 @@ struct SettingsView: View {
     @State private var showEditVitals = false
 
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
+    @AppStorage("nudge.meal.enabled") private var mealNudgeEnabled: Bool = true
+    @AppStorage("nudge.water.enabled") private var waterNudgeEnabled: Bool = true
 
     var body: some View {
         NavigationStack {
@@ -56,6 +58,10 @@ struct SettingsView: View {
 
                     section("Units") {
                         unitsRow
+                    }
+
+                    section("Reminders") {
+                        remindersSection
                     }
                 }
                 .padding(.horizontal, 20)
@@ -131,6 +137,57 @@ struct SettingsView: View {
             }
             Text(unitSystem.blurb)
                 .font(.caption).foregroundStyle(theme.dim)
+        }
+    }
+
+    @ViewBuilder
+    private var remindersSection: some View {
+        VStack(spacing: 1) {
+            nudgeToggleRow(
+                label: "Meal logging reminder",
+                detail: "Nudges you to log meals if you haven't by mid-day or evening.",
+                isOn: $mealNudgeEnabled,
+                isFirst: true, isLast: false
+            )
+            nudgeToggleRow(
+                label: "Water reminder",
+                detail: "Reminds you to drink water if you're behind on your daily goal.",
+                isOn: $waterNudgeEnabled,
+                isFirst: false, isLast: true
+            )
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+    }
+
+    @ViewBuilder
+    private func nudgeToggleRow(
+        label: String,
+        detail: String,
+        isOn: Binding<Bool>,
+        isFirst: Bool,
+        isLast: Bool
+    ) -> some View {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 3) {
+                Text(label)
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(theme.text)
+                Text(detail)
+                    .font(.caption)
+                    .foregroundStyle(theme.dim)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Spacer()
+            Toggle("", isOn: isOn)
+                .labelsHidden()
+                .tint(theme.accent)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .background(theme.card)
+        if !isLast {
+            Divider().background(theme.line).padding(.leading, 12)
         }
     }
 

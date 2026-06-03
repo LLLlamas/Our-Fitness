@@ -39,6 +39,9 @@ public final class HealthKitService: ObservableObject {
         if let t = HKObjectType.quantityType(forIdentifier: .bloodPressureSystolic)  { s.insert(t) }
         if let t = HKObjectType.quantityType(forIdentifier: .bloodPressureDiastolic) { s.insert(t) }
         if let t = HKObjectType.quantityType(forIdentifier: .bloodGlucose)           { s.insert(t) }
+        if let t = HKObjectType.quantityType(forIdentifier: .flightsClimbed)         { s.insert(t) }
+        if let t = HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning)  { s.insert(t) }
+        if let t = HKObjectType.quantityType(forIdentifier: .basalEnergyBurned)       { s.insert(t) }
         // NOTE: do NOT add the bloodPressure *correlation* type here. Authorizing
         // its component quantity types (systolic/diastolic, above) is sufficient to
         // run the correlation query in latestBloodPressure(); including the
@@ -270,6 +273,47 @@ public final class HealthKitService: ObservableObject {
     /// Active energy burned (kcal) for a local-calendar day.
     public func activeEnergy(for date: Date = Date()) async -> Double {
         guard let type = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned) else { return 0 }
+        let (start, end) = Self.dayBounds(date)
+        let predicate = HKQuery.predicateForSamples(withStart: start, end: end, options: [.strictStartDate])
+        return await withCheckedContinuation { cont in
+            let q = HKStatisticsQuery(quantityType: type, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, stats, _ in
+                cont.resume(returning: stats?.sumQuantity()?.doubleValue(for: .kilocalorie()) ?? 0)
+            }
+            store.execute(q)
+        }
+    }
+
+    /// Floors climbed (integer count) for a local-calendar day.
+    public func flightsClimbed(for date: Date = Date()) async -> Int {
+        guard let type = HKQuantityType.quantityType(forIdentifier: .flightsClimbed) else { return 0 }
+        let (start, end) = Self.dayBounds(date)
+        let predicate = HKQuery.predicateForSamples(withStart: start, end: end, options: [.strictStartDate])
+        return await withCheckedContinuation { cont in
+            let q = HKStatisticsQuery(quantityType: type, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, stats, _ in
+                let n = stats?.sumQuantity()?.doubleValue(for: .count()) ?? 0
+                cont.resume(returning: Int(n))
+            }
+            store.execute(q)
+        }
+    }
+
+    /// Walking + running distance in miles for a local-calendar day.
+    public func walkingRunningDistanceMiles(for date: Date = Date()) async -> Double {
+        guard let type = HKQuantityType.quantityType(forIdentifier: .distanceWalkingRunning) else { return 0 }
+        let (start, end) = Self.dayBounds(date)
+        let predicate = HKQuery.predicateForSamples(withStart: start, end: end, options: [.strictStartDate])
+        return await withCheckedContinuation { cont in
+            let q = HKStatisticsQuery(quantityType: type, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, stats, _ in
+                let miles = stats?.sumQuantity()?.doubleValue(for: .mile()) ?? 0
+                cont.resume(returning: miles)
+            }
+            store.execute(q)
+        }
+    }
+
+    /// Resting (basal) energy burned in kcal for a local-calendar day.
+    public func restingEnergy(for date: Date = Date()) async -> Double {
+        guard let type = HKQuantityType.quantityType(forIdentifier: .basalEnergyBurned) else { return 0 }
         let (start, end) = Self.dayBounds(date)
         let predicate = HKQuery.predicateForSamples(withStart: start, end: end, options: [.strictStartDate])
         return await withCheckedContinuation { cont in

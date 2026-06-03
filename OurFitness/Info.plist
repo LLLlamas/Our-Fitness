@@ -31,6 +31,10 @@
   <key>NSSupportsLiveActivities</key>
   <true/>
 
+  <!-- Camera usage (food label scanner) -->
+  <key>NSCameraUsageDescription</key>
+  <string>Scan food labels to log nutrition quickly.</string>
+
   <!-- HealthKit usage descriptions (required for App Store) -->
   <key>NSHealthShareUsageDescription</key>
   <string>Our-Fitness reads your steps, weight, heart rate, resting heart rate, active energy, exercise time, body fat, waist, blood pressure, and blood glucose from Apple Health to show your daily progress and trends.</string>

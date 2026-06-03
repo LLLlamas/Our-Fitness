@@ -119,6 +119,30 @@ public final class ToastCenter: ObservableObject {
                    accent: .ok, symbol: msg.sfSymbol), for: 2.0)
     }
 
+    // Time-based nudge toasts — fired from TodayView's periodic timer.
+    // Each method calls the engine and only shows a toast when the engine
+    // returns a non-nil message (avoids spamming during quiet periods).
+
+    public func mealNudge(mealsLoggedToday: Int, hourOfDay: Int, mode: Mode) {
+        guard let msg = EncouragementEngine.mealLoggingNudge(
+            mealsLoggedToday: mealsLoggedToday,
+            hourOfDay: hourOfDay,
+            mode: mode
+        ) else { return }
+        show(Toast(title: msg.headline, detail: msg.detail,
+                   accent: .info, symbol: msg.sfSymbol), for: 2.4)
+    }
+
+    public func waterReminder(currentOz: Double, goalOz: Double, hourOfDay: Int) {
+        guard let msg = EncouragementEngine.waterNudge(
+            currentOz: currentOz,
+            goalOz: goalOz,
+            hourOfDay: hourOfDay
+        ) else { return }
+        show(Toast(title: msg.headline, detail: msg.detail,
+                   accent: .info, symbol: msg.sfSymbol), for: 2.4)
+    }
+
     public func warn(_ msg: String) {
         show(Toast(title: msg, accent: .warn, symbol: "exclamationmark.triangle.fill"))
     }

@@ -18,6 +18,7 @@ struct TodayView: View {
 
     @Query private var logModels: [FoodLogEntryModel]
     @Query private var stepModels: [StepCountModel]
+    @Query private var waterModels: [WaterEntryModel]
 
     @State private var entryToDetail: FoodLogEntryDTO?
 
@@ -35,6 +36,23 @@ struct TodayView: View {
     @AppStorage private var customStepsGoalRaw: Int
     @AppStorage private var customWeeklyDaysRaw: Int
 
+    // Water goal — mirrors the key used in WaterCard so nudges read the same value.
+    @AppStorage private var waterGoalFlOz: Double
+
+    // User-configurable nudge toggles — mirrored from SettingsView.
+    @AppStorage("nudge.meal.enabled") private var mealNudgeEnabled: Bool = true
+    @AppStorage("nudge.water.enabled") private var waterNudgeEnabled: Bool = true
+
+    // Time-based nudge state — tracks the last hour in which a nudge fired so
+    // each kind fires at most once per hour. Reset on day rollover (via @State,
+    // not AppStorage — a cold relaunch is fine to check again).
+    @State private var lastMealNudgeHour: Int = -1
+    @State private var lastWaterNudgeHour: Int = -1
+    @State private var nudgeDayKey: String = ""
+
+    // 30-minute repeating timer that triggers the periodic nudge check.
+    private let nudgeTimer = Timer.publish(every: 1800, tolerance: 60, on: .main, in: .common).autoconnect()
+
     init(profile: ProfileDTO, health: HealthKitService) {
         self.profile = profile
         self._health = ObservedObject(wrappedValue: health)
@@ -49,13 +67,23 @@ struct TodayView: View {
             sort: \.date,
             order: .reverse
         )
+        _waterModels = Query(
+            filter: #Predicate<WaterEntryModel> { $0.userId == uid },
+            sort: \.timestamp,
+            order: .forward
+        )
         _macroFiredRaw = AppStorage(wrappedValue: "", "macroFired.\(uid.uuidString)")
         _macroFlagDayKey = AppStorage(wrappedValue: "", "macroFiredDay.\(uid.uuidString)")
         _customStepsGoalRaw = AppStorage(wrappedValue: 0, "stepsGoal.\(uid.uuidString)")
         _customWeeklyDaysRaw = AppStorage(wrappedValue: 5, "stepsWeeklyDays.\(uid.uuidString)")
+        _waterGoalFlOz = AppStorage(wrappedValue: Water.defaultGoalFlOz, "waterGoalFlOz.\(uid.uuidString)")
     }
 
     private var today: String { Dates.dayKey() }
+
+    private var todayWaterOz: Double {
+        Water.total(waterModels.map(\.snapshot), on: today)
+    }
 
     private var todaysLogs: [FoodLogEntryDTO] {
         logModels.map(\.snapshot).filter { $0.date == today }
@@ -132,6 +160,12 @@ struct TodayView: View {
         .onChange(of: totals) { _, newTotals in
             checkMacroMilestones(newTotals)
         }
+        .onAppear {
+            checkTimeNudges()
+        }
+        .onReceive(nudgeTimer) { _ in
+            checkTimeNudges()
+        }
         .sheet(item: $entryToDetail) { entry in
             MealIngredientDetailSheet(
                 mode: .editing(entry: entry),
@@ -191,6 +225,50 @@ struct TodayView: View {
                 toasts.macroApproaching(EncouragementEngine.macroApproachingMessage(
                     macro: "calories", remaining: remaining, unit: " cal", mode: profile.mode))
             }
+        }
+    }
+
+    // MARK: - Time-based nudges
+
+    /// Fires meal-logging and water nudges at most once per hour per kind.
+    /// Called on .onAppear and on the 30-minute nudgeTimer tick.
+    private func checkTimeNudges() {
+        let hour = Calendar.current.component(.hour, from: Date())
+        let dayKey = today
+
+        // Reset per-hour counters when the calendar day rolls over.
+        if nudgeDayKey != dayKey {
+            nudgeDayKey = dayKey
+            lastMealNudgeHour = -1
+            lastWaterNudgeHour = -1
+        }
+
+        let mealCount = todaysLogs.count
+
+        // Meal nudge — ask the engine first so we only advance the guard when a
+        // message would actually fire. This avoids marking the hour "used" during
+        // quiet periods (e.g. before 11 AM) when the engine returns nil.
+        if mealNudgeEnabled,
+           hour != lastMealNudgeHour,
+           EncouragementEngine.mealLoggingNudge(
+               mealsLoggedToday: mealCount,
+               hourOfDay: hour,
+               mode: profile.mode
+           ) != nil {
+            toasts.mealNudge(mealsLoggedToday: mealCount, hourOfDay: hour, mode: profile.mode)
+            lastMealNudgeHour = hour
+        }
+
+        // Water nudge — same pattern; separate hour guard from meal nudge.
+        if waterNudgeEnabled,
+           hour != lastWaterNudgeHour,
+           EncouragementEngine.waterNudge(
+               currentOz: todayWaterOz,
+               goalOz: waterGoalFlOz,
+               hourOfDay: hour
+           ) != nil {
+            toasts.waterReminder(currentOz: todayWaterOz, goalOz: waterGoalFlOz, hourOfDay: hour)
+            lastWaterNudgeHour = hour
         }
     }
 

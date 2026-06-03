@@ -287,6 +287,14 @@ private struct ExerciseRow: View {
             }
         }
         .padding(.vertical, 4)
+        .swipeActions(edge: .trailing) {
+            Button(role: .destructive) {
+                onDelete()
+            } label: {
+                Label("Remove", systemImage: "trash")
+            }
+            .tint(.red)
+        }
         .contextMenu {
             Button(role: .destructive) {
                 onDelete()

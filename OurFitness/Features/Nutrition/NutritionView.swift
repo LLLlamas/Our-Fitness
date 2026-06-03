@@ -31,7 +31,19 @@ struct NutritionView: View {
     @State private var savedTemplateToLog: SavedMealTemplateDTO?
     @State private var showNutritionTrend = false
     @State private var showNutritionInsight = false
+    @State private var showCameraLog = false
     @State private var selectedDayKey: String = Dates.dayKey()
+
+    // MARK: - Smarter swaps state
+
+    private enum AlternativesState {
+        case idle
+        case loading
+        case loaded([FoodAlternative])
+        case unavailable
+    }
+
+    @State private var alternativesState: AlternativesState = .idle
 
     init(profile: ProfileDTO) {
         self.profile = profile
@@ -121,6 +133,7 @@ struct NutritionView: View {
         )
         Repos.addFoodLog(ctx, dto)
         toasts.logged(meal.name, calories: scaled.calories)
+        FoodAlternativeService.shared.prefetch(for: meal.name, mode: profile.mode)
     }
 
     private func logCommonFood(_ food: CommonFood, slot: Slot = .lunch, multiplier: Double = 1.0) {
@@ -140,6 +153,7 @@ struct NutritionView: View {
         )
         Repos.addFoodLog(ctx, dto)
         toasts.logged(food.name, calories: dto.perServing.calories)
+        FoodAlternativeService.shared.prefetch(for: food.name, mode: profile.mode)
     }
 
     var body: some View {
@@ -173,7 +187,7 @@ struct NutritionView: View {
 
                 if selectedDayKey == today {
                     suggestionPillRow
-                    nudgeSection
+                    smarterSwapsSection
                 }
 
                 if selectedDayKey == today {
@@ -194,6 +208,14 @@ struct NutritionView: View {
                             Label("Browse", systemImage: "magnifyingglass")
                         }
                         .tactile(.secondary)
+
+                        Button {
+                            showCameraLog = true
+                        } label: {
+                            Image(systemName: "camera.fill")
+                        }
+                        .tactile(.ghost)
+                        .accessibilityLabel("Scan food label")
                     }
                 }
 
@@ -208,6 +230,10 @@ struct NutritionView: View {
             NLMealLogSheet(profile: profile) { dto in
                 Repos.addFoodLog(ctx, dto)
                 toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
+                let foodName = dto.foodId ?? dto.customName ?? ""
+                if !foodName.isEmpty {
+                    FoodAlternativeService.shared.prefetch(for: foodName, mode: profile.mode)
+                }
             }
             .themed(profile.mode)
         }
@@ -216,11 +242,16 @@ struct NutritionView: View {
                 Repos.addFoodLog(ctx, dto)
                 toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
                 showSuggestions = false
+                let foodName = dto.foodId ?? dto.customName ?? ""
+                if !foodName.isEmpty {
+                    FoodAlternativeService.shared.prefetch(for: foodName, mode: profile.mode)
+                }
             }
             .themed(profile.mode)
         }
         .sheet(isPresented: $showLibrary) {
             FoodLibrarySheet(profile: profile) { food, slot, multiplier in
+                // logCommonFood already calls prefetch internally.
                 logCommonFood(food, slot: slot, multiplier: multiplier)
             }
             .themed(profile.mode)
@@ -288,6 +319,59 @@ struct NutritionView: View {
             NutritionInsightSheet(profile: profile, logs: allLogs)
                 .themed(profile.mode)
         }
+        .sheet(isPresented: $showCameraLog) {
+            CameraFoodLogSheet(profile: profile, slot: .lunch) { dto in
+                Repos.addFoodLog(ctx, dto)
+                toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
+                let foodName = dto.foodId ?? dto.customName ?? ""
+                if !foodName.isEmpty {
+                    FoodAlternativeService.shared.prefetch(for: foodName, mode: profile.mode)
+                }
+            }
+            .themed(profile.mode)
+        }
+        // Key on profile.id + the id of the most recent today's log so the section
+        // refreshes when the user logs a new food today (subject changes), but not
+        // on every single entry change (e.g. edits to older days).
+        .task(id: "\(profile.id)-\(todaysLogs.last?.id.uuidString ?? "none")") {
+            await loadAlternatives()
+        }
+    }
+
+    // MARK: - Load AI alternatives
+
+    private func loadAlternatives() async {
+        guard FoodAlternativeService.shared.isAvailable else {
+            alternativesState = .unavailable
+            return
+        }
+
+        // Subject: the most recently logged food today. If today has no logs,
+        // fall back to the most frequent food from the last 30 days. If neither
+        // is available, skip loading.
+        let targetFood: String
+        if let lastToday = todaysLogs.last {
+            targetFood = lastToday.foodId ?? lastToday.customName ?? ""
+        } else {
+            let frequents = FoodAlternativeService.shared.learnedFrequents(from: allLogs)
+            targetFood = frequents.first ?? ""
+        }
+
+        guard !targetFood.isEmpty else {
+            alternativesState = .unavailable
+            return
+        }
+
+        let frequents = FoodAlternativeService.shared.learnedFrequents(from: allLogs)
+        let favNames = favoriteFoods.map { $0.name }
+        alternativesState = .loading
+        let results = await FoodAlternativeService.shared.alternatives(
+            for: targetFood,
+            mode: profile.mode,
+            recentFoodNames: frequents,
+            favoriteFoodNames: favNames
+        )
+        alternativesState = results.isEmpty ? .unavailable : .loaded(results)
     }
 
     // MARK: - Weekly nutrition
@@ -441,41 +525,141 @@ struct NutritionView: View {
         }
     }
 
-    // MARK: - Variety nudges
+    // MARK: - Smarter swaps
+
+    /// Resolves to a non-empty list of AI alternatives only when the service has
+    /// returned loaded results. Returns nil when we should show nothing.
+    private var aiAlternativeItems: [FoodAlternative]? {
+        if case .loaded(let items) = alternativesState, !items.isEmpty {
+            return Array(items.prefix(3))
+        }
+        return nil
+    }
 
     @ViewBuilder
-    private var nudgeSection: some View {
+    private var smarterSwapsSection: some View {
+        // Always show the Smarter Swaps section header. When AI has results,
+        // show them with the whyBetter educational line. When AI is unavailable,
+        // show the variety nudges as the fallback content.
+        let aiItems = aiAlternativeItems
         let nudges = varietyNudges
-        if !nudges.isEmpty {
+
+        // Only render if there's something to show: AI results, nudges, or loading.
+        let isLoading: Bool = {
+            if case .loading = alternativesState { return true }
+            return false
+        }()
+        let hasContent = aiItems != nil || !nudges.isEmpty || isLoading
+
+        if hasContent || FoodAlternativeService.shared.isAvailable {
             VStack(alignment: .leading, spacing: 10) {
-                ForEach(nudges, id: \.headline) { nudge in
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack(spacing: 6) {
-                            Text(nudge.emoji)
-                                .font(.system(size: 12))
-                            Text(nudge.headline)
-                                .font(.caption).fontWeight(.medium)
-                                .foregroundStyle(theme.text)
+                HStack(spacing: 6) {
+                    Image(systemName: "sparkles")
+                        .font(.system(size: 11))
+                        .foregroundStyle(theme.accent)
+                    Text("Smarter swaps")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(theme.text)
+                }
+
+                if isLoading {
+                    HStack(spacing: 8) {
+                        ProgressView().controlSize(.small)
+                        Text("Finding healthier swaps…")
+                            .font(.caption).foregroundStyle(theme.dim)
+                    }
+                } else if let items = aiItems {
+                    // AI alternatives — each carries a whyBetter research reason.
+                    ForEach(items, id: \.item.food.id) { alt in
+                        HStack(alignment: .top, spacing: 10) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(alt.item.food.name)
+                                    .font(.callout)
+                                    .foregroundStyle(theme.text)
+                                Text("\(alt.item.scaledCalories) cal · \(alt.item.scaledProteinG)g protein")
+                                    .font(.system(.caption2, design: .monospaced))
+                                    .foregroundStyle(theme.dim)
+                                if !alt.whyBetter.isEmpty {
+                                    Text(alt.whyBetter)
+                                        .font(.caption2).italic()
+                                        .foregroundStyle(theme.dim)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
+                            }
+                            Spacer(minLength: 0)
+                            Button {
+                                let item = alt.item
+                                let dto = FoodLogEntryDTO(
+                                    userId: profile.id,
+                                    date: today,
+                                    slot: .lunch,
+                                    foodId: item.food.id,
+                                    customName: item.food.name,
+                                    perServing: PerServing(
+                                        calories: item.scaledCalories,
+                                        proteinG: item.scaledProteinG,
+                                        carbsG: item.scaledCarbsG,
+                                        fatG: item.scaledFatG,
+                                        fiberG: item.scaledFiberG
+                                    )
+                                )
+                                Repos.addFoodLog(ctx, dto)
+                                toasts.logged(item.food.name, calories: item.scaledCalories)
+                                FoodAlternativeService.shared.prefetch(for: item.food.name, mode: profile.mode)
+                            } label: {
+                                Image(systemName: "plus.circle")
+                            }
+                            .tactile(.ghost)
+                            .accessibilityLabel("Log \(alt.item.food.name)")
                         }
-                        Text(nudge.reason)
-                            .font(.caption2).italic()
+                        .padding(10)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(theme.card)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+                    }
+
+                    // Apple Intelligence attribution
+                    HStack(alignment: .top, spacing: 6) {
+                        Image(systemName: "sparkles")
+                            .font(.system(size: 9))
+                            .foregroundStyle(theme.accent)
+                        Text("Suggestions from Apple Intelligence. Calories and macros come from the food database, not the model.")
+                            .font(.caption2)
                             .foregroundStyle(theme.dim)
                             .fixedSize(horizontal: false, vertical: true)
-                        HStack(alignment: .top, spacing: 4) {
-                            Text("→")
-                                .font(.caption2)
-                                .foregroundStyle(theme.accent2)
-                            Text(nudge.alternative)
-                                .font(.caption2)
+                    }
+                } else if !nudges.isEmpty {
+                    // Variety nudges as fallback when AI is unavailable.
+                    ForEach(nudges, id: \.headline) { nudge in
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack(spacing: 6) {
+                                Text(nudge.emoji)
+                                    .font(.system(size: 12))
+                                Text(nudge.headline)
+                                    .font(.caption).fontWeight(.medium)
+                                    .foregroundStyle(theme.text)
+                            }
+                            Text(nudge.reason)
+                                .font(.caption2).italic()
                                 .foregroundStyle(theme.dim)
                                 .fixedSize(horizontal: false, vertical: true)
+                            HStack(alignment: .top, spacing: 4) {
+                                Text("→")
+                                    .font(.caption2)
+                                    .foregroundStyle(theme.accent2)
+                                Text(nudge.alternative)
+                                    .font(.caption2)
+                                    .foregroundStyle(theme.dim)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
                         }
-                    }
-                    .padding(10)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(theme.card)
-                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .padding(10)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(theme.card)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                         .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+                    }
                 }
             }
         }

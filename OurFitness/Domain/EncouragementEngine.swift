@@ -273,6 +273,105 @@ public enum EncouragementEngine {
         }
     }
 
+    // MARK: - Time-based nudges
+
+    /// Gentle meal-logging nudge based on time of day and how many meals have
+    /// been logged. Returns nil when no nudge is warranted — avoid calling
+    /// repeatedly without checking the return value.
+    ///
+    /// Rules:
+    /// - Returns nil if mealsLoggedToday > 1 (already on track; 1-meal case gets
+    ///   a mid-day tip but not an evening one)
+    /// - Returns nil before 11 AM (let people ease into the day)
+    /// - Mode shapes focus: Build → protein, Circuit → balanced nutrition
+    public static func mealLoggingNudge(
+        mealsLoggedToday: Int,
+        hourOfDay: Int,
+        mode: Mode
+    ) -> EncouragementMessage? {
+        let isBuild = mode == .build
+
+        // Don't nag before 11 AM.
+        guard hourOfDay >= 11 else { return nil }
+
+        if mealsLoggedToday == 0 {
+            if hourOfDay >= 17 {
+                // Late in the day, still nothing logged.
+                return isBuild
+                    ? EncouragementMessage(
+                        headline: "Day almost done — no meals logged.",
+                        detail: "Logging helps you hit your protein target. Even a quick entry keeps the data honest.",
+                        tone: .nudge, sfSymbol: "fork.knife")
+                    : EncouragementMessage(
+                        headline: "Day almost done — no meals logged.",
+                        detail: "Balanced nutrition is the foundation of Circuit. A quick log — even an estimate — keeps you on track.",
+                        tone: .nudge, sfSymbol: "fork.knife")
+            } else if hourOfDay >= 11 {
+                // Mid-day, nothing logged yet.
+                return isBuild
+                    ? EncouragementMessage(
+                        headline: "Haven't logged yet today.",
+                        detail: "Protein timing matters for muscle growth — logging meals keeps you on track to hit your daily target.",
+                        tone: .nudge, sfSymbol: "fork.knife")
+                    : EncouragementMessage(
+                        headline: "Haven't logged yet today.",
+                        detail: "Logging even one meal helps you see where you stand on calories and protein for the day.",
+                        tone: .nudge, sfSymbol: "fork.knife")
+            }
+        } else if mealsLoggedToday == 1, hourOfDay >= 11, hourOfDay <= 13 {
+            // One meal logged around midday — light encouragement to keep going.
+            return isBuild
+                ? EncouragementMessage(
+                    headline: "Good start — keep logging.",
+                    detail: "One meal in. Keep tracking to make sure your protein target is reachable by end of day.",
+                    tone: .nudge, sfSymbol: "fork.knife")
+                : EncouragementMessage(
+                    headline: "Good start — keep logging.",
+                    detail: "One meal tracked. Logging the rest of the day helps you balance calories and hit your nutrition goal.",
+                    tone: .nudge, sfSymbol: "fork.knife")
+        }
+
+        return nil
+    }
+
+    /// Hydration nudge based on time of day and progress toward the water goal.
+    /// Returns nil when no nudge is warranted.
+    ///
+    /// Rules:
+    /// - Returns nil if currentOz >= goalOz * 0.5 (half the goal met — no nag needed)
+    /// - Returns nil outside 10 AM – 8 PM (quiet hours)
+    public static func waterNudge(
+        currentOz: Double,
+        goalOz: Double,
+        hourOfDay: Int
+    ) -> EncouragementMessage? {
+        // Quiet hours.
+        guard hourOfDay >= 10, hourOfDay <= 20 else { return nil }
+        // Already past half the goal — no nudge needed.
+        guard goalOz > 0, currentOz < goalOz * 0.5 else { return nil }
+
+        let pct = goalOz > 0 ? Int((currentOz / goalOz) * 100) : 0
+        let remaining = Int(goalOz - currentOz)
+
+        if hourOfDay >= 12, hourOfDay <= 14, pct < 25 {
+            // Midday and less than a quarter done.
+            return EncouragementMessage(
+                headline: "Hydration check.",
+                detail: "You're at \(pct)% of your water goal. Staying hydrated supports joint lubrication, metabolic function, and sustained energy — research suggests mild dehydration can dull both physical performance and mood.",
+                scienceLine: "ACSM hydration guidelines; Popkin et al., Nutr Rev 2010.",
+                tone: .nudge, sfSymbol: "drop.fill")
+        } else if hourOfDay >= 16, hourOfDay <= 18 {
+            // Afternoon catch-up window — still under 50% (already gated above).
+            return EncouragementMessage(
+                headline: "Catch up on water.",
+                detail: "\(remaining) oz to go. Afternoon is a good window to catch up — hydration supports your metabolism and helps your body use the nutrients from today's meals.",
+                scienceLine: "ACSM hydration guidelines; Popkin et al., Nutr Rev 2010.",
+                tone: .nudge, sfSymbol: "drop.fill")
+        }
+
+        return nil
+    }
+
     /// Copy for approaching a macro target. Intended for use when ≥85% there.
     public static func macroApproachingMessage(macro: String, remaining: Int, unit: String, mode: Mode) -> EncouragementMessage {
         let isBuild = mode == .build
