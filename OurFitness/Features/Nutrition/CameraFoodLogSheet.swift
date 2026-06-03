@@ -1,28 +1,28 @@
 // Camera-based food label scanner.
 //
-// Opens the device camera via VisionKit DataScannerViewController, reads
-// printed text off a nutrition facts panel, then passes that raw text to
-// the on-device FoundationModels AI (iOS 26+) which extracts the structured
-// fields (name, serving, calories, macros) declared in FoodLabelDraft.
+// Two capture modes:
+//   1. Live scan (DataScannerViewController) — hold phone over the label; auto-detects.
+//   2. Photo mode (UIImagePickerController + Vision OCR) — snap or pick a photo; Vision
+//      reads the text offline so the user doesn't need to hold steady.
 //
-// Safety note: unlike the meal-description parser (MealParseService) where
-// AI must NEVER touch nutrition numbers, here the model IS reading nutrition
-// numbers — but only numbers already PRINTED on the physical label. The model
-// is transcribing stated facts, not inventing them. The @Generable prompt
-// makes this explicit so the model stays within bounds.
+// Both paths run the same AI / regex extraction pipeline, then land on a
+// fully-editable confirmation screen: name, serving size, servings stepper, and
+// every individual nutrient row (calories, fat, sat fat, cholesterol, sodium,
+// carbs, fiber, sugars, added sugars, protein). All values are TextFields —
+// nothing is locked after scanning.
+//
+// Safety: FoundationModels reads PRINTED numbers from the label — it does not
+// invent macros. The @Generable prompt enforces this constraint.
 //
 // Graceful degradation:
-//   • iOS < 17 or DataScanner unavailable → fallback text-entry screen
-//   • iOS < 26 / no Apple Intelligence → fallback text-entry screen
-//     (the captured text is fed through FoodParser for a best-effort result)
-//   • Any error during scanning or AI generation → user-facing message, retry
-//
-// Public interface:
-//   CameraFoodLogSheet(profile:slot:onLog:)
-//     onLog: (FoodLogEntryDTO) -> Void
+//   • DataScanner unavailable → skip to fallback text-entry screen
+//   • iOS < 26 / no Apple Intelligence → Vision OCR + regex extraction only
+//   • Any error → user-facing message, retry available
 
 import SwiftUI
 import VisionKit
+import Vision
+import UIKit
 import Foundation
 #if canImport(FoundationModels)
 import FoundationModels
@@ -31,36 +31,37 @@ import FoundationModels
 // MARK: - FoodLabelDraft (AI output shape, iOS 26+ only)
 
 #if canImport(FoundationModels)
-/// The structured shape the on-device model fills from scanned label text.
-/// Contains nutrition numbers because the model is READING them from the
-/// physical label — not inventing them. Prompt reinforces this constraint.
 @available(iOS 26.0, *)
 @Generable
 private struct FoodLabelDraft {
-    @Guide(description: "The product name from the nutrition label")
+    @Guide(description: "Product name from the label. If absent, write 'Unknown food'.")
     var foodName: String
-
-    @Guide(description: "Serving size as printed on the label, e.g. '1 cup (240g)' or '1 bar (45g)'")
+    @Guide(description: "Serving size exactly as printed, e.g. '4 pieces (88g)'.")
     var servingLabel: String
-
-    @Guide(description: "Calories per serving as an integer. Use 0 if not found.")
+    @Guide(description: "Calories per serving as an integer. 0 if not found.")
     var calories: Int
-
-    @Guide(description: "Protein in grams per serving. Use 0 if not found.")
+    @Guide(description: "Protein in grams per serving. 0 if not found.")
     var proteinG: Double
-
-    @Guide(description: "Total carbohydrates in grams per serving. Use 0 if not found.")
+    @Guide(description: "Total carbohydrates in grams per serving. 0 if not found.")
     var carbsG: Double
-
-    @Guide(description: "Total fat in grams per serving. Use 0 if not found.")
+    @Guide(description: "Total fat in grams per serving. 0 if not found.")
     var fatG: Double
-
-    @Guide(description: "Dietary fiber in grams per serving. Use 0 if not found.")
+    @Guide(description: "Saturated fat in grams per serving. 0 if not found.")
+    var saturatedFatG: Double
+    @Guide(description: "Dietary fiber in grams per serving. 0 if not found.")
     var fiberG: Double
+    @Guide(description: "Total sugars in grams per serving. 0 if not found.")
+    var totalSugarG: Double
+    @Guide(description: "Added sugars in grams per serving. 0 if not found.")
+    var addedSugarG: Double
+    @Guide(description: "Sodium in milligrams per serving. 0 if not found.")
+    var sodiumMg: Double
+    @Guide(description: "Cholesterol in milligrams per serving. 0 if not found.")
+    var cholesterolMg: Double
 }
 #endif
 
-// MARK: - Confirmed label data (used after AI or manual extraction)
+// MARK: - ConfirmedLabel
 
 private struct ConfirmedLabel {
     var foodName: String
@@ -69,17 +70,98 @@ private struct ConfirmedLabel {
     var proteinG: Double
     var carbsG: Double
     var fatG: Double
+    var saturatedFatG: Double
     var fiberG: Double
+    var totalSugarG: Double
+    var addedSugarG: Double
+    var sodiumMg: Double
+    var cholesterolMg: Double
 }
 
-// MARK: - Sheet state machine
+// MARK: - EditableDraft (all nutrient values as strings for inline TextFields)
+
+private struct EditableDraft {
+    var name: String
+    var serving: String
+    var calories: String
+    var proteinG: String
+    var carbsG: String
+    var fatG: String
+    var saturatedFatG: String
+    var fiberG: String
+    var totalSugarG: String
+    var addedSugarG: String
+    var sodiumMg: String
+    var cholesterolMg: String
+
+    init(from label: ConfirmedLabel) {
+        name         = label.foodName
+        serving      = label.servingLabel
+        calories     = label.calories > 0 ? "\(label.calories)" : ""
+        proteinG     = Self.fmt(label.proteinG)
+        carbsG       = Self.fmt(label.carbsG)
+        fatG         = Self.fmt(label.fatG)
+        saturatedFatG = Self.fmt(label.saturatedFatG)
+        fiberG       = Self.fmt(label.fiberG)
+        totalSugarG  = Self.fmt(label.totalSugarG)
+        addedSugarG  = Self.fmt(label.addedSugarG)
+        sodiumMg     = label.sodiumMg > 0    ? "\(Int(label.sodiumMg))"    : ""
+        cholesterolMg = label.cholesterolMg > 0 ? "\(Int(label.cholesterolMg))" : ""
+    }
+
+    private static func fmt(_ d: Double) -> String {
+        guard d > 0 else { return "" }
+        return d.truncatingRemainder(dividingBy: 1) == 0
+            ? "\(Int(d))"
+            : String(format: "%.1f", d)
+    }
+
+    var caloriesInt: Int    { Int(calories)              ?? 0 }
+    var proteinInt:  Int    { Int(Double(proteinG)  ?? 0) }
+    var carbsInt:    Int    { Int(Double(carbsG)    ?? 0) }
+    var fatInt:      Int    { Int(Double(fatG)      ?? 0) }
+    var satFatInt:   Int    { Int(Double(saturatedFatG) ?? 0) }
+    var fiberInt:    Int    { Int(Double(fiberG)    ?? 0) }
+    var addedSugarInt: Int  { Int(Double(addedSugarG) ?? 0) }
+    var sodiumInt:   Int    { Int(sodiumMg)          ?? 0 }
+
+    func toPerServing() -> PerServing {
+        PerServing(
+            calories:     caloriesInt,
+            proteinG:     proteinInt,
+            carbsG:       carbsInt,
+            fatG:         fatInt,
+            fiberG:       fiberInt,
+            sodiumMg:     sodiumInt,
+            addedSugarG:  addedSugarInt,
+            saturatedFatG: satFatInt
+        )
+    }
+
+    func scaled(by qty: Double) -> PerServing {
+        let s = toPerServing()
+        return PerServing(
+            calories:     Int((Double(s.calories)      * qty).rounded()),
+            proteinG:     Int((Double(s.proteinG)      * qty).rounded()),
+            carbsG:       Int((Double(s.carbsG)        * qty).rounded()),
+            fatG:         Int((Double(s.fatG)          * qty).rounded()),
+            fiberG:       Int((Double(s.fiberG)        * qty).rounded()),
+            sodiumMg:     Int((Double(s.sodiumMg)      * qty).rounded()),
+            addedSugarG:  Int((Double(s.addedSugarG)   * qty).rounded()),
+            saturatedFatG: Int((Double(s.saturatedFatG) * qty).rounded())
+        )
+    }
+}
+
+// MARK: - Phase
 
 private enum ScannerPhase {
-    case scanning                          // live camera running
-    case processing                        // AI parsing in progress
-    case confirming(ConfirmedLabel, quantity: Double)  // review + adjust
-    case fallback(text: String)            // no scanner / no AI, manual entry
-    case error(String)                     // unrecoverable error
+    case scanning
+    case capturingPhoto(source: UIImagePickerController.SourceType)
+    case processing
+    case confirming(ConfirmedLabel, quantity: Double)
+    case fallback(text: String)
+    case error(String)
 }
 
 // MARK: - Main sheet
@@ -94,7 +176,6 @@ struct CameraFoodLogSheet: View {
 
     @State private var phase: ScannerPhase = .scanning
     @State private var capturedText: String = ""
-    @State private var manualText: String = ""
     @State private var stableTimer: Timer? = nil
     @State private var lastSeenText: String = ""
     @State private var isStable: Bool = false
@@ -105,6 +186,7 @@ struct CameraFoodLogSheet: View {
         }
         return false
     }
+    private var cameraAvailable: Bool { UIImagePickerController.isSourceTypeAvailable(.camera) }
 
     var body: some View {
         NavigationStack {
@@ -116,27 +198,32 @@ struct CameraFoodLogSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
-                        .tactile(.ghost)
+                    Button("Cancel") { dismiss() }.tactile(.ghost)
                 }
             }
         }
         .presentationDetents([.large])
         .presentationBackground(theme.bg)
         .onAppear {
-            if !scannerAvailable {
-                phase = .fallback(text: "")
-            }
+            if !scannerAvailable { phase = .fallback(text: "") }
         }
     }
-
-    // MARK: - Content router
 
     @ViewBuilder
     private var content: some View {
         switch phase {
         case .scanning:
             scanningView
+        case .capturingPhoto(let source):
+            ImagePickerView(
+                sourceType: source,
+                onCapture: { image in
+                    phase = .processing
+                    Task { await processImage(image) }
+                },
+                onCancel: { phase = .scanning }
+            )
+            .ignoresSafeArea()
         case .processing:
             processingView
         case .confirming(let label, let qty):
@@ -156,75 +243,66 @@ struct CameraFoodLogSheet: View {
             if #available(iOS 17.0, *) {
                 DataScannerView(
                     capturedText: $capturedText,
-                    onTextStable: { text in
-                        handleCapturedText(text)
-                    }
+                    onTextStable: { text in handleCapturedText(text) }
                 )
                 .ignoresSafeArea(edges: .bottom)
             } else {
                 Color.black.ignoresSafeArea()
             }
-
-            // Overlay: scanning guide + instruction
             VStack {
                 Spacer()
-                scanningOverlay
-                    .padding(.bottom, 40)
+                scanningOverlay.padding(.bottom, 40)
             }
         }
-        .onChange(of: capturedText) { _, newText in
-            throttleStabilization(newText)
-        }
+        .onChange(of: capturedText) { _, newText in throttleStabilization(newText) }
     }
 
     private var scanningOverlay: some View {
-        VStack(spacing: 16) {
-            // Viewfinder guide frame
+        VStack(spacing: 14) {
             RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .strokeBorder(Color.white.opacity(0.6), lineWidth: 2)
                 .frame(width: 280, height: 160)
                 .overlay {
-                    Text("Point at the\nNutrition Facts panel")
-                        .font(.caption)
-                        .foregroundStyle(Color.white.opacity(0.8))
-                        .multilineTextAlignment(.center)
+                    VStack(spacing: 6) {
+                        Text("Point at Nutrition Facts")
+                            .font(.caption).foregroundStyle(Color.white.opacity(0.85))
+                        if !capturedText.isEmpty {
+                            Text(isStable ? "Label detected" : "Reading…")
+                                .font(.system(size: 11, weight: .medium))
+                                .foregroundStyle(Color.white.opacity(0.6))
+                                .animation(.easeInOut(duration: 0.2), value: isStable)
+                        }
+                    }
                 }
-                .padding(.bottom, 8)
 
-            // Status pill
-            if capturedText.isEmpty {
-                Text("Scanning…")
-                    .font(.system(size: 13, weight: .medium))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                    .background(Color.black.opacity(0.55), in: Capsule())
-            } else {
-                Text(isStable ? "Label detected — using…" : "Reading label…")
-                    .font(.system(size: 13, weight: .medium))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                    .background(Color.black.opacity(0.55), in: Capsule())
-                    .animation(.easeInOut(duration: 0.2), value: isStable)
-            }
-
-            // Manual "Use this" button shown once text is captured
             if !capturedText.isEmpty {
-                Button("Use this") {
-                    handleCapturedText(capturedText)
-                }
-                .tactile(.primary)
-                .padding(.top, 4)
+                Button("Use this ›") { handleCapturedText(capturedText) }
+                    .tactile(.primary)
             }
 
-            // Escape hatch: type instead
-            Button("Type it instead") {
-                phase = .fallback(text: "")
+            HStack(spacing: 10) {
+                if cameraAvailable {
+                    Button {
+                        phase = .capturingPhoto(source: .camera)
+                    } label: {
+                        Label("Take Photo", systemImage: "camera.fill")
+                            .font(.system(size: 13, weight: .medium))
+                    }
+                    .tactile(.secondary)
+                }
+                Button {
+                    phase = .capturingPhoto(source: .photoLibrary)
+                } label: {
+                    Label("Choose Photo", systemImage: "photo.on.rectangle")
+                        .font(.system(size: 13, weight: .medium))
+                }
+                .tactile(.secondary)
             }
-            .tactile(.ghost)
+
+            Button("Type it instead") { phase = .fallback(text: "") }
+                .tactile(.ghost)
         }
-        .padding(.horizontal, 32)
+        .padding(.horizontal, 24)
     }
 
     // MARK: - Processing view
@@ -236,103 +314,91 @@ struct CameraFoodLogSheet: View {
                 .progressViewStyle(.circular)
                 .tint(theme.accent)
                 .scaleEffect(1.4)
-
             Text("Reading label…")
-                .font(.system(size: 17, weight: .medium))
-                .foregroundStyle(theme.text)
-
+                .font(.system(size: 17, weight: .medium)).foregroundStyle(theme.text)
             Text("Extracting nutrition from the printed label.")
-                .font(.caption)
-                .foregroundStyle(theme.dim)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 40)
+                .font(.caption).foregroundStyle(theme.dim)
+                .multilineTextAlignment(.center).padding(.horizontal, 40)
             Spacer()
         }
     }
 
-    // MARK: - Confirmation view
+    // MARK: - Subview routing
 
     private func confirmingView(label: ConfirmedLabel, quantity: Double) -> some View {
         ConfirmationView(
-            label: label,
-            quantity: quantity,
-            slot: slot,
-            profile: profile,
-            onLog: { entry in
-                onLog(entry)
-                dismiss()
-            },
+            label: label, quantity: quantity, slot: slot, profile: profile,
+            onLog: { entry in onLog(entry); dismiss() },
             onRescan: {
-                capturedText = ""
-                lastSeenText = ""
-                isStable = false
+                capturedText = ""; lastSeenText = ""; isStable = false
                 phase = .scanning
             }
         )
     }
 
-    // MARK: - Fallback (manual text entry)
-
     private func fallbackView(initialText: String) -> some View {
         FallbackEntryView(
-            initialText: initialText,
-            slot: slot,
-            profile: profile,
-            onLog: { entry in
-                onLog(entry)
-                dismiss()
-            }
+            initialText: initialText, slot: slot, profile: profile,
+            onLog: { entry in onLog(entry); dismiss() }
         )
     }
-
-    // MARK: - Error view
 
     private func errorView(message: String) -> some View {
         VStack(spacing: 20) {
             Spacer()
             Image(systemName: "exclamationmark.triangle")
-                .font(.system(size: 44))
-                .foregroundStyle(theme.warn)
-
+                .font(.system(size: 44)).foregroundStyle(theme.warn)
             Text("Could not read label")
-                .font(.headline)
-                .foregroundStyle(theme.text)
-
+                .font(.headline).foregroundStyle(theme.text)
             Text(message)
-                .font(.subheadline)
-                .foregroundStyle(theme.dim)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
-
+                .font(.subheadline).foregroundStyle(theme.dim)
+                .multilineTextAlignment(.center).padding(.horizontal, 32)
             HStack(spacing: 12) {
                 Button("Try again") {
-                    capturedText = ""
-                    lastSeenText = ""
-                    isStable = false
+                    capturedText = ""; lastSeenText = ""; isStable = false
                     phase = .scanning
                 }
                 .tactile(.secondary)
-
-                Button("Type instead") {
-                    phase = .fallback(text: "")
-                }
-                .tactile(.primary)
+                Button("Type instead") { phase = .fallback(text: "") }
+                    .tactile(.primary)
             }
             .padding(.top, 8)
             Spacer()
         }
     }
 
-    // MARK: - Text stabilization
+    // MARK: - Photo → Vision OCR
 
-    /// Debounce: if the recognized text hasn't changed for 2 seconds, treat it
-    /// as stable and proceed automatically. The "Use this" button lets users
-    /// proceed earlier; this just adds the auto-trigger convenience.
+    private func processImage(_ image: UIImage) async {
+        let text = await recognizeText(in: image)
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty {
+            await MainActor.run { phase = .fallback(text: "") }
+        } else {
+            handleCapturedText(trimmed)
+        }
+    }
+
+    private func recognizeText(in image: UIImage) async -> String {
+        guard let cgImage = image.cgImage else { return "" }
+        return await Task.detached(priority: .userInitiated) {
+            let request = VNRecognizeTextRequest()
+            request.recognitionLevel = .accurate
+            request.usesLanguageCorrection = true
+            let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+            try? handler.perform([request])
+            let observations = request.results ?? []
+            // VN uses flipped Y: higher minY = higher on screen → sort descending for reading order.
+            let sorted = observations.sorted { $0.boundingBox.minY > $1.boundingBox.minY }
+            return sorted.compactMap { $0.topCandidates(1).first?.string }.joined(separator: "\n")
+        }.value
+    }
+
+    // MARK: - Text stabilization (live scanner debounce)
+
     private func throttleStabilization(_ text: String) {
         stableTimer?.invalidate()
-        if text == lastSeenText {
-            return
-        }
+        guard text != lastSeenText else { return }
         lastSeenText = text
         isStable = false
         guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
@@ -340,7 +406,6 @@ struct CameraFoodLogSheet: View {
             Task { @MainActor in
                 guard case .scanning = phase else { return }
                 isStable = true
-                // Auto-proceed after stable text settles
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                     handleCapturedText(text)
                 }
@@ -348,49 +413,39 @@ struct CameraFoodLogSheet: View {
         }
     }
 
-    // MARK: - Text → AI parse
+    // MARK: - Text → parse → confirm
 
     private func handleCapturedText(_ text: String) {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
         stableTimer?.invalidate()
         phase = .processing
-
         Task {
             let result = await extractLabel(from: trimmed)
             await MainActor.run {
                 switch result {
                 case .success(let label):
                     phase = .confirming(label, quantity: 1.0)
-                case .failure(let err):
-                    // On AI failure, drop to fallback with the raw scanned text
-                    // so the user can verify / correct it manually.
-                    if let parserResult = fallbackParse(trimmed) {
-                        phase = .confirming(parserResult, quantity: 1.0)
+                case .failure:
+                    if let parsed = fallbackParse(trimmed) {
+                        phase = .confirming(parsed, quantity: 1.0)
                     } else {
                         phase = .fallback(text: trimmed)
-                        _ = err // logged internally, not surfaced verbatim
                     }
                 }
             }
         }
     }
 
-    /// Try AI extraction (iOS 26+ with FoundationModels). Falls back to a simple
-    /// regex/keyword scan so even non-AI devices get a best-effort result.
     private func extractLabel(from text: String) async -> Result<ConfirmedLabel, Error> {
         #if canImport(FoundationModels)
         if #available(iOS 26.0, *) {
-            let aiAvailable = SystemLanguageModel.default.availability == .available
-            if aiAvailable {
+            if SystemLanguageModel.default.availability == .available {
                 return await extractLabelWithAI(text)
             }
         }
         #endif
-        // Non-AI path: attempt a heuristic numeric extraction from the raw text.
-        if let result = fallbackParse(text) {
-            return .success(result)
-        }
+        if let parsed = fallbackParse(text) { return .success(parsed) }
         return .failure(NSError(domain: "CameraFoodLog", code: 1,
                                 userInfo: [NSLocalizedDescriptionKey: "Could not extract nutrition from this label."]))
     }
@@ -399,97 +454,126 @@ struct CameraFoodLogSheet: View {
     @available(iOS 26.0, *)
     private func extractLabelWithAI(_ text: String) async -> Result<ConfirmedLabel, Error> {
         let instructions = """
-        You are reading the text from a physical Nutrition Facts label that was scanned \
-        by the phone camera. Extract exactly what is PRINTED on the label:
-        - The product name (from the label; if absent, write "Unknown food").
-        - The serving size exactly as printed.
-        - Calories per serving as an integer.
-        - Protein, carbs, total fat, and dietary fiber in grams per serving.
-
-        Use ONLY numbers that appear in the scanned text. If a value is not visible or \
-        not present on the label, use 0. Do NOT estimate or invent any number.
+        You are reading text scanned from a physical Nutrition Facts label. Extract exactly \
+        what is PRINTED on the label. Use 0 for any value that is absent or illegible. \
+        Do NOT estimate or invent any number. The product name is often NOT on the Nutrition \
+        Facts panel itself — if absent, use "Unknown food".
         """
         do {
             let session = LanguageModelSession { instructions }
             let response = try await session.respond(
-                to: "Nutrition label text:\n\"\"\"\n\(text)\n\"\"\"",
+                to: "Label text:\n\"\"\"\n\(text)\n\"\"\"",
                 generating: FoodLabelDraft.self
             )
-            let draft = response.content
-            let label = ConfirmedLabel(
-                foodName: draft.foodName.trimmingCharacters(in: .whitespacesAndNewlines),
-                servingLabel: draft.servingLabel.trimmingCharacters(in: .whitespacesAndNewlines),
-                calories: max(0, draft.calories),
-                proteinG: max(0, draft.proteinG),
-                carbsG: max(0, draft.carbsG),
-                fatG: max(0, draft.fatG),
-                fiberG: max(0, draft.fiberG)
-            )
-            return .success(label)
+            let d = response.content
+            return .success(ConfirmedLabel(
+                foodName:      d.foodName.trimmingCharacters(in: .whitespacesAndNewlines),
+                servingLabel:  d.servingLabel.trimmingCharacters(in: .whitespacesAndNewlines),
+                calories:      max(0, d.calories),
+                proteinG:      max(0, d.proteinG),
+                carbsG:        max(0, d.carbsG),
+                fatG:          max(0, d.fatG),
+                saturatedFatG: max(0, d.saturatedFatG),
+                fiberG:        max(0, d.fiberG),
+                totalSugarG:   max(0, d.totalSugarG),
+                addedSugarG:   max(0, d.addedSugarG),
+                sodiumMg:      max(0, d.sodiumMg),
+                cholesterolMg: max(0, d.cholesterolMg)
+            ))
         } catch {
             return .failure(error)
         }
     }
     #endif
 
-    /// Heuristic numeric extraction from raw label text for non-AI devices.
-    /// Looks for lines matching "Calories NNN" and "Protein NNg" patterns.
+    /// Heuristic numeric extraction for non-AI devices.
     private func fallbackParse(_ text: String) -> ConfirmedLabel? {
         let lines = text.components(separatedBy: .newlines)
             .map { $0.trimmingCharacters(in: .whitespaces) }
 
-        func firstNumber(after keyword: String) -> Double? {
+        func firstNum(after keyword: String) -> Double? {
             for line in lines {
-                let lower = line.lowercased()
-                if lower.contains(keyword) {
-                    let nums = line.components(separatedBy: .whitespaces)
-                        .compactMap { s -> Double? in
-                            let stripped = s.replacingOccurrences(of: "g", with: "")
-                                           .replacingOccurrences(of: "mg", with: "")
-                            return Double(stripped)
-                        }
-                    if let first = nums.first { return first }
+                guard line.lowercased().contains(keyword) else { continue }
+                let nums = line.components(separatedBy: .whitespaces).compactMap { tok -> Double? in
+                    var s = tok
+                    for sfx in ["g", "mg", "mcg", "kcal", "%", "<"] { s = s.replacingOccurrences(of: sfx, with: "") }
+                    return Double(s)
                 }
+                if let n = nums.first { return n }
             }
             return nil
         }
 
-        let calories = firstNumber(after: "calorie").map { Int($0) } ?? 0
-        // Require at least a calorie value to treat this as a valid label
+        let calories = firstNum(after: "calorie").map { Int($0) } ?? 0
         guard calories > 0 else { return nil }
 
-        // Try to pull a product name from the first non-numeric, non-empty line
-        let nameLine = lines.first { line in
+        let serving = lines.first { $0.lowercased().contains("serving size") } ?? "1 serving"
+        let name = lines.first { line in
             !line.isEmpty &&
             !line.lowercased().contains("nutrition") &&
             !line.lowercased().contains("calorie") &&
+            !line.lowercased().contains("serving") &&
             Double(line) == nil
         } ?? "Scanned food"
 
-        let servingLine = lines.first { $0.lowercased().contains("serving size") } ?? "1 serving"
-
         return ConfirmedLabel(
-            foodName: nameLine,
-            servingLabel: servingLine,
-            calories: calories,
-            proteinG: firstNumber(after: "protein") ?? 0,
-            carbsG: firstNumber(after: "carbohydrate") ?? 0,
-            fatG: firstNumber(after: "total fat") ?? firstNumber(after: "fat") ?? 0,
-            fiberG: firstNumber(after: "fiber") ?? firstNumber(after: "fibre") ?? 0
+            foodName:      name,
+            servingLabel:  serving,
+            calories:      calories,
+            proteinG:      firstNum(after: "protein")          ?? 0,
+            carbsG:        firstNum(after: "total carb")       ?? firstNum(after: "carbohydrate") ?? 0,
+            fatG:          firstNum(after: "total fat")        ?? firstNum(after: " fat") ?? 0,
+            saturatedFatG: firstNum(after: "saturated fat")    ?? 0,
+            fiberG:        firstNum(after: "dietary fiber")    ?? firstNum(after: "fiber") ?? 0,
+            totalSugarG:   firstNum(after: "total sugar")      ?? firstNum(after: "sugars") ?? 0,
+            addedSugarG:   firstNum(after: "added sugar")      ?? 0,
+            sodiumMg:      firstNum(after: "sodium")           ?? 0,
+            cholesterolMg: firstNum(after: "cholesterol")      ?? 0
         )
     }
 }
 
-// MARK: - DataScanner wrapper (iOS 17+)
+// MARK: - ImagePickerView
+
+private struct ImagePickerView: UIViewControllerRepresentable {
+    let sourceType: UIImagePickerController.SourceType
+    let onCapture: (UIImage) -> Void
+    let onCancel: () -> Void
+
+    func makeCoordinator() -> Coordinator { Coordinator(onCapture: onCapture, onCancel: onCancel) }
+
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.sourceType = sourceType
+        picker.delegate = context.coordinator
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+
+    final class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+        let onCapture: (UIImage) -> Void
+        let onCancel: () -> Void
+        init(onCapture: @escaping (UIImage) -> Void, onCancel: @escaping () -> Void) {
+            self.onCapture = onCapture
+            self.onCancel = onCancel
+        }
+        func imagePickerController(_ picker: UIImagePickerController,
+                                   didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+            if let img = info[.originalImage] as? UIImage { onCapture(img) } else { onCancel() }
+        }
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) { onCancel() }
+    }
+}
+
+// MARK: - DataScannerView (iOS 17+)
 
 @available(iOS 17.0, *)
 private struct DataScannerView: UIViewControllerRepresentable {
     @Binding var capturedText: String
     var onTextStable: (String) -> Void
 
-    func makeCoordinator() -> Coordinator {
-        Coordinator(capturedText: $capturedText, onTextStable: onTextStable)
-    }
+    func makeCoordinator() -> Coordinator { Coordinator(capturedText: $capturedText, onTextStable: onTextStable) }
 
     func makeUIViewController(context: Context) -> DataScannerViewController {
         let scanner = DataScannerViewController(
@@ -507,52 +591,32 @@ private struct DataScannerView: UIViewControllerRepresentable {
 
     func updateUIViewController(_ uiViewController: DataScannerViewController, context: Context) {}
 
-    // MARK: Coordinator
     final class Coordinator: NSObject, DataScannerViewControllerDelegate {
         @Binding var capturedText: String
         var onTextStable: (String) -> Void
-        private var accumulatedLines: [String] = []
 
         init(capturedText: Binding<String>, onTextStable: @escaping (String) -> Void) {
             self._capturedText = capturedText
             self.onTextStable = onTextStable
         }
 
-        func dataScanner(_ dataScanner: DataScannerViewController,
-                         didAdd addedItems: [RecognizedItem],
-                         allItems: [RecognizedItem]) {
-            updateText(from: allItems)
-        }
+        func dataScanner(_ dataScanner: DataScannerViewController, didAdd addedItems: [RecognizedItem], allItems: [RecognizedItem]) { update(allItems) }
+        func dataScanner(_ dataScanner: DataScannerViewController, didUpdate updatedItems: [RecognizedItem], allItems: [RecognizedItem]) { update(allItems) }
+        func dataScanner(_ dataScanner: DataScannerViewController, didRemove removedItems: [RecognizedItem], allItems: [RecognizedItem]) { update(allItems) }
 
-        func dataScanner(_ dataScanner: DataScannerViewController,
-                         didUpdate updatedItems: [RecognizedItem],
-                         allItems: [RecognizedItem]) {
-            updateText(from: allItems)
-        }
-
-        func dataScanner(_ dataScanner: DataScannerViewController,
-                         didRemove removedItems: [RecognizedItem],
-                         allItems: [RecognizedItem]) {
-            updateText(from: allItems)
-        }
-
-        private func updateText(from items: [RecognizedItem]) {
-            var lines: [String] = []
-            for item in items {
-                if case .text(let textItem) = item {
-                    let t = textItem.transcript.trimmingCharacters(in: .whitespacesAndNewlines)
-                    if !t.isEmpty { lines.append(t) }
-                }
+        private func update(_ items: [RecognizedItem]) {
+            let lines = items.compactMap { item -> String? in
+                guard case .text(let t) = item else { return nil }
+                let s = t.transcript.trimmingCharacters(in: .whitespacesAndNewlines)
+                return s.isEmpty ? nil : s
             }
             let combined = lines.joined(separator: "\n")
-            DispatchQueue.main.async {
-                self.capturedText = combined
-            }
+            DispatchQueue.main.async { self.capturedText = combined }
         }
     }
 }
 
-// MARK: - Confirmation view
+// MARK: - ConfirmationView
 
 private struct ConfirmationView: View {
     let label: ConfirmedLabel
@@ -564,239 +628,211 @@ private struct ConfirmationView: View {
 
     @Environment(\.theme) private var theme
     @State private var qty: Double
-    @State private var editedName: String
-    @State private var editedServing: String
+    @State private var draft: EditableDraft
+    @FocusState private var focused: String?
 
     init(label: ConfirmedLabel, quantity: Double, slot: Slot,
-         profile: ProfileDTO, onLog: @escaping (FoodLogEntryDTO) -> Void,
+         profile: ProfileDTO,
+         onLog: @escaping (FoodLogEntryDTO) -> Void,
          onRescan: @escaping () -> Void) {
-        self.label = label
-        self.quantity = quantity
-        self.slot = slot
-        self.profile = profile
-        self.onLog = onLog
-        self.onRescan = onRescan
-        _qty = State(initialValue: quantity)
-        _editedName = State(initialValue: label.foodName)
-        _editedServing = State(initialValue: label.servingLabel)
+        self.label = label; self.quantity = quantity
+        self.slot = slot; self.profile = profile
+        self.onLog = onLog; self.onRescan = onRescan
+        _qty   = State(initialValue: quantity)
+        _draft = State(initialValue: EditableDraft(from: label))
     }
 
-    private var scaledCalories: Int { Int((Double(label.calories) * qty).rounded()) }
-    private var scaledProtein: Int { Int((label.proteinG * qty).rounded()) }
-    private var scaledCarbs: Int { Int((label.carbsG * qty).rounded()) }
-    private var scaledFat: Int { Int((label.fatG * qty).rounded()) }
-    private var scaledFiber: Int { Int((label.fiberG * qty).rounded()) }
+    private var scaledKcal: Int { Int((Double(draft.caloriesInt) * qty).rounded()) }
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                aiAttributionBanner
+            VStack(alignment: .leading, spacing: 16) {
+                banner
                 nameServingCard
-                macroCard
-                quantityStepper
-                logButton
-                rescanButton
+                servingsCard
+                nutritionFactsEditor
+                Button("Log this") { onLog(buildEntry()) }
+                    .tactile(.primary, fullWidth: true)
+                Button("Scan again") { onRescan() }
+                    .tactile(.ghost, fullWidth: true)
             }
             .padding(20)
         }
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") { focused = nil }
+            }
+        }
     }
 
-    // MARK: Attribution
+    // MARK: Subviews
 
-    private var aiAttributionBanner: some View {
+    private var banner: some View {
         HStack(spacing: 8) {
-            Image(systemName: "sparkles")
-                .font(.caption)
-                .foregroundStyle(theme.accent)
-            Text("Numbers read from the printed label. Always check against the package.")
-                .font(.caption)
-                .foregroundStyle(theme.dim)
+            Image(systemName: "sparkles").font(.caption).foregroundStyle(theme.accent)
+            Text("Numbers read from the printed label. Tap any value to correct it.")
+                .font(.caption).foregroundStyle(theme.dim)
         }
         .padding(12)
         .background(theme.card2, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 
-    // MARK: Name + serving card
-
     private var nameServingCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Product")
-                .font(.caption)
-                .foregroundStyle(theme.dim)
-                .textCase(.uppercase)
-                .tracking(1)
-
-            TextField("Product name", text: $editedName)
+        VStack(alignment: .leading, spacing: 10) {
+            sectionLabel("Name")
+            TextField("Product name", text: $draft.name)
                 .font(.system(size: 17, weight: .semibold))
                 .foregroundStyle(theme.text)
                 .padding(12)
                 .background(theme.card2, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
-
-            Text("Serving size")
-                .font(.caption)
-                .foregroundStyle(theme.dim)
-                .textCase(.uppercase)
-                .tracking(1)
-
-            TextField("e.g. 1 cup (240g)", text: $editedServing)
-                .font(.subheadline)
-                .foregroundStyle(theme.text)
+                .focused($focused, equals: "name")
+            sectionLabel("Serving size")
+            TextField("e.g. 4 pieces (88g)", text: $draft.serving)
+                .font(.subheadline).foregroundStyle(theme.text)
                 .padding(12)
                 .background(theme.card2, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+                .focused($focused, equals: "serving")
         }
         .padding(16)
         .background(theme.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 
-    // MARK: Macro grid
-
-    private var macroCard: some View {
+    private var servingsCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Per \(qty == 1 ? "serving" : String(format: "%.1g", qty) + " servings")")
-                .font(.caption)
-                .foregroundStyle(theme.dim)
-                .textCase(.uppercase)
-                .tracking(1)
-
-            LazyVGrid(columns: [
-                GridItem(.flexible()), GridItem(.flexible()),
-                GridItem(.flexible()), GridItem(.flexible())
-            ], spacing: 12) {
-                MacroCell(label: "Cal", value: "\(scaledCalories)", accent: theme.accent)
-                MacroCell(label: "Protein", value: "\(scaledProtein)g", accent: theme.accent2)
-                MacroCell(label: "Carbs", value: "\(scaledCarbs)g", accent: theme.ok)
-                MacroCell(label: "Fat", value: "\(scaledFat)g", accent: theme.dim)
-                if label.fiberG > 0 {
-                    MacroCell(label: "Fiber", value: "\(scaledFiber)g", accent: theme.dim)
-                }
-            }
-        }
-        .padding(16)
-        .background(theme.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-    }
-
-    // MARK: Quantity stepper
-
-    private var quantityStepper: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Servings")
-                .font(.caption)
-                .foregroundStyle(theme.dim)
-                .textCase(.uppercase)
-                .tracking(1)
-
+            sectionLabel("Servings")
             HStack(spacing: 16) {
-                Button {
-                    if qty > 0.5 { qty = (qty - 0.5) }
-                } label: {
-                    Image(systemName: "minus")
-                        .frame(width: 36, height: 36)
+                Button { if qty > 0.5 { qty -= 0.5 } } label: {
+                    Image(systemName: "minus").frame(width: 36, height: 36)
                 }
-                .tactile(.secondary)
-                .disabled(qty <= 0.5)
+                .tactile(.secondary).disabled(qty <= 0.5)
 
                 Text(qty.truncatingRemainder(dividingBy: 1) == 0
-                     ? "\(Int(qty))"
-                     : String(format: "%.1f", qty))
+                     ? "\(Int(qty))" : String(format: "%.1f", qty))
                     .font(.system(size: 22, weight: .semibold, design: .rounded))
                     .foregroundStyle(theme.text)
-                    .frame(minWidth: 48)
-                    .multilineTextAlignment(.center)
+                    .frame(minWidth: 48).multilineTextAlignment(.center)
 
-                Button {
-                    if qty < 5.0 { qty = (qty + 0.5) }
-                } label: {
-                    Image(systemName: "plus")
-                        .frame(width: 36, height: 36)
+                Button { if qty < 10.0 { qty += 0.5 } } label: {
+                    Image(systemName: "plus").frame(width: 36, height: 36)
                 }
-                .tactile(.secondary)
-                .disabled(qty >= 5.0)
+                .tactile(.secondary).disabled(qty >= 10.0)
 
                 Spacer()
 
-                Text("\(scaledCalories) cal")
-                    .font(.subheadline.monospacedDigit())
-                    .foregroundStyle(theme.accent)
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text("\(scaledKcal) cal")
+                        .font(.system(size: 20, weight: .semibold, design: .monospaced))
+                        .foregroundStyle(theme.accent)
+                        .contentTransition(.numericText())
+                    if qty != 1 {
+                        Text("(\(draft.caloriesInt) per serving)")
+                            .font(.system(size: 11)).foregroundStyle(theme.dim)
+                    }
+                }
             }
         }
         .padding(16)
         .background(theme.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 
-    // MARK: Log button
+    private var nutritionFactsEditor: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Nutrition Facts")
+                .font(.system(size: 14, weight: .bold))
+                .foregroundStyle(theme.text)
+                .padding(.horizontal, 16).padding(.top, 16).padding(.bottom, 2)
+            Text("Per serving · tap any value to edit")
+                .font(.system(size: 10)).tracking(1)
+                .foregroundStyle(theme.dim)
+                .padding(.horizontal, 16).padding(.bottom, 10)
 
-    private var logButton: some View {
-        Button("Log this") {
-            let entry = buildEntry()
-            onLog(entry)
+            Divider().background(theme.line).padding(.horizontal, 16)
+
+            // Calories row — prominent
+            HStack {
+                Text("Calories")
+                    .font(.system(size: 15, weight: .semibold)).foregroundStyle(theme.text)
+                Spacer()
+                TextField("0", text: $draft.calories)
+                    .font(.system(size: 24, weight: .bold, design: .monospaced))
+                    .foregroundStyle(theme.accent)
+                    .multilineTextAlignment(.trailing)
+                    .keyboardType(.numberPad)
+                    .frame(width: 80)
+                    .focused($focused, equals: "calories")
+            }
+            .padding(.horizontal, 16).padding(.vertical, 12)
+
+            Divider().background(theme.line).padding(.horizontal, 16)
+
+            Group {
+                nutrientRow("Total Fat",          $draft.fatG,          unit: "g",  indent: 0, field: "fat")
+                nutrientRow("Saturated Fat",      $draft.saturatedFatG, unit: "g",  indent: 1, field: "satfat")
+                nutrientRow("Cholesterol",        $draft.cholesterolMg, unit: "mg", indent: 0, field: "chol")
+                nutrientRow("Sodium",             $draft.sodiumMg,      unit: "mg", indent: 0, field: "sodium")
+                nutrientRow("Total Carbohydrate", $draft.carbsG,        unit: "g",  indent: 0, field: "carbs")
+                nutrientRow("Dietary Fiber",      $draft.fiberG,        unit: "g",  indent: 1, field: "fiber")
+                nutrientRow("Total Sugars",       $draft.totalSugarG,   unit: "g",  indent: 1, field: "sugar")
+                nutrientRow("Added Sugars",       $draft.addedSugarG,   unit: "g",  indent: 2, field: "addedsug")
+                nutrientRow("Protein",            $draft.proteinG,      unit: "g",  indent: 0, field: "protein")
+            }
+
+            // Cholesterol note — not stored in PerServing
+            Text("† Cholesterol is shown for reference; not stored in the nutrition log.")
+                .font(.system(size: 9)).foregroundStyle(theme.dim)
+                .padding(.horizontal, 16).padding(.vertical, 8)
         }
-        .tactile(.primary, fullWidth: true)
-        .padding(.top, 4)
+        .background(theme.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 
-    private var rescanButton: some View {
-        Button("Scan again") {
-            onRescan()
+    @ViewBuilder
+    private func sectionLabel(_ text: String) -> some View {
+        Text(text.uppercased())
+            .font(.system(size: 10)).tracking(1.5).foregroundStyle(theme.dim)
+    }
+
+    @ViewBuilder
+    private func nutrientRow(_ name: String, _ binding: Binding<String>,
+                             unit: String, indent: Int, field: String) -> some View {
+        HStack(alignment: .center) {
+            if indent > 0 { Color.clear.frame(width: CGFloat(indent) * 16, height: 1) }
+            Text(name)
+                .font(indent == 0
+                      ? .system(size: 14, weight: .medium)
+                      : .system(size: 13))
+                .foregroundStyle(indent == 0 ? theme.text : theme.dim)
+            Spacer()
+            HStack(spacing: 3) {
+                TextField("0", text: binding)
+                    .font(.system(size: 14, design: .monospaced))
+                    .foregroundStyle(theme.text)
+                    .multilineTextAlignment(.trailing)
+                    .keyboardType(.decimalPad)
+                    .frame(width: 52)
+                    .focused($focused, equals: field)
+                Text(unit)
+                    .font(.system(size: 12)).foregroundStyle(theme.dim)
+                    .frame(width: 24, alignment: .leading)
+            }
         }
-        .tactile(.ghost, fullWidth: true)
+        .padding(.horizontal, 16).padding(.vertical, 9)
+        Divider().background(theme.line).padding(.horizontal, 16)
     }
 
     // MARK: Build entry
 
     private func buildEntry() -> FoodLogEntryDTO {
-        let perServing = PerServing(
-            calories: label.calories,
-            proteinG: Int(label.proteinG.rounded()),
-            carbsG: Int(label.carbsG.rounded()),
-            fatG: Int(label.fatG.rounded()),
-            fiberG: Int(label.fiberG.rounded())
-        )
-        // Scale by quantity so the stored entry reflects what was actually eaten
-        let scaled = PerServing(
-            calories: scaledCalories,
-            proteinG: scaledProtein,
-            carbsG: scaledCarbs,
-            fatG: scaledFat,
-            fiberG: scaledFiber
-        )
-        return FoodLogEntryDTO(
+        FoodLogEntryDTO(
             userId: profile.id,
             date: Dates.dayKey(),
             slot: slot,
-            customName: editedName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                ? "Scanned food" : editedName.trimmingCharacters(in: .whitespacesAndNewlines),
+            customName: draft.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                ? "Scanned food"
+                : draft.name.trimmingCharacters(in: .whitespacesAndNewlines),
             servings: qty,
-            perServing: perServing.calories > 0 ? perServing : scaled
+            perServing: draft.toPerServing()
         )
-        // Note: we store the per-serving macros (not scaled) in perServing
-        // and qty in servings, matching how FoodLogEntryDTO is used elsewhere.
-        // The caller (NutritionView) multiplies when displaying totals.
-    }
-}
-
-// MARK: - Macro cell (private to this file)
-
-private struct MacroCell: View {
-    let label: String
-    let value: String
-    let accent: Color
-
-    @Environment(\.theme) private var theme
-
-    var body: some View {
-        VStack(spacing: 4) {
-            Text(value)
-                .font(.system(size: 16, weight: .semibold, design: .rounded))
-                .foregroundStyle(accent)
-            Text(label)
-                .font(.system(size: 10, weight: .medium))
-                .foregroundStyle(theme.dim)
-                .textCase(.uppercase)
-                .tracking(0.5)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 12)
-        .background(theme.card2, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
     }
 }
 
@@ -817,46 +853,61 @@ private struct FallbackEntryView: View {
     init(initialText: String, slot: Slot, profile: ProfileDTO,
          onLog: @escaping (FoodLogEntryDTO) -> Void) {
         self.initialText = initialText
-        self.slot = slot
-        self.profile = profile
-        self.onLog = onLog
+        self.slot = slot; self.profile = profile; self.onLog = onLog
         _text = State(initialValue: initialText)
     }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                noScannerBanner
+                HStack(spacing: 8) {
+                    Image(systemName: "camera.slash").font(.caption).foregroundStyle(theme.dim)
+                    Text("Camera scanner unavailable. Type what you ate instead.")
+                        .font(.caption).foregroundStyle(theme.dim)
+                }
+                .padding(12)
+                .background(theme.card2, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
 
                 VStack(alignment: .leading, spacing: 8) {
                     Text("What did you eat?")
-                        .font(.caption)
-                        .foregroundStyle(theme.dim)
-                        .textCase(.uppercase)
-                        .tracking(1)
-
+                        .font(.system(size: 10)).tracking(1.5).foregroundStyle(theme.dim)
                     TextField("e.g. Greek yogurt, banana, coffee",
                               text: $text, axis: .vertical)
                         .lineLimit(3, reservesSpace: true)
-                        .font(.body)
-                        .foregroundStyle(theme.text)
+                        .font(.body).foregroundStyle(theme.text)
                         .padding(12)
                         .background(theme.card, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
                         .focused($textFocused)
-                        .onChange(of: text) { _, newValue in
-                            parseResult = FoodParser.parse(text: newValue)
-                        }
+                        .onChange(of: text) { _, v in parseResult = FoodParser.parse(text: v) }
                 }
 
                 if let result = parseResult, result.hasMatches {
-                    fallbackResultCard(result: result)
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Matched")
+                            .font(.system(size: 10)).tracking(1.5).foregroundStyle(theme.dim)
+                        ForEach(result.recognized, id: \.food.id) { item in
+                            HStack {
+                                Text(item.description).font(.subheadline).foregroundStyle(theme.text)
+                                Spacer()
+                                Text("\(item.scaledCalories) cal")
+                                    .font(.caption.monospacedDigit()).foregroundStyle(theme.dim)
+                            }
+                        }
+                        Divider().background(theme.line)
+                        HStack {
+                            Text("Total").font(.subheadline.weight(.semibold)).foregroundStyle(theme.text)
+                            Spacer()
+                            Text("\(result.totalPerServing.calories) cal · \(result.totalPerServing.proteinG)g protein")
+                                .font(.caption.monospacedDigit()).foregroundStyle(theme.accent)
+                        }
+                    }
+                    .padding(16)
+                    .background(theme.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                 }
 
-                Button("Log") {
-                    logFallback()
-                }
-                .tactile(.primary, fullWidth: true)
-                .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                Button("Log") { logFallback() }
+                    .tactile(.primary, fullWidth: true)
+                    .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
             .padding(20)
         }
@@ -867,82 +918,20 @@ private struct FallbackEntryView: View {
             }
         }
         .onAppear {
-            if !initialText.isEmpty {
-                parseResult = FoodParser.parse(text: initialText)
-            }
+            if !initialText.isEmpty { parseResult = FoodParser.parse(text: initialText) }
         }
-    }
-
-    private var noScannerBanner: some View {
-        HStack(spacing: 8) {
-            Image(systemName: "camera.slash")
-                .font(.caption)
-                .foregroundStyle(theme.dim)
-            Text("Camera scanner is unavailable on this device. Type what you ate instead.")
-                .font(.caption)
-                .foregroundStyle(theme.dim)
-        }
-        .padding(12)
-        .background(theme.card2, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-    }
-
-    private func fallbackResultCard(result: FoodParser.ParseResult) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("Matched")
-                .font(.caption)
-                .foregroundStyle(theme.dim)
-                .textCase(.uppercase)
-                .tracking(1)
-
-            ForEach(result.recognized, id: \.food.id) { item in
-                HStack {
-                    Text(item.description)
-                        .font(.subheadline)
-                        .foregroundStyle(theme.text)
-                    Spacer()
-                    Text("\(item.scaledCalories) cal")
-                        .font(.caption.monospacedDigit())
-                        .foregroundStyle(theme.dim)
-                }
-            }
-
-            Divider().background(theme.line)
-
-            HStack {
-                Text("Total")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(theme.text)
-                Spacer()
-                Text("\(result.totalPerServing.calories) cal · \(result.totalPerServing.proteinG)g protein")
-                    .font(.caption.monospacedDigit())
-                    .foregroundStyle(theme.accent)
-            }
-        }
-        .padding(16)
-        .background(theme.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 
     private func logFallback() {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         let result = FoodParser.parse(text: trimmed, includeDatabase: true)
-        let perServing: PerServing
-        let name: String
-
-        if result.hasMatches {
-            perServing = result.totalPerServing
-            name = result.bestName
-        } else {
-            perServing = .zero
-            name = trimmed.isEmpty ? "Unknown food" : trimmed
-        }
-
         let entry = FoodLogEntryDTO(
             userId: profile.id,
             date: Dates.dayKey(),
             slot: slot,
-            customName: name,
+            customName: result.hasMatches ? result.bestName : (trimmed.isEmpty ? "Unknown food" : trimmed),
             servings: 1.0,
-            perServing: perServing
+            perServing: result.hasMatches ? result.totalPerServing : .zero
         )
         onLog(entry)
     }
