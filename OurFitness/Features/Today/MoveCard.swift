@@ -133,27 +133,27 @@ struct MoveCard: View {
                     Spacer()
                 }
 
-                // Row 1: Apple Total · Our Estimate · Training (hero)
+                // Row 1: Apple Total · Our Estimate · Training
                 HStack(alignment: .top, spacing: 0) {
                     metricColumn(
                         icon: "flame.fill", title: "APPLE TOTAL",
                         value: hasEnergyData ? "\(combinedEnergyKcal)" : "-",
                         sub: hasEnergyData ? "cal · active + resting" : "need new data",
-                        accented: false, action: { showEnergyInfo = true }
+                        action: { showEnergyInfo = true }
                     )
                     columnSep
                     metricColumn(
                         icon: "sum", title: "OUR ESTIMATE",
                         value: "\(metTotal)",
                         sub: "cal · all-day total",
-                        accented: false, action: { showMetTotalInfo = true }
+                        action: { showMetTotalInfo = true }
                     )
                     columnSep
                     metricColumn(
                         icon: "dumbbell.fill", title: "TRAINING",
                         value: "\(trainingMetEstimate)",
                         sub: trainingMetEstimate > 0 ? "cal burned today" : "no sessions yet",
-                        accented: true, action: { showExercisesInfo = true }
+                        action: { showExercisesInfo = true }
                     )
                 }
 
@@ -165,21 +165,21 @@ struct MoveCard: View {
                         icon: "figure.walk", title: "DISTANCE",
                         value: walkingDistanceMiles > 0 ? distanceLabel : "-",
                         sub: unitSystem == .imperial ? "miles today" : "km today",
-                        accented: false, action: { showDistanceInfo = true }
+                        action: { showDistanceInfo = true }
                     )
                     columnSep
                     metricColumn(
                         icon: "arrow.up.circle.fill", title: "FLIGHTS",
                         value: "\(flightsClimbed)",
                         sub: "floors climbed",
-                        accented: false, action: { showFlightsInfo = true }
+                        action: { showFlightsInfo = true }
                     )
                     columnSep
                     metricColumn(
                         icon: "heart.fill", title: "HEART RATE",
                         value: (isBpmStale || bpm == nil) ? "-" : "\(bpm!)",
                         sub: isBpmStale ? "need new data" : "bpm · \(asOfText(bpmDate))",
-                        accented: false, action: { showHeartRateInfo = true }
+                        action: { showHeartRateInfo = true }
                     )
                 }
             }
@@ -249,21 +249,21 @@ struct MoveCard: View {
     @ViewBuilder
     private func metricColumn(
         icon: String, title: String, value: String, sub: String,
-        accented: Bool, action: @escaping () -> Void
+        action: @escaping () -> Void
     ) -> some View {
         Button(action: action) {
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 4) {
                     Image(systemName: icon)
                         .font(.system(size: 9))
-                        .foregroundStyle(accented ? theme.accent : theme.dim)
+                        .foregroundStyle(theme.dim)
                     Text(title)
                         .font(.system(size: 8, weight: .semibold)).tracking(1.2)
                         .foregroundStyle(theme.dim)
                 }
                 Text(value)
                     .font(.system(size: 26, weight: .bold, design: .monospaced))
-                    .foregroundStyle(accented ? theme.accent : theme.text)
+                    .foregroundStyle(theme.text)
                     .contentTransition(.numericText())
                     .minimumScaleFactor(0.7)
                 Text(sub)
@@ -275,8 +275,6 @@ struct MoveCard: View {
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(accented ? theme.accent.opacity(0.07) : Color.clear)
-            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
         }
         .tactile(.ghost)
         .accessibilityLabel("\(title) details")
@@ -413,35 +411,49 @@ private struct AppleEnergyInfoSheet: View {
     var body: some View {
         ColumnInfoScaffold(title: "apple energy.", subtitle: "FROM YOUR IPHONE + APPLE WATCH") {
 
-            ColumnInfoSection(title: "Total today") {
-                if let combined = combinedKcal {
-                    ColumnBreakdownRow(
-                        label: "\(activeKcal ?? 0) active + \(restingKcal ?? 0) resting = \(combined) cal",
-                        detail: asOf.map { "Last updated \($0)" } ?? "Current data"
-                    )
-                } else {
-                    ColumnBreakdownRow(label: "No data yet",
-                                       detail: "Open the Health app or wear your Apple Watch.")
+            ColumnInfoSection(title: "Today's breakdown") {
+                VStack(spacing: 6) {
+                    if activeKcal == nil && restingKcal == nil {
+                        ColumnBigNumberRow(icon: "flame.fill", name: "No data yet",
+                                           detail: "Open the Health app or wear your Apple Watch.",
+                                           value: "-", unit: "cal")
+                    } else {
+                        ColumnBigNumberRow(
+                            icon: "bolt.fill",
+                            name: "Active energy",
+                            detail: "Movement Apple detected today",
+                            value: activeKcal.map { "\($0)" } ?? "-",
+                            unit: "cal"
+                        )
+                        ColumnBigNumberRow(
+                            icon: "moon.fill",
+                            name: "Resting energy",
+                            detail: "Body at rest — heart, lungs, brain",
+                            value: restingKcal.map { "\($0)" } ?? "-",
+                            unit: "cal"
+                        )
+                    }
+                    if let combined = combinedKcal {
+                        ColumnHeroStat(
+                            label: "TOTAL TODAY" + (asOf.map { " · \($0)" } ?? ""),
+                            value: "\(combined) cal"
+                        )
+                    }
                 }
             }
 
             ColumnInfoSection(title: "Active energy") {
-                VStack(alignment: .leading, spacing: 6) {
-                    ColumnInfoBody(text: "Every calorie burned beyond your resting baseline — walking, workouts, stairs, fidgeting. Measured by iPhone and Apple Watch sensors.")
+                VStack(alignment: .leading, spacing: 5) {
+                    ColumnInfoBody(text: "Every calorie burned beyond your resting baseline — walking, workouts, stairs, fidgeting. Measured directly by iPhone and Apple Watch sensors.")
                     ColumnInfoBody(text: "✓  All steps and movement Apple can detect\n✗  Doesn't include resting or BMR calories")
                 }
             }
 
             ColumnInfoSection(title: "Resting energy") {
-                VStack(alignment: .leading, spacing: 6) {
-                    ColumnInfoBody(text: "Calories your body burns just to stay alive — heart, lungs, brain. Estimated by Apple from your age, height, and weight.")
-                    if let r = restingKcal {
-                        ColumnInfoBody(text: "Your resting energy today: \(r) cal — typically 60–75% of total daily burn.")
-                    }
-                }
+                ColumnInfoBody(text: "Calories your body burns just to exist — heart, lungs, brain. Estimated by Apple from your age, height, and weight. Typically 60–75% of total daily burn.")
             }
 
-            ColumnInfoSection(title: "Active + Resting = your total daily burn") {
+            ColumnInfoSection(title: "Active + Resting = total daily burn") {
                 ColumnBreakdownRow(
                     label: "This is your TDEE",
                     detail: "Build mode adds 400–600 cal on top. Circuit mode runs 300–500 cal below it."
@@ -466,14 +478,28 @@ private struct MetTotalInfoSheet: View {
 
             ColumnInfoSection(title: "Today's breakdown") {
                 VStack(spacing: 6) {
-                    ColumnBreakdownRow(label: "Resting (BMR): ~\(metBMR) cal",
-                                       detail: "Mifflin-St Jeor formula from your profile — updates when you edit vitals")
-                    ColumnBreakdownRow(label: "Steps: ~\(stepsKcal) cal",
-                                       detail: "MET 4.3 × \(weightKg) kg × step count ÷ 7,392 steps/hr")
-                    ColumnBreakdownRow(label: "Training: ~\(trainingKcal) cal",
-                                       detail: "Strength, cardio, pilates, live sessions — tap Training for the per-session breakdown")
-                    ColumnBreakdownRow(label: "Total: ~\(metTotal) cal",
-                                       detail: "Our complete daily burn estimate")
+                    ColumnBigNumberRow(
+                        icon: "moon.zzz.fill",
+                        name: "Resting (BMR)",
+                        detail: "Mifflin-St Jeor · updates when you edit vitals",
+                        value: "~\(metBMR)",
+                        unit: "cal"
+                    )
+                    ColumnBigNumberRow(
+                        icon: "figure.walk",
+                        name: "Steps",
+                        detail: "MET 4.3 × \(weightKg) kg × step count",
+                        value: "~\(stepsKcal)",
+                        unit: "cal"
+                    )
+                    ColumnBigNumberRow(
+                        icon: "dumbbell.fill",
+                        name: "Training",
+                        detail: "Logged strength, cardio, pilates, live sessions",
+                        value: "~\(trainingKcal)",
+                        unit: "cal"
+                    )
+                    ColumnHeroStat(label: "TOTAL TODAY", value: "~\(metTotal) cal")
                 }
             }
 
@@ -752,16 +778,19 @@ private struct HeartRateInfoSheet: View {
     var body: some View {
         ColumnInfoScaffold(title: "heart rate.", subtitle: "APPLE HEALTH · MOST RECENT READING") {
             ColumnInfoSection(title: "Today") {
-                if let bpm, let asOf {
-                    ColumnBreakdownRow(label: "\(bpm) bpm", detail: "Reading from \(asOf)")
-                } else {
-                    ColumnBreakdownRow(label: "No recent reading",
-                                       detail: "Wear your Apple Watch to get an updated reading.")
+                VStack(spacing: 6) {
+                    ColumnBigNumberRow(
+                        icon: "heart.fill",
+                        name: "Latest reading",
+                        detail: asOf.map { "as of \($0)" } ?? "Wear your Apple Watch to get a reading.",
+                        value: bpm.map { "\($0)" } ?? "-",
+                        unit: "bpm"
+                    )
                 }
             }
             ColumnInfoSection(title: "Ranges") {
                 VStack(spacing: 6) {
-                    ColumnBreakdownRow(label: "Resting heart rate",
+                    ColumnBreakdownRow(label: "Resting",
                                        detail: "60–100 bpm is normal. Athletes often sit at 50–70 bpm.")
                     ColumnBreakdownRow(label: "Moderate exercise",
                                        detail: "50–70% of your max (≈ 220 − your age)")
@@ -785,19 +814,23 @@ private struct DistanceInfoSheet: View {
 
     private var displayValue: String {
         unitSystem == .imperial
-            ? String(format: "%.2f miles", miles)
-            : String(format: "%.2f km", miles * 1.60934)
+            ? String(format: "%.2f", miles)
+            : String(format: "%.2f", miles * 1.60934)
     }
+    private var unitLabel: String { unitSystem == .imperial ? "miles" : "km" }
 
     var body: some View {
         ColumnInfoScaffold(title: "distance.", subtitle: "WALKING + RUNNING · FROM APPLE HEALTH") {
             ColumnInfoSection(title: "Today") {
-                ColumnBreakdownRow(
-                    label: miles > 0 ? displayValue : "No data yet",
-                    detail: miles > 0
-                        ? "Total foot distance — walking and running combined"
-                        : "Carry your iPhone or wear your Apple Watch to start tracking."
-                )
+                VStack(spacing: 6) {
+                    ColumnBigNumberRow(
+                        icon: "figure.walk",
+                        name: "Walking + Running",
+                        detail: miles > 0 ? "total foot distance today" : "Carry your iPhone or wear your Apple Watch.",
+                        value: miles > 0 ? displayValue : "-",
+                        unit: unitLabel
+                    )
+                }
             }
             ColumnInfoSection(title: "Benchmarks") {
                 VStack(spacing: 6) {
@@ -820,12 +853,17 @@ private struct FlightsClimbedInfoSheet: View {
     var body: some View {
         ColumnInfoScaffold(title: "flights climbed.", subtitle: "FLOORS · FROM APPLE HEALTH BAROMETER") {
             ColumnInfoSection(title: "Today") {
-                ColumnBreakdownRow(
-                    label: floors > 0 ? "\(floors) floor\(floors == 1 ? "" : "s") climbed" : "No flights yet today",
-                    detail: floors > 0
-                        ? "≈ \(floors * 10) ft / \(floors * 3) m of elevation gained"
-                        : "Detected automatically as you ascend ~10 feet. No logging needed."
-                )
+                VStack(spacing: 6) {
+                    ColumnBigNumberRow(
+                        icon: "arrow.up.circle.fill",
+                        name: "Floors climbed",
+                        detail: floors > 0
+                            ? "≈ \(floors * 10) ft / \(floors * 3) m elevation"
+                            : "Detected automatically as you ascend ~10 feet.",
+                        value: floors > 0 ? "\(floors)" : "-",
+                        unit: "floors"
+                    )
+                }
             }
             ColumnInfoSection(title: "Why it matters") {
                 ColumnInfoBody(text: "Stair climbing (MET 4.0–8.0) activates glutes and quads and spikes heart rate faster than flat walking. Studies link regular stair use to lower all-cause mortality. (Stamatakis et al., Brit J Sports Med 2021)")
@@ -883,6 +921,71 @@ private struct ColumnInfoBody: View {
     var body: some View {
         Text(text).font(.callout).foregroundStyle(theme.dim)
             .fixedSize(horizontal: false, vertical: true)
+    }
+}
+
+// Row with a large number on the right — used across all info sheets for per-item stats.
+private struct ColumnBigNumberRow: View {
+    let icon: String
+    let name: String
+    var detail: String = ""
+    let value: String
+    var unit: String = "cal"
+    @Environment(\.theme) private var theme
+
+    var body: some View {
+        HStack(alignment: .center, spacing: 10) {
+            Image(systemName: icon)
+                .font(.system(size: 14, weight: .medium))
+                .foregroundStyle(theme.accent)
+                .frame(width: 22)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(name)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(theme.text)
+                if !detail.isEmpty {
+                    Text(detail)
+                        .font(.system(size: 11))
+                        .foregroundStyle(theme.dim)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            Spacer()
+            VStack(alignment: .trailing, spacing: 1) {
+                Text(value)
+                    .font(.system(size: 20, weight: .bold, design: .monospaced))
+                    .foregroundStyle(theme.accent)
+                Text(unit)
+                    .font(.system(size: 10))
+                    .foregroundStyle(theme.dim)
+            }
+        }
+        .padding(.vertical, 10)
+        .padding(.horizontal, 12)
+        .background(theme.card2)
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+    }
+}
+
+// Full-width hero total — large accent number, right-aligned label + value stack.
+private struct ColumnHeroStat: View {
+    let label: String
+    let value: String
+    @Environment(\.theme) private var theme
+
+    var body: some View {
+        HStack {
+            Spacer()
+            VStack(alignment: .trailing, spacing: 2) {
+                Text(label)
+                    .font(.system(size: 9, weight: .semibold)).tracking(1.5)
+                    .foregroundStyle(theme.dim)
+                Text(value)
+                    .font(.system(size: 28, weight: .bold, design: .monospaced))
+                    .foregroundStyle(theme.accent)
+            }
+        }
+        .padding(.top, 4)
     }
 }
 
