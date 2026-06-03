@@ -28,6 +28,7 @@ struct MoveCard: View {
     @State private var walkingDistanceMiles: Double = 0
     @State private var showInfo = false
     @State private var showEnergyInfo = false
+    @State private var showMetTotalInfo = false
     @State private var showExercisesInfo = false
     @State private var showHeartRateInfo = false
     @State private var showFlightsInfo = false
@@ -90,10 +91,18 @@ struct MoveCard: View {
     }
 
     private var trainingMetEstimate: Int {
-        // Reuses the sub-values already computed above — no duplicate reduce closures.
-        // Steps excluded: Apple's active energy already counts walking.
+        // Logged exercises only — no steps, no resting.
         setsKcal + cardioKcal + pilatesKcal + activitiesKcal
     }
+
+    // Mifflin-St Jeor resting estimate from profile vitals (same formula Targets uses).
+    private var metBMR: Int {
+        Targets.bmr(sex: profile.sex, weightLb: profile.weightLb,
+                    heightIn: profile.heightIn, age: profile.age)
+    }
+
+    // Our full-day estimate: resting + active steps + active training.
+    private var metTotal: Int { metEstimate + metBMR }
 
     private var weightKg: Int { Int(profile.weightLb * 0.4536) }
 
@@ -131,37 +140,37 @@ struct MoveCard: View {
                     Spacer()
                 }
 
-                // Row 1: Apple Energy (active+resting combined) · MET Estimate · Heart Rate
+                // Row 1: Apple Total · MET Total · MET Exercises
                 HStack(alignment: .top, spacing: 12) {
                     tappableMetricColumn(
                         icon: "flame.fill",
-                        title: "APPLE ENERGY",
+                        title: "APPLE TOTAL",
                         value: hasEnergyData ? "\(combinedEnergyKcal)" : "-",
                         unit: "cal total",
                         subtext: hasEnergyData ? "active + resting" : "need new data",
                         action: { showEnergyInfo = true }
                     )
                     tappableMetricColumn(
-                        icon: "dumbbell.fill",
-                        title: "MET ESTIMATE",
-                        value: "\(metEstimate)",
-                        unit: "cal burned",
-                        subtext: "steps + training",
-                        action: { showExercisesInfo = true }
+                        icon: "sum",
+                        title: "MET TOTAL",
+                        value: "\(metTotal)",
+                        unit: "cal total",
+                        subtext: "active + resting est.",
+                        action: { showMetTotalInfo = true }
                     )
                     tappableMetricColumn(
-                        icon: "heart.fill",
-                        title: "HEART RATE",
-                        value: (isBpmStale || bpm == nil) ? "-" : "\(bpm!)",
-                        unit: "bpm",
-                        subtext: isBpmStale ? "need new data" : asOfText(bpmDate),
-                        action: { showHeartRateInfo = true }
+                        icon: "dumbbell.fill",
+                        title: "MET EXERCISES",
+                        value: "\(trainingMetEstimate)",
+                        unit: "active cal",
+                        subtext: "logged training",
+                        action: { showExercisesInfo = true }
                     )
                 }
 
                 Divider().background(theme.line).padding(.vertical, 2)
 
-                // Row 2: Distance · Flights
+                // Row 2: Distance · Flights · Heart Rate
                 HStack(alignment: .top, spacing: 12) {
                     tappableMetricColumn(
                         icon: "figure.walk",
@@ -179,8 +188,14 @@ struct MoveCard: View {
                         subtext: "climbed today",
                         action: { showFlightsInfo = true }
                     )
-                    // Spacer column to keep row height consistent with row 1.
-                    Spacer().frame(maxWidth: .infinity)
+                    tappableMetricColumn(
+                        icon: "heart.fill",
+                        title: "HEART RATE",
+                        value: (isBpmStale || bpm == nil) ? "-" : "\(bpm!)",
+                        unit: "bpm",
+                        subtext: isBpmStale ? "need new data" : asOfText(bpmDate),
+                        action: { showHeartRateInfo = true }
+                    )
                 }
             }
         }
@@ -188,7 +203,9 @@ struct MoveCard: View {
         .sheet(isPresented: $showInfo) {
             MoveInfoSheet(
                 profile: profile,
-                metEstimate: metEstimate,
+                metTotal: metTotal,
+                metBMR: metBMR,
+                metActive: metEstimate,
                 trainingMet: trainingMetEstimate,
                 todaySteps: todaySteps,
                 stepsKcal: stepsKcal
@@ -203,11 +220,20 @@ struct MoveCard: View {
             )
             .themed(profile.mode)
         }
+        .sheet(isPresented: $showMetTotalInfo) {
+            MetTotalInfoSheet(
+                metTotal: metTotal,
+                metBMR: metBMR,
+                metActive: metEstimate,
+                stepsKcal: stepsKcal,
+                trainingKcal: trainingMetEstimate,
+                weightKg: weightKg
+            )
+            .themed(profile.mode)
+        }
         .sheet(isPresented: $showExercisesInfo) {
             ExercisesInfoSheet(
                 weightKg: weightKg,
-                todaySteps: todaySteps,
-                stepsKcal: stepsKcal,
                 setsKcal: setsKcal,
                 cardioKcal: cardioKcal,
                 pilatesKcal: pilatesKcal,
@@ -295,7 +321,9 @@ struct MoveCard: View {
 
 private struct MoveInfoSheet: View {
     let profile: ProfileDTO
-    let metEstimate: Int
+    let metTotal: Int
+    let metBMR: Int
+    let metActive: Int
     let trainingMet: Int
     let todaySteps: Int
     let stepsKcal: Int
@@ -317,46 +345,28 @@ private struct MoveInfoSheet: View {
                 }
 
                 section(title: "Two sources, one picture") {
-                    Text("The Move card shows two independent views of your day. Apple Health columns are measured by your iPhone and Watch sensors. The MET Estimate is our science-based calculation from what you log. They are separate — logged workouts do not change Apple's measured numbers.")
+                    Text("Apple Health measures what sensors can detect. MET calculates from what you log. Both now show a full-day total (active + resting) so the numbers are directly comparable. They'll rarely match perfectly — Apple captures incidental movement; MET captures logged training Apple can't see.")
                         .font(.callout)
                         .foregroundStyle(theme.dim)
                         .fixedSize(horizontal: false, vertical: true)
                 }
 
-                section(title: "From Apple Health (measured)") {
+                section(title: "Apple Total (measured)") {
                     VStack(alignment: .leading, spacing: 8) {
-                        columnNote(
-                            label: "Apple Energy",
-                            detail: "Active + Resting combined — your full daily calorie expenditure as Apple measures it. Tap for the active vs. resting breakdown."
-                        )
-                        columnNote(
-                            label: "Heart Rate",
-                            detail: "Most recent reading from your Watch or paired sensor. A snapshot, not a daily average. Tap to see context ranges."
-                        )
-                        columnNote(
-                            label: "Distance",
-                            detail: "Walking + running distance from iPhone/Watch GPS and motion sensors. Separate from step count — 2,000 steps ≈ 1 mile depending on stride."
-                        )
-                        columnNote(
-                            label: "Flights Climbed",
-                            detail: "Floors of stairs climbed, detected by barometer. One flight ≈ 10 ft / 3 m of elevation. Not counted in steps or distance."
-                        )
-                        breakdownRow(
-                            label: "Active + Resting = total daily burn (TDEE)",
-                            detail: "Active covers all movement above rest. Resting covers organ function, temperature, cell repair. Together they are your full daily expenditure — the baseline your nutrition targets are built on."
-                        )
+                        columnNote(label: "Apple Total", detail: "Active energy measured by iPhone/Watch sensors + resting energy estimated from your biometrics. Covers all movement Apple can detect — steps, general activity — but misses logged strength and sport sessions.")
+                        columnNote(label: "Distance", detail: "Walking + running distance from GPS and motion sensors.")
+                        columnNote(label: "Flights Climbed", detail: "Floors climbed, detected by barometer.")
+                        columnNote(label: "Heart Rate", detail: "Most recent reading — a snapshot, not a daily average.")
                     }
                 }
 
-                section(title: "MET Estimate (calculated from your logs)") {
+                section(title: "MET (calculated from your logs)") {
                     VStack(alignment: .leading, spacing: 8) {
-                        columnNote(
-                            label: "MET Estimate",
-                            detail: "Our science-based burn calculated from what you've logged today: steps + strength sets + cardio + pilates + live sessions. Formula: MET × body weight × hours. Tap for the full per-source breakdown."
-                        )
+                        columnNote(label: "MET Total", detail: "Resting estimate (Mifflin-St Jeor from your profile) + active steps + all logged training. The full-day estimate from our side.")
+                        columnNote(label: "MET Exercises", detail: "Only the logged training portion — basketball, strength sets, cardio, pilates, live sessions. Steps and resting excluded. This is what Apple misses.")
                         breakdownRow(
                             label: "Today's MET breakdown",
-                            detail: "Steps: MET 4.3 × \(weightKg) kg × \(todaySteps)/7,392 hr ≈ \(stepsKcal) cal\nTraining: MET 3.5–8.0 × \(weightKg) kg × session time ≈ \(trainingMet) cal\nTotal: ≈\(metEstimate) cal"
+                            detail: "Resting (BMR): ≈\(metBMR) cal\nSteps: MET 4.3 × \(weightKg) kg × \(todaySteps)/7,392 hr ≈ \(stepsKcal) cal\nTraining: ≈\(trainingMet) cal\nTotal: ≈\(metTotal) cal"
                         )
                     }
                 }
@@ -491,10 +501,59 @@ private struct AppleEnergyInfoSheet: View {
     }
 }
 
+// MARK: - MET Total info sheet
+
+private struct MetTotalInfoSheet: View {
+    let metTotal: Int
+    let metBMR: Int
+    let metActive: Int
+    let stepsKcal: Int
+    let trainingKcal: Int
+    let weightKg: Int
+
+    var body: some View {
+        ColumnInfoScaffold(title: "met total.", subtitle: "RESTING + ACTIVE · OUR FULL-DAY ESTIMATE") {
+
+            ColumnInfoSection(title: "Total today") {
+                ColumnBreakdownRow(
+                    label: "Resting + Active = \(metTotal) cal",
+                    detail: "\(metBMR) cal resting + \(metActive) cal active = our complete daily burn estimate"
+                )
+            }
+
+            ColumnInfoSection(title: "Resting — Mifflin-St Jeor BMR") {
+                VStack(alignment: .leading, spacing: 8) {
+                    ColumnInfoBody(text: "Calories your body burns at complete rest — organs, temperature regulation, cell repair. Calculated from your profile (age, height, weight, sex) using the Mifflin-St Jeor equation, the same formula your calorie targets are built on.")
+                    ColumnBreakdownRow(
+                        label: "Resting estimate: \(metBMR) cal",
+                        detail: "This matches the BMR in your nutrition targets. It updates automatically when you edit your vitals in Settings."
+                    )
+                }
+            }
+
+            ColumnInfoSection(title: "Active — steps + logged training") {
+                VStack(alignment: .leading, spacing: 8) {
+                    ColumnInfoBody(text: "Everything you moved and logged today, calculated with the MET formula (Ainsworth 2011 Compendium). Apple Health can't detect your strength sets or sport sessions — logging them here fills that gap.")
+                    ColumnBreakdownRow(
+                        label: "Steps: ≈\(stepsKcal) cal",
+                        detail: "MET 4.3 × \(weightKg) kg × steps ÷ 7,392 steps/hr"
+                    )
+                    ColumnBreakdownRow(
+                        label: "Logged training: ≈\(trainingKcal) cal",
+                        detail: "Strength sets + cardio + pilates + live sessions. Tap MET Exercises for the per-source breakdown."
+                    )
+                }
+            }
+
+            ColumnInfoSection(title: "Compared to Apple Total") {
+                ColumnInfoBody(text: "Apple Total uses sensor-measured active energy + Health's resting estimate. MET Total uses the formula-based MET active + Mifflin-St Jeor resting. They should be in the same ballpark. If MET Total > Apple Total, your logged training is capturing activity Apple's sensors can't see.")
+            }
+        }
+    }
+}
+
 private struct ExercisesInfoSheet: View {
     let weightKg: Int
-    let todaySteps: Int
-    let stepsKcal: Int
     let setsKcal: Int
     let cardioKcal: Int
     let pilatesKcal: Int
@@ -503,26 +562,24 @@ private struct ExercisesInfoSheet: View {
 
     @Environment(\.theme) private var theme
 
-    private var totalKcal: Int { stepsKcal + trainingMetEstimate }
-    // Fat oxidation: ~55% at walking intensity, ~50% for training — blended ~52%
-    private var fatGrams: Int { max(0, Int((Double(totalKcal) * 0.52 / 9.0).rounded())) }
-    // Sweat loss: training kcal / 50 ≈ oz lost (rough moderate-intensity proxy)
+    // Training-only fat/sweat — steps and resting are not this column's scope.
+    private var fatGrams: Int { max(0, Int((Double(trainingMetEstimate) * 0.50 / 9.0).rounded())) }
     private var sweatOz: Double { Double(trainingMetEstimate) / 50.0 }
 
     var body: some View {
-        ColumnInfoScaffold(title: "met estimate.", subtitle: "MET × WEIGHT × TIME = CALORIES") {
+        ColumnInfoScaffold(title: "met exercises.", subtitle: "LOGGED TRAINING · MET × WEIGHT × TIME") {
             ColumnInfoSection(title: "What it is") {
-                ColumnInfoBody(text: "Our science-based estimate of your active calorie burn, calculated from everything you've logged today. MET (Metabolic Equivalent of Task) scores how hard an activity is relative to sitting still (MET 1). Multiply by your weight and time to get calories burned.")
+                ColumnInfoBody(text: "Calories burned from the sessions you logged today — strength, cardio, pilates, and live activities. This is the activity Apple Health can't detect automatically, so logging it fills the gap. Steps and resting are in MET Total.")
             }
 
             ColumnInfoSection(title: "What's included") {
                 VStack(alignment: .leading, spacing: 6) {
-                    ColumnInfoBody(text: "✓ Steps — MET 4.3 (walking at ~3.5 mph)")
                     ColumnInfoBody(text: "✓ Strength sets — MET 3.5–8.0 depending on exercise")
                     ColumnInfoBody(text: "✓ Cardio sessions (non-walk) — MET 4.5")
                     ColumnInfoBody(text: "✓ Pilates — MET 3.0 (Ainsworth code 06010)")
                     ColumnInfoBody(text: "✓ Live sessions — MET varies by activity (2.8–11.8)")
-                    ColumnInfoBody(text: "✗ Resting/basal energy — see the Resting Energy column")
+                    ColumnInfoBody(text: "✗ Steps — counted separately in MET Total")
+                    ColumnInfoBody(text: "✗ Resting/BMR — counted separately in MET Total")
                     ColumnInfoBody(text: "✗ Unlogged movement — only what you record in the app")
                 }
             }
@@ -530,19 +587,10 @@ private struct ExercisesInfoSheet: View {
             ColumnInfoSection(title: "The formula") {
                 ColumnBreakdownRow(
                     label: "MET × weight (kg) × hours = cal",
-                    detail: "Your weight: \(weightKg) kg. Example: a 30-min run at MET 8 → 8 × \(weightKg) × 0.5 = \(8 * weightKg / 2) cal"
+                    detail: "Your weight: \(weightKg) kg. Example: 60 min basketball shooting (MET 4.5) → 4.5 × \(weightKg) × 1.0 = \(4 * weightKg + weightKg / 2) cal"
                 )
             }
 
-            // Steps breakdown — always shown
-            ColumnInfoSection(title: "Steps today") {
-                ColumnBreakdownRow(
-                    label: "MET 4.3 × \(weightKg) kg × \(todaySteps) steps ÷ 7,392 steps/hr",
-                    detail: "≈\(stepsKcal) cal from \(todaySteps.formatted()) steps"
-                )
-            }
-
-            // Strength sets — only if logged
             if setsKcal > 0 {
                 ColumnInfoSection(title: "Strength & exercises today") {
                     ColumnBreakdownRow(
@@ -552,17 +600,15 @@ private struct ExercisesInfoSheet: View {
                 }
             }
 
-            // Cardio — only if logged
             if cardioKcal > 0 {
                 ColumnInfoSection(title: "Cardio today (non-walk)") {
                     ColumnBreakdownRow(
                         label: "MET 4.5 × \(weightKg) kg × session duration",
-                        detail: "≈\(cardioKcal) cal (walk sessions use step MET instead)"
+                        detail: "≈\(cardioKcal) cal (walk sessions use step MET in MET Total instead)"
                     )
                 }
             }
 
-            // Pilates — only if logged
             if pilatesKcal > 0 {
                 ColumnInfoSection(title: "Pilates today") {
                     ColumnBreakdownRow(
@@ -572,7 +618,6 @@ private struct ExercisesInfoSheet: View {
                 }
             }
 
-            // Live sessions — only if logged
             if activitiesKcal > 0 {
                 ColumnInfoSection(title: "Live sessions today") {
                     ColumnBreakdownRow(
@@ -582,26 +627,28 @@ private struct ExercisesInfoSheet: View {
                 }
             }
 
-            // Running total
-            ColumnInfoSection(title: "Total today") {
+            ColumnInfoSection(title: "Total logged training today") {
                 ColumnBreakdownRow(
-                    label: "All sources combined",
-                    detail: "≈\(totalKcal) cal burned (MET estimate, steps + training)"
+                    label: "Exercises only (no steps, no resting)",
+                    detail: trainingMetEstimate > 0
+                        ? "≈\(trainingMetEstimate) cal — the activity Apple couldn't detect"
+                        : "No training logged yet today."
                 )
             }
 
-            // Bonus
-            ColumnInfoSection(title: "Derived estimates") {
-                VStack(alignment: .leading, spacing: 8) {
-                    ColumnBreakdownRow(
-                        label: "Fat burned",
-                        detail: "~\(fatGrams) g fat oxidized — at moderate intensity roughly 52% of energy comes from fat (9 cal/g)"
-                    )
-                    if sweatOz > 0.5 {
+            if trainingMetEstimate > 0 {
+                ColumnInfoSection(title: "Derived estimates") {
+                    VStack(alignment: .leading, spacing: 8) {
                         ColumnBreakdownRow(
-                            label: "Estimated sweat loss (training)",
-                            detail: String(format: "~%.1f oz / %.0f mL — drink water to replace", sweatOz, sweatOz * 29.57)
+                            label: "Fat burned from training",
+                            detail: "~\(fatGrams) g fat oxidized — at training intensity roughly 50% of energy comes from fat (9 cal/g)"
                         )
+                        if sweatOz > 0.5 {
+                            ColumnBreakdownRow(
+                                label: "Estimated sweat loss",
+                                detail: String(format: "~%.1f oz / %.0f mL — drink water to replace", sweatOz, sweatOz * 29.57)
+                            )
+                        }
                     }
                 }
             }
