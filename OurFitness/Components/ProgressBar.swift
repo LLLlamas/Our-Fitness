@@ -70,36 +70,46 @@ public struct ProgressBar: View {
                 ZStack(alignment: .leading) {
                     // Track
                     Capsule().fill(theme.barBg)
-                    // Fill
-                    RoundedRectangle(cornerRadius: 3, style: .continuous)
-                        .fill(fillColor)
-                        .frame(width: geo.size.width * displayPct)
-                    // Hit flash (overlay)
-                    if flashActive {
-                        RoundedRectangle(cornerRadius: 3, style: .continuous)
+                    // Gradient fill with glow
+                    if displayPct > 0 {
+                        let fillWidth = max(geo.size.height, geo.size.width * displayPct)
+                        Capsule()
                             .fill(LinearGradient(
-                                colors: [.white.opacity(0.0), .white.opacity(0.55), .white.opacity(0.0)],
+                                colors: [fillColor, fillColor.opacity(0.72)],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            ))
+                            .frame(width: fillWidth)
+                            .shadow(color: fillColor.opacity(over ? 0.25 : 0.45), radius: 5, x: 0, y: 1)
+                    }
+                    // Hit flash overlay
+                    if flashActive {
+                        let fillWidth = max(geo.size.height, geo.size.width * displayPct)
+                        Capsule()
+                            .fill(LinearGradient(
+                                colors: [.white.opacity(0.0), .white.opacity(0.6), .white.opacity(0.0)],
                                 startPoint: .leading, endPoint: .trailing
                             ))
-                            .frame(width: geo.size.width * displayPct)
+                            .frame(width: fillWidth)
                             .blendMode(.plusLighter)
                             .transition(.opacity)
                     }
                 }
             }
-            .frame(height: 5)
-            .clipped()
+            .frame(height: 7)
+            .clipShape(Capsule())
         }
         .animation(.spring(response: 0.45, dampingFraction: 0.82), value: displayPct)
         .animation(.easeOut(duration: 0.35), value: fillColor)
         .onAppear {
             lastValue = value
-            withAnimation(.spring(response: 0.7, dampingFraction: 0.85).delay(0.12)) {
+            // Sweep in from 0 with a visible spring bounce every time
+            withAnimation(.spring(response: 0.9, dampingFraction: 0.72).delay(0.12)) {
                 displayPct = pct
             }
         }
         .onChange(of: value) { _, newValue in
-            withAnimation(.spring(response: 0.45, dampingFraction: 0.82)) {
+            withAnimation(.spring(response: 0.48, dampingFraction: 0.80)) {
                 displayPct = pct
             }
             // Flash on transition into the on-target window.
