@@ -112,6 +112,11 @@ struct RootView: View {
         .sheet(isPresented: $showSettings) {
             SettingsView(profile: profile, health: health)
         }
+        .onAppear {
+            // Guard against a stale tab value on cold launch (e.g. if tab were ever persisted).
+            // Circuit has no Train tab — redirect to Today.
+            if profile.mode == .circuit && tab == .workouts { tab = .today }
+        }
         .onChange(of: profile.mode) { _, _ in
             // If switching from Build → Circuit while on the Train tab, land on Today
             if tab == .workouts { tab = .today }

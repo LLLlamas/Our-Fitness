@@ -539,6 +539,24 @@ public enum Repos {
         }
     }
 
+    /// Correct a logged session's duration after the fact (e.g. the user forgot to
+    /// start the timer). Recomputes the calorie estimate from the session's original
+    /// MET and the profile's current weight — the same deterministic
+    /// `MET × bodyWeightLb × hours` math used at log time. Leaves `met`, `date`, and
+    /// `expectedMinutes` untouched.
+    public static func updateActivitySession(
+        _ ctx: ModelContext, id: UUID, durationMinutes: Int, bodyWeightLb: Double
+    ) {
+        let desc = FetchDescriptor<ActivitySessionModel>(predicate: #Predicate { $0.id == id })
+        guard let target = try? ctx.fetch(desc).first else { return }
+        let mins = max(1, durationMinutes)
+        target.durationMinutes = mins
+        target.caloriesEst = CalorieEstimator.caloriesForActivity(
+            met: target.met, minutes: Double(mins), bodyWeightLb: bodyWeightLb
+        )
+        try? ctx.save()
+    }
+
     /// UPSERT by (userId, date). Used by both manual entry and HealthKit sync.
     public static func setSteps(_ ctx: ModelContext, userId: UUID, date: String, steps: Int, source: StepSource) {
         let desc = FetchDescriptor<StepCountModel>(

@@ -208,7 +208,7 @@ struct MoveCard: View {
         }
         .sheet(isPresented: $showExercisesInfo) {
             ExercisesInfoSheet(
-                weightKg: weightKg,
+                weightKg: weightKg, weightLb: profile.weightLb,
                 todaySteps: todaySteps, stepsKcal: stepsKcal, stepsGoal: effectiveStepsGoal,
                 setsKcal: setsKcal, cardioKcal: cardioKcal,
                 pilatesKcal: pilatesKcal, activitiesKcal: activitiesKcal,
@@ -493,6 +493,7 @@ private struct MetTotalInfoSheet: View {
 
 private struct ExercisesInfoSheet: View {
     let weightKg: Int
+    let weightLb: Double
     let todaySteps: Int
     let stepsKcal: Int
     let stepsGoal: Int
@@ -565,7 +566,8 @@ private struct ExercisesInfoSheet: View {
 
                     // Pilates sessions
                     ForEach(todayPilates) { session in
-                        let kcal = Int((3.0 * Double(weightKg) * Double(session.durationMinutes) / 60.0).rounded())
+                        let kcal = CalorieEstimator.caloriesForPilates(
+                            minutes: Double(session.durationMinutes), bodyWeightLb: weightLb)
                         activityRow(
                             icon: "figure.mind.and.body", name: "Pilates",
                             detail: "\(session.durationMinutes) min",

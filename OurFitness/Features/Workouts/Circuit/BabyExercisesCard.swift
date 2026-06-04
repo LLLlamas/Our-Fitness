@@ -21,21 +21,23 @@ struct BabyExercisesCard: View {
     @State private var ringGlow: Bool = false
     @State private var ringTrigger: Int = 0
 
+    init(profile: ProfileDTO) {
+        self.profile = profile
+        let uid = profile.id
+        _exerciseModels = Query(filter: #Predicate { $0.profileId == uid })
+        _setModels = Query(filter: #Predicate { $0.userId == uid })
+    }
+
     private var myExercises: [ExerciseDTO] {
-        let id = profile.id
-        return exerciseModels.map(\.snapshot)
-            .filter { $0.profileId == id }
-            .sorted { $0.name < $1.name }
+        exerciseModels.map(\.snapshot).sorted { $0.name < $1.name }
     }
 
     private var todayKey: String { Dates.dayKey() }
 
     private func todayReps(for exercise: ExerciseDTO) -> Int {
         let exId = exercise.id
-        let uid = profile.id
         return setModels
-            .filter { $0.exerciseId == exId && $0.userId == uid
-                && Dates.dayKey($0.timestamp) == todayKey }
+            .filter { $0.exerciseId == exId && Dates.dayKey($0.timestamp) == todayKey }
             .reduce(0) { $0 + $1.reps }
     }
 
@@ -44,9 +46,8 @@ struct BabyExercisesCard: View {
     }
 
     private var todayTotalKcal: Double {
-        let uid = profile.id
-        return setModels
-            .filter { $0.userId == uid && Dates.dayKey($0.timestamp) == todayKey }
+        setModels
+            .filter { Dates.dayKey($0.timestamp) == todayKey }
             .reduce(0) { $0 + ($1.caloriesEst ?? 0) }
     }
 
@@ -174,12 +175,11 @@ struct BabyExercisesCard: View {
     }
 
     private func undoLastSet(for exercise: ExerciseDTO) {
-        let uid = profile.id
         let exId = exercise.id
         let today = Dates.dayKey()
-        // Find the most recently logged set today for this exercise
+        // Find the most recently logged set today for this exercise (query already scoped to profile)
         let todaySets = setModels
-            .filter { $0.exerciseId == exId && $0.userId == uid && Dates.dayKey($0.timestamp) == today }
+            .filter { $0.exerciseId == exId && Dates.dayKey($0.timestamp) == today }
             .sorted { $0.timestamp > $1.timestamp }
         guard let latest = todaySets.first else { return }
         Repos.deleteSet(ctx, id: latest.id)

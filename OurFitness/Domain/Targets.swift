@@ -71,7 +71,12 @@ public enum Targets {
 
     /// Compute macro + steps targets from profile. Idempotent.
     public static func compute(mode: Mode, vitals v: ProfileVitals) -> MacroTargets {
-        guard let r = rules[mode] else { fatalError("unknown mode") }
+        // Exhaustive switch keeps this compile-time safe when new Mode cases are added.
+        let r: ModeRules
+        switch mode {
+        case .build:   r = rules[.build]!
+        case .circuit: r = rules[.circuit]!
+        }
         let calories = max(1200, tdee(v) + r.calorieAdjust)
         let proteinG = Int((v.weightLb * r.proteinPerLb).rounded())
         let fatG = Int((Double(calories) * r.fatPctOfCals / 9).rounded())

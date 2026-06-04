@@ -22,8 +22,9 @@ struct LiveSessionCard: View {
     @Environment(\.theme) private var theme
 
     @State private var showPicker = false
+    @State private var showPastLog = false
     @State private var runner: RunnerSession?
-    // Bumped when a session ends so the recent list re-queries.
+    // Bumped when a session ends or a past session is logged so the recent list re-queries.
     @State private var refreshToken = UUID()
 
     /// Identifiable wrapper so `.sheet(item:)` can drive the runner. Keeps the
@@ -40,6 +41,13 @@ struct LiveSessionCard: View {
             } else {
                 startCard
             }
+            Button {
+                showPastLog = true
+            } label: {
+                Label("Log a past session", systemImage: "clock.arrow.circlepath")
+                    .frame(maxWidth: .infinity)
+            }
+            .tactile(.secondary, fullWidth: true)
             RecentActivitySessions(profile: profile, refreshToken: refreshToken)
         }
         .onAppear {
@@ -56,6 +64,10 @@ struct LiveSessionCard: View {
         }
         .sheet(item: $runner, onDismiss: { refreshToken = UUID() }) { wrapped in
             LiveSessionRunner(profile: profile, initial: wrapped.state)
+                .themed(profile.mode)
+        }
+        .sheet(isPresented: $showPastLog, onDismiss: { refreshToken = UUID() }) {
+            LogPastSessionSheet(profile: profile)
                 .themed(profile.mode)
         }
     }
@@ -549,6 +561,7 @@ private struct RecentActivitySessions: View {
     @EnvironmentObject private var toasts: ToastCenter
 
     @Query private var models: [ActivitySessionModel]
+    @State private var editing: ActivitySessionDTO?
 
     init(profile: ProfileDTO, refreshToken: UUID) {
         self.profile = profile
@@ -571,6 +584,10 @@ private struct RecentActivitySessions: View {
                 ForEach(sessions) { sessionRow($0) }
             }
             .id(refreshToken)
+            .sheet(item: $editing) { session in
+                EditSessionDurationSheet(profile: profile, session: session)
+                    .themed(profile.mode)
+            }
         }
     }
 
@@ -610,6 +627,359 @@ private struct RecentActivitySessions: View {
         .background(theme.card)
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+        .contextMenu {
+            Button {
+                editing = s
+            } label: {
+                Label("Edit duration", systemImage: "pencil")
+            }
+            Button(role: .destructive) {
+                Repos.deleteActivitySession(ctx, id: s.id)
+                Haptics.warn()
+                toasts.show(Toast(title: "Session removed", detail: s.activityName,
+                                  accent: .warn, symbol: "trash.fill"))
+            } label: {
+                Label("Delete session", systemImage: "trash")
+            }
+        }
+    }
+}
+
+// MARK: - Duration entry (shared)
+
+/// Wheel-style hours + minutes picker used by both the edit-duration and
+/// log-a-past-session sheets. Binds a single minutes total so callers stay simple.
+private struct DurationWheel: View {
+    @Binding var totalMinutes: Int
+
+    @Environment(\.theme) private var theme
+
+    private var hours: Int { totalMinutes / 60 }
+    private var minutes: Int { totalMinutes % 60 }
+
+    var body: some View {
+        HStack(spacing: 0) {
+            Picker("Hours", selection: Binding(
+                get: { hours },
+                set: { totalMinutes = max(1, $0 * 60 + minutes) }
+            )) {
+                ForEach(0...5, id: \.self) { h in
+                    Text("\(h) hr").tag(h)
+                }
+            }
+            .pickerStyle(.wheel)
+            .frame(maxWidth: .infinity)
+
+            Picker("Minutes", selection: Binding(
+                get: { minutes },
+                set: { totalMinutes = max(1, hours * 60 + $0) }
+            )) {
+                ForEach(0...59, id: \.self) { m in
+                    Text("\(m) min").tag(m)
+                }
+            }
+            .pickerStyle(.wheel)
+            .frame(maxWidth: .infinity)
+        }
+        .padding(8)
+        .background(theme.card2)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+    }
+}
+
+/// Activity name + icon header reused by the duration sheets.
+private struct SessionActivityHeader: View {
+    let activityName: String
+    let symbol: String
+
+    @Environment(\.theme) private var theme
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: symbol)
+                .font(.system(size: 26))
+                .foregroundStyle(theme.accent)
+                .frame(width: 40)
+            Text(activityName)
+                .font(.system(size: 22, weight: .semibold))
+                .foregroundStyle(theme.text)
+            Spacer(minLength: 0)
+        }
+        .padding(14)
+        .frame(maxWidth: .infinity)
+        .background(theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(theme.line, lineWidth: 1))
+    }
+}
+
+// MARK: - Edit session duration
+
+/// Retroactively correct a logged session's duration. Recomputes calories from the
+/// session's original MET + the profile's current weight via `Repos.updateActivitySession`.
+private struct EditSessionDurationSheet: View {
+    let profile: ProfileDTO
+    let session: ActivitySessionDTO
+
+    @Environment(\.modelContext) private var ctx
+    @Environment(\.theme) private var theme
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var toasts: ToastCenter
+
+    @State private var totalMinutes: Int
+
+    init(profile: ProfileDTO, session: ActivitySessionDTO) {
+        self.profile = profile
+        self.session = session
+        _totalMinutes = State(initialValue: max(1, session.durationMinutes))
+    }
+
+    private var symbol: String {
+        ActivityCatalog.activity(id: session.activityId)?.symbol ?? "figure.mixed.cardio"
+    }
+
+    private var estimatedCal: Int {
+        Int(CalorieEstimator.caloriesForActivity(
+            met: session.met, minutes: Double(totalMinutes), bodyWeightLb: profile.weightLb
+        ).rounded())
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                Text("EDIT DURATION")
+                    .font(.system(size: 10, weight: .medium)).tracking(2)
+                    .foregroundStyle(theme.dim)
+
+                SessionActivityHeader(activityName: session.activityName, symbol: symbol)
+
+                DurationWheel(totalMinutes: $totalMinutes)
+
+                Text("≈ \(estimatedCal) cal")
+                    .font(.system(size: 18, weight: .semibold, design: .monospaced))
+                    .foregroundStyle(theme.accent)
+                    .contentTransition(.numericText())
+                    .frame(maxWidth: .infinity)
+
+                Button {
+                    save()
+                } label: {
+                    Text("Save")
+                }
+                .tactile(.primary, fullWidth: true)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+        }
+        .presentationDetents([.medium])
+        .presentationBackground(theme.bg)
+    }
+
+    private func save() {
+        Repos.updateActivitySession(
+            ctx, id: session.id, durationMinutes: totalMinutes, bodyWeightLb: profile.weightLb
+        )
+        Haptics.success()
+        toasts.show(Toast(
+            title: "Duration updated",
+            detail: "\(session.activityName) · \(totalMinutes) min · ~\(estimatedCal) cal",
+            accent: .win, symbol: "checkmark.seal.fill"
+        ), for: 2.4)
+        dismiss()
+    }
+}
+
+// MARK: - Log a past session
+
+/// "I forgot to start the timer" entry point: pick an activity, enter the duration,
+/// and log a completed `ActivitySessionDTO` (or `PilatesSessionDTO` for pilates,
+/// mirroring the live runner's end path) without using the live timer.
+private struct LogPastSessionSheet: View {
+    let profile: ProfileDTO
+
+    @Environment(\.modelContext) private var ctx
+    @Environment(\.theme) private var theme
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var toasts: ToastCenter
+
+    @State private var selectedId: String?
+    @State private var totalMinutes: Int = 30
+    @State private var customMET: Double = ActivityCatalog.otherDefaultMET
+
+    private let columns = [GridItem(.adaptive(minimum: 96), spacing: 12)]
+
+    private var selected: Activity? {
+        guard let id = selectedId else { return nil }
+        return ActivityCatalog.activity(id: id)
+    }
+
+    private var isOther: Bool { selectedId == ActivityCatalog.otherId }
+
+    private var met: Double { isOther ? customMET : (selected?.met ?? ActivityCatalog.otherDefaultMET) }
+
+    private var estimatedCal: Int {
+        Int(CalorieEstimator.caloriesForActivity(
+            met: met, minutes: Double(totalMinutes), bodyWeightLb: profile.weightLb
+        ).rounded())
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                Text("log a past session.")
+                    .font(.system(size: 34, weight: .regular))
+                    .foregroundStyle(theme.text)
+
+                Text("PICK AN ACTIVITY")
+                    .font(.system(size: 10, weight: .medium)).tracking(2)
+                    .foregroundStyle(theme.dim)
+
+                LazyVGrid(columns: columns, spacing: 12) {
+                    ForEach(ActivityCatalog.all) { activity in
+                        activityTile(activity)
+                    }
+                }
+
+                if selected != nil {
+                    Text("HOW LONG")
+                        .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+
+                    DurationWheel(totalMinutes: $totalMinutes)
+
+                    if isOther {
+                        intensitySection
+                    }
+
+                    Text("≈ \(estimatedCal) cal")
+                        .font(.system(size: 18, weight: .semibold, design: .monospaced))
+                        .foregroundStyle(theme.accent)
+                        .contentTransition(.numericText())
+                        .frame(maxWidth: .infinity)
+
+                    Button {
+                        save()
+                    } label: {
+                        Text("Log session")
+                    }
+                    .tactile(.primary, fullWidth: true)
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+        }
+        .presentationDetents([.large])
+        .presentationBackground(theme.bg)
+    }
+
+    @ViewBuilder
+    private func activityTile(_ activity: Activity) -> some View {
+        let isSel = selectedId == activity.id
+        Button {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                selectedId = activity.id
+                if activity.id == ActivityCatalog.otherId { customMET = ActivityCatalog.otherDefaultMET }
+            }
+            Haptics.selection()
+        } label: {
+            VStack(spacing: 8) {
+                Image(systemName: activity.symbol)
+                    .font(.system(size: 26))
+                    .foregroundStyle(isSel ? theme.bg : theme.accent)
+                Text(activity.name)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(isSel ? theme.bg : theme.text)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.8)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 92)
+            .padding(8)
+            .background(isSel ? theme.accent : theme.card)
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .stroke(isSel ? theme.accent : theme.line, lineWidth: 1)
+            )
+        }
+        .buttonStyle(TilePressStyle())
+        .accessibilityLabel(activity.name)
+        .accessibilityAddTraits(isSel ? .isSelected : [])
+    }
+
+    @ViewBuilder
+    private var intensitySection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("INTENSITY")
+                .font(.system(size: 10, weight: .medium)).tracking(2)
+                .foregroundStyle(theme.dim)
+            VStack(alignment: .leading, spacing: 6) {
+                HStack {
+                    Text(intensityLabel)
+                        .font(.system(size: 15, weight: .medium))
+                        .foregroundStyle(theme.text)
+                    Spacer()
+                    Text(String(format: "%.1f MET", customMET))
+                        .font(.system(.footnote, design: .monospaced))
+                        .foregroundStyle(theme.accent)
+                }
+                Slider(value: $customMET, in: 2...12, step: 0.5)
+                    .tint(theme.accent)
+                Text("How hard it felt — light (2), moderate (5), or intense (10+). Drives the calorie estimate.")
+                    .font(.caption2).foregroundStyle(theme.dim)
+            }
+            .padding(10)
+            .background(theme.card)
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+        }
+    }
+
+    private var intensityLabel: String {
+        switch customMET {
+        case ..<3.5:  return "Light"
+        case ..<6.0:  return "Moderate"
+        case ..<8.5:  return "Vigorous"
+        default:      return "Intense"
+        }
+    }
+
+    private func save() {
+        guard let activity = selected else { return }
+        let minutes = max(1, totalMinutes)
+        // Pilates routes to its own model so it credits the pilates weekly streak,
+        // mirroring the live runner's end path.
+        if activity.id == ActivityCatalog.pilatesId {
+            Repos.logPilatesSession(ctx, PilatesSessionDTO(
+                profileId: profile.id,
+                date: Date(),
+                durationMinutes: minutes,
+                focusAreas: []
+            ))
+        } else {
+            let cal = CalorieEstimator.caloriesForActivity(
+                met: met, minutes: Double(minutes), bodyWeightLb: profile.weightLb
+            )
+            Repos.logActivitySession(ctx, ActivitySessionDTO(
+                profileId: profile.id,
+                date: Date(),
+                activityId: activity.id,
+                activityName: activity.name,
+                met: met,
+                durationMinutes: minutes,
+                expectedMinutes: minutes,
+                caloriesEst: cal
+            ))
+        }
+        Haptics.success()
+        toasts.show(Toast(
+            title: "\(activity.name) logged",
+            detail: "\(minutes) min · ~\(estimatedCal) cal",
+            accent: .win, symbol: "checkmark.seal.fill"
+        ), for: 2.4)
+        dismiss()
     }
 }
 

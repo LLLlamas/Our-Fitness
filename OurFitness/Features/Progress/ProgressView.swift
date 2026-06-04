@@ -117,6 +117,7 @@ struct ProgressTabView: View {
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 18)
+            .scrollHapticTicks()
         }
         .background(theme.bg.ignoresSafeArea())
         .sheet(item: $activeStat) { kind in
