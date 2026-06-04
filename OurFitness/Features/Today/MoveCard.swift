@@ -566,8 +566,8 @@ private struct ExercisesInfoSheet: View {
 
                     // Pilates sessions
                     ForEach(todayPilates) { session in
-                        let kcal = CalorieEstimator.caloriesForPilates(
-                            minutes: Double(session.durationMinutes), bodyWeightLb: weightLb)
+                        let kcal = Int(CalorieEstimator.caloriesForPilates(
+                            minutes: Double(session.durationMinutes), bodyWeightLb: weightLb).rounded())
                         activityRow(
                             icon: "figure.mind.and.body", name: "Pilates",
                             detail: "\(session.durationMinutes) min",
