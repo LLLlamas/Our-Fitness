@@ -19,7 +19,6 @@ struct MoveCard: View {
 
     @State private var appleEnergyKcal: Double = 0
     @State private var appleEnergyDate: Date? = nil
-    @State private var restingEnergyKcal: Double = 0
     @State private var bpm: Int? = nil
     @State private var bpmDate: Date? = nil
     @State private var flightsClimbed: Int = 0
@@ -32,8 +31,8 @@ struct MoveCard: View {
     @State private var showFlightsInfo = false
     @State private var showDistanceInfo = false
 
-    private var combinedEnergyKcal: Int { Int(appleEnergyKcal + restingEnergyKcal) }
-    private var hasEnergyData: Bool { !isEnergyStale && (appleEnergyKcal > 0 || restingEnergyKcal > 0) }
+    private var activeEnergyKcal: Int { Int(appleEnergyKcal) }
+    private var hasEnergyData: Bool { !isEnergyStale && appleEnergyKcal > 0 }
 
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
     @AppStorage private var customStepsGoalRaw: Int
@@ -137,8 +136,8 @@ struct MoveCard: View {
                 HStack(alignment: .top, spacing: 0) {
                     metricColumn(
                         icon: "flame.fill", title: "APPLE TOTAL",
-                        value: hasEnergyData ? "\(combinedEnergyKcal)" : "-",
-                        sub: hasEnergyData ? "cal · active + resting" : "need new data",
+                        value: hasEnergyData ? "\(activeEnergyKcal)" : "-",
+                        sub: hasEnergyData ? "cal · active energy" : "need new data",
                         action: { showEnergyInfo = true }
                     )
                     columnSep
@@ -196,7 +195,6 @@ struct MoveCard: View {
         .sheet(isPresented: $showEnergyInfo) {
             AppleEnergyInfoSheet(
                 activeKcal: isEnergyStale ? nil : Int(appleEnergyKcal),
-                restingKcal: restingEnergyKcal > 0 ? Int(restingEnergyKcal) : nil,
                 asOf: isEnergyStale ? nil : asOfText(appleEnergyDate)
             )
             .themed(profile.mode)
@@ -290,7 +288,6 @@ struct MoveCard: View {
         }
         flightsClimbed = await health.flightsClimbed()
         walkingDistanceMiles = await health.walkingRunningDistanceMiles()
-        restingEnergyKcal = await health.restingEnergy()
     }
 
     private func asOfText(_ date: Date?) -> String {
@@ -326,15 +323,14 @@ private struct MoveInfoSheet: View {
                 }
 
                 section(title: "Two sources, one picture") {
-                    Text("Apple Health measures what its sensors detect. Our estimate calculates from what you log. Both show a full-day total (active + resting) so they're directly comparable — they'll rarely match perfectly, and that's fine.")
+                    Text("Apple Health measures what its sensors detect. Our Estimate calculates from what you log — BMR + steps + training. They'll rarely match perfectly, and that's fine.")
                         .font(.callout).foregroundStyle(theme.dim)
                         .fixedSize(horizontal: false, vertical: true)
                 }
 
                 section(title: "Apple Total") {
                     VStack(alignment: .leading, spacing: 8) {
-                        columnNote(label: "Active energy", detail: "Steps and all movement Apple detects. Misses logged strength and sport sessions.")
-                        columnNote(label: "Resting energy", detail: "Calories burned at rest — estimated by Apple from your age, height, and weight.")
+                        columnNote(label: "Active energy", detail: "Steps and all movement Apple detects. Misses logged strength and sport sessions. Syncs from Watch every 15–60 min.")
                         columnNote(label: "Distance & Flights", detail: "Foot distance from GPS and floors climbed from the barometer.")
                         columnNote(label: "Heart Rate", detail: "Most recent spot reading — not a daily average.")
                     }
@@ -342,7 +338,7 @@ private struct MoveInfoSheet: View {
 
                 section(title: "Our Estimate") {
                     VStack(alignment: .leading, spacing: 8) {
-                        columnNote(label: "Total (resting + active)", detail: "Mifflin-St Jeor BMR from your profile + step burn + all logged training.")
+                        columnNote(label: "Total (BMR + active)", detail: "Mifflin-St Jeor BMR from your profile + step burn + all logged training.")
                         columnNote(label: "Training", detail: "Only logged sessions — strength, cardio, pilates, live activities. The activity Apple's sensors miss.")
                         breakdownRow(
                             label: "Today's breakdown",
@@ -400,22 +396,16 @@ private struct MoveInfoSheet: View {
 
 private struct AppleEnergyInfoSheet: View {
     let activeKcal: Int?
-    let restingKcal: Int?
     let asOf: String?
 
-    private var combinedKcal: Int? {
-        guard let a = activeKcal, let r = restingKcal else { return activeKcal ?? restingKcal }
-        return a + r
-    }
-
     var body: some View {
-        ColumnInfoScaffold(title: "apple energy.", subtitle: "FROM YOUR IPHONE + APPLE WATCH") {
+        ColumnInfoScaffold(title: "apple energy.", subtitle: "ACTIVE ENERGY · FROM YOUR IPHONE + WATCH") {
 
-            ColumnInfoSection(title: "Today's breakdown") {
+            ColumnInfoSection(title: "Today") {
                 VStack(spacing: 6) {
-                    if activeKcal == nil && restingKcal == nil {
-                        ColumnBigNumberRow(icon: "flame.fill", name: "No data yet",
-                                           detail: "Open the Health app or wear your Apple Watch.",
+                    if activeKcal == nil {
+                        ColumnBigNumberRow(icon: "bolt.fill", name: "No data yet",
+                                           detail: "Watch syncs every 15–60 min. Carry your iPhone for iPhone-only tracking.",
                                            value: "-", unit: "cal")
                     } else {
                         ColumnBigNumberRow(
@@ -425,38 +415,27 @@ private struct AppleEnergyInfoSheet: View {
                             value: activeKcal.map { "\($0)" } ?? "-",
                             unit: "cal"
                         )
-                        ColumnBigNumberRow(
-                            icon: "moon.fill",
-                            name: "Resting energy",
-                            detail: "Body at rest — heart, lungs, brain",
-                            value: restingKcal.map { "\($0)" } ?? "-",
-                            unit: "cal"
-                        )
-                    }
-                    if let combined = combinedKcal {
-                        ColumnHeroStat(
-                            label: "TOTAL TODAY" + (asOf.map { " · \($0)" } ?? ""),
-                            value: "\(combined) cal"
-                        )
+                        if let kcal = activeKcal {
+                            ColumnHeroStat(
+                                label: "TODAY" + (asOf.map { " · \($0)" } ?? ""),
+                                value: "\(kcal) cal"
+                            )
+                        }
                     }
                 }
             }
 
-            ColumnInfoSection(title: "Active energy") {
+            ColumnInfoSection(title: "What's counted") {
                 VStack(alignment: .leading, spacing: 5) {
                     ColumnInfoBody(text: "Every calorie burned beyond your resting baseline — walking, workouts, stairs, fidgeting. Measured directly by iPhone and Apple Watch sensors.")
-                    ColumnInfoBody(text: "✓  All steps and movement Apple can detect\n✗  Doesn't include resting or BMR calories")
+                    ColumnInfoBody(text: "✓  All steps and movement Apple can detect\n✗  Doesn't include BMR/resting calories (those are in Our Estimate)")
                 }
             }
 
-            ColumnInfoSection(title: "Resting energy") {
-                ColumnInfoBody(text: "Calories your body burns just to exist — heart, lungs, brain. Estimated by Apple from your age, height, and weight. Typically 60–75% of total daily burn.")
-            }
-
-            ColumnInfoSection(title: "Active + Resting = total daily burn") {
+            ColumnInfoSection(title: "vs. Our Estimate") {
                 ColumnBreakdownRow(
-                    label: "This is your TDEE",
-                    detail: "Build mode adds 400–600 cal on top. Circuit mode runs 300–500 cal below it."
+                    label: "Apple active vs. Our Estimate",
+                    detail: "Our Estimate = BMR + steps + logged training. Apple active energy = pure movement only. That's why Our Estimate will always be higher."
                 )
             }
         }
@@ -504,7 +483,7 @@ private struct MetTotalInfoSheet: View {
             }
 
             ColumnInfoSection(title: "vs. Apple Total") {
-                ColumnInfoBody(text: "Apple uses sensor-measured active energy + Health's resting estimate. We use MET formula + Mifflin-St Jeor. If Our Estimate > Apple Total, your logged training is capturing activity Apple's sensors can't see.")
+                ColumnInfoBody(text: "Apple shows active energy only — movement its sensors detect. Our Estimate adds BMR (Mifflin-St Jeor) on top. Our Estimate will always read higher than Apple's active number; that's expected, not a discrepancy.")
             }
         }
     }
