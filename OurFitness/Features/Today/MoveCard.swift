@@ -94,11 +94,7 @@ struct MoveCard: View {
     }
     private var trainingMetEstimate: Int { setsKcal + cardioKcal + pilatesKcal + activitiesKcal }
 
-    private var metBMR: Int {
-        Targets.bmr(sex: profile.sex, weightLb: profile.weightLb,
-                    heightIn: profile.heightIn, age: profile.age)
-    }
-    private var metTotal: Int { metEstimate + metBMR }
+    private var metTotal: Int { metEstimate }
     private var weightKg: Int { Int(profile.weightLb * 0.4536) }
 
     private var distanceLabel: String {
@@ -144,7 +140,7 @@ struct MoveCard: View {
                     metricColumn(
                         icon: "sum", title: "OUR ESTIMATE",
                         value: "\(metTotal)",
-                        sub: "cal · all-day total",
+                        sub: "cal · activity estimate",
                         action: { showMetTotalInfo = true }
                     )
                     columnSep
@@ -186,8 +182,8 @@ struct MoveCard: View {
         .task(id: profile.id) { await load() }
         .sheet(isPresented: $showInfo) {
             MoveInfoSheet(
-                profile: profile, metTotal: metTotal, metBMR: metBMR,
-                metActive: metEstimate, trainingMet: trainingMetEstimate,
+                profile: profile, metTotal: metTotal,
+                trainingMet: trainingMetEstimate,
                 todaySteps: todaySteps, stepsKcal: stepsKcal
             )
             .themed(profile.mode)
@@ -201,7 +197,7 @@ struct MoveCard: View {
         }
         .sheet(isPresented: $showMetTotalInfo) {
             MetTotalInfoSheet(
-                metTotal: metTotal, metBMR: metBMR, metActive: metEstimate,
+                metTotal: metTotal,
                 stepsKcal: stepsKcal, trainingKcal: trainingMetEstimate, weightKg: weightKg
             )
             .themed(profile.mode)
@@ -301,8 +297,6 @@ struct MoveCard: View {
 private struct MoveInfoSheet: View {
     let profile: ProfileDTO
     let metTotal: Int
-    let metBMR: Int
-    let metActive: Int
     let trainingMet: Int
     let todaySteps: Int
     let stepsKcal: Int
@@ -323,7 +317,7 @@ private struct MoveInfoSheet: View {
                 }
 
                 section(title: "Two sources, one picture") {
-                    Text("Apple Health measures what its sensors detect. Our Estimate calculates from what you log — BMR + steps + training. They'll rarely match perfectly, and that's fine.")
+                    Text("Apple Health measures what its sensors detect. Our Estimate calculates from what you log — steps + training. They'll rarely match perfectly, and that's fine.")
                         .font(.callout).foregroundStyle(theme.dim)
                         .fixedSize(horizontal: false, vertical: true)
                 }
@@ -338,11 +332,11 @@ private struct MoveInfoSheet: View {
 
                 section(title: "Our Estimate") {
                     VStack(alignment: .leading, spacing: 8) {
-                        columnNote(label: "Total (BMR + active)", detail: "Mifflin-St Jeor BMR from your profile + step burn + all logged training.")
+                        columnNote(label: "Activity total", detail: "Step burn (MET 4.3) + all logged training sessions.")
                         columnNote(label: "Training", detail: "Only logged sessions — strength, cardio, pilates, live activities. The activity Apple's sensors miss.")
                         breakdownRow(
                             label: "Today's breakdown",
-                            detail: "BMR: ≈\(metBMR) cal\nSteps: ≈\(stepsKcal) cal\nTraining: ≈\(trainingMet) cal\nTotal: ≈\(metTotal) cal"
+                            detail: "Steps: ≈\(stepsKcal) cal\nTraining: ≈\(trainingMet) cal\nTotal: ≈\(metTotal) cal"
                         )
                     }
                 }
@@ -428,14 +422,14 @@ private struct AppleEnergyInfoSheet: View {
             ColumnInfoSection(title: "What's counted") {
                 VStack(alignment: .leading, spacing: 5) {
                     ColumnInfoBody(text: "Every calorie burned beyond your resting baseline — walking, workouts, stairs, fidgeting. Measured directly by iPhone and Apple Watch sensors.")
-                    ColumnInfoBody(text: "✓  All steps and movement Apple can detect\n✗  Doesn't include BMR/resting calories (those are in Our Estimate)")
+                    ColumnInfoBody(text: "✓  All steps and movement Apple can detect\n✗  Doesn't include manually logged training sessions (those are in Our Estimate)")
                 }
             }
 
             ColumnInfoSection(title: "vs. Our Estimate") {
                 ColumnBreakdownRow(
                     label: "Apple active vs. Our Estimate",
-                    detail: "Our Estimate = BMR + steps + logged training. Apple active energy = pure movement only. That's why Our Estimate will always be higher."
+                    detail: "Our Estimate = steps (MET formula) + logged training. Apple active energy = movement its sensors detect. Numbers won't match exactly — that's expected."
                 )
             }
         }
@@ -446,24 +440,15 @@ private struct AppleEnergyInfoSheet: View {
 
 private struct MetTotalInfoSheet: View {
     let metTotal: Int
-    let metBMR: Int
-    let metActive: Int
     let stepsKcal: Int
     let trainingKcal: Int
     let weightKg: Int
 
     var body: some View {
-        ColumnInfoScaffold(title: "our estimate.", subtitle: "MIFFLIN-ST JEOR + MET · ALL-DAY TOTAL") {
+        ColumnInfoScaffold(title: "our estimate.", subtitle: "MET FORMULA · ACTIVITY CALORIES") {
 
             ColumnInfoSection(title: "Today's breakdown") {
                 VStack(spacing: 6) {
-                    ColumnBigNumberRow(
-                        icon: "moon.zzz.fill",
-                        name: "Resting (BMR)",
-                        detail: "Mifflin-St Jeor · updates when you edit vitals",
-                        value: "~\(metBMR)",
-                        unit: "cal"
-                    )
                     ColumnBigNumberRow(
                         icon: "figure.walk",
                         name: "Steps",
@@ -483,7 +468,7 @@ private struct MetTotalInfoSheet: View {
             }
 
             ColumnInfoSection(title: "vs. Apple Total") {
-                ColumnInfoBody(text: "Apple shows active energy only — movement its sensors detect. Our Estimate adds BMR (Mifflin-St Jeor) on top. Our Estimate will always read higher than Apple's active number; that's expected, not a discrepancy.")
+                ColumnInfoBody(text: "Apple shows active energy from its sensors. Our Estimate uses the Ainsworth MET formula on what you log — step count + training sessions. Numbers won't match exactly; that's expected.")
             }
         }
     }
@@ -628,7 +613,6 @@ private struct ExercisesInfoSheet: View {
                     bulletRow(check: true,  text: "Pilates sessions — MET 3.0")
                     bulletRow(check: true,  text: "Live sessions (basketball, yoga, etc.) — MET 2.8–11.8")
                     bulletRow(check: false, text: "Steps — counted in Our Estimate, not here")
-                    bulletRow(check: false, text: "Resting/BMR — counted in Our Estimate")
                 }
             }
 

@@ -126,7 +126,7 @@ struct NutritionView: View {
         )
         let dto = FoodLogEntryDTO(
             userId: profile.id,
-            date: today,
+            date: selectedDayKey,
             slot: slot,
             customName: meal.name,
             perServing: scaled
@@ -139,7 +139,7 @@ struct NutritionView: View {
     private func logCommonFood(_ food: CommonFood, slot: Slot = .lunch, multiplier: Double = 1.0) {
         let dto = FoodLogEntryDTO(
             userId: profile.id,
-            date: today,
+            date: selectedDayKey,
             slot: slot,
             foodId: food.id,
             customName: food.name,
@@ -190,25 +190,25 @@ struct NutritionView: View {
                     smarterSwapsSection
                 }
 
-                if selectedDayKey == today {
-                    HStack(spacing: 10) {
-                        Button {
-                            showLogSheet = true
-                        } label: {
-                            HStack {
-                                Image(systemName: "plus.circle.fill")
-                                Text("Log a meal")
-                            }
+                HStack(spacing: 10) {
+                    Button {
+                        showLogSheet = true
+                    } label: {
+                        HStack {
+                            Image(systemName: "plus.circle.fill")
+                            Text("Log a meal")
                         }
-                        .tactile(.primary, fullWidth: true)
+                    }
+                    .tactile(.primary, fullWidth: true)
 
-                        Button {
-                            showLibrary = true
-                        } label: {
-                            Label("Browse", systemImage: "magnifyingglass")
-                        }
-                        .tactile(.secondary)
+                    Button {
+                        showLibrary = true
+                    } label: {
+                        Label("Browse", systemImage: "magnifyingglass")
+                    }
+                    .tactile(.secondary)
 
+                    if selectedDayKey == today {
                         Button {
                             showCameraLog = true
                         } label: {
@@ -227,7 +227,7 @@ struct NutritionView: View {
         }
         .background(theme.bg.ignoresSafeArea())
         .sheet(isPresented: $showLogSheet) {
-            NLMealLogSheet(profile: profile) { dto in
+            NLMealLogSheet(profile: profile, targetDate: selectedDayKey) { dto in
                 Repos.addFoodLog(ctx, dto)
                 toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
                 let foodName = dto.foodId ?? dto.customName ?? ""
@@ -238,7 +238,7 @@ struct NutritionView: View {
             .themed(profile.mode)
         }
         .sheet(isPresented: $showSuggestions) {
-            SuggestionsSheet(profile: profile, totals: totals) { dto in
+            SuggestionsSheet(profile: profile, totals: totals, targetDate: selectedDayKey) { dto in
                 Repos.addFoodLog(ctx, dto)
                 toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
                 showSuggestions = false
@@ -250,7 +250,7 @@ struct NutritionView: View {
             .themed(profile.mode)
         }
         .sheet(isPresented: $showLibrary) {
-            FoodLibrarySheet(profile: profile) { food, slot, multiplier in
+            FoodLibrarySheet(profile: profile, targetDate: selectedDayKey) { food, slot, multiplier in
                 // logCommonFood already calls prefetch internally.
                 logCommonFood(food, slot: slot, multiplier: multiplier)
             }
@@ -265,6 +265,7 @@ struct NutritionView: View {
                     ingredients: meal.resolvedIngredients()
                 ),
                 profile: profile,
+                targetDate: selectedDayKey,
                 onDone: { mealToDetail = nil }
             )
             .themed(profile.mode)
@@ -278,6 +279,7 @@ struct NutritionView: View {
                     ingredients: meal.ingredients
                 ),
                 profile: profile,
+                targetDate: selectedDayKey,
                 onDone: { mealToLog = nil }
             )
             .themed(profile.mode)
@@ -299,6 +301,7 @@ struct NutritionView: View {
                     ingredients: template.ingredients
                 ),
                 profile: profile,
+                targetDate: selectedDayKey,
                 onDone: { savedTemplateToLog = nil },
                 onDeleteTemplate: {
                     Repos.deleteSavedTemplate(ctx, id: template.id)
@@ -693,7 +696,7 @@ struct NutritionView: View {
             } else {
                 ForEach(selectedDayLogs) { e in
                     LogRow(entry: e, onTap: { entryToDetail = e },
-                           canDelete: selectedDayKey == today) {
+                           canDelete: true) {
                         Repos.deleteFoodLog(ctx, id: e.id)
                         Haptics.warn()
                         toasts.show(Toast(title: "Removed", detail: e.customName ?? "Meal", accent: .warn, symbol: "minus.circle.fill"))
@@ -937,6 +940,7 @@ struct MacroChip: View {
 
 private struct NLMealLogSheet: View {
     let profile: ProfileDTO
+    let targetDate: String
     let onSave: (FoodLogEntryDTO) -> Void
 
     @Environment(\.theme) private var theme
@@ -1024,7 +1028,7 @@ private struct NLMealLogSheet: View {
                     }
                     let dto = FoodLogEntryDTO(
                         userId: profile.id,
-                        date: Dates.dayKey(),
+                        date: targetDate,
                         slot: slot,
                         customName: resolvedName,
                         perServing: resolvedPerServing,
@@ -1258,6 +1262,7 @@ private struct NLMealLogSheet: View {
 private struct SuggestionsSheet: View {
     let profile: ProfileDTO
     let totals: DailyTotals
+    let targetDate: String
     let onPick: (FoodLogEntryDTO) -> Void
 
     @Environment(\.theme) private var theme
@@ -1327,7 +1332,7 @@ private struct SuggestionsSheet: View {
                 )
                 let dto = FoodLogEntryDTO(
                     userId: profile.id,
-                    date: Dates.dayKey(),
+                    date: targetDate,
                     slot: s,
                     customName: m.name,
                     perServing: scaled
@@ -1345,6 +1350,7 @@ private struct SuggestionsSheet: View {
 
 private struct FoodLibrarySheet: View {
     let profile: ProfileDTO
+    let targetDate: String
     let onLog: (CommonFood, Slot, Double) -> Void
 
     @AppStorage private var favoriteIdsString: String
@@ -1355,8 +1361,9 @@ private struct FoodLibrarySheet: View {
     @State private var foodToDetail: CommonFood?
     @FocusState private var searchFocused: Bool
 
-    init(profile: ProfileDTO, onLog: @escaping (CommonFood, Slot, Double) -> Void) {
+    init(profile: ProfileDTO, targetDate: String = Dates.dayKey(), onLog: @escaping (CommonFood, Slot, Double) -> Void) {
         self.profile = profile
+        self.targetDate = targetDate
         self.onLog = onLog
         _favoriteIdsString = AppStorage(wrappedValue: "", "favoriteFoodIds.\(profile.id.uuidString)")
     }
@@ -1474,6 +1481,7 @@ private struct FoodLibrarySheet: View {
                     ingredients: ingredients
                 ),
                 profile: profile,
+                targetDate: targetDate,
                 onDone: { foodToDetail = nil }
             )
             .themed(profile.mode)

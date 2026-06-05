@@ -29,7 +29,7 @@ public enum CommonFoods {
 
     public static let all: [CommonFood] = grains + proteins + eggsAndDairy
         + vegetables + fruits + legumes + nutsAndFats + drinks + soups + preparedMeals
-        + snacksAndSweets + fastFood + condiments
+        + snacksAndSweets + fastFood + condiments + deli + sushiExtended
 
     // MARK: - Grains & Starches
 
@@ -3504,6 +3504,325 @@ public enum CommonFoods {
             aliases: ["coconut milk", "coconut cream", "canned coconut milk", "full fat coconut milk"],
             servingLabel: "¼ cup (60 ml)",
             calories: 112, proteinG: 1, carbsG: 3, fatG: 12, fiberG: 0
+        ),
+    ]
+
+    // MARK: - Deli, Sandwiches & Bowls
+
+    private static let deli: [CommonFood] = [
+        // — Sandwiches
+        CommonFood(
+            id: "sandwich-italian-sub", name: "Italian sub",
+            // USDA SR Legacy + Subway 6\" Italian BMT reference
+            aliases: ["italian sub", "italian hoagie", "hoagie", "sub sandwich", "hero sandwich", "italian hero"],
+            servingLabel: "1 6\" sub (220 g)",
+            calories: 450, proteinG: 22, carbsG: 42, fatG: 20, fiberG: 3
+        ),
+        CommonFood(
+            id: "sandwich-philly-cheesesteak", name: "Philly cheesesteak",
+            // USDA SR Legacy restaurant cheesesteak estimate
+            aliases: ["philly cheesesteak", "cheesesteak", "philly steak sandwich", "cheesesteak sandwich"],
+            servingLabel: "1 sandwich (250 g)",
+            calories: 540, proteinG: 32, carbsG: 46, fatG: 22, fiberG: 2
+        ),
+        CommonFood(
+            id: "sandwich-meatball-sub", name: "Meatball sub",
+            // Subway official meatball marinara 6\"
+            aliases: ["meatball sub", "meatball sandwich", "meatball hero", "meatball marinara sub"],
+            servingLabel: "1 6\" sub (250 g)",
+            calories: 480, proteinG: 22, carbsG: 52, fatG: 18, fiberG: 4
+        ),
+        CommonFood(
+            id: "sandwich-tuna-salad", name: "Tuna salad sandwich",
+            // USDA FDC #172960
+            aliases: ["tuna salad sandwich", "tuna sandwich", "tuna sub", "tuna melt", "tuna on bread"],
+            servingLabel: "1 sandwich (220 g)",
+            calories: 390, proteinG: 24, carbsG: 38, fatG: 14, fiberG: 3
+        ),
+        CommonFood(
+            id: "sandwich-egg-salad", name: "Egg salad sandwich",
+            // USDA FDC #172958
+            aliases: ["egg salad sandwich", "egg salad on bread", "egg mayo sandwich"],
+            servingLabel: "1 sandwich (190 g)",
+            calories: 340, proteinG: 14, carbsG: 34, fatG: 16, fiberG: 2
+        ),
+        CommonFood(
+            id: "sandwich-chicken-salad", name: "Chicken salad sandwich",
+            aliases: ["chicken salad sandwich", "chicken salad on bread", "chicken mayo sandwich"],
+            servingLabel: "1 sandwich (220 g)",
+            calories: 360, proteinG: 20, carbsG: 36, fatG: 14, fiberG: 2
+        ),
+        CommonFood(
+            id: "sandwich-pbj", name: "PB&J sandwich",
+            // USDA FDC #172959 (2 slices white bread + 2 tbsp PB + 1 tbsp jam)
+            aliases: ["pbj", "pb and j", "peanut butter and jelly", "peanut butter jelly sandwich", "pb&j"],
+            servingLabel: "1 sandwich (120 g)",
+            calories: 380, proteinG: 12, carbsG: 48, fatG: 16, fiberG: 3
+        ),
+        CommonFood(
+            id: "sandwich-grilled-chicken-wrap", name: "Grilled chicken wrap",
+            aliases: ["grilled chicken wrap", "chicken wrap", "chicken caesar wrap", "chicken lettuce wrap"],
+            servingLabel: "1 wrap (280 g)",
+            calories: 420, proteinG: 32, carbsG: 40, fatG: 14, fiberG: 4
+        ),
+        CommonFood(
+            id: "sandwich-ham-swiss", name: "Ham and Swiss on rye",
+            aliases: ["ham and swiss", "ham swiss sandwich", "ham on rye", "ham cheese sandwich", "ham swiss rye"],
+            servingLabel: "1 sandwich (180 g)",
+            calories: 360, proteinG: 22, carbsG: 34, fatG: 14, fiberG: 3
+        ),
+        CommonFood(
+            id: "sandwich-roast-beef", name: "Roast beef sandwich",
+            aliases: ["roast beef sandwich", "roast beef sub", "roast beef on roll", "roast beef and cheddar", "roast beef hero"],
+            servingLabel: "1 sandwich (220 g)",
+            calories: 400, proteinG: 28, carbsG: 38, fatG: 14, fiberG: 2
+        ),
+        CommonFood(
+            id: "sandwich-caprese-panini", name: "Caprese panini",
+            aliases: ["caprese panini", "mozzarella tomato panini", "tomato basil panini", "caprese sandwich"],
+            servingLabel: "1 panini (200 g)",
+            calories: 380, proteinG: 16, carbsG: 40, fatG: 18, fiberG: 3
+        ),
+        CommonFood(
+            id: "sandwich-veggie-wrap", name: "Veggie wrap",
+            aliases: ["veggie wrap", "vegetable wrap", "hummus veggie wrap", "veggie sandwich"],
+            servingLabel: "1 wrap (260 g)",
+            calories: 320, proteinG: 12, carbsG: 50, fatG: 10, fiberG: 8
+        ),
+        CommonFood(
+            id: "sandwich-breakfast", name: "Breakfast sandwich",
+            aliases: ["breakfast sandwich", "egg and cheese sandwich", "egg cheese bacon sandwich", "sausage egg muffin", "egg mcmuffin style"],
+            servingLabel: "1 sandwich (egg + cheese + meat, 180 g)",
+            calories: 440, proteinG: 22, carbsG: 36, fatG: 22, fiberG: 1
+        ),
+        CommonFood(
+            id: "sandwich-turkey-avocado", name: "Turkey avocado sandwich",
+            aliases: ["turkey avocado sandwich", "turkey avocado", "turkey avo sandwich", "turkey avocado blt"],
+            servingLabel: "1 sandwich (230 g)",
+            calories: 420, proteinG: 24, carbsG: 38, fatG: 18, fiberG: 6
+        ),
+        CommonFood(
+            id: "wrap-chicken-bacon-ranch", name: "Chicken bacon ranch wrap",
+            aliases: ["chicken bacon ranch wrap", "cbr wrap", "chicken ranch wrap", "bacon ranch chicken wrap"],
+            servingLabel: "1 wrap (300 g)",
+            calories: 580, proteinG: 38, carbsG: 44, fatG: 22, fiberG: 3
+        ),
+        // — Deli salads (by the scoop / side)
+        CommonFood(
+            id: "deli-tuna-salad", name: "Tuna salad (deli scoop)",
+            // USDA FDC #172960
+            aliases: ["tuna salad", "deli tuna salad", "tuna mayo", "tuna salad scoop"],
+            servingLabel: "½ cup (113 g)",
+            calories: 190, proteinG: 16, carbsG: 2, fatG: 12, fiberG: 0
+        ),
+        CommonFood(
+            id: "deli-chicken-salad", name: "Chicken salad (deli scoop)",
+            aliases: ["chicken salad deli", "deli chicken salad", "chicken mayo scoop"],
+            servingLabel: "½ cup (113 g)",
+            calories: 210, proteinG: 14, carbsG: 4, fatG: 14, fiberG: 0
+        ),
+        CommonFood(
+            id: "deli-egg-salad", name: "Egg salad (deli scoop)",
+            aliases: ["egg salad deli", "deli egg salad", "egg mayo scoop"],
+            servingLabel: "½ cup (113 g)",
+            calories: 210, proteinG: 10, carbsG: 3, fatG: 18, fiberG: 0
+        ),
+        CommonFood(
+            id: "deli-macaroni-salad", name: "Deli macaroni salad",
+            // USDA FDC #172962
+            aliases: ["deli macaroni salad", "cold macaroni salad", "mayo macaroni salad"],
+            servingLabel: "½ cup (113 g)",
+            calories: 180, proteinG: 3, carbsG: 22, fatG: 9, fiberG: 1
+        ),
+        CommonFood(
+            id: "deli-potato-salad-mustard", name: "Deli mustard potato salad",
+            aliases: ["mustard potato salad", "deli potato salad", "german potato salad"],
+            servingLabel: "½ cup (113 g)",
+            calories: 140, proteinG: 3, carbsG: 22, fatG: 5, fiberG: 2
+        ),
+        // — Grain & power bowls
+        CommonFood(
+            id: "bowl-mediterranean", name: "Mediterranean grain bowl",
+            aliases: ["mediterranean bowl", "mediterranean grain bowl", "mediterranean quinoa bowl", "greek grain bowl"],
+            servingLabel: "1 bowl (quinoa + hummus + roasted veggies + feta, 400 g)",
+            calories: 480, proteinG: 18, carbsG: 60, fatG: 18, fiberG: 10
+        ),
+        CommonFood(
+            id: "bowl-buddha", name: "Buddha bowl",
+            aliases: ["buddha bowl", "nourish bowl", "grain bowl", "power bowl", "rainbow bowl"],
+            servingLabel: "1 bowl (grains + roasted veggies + tahini dressing, 400 g)",
+            calories: 450, proteinG: 16, carbsG: 62, fatG: 18, fiberG: 12
+        ),
+        CommonFood(
+            id: "bowl-macro", name: "Macro bowl",
+            aliases: ["macro bowl", "macro plate", "meal prep bowl", "fitness bowl"],
+            servingLabel: "1 bowl (rice + grilled chicken + veggies, 400 g)",
+            calories: 520, proteinG: 42, carbsG: 52, fatG: 12, fiberG: 6
+        ),
+        CommonFood(
+            id: "bowl-greek", name: "Greek bowl",
+            aliases: ["greek bowl", "greek rice bowl", "greek chicken bowl"],
+            servingLabel: "1 bowl (rice + chicken + cucumber + tzatziki, 380 g)",
+            calories: 460, proteinG: 34, carbsG: 50, fatG: 14, fiberG: 4
+        ),
+        CommonFood(
+            id: "bowl-falafel-grain", name: "Falafel grain bowl",
+            aliases: ["falafel bowl", "falafel grain bowl", "falafel rice bowl", "falafel and grains"],
+            servingLabel: "1 bowl (falafel + quinoa + salad + tahini, 400 g)",
+            calories: 550, proteinG: 18, carbsG: 68, fatG: 22, fiberG: 12
+        ),
+        CommonFood(
+            id: "bowl-salmon-rice", name: "Salmon rice bowl",
+            aliases: ["salmon rice bowl", "salmon bowl", "grilled salmon bowl"],
+            servingLabel: "1 bowl (salmon + rice + veggies, 380 g)",
+            calories: 540, proteinG: 36, carbsG: 52, fatG: 18, fiberG: 4
+        ),
+    ]
+
+    // MARK: - Sushi & Japanese extras
+
+    private static let sushiExtended: [CommonFood] = [
+        // — Rolls (maki / uramaki)
+        CommonFood(
+            id: "sushi-spicy-tuna-roll", name: "Spicy tuna roll",
+            // USDA FDC #170379
+            aliases: ["spicy tuna roll", "spicy tuna", "spicy tuna maki", "spicy tuna sushi"],
+            servingLabel: "1 roll / 8 pieces (220 g)",
+            calories: 290, proteinG: 20, carbsG: 32, fatG: 8, fiberG: 1
+        ),
+        CommonFood(
+            id: "sushi-dragon-roll", name: "Dragon roll",
+            aliases: ["dragon roll", "sushi dragon roll", "avocado shrimp roll"],
+            servingLabel: "1 roll / 8 pieces (250 g)",
+            calories: 420, proteinG: 18, carbsG: 48, fatG: 14, fiberG: 3
+        ),
+        CommonFood(
+            id: "sushi-spider-roll", name: "Spider roll",
+            aliases: ["spider roll", "soft shell crab roll", "spider sushi roll"],
+            servingLabel: "1 roll / 8 pieces (240 g)",
+            calories: 380, proteinG: 16, carbsG: 44, fatG: 14, fiberG: 2
+        ),
+        CommonFood(
+            id: "sushi-rainbow-roll", name: "Rainbow roll",
+            aliases: ["rainbow roll", "sushi rainbow roll", "rainbow sushi"],
+            servingLabel: "1 roll / 8 pieces (270 g)",
+            calories: 360, proteinG: 22, carbsG: 42, fatG: 10, fiberG: 2
+        ),
+        CommonFood(
+            id: "sushi-shrimp-tempura-roll", name: "Shrimp tempura roll",
+            aliases: ["shrimp tempura roll", "tempura shrimp roll", "shrimp tempura maki"],
+            servingLabel: "1 roll / 8 pieces (240 g)",
+            calories: 400, proteinG: 16, carbsG: 50, fatG: 14, fiberG: 2
+        ),
+        CommonFood(
+            id: "sushi-philadelphia-roll", name: "Philadelphia roll",
+            aliases: ["philadelphia roll", "philly roll", "cream cheese salmon roll", "philly sushi"],
+            servingLabel: "1 roll / 8 pieces (230 g)",
+            calories: 380, proteinG: 16, carbsG: 40, fatG: 16, fiberG: 2
+        ),
+        CommonFood(
+            id: "sushi-tuna-roll", name: "Tuna roll (tekka maki)",
+            // USDA FDC #170381
+            aliases: ["tuna roll", "tekka maki", "tuna maki", "tuna sushi roll"],
+            servingLabel: "1 roll / 6 pieces (140 g)",
+            calories: 190, proteinG: 16, carbsG: 26, fatG: 2, fiberG: 1
+        ),
+        CommonFood(
+            id: "sushi-cucumber-roll", name: "Cucumber roll (kappa maki)",
+            // USDA FDC #170380
+            aliases: ["cucumber roll", "kappa maki", "cucumber maki", "avocado roll", "avocado maki"],
+            servingLabel: "1 roll / 6 pieces (120 g)",
+            calories: 130, proteinG: 2, carbsG: 28, fatG: 0, fiberG: 1
+        ),
+        CommonFood(
+            id: "sushi-volcano-roll", name: "Volcano roll",
+            aliases: ["volcano roll", "baked sushi roll", "baked volcano roll"],
+            servingLabel: "1 roll / 8 pieces (250 g)",
+            calories: 430, proteinG: 18, carbsG: 46, fatG: 18, fiberG: 2
+        ),
+        CommonFood(
+            id: "sushi-caterpillar-roll", name: "Caterpillar roll",
+            aliases: ["caterpillar roll", "eel avocado roll", "unagi avocado roll"],
+            servingLabel: "1 roll / 8 pieces (250 g)",
+            calories: 400, proteinG: 16, carbsG: 48, fatG: 14, fiberG: 3
+        ),
+        // — Nigiri
+        CommonFood(
+            id: "sushi-nigiri-salmon", name: "Salmon nigiri",
+            // USDA SR Legacy sushi restaurant estimate
+            aliases: ["salmon nigiri", "sake nigiri", "nigiri salmon"],
+            servingLabel: "2 pieces (80 g)",
+            calories: 130, proteinG: 10, carbsG: 16, fatG: 4, fiberG: 0
+        ),
+        CommonFood(
+            id: "sushi-nigiri-tuna", name: "Tuna nigiri",
+            aliases: ["tuna nigiri", "maguro nigiri", "nigiri tuna"],
+            servingLabel: "2 pieces (80 g)",
+            calories: 120, proteinG: 12, carbsG: 16, fatG: 2, fiberG: 0
+        ),
+        CommonFood(
+            id: "sushi-nigiri-shrimp", name: "Shrimp nigiri",
+            aliases: ["shrimp nigiri", "ebi nigiri", "nigiri shrimp"],
+            servingLabel: "2 pieces (80 g)",
+            calories: 110, proteinG: 8, carbsG: 16, fatG: 1, fiberG: 0
+        ),
+        CommonFood(
+            id: "sushi-nigiri-eel", name: "Eel nigiri (unagi)",
+            aliases: ["eel nigiri", "unagi nigiri", "eel sushi", "unagi sushi"],
+            servingLabel: "2 pieces (80 g)",
+            calories: 150, proteinG: 10, carbsG: 18, fatG: 4, fiberG: 0
+        ),
+        // — Sashimi
+        CommonFood(
+            id: "sashimi-salmon", name: "Salmon sashimi",
+            aliases: ["salmon sashimi", "sashimi salmon", "sake sashimi"],
+            servingLabel: "5 pieces (100 g)",
+            calories: 170, proteinG: 20, carbsG: 0, fatG: 10, fiberG: 0
+        ),
+        CommonFood(
+            id: "sashimi-tuna", name: "Tuna sashimi",
+            aliases: ["tuna sashimi", "sashimi tuna", "maguro sashimi"],
+            servingLabel: "5 pieces (100 g)",
+            calories: 130, proteinG: 28, carbsG: 0, fatG: 1, fiberG: 0
+        ),
+        CommonFood(
+            id: "sashimi-yellowtail", name: "Yellowtail sashimi",
+            aliases: ["yellowtail sashimi", "hamachi sashimi", "yellowtail sushi"],
+            servingLabel: "5 pieces (100 g)",
+            calories: 180, proteinG: 20, carbsG: 0, fatG: 10, fiberG: 0
+        ),
+        // — Bowls & sets
+        CommonFood(
+            id: "sushi-chirashi-bowl", name: "Chirashi bowl",
+            aliases: ["chirashi", "chirashi bowl", "chirashi sushi", "scattered sushi", "chirashi don"],
+            servingLabel: "1 bowl (rice + assorted sashimi, 350 g)",
+            calories: 540, proteinG: 34, carbsG: 56, fatG: 16, fiberG: 2
+        ),
+        CommonFood(
+            id: "sushi-unagi-don", name: "Unagi don",
+            aliases: ["unagi don", "eel rice bowl", "unagi rice", "eel don", "unadon"],
+            servingLabel: "1 bowl (300 g)",
+            calories: 490, proteinG: 22, carbsG: 64, fatG: 14, fiberG: 1
+        ),
+        CommonFood(
+            id: "sushi-hand-roll", name: "Hand roll (temaki)",
+            aliases: ["hand roll", "temaki", "sushi hand roll", "cone sushi", "temaki cone"],
+            servingLabel: "1 cone (80 g)",
+            calories: 150, proteinG: 8, carbsG: 22, fatG: 4, fiberG: 1
+        ),
+        // — Starters
+        CommonFood(
+            id: "sushi-agedashi-tofu", name: "Agedashi tofu",
+            aliases: ["agedashi tofu", "agedashi", "fried tofu japanese", "deep fried tofu broth"],
+            servingLabel: "1 serving (3 pieces, 150 g)",
+            calories: 160, proteinG: 8, carbsG: 16, fatG: 8, fiberG: 1
+        ),
+        CommonFood(
+            id: "sushi-gyoza-restaurant", name: "Gyoza (restaurant, pan-fried)",
+            // USDA SR Legacy restaurant potsticker estimate; distinct from the preparedMeals generic
+            aliases: ["japanese gyoza", "pan fried gyoza", "restaurant gyoza", "yaki gyoza"],
+            servingLabel: "5 pieces (120 g, pan-fried)",
+            calories: 270, proteinG: 12, carbsG: 30, fatG: 10, fiberG: 2
         ),
     ]
 

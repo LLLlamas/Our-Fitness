@@ -20,6 +20,7 @@ struct MealIngredientDetailSheet: View {
 
     let mode: Mode
     let profile: ProfileDTO
+    let targetDate: String
     var onDone: () -> Void
     var onDeleteTemplate: (() -> Void)?
 
@@ -37,9 +38,10 @@ struct MealIngredientDetailSheet: View {
     @State private var showFoodSearch = false
     @State private var showSaveTemplate = false
 
-    init(mode: Mode, profile: ProfileDTO, onDone: @escaping () -> Void, onDeleteTemplate: (() -> Void)? = nil) {
+    init(mode: Mode, profile: ProfileDTO, targetDate: String = Dates.dayKey(), onDone: @escaping () -> Void, onDeleteTemplate: (() -> Void)? = nil) {
         self.mode = mode
         self.profile = profile
+        self.targetDate = targetDate
         self.onDone = onDone
         self.onDeleteTemplate = onDeleteTemplate
 
@@ -215,7 +217,7 @@ struct MealIngredientDetailSheet: View {
         let perServing = totals
         let dto = FoodLogEntryDTO(
             userId: profile.id,
-            date: Dates.dayKey(),
+            date: targetDate,
             slot: slot,
             customName: name.isEmpty ? nil : name,
             perServing: perServing,
