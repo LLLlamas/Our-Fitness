@@ -282,6 +282,43 @@ public enum CommonFoods {
             servingLabel: "1 sheet (50 g)",
             calories: 207, proteinG: 3, carbsG: 18, fatG: 14, fiberG: 1
         ),
+        CommonFood(
+            id: "couscous", name: "Couscous",
+            // USDA FDC #169720
+            aliases: ["couscous", "moroccan couscous", "semolina couscous", "israeli couscous", "pearl couscous"],
+            servingLabel: "1 cup cooked (157 g)",
+            calories: 176, proteinG: 6, carbsG: 36, fatG: 0, fiberG: 2
+        ),
+        CommonFood(
+            id: "sticky-rice", name: "Sticky rice",
+            aliases: ["sticky rice", "glutinous rice", "sweet rice", "malagkit", "thai sticky rice", "mochigome"],
+            servingLabel: "1 cup cooked (186 g)",
+            calories: 169, proteinG: 4, carbsG: 37, fatG: 0, fiberG: 1
+        ),
+        CommonFood(
+            id: "paratha", name: "Paratha",
+            aliases: ["paratha", "plain paratha", "indian paratha", "layered flatbread"],
+            servingLabel: "1 piece (80 g)",
+            calories: 200, proteinG: 4, carbsG: 26, fatG: 9, fiberG: 2
+        ),
+        CommonFood(
+            id: "aloo-paratha", name: "Aloo paratha",
+            aliases: ["aloo paratha", "stuffed paratha", "potato paratha", "aloo ka paratha", "potato stuffed flatbread"],
+            servingLabel: "1 piece (120 g)",
+            calories: 280, proteinG: 6, carbsG: 36, fatG: 12, fiberG: 3
+        ),
+        CommonFood(
+            id: "pan-de-bono", name: "Pan de bono",
+            aliases: ["pan de bono", "colombian cheese bread", "pan de queso colombiano", "bono bread"],
+            servingLabel: "2 pieces (80 g)",
+            calories: 240, proteinG: 7, carbsG: 34, fatG: 9, fiberG: 1
+        ),
+        CommonFood(
+            id: "pao-de-queijo", name: "Pão de queijo",
+            aliases: ["pao de queijo", "pão de queijo", "brazilian cheese bread", "cheese bread brazil", "tapioca cheese bread"],
+            servingLabel: "3 pieces (60 g)",
+            calories: 190, proteinG: 5, carbsG: 26, fatG: 8, fiberG: 0
+        ),
     ]
 
     // MARK: - Proteins
@@ -2677,6 +2714,350 @@ public enum CommonFoods {
             servingLabel: "1 bowl (600 g, broth + noodles + chicken)",
             calories: 380, proteinG: 26, carbsG: 47, fatG: 6, fiberG: 2
         ),
+
+        // — Filipino (extended)
+        CommonFood(
+            id: "sisig", name: "Sisig",
+            aliases: ["sisig", "sizzling sisig", "pork sisig", "chicken sisig", "tofu sisig"],
+            servingLabel: "1 sizzling plate (200 g)",
+            calories: 420, proteinG: 24, carbsG: 6, fatG: 34, fiberG: 0
+        ),
+        CommonFood(
+            id: "kare-kare", name: "Kare-kare",
+            aliases: ["kare kare", "kare-kare", "oxtail peanut stew", "peanut stew filipino"],
+            servingLabel: "1 cup stew (240 g)",
+            calories: 350, proteinG: 24, carbsG: 12, fatG: 24, fiberG: 3
+        ),
+        CommonFood(
+            id: "arroz-caldo", name: "Arroz caldo",
+            aliases: ["arroz caldo", "filipino rice porridge", "lugaw", "chicken porridge filipino", "tinolang lugaw"],
+            servingLabel: "1 cup (250 g)",
+            calories: 180, proteinG: 12, carbsG: 22, fatG: 4, fiberG: 1
+        ),
+        CommonFood(
+            id: "tocino", name: "Tocino",
+            aliases: ["tocino", "filipino tocino", "sweet pork breakfast", "chicken tocino", "pork tocino"],
+            servingLabel: "3 oz grilled (85 g)",
+            calories: 240, proteinG: 16, carbsG: 12, fatG: 14, fiberG: 0
+        ),
+        CommonFood(
+            id: "longganisa", name: "Longganisa",
+            aliases: ["longganisa", "longanisa", "filipino sausage", "garlic sausage filipino", "sweet sausage philippine"],
+            servingLabel: "2 links grilled (80 g)",
+            calories: 270, proteinG: 12, carbsG: 8, fatG: 22, fiberG: 0
+        ),
+        CommonFood(
+            id: "palabok", name: "Palabok",
+            aliases: ["palabok", "pancit palabok", "noodles with shrimp sauce", "filipino palabok"],
+            servingLabel: "1 cup (200 g)",
+            calories: 310, proteinG: 14, carbsG: 42, fatG: 10, fiberG: 2
+        ),
+        CommonFood(
+            id: "bulalo", name: "Bulalo",
+            aliases: ["bulalo", "beef bulalo", "beef marrow soup", "bulalo soup"],
+            servingLabel: "1 cup broth with beef (240 g)",
+            calories: 250, proteinG: 22, carbsG: 4, fatG: 16, fiberG: 1
+        ),
+        CommonFood(
+            id: "tinola", name: "Tinola",
+            aliases: ["tinola", "chicken tinola", "tinolang manok", "ginger chicken soup filipino"],
+            servingLabel: "1 cup (240 g)",
+            calories: 155, proteinG: 16, carbsG: 8, fatG: 7, fiberG: 2
+        ),
+        CommonFood(
+            id: "giniling", name: "Giniling",
+            aliases: ["giniling", "pork giniling", "beef giniling", "ground pork stew filipino", "picadillo filipino"],
+            servingLabel: "1 cup (200 g)",
+            calories: 290, proteinG: 18, carbsG: 18, fatG: 16, fiberG: 2
+        ),
+        CommonFood(
+            id: "lomi", name: "Lomi",
+            aliases: ["lomi", "lomi batangas", "lomi noodles", "thick noodle soup filipino"],
+            servingLabel: "1 bowl (300 g)",
+            calories: 320, proteinG: 16, carbsG: 40, fatG: 10, fiberG: 2
+        ),
+
+        // — Colombian (extended)
+        CommonFood(
+            id: "bandeja-paisa", name: "Bandeja paisa",
+            aliases: ["bandeja paisa", "bandeja", "colombian platter", "paisa platter", "bandeja antioqueña"],
+            servingLabel: "1 full plate (~600 g)",
+            calories: 1050, proteinG: 52, carbsG: 92, fatG: 52, fiberG: 14
+        ),
+        CommonFood(
+            id: "sancocho", name: "Sancocho",
+            aliases: ["sancocho", "colombian sancocho", "chicken sancocho", "sancocho de pollo", "sancocho trifasico"],
+            servingLabel: "1 cup (240 g)",
+            calories: 190, proteinG: 14, carbsG: 20, fatG: 6, fiberG: 3
+        ),
+        CommonFood(
+            id: "ajiaco", name: "Ajiaco",
+            aliases: ["ajiaco", "ajiaco bogotano", "colombian chicken potato soup"],
+            servingLabel: "1 cup (240 g)",
+            calories: 210, proteinG: 16, carbsG: 22, fatG: 6, fiberG: 3
+        ),
+        CommonFood(
+            id: "changua", name: "Changua",
+            aliases: ["changua", "colombian milk soup", "egg milk soup", "colombian breakfast soup"],
+            servingLabel: "1 cup (240 g)",
+            calories: 130, proteinG: 9, carbsG: 8, fatG: 7, fiberG: 0
+        ),
+
+        // — Indian (extended)
+        CommonFood(
+            id: "tandoori-chicken", name: "Tandoori chicken",
+            aliases: ["tandoori chicken", "tandoor chicken", "murgh tandoori", "tandoori murgh"],
+            servingLabel: "3 oz cooked (85 g)",
+            calories: 175, proteinG: 24, carbsG: 4, fatG: 6, fiberG: 0
+        ),
+        CommonFood(
+            id: "aloo-gobi", name: "Aloo gobi",
+            aliases: ["aloo gobi", "potato cauliflower curry", "aloo gobi sabzi"],
+            servingLabel: "1 cup (200 g)",
+            calories: 180, proteinG: 5, carbsG: 28, fatG: 7, fiberG: 5
+        ),
+        CommonFood(
+            id: "rajma", name: "Rajma",
+            aliases: ["rajma", "kidney bean curry", "rajma masala", "rajma chawal"],
+            servingLabel: "1 cup (200 g)",
+            calories: 250, proteinG: 13, carbsG: 40, fatG: 5, fiberG: 10
+        ),
+        CommonFood(
+            id: "dosa", name: "Dosa",
+            aliases: ["dosa", "plain dosa", "dosai", "rice lentil crepe", "crispy dosa"],
+            servingLabel: "1 dosa (100 g)",
+            calories: 162, proteinG: 4, carbsG: 26, fatG: 4, fiberG: 2
+        ),
+        CommonFood(
+            id: "masala-dosa", name: "Masala dosa",
+            aliases: ["masala dosa", "potato dosa", "stuffed dosa", "masala dosai"],
+            servingLabel: "1 dosa with potato filling (250 g)",
+            calories: 330, proteinG: 8, carbsG: 52, fatG: 10, fiberG: 4
+        ),
+        CommonFood(
+            id: "idli", name: "Idli",
+            aliases: ["idli", "idly", "steamed rice cake indian", "idli sambar"],
+            servingLabel: "3 idli (150 g)",
+            calories: 170, proteinG: 5, carbsG: 32, fatG: 1, fiberG: 2
+        ),
+        CommonFood(
+            id: "chicken-korma", name: "Chicken korma",
+            aliases: ["chicken korma", "korma", "mild chicken curry", "creamy korma"],
+            servingLabel: "1 cup (240 g, no rice)",
+            calories: 390, proteinG: 28, carbsG: 14, fatG: 26, fiberG: 2
+        ),
+        CommonFood(
+            id: "chicken-vindaloo", name: "Chicken vindaloo",
+            aliases: ["chicken vindaloo", "vindaloo", "goan vindaloo", "spicy goan curry", "pork vindaloo"],
+            servingLabel: "1 cup (240 g, no rice)",
+            calories: 340, proteinG: 28, carbsG: 12, fatG: 20, fiberG: 2
+        ),
+        CommonFood(
+            id: "raita", name: "Raita",
+            aliases: ["raita", "cucumber raita", "onion raita", "boondi raita", "yogurt cucumber dip indian"],
+            servingLabel: "½ cup (113 g)",
+            calories: 65, proteinG: 4, carbsG: 7, fatG: 2, fiberG: 0
+        ),
+        CommonFood(
+            id: "gulab-jamun", name: "Gulab jamun",
+            aliases: ["gulab jamun", "gulab jaman", "indian milk dumplings", "fried milk sweet"],
+            servingLabel: "2 pieces (80 g)",
+            calories: 200, proteinG: 3, carbsG: 34, fatG: 6, fiberG: 0
+        ),
+        CommonFood(
+            id: "pav-bhaji", name: "Pav bhaji",
+            aliases: ["pav bhaji", "pav bhaaji", "bhaji pav", "mumbai street food pav", "street food bhaji"],
+            servingLabel: "1 serving with 2 pav (240 g)",
+            calories: 360, proteinG: 10, carbsG: 54, fatG: 12, fiberG: 6
+        ),
+
+        // — Nigerian / West African
+        CommonFood(
+            id: "jollof-rice", name: "Jollof rice",
+            aliases: ["jollof rice", "nigerian jollof", "ghanaian jollof", "west african jollof", "party jollof"],
+            servingLabel: "1 cup (200 g)",
+            calories: 330, proteinG: 7, carbsG: 60, fatG: 8, fiberG: 3
+        ),
+        CommonFood(
+            id: "egusi-soup", name: "Egusi soup",
+            aliases: ["egusi soup", "melon seed soup", "west african egusi", "egusi stew"],
+            servingLabel: "½ cup (120 g)",
+            calories: 290, proteinG: 16, carbsG: 8, fatG: 22, fiberG: 3
+        ),
+        CommonFood(
+            id: "suya", name: "Suya",
+            aliases: ["suya", "nigerian suya", "west african beef skewers", "spiced suya"],
+            servingLabel: "3 oz skewers (85 g)",
+            calories: 205, proteinG: 24, carbsG: 4, fatG: 10, fiberG: 1
+        ),
+        CommonFood(
+            id: "moi-moi", name: "Moi moi",
+            aliases: ["moi moi", "moin moin", "steamed bean pudding", "bean cake nigerian"],
+            servingLabel: "1 piece (150 g)",
+            calories: 170, proteinG: 10, carbsG: 18, fatG: 6, fiberG: 4
+        ),
+        CommonFood(
+            id: "fufu", name: "Fufu",
+            aliases: ["fufu", "pounded yam", "eba", "ugali", "banku", "sadza", "amala"],
+            servingLabel: "1 cup (200 g)",
+            calories: 330, proteinG: 2, carbsG: 80, fatG: 0, fiberG: 4
+        ),
+        CommonFood(
+            id: "puff-puff-nigerian", name: "Puff puff",
+            aliases: ["puff puff", "nigerian puff puff", "african fried dough balls"],
+            servingLabel: "3 pieces (75 g)",
+            calories: 260, proteinG: 4, carbsG: 32, fatG: 13, fiberG: 1
+        ),
+
+        // — Caribbean / Jamaican
+        CommonFood(
+            id: "jerk-chicken", name: "Jerk chicken",
+            aliases: ["jerk chicken", "jamaican jerk chicken", "jerk pork", "jamaican jerk"],
+            servingLabel: "3 oz cooked (85 g)",
+            calories: 195, proteinG: 24, carbsG: 4, fatG: 9, fiberG: 0
+        ),
+        CommonFood(
+            id: "curry-goat", name: "Curry goat",
+            aliases: ["curry goat", "jamaican curry goat", "goat curry", "curried goat"],
+            servingLabel: "1 cup (240 g)",
+            calories: 300, proteinG: 26, carbsG: 8, fatG: 18, fiberG: 2
+        ),
+        CommonFood(
+            id: "rice-and-peas-jamaican", name: "Rice and peas (Jamaican)",
+            aliases: ["rice and peas", "jamaican rice and peas", "coconut rice with beans", "sunday rice jamaican"],
+            servingLabel: "1 cup (200 g)",
+            calories: 280, proteinG: 7, carbsG: 50, fatG: 6, fiberG: 5
+        ),
+        CommonFood(
+            id: "ackee-saltfish", name: "Ackee and saltfish",
+            aliases: ["ackee and saltfish", "ackee saltfish", "jamaican national dish", "ackee codfish"],
+            servingLabel: "1 cup (200 g)",
+            calories: 260, proteinG: 18, carbsG: 6, fatG: 18, fiberG: 2
+        ),
+        CommonFood(
+            id: "doubles", name: "Doubles (Trinidad)",
+            aliases: ["doubles", "trinidad doubles", "bara and channa", "trini doubles"],
+            servingLabel: "2 doubles (180 g)",
+            calories: 320, proteinG: 10, carbsG: 50, fatG: 9, fiberG: 6
+        ),
+
+        // — Brazilian
+        CommonFood(
+            id: "feijoada", name: "Feijoada",
+            aliases: ["feijoada", "brazilian black bean stew", "feijoada completa"],
+            servingLabel: "1 cup (240 g)",
+            calories: 390, proteinG: 20, carbsG: 38, fatG: 16, fiberG: 8
+        ),
+        CommonFood(
+            id: "brigadeiro", name: "Brigadeiro",
+            aliases: ["brigadeiro", "brigadeiros", "chocolate truffle brazilian", "fudge ball brazilian"],
+            servingLabel: "2 pieces (40 g)",
+            calories: 150, proteinG: 2, carbsG: 22, fatG: 6, fiberG: 1
+        ),
+        CommonFood(
+            id: "coxinha", name: "Coxinha",
+            aliases: ["coxinha", "chicken croquette brazilian", "coxinha de frango"],
+            servingLabel: "1 piece (80 g)",
+            calories: 225, proteinG: 10, carbsG: 22, fatG: 12, fiberG: 1
+        ),
+        CommonFood(
+            id: "moqueca", name: "Moqueca",
+            aliases: ["moqueca", "moqueca de peixe", "brazilian fish stew", "bahian coconut fish stew"],
+            servingLabel: "1 cup (240 g)",
+            calories: 280, proteinG: 22, carbsG: 10, fatG: 18, fiberG: 2
+        ),
+        CommonFood(
+            id: "churrasco", name: "Churrasco",
+            aliases: ["churrasco", "brazilian bbq", "rodizio", "picanha", "churrasco steak"],
+            servingLabel: "3 oz (85 g)",
+            calories: 220, proteinG: 24, carbsG: 0, fatG: 13, fiberG: 0
+        ),
+
+        // — Peruvian
+        CommonFood(
+            id: "lomo-saltado", name: "Lomo saltado",
+            aliases: ["lomo saltado", "peruvian stir fry", "beef stir fry peruvian", "lomito saltado"],
+            servingLabel: "1 cup (220 g)",
+            calories: 370, proteinG: 24, carbsG: 26, fatG: 18, fiberG: 3
+        ),
+        CommonFood(
+            id: "aji-de-gallina", name: "Aji de gallina",
+            aliases: ["aji de gallina", "peruvian creamy chicken", "yellow pepper chicken stew", "ajì de gallina"],
+            servingLabel: "1 cup (240 g, no rice)",
+            calories: 340, proteinG: 26, carbsG: 20, fatG: 18, fiberG: 2
+        ),
+        CommonFood(
+            id: "causa", name: "Causa",
+            aliases: ["causa", "causa limeña", "peruvian potato terrine", "causa rellena"],
+            servingLabel: "1 serving (150 g)",
+            calories: 280, proteinG: 12, carbsG: 36, fatG: 10, fiberG: 3
+        ),
+        CommonFood(
+            id: "anticuchos", name: "Anticuchos",
+            aliases: ["anticuchos", "beef heart skewers", "peruvian grilled skewers", "anticuchos de corazon"],
+            servingLabel: "4 skewers (100 g)",
+            calories: 200, proteinG: 22, carbsG: 6, fatG: 10, fiberG: 1
+        ),
+
+        // — Moroccan / North African
+        CommonFood(
+            id: "chicken-tagine", name: "Chicken tagine",
+            aliases: ["chicken tagine", "moroccan tagine", "tagine", "lamb tagine", "moroccan stew"],
+            servingLabel: "1 cup (240 g, no couscous)",
+            calories: 310, proteinG: 28, carbsG: 18, fatG: 14, fiberG: 4
+        ),
+        CommonFood(
+            id: "harira", name: "Harira",
+            aliases: ["harira", "moroccan soup", "moroccan lentil tomato soup", "ramadan soup"],
+            servingLabel: "1 cup (240 g)",
+            calories: 145, proteinG: 9, carbsG: 22, fatG: 3, fiberG: 5
+        ),
+        CommonFood(
+            id: "shakshuka", name: "Shakshuka",
+            aliases: ["shakshuka", "shakshouka", "eggs in tomato sauce", "middle eastern baked eggs"],
+            servingLabel: "2 eggs in sauce (280 g)",
+            calories: 250, proteinG: 14, carbsG: 20, fatG: 12, fiberG: 4
+        ),
+
+        // — Vietnamese (extended)
+        CommonFood(
+            id: "bun-bo-hue", name: "Bún bò Huế",
+            aliases: ["bun bo hue", "bun bo", "spicy beef noodle soup", "hue noodle soup", "vietnamese spicy noodle"],
+            servingLabel: "1 bowl (~600 g)",
+            calories: 430, proteinG: 28, carbsG: 50, fatG: 12, fiberG: 3
+        ),
+        CommonFood(
+            id: "com-tam", name: "Cơm tấm",
+            aliases: ["com tam", "broken rice", "vietnamese broken rice", "com tam saigon", "cơm tấm"],
+            servingLabel: "1 plate (380 g, pork + egg + rice)",
+            calories: 600, proteinG: 34, carbsG: 68, fatG: 20, fiberG: 3
+        ),
+        CommonFood(
+            id: "banh-xeo", name: "Bánh xèo",
+            aliases: ["banh xeo", "sizzling crepe vietnamese", "vietnamese sizzling crepe", "crispy rice crepe"],
+            servingLabel: "1 half (150 g)",
+            calories: 275, proteinG: 12, carbsG: 28, fatG: 14, fiberG: 2
+        ),
+
+        // — Taiwanese
+        CommonFood(
+            id: "lu-rou-fan", name: "Lu rou fan",
+            aliases: ["lu rou fan", "braised pork rice", "minced pork rice bowl", "taiwanese braised pork", "taiwanese pork rice"],
+            servingLabel: "1 bowl (300 g)",
+            calories: 480, proteinG: 22, carbsG: 60, fatG: 16, fiberG: 2
+        ),
+        CommonFood(
+            id: "taiwanese-beef-noodle", name: "Taiwanese beef noodle soup",
+            aliases: ["taiwanese beef noodle soup", "beef noodle soup taiwan", "niu rou mian", "red braised beef noodle"],
+            servingLabel: "1 bowl (~600 g)",
+            calories: 520, proteinG: 30, carbsG: 62, fatG: 14, fiberG: 4
+        ),
+        CommonFood(
+            id: "scallion-pancake", name: "Scallion pancake",
+            aliases: ["scallion pancake", "cong you bing", "green onion pancake", "chinese scallion pancake", "taiwanese pancake"],
+            servingLabel: "1 pancake (100 g)",
+            calories: 270, proteinG: 5, carbsG: 34, fatG: 13, fiberG: 2
+        ),
     ]
 
     // MARK: - Snacks & Sweets
@@ -3606,6 +3987,54 @@ public enum CommonFoods {
             aliases: ["chicken bacon ranch wrap", "cbr wrap", "chicken ranch wrap", "bacon ranch chicken wrap"],
             servingLabel: "1 wrap (300 g)",
             calories: 580, proteinG: 38, carbsG: 44, fatG: 22, fiberG: 3
+        ),
+        CommonFood(
+            id: "sandwich-lobster-roll", name: "Lobster roll",
+            aliases: ["lobster roll", "maine lobster roll", "connecticut lobster roll", "new england lobster roll"],
+            servingLabel: "1 roll (180 g)",
+            calories: 400, proteinG: 22, carbsG: 36, fatG: 18, fiberG: 1
+        ),
+        CommonFood(
+            id: "sandwich-po-boy", name: "Shrimp po' boy",
+            aliases: ["po boy", "po' boy", "shrimp po boy", "oyster po boy", "new orleans po boy", "louisiana po boy"],
+            servingLabel: "1 sandwich (250 g)",
+            calories: 455, proteinG: 20, carbsG: 54, fatG: 16, fiberG: 3
+        ),
+        CommonFood(
+            id: "sandwich-french-dip", name: "French dip",
+            aliases: ["french dip", "french dip sandwich", "roast beef french dip", "au jus sandwich"],
+            servingLabel: "1 sandwich with au jus (260 g)",
+            calories: 470, proteinG: 34, carbsG: 44, fatG: 14, fiberG: 2
+        ),
+        CommonFood(
+            id: "sandwich-croque-monsieur", name: "Croque Monsieur",
+            aliases: ["croque monsieur", "croque madame", "french grilled cheese", "french ham cheese toasted"],
+            servingLabel: "1 sandwich (200 g)",
+            calories: 520, proteinG: 28, carbsG: 38, fatG: 28, fiberG: 2
+        ),
+        CommonFood(
+            id: "sandwich-monte-cristo", name: "Monte Cristo sandwich",
+            aliases: ["monte cristo", "monte cristo sandwich", "battered ham cheese sandwich", "deep fried sandwich"],
+            servingLabel: "1 sandwich (220 g)",
+            calories: 570, proteinG: 28, carbsG: 46, fatG: 28, fiberG: 2
+        ),
+        CommonFood(
+            id: "sandwich-patty-melt", name: "Patty melt",
+            aliases: ["patty melt", "beef patty melt", "patty melt on rye", "rye patty melt"],
+            servingLabel: "1 sandwich (280 g)",
+            calories: 660, proteinG: 34, carbsG: 44, fatG: 38, fiberG: 3
+        ),
+        CommonFood(
+            id: "sandwich-torta", name: "Torta",
+            aliases: ["torta", "mexican torta", "torta sandwich", "torta de milanesa", "torta ahogada"],
+            servingLabel: "1 sandwich (280 g)",
+            calories: 540, proteinG: 28, carbsG: 52, fatG: 22, fiberG: 4
+        ),
+        CommonFood(
+            id: "sandwich-katsu-sando", name: "Katsu sando",
+            aliases: ["katsu sando", "japanese katsu sandwich", "tonkatsu sandwich", "chicken katsu sandwich", "katsu sandwich"],
+            servingLabel: "1 sandwich (220 g)",
+            calories: 540, proteinG: 26, carbsG: 52, fatG: 22, fiberG: 3
         ),
         // — Deli salads (by the scoop / side)
         CommonFood(
