@@ -222,7 +222,7 @@ struct EnergyBalanceDetailSheet: View {
                 .foregroundStyle(theme.accent2)
                 .frame(width: 56, alignment: .trailing)
             Text("\(row.net >= 0 ? "+" : "")\(row.net)")
-                .font(.system(.footnote, weight: .semibold, design: .monospaced))
+                .font(.system(.footnote, design: .monospaced, weight: .semibold))
                 .foregroundStyle(row.net >= 0 ? theme.text : theme.warn)
                 .frame(width: 64, alignment: .trailing)
         }
