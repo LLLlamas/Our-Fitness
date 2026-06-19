@@ -58,6 +58,7 @@ private struct MacroRingCell: View {
     let profile: ProfileDTO
 
     @State private var showInfo = false
+    @State private var reveal: CGFloat = 0
     @Environment(\.theme) private var theme
 
     private var pct: Double {
@@ -73,7 +74,7 @@ private struct MacroRingCell: View {
     var body: some View {
         VStack(spacing: 6) {
             ZStack {
-                ProgressRing(pct: pct, color: ringColor, trackColor: theme.barBg, lineWidth: 9)
+                ProgressRing(pct: pct * Double(reveal), color: ringColor, trackColor: theme.barBg, lineWidth: 9)
                 VStack(spacing: 1) {
                     AnimatedNumber(
                         value,
@@ -113,6 +114,7 @@ private struct MacroRingCell: View {
         .background(theme.card)
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(theme.line, lineWidth: 1))
+        .revealOnAppear($reveal)
         .onChange(of: value) { old, new in
             let wasUnder = old < target * 0.9
             if wasUnder && hitTarget { Haptics.success() }

@@ -138,14 +138,14 @@ struct MoveCard: View {
                     )
                     columnSep
                     metricColumn(
-                        icon: "sum", title: "OUR ESTIMATE",
+                        icon: "sum", title: "OUR TOTAL ESTIMATE",
                         value: "\(metTotal)",
                         sub: "cal · activity estimate",
                         action: { showMetTotalInfo = true }
                     )
                     columnSep
                     metricColumn(
-                        icon: "dumbbell.fill", title: "TRAINING",
+                        icon: "dumbbell.fill", title: "TRAINING ONLY",
                         value: "\(trainingMetEstimate)",
                         sub: trainingMetEstimate > 0 ? "cal burned today" : "no sessions yet",
                         action: { showExercisesInfo = true }
@@ -256,10 +256,11 @@ struct MoveCard: View {
                         .foregroundStyle(theme.dim)
                 }
                 Text(value)
-                    .font(.system(size: 26, weight: .bold, design: .monospaced))
+                    .font(.system(size: 22, weight: .bold, design: .monospaced))
                     .foregroundStyle(theme.text)
                     .contentTransition(.numericText())
-                    .minimumScaleFactor(0.7)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.9)
                 Text(sub)
                     .font(.system(size: 10))
                     .foregroundStyle(theme.dim)
@@ -445,7 +446,7 @@ private struct MetTotalInfoSheet: View {
     let weightKg: Int
 
     var body: some View {
-        ColumnInfoScaffold(title: "our estimate.", subtitle: "MET FORMULA · ACTIVITY CALORIES") {
+        ColumnInfoScaffold(title: "our total estimate.", subtitle: "MET FORMULA · ACTIVITY CALORIES") {
 
             ColumnInfoSection(title: "Today's breakdown") {
                 VStack(spacing: 6) {
@@ -520,7 +521,7 @@ private struct ExercisesInfoSheet: View {
     }
 
     var body: some View {
-        ColumnInfoScaffold(title: "training.", subtitle: "TODAY'S BURN FROM LOGGED SESSIONS") {
+        ColumnInfoScaffold(title: "training only.", subtitle: "TODAY'S BURN FROM LOGGED SESSIONS") {
 
             // ── Today's activity ─────────────────────────────────────
             ColumnInfoSection(title: "Today's activity") {

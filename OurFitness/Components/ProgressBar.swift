@@ -17,7 +17,7 @@ public struct ProgressBar: View {
 
     @State private var lastValue: Double = 0
     @State private var flashActive: Bool = false
-    @State private var displayPct: Double = 0
+    @State private var reveal: CGFloat = 0
 
     public init(value: Double, target: Double, label: String,
                 unit: String = "", inverted: Bool = false) {
@@ -32,6 +32,10 @@ public struct ProgressBar: View {
         guard target > 0 else { return 0 }
         return min(1, value / target)
     }
+
+    /// The on-screen fill fraction: the real pct scaled by the reveal sweep, so
+    /// the bar fills from 0 every time it (re)appears.
+    private var displayPct: Double { pct * Double(reveal) }
 
     private var hitTarget: Bool {
         inverted ? value <= target : value >= target * 0.95 && value <= target * 1.05
@@ -99,19 +103,13 @@ public struct ProgressBar: View {
             .frame(height: 7)
             .clipShape(Capsule())
         }
-        .animation(.spring(response: 0.45, dampingFraction: 0.82), value: displayPct)
+        .animation(.spring(response: 0.48, dampingFraction: 0.80), value: pct)
         .animation(.easeOut(duration: 0.35), value: fillColor)
+        .revealOnAppear($reveal)
         .onAppear {
             lastValue = value
-            // Sweep in from 0 with a visible spring bounce every time
-            withAnimation(.spring(response: 0.9, dampingFraction: 0.72).delay(0.12)) {
-                displayPct = pct
-            }
         }
         .onChange(of: value) { _, newValue in
-            withAnimation(.spring(response: 0.48, dampingFraction: 0.80)) {
-                displayPct = pct
-            }
             // Flash on transition into the on-target window.
             let wasUnder = inverted ? lastValue > target : lastValue < target * 0.95
             let nowAt = hitTarget

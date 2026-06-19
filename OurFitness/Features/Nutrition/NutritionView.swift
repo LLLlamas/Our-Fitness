@@ -283,7 +283,7 @@ struct NutritionView: View {
             .themed(profile.mode)
         }
         .sheet(isPresented: $showLibrary) {
-            FoodLibrarySheet(profile: profile, targetDate: selectedDayKey) { food, slot, multiplier in
+            FoodLibrarySheet(profile: profile, targetDate: selectedDayKey, recentLogs: allLogs) { food, slot, multiplier in
                 // logCommonFood already calls prefetch internally.
                 logCommonFood(food, slot: slot, multiplier: multiplier)
             }
@@ -1466,25 +1466,49 @@ private struct SuggestionsSheet: View {
 private struct FoodLibrarySheet: View {
     let profile: ProfileDTO
     let targetDate: String
+    let recentLogs: [FoodLogEntryDTO]
     let onLog: (CommonFood, Slot, Double) -> Void
 
     @AppStorage private var favoriteIdsString: String
     @Environment(\.theme) private var theme
     @Environment(\.dismiss) private var dismiss
     @State private var query: String = ""
-    @State private var displayedResults: [CommonFood] = CommonFoods.all
+    @State private var displayedResults: [CommonFood] = []
     @State private var foodToDetail: CommonFood?
     @FocusState private var searchFocused: Bool
 
-    init(profile: ProfileDTO, targetDate: String = Dates.dayKey(), onLog: @escaping (CommonFood, Slot, Double) -> Void) {
+    init(profile: ProfileDTO, targetDate: String = Dates.dayKey(), recentLogs: [FoodLogEntryDTO] = [], onLog: @escaping (CommonFood, Slot, Double) -> Void) {
         self.profile = profile
         self.targetDate = targetDate
+        self.recentLogs = recentLogs
         self.onLog = onLog
         _favoriteIdsString = AppStorage(wrappedValue: "", "favoriteFoodIds.\(profile.id.uuidString)")
     }
 
     private var favoriteIds: Set<String> {
         Set(favoriteIdsString.split(separator: ",").map(String.init).filter { !$0.isEmpty })
+    }
+
+    /// Default (empty-query) ordering for the full curated library:
+    /// (a) favorites first, (b) then non-favorites the user actually logs
+    /// (last 30 days) by descending frequency, (c) then everything else in
+    /// `CommonFoods.all` order. Deterministic: frequency ties break by the
+    /// food's existing index, and favorites order by frequency then index.
+    private func defaultOrdered() -> [CommonFood] {
+        let favs = favoriteIds
+        let freq = FoodAffinity.frequencyByFoodId(recentLogs, days: 30)
+        let indexById: [String: Int] = Dictionary(
+            uniqueKeysWithValues: CommonFoods.all.enumerated().map { ($1.id, $0) }
+        )
+        func rank(_ food: CommonFood) -> (Int, Int, Int) {
+            let idx = indexById[food.id] ?? 0
+            let f = freq[food.id] ?? 0
+            // Bucket 0 = favorite, 1 = logged non-favorite, 2 = the rest.
+            let bucket = favs.contains(food.id) ? 0 : (f > 0 ? 1 : 2)
+            // Within a bucket: higher frequency first (negate), then existing index.
+            return (bucket, -f, idx)
+        }
+        return CommonFoods.all.sorted { rank($0) < rank($1) }
     }
 
     private func toggleFavorite(_ id: String) {
@@ -1523,12 +1547,17 @@ private struct FoodLibrarySheet: View {
                     searchField
 
                     if displayedResults.isEmpty {
-                        Text("No matches. Try a simpler term.")
-                            .font(.callout).foregroundStyle(theme.dim)
-                            .padding(.top, 8)
+                        // Empty + a real query = genuine no-match; empty + blank query
+                        // is just the pre-seed moment, so stay silent rather than flash
+                        // a misleading "No matches".
+                        if !query.trimmingCharacters(in: .whitespaces).isEmpty {
+                            Text("No matches. Try a simpler term.")
+                                .font(.callout).foregroundStyle(theme.dim)
+                                .padding(.top, 8)
+                        }
                     } else {
                         let ids = favoriteIds
-                        VStack(spacing: 8) {
+                        LazyVStack(spacing: 8) {
                             ForEach(displayedResults, id: \.id) { food in
                                 PressableCard(action: { foodToDetail = food }) {
                                     HStack(alignment: .top, spacing: 12) {
@@ -1579,6 +1608,13 @@ private struct FoodLibrarySheet: View {
         // search run, so typing never rescans 15–20k entries synchronously in `body`.
         .task(id: query) {
             let q = query
+            // Empty query → the commonly-used default ordering, computed immediately
+            // (no DB scan). This also seeds the very first render and is restored
+            // whenever the query is cleared.
+            if q.trimmingCharacters(in: .whitespaces).isEmpty {
+                displayedResults = defaultOrdered()
+                return
+            }
             try? await Task.sleep(nanoseconds: 180_000_000)   // 180 ms
             guard !Task.isCancelled else { return }
             displayedResults = Self.search(q)

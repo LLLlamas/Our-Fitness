@@ -15,9 +15,15 @@ struct ProgressTabView: View {
     @Query private var markerModels: [HealthMarkerModel]
     @Query private var stepModels: [StepCountModel]
     @Query private var setModels: [WorkoutSetModel]
+    // Energy-balance card inputs. Scoped per-profile like everything else.
+    @Query private var foodModels: [FoodLogEntryModel]
+    @Query private var cardioModels: [CardioSessionModel]
+    @Query private var pilatesModels: [PilatesSessionModel]
+    @Query private var activityModels: [ActivitySessionModel]
 
     @State private var activeStat: StatKind?
     @State private var showEditTrackers = false
+    @State private var showEnergyBalance = false
 
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
@@ -48,6 +54,23 @@ struct ProgressTabView: View {
             filter: #Predicate<WorkoutSetModel> { $0.userId == uid },
             sort: \.timestamp, order: .forward
         )
+        // Food uses userId; cardio/pilates/activities use profileId (mirrors MoveCard).
+        _foodModels = Query(
+            filter: #Predicate<FoodLogEntryModel> { $0.userId == uid },
+            sort: \.timestamp, order: .forward
+        )
+        _cardioModels = Query(
+            filter: #Predicate<CardioSessionModel> { $0.profileId == uid },
+            sort: \.date, order: .forward
+        )
+        _pilatesModels = Query(
+            filter: #Predicate<PilatesSessionModel> { $0.profileId == uid },
+            sort: \.date, order: .forward
+        )
+        _activityModels = Query(
+            filter: #Predicate<ActivitySessionModel> { $0.profileId == uid },
+            sort: \.date, order: .forward
+        )
     }
 
     // Body metrics arrive date-ascending from the query (consumers take `.last`).
@@ -55,6 +78,26 @@ struct ProgressTabView: View {
     private var markers: [HealthMarkerDTO] { markerModels.map(\.snapshot) }
     private var steps: [StepCountDTO] { stepModels.map(\.snapshot) }
     private var sets: [WorkoutSetDTO] { setModels.map(\.snapshot) }
+    private var foodLogs: [FoodLogEntryDTO] { foodModels.map(\.snapshot) }
+    private var cardio: [CardioSessionDTO] { cardioModels.map(\.snapshot) }
+    private var pilates: [PilatesSessionDTO] { pilatesModels.map(\.snapshot) }
+    private var activities: [ActivitySessionDTO] { activityModels.map(\.snapshot) }
+
+    // MARK: - Energy balance (intake vs activity burn)
+
+    private var energyRows: [EnergyBalance.DayBalance] {
+        EnergyBalance.byDay(
+            days: 30,
+            foodLogs: foodLogs, steps: steps, sets: sets,
+            cardio: cardio, pilates: pilates, activities: activities,
+            bodyWeightLb: profile.weightLb
+        )
+    }
+
+    private var targetCalories: Int { profile.computedTargets.calories }
+
+    /// Today's intake/burn for the card readout — the last (newest) row.
+    private var todayBalance: EnergyBalance.DayBalance? { energyRows.last }
 
     /// The enabled tracker set: mode defaults until the user customizes, then
     /// whatever they chose (including the empty "none" state).
@@ -114,6 +157,9 @@ struct ProgressTabView: View {
                         }
                     }
                 }
+
+                // Calorie intake vs activity burn — shown for both modes.
+                energyBalanceCard
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 18)
@@ -129,6 +175,68 @@ struct ProgressTabView: View {
                 persistEnabled(newSet)
             }
             .themed(profile.mode)
+        }
+        .sheet(isPresented: $showEnergyBalance) {
+            EnergyBalanceDetailSheet(
+                rows: energyRows,
+                targetCalories: targetCalories
+            )
+            .themed(profile.mode)
+        }
+    }
+
+    // MARK: - Energy balance card
+
+    @ViewBuilder
+    private var energyBalanceCard: some View {
+        let intake = todayBalance?.intake ?? 0
+        let burned = todayBalance?.burned ?? 0
+        PressableCard(action: { showEnergyBalance = true }) {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(spacing: 6) {
+                    Label("Energy Balance", systemImage: "fork.knife")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(theme.accent)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(theme.dim)
+                }
+
+                // Intake-vs-target bar inherits the reveal animation.
+                ProgressBar(
+                    value: Double(intake),
+                    target: Double(max(targetCalories, 1)),
+                    label: "Calories in",
+                    unit: " cal"
+                )
+
+                HStack(alignment: .firstTextBaseline, spacing: 16) {
+                    metric(label: "TARGET", value: targetCalories, accent: theme.text)
+                    metric(label: "BURNED", value: burned, accent: theme.accent2)
+                    Spacer()
+                    Text("today · tap for trend")
+                        .font(.system(size: 10))
+                        .foregroundStyle(theme.dim)
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func metric(label: String, value: Int, accent: Color) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(label)
+                .font(.system(size: 9, weight: .semibold)).tracking(1.2)
+                .foregroundStyle(theme.dim)
+            HStack(alignment: .firstTextBaseline, spacing: 3) {
+                Text("\(value)")
+                    .font(.system(size: 18, weight: .bold, design: .monospaced))
+                    .foregroundStyle(accent)
+                Text("cal")
+                    .font(.system(size: 9))
+                    .foregroundStyle(theme.dim)
+            }
         }
     }
 

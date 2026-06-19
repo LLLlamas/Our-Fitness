@@ -69,6 +69,7 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | **Nutrition** | |
 | Food parser (NL → macros) | `Domain/FoodParser.swift` + `Domain/CommonFoods.swift` + `Domain/SQLiteFoodDatabase.swift`. Keystroke = curated only; submit = full USDA DB |
 | Add / update curated food | `Domain/CommonFoods.swift` category arrays — aliases drive matching; curated shadows USDA DB |
+| Food library browse (lazy + sort) | `Features/Nutrition/NutritionView.swift` → `FoodLibrarySheet` — `LazyVStack` row list; empty-query default ordered favorites → `FoodAffinity.frequencyByFoodId` (30-day) → rest (`defaultOrdered()`); pass `recentLogs: allLogs` from `NutritionView` |
 | AI meal parser | `Services/MealParseService.swift` (iOS 26+; text-only model; numbers from DB) |
 | Camera food label scanner | `Features/Nutrition/CameraFoodLogSheet.swift` (iOS 17+ VisionKit, iOS 26+ AI) |
 | AI food alternatives | `Services/FoodAlternativeService.swift` (iOS 26+; prefetch after every log) |
@@ -84,7 +85,7 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | Calorie math | `Domain/Targets.swift` only |
 | Target rationale copy | `Domain/TargetRationale.swift` (spell out acronyms; "cal" not "kcal"); Circuit micro copy `fiberWhy`/`sodiumWhy`/`addedSugarWhy`/`saturatedFatWhy(for:)` (used by `HeartHealthCard` info sheet) |
 | **Today / Steps** | |
-| Move card (3 cols) | `Features/Today/MoveCard.swift` — Apple Energy, Exercises MET, Heart Rate. `activityRow(kcal:)` takes `Int` |
+| Move card (2×3 cols) | `Features/Today/MoveCard.swift` — row 1: Apple Total · Our Total Estimate · Training Only; row 2: Distance · Flights · Heart Rate. Single `metricColumn` helper (uniform 22pt value font, no differential shrink). `activityRow(kcal:)` takes `Int` |
 | Steps (Build) | `Features/Today/StepsCard.swift` |
 | Steps + cardio (Circuit) | `Features/Workouts/Circuit/StepsCardioCard.swift` |
 | Water tracker (Sip preset + day-streak) | `Domain/Water.swift` (4 oz "Sip" cup preset; `streak(_:goalFlOz:end:)`) + `Features/Today/WaterCard.swift` (`AppStorage "waterGoalFlOz.\(profileId)"`; streak chip; `GlassIcon` `.sip` size) |
@@ -96,6 +97,7 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | Add health marker kind | `Domain/Models.swift` (`HealthMarkerKind`) + `Domain/HealthRanges.swift` (exhaustive switches) + `Features/Progress/ProgressView.swift` |
 | Show/hide trackers | `Features/Progress/EditTrackersSheet.swift` — `AppStorage "progressStats.\(profileId)"` |
 | Training volume | `Features/Progress/ProgressView.swift` → `StatKind.trainingVolume` |
+| Calorie intake vs activity burn | `Domain/EnergyBalance.swift` → `byDay(...)` / `averages(_:)` (intake = `DailyTotals`; burn = `DailyBurn.metEstimate`, walks excluded). Card `energyBalanceCard` (both modes) in `Features/Progress/ProgressView.swift` → detail `Features/Progress/EnergyBalanceDetailSheet.swift` (Charts: intake bars vs burn line + target rule). Tests: `OurFitnessTests/EnergyBalanceTests.swift` |
 | **Settings / Profile** | |
 | Edit vitals | `Repos.updateVitals` + `Features/Settings/SettingsView.swift` → `EditVitalsSheet` |
 | Switch mode | `Repos.updateMode` + `Features/Settings/SettingsView.swift` → `ModeSwitchSheet` |
@@ -108,6 +110,7 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | **UI / Components** | |
 | Button variants (5 total) | `Components/TactileButtonStyle.swift` — never add a 6th |
 | Circular progress | `Components/ProgressRing.swift` — never inline `Circle().trim` |
+| Progress-fill replay (sweep from 0 on every appear) | `Components/VisibilityReveal.swift` → `RevealOnAppear` / `.revealOnAppear($reveal)` — resets to 0 on scroll-out / tab-leave, springs to full on re-entry. Used by `ProgressBar` + `MacroQuadGrid` rings (multiply `pct * reveal`) |
 | Haptics | `Services/Haptics.swift` |
 | Toast | `Services/ToastCenter.swift` + `Components/ToastView.swift` |
 | Scroll haptics | `Services/Haptics.swift` → `.scrollHapticTicks()` on top-level tab `ScrollView`s |
