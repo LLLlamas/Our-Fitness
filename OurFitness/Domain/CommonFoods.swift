@@ -319,6 +319,156 @@ public enum CommonFoods {
             servingLabel: "3 pieces (60 g)",
             calories: 190, proteinG: 5, carbsG: 26, fatG: 8, fiberG: 0
         ),
+
+        // — Breakfast cereals — values from box nutrition labels
+        CommonFood(
+            id: "cereal-cheerios", name: "Cheerios",
+            aliases: ["cheerios", "plain cheerios", "original cheerios"],
+            servingLabel: "1 cup (28 g) dry",
+            calories: 100, proteinG: 3, carbsG: 20, fatG: 2, fiberG: 3
+        ),
+        CommonFood(
+            id: "cereal-honey-nut-cheerios", name: "Honey Nut Cheerios",
+            aliases: ["honey nut cheerios", "honey cheerios", "hn cheerios"],
+            servingLabel: "¾ cup (28 g) dry",
+            calories: 110, proteinG: 2, carbsG: 22, fatG: 2, fiberG: 2
+        ),
+        CommonFood(
+            id: "cereal-frosted-flakes", name: "Frosted Flakes",
+            aliases: ["frosted flakes", "kelloggs frosted flakes", "tony the tiger cereal"],
+            servingLabel: "¾ cup (30 g) dry",
+            calories: 130, proteinG: 1, carbsG: 30, fatG: 0, fiberG: 1
+        ),
+        CommonFood(
+            id: "cereal-corn-flakes", name: "Corn Flakes",
+            aliases: ["corn flakes", "kelloggs corn flakes", "cornflakes"],
+            servingLabel: "1 cup (28 g) dry",
+            calories: 100, proteinG: 2, carbsG: 24, fatG: 0, fiberG: 1
+        ),
+        CommonFood(
+            id: "cereal-special-k", name: "Special K",
+            aliases: ["special k", "special k cereal", "kelloggs special k"],
+            servingLabel: "1 cup (31 g) dry",
+            calories: 120, proteinG: 6, carbsG: 22, fatG: 1, fiberG: 1
+        ),
+        CommonFood(
+            id: "cereal-cinnamon-toast-crunch", name: "Cinnamon Toast Crunch",
+            aliases: ["cinnamon toast crunch", "ctc cereal", "cinnamon crunch"],
+            servingLabel: "¾ cup (31 g) dry",
+            calories: 130, proteinG: 2, carbsG: 25, fatG: 3, fiberG: 1
+        ),
+        CommonFood(
+            id: "cereal-lucky-charms", name: "Lucky Charms",
+            aliases: ["lucky charms", "lucky charms cereal"],
+            servingLabel: "¾ cup (27 g) dry",
+            calories: 110, proteinG: 2, carbsG: 22, fatG: 1, fiberG: 2
+        ),
+        CommonFood(
+            id: "cereal-frosted-mini-wheats", name: "Frosted Mini-Wheats",
+            aliases: ["frosted mini wheats", "mini wheats", "mini-wheats"],
+            servingLabel: "24 biscuits (59 g) dry",
+            calories: 200, proteinG: 5, carbsG: 47, fatG: 1, fiberG: 6
+        ),
+        CommonFood(
+            id: "cereal-raisin-bran", name: "Raisin Bran",
+            aliases: ["raisin bran", "kelloggs raisin bran", "raisin bran cereal"],
+            servingLabel: "1 cup (59 g) dry",
+            calories: 190, proteinG: 5, carbsG: 46, fatG: 1, fiberG: 7
+        ),
+        CommonFood(
+            id: "cereal-capn-crunch", name: "Cap'n Crunch",
+            aliases: ["cap n crunch", "captain crunch", "capn crunch", "crunch berries"],
+            servingLabel: "¾ cup (27 g) dry",
+            calories: 110, proteinG: 1, carbsG: 23, fatG: 2, fiberG: 1
+        ),
+        CommonFood(
+            id: "cereal-froot-loops", name: "Froot Loops",
+            aliases: ["froot loops", "fruit loops", "kelloggs froot loops"],
+            servingLabel: "1 cup (29 g) dry",
+            calories: 110, proteinG: 1, carbsG: 25, fatG: 1, fiberG: 3
+        ),
+        CommonFood(
+            id: "eggo-waffle", name: "Eggo frozen waffles",
+            // Kellogg's Eggo Homestyle waffles label
+            aliases: ["eggo", "eggo waffle", "eggo waffles", "frozen waffle", "toaster waffle", "leggo my eggo"],
+            servingLabel: "2 waffles (70 g)",
+            calories: 180, proteinG: 4, carbsG: 30, fatG: 5, fiberG: 1
+        ),
+        CommonFood(
+            id: "instant-oatmeal-packet", name: "Instant oatmeal packet",
+            // Quaker Original instant oatmeal
+            aliases: ["instant oatmeal", "quaker oatmeal", "oatmeal packet", "maple brown sugar oatmeal", "oatmeal instant"],
+            servingLabel: "1 packet (28 g dry)",
+            calories: 100, proteinG: 4, carbsG: 19, fatG: 2, fiberG: 3
+        ),
+        CommonFood(
+            id: "arroz-con-coco", name: "Arroz con coco",
+            aliases: ["arroz con coco", "colombian coconut rice", "coconut rice caribbean colombian", "arroz de coco titote"],
+            servingLabel: "1 cup (180 g)",
+            calories: 330, proteinG: 5, carbsG: 50, fatG: 12, fiberG: 2
+        ),
+        CommonFood(
+            id: "mazamorra-antioquena", name: "Mazamorra antioqueña",
+            aliases: ["mazamorra antioquena", "colombian corn milk pudding", "mazamorra paisa", "hominy milk dessert colombian"],
+            servingLabel: "1 bowl (250 g)",
+            calories: 200, proteinG: 7, carbsG: 35, fatG: 4, fiberG: 2
+        ),
+        CommonFood(
+            id: "bunuelo-colombiano", name: "Buñuelo colombiano",
+            aliases: ["bunuelo colombiano", "colombian cheese fritter", "bunuelo de navidad", "fried cheese dough ball colombian"],
+            servingLabel: "1 buñuelo (50 g)",
+            calories: 190, proteinG: 5, carbsG: 18, fatG: 11, fiberG: 1
+        ),
+        CommonFood(
+            id: "almojabana", name: "Almojábana",
+            aliases: ["almojabana", "colombian cheese bread roll", "almojabanas", "cheese cornmeal roll colombian"],
+            servingLabel: "1 roll (70 g)",
+            calories: 210, proteinG: 7, carbsG: 25, fatG: 9, fiberG: 1
+        ),
+        CommonFood(
+            id: "pandeyuca", name: "Pandeyuca",
+            aliases: ["pandeyuca", "colombian cassava cheese bread", "pan de yuca colombiano", "yuca starch cheese roll"],
+            servingLabel: "1 roll (45 g)",
+            calories: 150, proteinG: 4, carbsG: 16, fatG: 7, fiberG: 1
+        ),
+        CommonFood(
+            id: "roscon-bogotano", name: "Roscón bogotano",
+            aliases: ["roscon bogotano", "colombian guava pastry", "roscon de arequipe", "guava filled bread ring colombian"],
+            servingLabel: "1 roscón (110 g)",
+            calories: 340, proteinG: 7, carbsG: 56, fatG: 10, fiberG: 2
+        ),
+        CommonFood(
+            id: "ensaymada", name: "Ensaymada",
+            aliases: ["filipino sweet bread", "ensaymada cheese", "buttery brioche roll filipino", "sugar cheese pastry"],
+            servingLabel: "1 piece (90 g)",
+            calories: 330, proteinG: 6, carbsG: 40, fatG: 16, fiberG: 1
+        ),
+        CommonFood(
+            id: "pandesal", name: "Pandesal",
+            aliases: ["filipino bread rolls", "pan de sal", "breakfast salt bread", "pinoy dinner rolls"],
+            servingLabel: "2 pieces (70 g)",
+            calories: 150, proteinG: 4, carbsG: 28, fatG: 2, fiberG: 1
+        ),
+        CommonFood(
+            id: "spanish-bread", name: "Spanish bread",
+            aliases: ["filipino spanish bread", "sweet butter roll filipino", "senorita bread", "breadcrumb filled roll"],
+            servingLabel: "1 piece (60 g)",
+            calories: 220, proteinG: 4, carbsG: 32, fatG: 8, fiberG: 1
+        ),
+        CommonFood(
+            id: "instant-grits", name: "Grits (instant)",
+            // Quaker official
+            aliases: ["instant grits", "quaker grits packet", "cooked grits"],
+            servingLabel: "1 packet prepared (28 g dry)",
+            calories: 100, proteinG: 2, carbsG: 22, fatG: 0, fiberG: 1
+        ),
+        CommonFood(
+            id: "cream-of-wheat", name: "Cream of Wheat (instant)",
+            // Cream of Wheat official
+            aliases: ["cream of wheat", "instant farina", "cream of wheat packet"],
+            servingLabel: "1 packet prepared (33 g)",
+            calories: 130, proteinG: 4, carbsG: 28, fatG: 0, fiberG: 1
+        ),
     ]
 
     // MARK: - Proteins
@@ -582,6 +732,96 @@ public enum CommonFoods {
             servingLabel: "3 oz (85 g)",
             calories: 216, proteinG: 20, carbsG: 1, fatG: 14, fiberG: 0
         ),
+        CommonFood(
+            id: "chicharron-colombiano", name: "Chicharrón colombiano",
+            aliases: ["chicharron colombiano", "colombian fried pork belly", "chicharron paisa", "crispy pork belly colombian"],
+            servingLabel: "1 piece (90 g)",
+            calories: 420, proteinG: 22, carbsG: 0, fatG: 37, fiberG: 0
+        ),
+        CommonFood(
+            id: "tyson-chicken-nuggets", name: "Frozen chicken nuggets (Tyson, 5)",
+            // Tyson official
+            aliases: ["tyson chicken nuggets", "frozen chicken nuggets", "breaded chicken nuggets"],
+            servingLabel: "5 nuggets (85 g)",
+            calories: 270, proteinG: 13, carbsG: 15, fatG: 17, fiberG: 1
+        ),
+        CommonFood(
+            id: "fish-sticks-frozen", name: "Fish sticks (6)",
+            // Gorton's official
+            aliases: ["fish sticks", "frozen fish sticks", "breaded fish sticks", "gorton's fish sticks"],
+            servingLabel: "6 sticks (114 g)",
+            calories: 290, proteinG: 13, carbsG: 20, fatG: 16, fiberG: 1
+        ),
+        CommonFood(
+            id: "vienna-sausages-can", name: "Vienna sausages (can)",
+            // Libby's official
+            aliases: ["vienna sausages", "canned vienna sausage", "libby's vienna sausages"],
+            servingLabel: "1 can (130 g)",
+            calories: 230, proteinG: 9, carbsG: 2, fatG: 21, fiberG: 0
+        ),
+        CommonFood(
+            id: "jimmy-dean-sausage-links", name: "Jimmy Dean breakfast sausage links (2)",
+            // Jimmy Dean official
+            aliases: ["jimmy dean sausage links", "breakfast sausage links", "pork breakfast links"],
+            servingLabel: "2 links (45 g)",
+            calories: 170, proteinG: 7, carbsG: 1, fatG: 15, fiberG: 0
+        ),
+        CommonFood(
+            id: "bologna", name: "Bologna",
+            // USDA FDC #174625
+            aliases: ["beef bologna", "baloney slices", "bologna deli meat", "pork bologna"],
+            servingLabel: "1 oz slice (28 g)",
+            calories: 88, proteinG: 3, carbsG: 1, fatG: 8, fiberG: 0
+        ),
+        CommonFood(
+            id: "mortadella", name: "Mortadella",
+            // USDA FDC #172846
+            aliases: ["italian mortadella", "mortadella deli", "bologna with pistachios"],
+            servingLabel: "2 oz (57 g)",
+            calories: 200, proteinG: 8, carbsG: 2, fatG: 18, fiberG: 0
+        ),
+        CommonFood(
+            id: "capicola", name: "Capicola",
+            // Boar's Head official
+            aliases: ["capocollo deli", "hot capicola", "coppa cured pork", "gabagool"],
+            servingLabel: "1 oz (28 g)",
+            calories: 60, proteinG: 8, carbsG: 0, fatG: 3, fiberG: 0
+        ),
+        CommonFood(
+            id: "prosciutto", name: "Prosciutto",
+            // USDA FDC #168334
+            aliases: ["prosciutto di parma", "italian dry cured ham", "prosciutto crudo"],
+            servingLabel: "1 oz (28 g)",
+            calories: 70, proteinG: 8, carbsG: 0, fatG: 4, fiberG: 0
+        ),
+        CommonFood(
+            id: "roast-turkey-breast-deli", name: "Roast turkey breast (deli)",
+            // Boar's Head official
+            aliases: ["oven roasted turkey breast", "roasted deli turkey", "low sodium turkey breast"],
+            servingLabel: "2 oz (57 g)",
+            calories: 50, proteinG: 10, carbsG: 1, fatG: 1, fiberG: 0
+        ),
+        CommonFood(
+            id: "honey-ham-deli", name: "Honey ham (deli)",
+            // Boar's Head official
+            aliases: ["honey baked ham deli", "sweet sliced ham", "honey glazed deli ham"],
+            servingLabel: "2 oz (57 g)",
+            calories: 70, proteinG: 10, carbsG: 3, fatG: 2, fiberG: 0
+        ),
+        CommonFood(
+            id: "genoa-salami", name: "Genoa salami",
+            // USDA FDC #172847
+            aliases: ["genoa hard salami", "italian dry salami", "genoa deli salami"],
+            servingLabel: "1 oz (28 g)",
+            calories: 110, proteinG: 6, carbsG: 1, fatG: 9, fiberG: 0
+        ),
+        CommonFood(
+            id: "liverwurst", name: "Liverwurst",
+            // USDA FDC #167537
+            aliases: ["braunschweiger spread", "liver sausage", "pork liverwurst"],
+            servingLabel: "1 oz (28 g)",
+            calories: 92, proteinG: 4, carbsG: 1, fatG: 8, fiberG: 0
+        ),
     ]
 
     // MARK: - Eggs & Dairy
@@ -739,6 +979,76 @@ public enum CommonFoods {
             aliases: ["half and half", "half & half", "creamer"],
             servingLabel: "2 tbsp (30 ml)",
             calories: 39, proteinG: 1, carbsG: 1, fatG: 3, fiberG: 0
+        ),
+        CommonFood(
+            id: "yoplait-yogurt-cup", name: "Yoplait yogurt cup",
+            // Yoplait official
+            aliases: ["yoplait original", "yoplait strawberry yogurt", "yoplait cup"],
+            servingLabel: "1 cup (170 g)",
+            calories: 150, proteinG: 5, carbsG: 25, fatG: 2, fiberG: 0
+        ),
+        CommonFood(
+            id: "chobani-flip-yogurt", name: "Chobani Flip yogurt",
+            // Chobani official
+            aliases: ["chobani flip", "flip yogurt cup", "chobani greek flip"],
+            servingLabel: "1 cup (149 g)",
+            calories: 220, proteinG: 12, carbsG: 32, fatG: 5, fiberG: 1
+        ),
+        CommonFood(
+            id: "kraft-american-single", name: "Kraft American single",
+            // Kraft official
+            aliases: ["kraft american single", "american cheese slice", "kraft cheese single", "processed cheese slice"],
+            servingLabel: "1 slice (21 g)",
+            calories: 60, proteinG: 3, carbsG: 2, fatG: 4, fiberG: 0
+        ),
+        CommonFood(
+            id: "provolone", name: "Provolone",
+            // USDA FDC #173430
+            aliases: ["provolone cheese slice", "sharp provolone", "aged provolone"],
+            servingLabel: "1 oz slice (28 g)",
+            calories: 100, proteinG: 7, carbsG: 1, fatG: 8, fiberG: 0
+        ),
+        CommonFood(
+            id: "pepper-jack", name: "Pepper jack cheese",
+            // Tillamook official
+            aliases: ["pepper jack slice", "monterey pepper jack", "spicy jack cheese"],
+            servingLabel: "1 oz slice (28 g)",
+            calories: 110, proteinG: 6, carbsG: 1, fatG: 9, fiberG: 0
+        ),
+        CommonFood(
+            id: "muenster", name: "Muenster cheese",
+            // USDA FDC #173427
+            aliases: ["muenster slice", "munster cheese", "deli muenster"],
+            servingLabel: "1 oz slice (28 g)",
+            calories: 100, proteinG: 7, carbsG: 0, fatG: 8, fiberG: 0
+        ),
+        CommonFood(
+            id: "gouda-slice", name: "Gouda cheese slice",
+            // USDA FDC #173420
+            aliases: ["smoked gouda slice", "gouda deli cheese", "aged gouda"],
+            servingLabel: "1 oz slice (28 g)",
+            calories: 101, proteinG: 7, carbsG: 1, fatG: 8, fiberG: 0
+        ),
+        CommonFood(
+            id: "havarti", name: "Havarti cheese",
+            // Boar's Head official
+            aliases: ["dill havarti", "creamy havarti slice", "danish havarti"],
+            servingLabel: "1 oz slice (28 g)",
+            calories: 105, proteinG: 6, carbsG: 0, fatG: 9, fiberG: 0
+        ),
+        CommonFood(
+            id: "american-cheese-slice", name: "American cheese slice",
+            // Kraft Singles official
+            aliases: ["american cheese single", "processed american slice", "yellow american cheese"],
+            servingLabel: "1 slice (21 g)",
+            calories: 60, proteinG: 3, carbsG: 2, fatG: 4, fiberG: 0
+        ),
+        CommonFood(
+            id: "colby-jack", name: "Colby jack cheese",
+            // Tillamook official
+            aliases: ["colby jack slice", "co jack cheese", "marbled colby monterey"],
+            servingLabel: "1 oz (28 g)",
+            calories: 110, proteinG: 7, carbsG: 1, fatG: 9, fiberG: 0
         ),
     ]
 
@@ -1192,6 +1502,20 @@ public enum CommonFoods {
             aliases: ["tangerine", "mandarin", "clementine", "mandarin orange"],
             servingLabel: "1 medium (88 g)",
             calories: 47, proteinG: 1, carbsG: 12, fatG: 0, fiberG: 2
+        ),
+        CommonFood(
+            id: "motts-applesauce-cup", name: "Applesauce cup (Mott's)",
+            // Mott's official
+            aliases: ["motts applesauce cup", "unsweetened applesauce cup", "mott's natural applesauce"],
+            servingLabel: "1 cup (113 g)",
+            calories: 50, proteinG: 0, carbsG: 13, fatG: 0, fiberG: 1
+        ),
+        CommonFood(
+            id: "fruit-cup-in-juice", name: "Fruit cup (in juice)",
+            // Dole official
+            aliases: ["fruit cup in juice", "diced peaches cup", "dole fruit cup", "mixed fruit cup"],
+            servingLabel: "1 cup (113 g)",
+            calories: 60, proteinG: 0, carbsG: 15, fatG: 0, fiberG: 1
         ),
     ]
 
@@ -1665,6 +1989,293 @@ public enum CommonFoods {
             servingLabel: "5 oz glass (147 ml)",
             calories: 121, proteinG: 0, carbsG: 5, fatG: 0, fiberG: 0
         ),
+
+        // — Energy & functional drinks —
+        CommonFood(
+            id: "celsius-drink", name: "Celsius energy drink",
+            // Celsius official label (original sparkling)
+            aliases: ["celsius", "celsius energy drink", "celsius sparkling"],
+            servingLabel: "12 oz can",
+            calories: 10, proteinG: 0, carbsG: 2, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "bang-energy", name: "Bang energy drink",
+            aliases: ["bang energy", "bang drink", "bang"],
+            servingLabel: "16 oz can",
+            calories: 0, proteinG: 0, carbsG: 0, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "prime-hydration", name: "Prime hydration drink",
+            // Prime official label
+            aliases: ["prime drink", "prime hydration", "prime"],
+            servingLabel: "16.9 oz bottle",
+            calories: 20, proteinG: 0, carbsG: 5, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "liquid-iv", name: "Liquid IV electrolyte packet",
+            // Liquid I.V. official label (lemon lime)
+            aliases: ["liquid iv", "liquid i.v.", "electrolyte packet", "hydration multiplier"],
+            servingLabel: "1 packet mixed in 16 oz water",
+            calories: 45, proteinG: 0, carbsG: 11, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "propel-water", name: "Propel fitness water",
+            aliases: ["propel", "propel water", "propel electrolyte water"],
+            servingLabel: "16.9 oz bottle",
+            calories: 10, proteinG: 0, carbsG: 3, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "body-armor", name: "Body Armor sports drink",
+            // Body Armor official label (fruit punch)
+            aliases: ["bodyarmor", "body armor", "body armor sports drink"],
+            servingLabel: "16 oz bottle",
+            calories: 120, proteinG: 0, carbsG: 30, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "gatorade-zero", name: "Gatorade Zero",
+            aliases: ["gatorade zero", "g zero", "gatorade zero sugar"],
+            servingLabel: "20 oz bottle",
+            calories: 10, proteinG: 0, carbsG: 2, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "arizona-iced-tea", name: "Arizona iced tea",
+            // Arizona Beverages official: 23.5 oz can = 270 cal
+            aliases: ["arizona iced tea", "arizona tea", "arizona green tea", "arizona sweet tea"],
+            servingLabel: "23.5 oz can",
+            calories: 270, proteinG: 0, carbsG: 73, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "snapple-iced-tea", name: "Snapple iced tea",
+            // Snapple lemon tea, 16 oz bottle
+            aliases: ["snapple", "snapple iced tea", "snapple lemon tea", "snapple peach tea"],
+            servingLabel: "16 oz bottle",
+            calories: 160, proteinG: 0, carbsG: 39, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "vitamin-water", name: "Vitaminwater",
+            // Vitaminwater, generic 20 oz
+            aliases: ["vitamin water", "vitaminwater", "vitamin water xxx", "vitamin water energy"],
+            servingLabel: "20 oz bottle",
+            calories: 120, proteinG: 0, carbsG: 32, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "gold-peak-sweet-tea", name: "Gold Peak sweet tea",
+            // Gold Peak official: 18.5 oz bottle
+            aliases: ["gold peak", "gold peak sweet tea", "gold peak tea"],
+            servingLabel: "18.5 oz bottle",
+            calories: 160, proteinG: 0, carbsG: 44, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "olipop-soda", name: "Olipop soda",
+            // Olipop official: vintage cola, 12 oz
+            aliases: ["olipop", "olipop soda", "olipop cola", "olipop prebiotic soda"],
+            servingLabel: "12 oz can",
+            calories: 35, proteinG: 0, carbsG: 13, fatG: 0, fiberG: 9
+        ),
+        CommonFood(
+            id: "dunkin-iced-coffee", name: "Dunkin' iced coffee",
+            // Dunkin' medium iced coffee with cream & sugar
+            aliases: ["dunkin iced coffee", "dunkin coffee", "dunkin donuts iced coffee", "dd iced coffee"],
+            servingLabel: "Medium (24 oz) with cream & sugar",
+            calories: 260, proteinG: 3, carbsG: 51, fatG: 6, fiberG: 0
+        ),
+        CommonFood(
+            id: "tinto-colombian-coffee", name: "Tinto (Colombian Black Coffee)",
+            aliases: ["tinto colombiano", "colombian black coffee", "tinto cafe"],
+            servingLabel: "1 cup (240 ml)",
+            calories: 5, proteinG: 0, carbsG: 1, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "agua-de-panela", name: "Agua de Panela",
+            aliases: ["agua de panela", "colombian cane sugar drink", "aguapanela"],
+            servingLabel: "1 cup (240 ml)",
+            calories: 70, proteinG: 0, carbsG: 18, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "chocolate-santafereno", name: "Chocolate Santafereño",
+            aliases: ["chocolate santafereno", "colombian hot chocolate with cheese", "chocolate caliente colombiano"],
+            servingLabel: "1 cup (240 ml)",
+            calories: 190, proteinG: 6, carbsG: 22, fatG: 9, fiberG: 2
+        ),
+        CommonFood(
+            id: "avena-colombiana", name: "Avena Colombiana (Oat Drink)",
+            aliases: ["avena colombiana", "colombian oatmeal drink", "avena en agua"],
+            servingLabel: "1 cup (240 ml)",
+            calories: 150, proteinG: 5, carbsG: 27, fatG: 3, fiberG: 2
+        ),
+        CommonFood(
+            id: "masato-colombiano", name: "Masato",
+            aliases: ["masato colombiano", "colombian fermented rice drink", "masato de arroz"],
+            servingLabel: "1 cup (240 ml)",
+            calories: 130, proteinG: 2, carbsG: 30, fatG: 0, fiberG: 1
+        ),
+        CommonFood(
+            id: "champus-colombiano", name: "Champús",
+            aliases: ["champus colombiano", "colombian corn fruit drink", "champus valluno"],
+            servingLabel: "1 cup (240 ml)",
+            calories: 160, proteinG: 1, carbsG: 40, fatG: 0, fiberG: 2
+        ),
+        CommonFood(
+            id: "lulada-colombiana", name: "Lulada",
+            aliases: ["lulada colombiana", "colombian lulo drink", "lulada del valle"],
+            servingLabel: "1 glass (300 ml)",
+            calories: 140, proteinG: 1, carbsG: 35, fatG: 0, fiberG: 2
+        ),
+        CommonFood(
+            id: "salpicon-colombiano", name: "Salpicón Colombiano",
+            aliases: ["salpicon colombiano", "colombian fruit punch drink", "salpicon de frutas"],
+            servingLabel: "1 cup (240 ml)",
+            calories: 130, proteinG: 1, carbsG: 33, fatG: 0, fiberG: 2
+        ),
+        CommonFood(
+            id: "pony-malta", name: "Pony Malta",
+            // Bavaria official
+            aliases: ["pony malta", "colombian malt soda", "ponymalta bavaria"],
+            servingLabel: "1 bottle (330 ml)",
+            calories: 200, proteinG: 1, carbsG: 48, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "colombiana-soda", name: "Colombiana Soda",
+            // Postobón official
+            aliases: ["colombiana soda", "kola colombiana", "colombian cream soda"],
+            servingLabel: "12 oz can (355 ml)",
+            calories: 170, proteinG: 0, carbsG: 44, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "jugo-de-lulo", name: "Jugo de Lulo",
+            aliases: ["jugo de lulo", "colombian lulo juice", "lulo naranjilla juice"],
+            servingLabel: "1 cup (240 ml)",
+            calories: 110, proteinG: 1, carbsG: 27, fatG: 0, fiberG: 1
+        ),
+        CommonFood(
+            id: "jugo-de-maracuya", name: "Jugo de Maracuyá",
+            aliases: ["jugo de maracuya", "colombian passion fruit juice", "maracuya juice"],
+            servingLabel: "1 cup (240 ml)",
+            calories: 130, proteinG: 1, carbsG: 32, fatG: 0, fiberG: 1
+        ),
+        CommonFood(
+            id: "refajo-colombiano", name: "Refajo",
+            // alcoholic; ethanol calories not in macros
+            aliases: ["refajo colombiano", "colombiana and beer mix", "refajo bavaria"],
+            servingLabel: "12 oz mix (355 ml)",
+            calories: 150, proteinG: 1, carbsG: 22, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "calamansi-juice", name: "Calamansi juice",
+            aliases: ["calamansi drink", "philippine lime juice", "kalamansi juice", "filipino citrus juice"],
+            servingLabel: "12 oz (355 ml)",
+            calories: 120, proteinG: 0, carbsG: 30, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "sagot-gulaman", name: "Sago't gulaman",
+            aliases: ["sago gulaman drink", "gulaman at sago", "filipino jelly tapioca drink", "arnibal pearl drink"],
+            servingLabel: "16 oz (475 ml)",
+            calories: 200, proteinG: 0, carbsG: 50, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "buko-juice", name: "Fresh buko juice",
+            aliases: ["young coconut water filipino", "fresh coconut juice", "buko water", "filipino coconut drink"],
+            servingLabel: "12 oz (355 ml)",
+            calories: 80, proteinG: 1, carbsG: 19, fatG: 0, fiberG: 2
+        ),
+        CommonFood(
+            id: "gatorade-fruit-punch", name: "Gatorade fruit punch",
+            // Gatorade official
+            aliases: ["gatorade fruit punch", "fruit punch sports drink", "gatorade thirst quencher"],
+            servingLabel: "20 fl oz bottle (591 ml)",
+            calories: 140, proteinG: 0, carbsG: 36, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "powerade-mountain-berry", name: "Powerade Mountain Berry Blast",
+            // Powerade official
+            aliases: ["powerade mountain berry blast", "powerade blue", "powerade berry blast"],
+            servingLabel: "20 fl oz bottle (591 ml)",
+            calories: 130, proteinG: 0, carbsG: 35, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "naked-green-machine", name: "Naked Green Machine",
+            // Naked Juice official
+            aliases: ["naked green machine", "green machine smoothie", "naked juice green"],
+            servingLabel: "15.2 fl oz bottle (450 ml)",
+            calories: 270, proteinG: 4, carbsG: 63, fatG: 1, fiberG: 1
+        ),
+        CommonFood(
+            id: "tropicana-orange-juice-bottle", name: "Tropicana orange juice (bottle)",
+            // Tropicana official
+            aliases: ["tropicana orange juice", "tropicana pure premium", "tropicana oj bottle"],
+            servingLabel: "12 fl oz bottle (355 ml)",
+            calories: 160, proteinG: 2, carbsG: 38, fatG: 0, fiberG: 1
+        ),
+        CommonFood(
+            id: "simply-lemonade", name: "Simply Lemonade",
+            // Simply official
+            aliases: ["simply lemonade bottle", "simply brand lemonade", "all natural lemonade"],
+            servingLabel: "12 fl oz (355 ml)",
+            calories: 160, proteinG: 0, carbsG: 42, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "yoo-hoo", name: "Yoo-hoo chocolate drink",
+            // Yoo-hoo official
+            aliases: ["yoo hoo chocolate", "yoohoo chocolate drink", "yoo-hoo bottle"],
+            servingLabel: "15.5 fl oz bottle (459 ml)",
+            calories: 210, proteinG: 2, carbsG: 44, fatG: 2, fiberG: 1
+        ),
+        CommonFood(
+            id: "capri-sun-pouch", name: "Capri Sun pouch",
+            // Capri Sun official
+            aliases: ["capri sun fruit punch", "capri sun pouch", "caprisun juice drink"],
+            servingLabel: "1 pouch (177 ml)",
+            calories: 60, proteinG: 0, carbsG: 15, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "ensure-original-shake", name: "Ensure Original shake",
+            // Ensure official
+            aliases: ["ensure original shake", "ensure nutrition shake", "ensure vanilla shake"],
+            servingLabel: "8 fl oz bottle (237 ml)",
+            calories: 220, proteinG: 9, carbsG: 33, fatG: 6, fiberG: 1
+        ),
+        CommonFood(
+            id: "muscle-milk-shake", name: "Muscle Milk protein shake",
+            // Muscle Milk official
+            aliases: ["muscle milk shake", "muscle milk protein drink", "muscle milk vanilla shake"],
+            servingLabel: "14 fl oz bottle (414 ml)",
+            calories: 170, proteinG: 25, carbsG: 9, fatG: 3, fiberG: 3
+        ),
+        CommonFood(
+            id: "fairlife-core-power", name: "Fairlife Core Power shake",
+            // Fairlife Core Power official
+            aliases: ["fairlife core power", "core power protein shake", "fairlife protein milk"],
+            servingLabel: "14 fl oz bottle (414 ml)",
+            calories: 170, proteinG: 26, carbsG: 9, fatG: 4, fiberG: 0
+        ),
+        CommonFood(
+            id: "red-bull", name: "Red Bull energy drink",
+            // Red Bull official
+            aliases: ["red bull can", "redbull energy drink", "red bull original"],
+            servingLabel: "8.4 fl oz can (250 ml)",
+            calories: 110, proteinG: 1, carbsG: 27, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "monster-energy", name: "Monster Energy",
+            // Monster official
+            aliases: ["monster energy drink", "monster green can", "monster original energy"],
+            servingLabel: "16 fl oz can (473 ml)",
+            calories: 210, proteinG: 0, carbsG: 54, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "v8-vegetable-juice", name: "V8 vegetable juice",
+            // V8 official
+            aliases: ["v8 original vegetable juice", "v8 tomato vegetable juice", "v eight juice"],
+            servingLabel: "8 fl oz (240 ml)",
+            calories: 45, proteinG: 2, carbsG: 10, fatG: 0, fiberG: 2
+        ),
+        CommonFood(
+            id: "sweet-apple-cider", name: "Apple cider (sweet)",
+            // USDA FDC #173951
+            aliases: ["sweet apple cider", "fresh pressed apple cider", "fall apple cider"],
+            servingLabel: "8 fl oz (240 ml)",
+            calories: 120, proteinG: 0, carbsG: 28, fatG: 0, fiberG: 0
+        ),
     ]
 
     // MARK: - Soups
@@ -1793,6 +2404,30 @@ public enum CommonFoods {
             aliases: ["gazpacho", "cold tomato soup"],
             servingLabel: "1 cup (244 g)",
             calories: 57, proteinG: 2, carbsG: 10, fatG: 2, fiberG: 1
+        ),
+        CommonFood(
+            id: "caldo-de-costilla", name: "Caldo de costilla",
+            aliases: ["caldo de costilla", "colombian rib broth", "beef rib soup colombian", "bogota rib broth"],
+            servingLabel: "1 bowl (400 g)",
+            calories: 250, proteinG: 22, carbsG: 18, fatG: 10, fiberG: 2
+        ),
+        CommonFood(
+            id: "mondongo-colombiano", name: "Mondongo colombiano",
+            aliases: ["mondongo colombiano", "colombian tripe soup", "sopa de mondongo", "menudo colombiano"],
+            servingLabel: "1 bowl (400 g)",
+            calories: 340, proteinG: 26, carbsG: 28, fatG: 14, fiberG: 5
+        ),
+        CommonFood(
+            id: "sancocho-de-gallina", name: "Sancocho de gallina",
+            aliases: ["sancocho de gallina", "colombian hen soup", "sancocho de pollo gallina", "hen and plantain soup"],
+            servingLabel: "1 bowl (450 g)",
+            calories: 420, proteinG: 30, carbsG: 38, fatG: 16, fiberG: 5
+        ),
+        CommonFood(
+            id: "beef-nilaga", name: "Beef Nilaga",
+            aliases: ["filipino boiled beef soup", "nilagang baka", "beef vegetable bone soup filipino", "nilaga beef"],
+            servingLabel: "1 bowl (350 g)",
+            calories: 280, proteinG: 24, carbsG: 14, fatG: 14, fiberG: 3
         ),
     ]
 
@@ -3058,6 +3693,311 @@ public enum CommonFoods {
             servingLabel: "1 pancake (100 g)",
             calories: 270, proteinG: 5, carbsG: 34, fatG: 13, fiberG: 2
         ),
+        CommonFood(
+            id: "lechona-tolimense", name: "Lechona tolimense",
+            aliases: ["lechona tolimense", "colombian roast pork rice", "lechona colombiana", "stuffed roast pig"],
+            servingLabel: "1 cup (250 g)",
+            calories: 458, proteinG: 30, carbsG: 35, fatG: 22, fiberG: 3
+        ),
+        CommonFood(
+            id: "tamal-tolimense", name: "Tamal tolimense",
+            aliases: ["tamal tolimense", "colombian corn tamal", "tamal del tolima", "banana leaf tamale colombian"],
+            servingLabel: "1 tamal (300 g)",
+            calories: 470, proteinG: 22, carbsG: 45, fatG: 22, fiberG: 5
+        ),
+        CommonFood(
+            id: "tamal-santandereano", name: "Tamal santandereano",
+            aliases: ["tamal santandereano", "tamal de santander", "colombian pork chickpea tamale", "tamal con garbanzo"],
+            servingLabel: "1 tamal (320 g)",
+            calories: 510, proteinG: 24, carbsG: 50, fatG: 24, fiberG: 6
+        ),
+        CommonFood(
+            id: "sobrebarriga-en-salsa", name: "Sobrebarriga en salsa",
+            aliases: ["sobrebarriga en salsa", "colombian flank steak stew", "sobrebarriga criolla", "braised flank steak colombian"],
+            servingLabel: "1 serving (220 g)",
+            calories: 360, proteinG: 32, carbsG: 8, fatG: 22, fiberG: 2
+        ),
+        CommonFood(
+            id: "posta-negra-cartagenera", name: "Posta negra cartagenera",
+            aliases: ["posta negra cartagenera", "cartagena black beef", "colombian black roast beef", "posta negra colombiana"],
+            servingLabel: "1 serving (200 g)",
+            calories: 330, proteinG: 34, carbsG: 14, fatG: 15, fiberG: 1
+        ),
+        CommonFood(
+            id: "sudado-de-pollo", name: "Sudado de pollo",
+            aliases: ["sudado de pollo", "colombian chicken stew", "pollo sudado", "stewed chicken colombian"],
+            servingLabel: "1 bowl (350 g)",
+            calories: 400, proteinG: 34, carbsG: 30, fatG: 16, fiberG: 4
+        ),
+        CommonFood(
+            id: "frijoles-antioquenos", name: "Fríjoles antioqueños",
+            aliases: ["frijoles antioquenos", "colombian red beans", "frijoles paisas", "paisa red bean stew"],
+            servingLabel: "1 cup (250 g)",
+            calories: 330, proteinG: 17, carbsG: 40, fatG: 11, fiberG: 12
+        ),
+        CommonFood(
+            id: "calentado-paisa", name: "Calentado paisa",
+            aliases: ["calentado paisa", "colombian rice and beans breakfast", "calentado colombiano", "reheated rice beans paisa"],
+            servingLabel: "1 plate (300 g)",
+            calories: 470, proteinG: 18, carbsG: 55, fatG: 19, fiberG: 9
+        ),
+        CommonFood(
+            id: "huevos-pericos", name: "Huevos pericos",
+            aliases: ["huevos pericos", "colombian scrambled eggs", "perico eggs", "eggs with tomato and onion colombian"],
+            servingLabel: "2 eggs (160 g)",
+            calories: 230, proteinG: 14, carbsG: 6, fatG: 17, fiberG: 1
+        ),
+        CommonFood(
+            id: "arroz-atollado", name: "Arroz atollado",
+            aliases: ["arroz atollado", "colombian soupy rice", "vallecaucano rice pork", "creamy pork rice colombian"],
+            servingLabel: "1 plate (320 g)",
+            calories: 480, proteinG: 24, carbsG: 52, fatG: 19, fiberG: 3
+        ),
+        CommonFood(
+            id: "patacon-con-hogao", name: "Patacón con hogao",
+            aliases: ["patacon con hogao", "fried plantain with tomato sauce", "patacon colombiano", "tostada de platano hogao"],
+            servingLabel: "1 patacón (120 g)",
+            calories: 290, proteinG: 3, carbsG: 44, fatG: 12, fiberG: 4
+        ),
+        CommonFood(
+            id: "carne-en-polvo", name: "Carne en polvo",
+            aliases: ["carne en polvo", "colombian powdered beef", "carne molida en polvo", "dried ground beef colombian"],
+            servingLabel: "½ cup (90 g)",
+            calories: 230, proteinG: 28, carbsG: 4, fatG: 11, fiberG: 1
+        ),
+        CommonFood(
+            id: "perro-caliente-colombiano", name: "Perro caliente colombiano",
+            aliases: ["perro caliente colombiano", "colombian hot dog", "perro caliente con papas", "loaded hot dog colombian"],
+            servingLabel: "1 hot dog (220 g)",
+            calories: 540, proteinG: 16, carbsG: 50, fatG: 31, fiberG: 3
+        ),
+        CommonFood(
+            id: "salchipapa-colombiana", name: "Salchipapa",
+            aliases: ["salchipapa colombiana", "colombian sausage and fries", "salchipapas", "papas con salchicha"],
+            servingLabel: "1 plate (350 g)",
+            calories: 720, proteinG: 22, carbsG: 65, fatG: 41, fiberG: 5
+        ),
+        CommonFood(
+            id: "empanada-colombiana", name: "Empanada colombiana",
+            aliases: ["empanada colombiana", "colombian corn empanada", "empanada de maiz", "fried corn empanada colombian"],
+            servingLabel: "1 empanada (100 g)",
+            calories: 280, proteinG: 8, carbsG: 30, fatG: 14, fiberG: 3
+        ),
+        CommonFood(
+            id: "pancit-bihon", name: "Pancit Bihon",
+            aliases: ["filipino rice noodle stir fry", "pancit bihon guisado", "pansit bihon", "filipino fried rice noodles"],
+            servingLabel: "1 cup (180 g)",
+            calories: 320, proteinG: 14, carbsG: 45, fatG: 9, fiberG: 3
+        ),
+        CommonFood(
+            id: "pancit-malabon", name: "Pancit Malabon",
+            aliases: ["filipino seafood noodles", "pansit malabon", "thick rice noodle seafood", "malabon noodles"],
+            servingLabel: "1 plate (300 g)",
+            calories: 420, proteinG: 22, carbsG: 52, fatG: 14, fiberG: 3
+        ),
+        CommonFood(
+            id: "pinakbet", name: "Pinakbet",
+            aliases: ["filipino vegetable stew", "pakbet", "ilocano vegetable dish", "sauteed vegetables shrimp paste"],
+            servingLabel: "1 cup (200 g)",
+            calories: 160, proteinG: 9, carbsG: 16, fatG: 8, fiberG: 5
+        ),
+        CommonFood(
+            id: "dinuguan", name: "Dinuguan",
+            aliases: ["filipino pork blood stew", "chocolate meat filipino", "dinuguang baboy", "pork blood pudding stew"],
+            servingLabel: "1 cup (240 g)",
+            calories: 310, proteinG: 22, carbsG: 8, fatG: 22, fiberG: 1
+        ),
+        CommonFood(
+            id: "kaldereta-beef", name: "Beef Kaldereta",
+            aliases: ["filipino beef stew tomato", "kalderetang baka", "caldereta beef", "beef liver sauce stew"],
+            servingLabel: "1 cup (250 g)",
+            calories: 420, proteinG: 28, carbsG: 14, fatG: 28, fiberG: 3
+        ),
+        CommonFood(
+            id: "mechado", name: "Mechado",
+            aliases: ["filipino beef tomato stew", "mitsado beef", "larded beef stew filipino", "mechadong baka"],
+            servingLabel: "1 cup (250 g)",
+            calories: 380, proteinG: 27, carbsG: 16, fatG: 22, fiberG: 2
+        ),
+        CommonFood(
+            id: "pork-menudo", name: "Pork Menudo",
+            aliases: ["filipino pork liver stew", "menudong baboy", "pork tomato liver stew", "ginisang menudo"],
+            servingLabel: "1 cup (250 g)",
+            calories: 360, proteinG: 24, carbsG: 18, fatG: 21, fiberG: 3
+        ),
+        CommonFood(
+            id: "chicken-afritada", name: "Chicken Afritada",
+            aliases: ["filipino chicken tomato stew", "afritadang manok", "chicken afritada filipino", "apritada chicken"],
+            servingLabel: "1 cup (250 g)",
+            calories: 330, proteinG: 26, carbsG: 18, fatG: 17, fiberG: 3
+        ),
+        CommonFood(
+            id: "bicol-express", name: "Bicol Express",
+            aliases: ["filipino pork coconut chili", "bicolano pork stew", "spicy pork coconut milk", "sinilihan"],
+            servingLabel: "1 cup (220 g)",
+            calories: 350, proteinG: 16, carbsG: 10, fatG: 28, fiberG: 3
+        ),
+        CommonFood(
+            id: "laing", name: "Laing",
+            aliases: ["taro leaves coconut milk", "filipino taro leaf stew", "laing bicol", "dried taro leaves coconut"],
+            servingLabel: "1 cup (200 g)",
+            calories: 230, proteinG: 6, carbsG: 12, fatG: 18, fiberG: 5
+        ),
+        CommonFood(
+            id: "crispy-pata", name: "Crispy Pata",
+            aliases: ["filipino crispy pork knuckle", "deep fried pork leg", "crispy pork hock", "krispy pata"],
+            servingLabel: "1 serving (250 g)",
+            calories: 560, proteinG: 42, carbsG: 2, fatG: 43, fiberG: 0
+        ),
+        CommonFood(
+            id: "lechon-kawali", name: "Lechon Kawali",
+            aliases: ["filipino crispy fried pork belly", "pan roasted pork belly", "letson kawali", "deep fried pork belly"],
+            servingLabel: "1 serving (150 g)",
+            calories: 480, proteinG: 30, carbsG: 0, fatG: 40, fiberG: 0
+        ),
+        CommonFood(
+            id: "bistek-tagalog", name: "Bistek Tagalog",
+            aliases: ["filipino beef steak onions", "bistek baka", "filipino soy citrus beef", "beefsteak tagalog"],
+            servingLabel: "1 serving (200 g)",
+            calories: 340, proteinG: 30, carbsG: 10, fatG: 20, fiberG: 1
+        ),
+        CommonFood(
+            id: "chicken-inasal", name: "Chicken Inasal",
+            aliases: ["filipino grilled chicken bacolod", "inasal na manok", "bacolod grilled chicken", "chicken inasal annatto"],
+            servingLabel: "1 piece (200 g)",
+            calories: 320, proteinG: 34, carbsG: 4, fatG: 19, fiberG: 0
+        ),
+        CommonFood(
+            id: "pork-bbq-skewer-filipino", name: "Filipino Pork BBQ Skewer",
+            aliases: ["filipino pork barbecue stick", "pinoy pork bbq", "grilled pork skewer filipino", "pork inihaw skewer"],
+            servingLabel: "1 skewer (80 g)",
+            calories: 200, proteinG: 18, carbsG: 10, fatG: 10, fiberG: 0
+        ),
+        CommonFood(
+            id: "lumpiang-shanghai", name: "Lumpiang Shanghai",
+            aliases: ["filipino fried meat spring rolls", "shanghai lumpia", "pork spring rolls filipino", "fried lumpia shanghai"],
+            servingLabel: "3 pieces (120 g)",
+            calories: 290, proteinG: 12, carbsG: 22, fatG: 17, fiberG: 1
+        ),
+        CommonFood(
+            id: "tapsilog", name: "Tapsilog",
+            aliases: ["filipino beef tapa egg rice", "tapa silog meal", "tapsilog breakfast", "cured beef garlic rice egg"],
+            servingLabel: "1 plate (380 g)",
+            calories: 650, proteinG: 32, carbsG: 72, fatG: 26, fiberG: 3
+        ),
+        CommonFood(
+            id: "longsilog", name: "Longsilog",
+            aliases: ["filipino longganisa egg rice", "longsilog breakfast", "longanisa silog meal", "sausage garlic rice egg"],
+            servingLabel: "1 plate (380 g)",
+            calories: 680, proteinG: 26, carbsG: 74, fatG: 32, fiberG: 3
+        ),
+        CommonFood(
+            id: "tocilog", name: "Tocilog",
+            aliases: ["filipino tocino egg rice", "tocilog breakfast", "sweet cured pork silog", "tosilog meal"],
+            servingLabel: "1 plate (380 g)",
+            calories: 660, proteinG: 25, carbsG: 80, fatG: 28, fiberG: 3
+        ),
+        CommonFood(
+            id: "tortang-talong", name: "Tortang Talong",
+            aliases: ["filipino eggplant omelette", "grilled eggplant egg", "torta talong", "eggplant frittata filipino"],
+            servingLabel: "1 piece (150 g)",
+            calories: 220, proteinG: 12, carbsG: 9, fatG: 16, fiberG: 4
+        ),
+        CommonFood(
+            id: "ginisang-munggo", name: "Ginisang Munggo",
+            aliases: ["filipino mung bean stew", "monggo guisado", "sauteed mung beans filipino", "munggo soup pork"],
+            servingLabel: "1 cup (240 g)",
+            calories: 240, proteinG: 16, carbsG: 26, fatG: 8, fiberG: 8
+        ),
+        CommonFood(
+            id: "daing-na-bangus", name: "Daing na Bangus",
+            aliases: ["filipino fried marinated milkfish", "bangus daing", "marinated milkfish fried", "daing bangus vinegar"],
+            servingLabel: "1 fillet (200 g)",
+            calories: 340, proteinG: 28, carbsG: 2, fatG: 25, fiberG: 0
+        ),
+        CommonFood(
+            id: "pork-humba", name: "Pork Humba",
+            aliases: ["filipino braised pork belly sweet", "humba baboy", "visayan braised pork", "humba pork black beans"],
+            servingLabel: "1 cup (240 g)",
+            calories: 430, proteinG: 26, carbsG: 16, fatG: 29, fiberG: 1
+        ),
+        CommonFood(
+            id: "digiorno-pepperoni-pizza", name: "DiGiorno frozen pepperoni pizza",
+            // DiGiorno official
+            aliases: ["digiorno pepperoni pizza", "frozen pepperoni pizza slice", "digiorno rising crust", "quarter frozen pizza"],
+            servingLabel: "⅛ pizza (132 g)",
+            calories: 360, proteinG: 16, carbsG: 39, fatG: 16, fiberG: 2
+        ),
+        CommonFood(
+            id: "frozen-mac-cheese", name: "Frozen mac & cheese",
+            // Stouffer's official
+            aliases: ["frozen mac and cheese", "stouffer's macaroni cheese", "microwave mac cheese"],
+            servingLabel: "1 cup (227 g)",
+            calories: 350, proteinG: 13, carbsG: 41, fatG: 15, fiberG: 2
+        ),
+        CommonFood(
+            id: "corn-dog-frozen", name: "Corn dog (frozen)",
+            // State Fair official
+            aliases: ["frozen corn dog", "corndog on a stick", "state fair corn dog"],
+            servingLabel: "1 corn dog (75 g)",
+            calories: 180, proteinG: 6, carbsG: 23, fatG: 7, fiberG: 1
+        ),
+        CommonFood(
+            id: "lunchables-turkey-cheddar", name: "Lunchables turkey & cheddar",
+            // Oscar Mayer official
+            aliases: ["lunchables turkey cheddar", "turkey cheddar lunchables", "lunchable cracker stackers"],
+            servingLabel: "1 tray (101 g)",
+            calories: 360, proteinG: 14, carbsG: 35, fatG: 18, fiberG: 1
+        ),
+        CommonFood(
+            id: "velveeta-shells-cheese-cup", name: "Velveeta shells & cheese cup",
+            // Velveeta official
+            aliases: ["velveeta shells and cheese", "velveeta cup", "microwave shells cheese cup"],
+            servingLabel: "1 cup (95 g)",
+            calories: 360, proteinG: 9, carbsG: 47, fatG: 16, fiberG: 2
+        ),
+        CommonFood(
+            id: "easy-mac-cup", name: "Easy Mac cup",
+            // Kraft official
+            aliases: ["easy mac cup", "kraft easy mac", "microwave mac cup"],
+            servingLabel: "1 cup prepared (61 g dry)",
+            calories: 220, proteinG: 6, carbsG: 40, fatG: 4, fiberG: 1
+        ),
+        CommonFood(
+            id: "hormel-canned-chili", name: "Canned chili (Hormel)",
+            // Hormel official
+            aliases: ["hormel chili with beans", "canned chili with beans", "hormel chili can"],
+            servingLabel: "1 cup (247 g)",
+            calories: 260, proteinG: 16, carbsG: 30, fatG: 7, fiberG: 7
+        ),
+        CommonFood(
+            id: "spaghettios", name: "SpaghettiOs",
+            // Campbell's official
+            aliases: ["spaghettios", "canned spaghetti o's", "franco american pasta rings"],
+            servingLabel: "1 cup (252 g)",
+            calories: 170, proteinG: 5, carbsG: 33, fatG: 2, fiberG: 3
+        ),
+        CommonFood(
+            id: "chef-boyardee-beef-ravioli", name: "Chef Boyardee beef ravioli",
+            // Chef Boyardee official
+            aliases: ["chef boyardee ravioli", "canned beef ravioli", "chef boyardee beef ravioli"],
+            servingLabel: "1 cup (244 g)",
+            calories: 230, proteinG: 8, carbsG: 37, fatG: 6, fiberG: 3
+        ),
+        CommonFood(
+            id: "jimmy-dean-breakfast-sandwich", name: "Jimmy Dean breakfast sandwich",
+            // Jimmy Dean official
+            aliases: ["jimmy dean breakfast sandwich", "sausage egg cheese croissant", "frozen breakfast sandwich"],
+            servingLabel: "1 sandwich (128 g)",
+            calories: 410, proteinG: 14, carbsG: 27, fatG: 27, fiberG: 1
+        ),
+        CommonFood(
+            id: "cup-noodles-chicken", name: "Cup Noodles (chicken)",
+            // Nissin official
+            aliases: ["cup noodles chicken", "nissin cup noodles", "instant ramen cup", "cup of noodles"],
+            servingLabel: "1 cup (64 g)",
+            calories: 290, proteinG: 6, carbsG: 38, fatG: 12, fiberG: 2
+        ),
     ]
 
     // MARK: - Snacks & Sweets
@@ -3349,6 +4289,442 @@ public enum CommonFoods {
             aliases: ["fruit roll up", "fruit roll-up", "fruit leather", "fruit by the foot"],
             servingLabel: "1 roll (14 g)",
             calories: 50, proteinG: 0, carbsG: 12, fatG: 1, fiberG: 0
+        ),
+
+        // — Crackers —
+        CommonFood(
+            id: "goldfish-crackers", name: "Goldfish crackers",
+            // Pepperidge Farm official
+            aliases: ["goldfish", "goldfish crackers", "pepperidge farm goldfish", "cheddar goldfish"],
+            servingLabel: "55 pieces (30 g)",
+            calories: 140, proteinG: 3, carbsG: 20, fatG: 5, fiberG: 1
+        ),
+        CommonFood(
+            id: "ritz-crackers", name: "Ritz crackers",
+            // Nabisco official
+            aliases: ["ritz", "ritz crackers", "ritz cracker"],
+            servingLabel: "5 crackers (16 g)",
+            calories: 80, proteinG: 1, carbsG: 10, fatG: 4, fiberG: 0
+        ),
+        CommonFood(
+            id: "triscuits", name: "Triscuits",
+            aliases: ["triscuits", "triscuit", "whole wheat crackers triscuit"],
+            servingLabel: "6 crackers (28 g)",
+            calories: 120, proteinG: 3, carbsG: 20, fatG: 3, fiberG: 3
+        ),
+        CommonFood(
+            id: "wheat-thins", name: "Wheat Thins",
+            // Nabisco official
+            aliases: ["wheat thins", "wheat thin crackers"],
+            servingLabel: "16 crackers (29 g)",
+            calories: 130, proteinG: 2, carbsG: 21, fatG: 5, fiberG: 1
+        ),
+        CommonFood(
+            id: "saltine-crackers", name: "Saltine crackers",
+            // USDA FDC #172023
+            aliases: ["saltines", "saltine crackers", "saltine", "soda crackers", "premium saltines"],
+            servingLabel: "5 crackers (14 g)",
+            calories: 60, proteinG: 1, carbsG: 11, fatG: 1, fiberG: 0
+        ),
+        CommonFood(
+            id: "graham-crackers", name: "Graham crackers",
+            // USDA FDC #172066
+            aliases: ["graham crackers", "graham cracker", "honey graham crackers"],
+            servingLabel: "2 full sheets / 8 squares (28 g)",
+            calories: 130, proteinG: 2, carbsG: 22, fatG: 3, fiberG: 1
+        ),
+        CommonFood(
+            id: "animal-crackers", name: "Animal crackers",
+            // Barnum's official
+            aliases: ["animal crackers", "animal cookies", "barnum's animal crackers"],
+            servingLabel: "15 crackers (30 g)",
+            calories: 120, proteinG: 2, carbsG: 22, fatG: 3, fiberG: 0
+        ),
+
+        // — Cookies —
+        CommonFood(
+            id: "oreo-cookies", name: "Oreo cookies",
+            // Nabisco official
+            aliases: ["oreos", "oreo", "oreo cookie", "oreo cookies", "double stuf oreos"],
+            servingLabel: "3 cookies (34 g)",
+            calories: 160, proteinG: 1, carbsG: 25, fatG: 7, fiberG: 1
+        ),
+        CommonFood(
+            id: "chips-ahoy", name: "Chips Ahoy! cookies",
+            // Nabisco official
+            aliases: ["chips ahoy", "chips ahoy cookies", "chocolate chip cookies chips ahoy"],
+            servingLabel: "3 cookies (33 g)",
+            calories: 160, proteinG: 2, carbsG: 21, fatG: 8, fiberG: 1
+        ),
+        CommonFood(
+            id: "nutter-butter", name: "Nutter Butter cookies",
+            // Nabisco official
+            aliases: ["nutter butter", "nutter butters", "peanut butter cookie nutter butter"],
+            servingLabel: "2 cookies (28 g)",
+            calories: 130, proteinG: 3, carbsG: 19, fatG: 6, fiberG: 1
+        ),
+        CommonFood(
+            id: "fig-newtons", name: "Fig Newtons",
+            // Nabisco official
+            aliases: ["fig newtons", "fig newton", "newtons figs"],
+            servingLabel: "2 cookies (31 g)",
+            calories: 110, proteinG: 1, carbsG: 22, fatG: 2, fiberG: 1
+        ),
+        CommonFood(
+            id: "nilla-wafers", name: "Nilla Wafers",
+            // Nabisco official
+            aliases: ["nilla wafers", "nilla wafer", "vanilla wafers", "vanilla cookies"],
+            servingLabel: "8 wafers (30 g)",
+            calories: 140, proteinG: 1, carbsG: 21, fatG: 6, fiberG: 0
+        ),
+
+        // — Protein & granola bars —
+        CommonFood(
+            id: "clif-bar", name: "Clif Bar",
+            // Clif official (Chocolate Chip)
+            aliases: ["clif bar", "cliff bar", "clif energy bar"],
+            servingLabel: "1 bar (68 g)",
+            calories: 250, proteinG: 9, carbsG: 44, fatG: 6, fiberG: 5
+        ),
+        CommonFood(
+            id: "kind-bar", name: "Kind Bar",
+            // Kind official (Dark Chocolate Nuts & Sea Salt)
+            aliases: ["kind bar", "kind snack bar", "kind nut bar"],
+            servingLabel: "1 bar (40 g)",
+            calories: 200, proteinG: 6, carbsG: 17, fatG: 15, fiberG: 7
+        ),
+        CommonFood(
+            id: "quest-bar", name: "Quest Bar",
+            // Quest official (Chocolate Chip Cookie Dough)
+            aliases: ["quest bar", "quest protein bar", "quest"],
+            servingLabel: "1 bar (60 g)",
+            calories: 190, proteinG: 21, carbsG: 21, fatG: 7, fiberG: 14
+        ),
+        CommonFood(
+            id: "rxbar", name: "RXBAR",
+            // RXBAR official (Chocolate Sea Salt)
+            aliases: ["rxbar", "rx bar", "rx protein bar"],
+            servingLabel: "1 bar (52 g)",
+            calories: 210, proteinG: 12, carbsG: 23, fatG: 9, fiberG: 5
+        ),
+        CommonFood(
+            id: "larabar", name: "Larabar",
+            // Larabar official (Apple Pie)
+            aliases: ["larabar", "lara bar", "larabar fruit bar"],
+            servingLabel: "1 bar (45 g)",
+            calories: 190, proteinG: 4, carbsG: 26, fatG: 10, fiberG: 4
+        ),
+        CommonFood(
+            id: "nature-valley-bar", name: "Nature Valley granola bar",
+            // General Mills official (Oats & Honey, 2 bars)
+            aliases: ["nature valley", "nature valley granola bar", "nature valley bar", "granola bar nature valley"],
+            servingLabel: "2 bars (42 g)",
+            calories: 190, proteinG: 4, carbsG: 29, fatG: 7, fiberG: 2
+        ),
+        CommonFood(
+            id: "nutri-grain-bar", name: "Nutri-Grain bar",
+            // Kellogg's official (Strawberry)
+            aliases: ["nutri-grain", "nutri grain bar", "nutrigrain bar", "kelloggs nutri-grain"],
+            servingLabel: "1 bar (37 g)",
+            calories: 120, proteinG: 2, carbsG: 24, fatG: 3, fiberG: 1
+        ),
+
+        // — Packaged house staples —
+        CommonFood(
+            id: "kraft-mac-cheese", name: "Kraft mac & cheese",
+            // Kraft official (box, prepared with butter/milk)
+            aliases: ["kraft mac and cheese", "kraft mac & cheese", "mac and cheese box", "boxed mac and cheese", "blue box mac and cheese"],
+            servingLabel: "1 cup prepared (about ¼ box)",
+            calories: 350, proteinG: 10, carbsG: 47, fatG: 13, fiberG: 2
+        ),
+        CommonFood(
+            id: "hot-pocket", name: "Hot Pocket",
+            // Nestlé official (Ham & Cheese, 1 pocket 128 g)
+            aliases: ["hot pocket", "hot pockets", "hot pocket ham and cheese", "ham and cheese hot pocket"],
+            servingLabel: "1 pocket (128 g)",
+            calories: 310, proteinG: 13, carbsG: 38, fatG: 11, fiberG: 1
+        ),
+        CommonFood(
+            id: "frozen-burrito", name: "Frozen burrito",
+            // Amy's/generic bean & cheese frozen burrito
+            aliases: ["frozen burrito", "bean and cheese burrito frozen", "microwave burrito", "el monterey burrito"],
+            servingLabel: "1 burrito (142 g)",
+            calories: 330, proteinG: 11, carbsG: 52, fatG: 9, fiberG: 5
+        ),
+        CommonFood(
+            id: "microwave-popcorn", name: "Microwave popcorn",
+            // Orville Redenbacher's Classic butter (per 3.5 cup popped)
+            aliases: ["microwave popcorn", "popcorn bag", "orville popcorn", "act ii popcorn", "jiffy pop"],
+            servingLabel: "3½ cups popped (30 g)",
+            calories: 150, proteinG: 3, carbsG: 15, fatG: 9, fiberG: 3
+        ),
+        CommonFood(
+            id: "hard-boiled-egg", name: "Hard boiled egg",
+            // USDA FDC #173423
+            aliases: ["hard boiled egg", "hardboiled egg", "hard-boiled egg", "boiled egg"],
+            servingLabel: "1 large egg (50 g)",
+            calories: 78, proteinG: 6, carbsG: 1, fatG: 5, fiberG: 0
+        ),
+        CommonFood(
+            id: "oblea-con-arequipe", name: "Oblea con Arequipe",
+            aliases: ["oblea con arequipe", "colombian wafer with dulce de leche", "obleas arequipe"],
+            servingLabel: "1 filled oblea (75 g)",
+            calories: 250, proteinG: 4, carbsG: 45, fatG: 6, fiberG: 1
+        ),
+        CommonFood(
+            id: "arequipe-dulce-de-leche", name: "Arequipe (Dulce de Leche)",
+            aliases: ["arequipe colombiano", "dulce de leche spread", "manjar de leche"],
+            servingLabel: "1 tbsp (19 g)",
+            calories: 60, proteinG: 1, carbsG: 11, fatG: 1, fiberG: 0
+        ),
+        CommonFood(
+            id: "panelitas-de-leche", name: "Panelitas de Leche",
+            aliases: ["panelitas de leche", "colombian milk fudge", "panelitas colombianas"],
+            servingLabel: "1 piece (40 g)",
+            calories: 160, proteinG: 2, carbsG: 30, fatG: 4, fiberG: 0
+        ),
+        CommonFood(
+            id: "cocada-colombiana", name: "Cocada",
+            aliases: ["cocada colombiana", "coconut candy cocada", "cocadas de coco"],
+            servingLabel: "1 piece (35 g)",
+            calories: 140, proteinG: 1, carbsG: 19, fatG: 7, fiberG: 2
+        ),
+        CommonFood(
+            id: "merengon-colombiano", name: "Merengón",
+            aliases: ["merengon colombiano", "colombian meringue dessert", "merengon de fresas"],
+            servingLabel: "1 serving (150 g)",
+            calories: 280, proteinG: 4, carbsG: 55, fatG: 9, fiberG: 1
+        ),
+        CommonFood(
+            id: "postre-de-natas", name: "Postre de Natas",
+            aliases: ["postre de natas", "colombian milk cream dessert", "natas colombianas"],
+            servingLabel: "1 serving (120 g)",
+            calories: 280, proteinG: 5, carbsG: 38, fatG: 12, fiberG: 0
+        ),
+        CommonFood(
+            id: "manjar-blanco-colombiano", name: "Manjar Blanco",
+            aliases: ["manjar blanco colombiano", "colombian sweet milk custard", "manjarblanco"],
+            servingLabel: "¼ cup (60 g)",
+            calories: 200, proteinG: 3, carbsG: 35, fatG: 5, fiberG: 0
+        ),
+        CommonFood(
+            id: "brevas-con-arequipe", name: "Brevas con Arequipe",
+            aliases: ["brevas con arequipe", "figs with dulce de leche", "brevas colombianas"],
+            servingLabel: "2 stuffed figs (110 g)",
+            calories: 190, proteinG: 2, carbsG: 42, fatG: 2, fiberG: 3
+        ),
+        CommonFood(
+            id: "bocadillo-guava-paste", name: "Bocadillo (Guava Paste)",
+            aliases: ["bocadillo de guayaba", "colombian guava paste", "bocadillo veleño"],
+            servingLabel: "1 block (28 g)",
+            calories: 85, proteinG: 0, carbsG: 21, fatG: 0, fiberG: 1
+        ),
+        CommonFood(
+            id: "achira-biscuit", name: "Achira Biscuit",
+            aliases: ["achiras colombianas", "colombian arrowroot biscuit", "bizcocho de achira"],
+            servingLabel: "3 biscuits (30 g)",
+            calories: 130, proteinG: 3, carbsG: 15, fatG: 6, fiberG: 0
+        ),
+        CommonFood(
+            id: "dedito-de-queso", name: "Dedito de Queso",
+            aliases: ["dedito de queso", "colombian cheese stick pastry", "deditos de queso"],
+            servingLabel: "1 piece (45 g)",
+            calories: 150, proteinG: 5, carbsG: 14, fatG: 8, fiberG: 0
+        ),
+        CommonFood(
+            id: "turon", name: "Turon",
+            aliases: ["banana spring roll", "saba banana lumpia", "caramelized banana roll", "filipino banana fritter"],
+            servingLabel: "1 piece (95 g)",
+            calories: 210, proteinG: 2, carbsG: 40, fatG: 5, fiberG: 2
+        ),
+        CommonFood(
+            id: "bibingka", name: "Bibingka",
+            aliases: ["filipino rice cake", "baked coconut rice cake", "bibingka galapong", "filipino christmas cake"],
+            servingLabel: "1 slice (110 g)",
+            calories: 250, proteinG: 6, carbsG: 40, fatG: 8, fiberG: 2
+        ),
+        CommonFood(
+            id: "puto", name: "Puto",
+            aliases: ["steamed rice cake", "filipino puto", "puti puto", "white rice muffin"],
+            servingLabel: "3 pieces (90 g)",
+            calories: 150, proteinG: 3, carbsG: 30, fatG: 2, fiberG: 1
+        ),
+        CommonFood(
+            id: "kutsinta", name: "Kutsinta",
+            aliases: ["brown rice cake", "cuchinta", "filipino jelly cake", "steamed kutsinta"],
+            servingLabel: "3 pieces (75 g)",
+            calories: 120, proteinG: 1, carbsG: 28, fatG: 0, fiberG: 1
+        ),
+        CommonFood(
+            id: "sapin-sapin", name: "Sapin-sapin",
+            aliases: ["layered rice cake", "glutinous layered dessert", "filipino sapin sapin", "tri color rice cake"],
+            servingLabel: "1 slice (100 g)",
+            calories: 200, proteinG: 2, carbsG: 38, fatG: 4, fiberG: 1
+        ),
+        CommonFood(
+            id: "ube-halaya", name: "Ube halaya",
+            aliases: ["purple yam jam", "ube jam", "filipino ube halaya", "mashed purple yam"],
+            servingLabel: "½ cup (130 g)",
+            calories: 250, proteinG: 3, carbsG: 42, fatG: 8, fiberG: 3
+        ),
+        CommonFood(
+            id: "leche-flan", name: "Leche flan",
+            aliases: ["filipino creme caramel", "steamed egg custard", "leche flan slice", "caramel custard"],
+            servingLabel: "1 slice (110 g)",
+            calories: 300, proteinG: 7, carbsG: 40, fatG: 9, fiberG: 0
+        ),
+        CommonFood(
+            id: "buko-pie", name: "Buko pie",
+            aliases: ["young coconut pie", "filipino coconut pie", "laguna buko pie", "fresh coconut tart"],
+            servingLabel: "1 slice (130 g)",
+            calories: 340, proteinG: 4, carbsG: 45, fatG: 16, fiberG: 2
+        ),
+        CommonFood(
+            id: "biko", name: "Biko",
+            aliases: ["sweet sticky rice cake", "filipino biko", "coconut caramel rice", "glutinous rice cake biko"],
+            servingLabel: "1 slice (120 g)",
+            calories: 290, proteinG: 3, carbsG: 50, fatG: 8, fiberG: 1
+        ),
+        CommonFood(
+            id: "palitaw", name: "Palitaw",
+            aliases: ["filipino palitaw", "sticky rice patty", "sweet rice flat cake", "coconut sugar rice patty"],
+            servingLabel: "3 pieces (90 g)",
+            calories: 180, proteinG: 2, carbsG: 38, fatG: 2, fiberG: 1
+        ),
+        CommonFood(
+            id: "maja-blanca", name: "Maja blanca",
+            aliases: ["coconut pudding filipino", "maja blanca coconut", "filipino corn pudding", "white coconut pudding"],
+            servingLabel: "1 slice (100 g)",
+            calories: 170, proteinG: 2, carbsG: 32, fatG: 4, fiberG: 1
+        ),
+        CommonFood(
+            id: "cassava-cake", name: "Cassava cake",
+            aliases: ["filipino cassava cake", "grated cassava cake", "balinghoy cake", "cassava custard cake"],
+            servingLabel: "1 slice (120 g)",
+            calories: 290, proteinG: 4, carbsG: 45, fatG: 10, fiberG: 2
+        ),
+        CommonFood(
+            id: "mango-float", name: "Mango float",
+            aliases: ["crema de fruta mango", "mango graham cake", "filipino mango icebox cake", "mango refrigerator cake"],
+            servingLabel: "1 slice (130 g)",
+            calories: 340, proteinG: 4, carbsG: 42, fatG: 18, fiberG: 2
+        ),
+        CommonFood(
+            id: "hopia", name: "Hopia",
+            aliases: ["filipino mung bean pastry", "hopia mongo", "hopia ube", "filipino bean cake pastry"],
+            servingLabel: "1 piece (55 g)",
+            calories: 190, proteinG: 3, carbsG: 30, fatG: 6, fiberG: 2
+        ),
+        CommonFood(
+            id: "polvoron", name: "Polvoron",
+            aliases: ["filipino polvoron", "powdered milk candy", "toasted flour candy", "goldilocks polvoron"],
+            servingLabel: "1 piece (25 g)",
+            calories: 110, proteinG: 2, carbsG: 14, fatG: 5, fiberG: 0
+        ),
+        CommonFood(
+            id: "taho", name: "Taho",
+            aliases: ["filipino silken tofu dessert", "taho with sago", "arnibal tofu", "sweet soybean pudding"],
+            servingLabel: "1 cup (300 g)",
+            calories: 220, proteinG: 6, carbsG: 42, fatG: 3, fiberG: 1
+        ),
+        CommonFood(
+            id: "sorbetes", name: "Sorbetes",
+            aliases: ["dirty ice cream", "filipino sorbetes", "coconut milk ice cream", "ube sorbetes scoop"],
+            servingLabel: "1 scoop (70 g)",
+            calories: 140, proteinG: 2, carbsG: 22, fatG: 5, fiberG: 0
+        ),
+        CommonFood(
+            id: "red-ribbon-mango-cake", name: "Red Ribbon mango cake slice",
+            // Red Ribbon official
+            aliases: ["red ribbon mango cake", "filipino mango cake slice", "red ribbon dewberry mango", "mango chiffon cake slice"],
+            servingLabel: "1 slice (115 g)",
+            calories: 330, proteinG: 4, carbsG: 42, fatG: 16, fiberG: 1
+        ),
+        CommonFood(
+            id: "goldilocks-ube-cake", name: "Goldilocks ube cake slice",
+            // Goldilocks official
+            aliases: ["goldilocks ube cake", "filipino ube chiffon cake", "purple yam cake slice goldilocks", "ube macapuno cake slice"],
+            servingLabel: "1 slice (115 g)",
+            calories: 340, proteinG: 4, carbsG: 48, fatG: 15, fiberG: 1
+        ),
+        CommonFood(
+            id: "totinos-pizza-rolls", name: "Totino's pizza rolls (6)",
+            // Totino's official
+            aliases: ["totinos pizza rolls", "pepperoni pizza rolls", "frozen pizza rolls"],
+            servingLabel: "6 rolls (85 g)",
+            calories: 220, proteinG: 5, carbsG: 24, fatG: 11, fiberG: 1
+        ),
+        CommonFood(
+            id: "tater-tots-frozen", name: "Tater tots (frozen)",
+            // Ore-Ida official
+            aliases: ["tater tots", "frozen tater tots", "potato tots", "tatertots"],
+            servingLabel: "9 pieces (86 g)",
+            calories: 160, proteinG: 2, carbsG: 20, fatG: 8, fiberG: 2
+        ),
+        CommonFood(
+            id: "uncrustables-pbj", name: "Uncrustables PB&J",
+            // Smucker's official
+            aliases: ["uncrustables pbj", "peanut butter jelly uncrustable", "smucker's uncrustable", "frozen pb and j sandwich"],
+            servingLabel: "1 sandwich (58 g)",
+            calories: 210, proteinG: 7, carbsG: 25, fatG: 9, fiberG: 2
+        ),
+        CommonFood(
+            id: "toaster-strudel", name: "Toaster strudel",
+            // Pillsbury official
+            aliases: ["toaster strudel", "pillsbury toaster strudel", "strawberry toaster pastry"],
+            servingLabel: "1 pastry (54 g)",
+            calories: 190, proteinG: 3, carbsG: 26, fatG: 8, fiberG: 1
+        ),
+        CommonFood(
+            id: "bagel-bites", name: "Bagel Bites (4)",
+            // Bagel Bites official
+            aliases: ["bagel bites", "mini pizza bagels", "cheese pepperoni bagel bites"],
+            servingLabel: "4 pieces (88 g)",
+            calories: 200, proteinG: 7, carbsG: 28, fatG: 6, fiberG: 2
+        ),
+        CommonFood(
+            id: "mozzarella-sticks-frozen", name: "Mozzarella sticks (4)",
+            // Farm Rich official
+            aliases: ["mozzarella sticks", "frozen mozzarella sticks", "breaded cheese sticks", "mozz sticks"],
+            servingLabel: "4 sticks (88 g)",
+            calories: 280, proteinG: 10, carbsG: 26, fatG: 15, fiberG: 2
+        ),
+        CommonFood(
+            id: "jello-pudding-cup", name: "Jell-O pudding cup",
+            // Jell-O official
+            aliases: ["jello pudding cup", "jell-o chocolate pudding", "snack pack pudding"],
+            servingLabel: "1 cup (113 g)",
+            calories: 120, proteinG: 1, carbsG: 22, fatG: 3, fiberG: 1
+        ),
+        CommonFood(
+            id: "cheese-danish", name: "Cheese danish",
+            aliases: ["cheese danish pastry", "cream cheese danish", "bakery cheese danish"],
+            servingLabel: "1 pastry (91 g)",
+            calories: 340, proteinG: 6, carbsG: 38, fatG: 18, fiberG: 1
+        ),
+        CommonFood(
+            id: "cinnamon-roll-icing", name: "Cinnamon roll with icing",
+            aliases: ["iced cinnamon roll", "cinnamon bun with frosting", "bakery cinnamon roll"],
+            servingLabel: "1 large roll (113 g)",
+            calories: 340, proteinG: 5, carbsG: 49, fatG: 14, fiberG: 1
+        ),
+        CommonFood(
+            id: "bear-claw-pastry", name: "Bear claw pastry",
+            aliases: ["almond bear claw", "bear claw danish", "bakery bear claw"],
+            servingLabel: "1 pastry (99 g)",
+            calories: 420, proteinG: 7, carbsG: 44, fatG: 24, fiberG: 2
+        ),
+        CommonFood(
+            id: "chocolate-chip-muffin", name: "Chocolate chip muffin",
+            aliases: ["choc chip muffin", "chocolate chip bakery muffin", "double chocolate muffin"],
+            servingLabel: "1 large muffin (113 g)",
+            calories: 440, proteinG: 6, carbsG: 58, fatG: 21, fiberG: 2
+        ),
+        CommonFood(
+            id: "pumpkin-bread-slice", name: "Pumpkin bread slice",
+            aliases: ["pumpkin loaf slice", "spiced pumpkin bread", "pumpkin quick bread"],
+            servingLabel: "1 slice (80 g)",
+            calories: 270, proteinG: 3, carbsG: 40, fatG: 11, fiberG: 1
         ),
     ]
 
@@ -3710,6 +5086,719 @@ public enum CommonFoods {
             servingLabel: "3 fingers + toast + coleslaw (250 g)",
             calories: 570, proteinG: 32, carbsG: 54, fatG: 22, fiberG: 2
         ),
+
+        // — Panera Bread — https://www.panerabread.com/en-us/articles/nutrition.html
+        CommonFood(
+            id: "ff-panera-mac-cheese", name: "Panera mac & cheese",
+            aliases: ["panera mac and cheese", "panera mac & cheese", "panera macaroni"],
+            servingLabel: "Cup (240 g)",
+            calories: 450, proteinG: 17, carbsG: 51, fatG: 19, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-panera-broccoli-cheddar", name: "Panera broccoli cheddar soup",
+            aliases: ["panera broccoli cheddar", "panera broccoli soup", "broccoli cheddar soup panera"],
+            servingLabel: "Cup (240 ml)",
+            calories: 360, proteinG: 13, carbsG: 29, fatG: 23, fiberG: 3
+        ),
+        CommonFood(
+            id: "ff-panera-turkey-sandwich", name: "Panera turkey sandwich",
+            // Panera Turkey Chipotle Avocado on white whole grain
+            aliases: ["panera turkey sandwich", "panera turkey", "turkey sandwich panera"],
+            servingLabel: "1 whole sandwich (295 g)",
+            calories: 470, proteinG: 26, carbsG: 53, fatG: 16, fiberG: 5
+        ),
+        CommonFood(
+            id: "ff-panera-caesar-salad", name: "Panera chicken caesar salad",
+            aliases: ["panera caesar salad", "panera chicken caesar", "caesar salad panera"],
+            servingLabel: "Full salad (421 g)",
+            calories: 490, proteinG: 35, carbsG: 20, fatG: 31, fiberG: 4
+        ),
+
+        // — Arby's — https://www.arbys.com/menu/nutritional-information/
+        CommonFood(
+            id: "ff-arbys-beef-n-cheddar", name: "Arby's Beef 'n Cheddar",
+            aliases: ["arbys beef n cheddar", "arby's beef n cheddar", "beef n cheddar arby's", "beefy cheddar arby"],
+            servingLabel: "1 sandwich (198 g)",
+            calories: 450, proteinG: 25, carbsG: 46, fatG: 20, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-arbys-roast-beef", name: "Arby's Classic Roast Beef",
+            aliases: ["arbys roast beef", "arby's roast beef", "roast beef arby's"],
+            servingLabel: "1 sandwich (154 g)",
+            calories: 360, proteinG: 23, carbsG: 36, fatG: 14, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-arbys-curly-fries", name: "Arby's curly fries",
+            aliases: ["arby's curly fries", "arbys curly fries", "curly fries arby"],
+            servingLabel: "Medium (142 g)",
+            calories: 550, proteinG: 7, carbsG: 71, fatG: 26, fiberG: 6
+        ),
+
+        // — Sonic Drive-In — https://www.sonicdrivein.com/menu/nutrition
+        CommonFood(
+            id: "ff-sonic-cheeseburger", name: "Sonic cheeseburger",
+            aliases: ["sonic burger", "sonic cheeseburger", "sonic drive in burger"],
+            servingLabel: "1 burger (254 g)",
+            calories: 630, proteinG: 31, carbsG: 48, fatG: 34, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-sonic-tots", name: "Sonic tater tots",
+            aliases: ["sonic tots", "sonic tater tots", "tater tots sonic"],
+            servingLabel: "Medium (148 g)",
+            calories: 360, proteinG: 4, carbsG: 44, fatG: 18, fiberG: 3
+        ),
+        CommonFood(
+            id: "ff-sonic-corn-dog", name: "Sonic corn dog",
+            aliases: ["sonic corn dog", "sonic hotdog", "corn dog sonic"],
+            servingLabel: "1 corn dog (97 g)",
+            calories: 220, proteinG: 7, carbsG: 26, fatG: 10, fiberG: 1
+        ),
+
+        // — Jack in the Box — https://www.jackinthebox.com/nutrition
+        CommonFood(
+            id: "ff-jack-spicy-chicken", name: "Jack in the Box Spicy Deluxe Crispy Chicken",
+            aliases: ["jack in the box spicy chicken", "jack spicy chicken", "jitb spicy chicken sandwich"],
+            servingLabel: "1 sandwich (236 g)",
+            calories: 580, proteinG: 31, carbsG: 59, fatG: 25, fiberG: 3
+        ),
+        CommonFood(
+            id: "ff-jack-jumbo-jack", name: "Jack in the Box Jumbo Jack",
+            aliases: ["jumbo jack", "jack in the box jumbo jack", "jitb jumbo jack"],
+            servingLabel: "1 burger (256 g)",
+            calories: 590, proteinG: 26, carbsG: 47, fatG: 33, fiberG: 2
+        ),
+
+        // — Dairy Queen — https://www.dairyqueen.com/us-en/food/nutrition-info/
+        CommonFood(
+            id: "ff-dq-blizzard-medium", name: "Dairy Queen Blizzard",
+            // DQ Oreo Blizzard medium
+            aliases: ["dairy queen blizzard", "dq blizzard", "blizzard dairy queen", "oreo blizzard"],
+            servingLabel: "Medium (414 g)",
+            calories: 740, proteinG: 15, carbsG: 106, fatG: 28, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-dq-soft-serve-cone", name: "Dairy Queen vanilla cone",
+            aliases: ["dairy queen cone", "dq cone", "vanilla soft serve cone", "dq vanilla cone"],
+            servingLabel: "Medium soft serve (163 g)",
+            calories: 330, proteinG: 9, carbsG: 52, fatG: 11, fiberG: 0
+        ),
+        CommonFood(
+            id: "ff-dq-chicken-strips", name: "Dairy Queen chicken strip basket",
+            aliases: ["dq chicken strips", "dairy queen chicken strips", "dq strip basket"],
+            servingLabel: "4-piece basket with fries (418 g)",
+            calories: 1010, proteinG: 43, carbsG: 118, fatG: 40, fiberG: 7
+        ),
+
+        // — Wingstop — https://www.wingstop.com/menu/nutrition
+        CommonFood(
+            id: "ff-wingstop-original-hot", name: "Wingstop Original Hot wings",
+            aliases: ["wingstop wings", "wingstop original hot", "wingstop classic wings", "wingstop hot wings"],
+            servingLabel: "6 classic wings (~180 g meat)",
+            calories: 560, proteinG: 46, carbsG: 2, fatG: 40, fiberG: 0
+        ),
+        CommonFood(
+            id: "ff-wingstop-fries", name: "Wingstop seasoned fries",
+            aliases: ["wingstop fries", "wingstop cajun fries", "wingstop seasoned fries"],
+            servingLabel: "Large (227 g)",
+            calories: 470, proteinG: 6, carbsG: 69, fatG: 20, fiberG: 5
+        ),
+        CommonFood(
+            id: "ff-wingstop-boneless", name: "Wingstop boneless wings",
+            aliases: ["wingstop boneless", "boneless wings wingstop", "wingstop boneless chicken"],
+            servingLabel: "8 pieces (~180 g)",
+            calories: 510, proteinG: 36, carbsG: 35, fatG: 23, fiberG: 2
+        ),
+
+        // — Dunkin' — https://www.dunkindonuts.com/en/menu/nutrition
+        CommonFood(
+            id: "ff-dunkin-glazed-donut", name: "Dunkin' glazed donut",
+            aliases: ["dunkin glazed donut", "dunkin' glazed donut", "dunkin donuts glazed", "dd glazed donut"],
+            servingLabel: "1 donut (58 g)",
+            calories: 260, proteinG: 4, carbsG: 33, fatG: 14, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-dunkin-egg-sandwich", name: "Dunkin' egg & cheese sandwich",
+            aliases: ["dunkin egg sandwich", "dunkin breakfast sandwich", "dunkin egg cheese", "dd breakfast sandwich"],
+            servingLabel: "1 sandwich (131 g) on croissant",
+            calories: 420, proteinG: 14, carbsG: 31, fatG: 28, fiberG: 1
+        ),
+
+        // — Krispy Kreme — https://www.krispykreme.com/nutrition
+        CommonFood(
+            id: "ff-krispy-kreme-original", name: "Krispy Kreme Original Glazed donut",
+            aliases: ["krispy kreme", "krispy kreme glazed", "original glazed donut krispy kreme", "kk original glazed"],
+            servingLabel: "1 donut (52 g)",
+            calories: 190, proteinG: 2, carbsG: 22, fatG: 11, fiberG: 0
+        ),
+
+        // — Culver's — https://www.culvers.com/menu-and-nutrition/
+        CommonFood(
+            id: "ff-culvers-butterburger", name: "Culver's ButterBurger",
+            aliases: ["culvers butterburger", "culver's butterburger", "butterburger"],
+            servingLabel: "1 single ButterBurger (156 g)",
+            calories: 380, proteinG: 20, carbsG: 34, fatG: 18, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-culvers-cheese-curds", name: "Culver's Wisconsin cheese curds",
+            aliases: ["culvers cheese curds", "culver's cheese curds", "cheese curds culvers"],
+            servingLabel: "Regular (151 g)",
+            calories: 530, proteinG: 27, carbsG: 40, fatG: 29, fiberG: 1
+        ),
+
+        // — Whataburger — https://whataburger.com/nutrition
+        CommonFood(
+            id: "ff-whataburger", name: "Whataburger",
+            aliases: ["whataburger", "whata burger"],
+            servingLabel: "1 burger (301 g)",
+            calories: 590, proteinG: 30, carbsG: 61, fatG: 26, fiberG: 3
+        ),
+
+        // — Buffalo Wild Wings — https://www.buffalowildwings.com/en/food/
+        CommonFood(
+            id: "ff-bww-traditional-wings", name: "Buffalo Wild Wings traditional wings",
+            aliases: ["buffalo wild wings", "bww wings", "bdubs wings", "bdubs traditional", "buffalo wings bdubs"],
+            servingLabel: "6 medium traditional wings with sauce (~200 g)",
+            calories: 430, proteinG: 36, carbsG: 0, fatG: 30, fiberG: 0
+        ),
+        CommonFood(
+            id: "ff-jollibee-spaghetti", name: "Jollibee Jolly Spaghetti",
+            // Jollibee official
+            aliases: ["jollibee spaghetti", "jolly spaghetti", "filipino sweet spaghetti jollibee", "jollibee pasta"],
+            servingLabel: "1 plate (320 g)",
+            calories: 560, proteinG: 19, carbsG: 84, fatG: 17, fiberG: 4
+        ),
+        CommonFood(
+            id: "ff-jollibee-palabok", name: "Jollibee Palabok Fiesta",
+            // Jollibee official
+            aliases: ["jollibee palabok", "palabok fiesta", "jollibee pancit palabok", "filipino shrimp noodles jollibee"],
+            servingLabel: "1 plate (340 g)",
+            calories: 590, proteinG: 23, carbsG: 75, fatG: 22, fiberG: 3
+        ),
+        CommonFood(
+            id: "ff-jollibee-peach-mango-pie", name: "Jollibee Peach Mango Pie",
+            // Jollibee official
+            aliases: ["jollibee peach mango pie", "jollibee mango pie", "peach mango pie jollibee", "jollibee fried pie"],
+            servingLabel: "1 pie (80 g)",
+            calories: 270, proteinG: 3, carbsG: 36, fatG: 12, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-jollibee-burger-steak", name: "Jollibee Burger Steak",
+            // Jollibee official
+            aliases: ["jollibee burger steak", "burger steak jollibee", "jollibee mushroom gravy patty", "filipino burger steak rice"],
+            servingLabel: "1 patty with gravy (130 g)",
+            calories: 280, proteinG: 10, carbsG: 24, fatG: 16, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-mcd-mcchicken", name: "McChicken",
+            // McDonald's official
+            aliases: ["mcchicken", "mcdonalds mcchicken", "mcdonald's mcchicken", "mc chicken sandwich"],
+            servingLabel: "1 sandwich (143 g)",
+            calories: 400, proteinG: 14, carbsG: 40, fatG: 21, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-mcd-mcdouble", name: "McDouble",
+            // McDonald's official
+            aliases: ["mcdouble", "mcdonalds mcdouble", "double cheeseburger mcdonalds", "mc double"],
+            servingLabel: "1 burger (151 g)",
+            calories: 400, proteinG: 22, carbsG: 33, fatG: 20, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-mcd-egg-mcmuffin", name: "Egg McMuffin",
+            // McDonald's official
+            aliases: ["egg mcmuffin", "mcdonalds egg mcmuffin", "egg mc muffin", "mcdonalds breakfast muffin"],
+            servingLabel: "1 muffin (135 g)",
+            calories: 310, proteinG: 17, carbsG: 30, fatG: 13, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-mcd-sausage-mcmuffin-egg", name: "Sausage McMuffin with Egg",
+            // McDonald's official
+            aliases: ["sausage mcmuffin with egg", "mcdonalds sausage mcmuffin", "sausage egg mcmuffin", "sausage mc muffin"],
+            servingLabel: "1 muffin (163 g)",
+            calories: 480, proteinG: 20, carbsG: 30, fatG: 31, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-mcd-hash-brown", name: "McDonald's hash brown",
+            // McDonald's official
+            aliases: ["mcdonalds hash brown", "mcdonald's hash brown", "mcdonalds hashbrown", "mcdonalds breakfast hash brown"],
+            servingLabel: "1 piece (53 g)",
+            calories: 140, proteinG: 1, carbsG: 16, fatG: 8, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-mcd-hotcakes", name: "Hotcakes (3)",
+            // McDonald's official
+            aliases: ["mcdonalds hotcakes", "mcdonald's hotcakes", "mcdonalds pancakes", "three hotcakes"],
+            servingLabel: "3 hotcakes with syrup & butter (228 g)",
+            calories: 580, proteinG: 8, carbsG: 102, fatG: 16, fiberG: 3
+        ),
+        CommonFood(
+            id: "ff-mcd-filet-o-fish", name: "Filet-O-Fish",
+            // McDonald's official
+            aliases: ["filet o fish", "filet-o-fish", "mcdonalds fish sandwich", "fillet o fish"],
+            servingLabel: "1 sandwich (142 g)",
+            calories: 390, proteinG: 15, carbsG: 39, fatG: 19, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-mcd-mcflurry-oreo", name: "McFlurry with Oreo Cookies",
+            // McDonald's official
+            aliases: ["oreo mcflurry", "mcdonalds mcflurry", "mc flurry oreo", "oreo mc flurry"],
+            servingLabel: "Regular (285 g)",
+            calories: 480, proteinG: 11, carbsG: 80, fatG: 15, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-mcd-apple-pie", name: "McDonald's Baked Apple Pie",
+            // McDonald's official
+            aliases: ["mcdonalds apple pie", "mcdonald's apple pie", "baked apple pie mcdonalds", "mcdonalds hot apple pie"],
+            servingLabel: "1 pie (77 g)",
+            calories: 230, proteinG: 2, carbsG: 33, fatG: 11, fiberG: 4
+        ),
+        CommonFood(
+            id: "ff-mcd-sausage-biscuit", name: "Sausage Biscuit",
+            // McDonald's official
+            aliases: ["mcdonalds sausage biscuit", "mcdonald's sausage biscuit", "sausage biscuit mcdonalds", "breakfast sausage biscuit"],
+            servingLabel: "1 biscuit (111 g)",
+            calories: 460, proteinG: 11, carbsG: 36, fatG: 30, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-mcd-mcnuggets-6", name: "Chicken McNuggets (6 pc)",
+            // McDonald's official
+            aliases: ["6 piece mcnuggets", "6 piece chicken nuggets mcdonalds", "six piece mcnuggets", "6pc mcnuggets"],
+            servingLabel: "6 pieces (97 g)",
+            calories: 250, proteinG: 14, carbsG: 15, fatG: 15, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-mcd-fries-large", name: "McDonald's large fries",
+            // McDonald's official
+            aliases: ["mcdonalds large fries", "mcdonald's large fries", "mcdonalds large french fries", "large world famous fries"],
+            servingLabel: "Large (150 g)",
+            calories: 510, proteinG: 7, carbsG: 66, fatG: 24, fiberG: 6
+        ),
+        CommonFood(
+            id: "ff-mcd-sausage-mcgriddles", name: "Sausage McGriddles",
+            // McDonald's official
+            aliases: ["sausage mcgriddles", "mcdonalds mcgriddle", "sausage mc griddle", "mcgriddle sausage"],
+            servingLabel: "1 sandwich (115 g)",
+            calories: 430, proteinG: 11, carbsG: 43, fatG: 24, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-mcd-bacon-egg-cheese-biscuit", name: "Bacon, Egg & Cheese Biscuit",
+            // McDonald's official
+            aliases: ["bacon egg and cheese biscuit", "mcdonalds bacon egg cheese biscuit", "bacon egg cheese biscuit", "bec biscuit mcdonalds"],
+            servingLabel: "1 biscuit (149 g)",
+            calories: 460, proteinG: 19, carbsG: 38, fatG: 26, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-wendys-baconator", name: "Wendy's Baconator",
+            // Wendy's official
+            aliases: ["wendys baconator", "wendy's baconator", "baconator burger", "wendys bacon burger"],
+            servingLabel: "1 burger (296 g)",
+            calories: 950, proteinG: 56, carbsG: 40, fatG: 62, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-wendys-spicy-chicken-sandwich", name: "Wendy's Spicy Chicken Sandwich",
+            // Wendy's official
+            aliases: ["wendys spicy chicken sandwich", "wendy's spicy chicken", "spicy chicken sandwich wendys", "wendys spicy chicken sandwich"],
+            servingLabel: "1 sandwich (225 g)",
+            calories: 510, proteinG: 31, carbsG: 50, fatG: 20, fiberG: 3
+        ),
+        CommonFood(
+            id: "ff-wendys-nuggets-10", name: "Wendy's Chicken Nuggets (10 pc)",
+            // Wendy's official
+            aliases: ["wendys nuggets", "wendy's chicken nuggets", "10 piece nuggets wendys", "wendys 10 piece nuggets"],
+            servingLabel: "10 pieces (150 g)",
+            calories: 420, proteinG: 24, carbsG: 24, fatG: 26, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-wendys-jr-bacon-cheeseburger", name: "Wendy's Jr. Bacon Cheeseburger",
+            // Wendy's official
+            aliases: ["jr bacon cheeseburger", "wendys jr bacon cheeseburger", "junior bacon cheeseburger wendys", "wendys junior bacon burger"],
+            servingLabel: "1 burger (129 g)",
+            calories: 380, proteinG: 20, carbsG: 25, fatG: 22, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-wendys-chili-small", name: "Wendy's Chili (small)",
+            // Wendy's official
+            aliases: ["wendys chili", "wendy's chili small", "small chili wendys", "wendys beef chili"],
+            servingLabel: "Small (227 g)",
+            calories: 240, proteinG: 17, carbsG: 23, fatG: 7, fiberG: 6
+        ),
+        CommonFood(
+            id: "ff-wendys-baconator-fries", name: "Wendy's Baconator Fries",
+            // Wendy's official
+            aliases: ["baconator fries", "wendys baconator fries", "wendy's baconator fries", "bacon cheese fries wendys"],
+            servingLabel: "1 order (170 g)",
+            calories: 480, proteinG: 15, carbsG: 46, fatG: 27, fiberG: 5
+        ),
+        CommonFood(
+            id: "ff-wendys-daves-double", name: "Wendy's Dave's Double",
+            // Wendy's official
+            aliases: ["daves double", "wendys daves double", "dave's double burger", "wendys double cheeseburger"],
+            servingLabel: "1 burger (314 g)",
+            calories: 810, proteinG: 48, carbsG: 40, fatG: 50, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-tb-doritos-locos-taco", name: "Taco Bell Doritos Locos Taco",
+            // Taco Bell official
+            aliases: ["doritos locos taco", "taco bell doritos taco", "nacho cheese doritos locos taco", "dlt taco bell"],
+            servingLabel: "1 taco (78 g)",
+            calories: 170, proteinG: 8, carbsG: 13, fatG: 9, fiberG: 3
+        ),
+        CommonFood(
+            id: "ff-tb-bean-burrito", name: "Taco Bell Bean Burrito",
+            // Taco Bell official
+            aliases: ["taco bell bean burrito", "bean burrito taco bell", "refried bean burrito", "tb bean burrito"],
+            servingLabel: "1 burrito (198 g)",
+            calories: 350, proteinG: 13, carbsG: 54, fatG: 9, fiberG: 11
+        ),
+        CommonFood(
+            id: "ff-tb-nachos-bellgrande", name: "Taco Bell Nachos BellGrande",
+            // Taco Bell official
+            aliases: ["nachos bellgrande", "taco bell nachos bellgrande", "nachos bell grande", "tb nachos bellgrande"],
+            servingLabel: "1 order (484 g)",
+            calories: 740, proteinG: 16, carbsG: 82, fatG: 38, fiberG: 12
+        ),
+        CommonFood(
+            id: "ff-tb-cinnamon-twists", name: "Taco Bell Cinnamon Twists",
+            // Taco Bell official
+            aliases: ["cinnamon twists", "taco bell cinnamon twists", "cinnamon twists taco bell", "tb cinnamon twists"],
+            servingLabel: "1 order (35 g)",
+            calories: 170, proteinG: 2, carbsG: 27, fatG: 6, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-tb-mexican-pizza", name: "Taco Bell Mexican Pizza",
+            // Taco Bell official
+            aliases: ["mexican pizza", "taco bell mexican pizza", "mexican pizza taco bell", "tb mexican pizza"],
+            servingLabel: "1 pizza (218 g)",
+            calories: 540, proteinG: 19, carbsG: 48, fatG: 30, fiberG: 6
+        ),
+        CommonFood(
+            id: "ff-tb-cheesy-gordita-crunch", name: "Taco Bell Cheesy Gordita Crunch",
+            // Taco Bell official
+            aliases: ["cheesy gordita crunch", "taco bell gordita crunch", "cheesy gordita crunch taco bell", "cgc taco bell"],
+            servingLabel: "1 gordita (200 g)",
+            calories: 500, proteinG: 20, carbsG: 41, fatG: 28, fiberG: 4
+        ),
+        CommonFood(
+            id: "ff-tb-beefy-5-layer-burrito", name: "Taco Bell Beefy 5-Layer Burrito",
+            // Taco Bell official
+            aliases: ["beefy 5 layer burrito", "taco bell 5 layer burrito", "beefy five layer burrito", "beefy 5-layer burrito"],
+            servingLabel: "1 burrito (248 g)",
+            calories: 490, proteinG: 18, carbsG: 64, fatG: 18, fiberG: 9
+        ),
+        CommonFood(
+            id: "ff-bk-chicken-fries", name: "Burger King Chicken Fries",
+            // Burger King official
+            aliases: ["bk chicken fries", "burger king chicken fries", "chicken fries burger king", "9 piece chicken fries"],
+            servingLabel: "9 pieces (114 g)",
+            calories: 280, proteinG: 13, carbsG: 19, fatG: 17, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-bk-bacon-king", name: "Burger King Bacon King",
+            // Burger King official
+            aliases: ["bacon king", "burger king bacon king", "bk bacon king burger", "bacon king sandwich"],
+            servingLabel: "1 sandwich (322 g)",
+            calories: 1050, proteinG: 57, carbsG: 49, fatG: 70, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-bk-whopper-jr", name: "Whopper Jr.",
+            // Burger King official
+            aliases: ["whopper jr", "burger king whopper jr", "whopper junior", "bk whopper jr"],
+            servingLabel: "1 sandwich (133 g)",
+            calories: 310, proteinG: 13, carbsG: 27, fatG: 17, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-bk-mozzarella-sticks", name: "Burger King Mozzarella Sticks",
+            // Burger King official
+            aliases: ["bk mozzarella sticks", "burger king mozzarella sticks", "mozzarella sticks burger king", "4 piece mozzarella sticks bk"],
+            servingLabel: "4 pieces (113 g)",
+            calories: 350, proteinG: 14, carbsG: 33, fatG: 18, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-bk-original-chicken-sandwich", name: "BK Original Chicken Sandwich",
+            // Burger King official
+            aliases: ["bk original chicken sandwich", "burger king chicken sandwich", "original chicken sandwich burger king", "bk chicken sandwich"],
+            servingLabel: "1 sandwich (219 g)",
+            calories: 660, proteinG: 28, carbsG: 52, fatG: 40, fiberG: 4
+        ),
+        CommonFood(
+            id: "ff-bk-croissanwich", name: "Sausage, Egg & Cheese Croissan'wich",
+            // Burger King official
+            aliases: ["croissanwich", "burger king croissanwich", "sausage egg cheese croissanwich", "bk croissan'wich"],
+            servingLabel: "1 sandwich (160 g)",
+            calories: 500, proteinG: 18, carbsG: 28, fatG: 35, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-sonic-mozzarella-sticks", name: "Sonic Mozzarella Sticks",
+            // Sonic Drive-In official
+            aliases: ["sonic mozzarella sticks", "sonic mozz sticks", "mozzarella sticks sonic", "sonic cheese sticks"],
+            servingLabel: "5 pieces (137 g)",
+            calories: 440, proteinG: 19, carbsG: 40, fatG: 22, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-kfc-popcorn-chicken-lg", name: "KFC Popcorn Chicken (Large)",
+            // KFC official
+            aliases: ["kfc popcorn chicken", "popcorn chicken", "kentucky fried popcorn chicken", "kfc popcorn nuggets"],
+            servingLabel: "Large (159 g)",
+            calories: 620, proteinG: 30, carbsG: 36, fatG: 40, fiberG: 3
+        ),
+        CommonFood(
+            id: "ff-kfc-famous-bowl", name: "KFC Famous Bowl",
+            // KFC official
+            aliases: ["kfc famous bowl", "famous bowl", "kentucky fried famous bowl", "mashed potato gravy bowl"],
+            servingLabel: "1 bowl (485 g)",
+            calories: 720, proteinG: 26, carbsG: 77, fatG: 33, fiberG: 6
+        ),
+        CommonFood(
+            id: "ff-kfc-tenders-3pc", name: "KFC Crispy Tenders (3 pc)",
+            // KFC official
+            aliases: ["kfc tenders", "kfc crispy tenders", "kentucky fried tenders", "3 piece tenders kfc"],
+            servingLabel: "3 tenders (132 g)",
+            calories: 410, proteinG: 29, carbsG: 24, fatG: 21, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-kfc-coleslaw", name: "KFC Coleslaw",
+            // KFC official
+            aliases: ["kfc coleslaw", "kfc cole slaw", "kentucky fried coleslaw", "kfc slaw side"],
+            servingLabel: "Individual (130 g)",
+            calories: 170, proteinG: 1, carbsG: 22, fatG: 9, fiberG: 3
+        ),
+        CommonFood(
+            id: "ff-kfc-mashed-potatoes-gravy", name: "KFC Mashed Potatoes with Gravy",
+            // KFC official
+            aliases: ["kfc mashed potatoes", "kfc mashed potatoes and gravy", "kentucky fried mashed potatoes", "kfc potatoes gravy"],
+            servingLabel: "Individual (136 g)",
+            calories: 130, proteinG: 3, carbsG: 19, fatG: 5, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-kfc-biscuit", name: "KFC Biscuit",
+            // KFC official
+            aliases: ["kfc biscuit", "kentucky fried biscuit", "kfc buttermilk biscuit"],
+            servingLabel: "1 biscuit (62 g)",
+            calories: 180, proteinG: 4, carbsG: 23, fatG: 8, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-popeyes-red-beans-rice", name: "Popeyes Red Beans & Rice",
+            // Popeyes official
+            aliases: ["popeyes red beans and rice", "popeyes red beans", "cajun red beans rice", "louisiana red beans rice"],
+            servingLabel: "Regular (139 g)",
+            calories: 230, proteinG: 7, carbsG: 31, fatG: 8, fiberG: 7
+        ),
+        CommonFood(
+            id: "ff-popeyes-biscuit", name: "Popeyes Buttermilk Biscuit",
+            // Popeyes official
+            aliases: ["popeyes biscuit", "popeyes buttermilk biscuit", "louisiana biscuit", "cajun biscuit"],
+            servingLabel: "1 biscuit (60 g)",
+            calories: 230, proteinG: 3, carbsG: 26, fatG: 13, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-popeyes-cajun-fries", name: "Popeyes Cajun Fries",
+            // Popeyes official
+            aliases: ["popeyes cajun fries", "cajun fries", "popeyes seasoned fries", "louisiana cajun fries"],
+            servingLabel: "Regular (95 g)",
+            calories: 290, proteinG: 4, carbsG: 36, fatG: 15, fiberG: 4
+        ),
+        CommonFood(
+            id: "ff-popeyes-blackened-tenders", name: "Popeyes Blackened Chicken Tenders (3 pc)",
+            // Popeyes official
+            aliases: ["popeyes blackened tenders", "popeyes blackened chicken", "cajun blackened tenders", "popeyes grilled tenders"],
+            servingLabel: "3 tenders (130 g)",
+            calories: 170, proteinG: 31, carbsG: 3, fatG: 4, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-cfa-spicy-sandwich", name: "Chick-fil-A Spicy Chicken Sandwich",
+            // Chick-fil-A official
+            aliases: ["chick fil a spicy sandwich", "chick-fil-a spicy chicken sandwich", "cfa spicy sandwich", "chickfila spicy chicken"],
+            servingLabel: "1 sandwich (187 g)",
+            calories: 450, proteinG: 28, carbsG: 42, fatG: 19, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-cfa-mac-and-cheese", name: "Chick-fil-A Mac & Cheese",
+            // Chick-fil-A official
+            aliases: ["chick fil a mac and cheese", "chick-fil-a mac and cheese", "cfa mac and cheese", "chickfila macaroni"],
+            servingLabel: "Medium (218 g)",
+            calories: 450, proteinG: 18, carbsG: 30, fatG: 29, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-cfa-cobb-salad", name: "Chick-fil-A Cobb Salad (no dressing)",
+            // Chick-fil-A official, with nuggets
+            aliases: ["chick fil a cobb salad", "chick-fil-a cobb salad", "cfa cobb salad", "chickfila cobb"],
+            servingLabel: "1 salad (337 g)",
+            calories: 510, proteinG: 40, carbsG: 27, fatG: 28, fiberG: 5
+        ),
+        CommonFood(
+            id: "ff-cfa-frosted-lemonade", name: "Chick-fil-A Frosted Lemonade",
+            // Chick-fil-A official
+            aliases: ["chick fil a frosted lemonade", "chick-fil-a frosted lemonade", "cfa frosted lemonade", "chickfila frosted lemonade"],
+            servingLabel: "Small (482 g)",
+            calories: 330, proteinG: 7, carbsG: 63, fatG: 6, fiberG: 0
+        ),
+        CommonFood(
+            id: "ff-cfa-chicken-biscuit", name: "Chick-fil-A Chicken Biscuit",
+            // Chick-fil-A official
+            aliases: ["chick fil a chicken biscuit", "chick-fil-a chicken biscuit", "cfa chicken biscuit", "chickfila biscuit"],
+            servingLabel: "1 biscuit (143 g)",
+            calories: 460, proteinG: 17, carbsG: 45, fatG: 23, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-cfa-grilled-nuggets-8", name: "Chick-fil-A Grilled Nuggets (8 ct)",
+            // Chick-fil-A official
+            aliases: ["chick fil a grilled nuggets", "chick-fil-a grilled nuggets", "cfa grilled nuggets", "chickfila grilled nuggets"],
+            servingLabel: "8 count (113 g)",
+            calories: 130, proteinG: 25, carbsG: 1, fatG: 3, fiberG: 0
+        ),
+        CommonFood(
+            id: "ff-subway-meatball-marinara-footlong", name: "Subway Meatball Marinara Footlong",
+            // Subway official
+            aliases: ["subway meatball marinara", "meatball marinara footlong", "subway meatball sub", "footlong meatball marinara"],
+            servingLabel: "Footlong (491 g)",
+            calories: 960, proteinG: 42, carbsG: 116, fatG: 36, fiberG: 10
+        ),
+        CommonFood(
+            id: "ff-subway-tuna-footlong", name: "Subway Tuna Footlong",
+            // Subway official
+            aliases: ["subway tuna footlong", "footlong tuna sub", "subway tuna sandwich", "tuna melt subway"],
+            servingLabel: "Footlong (456 g)",
+            calories: 960, proteinG: 42, carbsG: 76, fatG: 54, fiberG: 6
+        ),
+        CommonFood(
+            id: "ff-subway-steak-cheese-footlong", name: "Subway Steak & Cheese Footlong",
+            // Subway official
+            aliases: ["subway steak and cheese", "steak and cheese footlong", "subway philly steak", "footlong steak cheese"],
+            servingLabel: "Footlong (530 g)",
+            calories: 740, proteinG: 48, carbsG: 86, fatG: 24, fiberG: 10
+        ),
+        CommonFood(
+            id: "ff-subway-sweet-onion-chicken-teriyaki", name: "Subway Sweet Onion Chicken Teriyaki Footlong",
+            // Subway official
+            aliases: ["subway sweet onion chicken teriyaki", "sweet onion chicken teriyaki", "subway teriyaki chicken", "footlong chicken teriyaki"],
+            servingLabel: "Footlong (560 g)",
+            calories: 760, proteinG: 48, carbsG: 118, fatG: 12, fiberG: 8
+        ),
+        CommonFood(
+            id: "ff-pizzahut-pepperoni-pan-slice", name: "Pizza Hut Pepperoni Pan Pizza (1 slice)",
+            // Pizza Hut official
+            aliases: ["pizza hut pepperoni pan", "pepperoni pan pizza slice", "pizza hut pan slice", "pizza hut pepperoni slice"],
+            servingLabel: "1 slice, large (113 g)",
+            calories: 340, proteinG: 13, carbsG: 33, fatG: 17, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-littlecaesars-cheese-slice", name: "Little Caesars Cheese Pizza (1 slice)",
+            // Little Caesars official
+            aliases: ["little caesars cheese slice", "little caesars cheese pizza", "lil caesars cheese slice", "little caesars classic cheese"],
+            servingLabel: "1 slice (104 g)",
+            calories: 250, proteinG: 12, carbsG: 31, fatG: 9, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-papajohns-pepperoni-slice", name: "Papa John's Pepperoni Pizza (1 slice)",
+            // Papa John's official
+            aliases: ["papa johns pepperoni slice", "papa johns pepperoni pizza", "papa john pepperoni slice", "papa johns original crust pepperoni"],
+            servingLabel: "1 slice, large (109 g)",
+            calories: 290, proteinG: 12, carbsG: 34, fatG: 12, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-chipotle-sofritas-bowl", name: "Chipotle Sofritas Bowl",
+            // Chipotle official, rice/beans/sofritas/salsa
+            aliases: ["chipotle sofritas bowl", "sofritas bowl", "chipotle tofu bowl", "chipotle sofritas burrito bowl"],
+            servingLabel: "1 bowl (510 g)",
+            calories: 605, proteinG: 18, carbsG: 85, fatG: 21, fiberG: 15
+        ),
+        CommonFood(
+            id: "ff-chipotle-queso-blanco", name: "Chipotle Queso Blanco (side)",
+            // Chipotle official
+            aliases: ["chipotle queso blanco", "chipotle queso", "queso blanco side", "chipotle white queso"],
+            servingLabel: "4 oz side (113 g)",
+            calories: 120, proteinG: 5, carbsG: 7, fatG: 9, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-panda-beijing-beef", name: "Beijing Beef (Panda Express)",
+            // Panda Express official
+            aliases: ["beijing beef", "panda express beijing beef", "panda beijing beef", "crispy beijing beef"],
+            servingLabel: "1 serving (5.6 oz / 159 g)",
+            calories: 480, proteinG: 14, carbsG: 46, fatG: 27, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-panda-kung-pao-chicken", name: "Kung Pao Chicken (Panda Express)",
+            // Panda Express official
+            aliases: ["kung pao chicken", "panda express kung pao", "panda kung pao chicken", "spicy kung pao chicken"],
+            servingLabel: "1 serving (5.7 oz / 162 g)",
+            calories: 290, proteinG: 16, carbsG: 14, fatG: 19, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-panda-honey-walnut-shrimp", name: "Honey Walnut Shrimp (Panda Express)",
+            // Panda Express official
+            aliases: ["honey walnut shrimp", "panda express honey walnut shrimp", "panda walnut shrimp", "candied walnut shrimp"],
+            servingLabel: "1 serving (3.7 oz / 105 g)",
+            calories: 360, proteinG: 13, carbsG: 35, fatG: 23, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-panda-fried-rice", name: "Fried Rice (Panda Express)",
+            // Panda Express official
+            aliases: ["panda express fried rice", "panda fried rice", "chinese fried rice side", "panda express white fried rice"],
+            servingLabel: "1 side (9.3 oz / 264 g)",
+            calories: 520, proteinG: 11, carbsG: 85, fatG: 16, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-panda-super-greens", name: "Super Greens (Panda Express)",
+            // Panda Express official
+            aliases: ["panda express super greens", "super greens side", "panda super greens", "broccoli kale cabbage side"],
+            servingLabel: "1 side (9.4 oz / 268 g)",
+            calories: 90, proteinG: 6, carbsG: 10, fatG: 3, fiberG: 5
+        ),
+        CommonFood(
+            id: "ff-panda-broccoli-beef", name: "Broccoli Beef (Panda Express)",
+            // Panda Express official
+            aliases: ["broccoli beef", "panda express broccoli beef", "panda broccoli beef", "beef and broccoli panda"],
+            servingLabel: "1 serving (5.4 oz / 153 g)",
+            calories: 150, proteinG: 9, carbsG: 13, fatG: 7, fiberG: 2
+        ),
+        CommonFood(
+            id: "ff-sbux-bacon-gouda-sandwich", name: "Starbucks Bacon & Gouda Sandwich",
+            // Starbucks official
+            aliases: ["starbucks bacon gouda", "bacon gouda sandwich", "starbucks bacon and gouda breakfast", "sbux bacon gouda"],
+            servingLabel: "1 sandwich (123 g)",
+            calories: 360, proteinG: 17, carbsG: 31, fatG: 19, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-sbux-egg-bites-bacon-gruyere", name: "Starbucks Bacon & Gruyère Egg Bites",
+            // Starbucks official
+            aliases: ["starbucks egg bites", "bacon gruyere egg bites", "sous vide egg bites", "starbucks bacon egg bites"],
+            servingLabel: "2 bites (130 g)",
+            calories: 300, proteinG: 19, carbsG: 9, fatG: 20, fiberG: 0
+        ),
+        CommonFood(
+            id: "ff-sbux-cake-pop", name: "Starbucks Birthday Cake Pop",
+            // Starbucks official
+            aliases: ["starbucks cake pop", "birthday cake pop", "sbux cake pop", "starbucks vanilla cake pop"],
+            servingLabel: "1 cake pop (43 g)",
+            calories: 160, proteinG: 2, carbsG: 22, fatG: 8, fiberG: 0
+        ),
+        CommonFood(
+            id: "ff-sbux-banana-bread", name: "Starbucks Banana Walnut Bread",
+            // Starbucks official
+            aliases: ["starbucks banana bread", "banana walnut bread starbucks", "sbux banana bread", "starbucks banana loaf"],
+            servingLabel: "1 slice (113 g)",
+            calories: 420, proteinG: 7, carbsG: 56, fatG: 19, fiberG: 3
+        ),
+        CommonFood(
+            id: "ff-dunkin-boston-kreme-donut", name: "Dunkin' Boston Kreme Donut",
+            // Dunkin' official
+            aliases: ["dunkin boston kreme", "boston kreme donut", "dunkin boston cream donut", "boston creme donut dunkin"],
+            servingLabel: "1 donut (87 g)",
+            calories: 300, proteinG: 4, carbsG: 42, fatG: 13, fiberG: 1
+        ),
+        CommonFood(
+            id: "ff-dunkin-munchkins-10", name: "Dunkin' Glazed Munchkins (10)",
+            // Dunkin' official
+            aliases: ["dunkin munchkins", "glazed munchkins", "dunkin donut holes", "munchkins 10 count"],
+            servingLabel: "10 munchkins (200 g)",
+            calories: 700, proteinG: 8, carbsG: 94, fatG: 33, fiberG: 3
+        ),
+        CommonFood(
+            id: "ff-dunkin-bagel-cream-cheese", name: "Dunkin' Bagel with Cream Cheese",
+            // Dunkin' official
+            aliases: ["dunkin bagel with cream cheese", "dunkin plain bagel cream cheese", "dunkin bagel and cream cheese", "plain bagel cream cheese dunkin"],
+            servingLabel: "1 bagel + spread (170 g)",
+            calories: 520, proteinG: 15, carbsG: 78, fatG: 17, fiberG: 4
+        ),
     ]
 
     // MARK: - Condiments, sauces & cooking fats
@@ -3885,6 +5974,71 @@ public enum CommonFoods {
             aliases: ["coconut milk", "coconut cream", "canned coconut milk", "full fat coconut milk"],
             servingLabel: "¼ cup (60 ml)",
             calories: 112, proteinG: 1, carbsG: 3, fatG: 12, fiberG: 0
+        ),
+        CommonFood(
+            id: "aji-colombiano", name: "Ají Colombiano",
+            aliases: ["aji colombiano", "colombian aji hot sauce", "aji picado"],
+            servingLabel: "2 tbsp (30 g)",
+            calories: 25, proteinG: 1, carbsG: 3, fatG: 1, fiberG: 1
+        ),
+        CommonFood(
+            id: "hogao-criollo-sauce", name: "Hogao (Salsa Criolla)",
+            aliases: ["hogao colombiano", "colombian criollo sauce", "salsa criolla hogao"],
+            servingLabel: "2 tbsp (30 g)",
+            calories: 30, proteinG: 0, carbsG: 3, fatG: 2, fiberG: 1
+        ),
+        CommonFood(
+            id: "sweet-relish", name: "Sweet relish",
+            // USDA FDC #168550
+            aliases: ["sweet pickle relish", "hot dog relish", "sweet cucumber relish"],
+            servingLabel: "1 tbsp (15 g)",
+            calories: 20, proteinG: 0, carbsG: 5, fatG: 0, fiberG: 0
+        ),
+        CommonFood(
+            id: "tartar-sauce", name: "Tartar sauce",
+            // USDA FDC #173595
+            aliases: ["tartar sauce", "tartare sauce", "fish fry sauce"],
+            servingLabel: "2 tbsp (28 g)",
+            calories: 140, proteinG: 0, carbsG: 4, fatG: 14, fiberG: 0
+        ),
+        CommonFood(
+            id: "cocktail-sauce", name: "Cocktail sauce",
+            aliases: ["shrimp cocktail sauce", "seafood cocktail sauce", "horseradish cocktail sauce"],
+            servingLabel: "¼ cup (60 g)",
+            calories: 80, proteinG: 1, carbsG: 19, fatG: 0, fiberG: 1
+        ),
+        CommonFood(
+            id: "buffalo-wing-sauce", name: "Buffalo wing sauce",
+            // Frank's RedHot official
+            aliases: ["buffalo wing sauce", "frank's buffalo sauce", "hot wing sauce"],
+            servingLabel: "2 tbsp (30 g)",
+            calories: 30, proteinG: 0, carbsG: 1, fatG: 3, fiberG: 0
+        ),
+        CommonFood(
+            id: "honey-mustard", name: "Honey mustard",
+            aliases: ["honey mustard sauce", "honey mustard dressing", "honey dijon dip"],
+            servingLabel: "2 tbsp (30 g)",
+            calories: 100, proteinG: 0, carbsG: 8, fatG: 8, fiberG: 0
+        ),
+        CommonFood(
+            id: "thousand-island-dressing", name: "Thousand Island dressing",
+            // USDA FDC #171428
+            aliases: ["thousand island dressing", "1000 island dressing", "thousand island sauce"],
+            servingLabel: "2 tbsp (30 g)",
+            calories: 110, proteinG: 0, carbsG: 5, fatG: 10, fiberG: 0
+        ),
+        CommonFood(
+            id: "blue-cheese-dressing", name: "Blue cheese dressing",
+            // USDA FDC #167659
+            aliases: ["blue cheese dressing", "bleu cheese dressing", "chunky blue cheese dip"],
+            servingLabel: "2 tbsp (30 g)",
+            calories: 150, proteinG: 1, carbsG: 2, fatG: 16, fiberG: 0
+        ),
+        CommonFood(
+            id: "chimichurri", name: "Chimichurri sauce",
+            aliases: ["chimichurri sauce", "argentinian chimichurri", "parsley garlic sauce"],
+            servingLabel: "2 tbsp (30 g)",
+            calories: 120, proteinG: 0, carbsG: 1, fatG: 13, fiberG: 0
         ),
     ]
 
@@ -4105,6 +6259,31 @@ public enum CommonFoods {
             aliases: ["salmon rice bowl", "salmon bowl", "grilled salmon bowl"],
             servingLabel: "1 bowl (salmon + rice + veggies, 380 g)",
             calories: 540, proteinG: 36, carbsG: 52, fatG: 18, fiberG: 4
+        ),
+        CommonFood(
+            id: "deli-broccoli-salad", name: "Broccoli salad (deli)",
+            aliases: ["broccoli bacon salad", "broccoli cheddar salad", "creamy broccoli salad"],
+            servingLabel: "½ cup (90 g)",
+            calories: 200, proteinG: 4, carbsG: 14, fatG: 15, fiberG: 3
+        ),
+        CommonFood(
+            id: "deli-three-bean-salad", name: "Three-bean salad (deli)",
+            // USDA FDC #173017
+            aliases: ["three bean salad", "marinated bean salad", "sweet and sour bean salad"],
+            servingLabel: "½ cup (130 g)",
+            calories: 130, proteinG: 4, carbsG: 23, fatG: 3, fiberG: 5
+        ),
+        CommonFood(
+            id: "deli-ambrosia-salad", name: "Ambrosia salad (deli)",
+            aliases: ["ambrosia fruit salad", "marshmallow fruit salad", "coconut fruit salad"],
+            servingLabel: "½ cup (130 g)",
+            calories: 200, proteinG: 2, carbsG: 30, fatG: 9, fiberG: 2
+        ),
+        CommonFood(
+            id: "deli-seven-layer-salad", name: "Seven-layer salad (deli)",
+            aliases: ["seven layer salad", "layered pea salad", "7 layer party salad"],
+            servingLabel: "1 cup (150 g)",
+            calories: 230, proteinG: 7, carbsG: 11, fatG: 18, fiberG: 2
         ),
     ]
 

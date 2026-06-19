@@ -107,6 +107,13 @@ public final class ToastCenter: ObservableObject {
                    accent: .win, symbol: msg.sfSymbol), for: 3.0)
     }
 
+    // Meal-logging streak milestone — self-gating: only shows at a milestone day.
+    public func mealStreak(days: Int, mode: Mode) {
+        guard let msg = EncouragementEngine.mealStreakMessage(days: days, mode: mode) else { return }
+        show(Toast(title: msg.headline, detail: msg.detail,
+                   accent: .win, symbol: msg.sfSymbol), for: 3.0)
+    }
+
     // Macro goal hit
     public func macroGoalHit(_ msg: EncouragementMessage) {
         show(Toast(title: msg.headline, detail: msg.detail,

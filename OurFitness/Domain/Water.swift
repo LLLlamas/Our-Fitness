@@ -19,9 +19,10 @@ public enum Water {
     /// Tap-to-add cup presets, in US fluid ounces. `symbol` maps to the custom
     /// glass icon by id in WaterCard, so the strings are placeholders.
     public static let presets: [CupPreset] = [
-        CupPreset(id: "cup-small",  label: "S", flOz: 8,  symbol: "glass-small"),
-        CupPreset(id: "cup-medium", label: "M", flOz: 16, symbol: "glass-medium"),
-        CupPreset(id: "cup-large",  label: "L", flOz: 32, symbol: "glass-large"),
+        CupPreset(id: "cup-sip",    label: "Sip", flOz: 4,  symbol: "glass-sip"),
+        CupPreset(id: "cup-small",  label: "S",   flOz: 8,  symbol: "glass-small"),
+        CupPreset(id: "cup-medium", label: "M",   flOz: 16, symbol: "glass-medium"),
+        CupPreset(id: "cup-large",  label: "L",   flOz: 32, symbol: "glass-large"),
     ]
 
     /// Default daily goal (~2.4 L). User-adjustable.
@@ -53,5 +54,30 @@ public enum Water {
         let vals = Dates.lastNDays(days, end: end).compactMap { map[$0] }.filter { $0 > 0 }
         guard !vals.isEmpty else { return 0 }
         return vals.reduce(0, +) / Double(vals.count)
+    }
+
+    /// Consecutive days ending at `end` on which intake met or exceeded `goalFlOz`.
+    /// Today is grace-zone: if today hasn't hit goal yet the streak is preserved from yesterday.
+    public static func streak(_ entries: [WaterEntryDTO], goalFlOz: Double, end: Date = Date()) -> Int {
+        guard goalFlOz > 0 else { return 0 }
+        let map = byDay(entries)
+        var n = 0
+        let cal = Calendar.current
+        var cursor = cal.startOfDay(for: end)
+        let todayKey = Dates.dayKey(end)
+        while true {
+            let key = Dates.dayKey(cursor)
+            if (map[key] ?? 0) >= goalFlOz {
+                n += 1
+            } else if key == todayKey {
+                // grace: not yet hit today — preserve streak from yesterday
+            } else {
+                break
+            }
+            if n >= 365 { break }   // runaway guard, capped at one year
+            guard let prev = cal.date(byAdding: .day, value: -1, to: cursor) else { break }
+            cursor = prev
+        }
+        return n
     }
 }

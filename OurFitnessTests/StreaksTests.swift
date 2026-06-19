@@ -69,4 +69,34 @@ final class StreaksTests: XCTestCase {
             2.0/7.0, accuracy: 0.01
         )
     }
+
+    // MARK: - Logging streak
+
+    func test_loggingStreak_zero_with_no_logs() {
+        XCTAssertEqual(Streaks.loggingStreak([], endDate: end), 0)
+    }
+
+    func test_loggingStreak_counts_consecutive_logged_days() {
+        let logs = [entry("2026-05-22", 1), entry("2026-05-23", 1), entry("2026-05-24", 1)]
+        XCTAssertEqual(Streaks.loggingStreak(logs, endDate: end), 3)
+    }
+
+    func test_loggingStreak_preserves_when_today_not_logged() {
+        // Nothing logged on the 24th (today) — streak holds from yesterday.
+        let logs = [entry("2026-05-22", 1), entry("2026-05-23", 1)]
+        XCTAssertEqual(Streaks.loggingStreak(logs, endDate: end), 2)
+    }
+
+    func test_loggingStreak_breaks_on_missed_prior_day() {
+        // 22nd missing breaks the chain; only 24th + 23rd count.
+        let logs = [entry("2026-05-23", 1), entry("2026-05-24", 1), entry("2026-05-21", 1)]
+        XCTAssertEqual(Streaks.loggingStreak(logs, endDate: end), 2)
+    }
+
+    func test_loggingStreak_respects_minEntriesPerDay() {
+        // 24th has 2 entries, 23rd only 1 — with a 2-meal threshold the 23rd
+        // doesn't qualify, so the streak is just the 24th.
+        let logs = [entry("2026-05-24", 1), entry("2026-05-24", 1), entry("2026-05-23", 1)]
+        XCTAssertEqual(Streaks.loggingStreak(logs, minEntriesPerDay: 2, endDate: end), 1)
+    }
 }

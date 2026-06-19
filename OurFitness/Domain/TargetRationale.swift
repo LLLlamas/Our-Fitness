@@ -126,6 +126,38 @@ public enum TargetRationale {
         "Fat is set to about \(fatPctOfCalories(for: p))% of your calories (\(p.computedTargets.fatG)g). Some fat is essential — your body needs it to make hormones and to absorb vitamins A, D, E, and K. Eating very low-fat can modestly lower testosterone, so this stays at a sensible floor."
     }
 
+    // MARK: - Circuit cardiometabolic targets (fiber floor + sodium / added-sugar / saturated-fat caps)
+    //
+    // These four only apply in Circuit mode (the caps are nil in Build). Copy ties
+    // each to the heart-health numbers Circuit exists to improve. Sources: soluble
+    // fibre lowers LDL (Whitehead, AJCN 2014); DASH + lower sodium lowers blood
+    // pressure (Sacks, NEJM 2001); added sugar and triglycerides (Te Morenga, BMJ
+    // 2012); saturated-fat swap lowers LDL (Hooper, Cochrane 2020).
+
+    /// Why your fiber floor is what it is. Reads the computed `fiberGMin`.
+    public static func fiberWhy(for p: ProfileDTO) -> String {
+        let g = p.computedTargets.fiberGMin ?? 35
+        return "Aim for at least \(g)g of fiber a day. Soluble fiber from oats, beans, and fruit binds cholesterol in your gut so less of the 'bad' LDL kind gets into your blood. It also slows how fast sugar hits your bloodstream and keeps you full on fewer calories."
+    }
+
+    /// Why your sodium cap is what it is. Reads the computed `sodiumMgMax`.
+    public static func sodiumWhy(for p: ProfileDTO) -> String {
+        let mg = p.computedTargets.sodiumMgMax ?? 1500
+        return "Try to stay under about \(mg) mg of sodium a day. Less salt means less water your body holds onto and lower blood pressure — often a drop of several points on its own. Most sodium hides in restaurant and packaged food, not the salt shaker."
+    }
+
+    /// Why your added-sugar cap is what it is. Reads the computed `addedSugarGMax`.
+    public static func addedSugarWhy(for p: ProfileDTO) -> String {
+        let g = p.computedTargets.addedSugarGMax ?? 25
+        return "Try to keep added sugar under about \(g)g a day. Added sugar spikes your blood sugar and raises triglycerides (the fat circulating in your blood) without filling you up — cutting it is one of the fastest ways to move those numbers."
+    }
+
+    /// Why your saturated-fat cap is what it is. Reads the computed `saturatedFatGMax`.
+    public static func saturatedFatWhy(for p: ProfileDTO) -> String {
+        let g = p.computedTargets.saturatedFatGMax ?? 22
+        return "Try to keep saturated fat under about \(g)g a day (roughly a tenth of your calories). Swapping some saturated fat — fatty meat, butter, cheese — for unsaturated fat like olive oil, nuts, and fish lowers the 'bad' LDL cholesterol."
+    }
+
     // MARK: - Steps
 
     /// Plain-language "why this step goal", honest about what walking does and

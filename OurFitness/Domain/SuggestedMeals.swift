@@ -466,9 +466,16 @@ public enum SuggestedMeals {
     /// restrictions and ranked against today's largest macro gap. When protein
     /// is the most under-target macro, high-protein options surface first; when
     /// calories are the biggest gap, calorie-dense options surface first.
+    ///
+    /// Personalisation: pass `recentLogs` and/or `favoriteFoodIds` and meals built
+    /// from foods the user already eats get a multiplicative boost — so the
+    /// suggestions lean toward their taste without overriding a much stronger
+    /// macro match. Both default empty, so the macro-only behaviour is preserved.
     public static func ranked(
         for profile: ProfileDTO,
         totals: DailyTotals,
+        recentLogs: [FoodLogEntryDTO] = [],
+        favoriteFoodIds: Set<String> = [],
         limit: Int = 5
     ) -> [SuggestedMeal] {
         let pool = suggestions(for: profile.mode).filter { meal in
@@ -491,13 +498,49 @@ public enum SuggestedMeals {
             bias = .calorieDense
         }
 
+        let loved = lovedFoodIds(recentLogs: recentLogs, favoriteFoodIds: favoriteFoodIds)
         let sorted = pool.sorted { a, b in
-            let sa = score(a, bias: bias)
-            let sb = score(b, bias: bias)
+            let sa = score(a, bias: bias) * affinityMultiplier(a, loved: loved)
+            let sb = score(b, bias: bias) * affinityMultiplier(b, loved: loved)
             if sa != sb { return sa > sb }
+            // Affinity then name as deterministic tiebreakers.
+            let aa = affinityCount(a, loved: loved)
+            let ab = affinityCount(b, loved: loved)
+            if aa != ab { return aa > ab }
             return a.name < b.name
         }
         return Array(sorted.prefix(limit))
+    }
+
+    /// True when a meal is built around at least one food the user already eats
+    /// (favorite or frequently logged) — lets the UI tag it "Because you like…".
+    public static func isPersonalised(
+        _ meal: SuggestedMeal, recentLogs: [FoodLogEntryDTO], favoriteFoodIds: Set<String>
+    ) -> Bool {
+        affinityCount(meal, loved: lovedFoodIds(recentLogs: recentLogs, favoriteFoodIds: favoriteFoodIds)) > 0
+    }
+
+    /// Foods the user likes: explicit favorites ∪ their top recent most-logged.
+    private static func lovedFoodIds(
+        recentLogs: [FoodLogEntryDTO], favoriteFoodIds: Set<String>
+    ) -> Set<String> {
+        var s = favoriteFoodIds
+        s.formUnion(FoodAffinity.mostLoggedIds(recentLogs, limit: 8))
+        return s
+    }
+
+    /// Distinct loved ingredient foodIds present in a meal.
+    private static func affinityCount(_ meal: SuggestedMeal, loved: Set<String>) -> Int {
+        guard !loved.isEmpty else { return 0 }
+        var seen = Set<String>()
+        for t in meal.ingredientTemplates where loved.contains(t.foodId) { seen.insert(t.foodId) }
+        return seen.count
+    }
+
+    /// Each loved ingredient lifts a meal's score by 15%, capped at +60%.
+    /// Multiplicative so it scales with whichever macro bias is active.
+    private static func affinityMultiplier(_ meal: SuggestedMeal, loved: Set<String>) -> Double {
+        1.0 + min(0.6, 0.15 * Double(affinityCount(meal, loved: loved)))
     }
 
     private enum RankBias { case protein, calorieDense, neutral }

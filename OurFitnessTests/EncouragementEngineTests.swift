@@ -162,4 +162,31 @@ final class EncouragementEngineTests: XCTestCase {
         let msg = EncouragementEngine.macroGoalHitMessage(macro: "calories", mode: .circuit)
         XCTAssertFalse(msg.detail.contains("kcal"))
     }
+
+    // MARK: - Meal-logging streak
+
+    func testMealStreak_nonMilestone_returnsNil() {
+        XCTAssertNil(EncouragementEngine.mealStreakMessage(days: 2, mode: .build))
+        XCTAssertNil(EncouragementEngine.mealStreakMessage(days: 5, mode: .circuit))
+        XCTAssertNil(EncouragementEngine.mealStreakMessage(days: 0, mode: .build))
+    }
+
+    func testMealStreak_milestones_returnMessage() {
+        for d in [3, 7, 14, 30, 60, 100] {
+            XCTAssertNotNil(EncouragementEngine.mealStreakMessage(days: d, mode: .build),
+                            "expected a message at \(d) days")
+        }
+    }
+
+    func testMealStreak_7day_hasScienceLine() {
+        let msg = EncouragementEngine.mealStreakMessage(days: 7, mode: .circuit)
+        XCTAssertNotNil(msg?.scienceLine)
+        XCTAssertEqual(msg?.tone, .impressed)
+    }
+
+    func testMealStreak_modeShapesCopy() {
+        let build = EncouragementEngine.mealStreakMessage(days: 3, mode: .build)
+        let circuit = EncouragementEngine.mealStreakMessage(days: 3, mode: .circuit)
+        XCTAssertNotEqual(build?.detail, circuit?.detail)
+    }
 }

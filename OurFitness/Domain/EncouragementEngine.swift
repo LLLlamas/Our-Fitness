@@ -238,6 +238,53 @@ public enum EncouragementEngine {
         }
     }
 
+    // MARK: - Meal-logging streak
+
+    /// Meal-logging streak milestone copy (3 / 7 / 14 / 30 / 60 / 100 days).
+    /// Returns nil at any other day count so the toast layer never spams. This is
+    /// the "you logged today, N days running" habit reward — distinct from the
+    /// weekly movement streak (`streakMilestoneMessage`).
+    public static func mealStreakMessage(days: Int, mode: Mode) -> EncouragementMessage? {
+        let isBuild = mode == .build
+        switch days {
+        case 3:
+            return EncouragementMessage(
+                headline: "3-day logging streak.",
+                detail: isBuild
+                    ? "Three days of tracking. Knowing what you eat is the first lever on hitting your protein and your surplus."
+                    : "Three days of tracking. Seeing what you eat is the first step to a steady, sustainable deficit.",
+                tone: .celebrate, sfSymbol: "flame.fill")
+        case 7:
+            return EncouragementMessage(
+                headline: "One week of logging.",
+                detail: "Seven days straight. People who track consistently are far more likely to reach their goal — and you've cleared the habit's hardest week.",
+                scienceLine: "Self-monitoring is one of the strongest predictors of weight outcomes (Burke et al., J Acad Nutr Diet 2011).",
+                tone: .impressed, sfSymbol: "flame.fill")
+        case 14:
+            return EncouragementMessage(
+                headline: "Two weeks logged.",
+                detail: "Two full weeks without a gap. Your log is now rich enough to spot patterns and fine-tune your targets.",
+                tone: .impressed, sfSymbol: "flame.fill")
+        case 30:
+            return EncouragementMessage(
+                headline: "30-day logging streak.",
+                detail: "A full month of tracking. This is the consistency that turns a goal into a result.",
+                tone: .impressed, sfSymbol: "star.fill")
+        case 60:
+            return EncouragementMessage(
+                headline: "60 days logged.",
+                detail: "Two months of unbroken tracking. That's elite consistency — the data and the habit are both working for you now.",
+                tone: .impressed, sfSymbol: "star.fill")
+        case 100:
+            return EncouragementMessage(
+                headline: "100-day logging streak.",
+                detail: "One hundred days. Tracking isn't a chore anymore — it's just part of who you are.",
+                tone: .impressed, sfSymbol: "star.fill")
+        default:
+            return nil
+        }
+    }
+
     // MARK: - Macros
 
     /// Copy for hitting a macro target (100% of goal).

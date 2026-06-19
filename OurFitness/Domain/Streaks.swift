@@ -62,4 +62,43 @@ public enum Streaks {
         let hits = window.reduce(0) { acc, k in acc + (Double(totals[k] ?? 0) >= floor ? 1 : 0) }
         return Double(hits) / Double(days)
     }
+
+    // MARK: - Logging streak
+
+    /// Number of food-log entries per day-key (any calorie value counts).
+    public static func loggedDayCounts(_ logs: [FoodLogEntryDTO]) -> [String: Int] {
+        var out: [String: Int] = [:]
+        for e in logs { out[e.date, default: 0] += 1 }
+        return out
+    }
+
+    /// Consecutive days ending at `endDate` on which the user logged at least
+    /// `minEntriesPerDay` meals — the "did you log today" habit streak (distinct
+    /// from `currentStreak`, which is calorie-adherence). Today is grace-zone: an
+    /// unlogged today preserves the streak from yesterday rather than breaking it.
+    public static func loggingStreak(
+        _ logs: [FoodLogEntryDTO],
+        minEntriesPerDay: Int = 1,
+        endDate: Date = Date()
+    ) -> Int {
+        let counts = loggedDayCounts(logs)
+        var n = 0
+        let cal = Calendar.current
+        var cursor = cal.startOfDay(for: endDate)
+        let todayKey = Dates.dayKey(endDate)
+        while true {
+            let key = Dates.dayKey(cursor)
+            if (counts[key] ?? 0) >= minEntriesPerDay {
+                n += 1
+            } else if key == todayKey {
+                // grace: today not logged yet — preserve streak from yesterday
+            } else {
+                break
+            }
+            if n >= 365 { break }   // runaway guard, capped at one year
+            guard let prev = cal.date(byAdding: .day, value: -1, to: cursor) else { break }
+            cursor = prev
+        }
+        return n
+    }
 }

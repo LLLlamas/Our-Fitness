@@ -33,6 +33,9 @@ struct NutritionView: View {
     @State private var showNutritionInsight = false
     @State private var showCameraLog = false
     @State private var selectedDayKey: String = Dates.dayKey()
+    // Tracks the logging streak across log events so we only celebrate a milestone
+    // at the moment it's crossed (set on appear; compared on each new log).
+    @State private var lastLoggingStreak = 0
 
     // MARK: - Smarter swaps state
 
@@ -96,6 +99,14 @@ struct NutritionView: View {
 
     private var totals: DailyTotals { DailyTotals.totals(from: selectedDayLogs) }
 
+    /// Consecutive days the user has logged at least one meal (habit streak).
+    private var mealLoggingStreak: Int { Streaks.loggingStreak(allLogs) }
+
+    /// What's left toward today's targets (and room under the Circuit caps).
+    private var remaining: RemainingMacros {
+        MacroBudget.remaining(totals: totals, targets: profile.computedTargets)
+    }
+
     private func dayPillLabel(_ key: String) -> String {
         if key == today { return "Today" }
         let yesterday = Dates.dayKey(Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date())
@@ -108,7 +119,12 @@ struct NutritionView: View {
     }
 
     private var rankedSuggestions: [SuggestedMeal] {
-        SuggestedMeals.ranked(for: profile, totals: totals)
+        // Personalised: meals built from foods the user favorites or logs often
+        // float toward the top, on top of the macro-gap ranking.
+        SuggestedMeals.ranked(
+            for: profile, totals: totals,
+            recentLogs: allLogs, favoriteFoodIds: favoriteIds
+        )
     }
 
     private var varietyNudges: [FoodVarietyNudge] {
@@ -182,6 +198,9 @@ struct NutritionView: View {
                 }
 
                 totalsCard
+                if profile.mode == .circuit {
+                    HeartHealthCard(totals: totals, targets: profile.computedTargets, profile: profile)
+                }
                 daySelector
                 weeklyNutritionCard
 
@@ -226,6 +245,20 @@ struct NutritionView: View {
             .scrollHapticTicks()
         }
         .background(theme.bg.ignoresSafeArea())
+        .onAppear { lastLoggingStreak = mealLoggingStreak }
+        .onChange(of: allLogs.count) { oldCount, newCount in
+            // Only react to new logs (not deletions), and only celebrate when the
+            // streak actually advances to a milestone day.
+            guard newCount > oldCount else {
+                lastLoggingStreak = mealLoggingStreak
+                return
+            }
+            let streak = mealLoggingStreak
+            if streak > lastLoggingStreak {
+                toasts.mealStreak(days: streak, mode: profile.mode)
+            }
+            lastLoggingStreak = streak
+        }
         .sheet(isPresented: $showLogSheet) {
             NLMealLogSheet(profile: profile, targetDate: selectedDayKey) { dto in
                 Repos.addFoodLog(ctx, dto)
@@ -594,7 +627,7 @@ struct NutritionView: View {
                                 let item = alt.item
                                 let dto = FoodLogEntryDTO(
                                     userId: profile.id,
-                                    date: today,
+                                    date: selectedDayKey,
                                     slot: .lunch,
                                     foodId: item.food.id,
                                     customName: item.food.name,
@@ -674,12 +707,58 @@ struct NutritionView: View {
     private var totalsCard: some View {
         Card {
             VStack(alignment: .leading, spacing: 10) {
-                Text(selectedDayKey == today ? "Today" : Dates.formatLong(selectedDayKey))
-                    .font(.caption).tracking(2).textCase(.uppercase)
-                    .foregroundStyle(theme.dim)
+                HStack {
+                    Text(selectedDayKey == today ? "Today" : Dates.formatLong(selectedDayKey))
+                        .font(.caption).tracking(2).textCase(.uppercase)
+                        .foregroundStyle(theme.dim)
+                    Spacer()
+                    if mealLoggingStreak >= 2 {
+                        Label("\(mealLoggingStreak)-day streak", systemImage: "flame.fill")
+                            .font(.system(size: 10, weight: .semibold))
+                            .foregroundStyle(theme.accent)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 3)
+                            .background(theme.accent.opacity(0.12))
+                            .clipShape(Capsule())
+                            .accessibilityLabel("\(mealLoggingStreak) day logging streak")
+                    }
+                }
                 MacroQuadGrid(totals: totals, targets: profile.computedTargets, profile: profile)
+                if selectedDayKey == today && totals.calories > 0 { toGoLine }
             }
         }
+    }
+
+    /// Plain (non-ViewBuilder) copy + symbol for the "what's left today" line.
+    private var toGoSummary: (text: String, symbol: String) {
+        let calLeft = remaining.calories
+        let proteinLeft = remaining.proteinG
+        if calLeft > 0 {
+            let t = proteinLeft > 0
+                ? "\(calLeft) cal · \(proteinLeft)g protein to go"
+                : "\(calLeft) cal to go · protein hit"
+            return (t, "target")
+        }
+        return (profile.mode == .build
+                ? "Calorie goal reached — nice."
+                : "At your calorie target for the day.",
+                "checkmark.circle.fill")
+    }
+
+    /// One-line "what's left today" headline that gives a reason to come back and
+    /// close the day — calories + protein remaining, or a target-reached note.
+    @ViewBuilder
+    private var toGoLine: some View {
+        let s = toGoSummary
+        HStack(spacing: 6) {
+            Image(systemName: s.symbol)
+                .font(.system(size: 11))
+                .foregroundStyle(theme.accent)
+            Text(s.text)
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(theme.dim)
+        }
+        .padding(.top, 2)
     }
 
     // MARK: - Log list
@@ -691,8 +770,7 @@ struct NutritionView: View {
                 .font(.system(size: 22, weight: .regular))
                 .foregroundStyle(theme.text)
             if selectedDayLogs.isEmpty {
-                Text("Nothing logged \(selectedDayKey == today ? "yet" : "this day").")
-                    .font(.callout).foregroundStyle(theme.dim)
+                emptyLogState
             } else {
                 ForEach(selectedDayLogs) { e in
                     LogRow(entry: e, onTap: { entryToDetail = e },
@@ -704,6 +782,43 @@ struct NutritionView: View {
                 }
             }
         }
+    }
+
+    /// Inviting empty state instead of a dead "Nothing logged" line — turns the
+    /// blank space into a one-tap on-ramp to logging.
+    @ViewBuilder
+    private var emptyLogState: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 10) {
+                Image(systemName: "fork.knife.circle.fill")
+                    .font(.system(size: 26))
+                    .foregroundStyle(theme.accent)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(selectedDayKey == today ? "Nothing logged yet today" : "Nothing logged this day")
+                        .font(.callout).fontWeight(.medium)
+                        .foregroundStyle(theme.text)
+                    Text(selectedDayKey == today
+                         ? "Logging takes a few seconds and keeps your day honest."
+                         : "Add what you ate to fill in this day.")
+                        .font(.caption).foregroundStyle(theme.dim)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            Button {
+                showLogSheet = true
+            } label: {
+                HStack {
+                    Image(systemName: "plus.circle.fill")
+                    Text(selectedDayKey == today ? "Log your first meal" : "Log a meal")
+                }
+            }
+            .tactile(.primary, fullWidth: true)
+        }
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(theme.line, lineWidth: 1))
     }
 }
 

@@ -35,6 +35,7 @@ struct WaterCard: View {
     private var weekSeries: [Trends.Point] { Water.series(entries, days: 7) }
     private var weekAvg: Double { Water.average(entries, days: 7) }
     private var canUndo: Bool { entries.contains { $0.date == today } }
+    private var waterStreak: Int { Water.streak(entries, goalFlOz: goalFlOz) }
 
     // No explicit Haptics — the buttons use `.tactile(...)` (press haptic), and
     // ProgressBar fires a success haptic when the day crosses the goal (outcome).
@@ -65,6 +66,15 @@ struct WaterCard: View {
                     Text("WATER")
                         .font(.system(size: 10, weight: .medium)).tracking(2)
                         .foregroundStyle(theme.dim)
+                    if waterStreak >= 2 {
+                        Text("\(waterStreak)-day streak")
+                            .font(.system(size: 10, weight: .semibold))
+                            .foregroundStyle(theme.accent)
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 3)
+                            .background(theme.accent.opacity(0.12))
+                            .clipShape(Capsule())
+                    }
                     Spacer()
                     Button { showInfo = true } label: {
                         Image(systemName: "info.circle")
@@ -116,6 +126,7 @@ struct WaterCard: View {
 
     private func glassIcon(for presetId: String) -> GlassIcon.GlassSize {
         switch presetId {
+        case "cup-sip":    return .sip
         case "cup-small":  return .small
         case "cup-medium": return .medium
         default:           return .large
@@ -193,9 +204,9 @@ private struct DrinkingGlass: Shape {
 /// Stroked glass outline whose height scales with the preset size.
 private struct GlassIcon: View {
     let size: GlassSize
-    enum GlassSize { case small, medium, large
-        var height: CGFloat { switch self { case .small: return 18; case .medium: return 26; case .large: return 34 } }
-        var width: CGFloat  { switch self { case .small: return 13; case .medium: return 18; case .large: return 22 } }
+    enum GlassSize { case sip, small, medium, large
+        var height: CGFloat { switch self { case .sip: return 12; case .small: return 18; case .medium: return 26; case .large: return 34 } }
+        var width: CGFloat  { switch self { case .sip: return 9;  case .small: return 13; case .medium: return 18; case .large: return 22 } }
     }
     var body: some View {
         DrinkingGlass()

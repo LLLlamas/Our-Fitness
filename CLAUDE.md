@@ -16,7 +16,7 @@ Native iOS app targeting App Store release. Two modes: **Build** (gain mass) and
 | Steps/day | 8,000 | 10,000 |
 | Workouts | rep/set, isometric holds, user exercises | baby exercises, pilates, steps |
 
-Circuit auto-seeds: Lifted Baby (30 lb), Lifted Stroller (25 lb), Carried Baby (30 lb). Isometric exercises: `isIsometric: true` on `ExerciseDTO`; hold saves `WorkoutSetModel{reps:1, holdSeconds:N}`; calorie: `CalorieEstimator.caloriesForIsometric`. `MacroTargets.{sodium,addedSugar,saturatedFat,fiber}` populate for Circuit but UI is dormant.
+Circuit auto-seeds: Lifted Baby (30 lb), Lifted Stroller (25 lb), Carried Baby (30 lb). Isometric exercises: `isIsometric: true` on `ExerciseDTO`; hold saves `WorkoutSetModel{reps:1, holdSeconds:N}`; calorie: `CalorieEstimator.caloriesForIsometric`. `MacroTargets.{sodium,addedSugar,saturatedFat,fiber}` populate for Circuit and are surfaced via `Components/HeartHealthCard.swift` (fiber floor + sodium/addedSugar/satFat caps) in `NutritionView`; remaining headroom is computed by `Domain/MacroBudget.swift` → `RemainingMacros`. Build leaves all four nil.
 
 ---
 
@@ -74,16 +74,20 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | AI food alternatives | `Services/FoodAlternativeService.swift` (iOS 26+; prefetch after every log) |
 | Meal log UI + day selector + past-day logging | `Features/Nutrition/NutritionView.swift` |
 | Ingredient-level editing / logging | `Features/Nutrition/MealIngredientDetailSheet.swift` — takes `targetDate:` for past-day logging |
-| Meal suggestions | `Domain/SuggestedMeals.swift` |
+| Meal suggestions | `Domain/SuggestedMeals.swift` → `ranked(...)` (optional `recentLogs:`/`favoriteFoodIds:` give an affinity boost; `isPersonalised(...)` flags boosted meals) |
+| Personalised recs / most-logged foods | `Domain/FoodAffinity.swift` → `mostLoggedIds(_:days:limit:end:)` / `frequencyByFoodId(_:days:end:)` (30-day window over foodIds incl. ingredients); fed into `SuggestedMeals.ranked` from `NutritionView` |
+| Meal-logging streak (consecutive days) | `Domain/Streaks.swift` → `loggingStreak(_:minEntriesPerDay:endDate:)`; milestone copy `Domain/EncouragementEngine.swift` → `mealStreakMessage(days:mode:)` (3/7/14/30/60/100); toast `Services/ToastCenter.swift` → `mealStreak(days:mode:)`; chip + milestone toast in `Features/Nutrition/NutritionView.swift` |
+| Circuit heart-health micros (fiber floor + sodium/sugar/satfat caps) | `Components/HeartHealthCard.swift` (Circuit-only; no-op if targets have no caps) — rendered in `NutritionView` after the totals card |
+| Remaining macros / headroom under caps | `Domain/MacroBudget.swift` → `remaining(totals:targets:)` returns `RemainingMacros` (caps = room left, negative when over; fiber = signed distance to floor; all four nil in Build) |
 | Personal meal templates | `Domain/Models.swift` (`SavedMealTemplateDTO`) + `Data/PersistenceModels.swift` (`SavedMealTemplateModel`) |
 | Weekly nutrition trend | `Domain/NutritionHistory.swift` + `Features/Nutrition/NutritionTrendSheet.swift` |
 | Calorie math | `Domain/Targets.swift` only |
-| Target rationale copy | `Domain/TargetRationale.swift` (spell out acronyms; "cal" not "kcal") |
+| Target rationale copy | `Domain/TargetRationale.swift` (spell out acronyms; "cal" not "kcal"); Circuit micro copy `fiberWhy`/`sodiumWhy`/`addedSugarWhy`/`saturatedFatWhy(for:)` (used by `HeartHealthCard` info sheet) |
 | **Today / Steps** | |
 | Move card (3 cols) | `Features/Today/MoveCard.swift` — Apple Energy, Exercises MET, Heart Rate. `activityRow(kcal:)` takes `Int` |
 | Steps (Build) | `Features/Today/StepsCard.swift` |
 | Steps + cardio (Circuit) | `Features/Workouts/Circuit/StepsCardioCard.swift` |
-| Water tracker | `Domain/Water.swift` + `Features/Today/WaterCard.swift` (`AppStorage "waterGoalFlOz.\(profileId)"`) |
+| Water tracker (Sip preset + day-streak) | `Domain/Water.swift` (4 oz "Sip" cup preset; `streak(_:goalFlOz:end:)`) + `Features/Today/WaterCard.swift` (`AppStorage "waterGoalFlOz.\(profileId)"`; streak chip; `GlassIcon` `.sip` size) |
 | Step milestones / goals | `Domain/Movement.swift` (`defaultStepMilestones`). Per-profile override: `AppStorage "stepsGoal.\(profileId.uuidString)"` |
 | Today burn estimate | `Domain/DailyBurn.swift` → `metEstimate` |
 | Encouragement / milestones | `Domain/EncouragementEngine.swift` + `Domain/EncouragementMessage.swift` + `Components/ProjectionBar.swift` |
