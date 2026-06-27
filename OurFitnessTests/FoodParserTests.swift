@@ -55,10 +55,10 @@ final class FoodParserTests: XCTestCase {
 
     private func dbWithUSDAOnly() -> FoodDatabase {
         FoodDatabase(entries: [
-            // A food NOT in CommonFoods → should resolve only via the DB.
+            // A synthetic food NOT in CommonFoods → should resolve only via the DB.
             FoodDatabaseEntry(
-                id: "usda-test-okra", name: "Okra",
-                aliases: ["okra", "ladies fingers"],
+                id: "usda-test-veg", name: "Synthveg",
+                aliases: ["synthveg", "lab vegetable"],
                 servingLabel: "1 cup (100 g)",
                 calories: 33, proteinG: 2, carbsG: 7, fatG: 0, fiberG: 3
             ),
@@ -74,8 +74,8 @@ final class FoodParserTests: XCTestCase {
     }
 
     func test_usdaOnlyFood_resolvesViaDatabase() {
-        let r = FoodParser.parse(text: "some okra", database: dbWithUSDAOnly())
-        XCTAssertEqual(r.recognized.first?.food.id, "usda-test-okra")
+        let r = FoodParser.parse(text: "some synthveg", database: dbWithUSDAOnly())
+        XCTAssertEqual(r.recognized.first?.food.id, "usda-test-veg")
         XCTAssertEqual(r.recognized.first?.scaledCalories, 33)
     }
 
@@ -88,10 +88,10 @@ final class FoodParserTests: XCTestCase {
     }
 
     func test_curatedAndUSDA_mixInOneMeal() {
-        let r = FoodParser.parse(text: "grilled chicken and some okra", database: dbWithUSDAOnly())
+        let r = FoodParser.parse(text: "grilled chicken and some synthveg", database: dbWithUSDAOnly())
         let ids = r.recognized.map(\.food.id)
         XCTAssertTrue(ids.contains("chicken-breast"))   // curated
-        XCTAssertTrue(ids.contains("usda-test-okra"))   // USDA fallback
+        XCTAssertTrue(ids.contains("usda-test-veg"))   // USDA fallback
     }
 
     func test_unknownFood_isUnrecognized() {

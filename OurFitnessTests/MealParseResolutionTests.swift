@@ -64,13 +64,13 @@ final class MealParseResolutionTests: XCTestCase {
     func test_resolve_usdaFallbackUsesDatabaseNumbers() {
         let db = FoodDatabase(entries: [
             FoodDatabaseEntry(
-                id: "usda-test-okra", name: "Okra",
-                aliases: ["okra"], servingLabel: "1 cup (100 g)",
+                id: "usda-test-veg", name: "Synthveg",
+                aliases: ["synthveg"], servingLabel: "1 cup (100 g)",
                 calories: 33, proteinG: 2, carbsG: 7, fatG: 0, fiberG: 3
             ),
         ])
-        let r = FoodParser.resolve(items: items([("okra", 1)]), database: db)
-        XCTAssertEqual(r.recognized.first?.food.id, "usda-test-okra")
+        let r = FoodParser.resolve(items: items([("synthveg", 1)]), database: db)
+        XCTAssertEqual(r.recognized.first?.food.id, "usda-test-veg")
         XCTAssertEqual(r.recognized.first?.scaledCalories, 33)
     }
 
