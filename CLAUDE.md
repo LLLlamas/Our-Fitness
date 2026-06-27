@@ -64,7 +64,10 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | Live sessions (timer) | `Features/Workouts/LiveSessionCard.swift` + `Domain/LiveSessionState.swift` + `Services/LiveSessionService.swift` |
 | Live Activity (Lock Screen) | `OurFitnessWidgets/LiveSessionLiveActivity.swift` + `Services/LiveSessionActivityController.swift` — [docs/live-activity-setup.md](docs/live-activity-setup.md) |
 | Exercise MET / muscles | `Domain/ExerciseInfo.swift` → `namedMeta` (first-match order matters; specific before general) |
+| Canonical exercise catalog | `Domain/ExerciseInfo.swift` → `catalog` (public, alphabetical, sourced from `namedMeta`) / `catalogEntry(named:)` |
 | AI exercise insights | `Services/ExerciseInsightService.swift` (iOS 26+, graceful fallback) |
+| AI "what to work on?" suggestions | `Services/WorkoutSuggestionService.swift` (iOS 26+; picks from `catalog`, text-only) + fallback `Domain/ExerciseGoalMatcher.swift` (goal→muscles→exercises, research reasons) → `WorkoutGoalSheet` in `Features/Workouts/WorkoutsView.swift`. Tests: `OurFitnessTests/ExerciseGoalMatcherTests.swift` |
+| Recent sets (today only) | `SetHistorySheet` in `Features/Workouts/WorkoutsView.swift` — @Query bounded to `timestamp >= startOfDay`; full history is in Progress |
 | Live-session activities | `Domain/ActivityCatalog.swift` |
 | **Nutrition** | |
 | Food parser (NL → macros) | `Domain/FoodParser.swift` + `Domain/CommonFoods.swift` + `Domain/SQLiteFoodDatabase.swift`. Keystroke = curated only; submit = full USDA DB |
@@ -73,6 +76,7 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | AI meal parser | `Services/MealParseService.swift` (iOS 26+; text-only model; numbers from DB) |
 | Camera food label scanner | `Features/Nutrition/CameraFoodLogSheet.swift` (iOS 17+ VisionKit, iOS 26+ AI) |
 | AI food alternatives | `Services/FoodAlternativeService.swift` (iOS 26+; prefetch after every log) |
+| AI "what are you in the mood for?" | `Services/MealIdeaService.swift` (iOS 26+; craving→food NAMES resolved to macros via `FoodParser`) + fallback `Domain/MealCravingMatcher.swift` (keyword/flavor/calorie/affinity rank of curated meals) → `MoodMealSheet` in `Features/Nutrition/NutritionView.swift`. Tests: `OurFitnessTests/MealCravingMatcherTests.swift` |
 | Meal log UI + day selector + past-day logging | `Features/Nutrition/NutritionView.swift` |
 | Ingredient-level editing / logging | `Features/Nutrition/MealIngredientDetailSheet.swift` — takes `targetDate:` for past-day logging |
 | Meal suggestions | `Domain/SuggestedMeals.swift` → `ranked(...)` (optional `recentLogs:`/`favoriteFoodIds:` give an affinity boost; `isPersonalised(...)` flags boosted meals) |
@@ -98,6 +102,8 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | Show/hide trackers | `Features/Progress/EditTrackersSheet.swift` — `AppStorage "progressStats.\(profileId)"` |
 | Training volume | `Features/Progress/ProgressView.swift` → `StatKind.trainingVolume` |
 | Calorie intake vs activity burn | `Domain/EnergyBalance.swift` → `byDay(...)` / `averages(_:)` (intake = `DailyTotals`; burn = `DailyBurn.metEstimate`, walks excluded). Card `energyBalanceCard` (both modes) in `Features/Progress/ProgressView.swift` → detail `Features/Progress/EnergyBalanceDetailSheet.swift` (Charts: intake bars vs burn line + target rule). Tests: `OurFitnessTests/EnergyBalanceTests.swift` |
+| Training history (cross-day) | `Domain/TrainingHistory.swift` → `sessions(sets:exercises:)` (per-day groups, newest first) → `trainingHistoryCard` + `TrainingHistorySheet` in `Features/Progress/ProgressView.swift` (per-line "remove a set" delete). Tests: `OurFitnessTests/TrainingHistoryTests.swift` |
+| Tracker display order | alphabetical by `StatKind.title` at the two render sites (`visibleStats` + `EditTrackersSheet` ForEach); never reorder the enum (persisted CSV) |
 | **Settings / Profile** | |
 | Edit vitals | `Repos.updateVitals` + `Features/Settings/SettingsView.swift` → `EditVitalsSheet` |
 | Switch mode | `Repos.updateMode` + `Features/Settings/SettingsView.swift` → `ModeSwitchSheet` |

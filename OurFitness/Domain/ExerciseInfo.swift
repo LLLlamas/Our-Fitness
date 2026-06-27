@@ -41,6 +41,107 @@ public enum ExerciseInfo {
         namedMeta(exercise.name.lowercased()) != nil
     }
 
+    // MARK: - Catalog (canonical, research-backed exercises)
+
+    /// A canonical exercise from the curated research library, paired with enough
+    /// metadata to both describe it and create it as a tracked exercise. This is
+    /// the public, enumerable surface over the private `namedMeta` library — fed
+    /// to the goal-to-exercise suggester (`ExerciseGoalMatcher`) and the on-device
+    /// `WorkoutSuggestionService`, and used for one-tap "Add to my exercises".
+    public struct CatalogExercise: Sendable, Identifiable {
+        public let name: String
+        public let meta: Meta
+        public let isIsometric: Bool
+        /// Whether this lift is normally loaded (drives `createExercise`'s category).
+        public let tracksWeight: Bool
+        public let repRange: ClosedRange<Int>
+        public var id: String { name }
+
+        /// Primary movers, the muscles a goal is matched against first.
+        public var muscleGroups: [String] { meta.muscleGroups }
+        public var secondaryMuscles: [String] { meta.secondaryMuscles }
+    }
+
+    /// The canonical exercise library, in alphabetical order. Each entry's `meta`
+    /// is pulled straight from `namedMeta` so muscle data, benefits, and MET stay
+    /// the single source of truth (the suggester never invents these).
+    public static let catalog: [CatalogExercise] = {
+        // (name, isometric, weighted, reps). Names are chosen to resolve to their
+        // intended `namedMeta` branch under its first-match-wins ordering.
+        let specs: [(String, Bool, Bool, ClosedRange<Int>)] = [
+            ("Ab Wheel Rollout",        false,  false,  6...15),
+            ("Back Extension",          false,  true,   10...20),
+            ("Barbell Row",             false,  true,   8...12),
+            ("Battle Ropes",            true,   false,  1...1),
+            ("Bench Press",             false,  true,   6...10),
+            ("Bicep Curl",              false,  true,   8...12),
+            ("Box Jump",                false,  false,  3...8),
+            ("Burpee",                  false,  false,  8...20),
+            ("Calf Raise",              false,  true,   12...20),
+            ("Chest Fly",               false,  true,   10...15),
+            ("Chin-up",                 false,  false,  5...10),
+            ("Crunch",                  false,  false,  12...20),
+            ("Dead Hang",               true,   false,  1...1),
+            ("Deadlift",                false,  true,   4...8),
+            ("Dip",                     false,  false,  6...12),
+            ("Face Pull",               false,  true,   12...20),
+            ("Farmer Carry",            true,   true,   1...1),
+            ("Front Raise",             false,  true,   10...15),
+            ("Glute Bridge",            false,  false,  10...15),
+            ("Glute Kickback",          false,  true,   10...20),
+            ("Good Morning",            false,  true,   8...12),
+            ("Hanging Leg Raise",       false,  false,  8...15),
+            ("Hip Abduction",           false,  true,   12...20),
+            ("Hip Adduction",           false,  true,   12...20),
+            ("Hip Thrust",              false,  true,   8...12),
+            ("Kettlebell Swing",        false,  true,   10...20),
+            ("L-sit",                   true,   false,  1...1),
+            ("Lat Pulldown",            false,  true,   8...12),
+            ("Lateral Raise",           false,  true,   12...20),
+            ("Leg Curl",                false,  true,   10...15),
+            ("Leg Extension",           false,  true,   10...15),
+            ("Leg Press",               false,  true,   8...12),
+            ("Lunge",                   false,  false,  8...12),
+            ("Mountain Climber",        false,  false,  20...40),
+            ("Overhead Press",          false,  true,   6...10),
+            ("Plank",                   true,   false,  1...1),
+            ("Pull-over",               false,  true,   10...15),
+            ("Pull-up",                 false,  false,  5...10),
+            ("Push-up",                 false,  false,  10...20),
+            ("Reverse Plank",           true,   false,  1...1),
+            ("Romanian Deadlift",       false,  true,   8...12),
+            ("Russian Twist",           false,  true,   12...30),
+            ("Shrug",                   false,  true,   10...15),
+            ("Squat",                   false,  true,   6...10),
+            ("Tricep Pushdown",         false,  true,   10...15),
+            ("Wall Sit",                true,   false,  1...1),
+        ]
+        return specs.compactMap { name, iso, weighted, reps in
+            guard let m = namedMeta(name.lowercased()) else { return nil }
+            return CatalogExercise(name: name, meta: m, isIsometric: iso,
+                                   tracksWeight: weighted, repRange: reps)
+        }
+    }()
+
+    /// Best-effort lookup of a catalog entry by free-text name — used to map a
+    /// model-suggested exercise name back onto the curated research. Tries exact,
+    /// then containment either direction, then a shared-word fallback.
+    public static func catalogEntry(named raw: String) -> CatalogExercise? {
+        let q = raw.lowercased().trimmingCharacters(in: .whitespaces)
+        guard !q.isEmpty else { return nil }
+        if let exact = catalog.first(where: { $0.name.lowercased() == q }) { return exact }
+        if let contained = catalog.first(where: {
+            let n = $0.name.lowercased()
+            return q.contains(n) || n.contains(q)
+        }) { return contained }
+        let qTokens = Set(q.split(separator: " ").map(String.init).filter { $0.count > 2 })
+        guard !qTokens.isEmpty else { return nil }
+        return catalog.first(where: { entry in
+            let nTokens = Set(entry.name.lowercased().split(separator: " ").map(String.init))
+            return !nTokens.isDisjoint(with: qTokens)
+        })
+    }
+
     // MARK: - Plain-English muscle names
 
     /// Anatomical muscle name → everyday gloss. Used to append a plain-English
@@ -78,6 +179,8 @@ public enum ExerciseInfo {
         ("hip flexor",        "front of your hips"),
         ("hip stabil",        "muscles that steady your hips"),
         ("erector spinae",    "the muscles running up either side of your spine"),
+        ("multifidus",        "small deep muscles that stabilise your spine"),
+        ("gracilis",          "a long muscle along your inner thigh"),
         ("transverse abdominis", "the deep core muscle that wraps your waist like a belt"),
         ("rectus abdominis",  "the \u{201C}six-pack\u{201D} muscle, the top layer of your abs"),
         ("oblique",           "the sides of your waist"),
@@ -112,6 +215,22 @@ public enum ExerciseInfo {
     // MARK: - Named library
 
     private static func namedMeta(_ lower: String) -> Meta? {
+
+        // Pull-over — checked BEFORE the "pull" prefix branch so "pullover" isn't
+        // captured as a pull-up (it is a lats + chest stretch, not elbow flexion).
+        if lower.contains("pull-over") || lower.contains("pullover") || lower.contains("pull over") || lower.contains("dumbbell pullover") {
+            return Meta(
+                muscleGroups: ["Lats", "Pectorals"],
+                secondaryMuscles: ["Serratus anterior", "Triceps (long head)", "Teres major", "Core"],
+                benefits: [
+                    "Loads the lats and chest through a deep overhead stretch — one of the few moves that trains the lats in shoulder extension rather than a pull toward the body.",
+                    "The big stretch under load is a strong stimulus for the lats and serratus anterior, contributing to back width and an expanded ribcage.",
+                    "Bridges chest and back work, so it fits well on either a push or a pull day.",
+                    "Keep the elbows softly bent and control the stretch — the shoulder is in a vulnerable position at the bottom, so moderate weight beats heavy."
+                ],
+                met: 3.5, secondsPerRep: 3
+            )
+        }
 
         // Pull-ups / Chin-ups
         if lower.hasPrefix("pull") || lower.hasPrefix("chin") || lower.contains("lat pull") {
@@ -294,6 +413,22 @@ public enum ExerciseInfo {
             )
         }
 
+        // Back Extension / hyperextension — checked BEFORE the tricep "extension"
+        // branch so "back extension"/"hyperextension" reads as erectors, not triceps.
+        if lower.contains("back extension") || lower.contains("hyperextension") || lower.contains("hyper extension") || lower.contains("back raise") {
+            return Meta(
+                muscleGroups: ["Erector spinae", "Glutes", "Hamstrings"],
+                secondaryMuscles: ["Multifidus", "Gluteus medius"],
+                benefits: [
+                    "Trains the spinal erectors and the rest of the posterior chain through controlled trunk extension on the hyperextension bench.",
+                    "McGill (Low Back Disorders, 2007): building endurance in the lumbar extensors is associated with reduced recurrence of lower-back pain.",
+                    "Shifting the load toward the hips (rounding less, hinging more) biases the glutes and hamstrings; a flatter back biases the erectors.",
+                    "A direct antidote to all-day sitting, reinforcing upright posture and a strong, resilient lower back."
+                ],
+                met: 3.8, secondsPerRep: 3
+            )
+        }
+
         // Tricep work
         if lower.contains("tricep") || lower.contains("extension") ||
            lower.contains("pushdown") || lower.contains("skull") ||
@@ -459,6 +594,201 @@ public enum ExerciseInfo {
                     "Grip strength training bonus with heavy-loaded shrugs."
                 ],
                 met: 4.0, secondsPerRep: 2.5
+            )
+        }
+
+        // Hip Abduction
+        if lower.contains("hip abduction") || lower.contains("abductor") || lower.contains("abduction machine") {
+            return Meta(
+                muscleGroups: ["Gluteus medius", "Glutes"],
+                secondaryMuscles: ["Gluteus maximus (upper fibers)", "Hip stabilisers"],
+                benefits: [
+                    "Isolates the gluteus medius through hip abduction — the muscle most lower bodies under-train, since squats and presses work the glutes mainly in the sagittal plane.",
+                    "A strong gluteus medius keeps the pelvis level during single-leg stance, which reduces knee valgus (inward collapse) linked to ACL and patellofemoral injury.",
+                    "Builds the upper-outer 'shelf' of the glutes, rounding the hip from the side.",
+                    "Frontal-plane hip strength carries over directly to lateral cutting, stair climbing, and stable walking gait."
+                ],
+                met: 3.5, secondsPerRep: 2.5
+            )
+        }
+
+        // Hip Adduction
+        if lower.contains("hip adduction") || lower.contains("adductor") || lower.contains("adduction machine") || lower.contains("inner thigh machine") {
+            return Meta(
+                muscleGroups: ["Adductors"],
+                secondaryMuscles: ["Gracilis", "Hip flexors"],
+                benefits: [
+                    "Directly isolates the inner-thigh adductors through hip adduction — a muscle group rarely loaded by the gym's usual squat and lunge work.",
+                    "Adductor strength is protective for the groin: weak or imbalanced adductors are a well-established risk factor for adductor and groin strains in athletes.",
+                    "The adductors (especially adductor magnus) also assist hip extension, contributing to squat and deadlift strength.",
+                    "Balancing adductor and abductor strength stabilises the hip in the frontal plane and supports pelvic alignment."
+                ],
+                met: 3.5, secondsPerRep: 2.5
+            )
+        }
+
+        // Good Morning
+        if lower.contains("good morning") {
+            return Meta(
+                muscleGroups: ["Hamstrings", "Glutes", "Erector spinae"],
+                secondaryMuscles: ["Adductors", "Core"],
+                benefits: [
+                    "A loaded hip hinge that trains the entire posterior chain — hamstrings, glutes, and spinal erectors — with the bar on the back, emphasising the hinge pattern without grip as a limiter.",
+                    "Strengthens the erector spinae isometrically as they resist trunk flexion, building the spinal stability that protects the lower back under heavy compound lifts.",
+                    "Lengthens and strengthens the hamstrings under load, which improves the bottom position of the squat and deadlift.",
+                    "Best trained with moderate load and strict control — the long lever on the spine rewards technique over weight."
+                ],
+                met: 5.0, secondsPerRep: 3.5
+            )
+        }
+
+        // Ab Wheel Rollout
+        if lower.contains("ab wheel") || lower.contains("ab roller") || lower.contains("rollout") || lower.contains("roll-out") || lower.contains("wheel rollout") {
+            return Meta(
+                muscleGroups: ["Rectus abdominis", "Transverse abdominis"],
+                secondaryMuscles: ["Obliques", "Lats", "Serratus anterior", "Hip flexors"],
+                benefits: [
+                    "One of the most demanding anti-extension exercises — the abs work maximally to stop the lower back from sagging as the wheel rolls out.",
+                    "Anti-extension core strength built here transfers directly to bracing under heavy squats, deadlifts, and overhead presses.",
+                    "High rectus abdominis and oblique EMG combined with a deep stretch makes it a strong driver of ab thickness, not just endurance.",
+                    "Scale by limiting rollout range or rolling from the knees, then progress toward a full standing rollout."
+                ],
+                met: 3.8, secondsPerRep: 4
+            )
+        }
+
+        // Hanging Leg Raise
+        if lower.contains("hanging leg raise") || lower.contains("leg raise") || lower.contains("knee raise") || lower.contains("toes to bar") || lower.contains("toes-to-bar") {
+            return Meta(
+                muscleGroups: ["Rectus abdominis", "Hip flexors"],
+                secondaryMuscles: ["Obliques", "Forearms/Grip", "Lats"],
+                benefits: [
+                    "Trains the abs through the full range from a hanging stretch to a hard contraction, with the lower abs heavily involved as the hips flex.",
+                    "Hanging from the bar adds a grip and forearm endurance demand on top of the core work.",
+                    "Raising the legs against gravity loads the rectus abdominis far more than a floor crunch, building visible ab strength.",
+                    "Scale with bent knees (knee raises) before progressing to straight-leg raises and toes-to-bar."
+                ],
+                met: 5, secondsPerRep: 3
+            )
+        }
+
+        // Russian Twist
+        if lower.contains("russian twist") || lower.contains("seated twist") || lower.contains("oblique twist") {
+            return Meta(
+                muscleGroups: ["Obliques", "Rectus abdominis"],
+                secondaryMuscles: ["Transverse abdominis", "Hip flexors"],
+                benefits: [
+                    "Trains rotational core strength through the obliques — the sides of the waist that bracing and crunching alone leave under-worked.",
+                    "Anti-rotation and rotation strength transfers to throwing, swinging, and any sport that rotates the trunk for power.",
+                    "Adding a weight plate or medicine ball scales the resistance smoothly without changing the movement.",
+                    "Keep the spine long and rotate from the ribcage rather than just swinging the arms to keep tension on the obliques."
+                ],
+                met: 4.5, secondsPerRep: 2
+            )
+        }
+
+        // Kettlebell Swing
+        if lower.contains("kettlebell swing") || lower.contains("kb swing") {
+            return Meta(
+                muscleGroups: ["Glutes", "Hamstrings", "Erector spinae"],
+                secondaryMuscles: ["Core", "Forearms/Grip", "Lats", "Quads"],
+                benefits: [
+                    "A ballistic hip hinge that builds explosive glute and hamstring power — the snap at the top is driven by a hard glute contraction, not the arms.",
+                    "Trains horizontal hip-extension force, which carries over to sprinting and jumping much like the hip thrust does.",
+                    "Performed for higher-rep sets, the swing doubles as conditioning, raising heart rate sharply while still loading the posterior chain.",
+                    "Hinge from the hips with a flat back and let the bell float — swinging with the lower back instead of the hips is the most common fault."
+                ],
+                met: 8, secondsPerRep: 1.5
+            )
+        }
+
+        // Farmer Carry
+        if lower.contains("farmer carry") || lower.contains("farmer's walk") || lower.contains("farmers walk") || lower.contains("farmer walk") || lower.contains("loaded carry") || lower.contains("suitcase carry") {
+            return Meta(
+                muscleGroups: ["Forearms/Grip", "Upper traps", "Core"],
+                secondaryMuscles: ["Glutes", "Quads", "Erector spinae", "Gluteus medius"],
+                benefits: [
+                    "Loaded carries build crushing grip and forearm strength — grip strength is a strong independent predictor of all-cause and cardiovascular mortality (Leong et al., Lancet 2015).",
+                    "The whole core and the gluteus medius work to keep the trunk and pelvis stable while walking under heavy load, training real-world anti-lateral-flexion strength.",
+                    "Holding heavy weight at the sides loads the upper traps and the entire posterior chain isometrically with very low technique risk.",
+                    "Carryover is direct: every grocery haul, suitcase, and moving day is a farmer carry."
+                ],
+                met: 5, secondsPerRep: 1
+            )
+        }
+
+        // Glute Kickback
+        if lower.contains("glute kickback") || lower.contains("cable kickback") || lower.contains("donkey kick") {
+            return Meta(
+                muscleGroups: ["Gluteus maximus", "Glutes"],
+                secondaryMuscles: ["Hamstrings", "Gluteus medius", "Erector spinae"],
+                benefits: [
+                    "Isolates the gluteus maximus through hip extension on a single leg, letting you train the glute without the quads or back sharing the load.",
+                    "The cable keeps constant tension across the whole range, including the fully contracted top position where the glute works hardest.",
+                    "Unilateral loading exposes and corrects left-right glute strength differences that bilateral lifts hide.",
+                    "A useful accessory for adding glute volume and shape after compound hip-extension work like hip thrusts and deadlifts."
+                ],
+                met: 3.5, secondsPerRep: 2.5
+            )
+        }
+
+        // Box Jump
+        if lower.contains("box jump") || lower.contains("jump box") {
+            return Meta(
+                muscleGroups: ["Quads", "Glutes", "Calves"],
+                secondaryMuscles: ["Hamstrings", "Core", "Hip flexors"],
+                benefits: [
+                    "A plyometric drill that trains explosive triple extension of the ankle, knee, and hip — the same pattern that drives sprinting and jumping.",
+                    "Rapid stretch-shortening of the quads, glutes, and calves develops rate of force development, the speed at which you can produce force.",
+                    "Jumping up onto the box keeps the landing impact low; step down rather than jumping down to spare the knees and Achilles.",
+                    "Choose a height you can land softly and in control — box height should reflect power, not ego."
+                ],
+                met: 8, secondsPerRep: 3
+            )
+        }
+
+        // Burpee
+        if lower.contains("burpee") {
+            return Meta(
+                muscleGroups: ["Quads", "Pectorals", "Glutes"],
+                secondaryMuscles: ["Triceps", "Anterior delts", "Core", "Calves", "Hamstrings"],
+                benefits: [
+                    "A full-body conditioning movement that chains a squat, a push-up, and a jump — it elevates heart rate fast and burns a lot of calories per minute.",
+                    "Trains the legs, chest, and core in one rep with no equipment, making it highly scalable and time-efficient.",
+                    "The repeated transition from floor to standing builds work capacity and muscular endurance across the whole body.",
+                    "Scale by stepping (rather than jumping) the feet back and dropping the jump at the top to manage intensity and joint load."
+                ],
+                met: 8, secondsPerRep: 3
+            )
+        }
+
+        // Mountain Climber
+        if lower.contains("mountain climber") {
+            return Meta(
+                muscleGroups: ["Rectus abdominis", "Hip flexors"],
+                secondaryMuscles: ["Obliques", "Anterior delts", "Quads", "Core"],
+                benefits: [
+                    "Combines a plank-style core brace with rapid hip flexion, training the abs and hip flexors dynamically while the shoulders stabilise the body.",
+                    "Driving the knees quickly raises the heart rate, so it doubles as a conditioning finisher with no equipment.",
+                    "The anti-extension demand on the core transfers to bracing under heavier compound lifts.",
+                    "Keep the hips low and level — letting them pike up takes tension off the abs and turns it into a cardio-only drill."
+                ],
+                met: 8, secondsPerRep: 1.5
+            )
+        }
+
+        // Battle Ropes
+        if lower.contains("battle rope") || lower.contains("battle ropes") || lower.contains("battling rope") || lower.contains("rope slam") {
+            return Meta(
+                muscleGroups: ["Anterior delts", "Forearms/Grip", "Core"],
+                secondaryMuscles: ["Lateral delts", "Upper traps", "Quads"],
+                benefits: [
+                    "High-intensity conditioning that hammers the shoulders, arms, and grip while the core braces against the constant pull of the ropes.",
+                    "Whipping the ropes for time spikes heart rate and oxygen demand, making it an effective low-impact cardio option that spares the knees.",
+                    "Sustained gripping builds forearm and grip endurance alongside the metabolic work.",
+                    "Stay in a quarter-squat with a braced trunk and drive the waves from the whole body, not just the arms."
+                ],
+                met: 8, secondsPerRep: 1
             )
         }
 

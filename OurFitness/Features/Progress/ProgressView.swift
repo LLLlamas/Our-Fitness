@@ -15,6 +15,8 @@ struct ProgressTabView: View {
     @Query private var markerModels: [HealthMarkerModel]
     @Query private var stepModels: [StepCountModel]
     @Query private var setModels: [WorkoutSetModel]
+    // Exercise names for the cross-day training-history list (sets reference exerciseId).
+    @Query private var exerciseModels: [ExerciseModel]
     // Energy-balance card inputs. Scoped per-profile like everything else.
     @Query private var foodModels: [FoodLogEntryModel]
     @Query private var cardioModels: [CardioSessionModel]
@@ -24,6 +26,7 @@ struct ProgressTabView: View {
     @State private var activeStat: StatKind?
     @State private var showEditTrackers = false
     @State private var showEnergyBalance = false
+    @State private var showTrainingHistory = false
 
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
@@ -54,6 +57,10 @@ struct ProgressTabView: View {
             filter: #Predicate<WorkoutSetModel> { $0.userId == uid },
             sort: \.timestamp, order: .forward
         )
+        _exerciseModels = Query(
+            filter: #Predicate<ExerciseModel> { $0.profileId == uid },
+            sort: \.name, order: .forward
+        )
         // Food uses userId; cardio/pilates/activities use profileId (mirrors MoveCard).
         _foodModels = Query(
             filter: #Predicate<FoodLogEntryModel> { $0.userId == uid },
@@ -78,6 +85,10 @@ struct ProgressTabView: View {
     private var markers: [HealthMarkerDTO] { markerModels.map(\.snapshot) }
     private var steps: [StepCountDTO] { stepModels.map(\.snapshot) }
     private var sets: [WorkoutSetDTO] { setModels.map(\.snapshot) }
+    private var exercises: [ExerciseDTO] { exerciseModels.map(\.snapshot) }
+    private var trainingSessions: [TrainingHistory.DaySession] {
+        TrainingHistory.sessions(sets: sets, exercises: exercises)
+    }
     private var foodLogs: [FoodLogEntryDTO] { foodModels.map(\.snapshot) }
     private var cardio: [CardioSessionDTO] { cardioModels.map(\.snapshot) }
     private var pilates: [PilatesSessionDTO] { pilatesModels.map(\.snapshot) }
@@ -110,7 +121,9 @@ struct ProgressTabView: View {
     }
 
     private var visibleStats: [StatKind] {
-        StatKind.allCases.filter { enabledSet.contains($0.rawValue) }
+        StatKind.allCases
+            .filter { enabledSet.contains($0.rawValue) }
+            .sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
     }
 
     private func persistEnabled(_ set: Set<String>) {
@@ -160,6 +173,11 @@ struct ProgressTabView: View {
 
                 // Calorie intake vs activity burn — shown for both modes.
                 energyBalanceCard
+
+                // Cross-day training history (the Workouts tab shows today only).
+                if !trainingSessions.isEmpty {
+                    trainingHistoryCard
+                }
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 18)
@@ -182,6 +200,39 @@ struct ProgressTabView: View {
                 targetCalories: targetCalories
             )
             .themed(profile.mode)
+        }
+        .sheet(isPresented: $showTrainingHistory) {
+            TrainingHistorySheet(profile: profile)
+                .environmentObject(toasts)
+                .themed(profile.mode)
+        }
+    }
+
+    // MARK: - Training history card
+
+    @ViewBuilder
+    private var trainingHistoryCard: some View {
+        let dayCount = trainingSessions.count
+        let lastDay = trainingSessions.first?.dayKey
+        PressableCard(action: { showTrainingHistory = true }) {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(spacing: 6) {
+                    Label("Training History", systemImage: "dumbbell.fill")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(theme.accent)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(theme.dim)
+                }
+                HStack(alignment: .firstTextBaseline, spacing: 16) {
+                    metric(label: "DAYS LOGGED", value: dayCount, accent: theme.text)
+                    Spacer()
+                    Text(lastDay.map { "last · \(Dates.formatShort($0))" } ?? "")
+                        .font(.system(size: 10))
+                        .foregroundStyle(theme.dim)
+                }
+            }
         }
     }
 
@@ -1384,5 +1435,146 @@ private struct WeightLogSheet: View {
         }
         let half = Int((lb * 2).rounded())
         draftHalfLb = max(minHalfLb, min(maxHalfLb, half))
+    }
+}
+
+// MARK: - Training history sheet
+
+/// Cross-day training history — every logged session grouped by day, newest first.
+/// This is the home for past workouts (the Workouts tab shows today only). Each
+/// exercise line offers a "remove a set" cleanup that deletes its most recent set
+/// on that day. Owns profile-scoped @Query so it refreshes live as sets are removed.
+private struct TrainingHistorySheet: View {
+    let profile: ProfileDTO
+
+    @Environment(\.modelContext) private var ctx
+    @Environment(\.theme) private var theme
+    @EnvironmentObject private var toasts: ToastCenter
+
+    @Query private var setModels: [WorkoutSetModel]
+    @Query private var exerciseModels: [ExerciseModel]
+
+    init(profile: ProfileDTO) {
+        self.profile = profile
+        let uid = profile.id
+        _setModels = Query(
+            filter: #Predicate<WorkoutSetModel> { $0.userId == uid },
+            sort: \.timestamp, order: .reverse
+        )
+        _exerciseModels = Query(
+            filter: #Predicate<ExerciseModel> { $0.profileId == uid },
+            sort: \.name, order: .forward
+        )
+    }
+
+    private var sessions: [TrainingHistory.DaySession] {
+        TrainingHistory.sessions(sets: setModels.map(\.snapshot), exercises: exerciseModels.map(\.snapshot))
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 18) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("training history.")
+                        .font(.system(size: 38, weight: .regular))
+                        .foregroundStyle(theme.text)
+                    Text("EVERY SESSION, NEWEST FIRST")
+                        .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                }
+
+                if sessions.isEmpty {
+                    Card {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("No training logged yet.")
+                                .font(.callout).foregroundStyle(theme.text)
+                            Text("Sets you log in the Workouts tab show up here, grouped by day.")
+                                .font(.caption).foregroundStyle(theme.dim)
+                        }
+                    }
+                } else {
+                    ForEach(sessions) { daySection($0) }
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+        }
+        .presentationDetents([.large])
+        .presentationBackground(theme.bg)
+    }
+
+    @ViewBuilder
+    private func daySection(_ s: TrainingHistory.DaySession) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(alignment: .firstTextBaseline) {
+                Text(Dates.formatLong(s.dayKey))
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(theme.text)
+                Spacer()
+                Text(daySummary(s))
+                    .font(.caption).foregroundStyle(theme.dim)
+            }
+            ForEach(s.exercises) { line in exerciseLineRow(line) }
+        }
+        .padding(12)
+        .background(theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(theme.line, lineWidth: 1))
+    }
+
+    private func daySummary(_ s: TrainingHistory.DaySession) -> String {
+        var parts = ["\(s.totalSets) set\(s.totalSets == 1 ? "" : "s")"]
+        if s.totalCalories > 0 { parts.append("~\(s.totalCalories) cal") }
+        return parts.joined(separator: " · ")
+    }
+
+    @ViewBuilder
+    private func exerciseLineRow(_ line: TrainingHistory.ExerciseLine) -> some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(line.name)
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(theme.text)
+                Text(lineDetail(line))
+                    .font(.caption).foregroundStyle(theme.dim)
+            }
+            Spacer()
+            Button(role: .destructive) {
+                removeLastSet(line)
+            } label: {
+                Image(systemName: "minus.circle")
+                    .foregroundStyle(theme.warn)
+            }
+            .tactile(.ghost)
+            .accessibilityLabel("Remove a set of \(line.name)")
+        }
+        .padding(.vertical, 4)
+    }
+
+    private func lineDetail(_ line: TrainingHistory.ExerciseLine) -> String {
+        if line.isIsometric {
+            return "\(line.setCount) hold\(line.setCount == 1 ? "" : "s") · \(holdLabel(line.totalHoldSeconds))"
+        }
+        var s = "\(line.setCount) set\(line.setCount == 1 ? "" : "s") · \(line.totalReps) rep\(line.totalReps == 1 ? "" : "s")"
+        if line.calories > 0 { s += " · ~\(line.calories) cal" }
+        return s
+    }
+
+    private func removeLastSet(_ line: TrainingHistory.ExerciseLine) {
+        guard let id = line.setIds.first else { return }
+        Repos.deleteSet(ctx, id: id)
+        Haptics.warn()
+        toasts.show(Toast(title: "Set removed", detail: line.name, accent: .warn, symbol: "trash.fill"))
+    }
+
+    private func holdLabel(_ seconds: Int) -> String {
+        guard seconds > 0 else { return "—" }
+        if seconds < 90 { return "\(seconds)s" }
+        if seconds < 4200 {
+            let m = seconds / 60; let s = seconds % 60
+            return s > 0 ? "\(m)m \(s)s" : "\(m)m"
+        }
+        let h = seconds / 3600; let m = (seconds % 3600) / 60
+        return m > 0 ? "\(h)h \(m)m" : "\(h)h"
     }
 }

@@ -82,4 +82,41 @@ final class ExerciseInfoTests: XCTestCase {
         let m = meta("Cable Woodchopper Thing", category: .compound)
         XCTAssertEqual(m.met, 5.5, accuracy: 0.001) // compound default
     }
+
+    // MARK: - Expanded library (first-match ordering must be preserved)
+
+    // Pull-over is checked BEFORE the "pull" prefix branch.
+    func test_pullover_isLatsAndChest_notPullup() {
+        let m = meta("Dumbbell Pull-over")
+        XCTAssertTrue(m.muscleGroups.contains("Lats"))
+        XCTAssertTrue(m.muscleGroups.contains("Pectorals"))
+        XCTAssertFalse(m.muscleGroups.contains("Biceps")) // would mean it hit the pull-up branch
+    }
+
+    // Back Extension is checked BEFORE the tricep "extension" branch.
+    func test_backExtension_isErectors_notTriceps() {
+        let m = meta("Back Extension")
+        XCTAssertTrue(m.muscleGroups.contains("Erector spinae"))
+        XCTAssertFalse(m.muscleGroups.contains { $0.lowercased().contains("tricep") })
+    }
+
+    func test_goodMorning_isPosteriorChain() {
+        let m = meta("Good Morning")
+        XCTAssertTrue(m.muscleGroups.contains("Hamstrings"))
+        XCTAssertTrue(m.muscleGroups.contains("Erector spinae"))
+    }
+
+    func test_russianTwist_isObliques() {
+        XCTAssertTrue(meta("Russian Twist").muscleGroups.contains("Obliques"))
+    }
+
+    func test_hipAdduction_isAdductors_hipAbduction_isGluteMedius() {
+        XCTAssertEqual(meta("Hip Adduction").muscleGroups, ["Adductors"])
+        XCTAssertTrue(meta("Hip Abduction").muscleGroups.contains("Gluteus medius"))
+    }
+
+    // "leg curl" must still read as hamstrings even though "Nordic"/new branches exist.
+    func test_existingLegCurl_unaffected() {
+        XCTAssertEqual(meta("Leg Curl").muscleGroups, ["Hamstrings"])
+    }
 }

@@ -32,20 +32,28 @@ final class SuggestedMealsTests: XCTestCase {
 
     func test_neutral_bias_top_is_highest_protein() {
         let p = profile(mode: .build)
-        // pasta-chicken (48g) is the highest-protein meal in the build+shared pool.
-        let ranked = SuggestedMeals.ranked(for: p, totals: neutralTotals(p), limit: 10)
-        XCTAssertEqual(ranked.first?.id, "pasta-chicken")
+        // Under neutral bias the score IS perServing protein, so the top result must
+        // be the highest-protein meal in the build+shared pool (robust to corpus growth).
+        let pool = SuggestedMeals.suggestions(for: .build)
+        let maxProtein = pool.map(\.perServing.proteinG).max()!
+        let ranked = SuggestedMeals.ranked(for: p, totals: neutralTotals(p), limit: 5)
+        XCTAssertEqual(ranked.first?.perServing.proteinG, maxProtein)
     }
 
     func test_favorite_ingredient_boosts_meal_above_higher_protein_one() {
         let p = profile(mode: .build)
         let t = neutralTotals(p)
-        // burrito-bowl (45g protein) contains avocado. Favoriting avocado applies a
-        // +15% boost → 45 * 1.15 = 51.75 > pasta-chicken's 48, so it overtakes.
+        // burrito-bowl (45g protein) contains avocado; favouriting avocado applies a
+        // +15% boost → 45 * 1.15 = 51.75 > pasta-chicken's 48, so burrito-bowl must
+        // outrank pasta-chicken (relative order — robust to other meals being added).
         let ranked = SuggestedMeals.ranked(
-            for: p, totals: t, favoriteFoodIds: ["avocado"], limit: 10
+            for: p, totals: t, favoriteFoodIds: ["avocado"], limit: 100
         )
-        XCTAssertEqual(ranked.first?.id, "burrito-bowl")
+        let burrito = ranked.firstIndex { $0.id == "burrito-bowl" }
+        let pasta = ranked.firstIndex { $0.id == "pasta-chicken" }
+        XCTAssertNotNil(burrito)
+        XCTAssertNotNil(pasta)
+        XCTAssertLessThan(burrito!, pasta!)
     }
 
     func test_isPersonalised_true_when_favorite_ingredient_present() {
@@ -80,7 +88,7 @@ final class SuggestedMealsTests: XCTestCase {
 
     // Helpers to fetch a known meal from the ranked pool.
     private func meal(_ id: String, _ p: ProfileDTO) -> SuggestedMeal {
-        SuggestedMeals.ranked(for: p, totals: neutralTotals(p), limit: 50).first { $0.id == id }!
+        SuggestedMeals.ranked(for: p, totals: neutralTotals(p), limit: 200).first { $0.id == id }!
     }
     private func burritoBowl(_ p: ProfileDTO) -> SuggestedMeal { meal("burrito-bowl", p) }
     private func eggsToast(_ p: ProfileDTO) -> SuggestedMeal { meal("eggs-toast", p) }

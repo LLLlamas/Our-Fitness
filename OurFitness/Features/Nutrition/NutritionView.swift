@@ -32,6 +32,7 @@ struct NutritionView: View {
     @State private var showNutritionTrend = false
     @State private var showNutritionInsight = false
     @State private var showCameraLog = false
+    @State private var showMoodSheet = false
     @State private var selectedDayKey: String = Dates.dayKey()
     // Tracks the logging streak across log events so we only celebrate a milestone
     // at the moment it's crossed (set on appear; compared on each new log).
@@ -172,6 +173,37 @@ struct NutritionView: View {
         FoodAlternativeService.shared.prefetch(for: food.name, mode: profile.mode)
     }
 
+    // "What are you in the mood for?" — AI (or the craving-matcher fallback)
+    // suggests foods/meals for a free-text craving + constraints. Logs land on the
+    // selected day.
+    @ViewBuilder
+    private var moodMealButton: some View {
+        Button { showMoodSheet = true } label: {
+            HStack(spacing: 10) {
+                Image(systemName: "wand.and.stars")
+                    .font(.system(size: 15))
+                    .foregroundStyle(theme.accent)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("What are you in the mood for?")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(theme.text)
+                    Text("Tell me your craving and calories")
+                        .font(.caption).foregroundStyle(theme.dim)
+                }
+                Spacer(minLength: 0)
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(theme.dim)
+            }
+            .padding(14)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(theme.card)
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(theme.line, lineWidth: 1))
+        }
+        .tactile(.ghost)
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
@@ -203,6 +235,8 @@ struct NutritionView: View {
                 }
                 daySelector
                 weeklyNutritionCard
+
+                moodMealButton
 
                 if selectedDayKey == today {
                     suggestionPillRow
@@ -359,6 +393,21 @@ struct NutritionView: View {
             CameraFoodLogSheet(profile: profile, slot: .lunch) { dto in
                 Repos.addFoodLog(ctx, dto)
                 toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
+                let foodName = dto.foodId ?? dto.customName ?? ""
+                if !foodName.isEmpty {
+                    FoodAlternativeService.shared.prefetch(for: foodName, mode: profile.mode)
+                }
+            }
+            .themed(profile.mode)
+        }
+        .sheet(isPresented: $showMoodSheet) {
+            MoodMealSheet(
+                profile: profile, totals: totals, targetDate: selectedDayKey,
+                recentLogs: allLogs, favoriteFoodIds: favoriteIds
+            ) { dto in
+                Repos.addFoodLog(ctx, dto)
+                toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
+                showMoodSheet = false
                 let foodName = dto.foodId ?? dto.customName ?? ""
                 if !foodName.isEmpty {
                     FoodAlternativeService.shared.prefetch(for: foodName, mode: profile.mode)
@@ -1459,6 +1508,252 @@ private struct SuggestionsSheet: View {
         }
     }
 
+}
+
+// MARK: - Mood meal sheet
+
+/// "What are you in the mood for?" — type a craving with loose constraints and get
+/// food ideas. Apple Intelligence (when available) suggests real foods whose macros
+/// are resolved from the food database; otherwise the deterministic
+/// `MealCravingMatcher` ranks curated meals from history. The model never supplies
+/// nutrition numbers.
+private struct MoodMealSheet: View {
+    let profile: ProfileDTO
+    let totals: DailyTotals
+    let targetDate: String
+    let recentLogs: [FoodLogEntryDTO]
+    let favoriteFoodIds: Set<String>
+    let onPick: (FoodLogEntryDTO) -> Void
+
+    @Environment(\.theme) private var theme
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var craving: String = ""
+    @State private var aiIdeas: [MealIdea] = []
+    @State private var curatedMatches: [MealCravingMatcher.CravingMatch] = []
+    @State private var loading = false
+    @State private var usedAI = false
+    @State private var hasSearched = false
+    @State private var selectedMeal: SuggestedMeal?
+    @FocusState private var focused: Bool
+
+    private let examples = ["something salty", "something sweet", "high protein, ~500 cal", "light, not too hungry"]
+
+    private var trimmed: String { craving.trimmingCharacters(in: .whitespacesAndNewlines) }
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 14) {
+                    Text("Tell me your craving, how hungry you are, a rough calorie target — I'll suggest something that fits.")
+                        .font(.callout).foregroundStyle(theme.dim)
+
+                    HStack(spacing: 8) {
+                        TextField("e.g. not too hungry, ~500 cal, salty", text: $craving)
+                            .padding(10).background(theme.card)
+                            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                            .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+                            .foregroundStyle(theme.text)
+                            .focused($focused)
+                            .submitLabel(.search)
+                            .onSubmit { Task { await run() } }
+
+                        Button { Task { await run() } } label: {
+                            Image(systemName: "arrow.up.circle.fill")
+                                .font(.system(size: 26))
+                                .foregroundStyle(trimmed.isEmpty ? theme.dim : theme.accent)
+                        }
+                        .tactile(.ghost)
+                        .disabled(trimmed.isEmpty)
+                        .accessibilityLabel("Get ideas")
+                    }
+
+                    if !hasSearched {
+                        VStack(alignment: .leading, spacing: 8) {
+                            ForEach(examples, id: \.self) { example in
+                                Button {
+                                    craving = example
+                                    Task { await run() }
+                                } label: {
+                                    Text(example)
+                                        .font(.system(size: 13))
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .padding(.vertical, 8).padding(.horizontal, 12)
+                                        .background(theme.card)
+                                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+                                        .foregroundStyle(theme.text)
+                                }
+                                .tactile(.ghost)
+                            }
+                        }
+                    }
+
+                    if loading {
+                        HStack(spacing: 8) {
+                            ProgressView().controlSize(.small)
+                            Text("Finding ideas with Apple Intelligence…")
+                                .font(.caption).foregroundStyle(theme.dim)
+                        }
+                    }
+
+                    if !aiIdeas.isEmpty {
+                        ForEach(Array(aiIdeas.enumerated()), id: \.offset) { _, idea in
+                            foodIdeaRow(idea)
+                        }
+                    } else {
+                        ForEach(curatedMatches) { match in
+                            mealMatchRow(match)
+                        }
+                    }
+
+                    if usedAI && !aiIdeas.isEmpty { aiAttribution }
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 24)
+            }
+            .background(theme.bg.ignoresSafeArea())
+            .navigationTitle("In the mood…")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") { dismiss() }.tactile(.ghost)
+                }
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") { focused = false }
+                }
+            }
+        }
+        .presentationDetents([.large])
+        .presentationBackground(theme.bg)
+        .sheet(item: $selectedMeal) { meal in
+            MealDetailSheet(meal: meal) { m, s, multiplier in
+                let ps = m.perServing
+                let scaled = PerServing(
+                    calories: Int(Double(ps.calories) * multiplier),
+                    proteinG: Int(Double(ps.proteinG) * multiplier),
+                    carbsG: Int(Double(ps.carbsG) * multiplier),
+                    fatG: Int(Double(ps.fatG) * multiplier),
+                    fiberG: Int(Double(ps.fiberG) * multiplier)
+                )
+                onPick(FoodLogEntryDTO(
+                    userId: profile.id, date: targetDate, slot: s,
+                    customName: m.name, perServing: scaled
+                ))
+                selectedMeal = nil
+            }
+            .themed(profile.mode)
+        }
+    }
+
+    private func run() async {
+        let g = trimmed
+        guard !g.isEmpty else { return }
+        focused = false
+        hasSearched = true
+
+        if MealIdeaService.shared.isAvailable {
+            loading = true
+            let recentNames = FoodAlternativeService.shared.learnedFrequents(from: recentLogs)
+            let ideas = await MealIdeaService.shared.ideas(forCraving: g, mode: profile.mode, recentFoodNames: recentNames)
+            loading = false
+            if !ideas.isEmpty {
+                aiIdeas = ideas
+                curatedMatches = []
+                usedAI = true
+                Haptics.selection()
+                return
+            }
+        }
+
+        // Deterministic fallback — recommend from curated meals + the user's history.
+        usedAI = false
+        aiIdeas = []
+        curatedMatches = MealCravingMatcher.matches(
+            for: profile, craving: g, totals: totals,
+            recentLogs: recentLogs, favoriteFoodIds: favoriteFoodIds
+        )
+        Haptics.selection()
+    }
+
+    @ViewBuilder
+    private func foodIdeaRow(_ idea: MealIdea) -> some View {
+        let item = idea.item
+        Card {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(alignment: .firstTextBaseline) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(item.food.name)
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundStyle(theme.text)
+                        Text("\(item.scaledCalories) cal · \(item.scaledProteinG)g pro · \(item.scaledCarbsG)g carbs · \(item.scaledFatG)g fat")
+                            .font(.system(.caption2, design: .monospaced))
+                            .foregroundStyle(theme.accent)
+                    }
+                    Spacer(minLength: 8)
+                    Button { logFood(item) } label: {
+                        Label("Log", systemImage: "plus")
+                            .font(.system(size: 12, weight: .medium))
+                    }
+                    .tactile(.pill, fill: theme.accent)
+                }
+                if !idea.why.isEmpty {
+                    Text(idea.why)
+                        .font(.callout).foregroundStyle(theme.text)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func mealMatchRow(_ match: MealCravingMatcher.CravingMatch) -> some View {
+        let meal = match.meal
+        PressableCard(action: { selectedMeal = meal }) {
+            HStack(spacing: 12) {
+                Text(meal.emoji).font(.system(size: 28))
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(meal.name)
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(theme.text)
+                    Text(match.reason)
+                        .font(.caption).foregroundStyle(theme.dim)
+                        .lineLimit(2)
+                    Text("\(meal.perServing.calories) cal · \(meal.perServing.proteinG)g pro · \(meal.perServing.carbsG)g carbs · \(meal.perServing.fatG)g fat")
+                        .font(.system(.caption2, design: .monospaced))
+                        .foregroundStyle(theme.accent)
+                }
+                Spacer(minLength: 0)
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12))
+                    .foregroundStyle(theme.dim)
+            }
+        }
+    }
+
+    private func logFood(_ item: FoodParser.ParsedItem) {
+        onPick(FoodLogEntryDTO(
+            userId: profile.id, date: targetDate, slot: .snack,
+            foodId: item.food.id, customName: item.food.name,
+            perServing: PerServing(
+                calories: item.scaledCalories, proteinG: item.scaledProteinG,
+                carbsG: item.scaledCarbsG, fatG: item.scaledFatG, fiberG: item.scaledFiberG
+            )
+        ))
+    }
+
+    @ViewBuilder
+    private var aiAttribution: some View {
+        HStack(alignment: .top, spacing: 6) {
+            Image(systemName: "sparkles")
+                .font(.system(size: 10)).foregroundStyle(theme.accent)
+            Text("Ideas from Apple Intelligence, on-device. Calories and macros come from the food database, not the model.")
+                .font(.caption2).foregroundStyle(theme.dim)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(.top, 2)
+    }
 }
 
 // MARK: - Food Library Sheet

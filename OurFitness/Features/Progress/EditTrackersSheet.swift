@@ -29,7 +29,9 @@ struct EditTrackersSheet: View {
                         .foregroundStyle(theme.dim)
                 }
 
-                ForEach(StatKind.allCases) { kind in
+                ForEach(StatKind.allCases.sorted {
+                    $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending
+                }) { kind in
                     row(kind)
                 }
             }
