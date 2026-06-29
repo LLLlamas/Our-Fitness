@@ -77,7 +77,7 @@ public enum MealCravingMatcher {
             .map { meal -> (meal: SuggestedMeal, score: Double, flavorsHit: [Flavor]) in
                 let (s, hits) = score(meal, tokens: tokens, flavors: flavors,
                                       calorieGoal: calorieGoal, protein: protein,
-                                      loved: loved, constrained: constrained)
+                                      loved: loved, constrained: constrained, mode: profile.mode)
                 return (meal, s, hits)
             }
             .filter { $0.score > 0 }
@@ -110,7 +110,8 @@ public enum MealCravingMatcher {
         calorieGoal: CalorieGoal?,
         protein: ProteinHint,
         loved: Set<String>,
-        constrained: Bool
+        constrained: Bool,
+        mode: Mode
     ) -> (Double, [Flavor]) {
         let text = searchable(meal)
 
@@ -161,6 +162,20 @@ public enum MealCravingMatcher {
             s += (meal.perServing.proteinG >= 4 && meal.perServing.proteinG <= 25) ? 2 : 0
         case .none:
             break
+        }
+
+        // Mode tilt: nudge within the (already mode-filtered) pool toward each mode's
+        // macro priorities — Build favours protein + calorie density, Circuit favours
+        // fibre + leaner picks. Small adds so the craving's flavour/keyword stays the
+        // primary signal; only reached after the gate.
+        let ps = meal.perServing
+        switch mode {
+        case .build:
+            s += min(1.5, Double(ps.proteinG) / 30.0)
+            s += min(1.0, Double(ps.calories) / 700.0)
+        case .circuit:
+            s += min(1.5, Double(ps.fiberG) / 8.0)
+            s += ps.calories <= 450 ? 0.8 : 0
         }
 
         // Affinity: meals built around loved foods get a boost. When the craving

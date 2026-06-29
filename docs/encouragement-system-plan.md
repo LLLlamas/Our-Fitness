@@ -11,7 +11,7 @@ A layered encouragement system across three surfaces:
 2. **Encouragement sheets** — medium-detent info panels with science context, triggered by tapping milestone chips or info buttons
 3. **Local push notifications** — scheduled UNUserNotificationCenter notifications (morning routine, post-log, weekly summary, stall nudge)
 
-Two complete message banks: one for **Build** (mass, hypertrophy, basketball fueling) and one for **Reset** (cardiometabolic markers, parenting movement, BP/LDL/insulin). Messages are scientifically specific — not generic "great job!" but "14 more pull-up sets this week locks in the 14% frequency advantage."
+Two complete message banks: one for **Build** (mass, hypertrophy, basketball fueling) and one for **Circuit** (cardiometabolic markers, parenting movement, BP/LDL/insulin). Messages are scientifically specific — not generic "great job!" but "14 more pull-up sets this week locks in the 14% frequency advantage."
 
 ---
 
@@ -185,17 +185,17 @@ All math re-uses existing `CalorieEstimator` and `ExerciseInfo`. No new math lay
 
 ---
 
-### Reset Mode — Full Copy (with science)
+### Circuit Mode — Full Copy (with science)
 
-#### Step Milestones (Reset Mode)
+#### Step Milestones (Circuit Mode)
 | Steps | Tone | Headline | Detail | Science Line |
 |-------|------|----------|--------|--------------|
 | 3,000 | celebrate | "3k. Starting." | "You're moving. Each 1,000 steps is a measurable cardiometabolic win." | "1,000 steps/day → 0.49 mmHg lower systolic BP. (PMC 2021)" |
 | 5,000 | celebrate | "Halfway to 10k." | "5k steps reduces fasting glucose. You're already improving insulin sensitivity just by walking." | "10-min stair walking → 23 mg/dL glucose reduction. (ScienceDirect)" |
 | 8,000 | impressed | "8k. The research sweet spot." | "51% lower all-cause mortality vs 4k. You've crossed a scientifically meaningful threshold." | "Saint-Maurice, JAMA 2020. Saint-Maurice 2020 also found no clear plateau — keep going." |
-| 10,000 | celebrate | "10k done." | "Daily step goal complete. This is the primary lever for BP, insulin sensitivity, and LDL in Reset mode. You hit it." | nil |
+| 10,000 | celebrate | "10k done." | "Daily step goal complete. This is the primary lever for BP, insulin sensitivity, and LDL in Circuit mode. You hit it." | nil |
 
-#### Pilates (Reset Mode)
+#### Pilates (Circuit Mode)
 | Sessions | Tone | Headline | Detail | Science Line |
 |----------|------|----------|--------|--------------|
 | 1st session | scienceTip | "Pilates for real." | "Core stability and blood pressure benefits begin accumulating from your very first session. Consistency compounds it." | "Pilates: −4.76 mmHg systolic, −3.43 mmHg diastolic vs. controls. (J Human Hypertension, 2024)" |
@@ -422,10 +422,10 @@ static func detectStalls(
 
 Stall thresholds:
 - **Steps gap**: no `StepCountDTO` with `steps > 500` for 2+ days → `logGap(.steps, 2)`
-- **Workout gap**: no `WorkoutSetDTO` in 5+ days (Build) or 7+ days (Reset) → `logGap(.workout, N)`
-- **Pilates gap**: Reset mode, no `PilatesSessionDTO` in 7+ days → `logGap(.pilates, 7)`
+- **Workout gap**: no `WorkoutSetDTO` in 5+ days (Build) or 7+ days (Circuit) → `logGap(.workout, N)`
+- **Pilates gap**: Circuit mode, no `PilatesSessionDTO` in 7+ days → `logGap(.pilates, 7)`
 - **BP/LDL stall**: same-kind markers over last 6 weeks show delta < 5% → `markerStall(kind, weeks)`
-- **Weight stall**: Reset mode, 14-day weight trend < 0.1 lb/week → `weightTrend(0.0, .circuit)` → `TrendAdjustment.addCardio` copy
+- **Weight stall**: Circuit mode, 14-day weight trend < 0.1 lb/week → `weightTrend(0.0, .circuit)` → `TrendAdjustment.addCardio` copy
 
 Called from:
 1. Background task (UNBackgroundTaskScheduler, minimal) — triggers stall push notification

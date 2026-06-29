@@ -18,7 +18,7 @@ Source: [OurFitness/App/RootView.swift](OurFitness/App/RootView.swift) lines 8�
 └──────────────────────────────────────────┘
 ```
 
-Selected tab: icon + label render in **theme accent color** (warm orange on Build, sage green on Reset). Unselected tabs: system gray (handled automatically by `TabView`). Background: system default — a translucent material layer that automatically adapts to light/dark mode and content scrolling underneath. We don't draw any of that ourselves.
+Selected tab: icon + label render in **theme accent color** (warm orange on Build, sage green on Circuit). Unselected tabs: system gray (handled automatically by `TabView`). Background: system default — a translucent material layer that automatically adapts to light/dark mode and content scrolling underneath. We don't draw any of that ourselves.
 
 A faint haptic tick fires on tab change via `.sensoryFeedback(.selection, trigger: tab)`.
 
@@ -117,7 +117,7 @@ Provide @1x / @2x / @3x slots in the asset catalog (or a single SVG marked "Pres
 .tint(Theme.for(profile.mode).accent)
 ```
 
-`.tint(...)` is the single knob. Whatever `Color` you pass becomes the selected icon + label color. In Our-Fitness this comes from the per-mode theme system ([Services/Theme.swift](OurFitness/Services/Theme.swift)) — warm orange `(1.0, 0.42, 0.21)` on Build, sage green `(0.50, 0.63, 0.45)` on Reset. To swap colors at runtime, change the value passed to `.tint()` and SwiftUI re-renders.
+`.tint(...)` is the single knob. Whatever `Color` you pass becomes the selected icon + label color. In Our-Fitness this comes from the per-mode theme system ([Services/Theme.swift](OurFitness/Services/Theme.swift)) — warm orange `(1.0, 0.42, 0.21)` on Build, sage green `(0.50, 0.63, 0.45)` on Circuit. To swap colors at runtime, change the value passed to `.tint()` and SwiftUI re-renders.
 
 For Llamas-Cookbook you'd most likely hard-code a single accent — say cookbook-red — and just write:
 

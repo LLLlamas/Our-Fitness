@@ -13,7 +13,7 @@ public enum Targets {
         public let proteinPerLb: Double
         public let fatPctOfCals: Double
         public let stepsDaily: Int
-        // Legacy caps (formerly Reset-only). Math retained; UI does not render.
+        // Legacy caps (formerly Circuit-only). Math retained; UI does not render.
         public let sodiumMgMax: Int?
         public let addedSugarGMax: Int?
         public let saturatedFatPctMax: Double?

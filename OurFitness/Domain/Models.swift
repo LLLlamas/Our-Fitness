@@ -10,15 +10,15 @@ import Foundation
 
 public enum Mode: String, Codable, CaseIterable, Sendable {
     case build
-    // Raw value pinned to "reset" so SwiftData rows persisted before the
-    // Circuit rename keep decoding cleanly. Symbol/UI copy renamed; bump a
-    // schema version before changing this raw value.
+    // Raw value pinned to "reset" so SwiftData rows persisted under the old "Reset"
+    // UI name keep decoding cleanly. The symbol and all UI copy are "Circuit"; bump a
+    // schema version before ever changing this raw value.
     case circuit = "reset"
 
     public var displayName: String {
         switch self {
         case .build:   return "Build"
-        case .circuit: return "Reset"
+        case .circuit: return "Circuit"
         }
     }
 
@@ -125,7 +125,7 @@ public struct MacroTargets: Codable, Equatable, Sendable {
     public var carbsG: Int
     public var fatG: Int
     public var stepsDaily: Int
-    // Legacy caps (formerly Reset-only). Retained on the data model; UI no longer renders them.
+    // Legacy caps (formerly Circuit-only). Retained on the data model; UI no longer renders them.
     public var sodiumMgMax: Int?
     public var addedSugarGMax: Int?
     public var saturatedFatGMax: Int?

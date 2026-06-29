@@ -1,9 +1,7 @@
 // Top-level shell. User-created profiles; first launch routes to creation.
 // Theme follows the active profile's mode. Overlays the toast host.
 //
-// Tab layout is mode-dependent:
-//   Build:   Today | Meals | Train | Progress
-//   Circuit: Today | Meals | Progress   (Train is absorbed into Today)
+// Tab layout (both modes): Today | Meals | Train | Progress
 
 import SwiftUI
 import SwiftData
@@ -100,12 +98,9 @@ struct RootView: View {
                     .tag(Tab.meals)
                     .tabItem { Label(Tab.meals.label, systemImage: Tab.meals.icon) }
 
-                // Train tab only for Build — Circuit workout content lives in Today
-                if profile.mode == .build {
-                    WorkoutsView(profile: profile)
-                        .tag(Tab.workouts)
-                        .tabItem { Label(Tab.workouts.label, systemImage: Tab.workouts.icon) }
-                }
+                WorkoutsView(profile: profile)
+                    .tag(Tab.workouts)
+                    .tabItem { Label(Tab.workouts.label, systemImage: Tab.workouts.icon) }
 
                 ProgressTabView(profile: profile)
                     .tag(Tab.progress)
@@ -118,15 +113,6 @@ struct RootView: View {
         .themed(profile.mode)
         .sheet(isPresented: $showSettings) {
             SettingsView(profile: profile, health: health)
-        }
-        .onAppear {
-            // Guard against a stale tab value on cold launch (e.g. if tab were ever persisted).
-            // Circuit has no Train tab — redirect to Today.
-            if profile.mode == .circuit && tab == .workouts { tab = .today }
-        }
-        .onChange(of: profile.mode) { _, _ in
-            // If switching from Build → Circuit while on the Train tab, land on Today
-            if tab == .workouts { tab = .today }
         }
         .task(id: StepObserverKey(profileId: profile.id, granted: profile.healthGranted)) {
             if profile.healthGranted {

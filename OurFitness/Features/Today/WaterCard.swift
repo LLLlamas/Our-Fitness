@@ -296,7 +296,7 @@ private struct WaterInfoSheet: View {
                         bullet("Water helps your body absorb nutrients and recover after training.")
                         bullet("Thirst is a good guide for most people — this goal is just a target to aim for, especially on hot or active days.")
                         if profile.mode == .circuit {
-                            bullet("Staying topped up makes the higher step counts in Reset feel easier.")
+                            bullet("Staying topped up makes the higher step counts in Circuit feel easier.")
                         }
                     }
                 }

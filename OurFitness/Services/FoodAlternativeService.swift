@@ -226,7 +226,7 @@ public final class FoodAlternativeService: @unchecked Sendable {
         case .build:
             parts.append("Goal: Build mode (gaining lean muscle mass). Prioritise alternatives with similar or higher protein content. Whole-food protein sources are preferred.")
         case .circuit:
-            parts.append("Goal: Reset mode (losing body fat and improving heart-health markers). Prioritise alternatives that are lower in saturated fat and sodium, higher in fibre, and ideally rich in omega-3 fatty acids.")
+            parts.append("Goal: Circuit mode (losing body fat and improving heart-health markers). Prioritise alternatives that are lower in saturated fat and sodium, higher in fibre, and ideally rich in omega-3 fatty acids.")
         }
 
         let contextFoods = (recentFoodNames + favoriteFoodNames)

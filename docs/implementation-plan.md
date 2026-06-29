@@ -10,15 +10,15 @@ Distilled from the 2026-05-26 planning conversation. This is the work to land be
 
 | Topic | Decision |
 |---|---|
-| Profiles | Two fixed profiles (Build / Reset). No add-button, no third user. Both profiles always exist in the shared store; either device can view either profile via a header switcher. |
+| Profiles | Two fixed profiles (Build / Circuit). No add-button, no third user. Both profiles always exist in the shared store; either device can view either profile via a header switcher. |
 | Onboarding | No "claim a slot" gate. Both seeded on first launch. User flips via Settings / header. |
 | HealthKit | Wired into onboarding step + a "Connect Apple Health" CTA on Today if not yet granted. Reads steps, weight, RHR, active energy + Apple Watch–originated steps. |
-| Caps (Reset) | Each cap (sodium / sugar / sat-fat / fiber) gets an `info.circle` button → sheet with plain-English explanation + medical reasoning. |
+| Caps (Circuit) | Each cap (sodium / sugar / sat-fat / fiber) gets an `info.circle` button → sheet with plain-English explanation + medical reasoning. |
 | Custom food entry | Name + quantity. Lookup pipeline: **USDA FoodData Central API → Apple Intelligence estimate → manual label-photo OCR fallback**. User confirms before save. |
 | AI provider | **Apple Intelligence (FoundationModels framework, iOS 18.1+)** on-device. No Anthropic tokens. No network. Free. |
-| Reset Train tab | Steps & cardio + Pilates only. **Strength removed entirely.** Goal: lower LDL, raise HDL, BP control, habit formation. |
+| Circuit Train tab | Steps & cardio + Pilates only. **Strength removed entirely.** Goal: lower LDL, raise HDL, BP control, habit formation. |
 | Build Train tab | Strength + mobility track. Mobility surfaces three ways: daily card on Today, warm-up block prepended to lift days, and a standalone Mobility day in the program. |
-| Progress modals | Pilates summary, Steps deep-dive, Health markers (Reset-critical). Weight + PR modals deferred. |
+| Progress modals | Pilates summary, Steps deep-dive, Health markers (Circuit-critical). Weight + PR modals deferred. |
 
 ---
 
@@ -30,7 +30,7 @@ Distilled from the 2026-05-26 planning conversation. This is the work to land be
 - [ ] Today view: if `!profile.healthGranted`, render a banner card "Connect Apple Health to track steps automatically" → same call.
 - [ ] `HKObserverQuery` registered at launch for `stepCount`. On fire → `UPSERT` `StepCount` row for today.
 - [ ] Apple Watch steps come for free once authorization is granted — no separate watch target in v1. Document this in `README.md`.
-- [ ] Add `activeEnergyBurned` + `appleExerciseTime` to the read set (Reset cares about cardio minutes).
+- [ ] Add `activeEnergyBurned` + `appleExerciseTime` to the read set (Circuit cares about cardio minutes).
 - [ ] Settings screen exposes "Apple Health permissions" → opens iOS Settings deep link if user wants to change.
 
 **Files:** `Services/HealthKitService.swift`, `Features/Onboarding/*`, `Features/Today/TodayView.swift`, `App/RootView.swift`, `Domain/Models.swift` (add `healthGranted: Bool` to `Profile`).
@@ -39,8 +39,8 @@ Distilled from the 2026-05-26 planning conversation. This is the work to land be
 
 ## 2. Profile model — fixed two, switchable view
 
-- [ ] Remove any "create profile" flow. Seed both `Build` and `Reset` profiles on first launch (`SeedProfiles.swift`, idempotent).
-- [ ] Add `@AppStorage("activeProfileID")` to RootView; defaults to Build on one device, Reset on the other (manually picked on first launch).
+- [ ] Remove any "create profile" flow. Seed both `Build` and `Circuit` profiles on first launch (`SeedProfiles.swift`, idempotent).
+- [ ] Add `@AppStorage("activeProfileID")` to RootView; defaults to Build on one device, Circuit on the other (manually picked on first launch).
 - [ ] Header avatar switcher: tap top-left avatar → small sheet with both profiles → switch. No password, no auth — household trust.
 - [ ] All `@Query` filters that currently take a profile keep working; just the active profile flips.
 
@@ -48,7 +48,7 @@ Distilled from the 2026-05-26 planning conversation. This is the work to land be
 
 ---
 
-## 3. Caps — info tooltips (Reset)
+## 3. Caps — info tooltips (Circuit)
 
 - [ ] `Components/CapBar.swift` (new or extend existing `ProgressBar`) — same visual, with an `info.circle` button trailing the label.
 - [ ] Tap → `.sheet` with a `CapExplanation` view: plain-English **why this cap exists** + medical reasoning + source (AHA, USDA, etc.).
@@ -82,9 +82,9 @@ Pipeline: user types name + quantity → app tries lookups in order, surfaces co
 
 ---
 
-## 5. Reset Train tab — full rewrite
+## 5. Circuit Train tab — full rewrite
 
-Currently seeds DB bench, DB row, etc. **Strip all strength from Reset.**
+Currently seeds DB bench, DB row, etc. **Strip all strength from Circuit.**
 
 - [ ] `SeedExercises.swift` — gate strength exercises behind `availableForMode: [.build]`.
 - [ ] `Features/Workouts/WorkoutsView.swift` — when `profile.mode == .reset`, render at top a **three-ring "Movement Minutes" summary** (Steps / Pilates / Cardio active-energy), then **two stacked cards** below:
@@ -103,7 +103,7 @@ Currently seeds DB bench, DB row, etc. **Strip all strength from Reset.**
   - Weekly frequency vs goal (default 3x/wk)
 - [ ] Habit-building: weekly streak indicator on each card. Persistent banner if she hits a 4-week+ streak. No streak-shame on breaks (per CLAUDE.md).
 
-**Files:** `Features/Workouts/WorkoutsView.swift`, `Features/Workouts/Reset/StepsCardioCard.swift` (new), `Features/Workouts/Reset/PilatesCard.swift` (new), `Domain/Models.swift` (`PilatesSession` entity + `FocusArea` enum), `Data/PersistenceModels.swift` (matching `@Model`).
+**Files:** `Features/Workouts/WorkoutsView.swift`, `Features/Workouts/Circuit/StepsCardioCard.swift` (new), `Features/Workouts/Circuit/PilatesCard.swift` (new), `Domain/Models.swift` (`PilatesSession` entity + `FocusArea` enum), `Data/PersistenceModels.swift` (matching `@Model`).
 
 ---
 
@@ -139,13 +139,13 @@ Use frontend-design agent for visual polish (see §10). Functional spec below.
 - Longest streak (consecutive goal-hit days)
 - Tap-and-hold on any bar shows that hour's exact step count
 
-### 7b. Pilates modal (Reset)
+### 7b. Pilates modal (Circuit)
 - Calendar heatmap (last 90 days) — color intensity by session duration
 - Focus-area breakdown — donut chart: % of sessions tagged each area, surfaces gaps ("you haven't logged Lower Back in 3 weeks")
 - Total minutes this month vs last
 - Progress history table — date, duration, focus tags, notes
 
-### 7c. Health markers modal (Reset-critical)
+### 7c. Health markers modal (Circuit-critical)
 - One card per marker: BP, LDL, HDL, triglycerides, A1c, fasting glucose, RHR
 - Tap card → full-screen chart: target range overlay (green band), historical trend, last reading badge
 - Manual entry sheet with date picker (these come from blood-work, not auto)
@@ -173,7 +173,7 @@ Current library is "tap to log." Add a **detail view** before the log action.
 - [ ] Tap a food → `FoodDetailModal`:
   - Photo (or symbolic icon if none)
   - Full macros breakdown (visual bars not just numbers)
-  - Mode-fit explanation ("Fits Reset because: high fiber, low sodium, omega-3")
+  - Mode-fit explanation ("Fits Circuit because: high fiber, low sodium, omega-3")
   - "Why we suggested this" if it's from the suggestion engine
   - Common pairings (e.g. "Pairs with brown rice for a complete meal")
   - **Log this** button at bottom (primary CTA)
@@ -190,7 +190,7 @@ iOS 18.1+ only. Gate behind availability check; degrade to deterministic-only on
 
 - [ ] `Services/AIEstimator.swift` — wraps `FoundationModels` `LanguageModelSession`. Structured-output API.
 - [ ] **Use case 1 (active):** estimate macros for custom food (§4).
-- [ ] **Use case 2 (active):** "Explain why" — given a logged meal + active mode caps, generate a 1-sentence natural-language summary ("Good Reset choice — this hits your fiber gap without breaking sodium").
+- [ ] **Use case 2 (active):** "Explain why" — given a logged meal + active mode caps, generate a 1-sentence natural-language summary ("Good Circuit choice — this hits your fiber gap without breaking sodium").
 - [ ] **Use case 3 (later):** ingredient-list → meal recommendation. User taps "What can I make?" → picks from a list of in-house ingredients → AI returns 3 meal ideas ranked by mode fit. Deterministic scoring still runs on top of AI output.
 - [ ] **NOT yet:** any open-ended chat surface, any medical advice generation. Hard rule: AI never prescribes; it suggests.
 
@@ -211,7 +211,7 @@ Delegate to `frontend-design` agent after §7 and §8 functional code lands. Sco
 
 - Progress section visual polish — charts, modals, transitions
 - Nutrition library + FoodDetailModal — photo treatment, macro visualization, mode-fit badge design
-- Mode-aware palette already exists (Build warm dark, Reset warm light) — agent must respect `Theme.for(profile.mode)`
+- Mode-aware palette already exists (Build warm dark, Circuit warm light) — agent must respect `Theme.for(profile.mode)`
 - Preserve all tactile UX rules from CLAUDE.md (TactileButtonStyle, PressableCard, ToastCenter, Haptics)
 - Dynamic Type must stay clean at XXL
 
@@ -225,7 +225,7 @@ The CLAUDE.md "Build order" is unchanged in spirit, but specific items here re-p
 
 1. **HealthKit wiring** (§1) — blocking
 2. **Profile model fix** (§2) — quick, unblocks testing both modes
-3. **Reset Train rewrite** (§5) — biggest single behavior change
+3. **Circuit Train rewrite** (§5) — biggest single behavior change
 4. **Caps tooltips** (§3) — low effort, high clarity gain
 5. **Custom food pipeline** (§4) — USDA first, AI later, OCR last
 6. **Build mobility track** (§6)

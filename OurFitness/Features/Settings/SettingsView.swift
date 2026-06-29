@@ -500,8 +500,8 @@ private struct ModeSwitchSheet: View {
                 }
 
                 Text(newMode == .circuit
-                     ? "Reset adds the parenting movements (Lifted Baby, Stroller, Carried Baby) to your exercises and folds your workout log into Today."
-                     : "Build brings back the Train tab for your own lifts and the rep counter.")
+                     ? "Circuit retargets you for fat loss and heart-health markers, and adds the parenting movements (Lifted Baby, Stroller, Carried Baby) plus a daily steps, cardio, and Pilates loop on Today."
+                     : "Build retargets you for gaining lean mass — a calorie surplus and higher protein to fuel your lifts.")
                     .font(.footnote).foregroundStyle(theme.dim)
 
                 Text("Your food, workout, and body logs are kept exactly as they are.")

@@ -1,6 +1,6 @@
 # Our-Fitness — Foundation (iOS / SwiftUI)
 
-Native iOS app for two specific humans, two specific modes. **Build** (gain mass, fuel hoops) and **Reset** (drop weight, fix markers). One device per person, one mode per person, one philosophy: **show up, log honestly, let the numbers tell the truth over time.**
+Native iOS app for two specific humans, two specific modes. **Build** (gain mass, fuel hoops) and **Circuit** (drop weight, fix markers). One device per person, one mode per person, one philosophy: **show up, log honestly, let the numbers tell the truth over time.**
 
 Purpose-built for these two. Don't generalize for a third.
 
@@ -10,9 +10,9 @@ Purpose-built for these two. Don't generalize for a third.
 
 **Build** — gain lean mass, keep playing. Picky-eater hardgainer, basketball 4–5×/week, struggles to eat enough. Enemy is *under-fueling*. Nut-free allergen lock. Food library: the familiar short list (smoothies, spam, rice, eggs, pizza, chocolate milk, nuggets — see [nutrition-plan-research.md](nutrition-plan-research.md)).
 
-**Reset** — drop weight, fix the markers. Real labs to move: elevated cholesterol, BP, blood sugar. Enemy is *dense empty calories + sodium creep*. **No food restrictions or allergies.** Food library: DASH + Mediterranean leaning — leafy greens, legumes, whole grains, oily fish, olive oil, nuts/seeds, low sodium, high fiber.
+**Circuit** — drop weight, fix the markers. Real labs to move: elevated cholesterol, BP, blood sugar. Enemy is *dense empty calories + sodium creep*. **No food restrictions or allergies.** Food library: DASH + Mediterranean leaning — leafy greens, legumes, whole grains, oily fish, olive oil, nuts/seeds, low sodium, high fiber.
 
-| | Build | Reset |
+| | Build | Circuit |
 |---|---|---|
 | Calories | TDEE + 400–600 | TDEE − 300–500 |
 | Protein g/lb | ~1.0 | 1.0–1.2 |
@@ -86,7 +86,7 @@ OurFitness/
     Onboarding/                  ← profile creation flow
     Today/                       ← daily anchor view: macros, movement, water, log
     Nutrition/                   ← meal log, parser, library, suggestions
-    Workouts/                    ← Build rep counter + Reset movement cards
+    Workouts/                    ← shared Train tab; Circuit movement cards under Circuit/
     Progress/                    ← trends, markers, energy balance, training history
     Settings/                    ← profile, mode, units, Health permissions
   Components/                    ← ProgressBar, Banner, StatBlock, Card
@@ -126,7 +126,7 @@ _stashed/                        ← excluded from target; historical/pending wo
 |---|---|
 | Add a new exercise | `Data/Seed/Exercises.swift` |
 | Add a Build food | `Data/Seed/FoodsBuild.swift` |
-| Add a Reset food | `Data/Seed/FoodsReset.swift` |
+| Add a Circuit food | `Domain/CommonFoods.swift` (curated) / `Domain/SuggestedMeals.swift` (`circuit` meals) |
 | New starter program | `Data/Seed/Programs.swift` |
 | Tweak mode caps (sodium/sugar/fiber) | `Domain/Targets.swift` (`ModeRules`) |
 | Change how meals are scored | `Domain/Score.swift` (shared) + `Domain/Suggestions.swift` (mode weights) |
@@ -155,22 +155,22 @@ All entities namespaced per `Profile`. Append-only logs (sets, food entries, bod
 
 Headline entities:
 - `Profile` — name, mode, biometrics, activity, restrictions, `computedTargets`
-- `MacroTargets` — calories/protein/carbs/fat + `stepsDaily`, plus optional Reset caps
+- `MacroTargets` — calories/protein/carbs/fat + `stepsDaily`, plus optional Circuit caps
 - `Exercise`, `WorkoutSet`, `Workout`, `Program` — full gym programming
 - `Food`, `FoodLogEntry` — `modeFit` gates suggestions; log entries denormalize macros
 - `BodyMetric` — weight, body-fat, waist
-- `HealthMarker` — BP, LDL/HDL, triglycerides, A1c, fasting glucose, resting HR (Reset-critical)
+- `HealthMarker` — BP, LDL/HDL, triglycerides, A1c, fasting glucose, resting HR (Circuit-critical)
 - `StepCount` — one row per user per day (UPSERT); `source: .manual | .appleHealth`
 
 ---
 
 ## Mode behaviors
 
-**Suggestion algorithm** (same shape, different scoring): filter by `modeFit`, allergens, slot; for Reset also filter against today's remaining sodium/sugar/sat-fat headroom. Score and return top 5. Build rewards calorie density + liquid (if `lowAppetite`) + cost + protein-gap fill. Reset rewards fiber + satiety + omega-3 + low sodium + protein-per-calorie.
+**Suggestion algorithm** (same shape, different scoring): filter by `modeFit`, allergens, slot; for Circuit also filter against today's remaining sodium/sugar/sat-fat headroom. Score and return top 5. Build rewards calorie density + liquid (if `lowAppetite`) + cost + protein-gap fill. Circuit rewards fiber + satiety + omega-3 + low sodium + protein-per-calorie.
 
 **14-day auto-adjust** (suggests, never mutates):
 - Build stalled → +200 cal/day; gaining >0.75 lb/wk → drop a multiplier
-- Reset stalled → −150 cal/day or +1 cardio; losing >1.5 lb/wk → +150 cal (protect muscle); marker not moving after 8 weeks → flag for doctor, never prescribe
+- Circuit stalled → −150 cal/day or +1 cardio; losing >1.5 lb/wk → +150 cal (protect muscle); marker not moving after 8 weeks → flag for doctor, never prescribe
 
 ---
 
@@ -194,9 +194,9 @@ The simulator can't return real Health data — develop UI in the sim, verify He
 Two visual personalities under one shell. Mode picks palette + energy. Typography shared via dynamic type with custom fonts (Bebas Neue for display numerals, Fraunces serif for accents, SF Mono for stat readouts — falls back to system fonts gracefully).
 
 - **Build:** warm dark, orange/amber/cream (matches [nutrition-plan.html](nutrition-plan.html))
-- **Reset:** warm light, sage/terracotta — calmer, "steady reset"
+- **Circuit:** warm light, sage/terracotta — calmer, steady
 
-Shared: large headlines, generous whitespace, weekly trend > daily pass/fail, no streak-shame, persistent banners (allergens on Build, caps remaining on Reset).
+Shared: large headlines, generous whitespace, weekly trend > daily pass/fail, no streak-shame, persistent banners (allergens on Build, caps remaining on Circuit).
 
 System dark mode follows the user's iOS setting; mode tokens override at the screen root via `ThemeProvider`.
 

@@ -68,7 +68,7 @@ The sections below are the original spec, retained for context.
 **Problem.** In the screenshot the Settings cards ("Connected to Apple Health",
 "Circuit") look washed-out gray with low-contrast text. Root cause: when the
 mode-switch sheet (`ModeSwitchSheet`, themed to the **destination** mode) is
-presented, iOS dims the Settings view behind it. In Reset mode the Settings is
+presented, iOS dims the Settings view behind it. In Circuit mode the Settings is
 the light palette (white `theme.card` on cream `theme.bg`, sub-labels in the muted
 `theme.dim` ≈ `#7A7368`), and the system dim turns those muted labels nearly
 illegible.

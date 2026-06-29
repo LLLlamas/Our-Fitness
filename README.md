@@ -1,6 +1,6 @@
 # Our Fitness
 
-A native iOS fitness app for two modes: **Build** (gain mass, fuel hoops) and **Reset** (drop weight, fix cardiovascular markers). SwiftUI, SwiftData, Apple Health integration — no backend, no subscription.
+A native iOS fitness app for two modes: **Build** (gain mass, fuel hoops) and **Circuit** (drop weight, fix cardiovascular markers). SwiftUI, SwiftData, Apple Health integration — no backend, no subscription.
 
 Show up, log honestly, let the numbers tell the truth.
 
@@ -8,7 +8,7 @@ Show up, log honestly, let the numbers tell the truth.
 
 ## Modes
 
-| | Build | Reset |
+| | Build | Circuit |
 |---|---|---|
 | Calories | TDEE + 400–600 surplus | TDEE − 300–500 deficit |
 | Protein | ~1 g/lb | 1.0–1.2 g/lb |

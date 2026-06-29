@@ -11,7 +11,7 @@ public enum Movement {
 
     // MARK: - Step milestones
 
-    /// Default step-count milestones for Reset. Ordered ascending.
+    /// Default step-count milestones for Circuit. Ordered ascending.
     public static let defaultStepMilestones: [Int] = [3_000, 5_000, 8_000, 10_000]
 
     /// Which milestone (if any) should fire *now*, given current steps and the

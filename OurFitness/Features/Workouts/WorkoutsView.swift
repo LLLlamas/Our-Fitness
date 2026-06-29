@@ -646,7 +646,7 @@ private struct WorkoutGoalSheet: View {
 
         if WorkoutSuggestionService.shared.isAvailable {
             loading = true
-            let picks = await WorkoutSuggestionService.shared.picks(forGoal: g)
+            let picks = await WorkoutSuggestionService.shared.picks(forGoal: g, mode: profile.mode)
             loading = false
             let mapped = picks.compactMap { pick -> ExerciseGoalMatcher.GoalSuggestion? in
                 guard let entry = ExerciseInfo.catalogEntry(named: pick.exerciseName) else { return nil }
@@ -662,7 +662,7 @@ private struct WorkoutGoalSheet: View {
 
         // Deterministic fallback — always returns sensible picks.
         usedAI = false
-        results = ExerciseGoalMatcher.suggestions(for: g)
+        results = ExerciseGoalMatcher.suggestions(for: g, mode: profile.mode)
         Haptics.selection()
     }
 

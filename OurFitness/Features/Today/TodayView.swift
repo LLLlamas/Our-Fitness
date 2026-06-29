@@ -1,9 +1,9 @@
 // Today tab — single-screen daily overview.
 //
-// Build mode:  macro rings | steps bar | recent food log
-// Reset mode: macro rings | steps ring + pilates + movements (Train absorbed here)
+// Build mode:   macro rings | steps bar | recent food log
+// Circuit mode: macro rings | steps ring + pilates + movements
 //
-// Circuit absorbs the Train tab so the daily workout loop lives in one place.
+// Both modes have the Train tab; Circuit's Today still carries the daily movement loop.
 
 import SwiftUI
 import SwiftData
