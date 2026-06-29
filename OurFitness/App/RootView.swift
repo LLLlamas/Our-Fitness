@@ -58,6 +58,13 @@ struct RootView: View {
     var body: some View {
         ZStack {
             content
+            // App-wide water quick-log button (tap = repeat last, hold = radial picker).
+            // Only with an active profile, so it stays off the creation screen.
+            if let active {
+                WaterQuickLogButton(profile: active)
+                    .id(active.id)
+                    .themed(active.mode)
+            }
             ToastHost()
                 .themed(active?.mode ?? .build)
         }

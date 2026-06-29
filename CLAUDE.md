@@ -70,18 +70,18 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | Recent sessions rule | Today/Train surfaces show today + yesterday only (sets sheet is today-only); older strength, live, cardio, and Pilates sessions live in Progress → Training history |
 | Live-session activities | `Domain/ActivityCatalog.swift` |
 | **Nutrition** | |
-| Food parser (NL → macros) | `Domain/FoodParser.swift` + `Domain/CommonFoods.swift` + `Domain/SQLiteFoodDatabase.swift`. Keystroke = curated only; submit = full USDA DB |
-| Add / update curated food | `Domain/CommonFoods.swift` category arrays — aliases drive matching; curated shadows USDA DB |
-| Food library browse (lazy + sort) | `Features/Nutrition/NutritionView.swift` → `FoodLibrarySheet` — `LazyVStack` row list; empty-query default ordered favorites → `FoodAffinity.frequencyByFoodId` (30-day) → rest (`defaultOrdered()`); pass `recentLogs: allLogs` from `NutritionView` |
+| Food parser (NL → macros) | `Domain/FoodParser.swift` → `matchFood` uses `CommonFoods.bestMatch` (first-token index, size-independent) then USDA `Domain/SQLiteFoodDatabase.swift`. Keystroke = curated only; submit = full USDA DB. Tests: `FoodParserTests` |
+| Add / update curated food | `Domain/CommonFoods.swift` (~1,200 foods; 16 category arrays + `expanded`) — aliases drive matching, curated shadows USDA. Append new foods to `expanded` (tie-break = `all` order; check Atwater + no alias collisions) |
+| Food library browse (lazy + sort) | `NutritionView` → `FoodLibrarySheet` — `LazyVStack`; empty-query order = favorites → `FoodAffinity.frequencyByFoodId` (30-day) → rest (`defaultOrdered()`) |
 | AI meal parser | `Services/MealParseService.swift` (iOS 26+; text-only model; numbers from DB) |
 | Camera food label scanner | `Features/Nutrition/CameraFoodLogSheet.swift` (iOS 17+ VisionKit, iOS 26+ AI) |
 | AI food alternatives | `Services/FoodAlternativeService.swift` (iOS 26+; prefetch after every log) |
-| AI "what are you in the mood for?" | `Services/MealIdeaService.swift` (iOS 26+; craving→food NAMES resolved to macros via `FoodParser`) + fallback `Domain/MealCravingMatcher.swift` (keyword/flavor/calorie/affinity rank of curated meals) → `MoodMealSheet` in `Features/Nutrition/NutritionView.swift`. Tests: `OurFitnessTests/MealCravingMatcherTests.swift` |
+| AI "what are you in the mood for?" | `Services/MealIdeaService.swift` (iOS 26+; prompt puts the craving first, mode/history as tie-breaks) + fallback `Domain/MealCravingMatcher.swift` — flavours have strong/weak signals scored by density, antagonist suppression (salty↔sweet/fruity, warm↔cold) and gated+capped affinity, so a stated flavour never returns its opposite → `MoodMealSheet` in `NutritionView`. Tests: `MealCravingMatcherTests` |
 | Meal log UI + day selector + past-day logging | `Features/Nutrition/NutritionView.swift` |
 | Ingredient-level editing / logging | `Features/Nutrition/MealIngredientDetailSheet.swift` — takes `targetDate:` for past-day logging |
 | Meal suggestions | `Domain/SuggestedMeals.swift` → `ranked(...)` (optional `recentLogs:`/`favoriteFoodIds:` give an affinity boost; `isPersonalised(...)` flags boosted meals) |
 | Personalised recs / most-logged foods | `Domain/FoodAffinity.swift` → `mostLoggedIds(_:days:limit:end:)` / `frequencyByFoodId(_:days:end:)` (30-day window over foodIds incl. ingredients); fed into `SuggestedMeals.ranked` from `NutritionView` |
-| Meal-logging streak (consecutive days) | `Domain/Streaks.swift` → `loggingStreak(_:minEntriesPerDay:endDate:)`; milestone copy `Domain/EncouragementEngine.swift` → `mealStreakMessage(days:mode:)` (3/7/14/30/60/100); toast `Services/ToastCenter.swift` → `mealStreak(days:mode:)`; chip + milestone toast in `Features/Nutrition/NutritionView.swift` |
+| Meal-logging streak (consecutive days) | `Domain/Streaks.swift` → `loggingStreak(...)`; copy `EncouragementEngine.mealStreakMessage(days:mode:)` (3/7/14/30/60/100); toast `ToastCenter.mealStreak(...)`; chip in `NutritionView` |
 | Reset heart-health micros (fiber floor + sodium/sugar/satfat caps) | `Components/HeartHealthCard.swift` (Reset-only; no-op if targets have no caps) — rendered in `NutritionView` after the totals card |
 | Remaining macros / headroom under caps | `Domain/MacroBudget.swift` → `remaining(totals:targets:)` returns `RemainingMacros` (caps = room left, negative when over; fiber = signed distance to floor; all four nil in Build) |
 | Personal meal templates | `Domain/Models.swift` (`SavedMealTemplateDTO`) + `Data/PersistenceModels.swift` (`SavedMealTemplateModel`) |
@@ -92,7 +92,8 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | Move card (2×3 cols) | `Features/Today/MoveCard.swift` — row 1: Apple Total · Our Total Estimate · Training Only; row 2: Distance · Flights · Heart Rate. Single `metricColumn` helper (uniform 22pt value font, no differential shrink). `activityRow(kcal:)` takes `Int` |
 | Steps (Build) | `Features/Today/StepsCard.swift` |
 | Steps + cardio (Reset) | `Features/Workouts/Circuit/StepsCardioCard.swift` (legacy folder name) |
-| Water tracker (Sip preset + day-streak) | `Domain/Water.swift` (4 oz "Sip" cup preset; `streak(_:goalFlOz:end:)`) + `Features/Today/WaterCard.swift` (`AppStorage "waterGoalFlOz.\(profileId)"`; streak chip; `GlassIcon` `.sip` size) |
+| Water tracker (presets + day-streak) | `Domain/Water.swift` (presets Sip 4 / S 8 / M 16 / L 32 oz; `streak(_:goalFlOz:end:)`) + `Features/Today/WaterCard.swift` (`AppStorage "waterGoalFlOz.\(profileId)"`; streak chip) |
+| Water quick-log (app-wide FAB) | `Features/Today/WaterQuickLogButton.swift` — tap = repeat last (`AppStorage "waterLastFlOz.\(profileId)"`), press-and-hold = dim screen + radial preset picker; logs via `Repos.addWater`. Overlaid in `App/RootView.swift` |
 | Step milestones / goals | `Domain/Movement.swift` (`defaultStepMilestones`). Per-profile override: `AppStorage "stepsGoal.\(profileId.uuidString)"` |
 | Today burn estimate | `Domain/DailyBurn.swift` → `metEstimate` |
 | Encouragement / milestones | `Domain/EncouragementEngine.swift` + `Domain/EncouragementMessage.swift` + `Components/ProjectionBar.swift` |
@@ -116,7 +117,7 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | **UI / Components** | |
 | Button variants (5 total) | `Components/TactileButtonStyle.swift` — never add a 6th |
 | Circular progress | `Components/ProgressRing.swift` — never inline `Circle().trim` |
-| Progress-fill replay (sweep from 0 on every appear) | `Components/VisibilityReveal.swift` → `RevealOnAppear` / `.revealOnAppear($reveal)` — resets to 0 on scroll-out / tab-leave, springs to full on re-entry. Used by `ProgressBar` + `MacroQuadGrid` rings (multiply `pct * reveal`) |
+| Progress-fill replay (sweep from 0 on appear) | `Components/VisibilityReveal.swift` → `.revealOnAppear($reveal)` — resets to 0 on scroll-out, springs to full on re-entry. Used by `ProgressBar` + `MacroQuadGrid` (`pct * reveal`) |
 | Haptics | `Services/Haptics.swift` |
 | Toast | `Services/ToastCenter.swift` + `Components/ToastView.swift` |
 | Scroll haptics | `Services/Haptics.swift` → `.scrollHapticTicks()` on top-level tab `ScrollView`s |
