@@ -8,6 +8,18 @@
 // This is the deterministic fallback for `MealIdeaService` (when Apple
 // Intelligence is unavailable) — "otherwise recommend according to previously
 // logged meals". All macro numbers come from the curated corpus, never invented.
+//
+// Accuracy model (why "something salty" no longer returns sweet shakes / fruit):
+//   • Each flavour has STRONG (defining) and WEAK (incidental) signal words. A
+//     flavour only counts when a meal has ≥1 strong OR ≥2 weak signals, so a single
+//     incidental word (e.g. one "cheese") can't flag a sweet dish as salty.
+//   • Score scales with signal density: strong = 3, weak = 1, capped.
+//   • ANTAGONIST suppression: a requested flavour is penalised by the strength of
+//     its opposite in the same meal (salty ↔ sweet/chocolatey/fruity, warm ↔ cold,
+//     light ↔ comfort). A chocolate-banana shake therefore scores ~0 for "salty".
+//   • Affinity (foods the user logs/favourites) is capped and GATED: when an
+//     explicit flavour/keyword is asked, it only nudges meals that already match the
+//     craving — it can never drag an irrelevant favourite to the top.
 
 import Foundation
 
@@ -37,8 +49,8 @@ public enum MealCravingMatcher {
             .filter { !hasRestrictedAllergen($0, restrictions: profile.restrictions) }
 
         let q = craving.lowercased()
-        let tokens = keywordTokens(in: q)
         let flavors = flavorClasses(triggeredBy: q)
+        let tokens = keywordTokens(in: q)
         let calorieGoal = calorieTarget(in: q)
         let protein = proteinHint(in: q)
 
@@ -56,10 +68,16 @@ public enum MealCravingMatcher {
                 .map { CravingMatch(meal: $0, reason: macroNote(for: $0)) }
         }
 
+        // When the user names a flavour or content word, that becomes a hard gate:
+        // a meal must clear a positive craving relevance to appear at all. This is
+        // what stops affinity-only or opposite-flavour meals from surfacing.
+        let constrained = !tokens.isEmpty || !flavors.isEmpty
+
         let scored = pool
             .map { meal -> (meal: SuggestedMeal, score: Double, flavorsHit: [Flavor]) in
                 let (s, hits) = score(meal, tokens: tokens, flavors: flavors,
-                                      calorieGoal: calorieGoal, protein: protein, loved: loved)
+                                      calorieGoal: calorieGoal, protein: protein,
+                                      loved: loved, constrained: constrained)
                 return (meal, s, hits)
             }
             .filter { $0.score > 0 }
@@ -91,20 +109,34 @@ public enum MealCravingMatcher {
         flavors: [Flavor],
         calorieGoal: CalorieGoal?,
         protein: ProteinHint,
-        loved: Set<String>
+        loved: Set<String>,
+        constrained: Bool
     ) -> (Double, [Flavor]) {
         let text = searchable(meal)
-        var s = 0.0
 
-        // Direct keyword overlap — the strongest relevance signal.
-        for t in tokens where text.contains(t) { s += 3 }
+        // Craving relevance = literal keyword hits + flavour fit (strength − antagonist).
+        // Tracked separately from calorie/protein/affinity so it can act as the gate.
+        var cravingScore = 0.0
 
-        // Flavour match: a craving flavour whose signal words appear in the meal.
+        // Direct keyword overlap — the strongest relevance signal. (Flavour-trigger
+        // words are excluded from `tokens`, so they're never double-counted here.)
+        for t in tokens where text.contains(t) { cravingScore += 3 }
+
+        // Flavour match: strength-weighted, with opposite-flavour suppression.
         var flavorsHit: [Flavor] = []
-        for flavor in flavors where flavor.signals.contains(where: { text.contains($0) }) {
-            s += 4
-            flavorsHit.append(flavor)
+        for flavor in flavors {
+            let fs = flavorScore(text, flavor)
+            if fs > 0 {
+                cravingScore += fs
+                flavorsHit.append(flavor)
+            }
         }
+
+        // GATE: a stated flavour/keyword with no positive craving relevance is out,
+        // before calorie/protein/affinity can resurrect it.
+        if constrained && cravingScore <= 0 { return (0, []) }
+
+        var s = cravingScore
 
         // Calorie fit.
         if let goal = calorieGoal {
@@ -131,13 +163,40 @@ public enum MealCravingMatcher {
             break
         }
 
-        // Affinity: meals built around loved foods get a capped boost.
+        // Affinity: meals built around loved foods get a boost. When the craving
+        // names a flavour/keyword, the boost is small and gated to already-relevant
+        // meals (cravingScore > 0) so it re-orders within the matches rather than
+        // overriding them. With no flavour stated, it can lead (old behaviour).
         if !loved.isEmpty {
             let hits = Set(meal.ingredientTemplates.map(\.foodId)).filter { loved.contains($0) }.count
-            s += min(4, 1.5 * Double(hits))
+            if hits > 0 {
+                if constrained {
+                    if cravingScore > 0 { s += min(2.0, Double(hits)) }
+                } else {
+                    s += min(4, 1.5 * Double(hits))
+                }
+            }
         }
 
         return (s, flavorsHit)
+    }
+
+    /// Strength-weighted score for one flavour on a meal, after antagonist
+    /// suppression. 0 unless the meal has ≥1 strong or ≥2 weak signals.
+    private static func flavorScore(_ text: String, _ flavor: Flavor) -> Double {
+        let d = density(text, flavor)
+        guard d.strong >= 1 || d.weak >= 2 else { return 0 }
+        let base = min(8.0, d.raw)
+        let opposing = (antagonists[flavor.label] ?? []).compactMap { flavorsByLabel[$0] }
+        let antagonist = 0.75 * (opposing.map { density(text, $0).raw }.max() ?? 0)
+        return max(0, base - antagonist)
+    }
+
+    /// Distinct strong/weak signal hits and their weighted density (strong 3, weak 1).
+    private static func density(_ text: String, _ flavor: Flavor) -> (strong: Int, weak: Int, raw: Double) {
+        let ns = flavor.strong.reduce(0) { $0 + (text.contains($1) ? 1 : 0) }
+        let nw = flavor.weak.reduce(0) { $0 + (text.contains($1) ? 1 : 0) }
+        return (ns, nw, 3.0 * Double(ns) + Double(nw))
     }
 
     private static func searchable(_ meal: SuggestedMeal) -> String {
@@ -171,20 +230,30 @@ public enum MealCravingMatcher {
         "a", "about", "actually", "afternoon", "an", "and", "anything", "are", "around", "bit",
         "breakfast", "brunch", "but", "cal", "calorie", "calories", "could", "crave", "craves",
         "craving", "definitely", "dinner", "eat", "evening", "fairly", "feel", "feeling", "fix",
-        "food", "for", "get", "gimme", "give", "going", "gonna", "gotta", "grab", "have",
+        "food", "for", "get", "gimme", "give", "going", "gonna", "gotta", "grab", "have", "high",
         "honestly", "hungry", "i", "i'm", "ish", "just", "kcal", "kind", "kinda", "least", "lemme",
-        "less", "like", "little", "lunch", "make", "maybe", "meal", "mealtime", "mood", "more",
-        "morning", "need", "not", "now", "okay", "over", "please", "prefer", "preferably",
+        "less", "like", "little", "low", "lunch", "make", "maybe", "meal", "mealtime", "mood",
+        "more", "morning", "need", "not", "now", "okay", "over", "please", "prefer", "preferably",
         "pretty", "probably", "protein", "quite", "real", "really", "right", "should", "snack",
         "some", "something", "somewhat", "sort", "sorta", "stuff", "super", "than", "that", "the",
-        "thing", "things", "this", "today", "tonight", "tonite", "totally", "under", "very",
+        "thing", "things", "this", "today", "tonight", "tonite", "too", "totally", "under", "very",
         "wanna", "want", "what", "whatever", "with", "would", "yeah", "you",
     ]
 
-    /// Distinct content words (length ≥ 3, not stopwords, not pure numbers).
+    /// Every word that is a flavour trigger, so they're excluded from keyword tokens
+    /// (the flavour system already scores them — counting them as keywords too would
+    /// double-count and let a meal's own "salty"/"sweet" description inflate it).
+    private static let triggerWords: Set<String> = Set(
+        flavors.flatMap { $0.triggers }
+            .flatMap { $0.split { !$0.isLetter }.map(String.init) }
+            .filter { $0.count >= 3 }
+    )
+
+    /// Distinct content words (length ≥ 3, not stopwords, not flavour triggers,
+    /// not pure numbers).
     private static func keywordTokens(in text: String) -> Set<String> {
         let raw = text.split { !($0.isLetter) }.map(String.init)
-        return Set(raw.filter { $0.count >= 3 && !stopwords.contains($0) })
+        return Set(raw.filter { $0.count >= 3 && !stopwords.contains($0) && !triggerWords.contains($0) })
     }
 
     private enum Bound { case floor, ceiling, around }
@@ -227,76 +296,121 @@ public enum MealCravingMatcher {
 
     // MARK: - Flavour vocabulary
 
-    /// A flavour/quality class: `triggers` are words a user types in a craving;
-    /// `signals` are words found in a meal (name/description/ingredients) that mark
-    /// it as having this flavour. Data-driven so the corpus is easy to extend.
+    /// A flavour/quality class. `triggers` are words a user types in a craving.
+    /// `strong` signals are defining markers of the flavour in a meal; `weak` signals
+    /// are incidental (count for less, and need two to flag a flavour on their own).
+    /// Data-driven so the corpus is easy to extend.
     private struct Flavor {
         let label: String
         let triggers: [String]
-        let signals: [String]
+        let strong: [String]
+        let weak: [String]
     }
 
     private static let flavors: [Flavor] = [
         Flavor(label: "salty",
                triggers: ["salt", "salty", "savory", "savoury"],
-               signals: ["chip", "fries", "pretzel", "jerky", "bacon", "cheese", "soy", "miso", "pickle", "popcorn", "cracker", "deli", "ham", "olive", "soup", "ramen", "broth", "nuts", "peanut", "feta", "salami", "sausage", "taco", "burrito", "pizza", "fried", "edamame"]),
+               strong: ["chip", "fries", "pretzel", "jerky", "bacon", "salami", "sausage", "deli", "ham", "feta", "parmesan", "miso", "soy sauce", "pickle", "anchov", "prosciutto", "nacho", "olives"],
+               weak: ["cheddar", "swiss", "mozzarella", "pepperoni", "popcorn", "cracker", "broth", "soup", "ramen", "fried", "edamame", "seaweed", "soy"]),
         Flavor(label: "sweet",
                triggers: ["sweet", "dessert", "sugary", "treat"],
-               signals: ["chocolate", "candy", "cookie", "cake", "berry", "berries", "honey", "yogurt", "yoghurt", "smoothie", "pancake", "syrup", "banana", "mango", "fruit", "oat", "granola", "muffin", "date", "apple", "peanut butter"]),
+               strong: ["chocolate", "candy", "cookie", "cake", "honey", "syrup", "pancake", "french toast", "muffin", "brownie", "fudge", "caramel", "maple", "date"],
+               weak: ["banana", "mango", "berry", "berries", "fruit", "apple", "granola", "oat", "yogurt", "smoothie"]),
         Flavor(label: "savory",
                triggers: ["savory", "savoury", "hearty", "meaty", "filling"],
-               signals: ["chicken", "beef", "steak", "egg", "rice", "pasta", "bowl", "burrito", "potato", "lentil", "bean", "turkey", "salmon", "tuna", "curry", "stir", "wrap", "sandwich", "burger", "tofu"]),
+               strong: ["chicken", "beef", "steak", "turkey", "salmon", "tuna", "pork", "lamb", "shrimp", "egg", "tofu", "tempeh", "lentil", "bean", "curry", "gravy", "burger", "meatloaf", "scallop", "cod", "tilapia"],
+               weak: ["rice", "pasta", "bowl", "potato", "stir", "noodle", "quinoa", "wrap", "sandwich"]),
         Flavor(label: "light",
                triggers: ["light", "fresh", "refreshing", "not that hungry", "not very hungry"],
-               signals: ["salad", "veggie", "vegetable", "greens", "soup", "broth", "smoothie", "fruit", "yogurt", "cucumber"]),
+               strong: ["salad", "greens", "veggie", "vegetable", "cucumber"],
+               weak: ["soup", "broth", "smoothie", "fruit", "yogurt", "light", "bright"]),
         Flavor(label: "spicy",
                triggers: ["spicy", "hot ", "chili", "fiery", "kick"],
-               signals: ["spicy", "chili", "sriracha", "pepper", "jalape", "curry", "buffalo"]),
+               strong: ["spicy", "spiced", "chili", "sriracha", "jalape", "buffalo", "hot sauce", "cayenne", "harissa", "fiery"],
+               weak: ["pepper", "curry", "salsa"]),
         Flavor(label: "creamy",
                triggers: ["creamy", "smooth", "rich"],
-               signals: ["yogurt", "cream", "smoothie", "avocado", "cheese", "milk", "peanut butter", "hummus"]),
+               strong: ["cream", "yogurt", "avocado", "hummus", "cottage cheese", "peanut butter", "tahini", "tzatziki", "ricotta"],
+               weak: ["milk", "smoothie"]),
         Flavor(label: "comfort",
+               // "comfort"/"hearty"/"cozy" are the descriptor words the corpus actually
+               // uses ("Italian comfort", "Hearty pasta", "Cozy red lentils") — they carry
+               // the recall here; the specific dish names below are rare but harmless.
                triggers: ["comfort", "comforting", "cozy", "cosy", "homey", "homely", "nostalgic", "craving comfort", "feel better"],
-               signals: ["mac", "macaroni", "mashed", "grilled cheese", "pot pie", "meatloaf", "gravy", "dumpling", "risotto", "casserole", "noodle", "pasta bake"]),
+               strong: ["comfort", "hearty", "cozy", "mac", "macaroni", "mashed", "grilled cheese", "pot pie", "meatloaf", "gravy", "dumpling", "risotto", "casserole", "pasta bake"],
+               weak: ["stew", "classic", "homemade", "mashed potato", "baked potato"]),
         Flavor(label: "crunchy",
                triggers: ["crunch", "crunchy", "crispy", "crisp", "snappy", "munch", "munchy"],
-               signals: ["chip", "chips", "fries", "crisp", "crispy", "pretzel", "cracker", "granola", "nuts", "almond", "celery", "carrot", "cucumber", "apple", "toast", "popcorn", "crouton", "seaweed"]),
+               strong: ["chip", "chips", "fries", "crisp", "crispy", "pretzel", "cracker", "granola", "crouton"],
+               weak: ["nuts", "almond", "celery", "carrot", "cucumber", "apple", "toast", "popcorn", "seaweed"]),
         Flavor(label: "cheesy",
                triggers: ["cheese", "cheesy", "queso", "extra cheese"],
-               signals: ["cheese", "cheesy", "cheddar", "mozzarella", "parmesan", "parmigiano", "feta", "cottage cheese", "queso", "nacho", "quesadilla", "grilled cheese", "pizza", "mac", "macaroni"]),
+               strong: ["cheese", "cheesy", "cheddar", "mozzarella", "parmesan", "feta", "queso", "nacho", "quesadilla", "grilled cheese"],
+               weak: ["pizza", "mac", "macaroni", "swiss"]),
         Flavor(label: "chocolatey",
                triggers: ["chocolate", "chocolatey", "chocolaty", "cocoa", "cacao", "choc", "mocha"],
-               signals: ["chocolate", "cocoa", "cacao", "mocha", "brownie", "fudge", "nutella"]),
+               strong: ["chocolate", "cocoa", "cacao", "mocha", "brownie", "fudge", "nutella"],
+               weak: []),
         Flavor(label: "fruity",
                triggers: ["fruity", "tropical", "berry", "berries"],
-               signals: ["strawberr", "blueberr", "raspberr", "mango", "pineapple", "watermelon", "peach", "plum", "grape", "orange", "kiwi", "papaya", "berry", "berries"]),
+               // "cherries" not "cherr": "cherr" also matches "cherry-tomatoes"/"cherry
+               // tomatoes", which would wrongly tag savory tomato dishes as fruity.
+               strong: ["strawberr", "blueberr", "raspberr", "mango", "pineapple", "watermelon", "peach", "plum", "grape", "kiwi", "papaya", "cherries"],
+               weak: ["banana", "fruit", "berry", "berries", "orange"]),
         Flavor(label: "warm",
                triggers: ["warm", "hot meal", "hot dish", "heated", "piping hot", "steaming", "cozy meal"],
-               signals: ["soup", "stew", "ramen", "broth", "oatmeal", "grilled", "baked", "roasted", "scramble", "scrambled", "curry", "stir", "steamed", "miso soup", "chicken soup", "toast"]),
+               strong: ["soup", "stew", "ramen", "broth", "oatmeal", "grilled", "baked", "roasted", "scramble", "curry", "stir", "steamed"],
+               weak: ["toast"]),
         Flavor(label: "cold",
-               triggers: ["cold", "chilled", "cooling", "icy", "frozen", "chill"],
-               signals: ["salad", "smoothie", "yogurt", "yoghurt", "cottage cheese", "cucumber", "watermelon", "frozen", "iced", "sushi", "seaweed salad", "fruit"]),
+               triggers: ["cold", "chilled", "cooling", "frozen", "chill"],
+               strong: ["smoothie", "frozen", "iced", "chilled", "sushi"],
+               weak: ["salad", "yogurt", "cottage cheese", "cucumber", "watermelon"]),
         Flavor(label: "umami",
                triggers: ["umami", "savory rich", "savoury rich", "brothy", "deep flavor", "deep flavour", "umami bomb"],
-               signals: ["miso", "soy", "mushroom", "beef", "steak", "salmon", "tuna", "bacon", "parmesan", "seaweed", "nori", "broth", "tomato", "tofu", "edamame"]),
+               strong: ["miso", "soy sauce", "mushroom", "beef", "steak", "salmon", "tuna", "bacon", "parmesan", "seaweed", "nori"],
+               weak: ["broth", "tomato", "tofu", "edamame"]),
         Flavor(label: "tangy",
                triggers: ["tangy", "sour", "tart", "zesty", "citrus", "acidic", "zingy", "vinegary"],
-               signals: ["lemon", "lime", "yogurt", "yoghurt", "greek yogurt", "tomato", "salsa", "pickle", "vinegar", "feta", "citrus", "orange", "plum", "raspberr", "cottage cheese", "balsamic"]),
+               strong: ["lemon", "lime", "salsa", "pickle", "vinegar", "vinaigrette", "citrus", "balsamic"],
+               weak: ["yogurt", "tomato", "feta", "orange", "plum"]),
         Flavor(label: "vegetarian",
                triggers: ["vegetarian", "veggie", "no meat", "meatless", "plant based", "plant-based"],
-               signals: ["veggie", "vegetable", "salad", "lentil", "bean", "tofu", "quinoa", "oatmeal", "yogurt", "egg", "cheese", "greens", "cottage cheese", "seaweed", "cucumber", "tomato", "zucchini", "smoothie", "oats"]),
+               strong: ["veggie", "vegetable", "salad", "lentil", "bean", "tofu", "quinoa", "egg"],
+               weak: ["cheese", "yogurt", "oatmeal", "cottage cheese", "seaweed", "cucumber", "tomato", "zucchini", "smoothie", "oats", "greens"]),
         Flavor(label: "vegan",
                triggers: ["vegan", "dairy free", "dairy-free", "no animal"],
-               signals: ["lentil", "bean", "tofu", "quinoa", "oat milk", "edamame", "avocado", "greens", "seaweed", "cucumber", "tomato", "zucchini", "broccoli", "spinach"]),
+               strong: ["lentil", "bean", "tofu", "quinoa", "oat milk", "edamame", "tempeh"],
+               weak: ["avocado", "greens", "seaweed", "cucumber", "tomato", "zucchini", "broccoli", "spinach"]),
         Flavor(label: "low carb",
                triggers: ["low carb", "lowcarb", "keto", "low-carb", "carb free", "no carbs", "fewer carbs"],
-               signals: ["salad", "egg", "chicken", "salmon", "tuna", "beef", "steak", "turkey", "tofu", "greens", "cucumber", "zucchini", "seaweed", "avocado", "cottage cheese", "broccoli", "spinach"]),
+               strong: ["salad", "egg", "chicken", "salmon", "tuna", "beef", "steak", "turkey", "tofu"],
+               weak: ["greens", "cucumber", "zucchini", "seaweed", "avocado", "cottage cheese", "broccoli", "spinach"]),
         Flavor(label: "high fiber",
                triggers: ["high fiber", "high fibre", "fiber", "fibre", "filling fiber", "gut health", "roughage"],
-               signals: ["lentil", "bean", "oatmeal", "oats", "quinoa", "broccoli", "berries", "brown rice", "avocado", "veggie", "vegetable", "greens", "seaweed", "spinach", "granola", "whole wheat"]),
+               strong: ["lentil", "bean", "oatmeal", "oats", "quinoa", "broccoli", "farro", "barley", "chia"],
+               weak: ["avocado", "berries", "brown rice", "veggie", "vegetable", "greens", "seaweed", "spinach", "granola"]),
         Flavor(label: "quick",
                triggers: ["quick", "grab and go", "grab-and-go", "no cook", "no-cook", "minimal effort", "speedy", "lazy"],
-               signals: ["smoothie", "shake", "yogurt", "yoghurt", "cottage cheese", "wrap", "sandwich", "scramble", "toast", "sushi", "bowl", "fruit", "banana", "granola", "oatmeal"]),
+               strong: ["smoothie", "shake", "no cook", "no-cook"],
+               weak: ["yogurt", "wrap", "sandwich", "toast", "sushi", "cottage cheese", "scramble", "bowl", "fruit", "banana", "granola", "oatmeal"]),
+    ]
+
+    private static let flavorsByLabel: [String: Flavor] =
+        Dictionary(uniqueKeysWithValues: flavors.map { ($0.label, $0) })
+
+    /// Requested flavour → opposing flavours whose presence suppresses the match.
+    /// Keeps salty/sweet (and warm/cold, light/comfort) from co-firing on a dish
+    /// that's dominated by the opposite, while leaving genuine dual dishes (salty
+    /// feta + sweet watermelon) merely ranked lower, not excluded.
+    private static let antagonists: [String: [String]] = [
+        "salty": ["sweet", "chocolatey", "fruity"],
+        "sweet": ["salty"],
+        "chocolatey": ["salty"],
+        "fruity": ["salty"],
+        "light": ["comfort"],
+        "comfort": ["light"],
+        "warm": ["cold"],
+        "cold": ["warm"],
     ]
 
     private static func flavorClasses(triggeredBy text: String) -> [Flavor] {

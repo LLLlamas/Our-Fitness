@@ -222,20 +222,9 @@ public enum FoodParser {
     /// supplies breadth the curated set misses.
     private static func matchFood(in chunk: String, dbLookup: (String) -> FoodDatabaseEntry?) -> CommonFood? {
         // Curated CommonFoods first — hand-tuned aliases/servings are authoritative.
-        struct Candidate { let food: CommonFood; let alias: String }
-        var best: Candidate? = nil
-
-        for food in CommonFoods.all {
-            let names = [food.name.lowercased()] + food.aliases.map { $0.lowercased() }
-            for alias in names {
-                if chunk.contains(alias) {
-                    if best == nil || alias.count > best!.alias.count {
-                        best = Candidate(food: food, alias: alias)
-                    }
-                }
-            }
-        }
-        if let best { return best.food }
+        // `bestMatch` is the indexed longest-alias matcher (size-independent, so the
+        // curated set can grow without slowing the per-keystroke parse).
+        if let curated = CommonFoods.bestMatch(in: chunk) { return curated }
 
         // Fall back to the broader USDA database for coverage curated foods miss.
         return dbLookup(chunk)?.asCommonFood

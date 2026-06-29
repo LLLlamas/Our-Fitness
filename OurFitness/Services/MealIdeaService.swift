@@ -113,28 +113,31 @@ public final class MealIdeaService: @unchecked Sendable {
     You are a friendly, practical nutrition coach. The user tells you what they \
     are in the mood for, in casual words — they may mention a flavour (salty, \
     sweet, savory), how hungry they are, a rough calorie amount, and how much \
-    protein they want. Suggest real, common foods that fit. Use simple everyday \
-    names a standard food database would recognise. For each, give one short \
-    sentence on why it fits. You provide food NAMES and reasons ONLY — never \
-    calories, grams, or any nutrition numbers, which are looked up separately. \
-    Do NOT invent foods or make medical claims. If unsure, suggest only foods you \
-    are confident are real and common.
+    protein they want. The CRAVING IS THE PRIORITY: every food you suggest must \
+    actually satisfy the flavour or quality they asked for — if they say salty, \
+    suggest salty foods (never sweet ones); if they say sweet, suggest sweet foods. \
+    Their goal and usual foods are gentle tie-breakers only and must never override \
+    the craving. Use simple everyday names a standard food database would recognise. \
+    For each, give one short sentence on why it fits. You provide food NAMES and \
+    reasons ONLY — never calories, grams, or any nutrition numbers, which are looked \
+    up separately. Do NOT invent foods or make medical claims. If unsure, suggest \
+    only foods you are confident are real and common.
     """
 
     private func prompt(craving: String, mode: Mode, recentFoodNames: [String]) -> String {
-        var parts = ["What they're in the mood for: \"\(craving)\"."]
+        var parts = ["What they're in the mood for: \"\(craving)\". This craving comes first — every suggestion must match it."]
         switch mode {
         case .build:
-            parts.append("They are gaining lean muscle, so foods with solid protein are welcome.")
+            parts.append("All else equal, they are gaining lean muscle, so lean toward the higher-protein option among foods that still match the craving.")
         case .circuit:
-            parts.append("They are losing body fat and improving heart health, so leaner, higher-fibre, lower-sodium foods are welcome.")
+            parts.append("All else equal, they are losing body fat and improving heart health, so lean toward the lighter / higher-fibre option among foods that still match the craving — but if they asked for something salty or indulgent, honour that.")
         }
         let context = recentFoodNames.map { $0.lowercased() }.filter { !$0.isEmpty }
         let unique = (NSOrderedSet(array: context).array as? [String] ?? context).prefix(10)
         if !unique.isEmpty {
-            parts.append("Foods this person already eats: \(unique.joined(separator: ", ")). Lean toward foods like these when it fits.")
+            parts.append("Foods this person already eats: \(unique.joined(separator: ", ")). Use these only to break ties between foods that already match the craving — never suggest one of them if it does not fit what they asked for.")
         }
-        parts.append("Suggest 3 to 5 foods. For each: the food name and one sentence on why it fits.")
+        parts.append("Suggest 3 to 5 foods, each one clearly matching the craving. For each: the food name and one sentence on why it fits.")
         return parts.joined(separator: " ")
     }
 

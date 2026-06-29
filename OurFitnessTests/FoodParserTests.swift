@@ -119,4 +119,32 @@ final class FoodParserTests: XCTestCase {
         XCTAssertEqual(viaFlag.recognized.map(\.food.id), viaEmpty.recognized.map(\.food.id))
         XCTAssertEqual(viaFlag.totalPerServing.calories, viaEmpty.totalPerServing.calories)
     }
+
+    // MARK: - Indexed curated matcher (size-independent keystroke path)
+
+    /// `CommonFoods.bestMatch` narrows by whole-word first token, so a curated alias
+    /// embedded inside a larger word no longer false-matches ("licorice" ≠ "rice",
+    /// "hammock" ≠ "ham"). This is a precision improvement over the old flat scan.
+    func test_substringWithinWord_doesNotFalseMatch() {
+        for word in ["licorice", "hammock", "breading"] {
+            let r = FoodParser.parse(text: word, database: emptyDB)
+            XCTAssertTrue(r.recognized.isEmpty, "'\(word)' should not match a curated food")
+        }
+        // A real whole word still matches.
+        XCTAssertEqual(CommonFoods.bestMatch(in: "rice")?.id, "rice-white")
+    }
+
+    /// Trailing sentence punctuation on a typed word still narrows to the right
+    /// bucket (we strip ".,!?" etc. for lookup but keep "%", "-", "'", accents).
+    func test_trailingPunctuation_stillMatches() {
+        XCTAssertEqual(FoodParser.parse(text: "two eggs.", database: emptyDB).recognized.first?.food.id, "egg")
+        XCTAssertEqual(FoodParser.parse(text: "grilled chicken, please", database: emptyDB).recognized.first?.food.id, "chicken-breast")
+        XCTAssertEqual(CommonFoods.bestMatch(in: "(banana)")?.id, "banana")
+    }
+
+    /// The longest curated alias still wins, and curated tie-break is `all` order.
+    func test_indexedMatcher_longestAliasWins() {
+        // "chicken thigh" must resolve to the thigh entry, not the shorter "chicken".
+        XCTAssertEqual(CommonFoods.bestMatch(in: "chicken thigh")?.id, "chicken-thigh")
+    }
 }
