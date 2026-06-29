@@ -1,9 +1,8 @@
 // Today tab — single-screen daily overview.
 //
-// Build mode:   macro rings | steps bar | recent food log
-// Circuit mode: macro rings | steps ring + pilates + movements
-//
-// Both modes have the Train tab; Circuit's Today still carries the daily movement loop.
+// Same shape in both modes: macro rings | move/steps | water | steps (+ cardio in
+// Circuit) | recent food log. Strength, live sessions, Pilates, and Circuit's
+// parenting movements live in the Train tab.
 
 import SwiftUI
 import SwiftData
@@ -284,12 +283,13 @@ struct TodayView: View {
         }
     }
 
-    // MARK: - Circuit content (absorbed from Train tab)
-
+    // MARK: - Circuit content
+    //
+    // Mirrors Build's daily layout (steps + food log). Steps and cardio stay here as
+    // daily-activity metrics; live sessions, Pilates, and the parenting movements now
+    // live in the Train tab.
     @ViewBuilder
     private var circuitContent: some View {
-        LiveSessionCard(profile: profile)
-
         StepsCardioCard(
             profile: profile,
             todaysSteps: todaysSteps,
@@ -302,10 +302,7 @@ struct TodayView: View {
         )
         focusFooter(.steps)
 
-        Card { PilatesCard(profile: profile) }
-        focusFooter(.pilates)
-
-        BabyExercisesCard(profile: profile)
+        recentLogs
     }
 
     @ViewBuilder

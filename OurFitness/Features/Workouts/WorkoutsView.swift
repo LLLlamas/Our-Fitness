@@ -13,7 +13,7 @@ struct WorkoutsView: View {
     }
 }
 
-// MARK: - Build mode
+// MARK: - Workouts content (both modes; Build = lifts, Circuit = Pilates + movements)
 
 private struct BuildWorkoutsView: View {
     let profile: ProfileDTO
@@ -108,42 +108,16 @@ private struct BuildWorkoutsView: View {
                 Text("Train")
                     .font(.system(size: 56, weight: .regular))
                     .foregroundStyle(theme.text)
-                Text("Hypertrophy bias. Add your lifts, count reps, watch the numbers climb.")
+                Text(profile.mode == .build
+                     ? "Hypertrophy bias. Add your lifts, count reps, watch the numbers climb."
+                     : "Pilates, live sessions, and your movements — log it, keep the markers moving.")
                     .font(.callout).foregroundStyle(theme.dim)
 
                 LiveSessionCard(profile: profile)
 
                 workoutSuggestionButton
 
-                HStack {
-                    Text("Your exercises")
-                        .font(.system(size: 22, weight: .regular))
-                        .foregroundStyle(theme.text)
-                    Spacer()
-                    Button { showAddSheet = true } label: {
-                        HStack(spacing: 4) {
-                            Image(systemName: "plus.circle.fill")
-                            Text("Add")
-                        }
-                    }
-                    .tactile(.pill, fill: theme.accent)
-                }
-
-                if myExercises.isEmpty {
-                    Card {
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text("No exercises yet.")
-                                .font(.callout).foregroundStyle(theme.text)
-                            Text("Tap Add to build your list. Each entry tracks reps, calories, and muscle history.")
-                                .font(.caption).foregroundStyle(theme.dim)
-                        }
-                    }
-                } else {
-                    let stats = statsByExercise
-                    ForEach(myExercises) { ex in
-                        exerciseCard(ex, stats: stats[ex.id] ?? ExerciseStats())
-                    }
-                }
+                exercisesSection
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 18)
@@ -177,6 +151,47 @@ private struct BuildWorkoutsView: View {
         .sheet(isPresented: $showGoalSheet) {
             WorkoutGoalSheet(profile: profile, existingNames: Set(myExercises.map { $0.name.lowercased() }))
                 .themed(profile.mode)
+        }
+    }
+
+    // Build shows the lift list (rep counter, sets, weight history); Circuit shows its
+    // movement loop — Pilates plus the parenting-movement quick-log (which renders the
+    // same exercises with tap-to-log, so the Build list would only duplicate it).
+    @ViewBuilder
+    private var exercisesSection: some View {
+        if profile.mode == .build {
+            HStack {
+                Text("Your exercises")
+                    .font(.system(size: 22, weight: .regular))
+                    .foregroundStyle(theme.text)
+                Spacer()
+                Button { showAddSheet = true } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "plus.circle.fill")
+                        Text("Add")
+                    }
+                }
+                .tactile(.pill, fill: theme.accent)
+            }
+
+            if myExercises.isEmpty {
+                Card {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("No exercises yet.")
+                            .font(.callout).foregroundStyle(theme.text)
+                        Text("Tap Add to build your list. Each entry tracks reps, calories, and muscle history.")
+                            .font(.caption).foregroundStyle(theme.dim)
+                    }
+                }
+            } else {
+                let stats = statsByExercise
+                ForEach(myExercises) { ex in
+                    exerciseCard(ex, stats: stats[ex.id] ?? ExerciseStats())
+                }
+            }
+        } else {
+            Card { PilatesCard(profile: profile) }
+            BabyExercisesCard(profile: profile)
         }
     }
 
