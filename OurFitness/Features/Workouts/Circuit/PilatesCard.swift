@@ -2,7 +2,7 @@
 //
 // - Progress ring: sessions this week / weekly goal (editable — tap "/" in ring)
 // - "Log Pilates" PressableCard → sheet (duration slider, focus chips, notes)
-// - Recent sessions strip with calorie estimates
+// - Today/yesterday sessions strip with calorie estimates
 // - Weekly streak indicator (no streak-shame)
 // - Info sheet: muscles worked + post-session nutrition hint
 
@@ -30,8 +30,9 @@ struct PilatesCard: View {
             "pilatesWeeklyGoal.\(profile.id.uuidString)"
         )
         let target = profile.id
+        let cutoff = Calendar.current.date(byAdding: .day, value: -365, to: Date()) ?? Dates.startOfYesterday()
         _sessionModels = Query(
-            filter: #Predicate<PilatesSessionModel> { $0.profileId == target },
+            filter: #Predicate<PilatesSessionModel> { $0.profileId == target && $0.date >= cutoff },
             sort: \.date,
             order: .reverse
         )
@@ -146,10 +147,10 @@ struct PilatesCard: View {
 
     @ViewBuilder
     private var recentStrip: some View {
-        let recent = Array(sessions.prefix(5))
+        let recent = Array(sessions.filter { Dates.isTodayOrYesterday($0.date) }.prefix(5))
         if !recent.isEmpty {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Recent")
+                Text("Today & yesterday")
                     .font(.caption).tracking(2).textCase(.uppercase)
                     .foregroundStyle(theme.dim)
                 ForEach(recent) { s in
@@ -249,7 +250,7 @@ private struct PilatesLogSheet: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
-                Text("log pilates.")
+                Text("Log Pilates")
                     .font(.system(size: 42, weight: .regular))
                     .foregroundStyle(theme.text)
 

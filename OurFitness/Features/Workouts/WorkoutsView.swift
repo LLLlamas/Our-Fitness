@@ -39,8 +39,9 @@ private struct BuildWorkoutsView: View {
             filter: #Predicate<ExerciseModel> { $0.profileId == uid },
             sort: \.name, order: .forward
         )
+        let cutoff = Dates.startOfYesterday()
         _setModels = Query(
-            filter: #Predicate<WorkoutSetModel> { $0.userId == uid },
+            filter: #Predicate<WorkoutSetModel> { $0.userId == uid && $0.timestamp >= cutoff },
             sort: \.timestamp, order: .forward
         )
     }
@@ -58,45 +59,36 @@ private struct BuildWorkoutsView: View {
     private struct ExerciseStats {
         var todayReps: Int = 0
         var yesterdayReps: Int = 0
-        var weekReps: Int = 0
         var todayCal: Double = 0
         var todayHoldSec: Int = 0
-        var weekHoldSec: Int = 0
+        var yesterdayHoldSec: Int = 0
+        var yesterdayCal: Double = 0
     }
 
-    private func exerciseStats(for exercise: ExerciseDTO) -> ExerciseStats {
+    private var statsByExercise: [String: ExerciseStats] {
         let cal = Calendar.current
         let now = Date()
         let todayStart = cal.startOfDay(for: now)
         let yesterdayStart = cal.date(byAdding: .day, value: -1, to: todayStart) ?? todayStart
-        var isoCal = Calendar(identifier: .iso8601)
-        isoCal.firstWeekday = 2
-        let weekInterval = isoCal.dateInterval(of: .weekOfYear, for: now)
 
-        var stats = ExerciseStats()
-        for s in mySets where s.exerciseId == exercise.id {
+        return mySets.reduce(into: [String: ExerciseStats]()) { acc, s in
             let ts = s.timestamp
             let inToday = ts >= todayStart
             let inYesterday = !inToday && ts >= yesterdayStart
-            let inWeek = weekInterval?.contains(ts) ?? false
+            guard inToday || inYesterday else { return }
 
+            var stats = acc[s.exerciseId] ?? ExerciseStats()
             if inToday {
-                if exercise.isIsometric {
-                    stats.todayHoldSec += s.holdSeconds ?? 0
-                }
                 stats.todayReps += s.reps
+                stats.todayHoldSec += s.holdSeconds ?? 0
                 stats.todayCal += s.caloriesEst ?? 0
             } else if inYesterday {
                 stats.yesterdayReps += s.reps
+                stats.yesterdayHoldSec += s.holdSeconds ?? 0
+                stats.yesterdayCal += s.caloriesEst ?? 0
             }
-            if inWeek {
-                stats.weekReps += s.reps
-                if exercise.isIsometric {
-                    stats.weekHoldSec += s.holdSeconds ?? 0
-                }
-            }
+            acc[s.exerciseId] = stats
         }
-        return stats
     }
 
     private func holdLabel(_ seconds: Int) -> String {
@@ -113,7 +105,7 @@ private struct BuildWorkoutsView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
-                Text("train.")
+                Text("Train")
                     .font(.system(size: 56, weight: .regular))
                     .foregroundStyle(theme.text)
                 Text("Hypertrophy bias. Add your lifts, count reps, watch the numbers climb.")
@@ -147,8 +139,9 @@ private struct BuildWorkoutsView: View {
                         }
                     }
                 } else {
+                    let stats = statsByExercise
                     ForEach(myExercises) { ex in
-                        exerciseCard(ex)
+                        exerciseCard(ex, stats: stats[ex.id] ?? ExerciseStats())
                     }
                 }
             }
@@ -218,8 +211,7 @@ private struct BuildWorkoutsView: View {
     }
 
     @ViewBuilder
-    private func exerciseCard(_ ex: ExerciseDTO) -> some View {
-        let stats = exerciseStats(for: ex)
+    private func exerciseCard(_ ex: ExerciseDTO, stats: ExerciseStats) -> some View {
         let info = ExerciseInfo.meta(for: ex)
 
         PressableCard(action: { activeRepCounter = ex }) {
@@ -260,15 +252,13 @@ private struct BuildWorkoutsView: View {
                         holdCell(label: "Today", seconds: stats.todayHoldSec,
                                  holds: stats.todayReps, cal: stats.todayCal > 0 ? stats.todayCal : nil)
                         Divider().frame(height: 32).background(theme.line).padding(.horizontal, 8)
-                        holdCell(label: "This week", seconds: stats.weekHoldSec,
-                                 holds: stats.weekReps, cal: nil)
+                        holdCell(label: "Yesterday", seconds: stats.yesterdayHoldSec,
+                                 holds: stats.yesterdayReps, cal: stats.yesterdayCal > 0 ? stats.yesterdayCal : nil)
                     } else {
                         repCell(label: "Today", reps: stats.todayReps,
                                 cal: stats.todayCal > 0 ? stats.todayCal : nil)
                         Divider().frame(height: 32).background(theme.line).padding(.horizontal, 8)
                         repCell(label: "Yesterday", reps: stats.yesterdayReps, cal: nil)
-                        Divider().frame(height: 32).background(theme.line).padding(.horizontal, 8)
-                        repCell(label: "This week", reps: stats.weekReps, cal: nil)
                     }
                     Spacer()
                     Image(systemName: "hand.tap.fill")
@@ -344,7 +334,7 @@ private struct AddExerciseSheet: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
-                Text("add exercise.")
+                Text("Add exercise")
                     .font(.system(size: 42, weight: .regular))
                     .foregroundStyle(theme.text)
 
@@ -445,11 +435,12 @@ private struct SetHistorySheet: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(exercise.name.lowercased() + ".")
+                    Text(exercise.name)
                         .font(.system(size: 38, weight: .regular))
                         .foregroundStyle(theme.text)
-                    Text("TODAY'S SETS")
+                    Text("Today sets")
                         .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .textCase(.uppercase)
                         .foregroundStyle(theme.dim)
                 }
 

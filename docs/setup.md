@@ -72,7 +72,7 @@ Keep the output ready for the `MATCH_GIT_BASIC_AUTHORIZATION` secret below.
 
 → Repo Settings → **Secrets and variables** → **Actions** → **New repository secret**
 
-Add all eight:
+Add these signing and App Store secrets:
 
 | Secret | Source | Notes |
 |---|---|---|
@@ -84,6 +84,8 @@ Add all eight:
 | `MATCH_GIT_URL` | Step 5 signing repo URL | Example: `https://github.com/YOUR_ORG/Our-Fitness-Signing.git` |
 | `MATCH_PASSWORD` | Make up a long random passphrase | Encrypts/decrypts the signing repo contents |
 | `MATCH_GIT_BASIC_AUTHORIZATION` | Step 5 PowerShell output | Base64 `github-user:token`; token needs access to the private signing repo |
+| `APPSTORE_PROFILE_BASE64` | Manual App Store provisioning profile for `com.ourfitness.app`, base64 encoded | Used by TestFlight export |
+| `APPSTORE_WIDGET_PROFILE_BASE64` | Manual App Store provisioning profile for `com.ourfitness.app.widgets`, base64 encoded | Used by widget/TestFlight export |
 
 Optional repository variables:
 
@@ -128,7 +130,7 @@ git push --tags
 
 Either way, the workflow:
 1. Runs unit tests (fails the build if any test fails)
-2. Syncs the Apple Distribution certificate and **"OurFitness AppStore"** provisioning profile from encrypted fastlane match storage
+2. Syncs the Apple Distribution certificate from encrypted fastlane match storage and installs the app/widget App Store provisioning profiles from the base64 secrets
 3. Bumps `CFBundleVersion` to the GitHub run number
 4. Archives + exports IPA
 5. Uploads via fastlane `pilot`

@@ -246,7 +246,7 @@ private struct StepsInfoSheet: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("steps.")
+                    Text("Steps")
                         .font(.system(size: 42, weight: .regular))
                         .foregroundStyle(theme.text)
                     Text("TODAY · \(steps.formatted()) STEPS")

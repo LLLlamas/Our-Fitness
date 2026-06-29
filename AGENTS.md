@@ -64,37 +64,38 @@ OurFitness/
   Domain/                        ← PURE Swift. No SwiftUI/SwiftData. Fully tested.
     Models.swift                 ← Mode, Sex, ActivityLevel, MacroTargets, DTOs
     Dates.swift                  ← dayKey, lastNDays, formatTimeAgo
-    Score.swift                  ← bell, rampUp, rampDown, macroFit (shared)
     Targets.swift                ← Mifflin-St Jeor + mode adjustments
-    Suggestions.swift            ← filter + score meals (per-mode scoring)
+    CommonFoods.swift            ← curated food library
+    SQLiteFoodDatabase.swift     ← bundled USDA lookup
+    SuggestedMeals.swift         ← ranked meal suggestions
     Progression.swift            ← linear / double-prog / RPE strategies
     Trends.swift                 ← rolling avg, weekly weight delta, marker stall
     Streaks.swift                ← adherence (≥80% cal target days in a row)
     Steps.swift                  ← step rollups + hit-rate + dense series
   Data/
-    ModelContainer.swift         ← SwiftData container + ModelConfiguration
+    ModelContainer+App.swift     ← SwiftData container + ModelConfiguration
     Schema.swift                 ← VersionedSchema + MigrationPlan
-    Models/                      ← @Model classes (one per entity)
+    PersistenceModels.swift      ← @Model classes and snapshot adapters
     Repositories/                ← Query helpers, batch operations, seeders
     Seed/
       Seeder.swift               ← idempotent on launch
-      FoodsBuild.swift           ← picky-friendly, nut-free
-      FoodsReset.swift           ← DASH + Mediterranean
-      Exercises.swift            ← full lift catalog
-      Programs.swift             ← starter programs per mode
   Services/
     HealthKitService.swift       ← steps, weight, RHR; auth + observers + writes
     Theme.swift                  ← mode → color/font tokens (light + dark)
   Features/
     Onboarding/                  ← profile creation flow
-    Today/                       ← daily anchor view: bars + steps + suggestions + log
-    Nutrition/                   ← library browser, planner (later), grocery (later)
-    Workouts/                    ← program runner, set logger, history
-    Progress/                    ← weight, steps, markers, lift PRs
+    Today/                       ← daily anchor view: macros, movement, water, log
+    Nutrition/                   ← meal log, parser, library, suggestions
+    Workouts/                    ← Build rep counter + Reset movement cards
+    Progress/                    ← trends, markers, energy balance, training history
+    Settings/                    ← profile, mode, units, Health permissions
   Components/                    ← ProgressBar, Banner, StatBlock, Card
+  Resources/usda-foods.db        ← bundled food database
   Assets.xcassets/               ← AppIcon, AccentColor, LaunchBackground
   Info.plist                     ← HealthKit usage strings (App Store requirement)
   OurFitness.entitlements        ← HealthKit capability
+Shared/                          ← Live Activity attributes shared with widget
+OurFitnessWidgets/               ← Live Activity / widget extension
 OurFitnessTests/                 ← XCTest suites for Domain/* only
 fastlane/
   Fastfile                       ← lanes: tests, compile, beta
@@ -102,10 +103,13 @@ fastlane/
 Gemfile                          ← Fastlane version pin
 scripts/
   generate-icon.sh               ← idempotent AppIcon placeholder generator
+  build-food-db.py               ← rebuild bundled food database
+  validate-ci-invariants.sh      ← CI guardrails
 .github/workflows/
   compile.yml                    ← every push/PR: build + test, no signing
   testflight.yml                 ← manual or v* tag: sign + ship via fastlane
 project.yml                      ← XcodeGen — single source of truth for project layout
+_stashed/                        ← excluded from target; historical/pending work
 ```
 
 **Three architecture rules to keep clean:**
@@ -139,6 +143,7 @@ project.yml                      ← XcodeGen — single source of truth for pro
 | Change haptic vocabulary | `Services/Haptics.swift` |
 | New toast accent / haptic pairing | `Services/ToastCenter.swift` (`ToastAccent` enum + `fireHaptic(for:)`) |
 | Tweak target-hit flash on bars | `Components/ProgressBar.swift` (`onChange(of: value)` block) |
+| Recent sessions/history | Today/Train show today + yesterday only; older strength, live, cardio, and Pilates sessions live in `Features/Progress/ProgressView.swift` training history |
 
 ---
 
@@ -245,7 +250,7 @@ No third user. No medical advice. No social/sharing/leaderboards. No barcode sca
 
 ## Foundation references
 
-- [RepCheck.md](RepCheck.md) — friction-free logging UX; the bar for one-tap actions
-- [nutrition-plan-research.md](nutrition-plan-research.md) — validated Build nutrition spec; food library, math, anchor schedule
+- [docs/RepCheck.md](docs/RepCheck.md) — friction-free logging UX; the bar for one-tap actions
+- [docs/nutrition-plan-research.md](docs/nutrition-plan-research.md) — validated Build nutrition spec; food library, math, anchor schedule
 - [nutrition-plan.html](nutrition-plan.html) — Build visual reference (look/feel, not codebase)
 - [README.md](README.md) — local setup, XcodeGen, TestFlight CI

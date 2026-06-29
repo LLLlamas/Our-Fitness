@@ -3,7 +3,7 @@
 // it is — anchored to the user's OWN numbers and their Mode's goal.
 //
 //   Build   = slowly add muscle & mass        (calorie surplus, high protein)
-//   Circuit = lose weight & improve the heart-health numbers
+//   Reset   = lose weight & improve the heart-health numbers
 //             (cholesterol, blood pressure, blood sugar) via a modest deficit,
 //             steps, and cardio.
 //
@@ -31,7 +31,7 @@ public enum TargetRationale {
         case .build:
             return "You're in Build mode — the goal is to slowly add muscle and mass."
         case .circuit:
-            return "You're in Circuit mode — the goal is to lose weight and improve your heart-health numbers (cholesterol, blood pressure, blood sugar)."
+            return "You're in Reset mode — the goal is to lose weight and improve your heart-health numbers (cholesterol, blood pressure, blood sugar)."
         }
     }
 
@@ -126,10 +126,10 @@ public enum TargetRationale {
         "Fat is set to about \(fatPctOfCalories(for: p))% of your calories (\(p.computedTargets.fatG)g). Some fat is essential — your body needs it to make hormones and to absorb vitamins A, D, E, and K. Eating very low-fat can modestly lower testosterone, so this stays at a sensible floor."
     }
 
-    // MARK: - Circuit cardiometabolic targets (fiber floor + sodium / added-sugar / saturated-fat caps)
+    // MARK: - Reset cardiometabolic targets (fiber floor + sodium / added-sugar / saturated-fat caps)
     //
-    // These four only apply in Circuit mode (the caps are nil in Build). Copy ties
-    // each to the heart-health numbers Circuit exists to improve. Sources: soluble
+    // These four only apply in Reset mode (the caps are nil in Build). Copy ties
+    // each to the heart-health numbers Reset exists to improve. Sources: soluble
     // fibre lowers LDL (Whitehead, AJCN 2014); DASH + lower sodium lowers blood
     // pressure (Sacks, NEJM 2001); added sugar and triglycerides (Te Morenga, BMJ
     // 2012); saturated-fat swap lowers LDL (Hooper, Cochrane 2020).
@@ -169,7 +169,7 @@ public enum TargetRationale {
         case .build:
             return "Your \(goal.formatted())-step goal keeps you active on top of lifting. Most of the health payoff from walking shows up by about 7,000–8,000 steps a day — every extra 1,000–2,000 steps lowers your risk of dying early, and the calories burned support your recovery without eating into your surplus."
         case .circuit:
-            return "Your \(goal.formatted())-step goal is the movement engine for Circuit. Walking reliably brings blood pressure down a few points and is your most repeatable daily calorie burn. Most of the benefit lands by about 7,000–8,000 steps — going higher keeps adding a little more. (Cholesterol and blood sugar respond best when you pair steps with cardio and the food tips.)"
+            return "Your \(goal.formatted())-step goal is the movement engine for Reset. Walking reliably brings blood pressure down a few points and is your most repeatable daily calorie burn. Most of the benefit lands by about 7,000–8,000 steps — going higher keeps adding a little more. (Cholesterol and blood sugar respond best when you pair steps with cardio and the food tips.)"
         }
     }
 

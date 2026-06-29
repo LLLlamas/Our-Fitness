@@ -116,7 +116,7 @@ struct NutritionView: View {
     }
 
     private var recentDayKeys: [String] {
-        Array(Dates.lastNDays(8).reversed())
+        Array(Dates.lastNDays(2).reversed())
     }
 
     private var rankedSuggestions: [SuggestedMeal] {
@@ -208,7 +208,7 @@ struct NutritionView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
                 HStack(alignment: .firstTextBaseline, spacing: 10) {
-                    Text("meals.")
+                    Text("Meals")
                         .font(.system(size: 56, weight: .regular))
                         .foregroundStyle(theme.text)
                     Button {
@@ -494,7 +494,6 @@ struct NutritionView: View {
                         withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
                             selectedDayKey = key
                         }
-                        Haptics.selection()
                     } label: {
                         Text(dayPillLabel(key))
                             .font(.system(size: 13, weight: .medium))
@@ -516,7 +515,7 @@ struct NutritionView: View {
         if hasContent {
             VStack(alignment: .leading, spacing: 14) {
                 if !savedTemplates.isEmpty {
-                    pillSection(header: "My Recipes") {
+                    pillSection(header: "recipes") {
                         ForEach(savedTemplates) { template in
                             Button {
                                 savedTemplateToLog = template.snapshot
@@ -533,7 +532,7 @@ struct NutritionView: View {
                                     Haptics.warn()
                                     toasts.show(Toast(title: "Recipe deleted", detail: template.name, accent: .warn, symbol: "trash"))
                                 } label: {
-                                    Label("Delete Recipe", systemImage: "trash")
+                                    Label("Delete recipe", systemImage: "trash")
                                 }
                             }
                         }
@@ -541,7 +540,7 @@ struct NutritionView: View {
                 }
 
                 if !favorites.isEmpty {
-                    pillSection(header: "Favorites") {
+                    pillSection(header: "favorites") {
                         ForEach(favorites) { food in
                             Button {
                                 let ingredients: [MealIngredient] = SuggestedMeals.compositeIngredients[food.id]?
@@ -556,7 +555,7 @@ struct NutritionView: View {
                 }
 
                 if !recents.isEmpty {
-                    pillSection(header: "Recently Logged") {
+                    pillSection(header: "recently logged") {
                         ForEach(recents) { entry in
                             Button {
                                 let ingredients: [MealIngredient]
@@ -578,7 +577,7 @@ struct NutritionView: View {
                 }
 
                 if !meals.isEmpty {
-                    pillSection(header: "For You") {
+                    pillSection(header: "for you") {
                         ForEach(meals) { meal in
                             Button {
                                 mealToDetail = meal
@@ -1102,7 +1101,7 @@ struct MacroChip: View {
 
 // MARK: - NL Meal Log Sheet
 
-private struct NLMealLogSheet: View {
+struct NLMealLogSheet: View {
     let profile: ProfileDTO
     let targetDate: String
     let onSave: (FoodLogEntryDTO) -> Void
@@ -1124,6 +1123,12 @@ private struct NLMealLogSheet: View {
 
     private enum Field: Hashable { case input, cal, protein, carbs, fat }
     @FocusState private var focused: Field?
+
+    init(profile: ProfileDTO, targetDate: String, onSave: @escaping (FoodLogEntryDTO) -> Void) {
+        self.profile = profile
+        self.targetDate = targetDate
+        self.onSave = onSave
+    }
 
     private var resolvedPerServing: PerServing {
         if showManual {
@@ -1148,7 +1153,7 @@ private struct NLMealLogSheet: View {
         NavigationStack {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
-                Text("log a meal.")
+                Text("Log a meal")
                     .font(.system(size: 42, weight: .regular))
                     .foregroundStyle(theme.text)
 
@@ -1211,7 +1216,7 @@ private struct NLMealLogSheet: View {
             .padding(.vertical, 24)
         }
         .background(theme.bg.ignoresSafeArea())
-        .navigationTitle("Log Meal")
+        .navigationTitle("Log meal")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
@@ -1306,7 +1311,7 @@ private struct NLMealLogSheet: View {
         VStack(alignment: .leading, spacing: 8) {
             if result.hasMatches {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Recognised".uppercased())
+                    Text("Recognized".uppercased())
                         .font(.system(size: 9, weight: .medium)).tracking(2)
                         .foregroundStyle(theme.dim)
                     ForEach(Array(result.recognized.enumerated()), id: \.offset) { _, item in
@@ -1326,7 +1331,7 @@ private struct NLMealLogSheet: View {
                 }
             }
             if !result.unrecognized.isEmpty {
-                Text("Not recognised: \(result.unrecognized.joined(separator: ", ")) — fill in below.")
+                Text("Not recognized: \(result.unrecognized.joined(separator: ", ")) — fill in below.")
                     .font(.caption).foregroundStyle(theme.dim)
             }
         }
@@ -2021,7 +2026,7 @@ private struct NutritionInsightSheet: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("nutrition goals.")
+                    Text("Nutrition goals")
                         .font(.system(size: 42, weight: .regular))
                         .foregroundStyle(theme.text)
                     Text("YOUR TARGETS · PLAIN ENGLISH")

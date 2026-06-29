@@ -21,7 +21,7 @@ struct SettingsView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    Text("settings.")
+                    Text("Settings")
                         .font(.system(size: 48, weight: .regular))
                         .foregroundStyle(theme.text)
 
@@ -357,7 +357,7 @@ private struct EditVitalsSheet: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("your body.")
+                        Text("Your body")
                             .font(.system(size: 42, weight: .regular))
                             .foregroundStyle(theme.text)
                         Text("EDIT VITALS")
@@ -479,7 +479,7 @@ private struct ModeSwitchSheet: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("switch mode.")
+                    Text("Switch mode")
                         .font(.system(size: 42, weight: .regular))
                         .foregroundStyle(theme.text)
                     Text("\(profile.mode.displayName.uppercased()) → \(newMode.displayName.uppercased())")
@@ -500,7 +500,7 @@ private struct ModeSwitchSheet: View {
                 }
 
                 Text(newMode == .circuit
-                     ? "Circuit adds the parenting movements (Lifted Baby, Stroller, Carried Baby) to your exercises and folds your workout log into Today."
+                     ? "Reset adds the parenting movements (Lifted Baby, Stroller, Carried Baby) to your exercises and folds your workout log into Today."
                      : "Build brings back the Train tab for your own lifts and the rep counter.")
                     .font(.footnote).foregroundStyle(theme.dim)
 

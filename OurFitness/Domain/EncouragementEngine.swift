@@ -351,7 +351,7 @@ public enum EncouragementEngine {
                         tone: .nudge, sfSymbol: "fork.knife")
                     : EncouragementMessage(
                         headline: "Day almost done — no meals logged.",
-                        detail: "Balanced nutrition is the foundation of Circuit. A quick log — even an estimate — keeps you on track.",
+                        detail: "Balanced nutrition is the foundation of Reset. A quick log — even an estimate — keeps you on track.",
                         tone: .nudge, sfSymbol: "fork.knife")
             } else if hourOfDay >= 11 {
                 // Mid-day, nothing logged yet.

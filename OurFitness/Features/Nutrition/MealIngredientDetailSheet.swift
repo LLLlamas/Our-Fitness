@@ -78,7 +78,7 @@ struct MealIngredientDetailSheet: View {
                 .padding(.vertical, 20)
             }
             .background(theme.bg.ignoresSafeArea())
-            .navigationTitle(isEditing ? "Edit Meal" : "Log Meal")
+            .navigationTitle(isEditing ? "Edit meal" : "Log meal")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -117,7 +117,6 @@ struct MealIngredientDetailSheet: View {
                     ForEach(Slot.allCases, id: \.self) { s in
                         Button {
                             slot = s
-                            Haptics.selection()
                         } label: {
                             Text(s.label)
                         }
@@ -190,21 +189,21 @@ struct MealIngredientDetailSheet: View {
             }
 
             if isEditing {
-                Button("Save Changes") { saveChanges() }
+                Button("Save changes") { saveChanges() }
                     .tactile(.primary, fullWidth: true)
 
                 Button("Remove Log") { deleteEntry() }
                     .tactile(.ghost)
                     .tint(.red)
             } else {
-                Button("Log Meal") { logMeal() }
+                Button("Log meal") { logMeal() }
                     .tactile(.primary, fullWidth: true)
                     .disabled(ingredients.isEmpty)
             }
 
             if let deleteTemplate = onDeleteTemplate {
                 Button(role: .destructive) { deleteTemplate() } label: {
-                    Label("Delete Recipe", systemImage: "trash")
+                    Label("Delete recipe", systemImage: "trash")
                 }
                 .tactile(.ghost)
                 .tint(.red)
@@ -423,7 +422,7 @@ struct IngredientFoodSearchSheet: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 16)
             .background(theme.bg.ignoresSafeArea())
-            .navigationTitle("Add Ingredient")
+            .navigationTitle("Add ingredient")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -508,7 +507,7 @@ struct ManualIngredientSheet: View {
                 .padding(.vertical, 16)
             }
             .background(theme.bg.ignoresSafeArea())
-            .navigationTitle("Manual Ingredient")
+            .navigationTitle("Manual ingredient")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -635,7 +634,7 @@ struct SaveTemplateSheet: View {
                 .padding(.vertical, 16)
             }
             .background(theme.bg.ignoresSafeArea())
-            .navigationTitle("Save Recipe")
+            .navigationTitle("Save recipe")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

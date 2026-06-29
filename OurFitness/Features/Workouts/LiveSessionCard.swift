@@ -44,7 +44,7 @@ struct LiveSessionCard: View {
             Button {
                 showPastLog = true
             } label: {
-                Label("Log a past session", systemImage: "clock.arrow.circlepath")
+                Label("Log session", systemImage: "clock.arrow.circlepath")
                     .frame(maxWidth: .infinity)
             }
             .tactile(.secondary, fullWidth: true)
@@ -143,7 +143,7 @@ private struct ActivityPicker: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                Text("live session.")
+                Text("Live session")
                     .font(.system(size: 42, weight: .regular))
                     .foregroundStyle(theme.text)
 
@@ -550,8 +550,8 @@ private struct LiveSessionRunner: View {
 
 // MARK: - Recent sessions
 
-/// Compact list of recently completed live sessions, profile-scoped at the query
-/// level. Re-queries when `refreshToken` changes (i.e. after a session ends).
+/// Compact list of today's and yesterday's live sessions. Older sessions live in
+/// Progress so Today/Train stays focused on the current loop.
 private struct RecentActivitySessions: View {
     let profile: ProfileDTO
     let refreshToken: UUID
@@ -567,18 +567,21 @@ private struct RecentActivitySessions: View {
         self.profile = profile
         self.refreshToken = refreshToken
         let uid = profile.id
+        let cutoff = Dates.startOfYesterday()
         _models = Query(
-            filter: #Predicate<ActivitySessionModel> { $0.profileId == uid },
+            filter: #Predicate<ActivitySessionModel> { $0.profileId == uid && $0.date >= cutoff },
             sort: \.date, order: .reverse
         )
     }
 
-    private var sessions: [ActivitySessionDTO] { Array(models.map(\.snapshot).prefix(5)) }
+    private var sessions: [ActivitySessionDTO] {
+        Array(models.map(\.snapshot).filter { Dates.isTodayOrYesterday($0.date) }.prefix(5))
+    }
 
     var body: some View {
         if !sessions.isEmpty {
             VStack(alignment: .leading, spacing: 8) {
-                Text("Recent sessions")
+                Text("Today & yesterday")
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(theme.dim)
                 ForEach(sessions) { sessionRow($0) }
@@ -796,6 +799,27 @@ private struct EditSessionDurationSheet: View {
 /// and log a completed `ActivitySessionDTO` (or `PilatesSessionDTO` for pilates,
 /// mirroring the live runner's end path) without using the live timer.
 private struct LogPastSessionSheet: View {
+    private enum LogDay: String, CaseIterable, Hashable, Identifiable {
+        case today, yesterday
+        var id: String { rawValue }
+
+        var label: String {
+            switch self {
+            case .today: return "Today"
+            case .yesterday: return "Yesterday"
+            }
+        }
+
+        var date: Date {
+            switch self {
+            case .today:
+                return Date()
+            case .yesterday:
+                return Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
+            }
+        }
+    }
+
     let profile: ProfileDTO
 
     @Environment(\.modelContext) private var ctx
@@ -806,6 +830,7 @@ private struct LogPastSessionSheet: View {
     @State private var selectedId: String?
     @State private var totalMinutes: Int = 30
     @State private var customMET: Double = ActivityCatalog.otherDefaultMET
+    @State private var logDay: LogDay = .today
 
     private let columns = [GridItem(.adaptive(minimum: 96), spacing: 12)]
 
@@ -827,12 +852,13 @@ private struct LogPastSessionSheet: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                Text("log a past session.")
+                Text("Log session")
                     .font(.system(size: 34, weight: .regular))
                     .foregroundStyle(theme.text)
 
-                Text("PICK AN ACTIVITY")
+                Text("Activity")
                     .font(.system(size: 10, weight: .medium)).tracking(2)
+                    .textCase(.uppercase)
                     .foregroundStyle(theme.dim)
 
                 LazyVGrid(columns: columns, spacing: 12) {
@@ -842,8 +868,21 @@ private struct LogPastSessionSheet: View {
                 }
 
                 if selected != nil {
-                    Text("HOW LONG")
+                    Text("Day")
                         .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .textCase(.uppercase)
+                        .foregroundStyle(theme.dim)
+
+                    Picker("Day", selection: $logDay) {
+                        ForEach(LogDay.allCases) { day in
+                            Text(day.label).tag(day)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+
+                    Text("How long")
+                        .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .textCase(.uppercase)
                         .foregroundStyle(theme.dim)
 
                     DurationWheel(totalMinutes: $totalMinutes)
@@ -881,7 +920,6 @@ private struct LogPastSessionSheet: View {
                 selectedId = activity.id
                 if activity.id == ActivityCatalog.otherId { customMET = ActivityCatalog.otherDefaultMET }
             }
-            Haptics.selection()
         } label: {
             VStack(spacing: 8) {
                 Image(systemName: activity.symbol)
@@ -954,7 +992,7 @@ private struct LogPastSessionSheet: View {
         if activity.id == ActivityCatalog.pilatesId {
             Repos.logPilatesSession(ctx, PilatesSessionDTO(
                 profileId: profile.id,
-                date: Date(),
+                date: logDay.date,
                 durationMinutes: minutes,
                 focusAreas: []
             ))
@@ -964,7 +1002,7 @@ private struct LogPastSessionSheet: View {
             )
             Repos.logActivitySession(ctx, ActivitySessionDTO(
                 profileId: profile.id,
-                date: Date(),
+                date: logDay.date,
                 activityId: activity.id,
                 activityName: activity.name,
                 met: met,

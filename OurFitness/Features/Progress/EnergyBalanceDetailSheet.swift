@@ -50,7 +50,7 @@ struct EnergyBalanceDetailSheet: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("energy balance.")
+            Text("Energy balance")
                 .font(.system(size: 42, weight: .regular))
                 .foregroundStyle(theme.text)
             Text("CALORIES IN vs ACTIVITY BURN")

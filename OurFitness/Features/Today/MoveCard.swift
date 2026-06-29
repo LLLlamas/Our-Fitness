@@ -309,7 +309,7 @@ private struct MoveInfoSheet: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("move.")
+                    Text("Move")
                         .font(.system(size: 42, weight: .regular))
                         .foregroundStyle(theme.text)
                     Text("MET × WEIGHT × TIME = CALORIES")

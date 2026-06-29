@@ -85,7 +85,7 @@ private struct HeartHealthInfoSheet: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("heart health.")
+                    Text("Heart health")
                         .font(.system(size: 38, weight: .regular))
                         .foregroundStyle(theme.text)
                     Text("YOUR CIRCUIT TARGETS")

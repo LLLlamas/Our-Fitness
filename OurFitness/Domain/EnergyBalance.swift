@@ -57,10 +57,10 @@ public enum EnergyBalance {
         let stepsByDay: [String: Int] = steps
             .filter { window.contains($0.date) }
             .reduce(into: [:]) { acc, s in acc[s.date, default: 0] += s.steps }
-        let setsByDay = Dictionary(grouping: sets, by: { Dates.dayKey($0.timestamp) })
-        let cardioByDay = Dictionary(grouping: cardio, by: { Dates.dayKey($0.date) })
-        let pilatesByDay = Dictionary(grouping: pilates, by: { Dates.dayKey($0.date) })
-        let activitiesByDay = Dictionary(grouping: activities, by: { Dates.dayKey($0.date) })
+        let setsByDay = Dictionary(grouping: sets.filter { window.contains(Dates.dayKey($0.timestamp)) }, by: { Dates.dayKey($0.timestamp) })
+        let cardioByDay = Dictionary(grouping: cardio.filter { window.contains(Dates.dayKey($0.date)) }, by: { Dates.dayKey($0.date) })
+        let pilatesByDay = Dictionary(grouping: pilates.filter { window.contains(Dates.dayKey($0.date)) }, by: { Dates.dayKey($0.date) })
+        let activitiesByDay = Dictionary(grouping: activities.filter { window.contains(Dates.dayKey($0.date)) }, by: { Dates.dayKey($0.date) })
 
         return keys.map { key in
             let intake = DailyTotals.totals(from: foodByDay[key] ?? []).calories

@@ -28,7 +28,7 @@ public enum FoodVarietyNudges {
         let circuitThreshold: Int
         let headline: (Int) -> String
         let reason: String
-        let circuitReason: String     // more specific for Circuit mode
+        let circuitReason: String     // more specific for Reset mode
         let alternative: String
         let circuitAlternative: String
         let emoji: String
@@ -77,7 +77,7 @@ public enum FoodVarietyNudges {
             circuitThreshold: 3,
             headline: { n in "Fries \(n)× this week" },
             reason: "Deep-fried foods add saturated fat quickly and spike the glycemic load of a meal.",
-            circuitReason: "Frying oils raise LDL and the refined-starch glycemic spike impairs insulin sensitivity — both are Circuit markers you're working to improve.",
+            circuitReason: "Frying oils raise LDL and the refined-starch glycemic spike impairs insulin sensitivity — both are Reset markers you're working to improve.",
             alternative: "Baked potato or air-popped popcorn give you the same satisfying crunch.",
             circuitAlternative: "Zucchini noodles or a cucumber-tomato salad — potassium from both actively lowers BP (DASH evidence), which is the other lever fries work against.",
             emoji: "🍟"

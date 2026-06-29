@@ -93,6 +93,15 @@ struct ProgressTabView: View {
     private var cardio: [CardioSessionDTO] { cardioModels.map(\.snapshot) }
     private var pilates: [PilatesSessionDTO] { pilatesModels.map(\.snapshot) }
     private var activities: [ActivitySessionDTO] { activityModels.map(\.snapshot) }
+    private var trainingHistoryDayKeys: [String] {
+        let keys = Set(
+            trainingSessions.map(\.dayKey)
+            + cardio.map { Dates.dayKey($0.date) }
+            + pilates.map { Dates.dayKey($0.date) }
+            + activities.map { Dates.dayKey($0.date) }
+        )
+        return keys.sorted(by: >)
+    }
 
     // MARK: - Energy balance (intake vs activity burn)
 
@@ -146,7 +155,7 @@ struct ProgressTabView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 HStack(alignment: .firstTextBaseline) {
-                    Text("progress.")
+                    Text("Progress")
                         .font(.system(size: 56, weight: .regular))
                         .foregroundStyle(theme.text)
                     Spacer()
@@ -174,8 +183,8 @@ struct ProgressTabView: View {
                 // Calorie intake vs activity burn — shown for both modes.
                 energyBalanceCard
 
-                // Cross-day training history (the Workouts tab shows today only).
-                if !trainingSessions.isEmpty {
+                // Cross-day training history; Today/Train only keep the daily surface short.
+                if !trainingHistoryDayKeys.isEmpty {
                     trainingHistoryCard
                 }
             }
@@ -212,12 +221,12 @@ struct ProgressTabView: View {
 
     @ViewBuilder
     private var trainingHistoryCard: some View {
-        let dayCount = trainingSessions.count
-        let lastDay = trainingSessions.first?.dayKey
+        let dayCount = trainingHistoryDayKeys.count
+        let lastDay = trainingHistoryDayKeys.first
         PressableCard(action: { showTrainingHistory = true }) {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(spacing: 6) {
-                    Label("Training History", systemImage: "dumbbell.fill")
+                    Label("Training history", systemImage: "dumbbell.fill")
                         .font(.system(size: 13, weight: .semibold))
                         .foregroundStyle(theme.accent)
                     Spacer()
@@ -515,7 +524,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .bmi:              return "BMI"
         case .restingHR:        return "bpm"
         case .stepsAvg:         return "steps"
-        case .trainingVolume:   return "sets · this wk"
+        case .trainingVolume:   return "sets · this week"
         case .bp:               return "mmHg"
         case .ldl, .hdl, .totalCholesterol, .fastingGlucose: return "mg/dL"
         case .a1c:              return "%"
@@ -817,7 +826,7 @@ private struct BMIDetailSheet: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("bmi.")
+                    Text("BMI")
                         .font(.system(size: 42, weight: .regular))
                         .foregroundStyle(theme.text)
                     Text("BODY MASS INDEX · COMPUTED FROM LOGGED WEIGHTS")
@@ -927,7 +936,7 @@ private struct BodyFatDetailSheet: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("body fat.")
+                    Text("Body fat")
                         .font(.system(size: 42, weight: .regular))
                         .foregroundStyle(theme.text)
                     Text("% · FAT MASS · LEAN MASS")
@@ -1123,7 +1132,7 @@ private struct BPDetailSheet: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("bp.")
+                    Text("BP")
                         .font(.system(size: 42, weight: .regular))
                         .foregroundStyle(theme.text)
                     Text("MMHG · SYSTOLIC / DIASTOLIC")
@@ -1307,7 +1316,7 @@ private struct WeightLogSheet: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("weight.")
+                    Text("Weight")
                         .font(.system(size: 42, weight: .regular))
                         .foregroundStyle(theme.text)
                     Text("\(Units.weightUnit(unitSystem).uppercased()) · 7-DAY AVERAGE")
@@ -1440,10 +1449,8 @@ private struct WeightLogSheet: View {
 
 // MARK: - Training history sheet
 
-/// Cross-day training history — every logged session grouped by day, newest first.
-/// This is the home for past workouts (the Workouts tab shows today only). Each
-/// exercise line offers a "remove a set" cleanup that deletes its most recent set
-/// on that day. Owns profile-scoped @Query so it refreshes live as sets are removed.
+/// Cross-day training history — every logged set/session grouped by day, newest first.
+/// This is the home for past workouts (Today/Train only show today/yesterday).
 private struct TrainingHistorySheet: View {
     let profile: ProfileDTO
 
@@ -1453,6 +1460,9 @@ private struct TrainingHistorySheet: View {
 
     @Query private var setModels: [WorkoutSetModel]
     @Query private var exerciseModels: [ExerciseModel]
+    @Query private var cardioModels: [CardioSessionModel]
+    @Query private var pilatesModels: [PilatesSessionModel]
+    @Query private var activityModels: [ActivitySessionModel]
 
     init(profile: ProfileDTO) {
         self.profile = profile
@@ -1465,35 +1475,60 @@ private struct TrainingHistorySheet: View {
             filter: #Predicate<ExerciseModel> { $0.profileId == uid },
             sort: \.name, order: .forward
         )
+        _cardioModels = Query(
+            filter: #Predicate<CardioSessionModel> { $0.profileId == uid },
+            sort: \.date, order: .reverse
+        )
+        _pilatesModels = Query(
+            filter: #Predicate<PilatesSessionModel> { $0.profileId == uid },
+            sort: \.date, order: .reverse
+        )
+        _activityModels = Query(
+            filter: #Predicate<ActivitySessionModel> { $0.profileId == uid },
+            sort: \.date, order: .reverse
+        )
     }
 
     private var sessions: [TrainingHistory.DaySession] {
         TrainingHistory.sessions(sets: setModels.map(\.snapshot), exercises: exerciseModels.map(\.snapshot))
+    }
+    private var cardio: [CardioSessionDTO] { cardioModels.map(\.snapshot) }
+    private var pilates: [PilatesSessionDTO] { pilatesModels.map(\.snapshot) }
+    private var activities: [ActivitySessionDTO] { activityModels.map(\.snapshot) }
+    private var dayKeys: [String] {
+        let keys = Set(
+            sessions.map(\.dayKey)
+            + cardio.map { Dates.dayKey($0.date) }
+            + pilates.map { Dates.dayKey($0.date) }
+            + activities.map { Dates.dayKey($0.date) }
+        )
+        return keys.sorted(by: >)
     }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("training history.")
+                    Text("Training history")
                         .font(.system(size: 38, weight: .regular))
                         .foregroundStyle(theme.text)
-                    Text("EVERY SESSION, NEWEST FIRST")
+                    Text("Every session, newest first")
                         .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .textCase(.uppercase)
                         .foregroundStyle(theme.dim)
                 }
 
-                if sessions.isEmpty {
+                if dayKeys.isEmpty {
                     Card {
                         VStack(alignment: .leading, spacing: 6) {
                             Text("No training logged yet.")
                                 .font(.callout).foregroundStyle(theme.text)
-                            Text("Sets you log in the Workouts tab show up here, grouped by day.")
+                            Text("Sets, cardio, Pilates, and live sessions show up here grouped by day.")
                                 .font(.caption).foregroundStyle(theme.dim)
                         }
                     }
                 } else {
-                    ForEach(sessions) { daySection($0) }
+                    ForEach(dayKeys, id: \.self) { daySection($0) }
                 }
             }
             .padding(.horizontal, 20)
@@ -1504,17 +1539,26 @@ private struct TrainingHistorySheet: View {
     }
 
     @ViewBuilder
-    private func daySection(_ s: TrainingHistory.DaySession) -> some View {
+    private func daySection(_ dayKey: String) -> some View {
+        let strength = sessions.first { $0.dayKey == dayKey }
+        let cardioRows = cardio.filter { Dates.dayKey($0.date) == dayKey }
+        let pilatesRows = pilates.filter { Dates.dayKey($0.date) == dayKey }
+        let activityRows = activities.filter { Dates.dayKey($0.date) == dayKey }
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .firstTextBaseline) {
-                Text(Dates.formatLong(s.dayKey))
+                Text(Dates.formatLong(dayKey))
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(theme.text)
                 Spacer()
-                Text(daySummary(s))
+                Text(daySummary(strength: strength, cardio: cardioRows, pilates: pilatesRows, activities: activityRows))
                     .font(.caption).foregroundStyle(theme.dim)
             }
-            ForEach(s.exercises) { line in exerciseLineRow(line) }
+            if let strength {
+                ForEach(strength.exercises) { line in exerciseLineRow(line) }
+            }
+            ForEach(cardioRows) { cardioLineRow($0) }
+            ForEach(pilatesRows) { pilatesLineRow($0) }
+            ForEach(activityRows) { activityLineRow($0) }
         }
         .padding(12)
         .background(theme.card)
@@ -1522,9 +1566,27 @@ private struct TrainingHistorySheet: View {
         .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(theme.line, lineWidth: 1))
     }
 
-    private func daySummary(_ s: TrainingHistory.DaySession) -> String {
-        var parts = ["\(s.totalSets) set\(s.totalSets == 1 ? "" : "s")"]
-        if s.totalCalories > 0 { parts.append("~\(s.totalCalories) cal") }
+    private func daySummary(
+        strength: TrainingHistory.DaySession?,
+        cardio: [CardioSessionDTO],
+        pilates: [PilatesSessionDTO],
+        activities: [ActivitySessionDTO]
+    ) -> String {
+        let sessionCount = cardio.count + pilates.count + activities.count
+        var parts: [String] = []
+        if let strength, strength.totalSets > 0 {
+            parts.append("\(strength.totalSets) set\(strength.totalSets == 1 ? "" : "s")")
+        }
+        if sessionCount > 0 {
+            parts.append("\(sessionCount) session\(sessionCount == 1 ? "" : "s")")
+        }
+        let totalCalories = (strength?.totalCalories ?? 0)
+            + cardio.reduce(0) { $0 + Int(($1.caloriesEst ?? 0).rounded()) }
+            + pilates.reduce(0) {
+                $0 + Int(CalorieEstimator.caloriesForPilates(minutes: Double($1.durationMinutes), bodyWeightLb: profile.weightLb).rounded())
+            }
+            + activities.reduce(0) { $0 + Int(($1.caloriesEst ?? 0).rounded()) }
+        if totalCalories > 0 { parts.append("~\(totalCalories) cal") }
         return parts.joined(separator: " · ")
     }
 
@@ -1558,6 +1620,87 @@ private struct TrainingHistorySheet: View {
         var s = "\(line.setCount) set\(line.setCount == 1 ? "" : "s") · \(line.totalReps) rep\(line.totalReps == 1 ? "" : "s")"
         if line.calories > 0 { s += " · ~\(line.calories) cal" }
         return s
+    }
+
+    @ViewBuilder
+    private func cardioLineRow(_ session: CardioSessionDTO) -> some View {
+        sessionLineRow(
+            icon: "figure.run",
+            title: session.type.label,
+            detail: "\(session.durationMinutes) min",
+            calories: Int((session.caloriesEst ?? 0).rounded()),
+            deleteLabel: "Delete \(session.type.label) session"
+        ) {
+            Repos.deleteCardioSession(ctx, id: session.id)
+        }
+    }
+
+    @ViewBuilder
+    private func pilatesLineRow(_ session: PilatesSessionDTO) -> some View {
+        let focus = session.focusAreas.first?.label ?? "Pilates"
+        let calories = Int(CalorieEstimator.caloriesForPilates(
+            minutes: Double(session.durationMinutes),
+            bodyWeightLb: profile.weightLb
+        ).rounded())
+        sessionLineRow(
+            icon: "figure.pilates",
+            title: "Pilates",
+            detail: "\(focus) · \(session.durationMinutes) min",
+            calories: calories,
+            deleteLabel: "Delete Pilates session"
+        ) {
+            Repos.deletePilatesSession(ctx, id: session.id)
+        }
+    }
+
+    @ViewBuilder
+    private func activityLineRow(_ session: ActivitySessionDTO) -> some View {
+        let symbol = ActivityCatalog.activity(id: session.activityId)?.symbol ?? "figure.mixed.cardio"
+        sessionLineRow(
+            icon: symbol,
+            title: session.activityName,
+            detail: "\(session.durationMinutes) min",
+            calories: Int((session.caloriesEst ?? 0).rounded()),
+            deleteLabel: "Delete \(session.activityName) session"
+        ) {
+            Repos.deleteActivitySession(ctx, id: session.id)
+        }
+    }
+
+    @ViewBuilder
+    private func sessionLineRow(
+        icon: String,
+        title: String,
+        detail: String,
+        calories: Int,
+        deleteLabel: String,
+        onDelete: @escaping () -> Void
+    ) -> some View {
+        HStack {
+            Image(systemName: icon)
+                .font(.system(size: 13))
+                .foregroundStyle(theme.accent)
+                .frame(width: 18)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(theme.text)
+                Text(calories > 0 ? "\(detail) · ~\(calories) cal" : detail)
+                    .font(.caption).foregroundStyle(theme.dim)
+            }
+            Spacer()
+            Button(role: .destructive) {
+                onDelete()
+                Haptics.warn()
+                toasts.show(Toast(title: "Session removed", detail: title, accent: .warn, symbol: "trash.fill"))
+            } label: {
+                Image(systemName: "minus.circle")
+                    .foregroundStyle(theme.warn)
+            }
+            .tactile(.ghost)
+            .accessibilityLabel(deleteLabel)
+        }
+        .padding(.vertical, 4)
     }
 
     private func removeLastSet(_ line: TrainingHistory.ExerciseLine) {

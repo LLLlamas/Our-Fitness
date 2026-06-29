@@ -21,7 +21,7 @@ struct EditTrackersSheet: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("trackers.")
+                    Text("Trackers")
                         .font(.system(size: 42, weight: .regular))
                         .foregroundStyle(theme.text)
                     Text("SHOW OR HIDE ANY METRIC")

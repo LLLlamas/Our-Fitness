@@ -22,8 +22,9 @@ struct WaterCard: View {
     init(profile: ProfileDTO) {
         self.profile = profile
         let uid = profile.id
+        let cutoff = Calendar.current.date(byAdding: .day, value: -365, to: Date()) ?? Date()
         _entryModels = Query(
-            filter: #Predicate<WaterEntryModel> { $0.userId == uid },
+            filter: #Predicate<WaterEntryModel> { $0.userId == uid && $0.timestamp >= cutoff },
             sort: \.timestamp, order: .forward
         )
         _goalFlOz = AppStorage(wrappedValue: Water.defaultGoalFlOz, "waterGoalFlOz.\(uid.uuidString)")
@@ -253,7 +254,7 @@ private struct WaterInfoSheet: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("water.")
+                    Text("Water")
                         .font(.system(size: 42, weight: .regular))
                         .foregroundStyle(theme.text)
                     Text("PERSONALIZED DAILY GOAL")
@@ -295,7 +296,7 @@ private struct WaterInfoSheet: View {
                         bullet("Water helps your body absorb nutrients and recover after training.")
                         bullet("Thirst is a good guide for most people — this goal is just a target to aim for, especially on hot or active days.")
                         if profile.mode == .circuit {
-                            bullet("Staying topped up makes the higher step counts in Circuit feel easier.")
+                            bullet("Staying topped up makes the higher step counts in Reset feel easier.")
                         }
                     }
                 }

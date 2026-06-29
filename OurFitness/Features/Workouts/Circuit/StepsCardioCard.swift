@@ -204,8 +204,8 @@ struct StepsCardioCard: View {
     @ViewBuilder
     private var secondaryStats: some View {
         HStack(spacing: 14) {
-            statCell(label: "Active cal · wk", value: "\(activeEnergyKcalThisWeek)")
-            statCell(label: "Exercise min · wk", value: "\(exerciseMinutesThisWeek)")
+            statCell(label: "Active cal · week", value: "\(activeEnergyKcalThisWeek)")
+            statCell(label: "Exercise min · week", value: "\(exerciseMinutesThisWeek)")
         }
     }
 
@@ -316,7 +316,7 @@ struct StepsCardioCard: View {
     @ViewBuilder
     private var stepsDeepDivePlaceholder: some View {
         VStack(spacing: 16) {
-            Text("steps.")
+            Text("Steps")
                 .font(.system(size: 48, weight: .regular))
                 .foregroundStyle(theme.text)
             Text("Hourly chart, week vs. last week, longest streak — coming in the next round.")
@@ -349,7 +349,7 @@ private struct CircuitStepsInfoSheet: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("steps & cardio.")
+                    Text("Steps & cardio")
                         .font(.system(size: 36, weight: .regular))
                         .foregroundStyle(theme.text)
                     Text("CIRCUIT — YOUR MOVEMENT ENGINE")

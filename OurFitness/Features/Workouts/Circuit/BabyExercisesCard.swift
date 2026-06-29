@@ -24,31 +24,31 @@ struct BabyExercisesCard: View {
     init(profile: ProfileDTO) {
         self.profile = profile
         let uid = profile.id
+        let dayStart = Calendar.current.startOfDay(for: Date())
         _exerciseModels = Query(filter: #Predicate { $0.profileId == uid })
-        _setModels = Query(filter: #Predicate { $0.userId == uid })
+        _setModels = Query(
+            filter: #Predicate<WorkoutSetModel> { $0.userId == uid && $0.timestamp >= dayStart },
+            sort: \.timestamp, order: .reverse
+        )
     }
 
     private var myExercises: [ExerciseDTO] {
         exerciseModels.map(\.snapshot).sorted { $0.name < $1.name }
     }
 
-    private var todayKey: String { Dates.dayKey() }
-
-    private func todayReps(for exercise: ExerciseDTO) -> Int {
-        let exId = exercise.id
-        return setModels
-            .filter { $0.exerciseId == exId && Dates.dayKey($0.timestamp) == todayKey }
-            .reduce(0) { $0 + $1.reps }
+    private var countsByExercise: [String: Int] {
+        setModels.reduce(into: [:]) { acc, set in
+            acc[set.exerciseId, default: 0] += set.reps
+        }
     }
 
     private var exercisesDoneToday: Int {
-        myExercises.filter { todayReps(for: $0) > 0 }.count
+        let counts = countsByExercise
+        return myExercises.filter { (counts[$0.id] ?? 0) > 0 }.count
     }
 
     private var todayTotalKcal: Double {
-        setModels
-            .filter { Dates.dayKey($0.timestamp) == todayKey }
-            .reduce(0) { $0 + ($1.caloriesEst ?? 0) }
+        setModels.reduce(0) { $0 + ($1.caloriesEst ?? 0) }
     }
 
     var body: some View {
@@ -59,11 +59,12 @@ struct BabyExercisesCard: View {
                     Text("No exercises yet. Head to Settings or ask to add one.")
                         .font(.callout).foregroundStyle(theme.dim)
                 } else {
+                    let counts = countsByExercise
                     ForEach(myExercises) { exercise in
                         ExerciseRow(
                             profile: profile,
                             exercise: exercise,
-                            todayCount: todayReps(for: exercise),
+                            todayCount: counts[exercise.id] ?? 0,
                             onLog: { amount in logActivity(exercise: exercise, amount: amount) },
                             onUndo: { undoLastSet(for: exercise) },
                             onDelete: { deleteExercise(exercise) }
@@ -176,12 +177,8 @@ struct BabyExercisesCard: View {
 
     private func undoLastSet(for exercise: ExerciseDTO) {
         let exId = exercise.id
-        let today = Dates.dayKey()
         // Find the most recently logged set today for this exercise (query already scoped to profile)
-        let todaySets = setModels
-            .filter { $0.exerciseId == exId && Dates.dayKey($0.timestamp) == today }
-            .sorted { $0.timestamp > $1.timestamp }
-        guard let latest = todaySets.first else { return }
+        guard let latest = setModels.first(where: { $0.exerciseId == exId }) else { return }
         Repos.deleteSet(ctx, id: latest.id)
         Haptics.warn()
         toasts.show(Toast(title: "Undone", detail: "\(exercise.name) · last rep removed",
@@ -527,7 +524,7 @@ private struct AddCircuitMovementSheet: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("add movement.")
+                    Text("Add movement")
                         .font(.system(size: 36, weight: .regular))
                         .foregroundStyle(theme.text)
                     Text("CIRCUIT · QUICK-LOG")

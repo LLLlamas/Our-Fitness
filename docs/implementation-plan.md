@@ -1,5 +1,7 @@
 # Our-Fitness — Implementation Plan (Round 1)
 
+> Archived planning note. Current source of truth is [../CLAUDE.md](../CLAUDE.md) plus [../AGENTS.md](../AGENTS.md). Several items below have shipped, moved, or changed names; do not treat the checkboxes as current backlog.
+
 Distilled from the 2026-05-26 planning conversation. This is the work to land before the daily loop is "solid enough to live in." Numbered phases run roughly in order; items within a phase can be parallel.
 
 ---
@@ -97,7 +99,7 @@ Currently seeds DB bench, DB row, etc. **Strip all strength from Reset.**
   - Active energy + exercise minutes secondary stats
 - [ ] **Pilates card** content:
   - "Log Pilates" PressableCard → modal: duration slider + focus-area chips (Core, Lower Back, Hips, Full Body, Flexibility) + optional notes
-  - Recent sessions strip (last 5)
+  - Today/yesterday sessions strip; older sessions live in Progress → Training history
   - Weekly frequency vs goal (default 3x/wk)
 - [ ] Habit-building: weekly streak indicator on each card. Persistent banner if she hits a 4-week+ streak. No streak-shame on breaks (per CLAUDE.md).
 
@@ -141,7 +143,7 @@ Use frontend-design agent for visual polish (see §10). Functional spec below.
 - Calendar heatmap (last 90 days) — color intensity by session duration
 - Focus-area breakdown — donut chart: % of sessions tagged each area, surfaces gaps ("you haven't logged Lower Back in 3 weeks")
 - Total minutes this month vs last
-- Recent sessions table — date, duration, focus tags, notes
+- Progress history table — date, duration, focus tags, notes
 
 ### 7c. Health markers modal (Reset-critical)
 - One card per marker: BP, LDL, HDL, triglycerides, A1c, fasting glucose, RHR
@@ -247,7 +249,7 @@ Ship §1–§5 before §6+. The daily loop is still the product.
 
 ---
 
-## 13. What's NOT in this round
+## 13. What's Not in this round
 
 - Apple Watch companion target (post-v1 still)
 - Notifications / Live Activities

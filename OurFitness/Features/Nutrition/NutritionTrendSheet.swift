@@ -25,7 +25,7 @@ struct NutritionTrendSheet: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("nutrition.")
+                    Text("Nutrition")
                         .font(.system(size: 42, weight: .regular))
                         .foregroundStyle(theme.text)
                     Text("CALORIES · LAST 30 DAYS · TARGET \(target)")

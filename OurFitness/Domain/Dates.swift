@@ -26,6 +26,12 @@ public enum Dates {
         return f
     }()
 
+    private static let timeAgoFallbackFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "EEE h:mm a"
+        return f
+    }()
+
     /// Local YYYY-MM-DD for a given Date (defaults to now).
     public static func dayKey(_ date: Date = Date()) -> String {
         dayFormatter.string(from: date)
@@ -64,6 +70,22 @@ public enum Dates {
         return out
     }
 
+    /// Local start of yesterday for the supplied clock time.
+    public static func startOfYesterday(now: Date = Date()) -> Date {
+        let cal = Calendar.current
+        let todayStart = cal.startOfDay(for: now)
+        return cal.date(byAdding: .day, value: -1, to: todayStart) ?? todayStart
+    }
+
+    /// True when `date` falls in today's or yesterday's local calendar day.
+    public static func isTodayOrYesterday(_ date: Date, now: Date = Date()) -> Bool {
+        let cal = Calendar.current
+        let todayStart = cal.startOfDay(for: now)
+        let yesterdayStart = startOfYesterday(now: now)
+        let tomorrowStart = cal.date(byAdding: .day, value: 1, to: todayStart) ?? now
+        return date >= yesterdayStart && date < tomorrowStart
+    }
+
     /// Whole days between two dayKeys.
     public static func daysBetween(_ a: String, _ b: String) -> Int {
         guard let da = date(fromDayKey: a), let db = date(fromDayKey: b) else { return 0 }
@@ -79,8 +101,6 @@ public enum Dates {
         if minutes < 60 { return "\(minutes)m ago" }
         let hours = minutes / 60
         if hours < 24 { return "\(hours)h ago" }
-        let f = DateFormatter()
-        f.dateFormat = "EEE h:mm a"
-        return f.string(from: ts)
+        return timeAgoFallbackFormatter.string(from: ts)
     }
 }

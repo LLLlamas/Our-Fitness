@@ -52,7 +52,7 @@ struct OurFitnessShortcuts: AppShortcutsProvider {
                 "Add food to \(.applicationName)",
                 "Track what I ate in \(.applicationName)",
             ],
-            shortTitle: "Log Meal",
+            shortTitle: "Log meal",
             systemImageName: "fork.knife"
         )
         AppShortcut(

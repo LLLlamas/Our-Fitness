@@ -1,4 +1,4 @@
-// Friction-free rep counter (Build mode). Tap +1 per rep, Save Set commits a WorkoutSet.
+// Friction-free rep counter (Build mode). Tap +1 per rep, Save set commits a WorkoutSet.
 // For isometric exercises, shows a countdown timer instead.
 
 import SwiftUI
@@ -139,7 +139,6 @@ private struct RepCounterView: View {
     private var tapButton: some View {
         Button {
             reps += 1
-            Haptics.tap()
         } label: {
             Text("+1 rep")
                 .font(.system(size: 22, weight: .semibold))
@@ -178,7 +177,7 @@ private struct RepCounterView: View {
             Button {
                 saveSet()
             } label: {
-                Text("Save Set")
+                Text("Save set")
             }
             .tactile(.primary, fill: theme.ok)
             .disabled(reps == 0)
@@ -359,7 +358,7 @@ private struct IsometricTimerView: View {
             secondsRemaining = pickedSeconds
             Haptics.bump()
         } label: {
-            Text("Start Hold")
+            Text("Start hold")
                 .font(.system(size: 22, weight: .semibold))
                 .frame(maxWidth: .infinity, minHeight: 88)
         }

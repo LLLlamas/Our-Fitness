@@ -1,7 +1,7 @@
 // Today tab — single-screen daily overview.
 //
 // Build mode:  macro rings | steps bar | recent food log
-// Circuit mode: macro rings | steps ring + pilates + movements (Train absorbed here)
+// Reset mode: macro rings | steps ring + pilates + movements (Train absorbed here)
 //
 // Circuit absorbs the Train tab so the daily workout loop lives in one place.
 
@@ -21,6 +21,7 @@ struct TodayView: View {
     @Query private var waterModels: [WaterEntryModel]
 
     @State private var entryToDetail: FoodLogEntryDTO?
+    @State private var showMealLog = false
 
     @AppStorage("hasBackfilled.steps") private var hasBackfilledRaw: String = ""
 
@@ -116,7 +117,7 @@ struct TodayView: View {
                     connectHealthCard
                 }
 
-                Text("today.")
+                Text("Today")
                     .font(.system(size: 56, weight: .regular))
                     .foregroundStyle(theme.text)
 
@@ -172,6 +173,17 @@ struct TodayView: View {
                 profile: profile,
                 onDone: { entryToDetail = nil }
             )
+            .themed(profile.mode)
+        }
+        .sheet(isPresented: $showMealLog) {
+            NLMealLogSheet(profile: profile, targetDate: today) { dto in
+                Repos.addFoodLog(ctx, dto)
+                toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
+                let foodName = dto.foodId ?? dto.customName ?? ""
+                if !foodName.isEmpty {
+                    FoodAlternativeService.shared.prefetch(for: foodName, mode: profile.mode)
+                }
+            }
             .themed(profile.mode)
         }
     }
@@ -330,9 +342,30 @@ struct TodayView: View {
                 .font(.system(size: 22, weight: .regular))
                 .foregroundStyle(theme.text)
             if todaysLogs.isEmpty {
-                Text("Nothing logged yet. Head to Meals to add one.")
-                    .font(.callout).foregroundStyle(theme.dim)
+                PressableCard(action: { showMealLog = true }) {
+                    HStack(spacing: 12) {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.system(size: 22))
+                            .foregroundStyle(theme.accent)
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Log a meal")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundStyle(theme.text)
+                            Text("Quick text entry for today")
+                                .font(.caption)
+                                .foregroundStyle(theme.dim)
+                        }
+                        Spacer(minLength: 0)
+                    }
+                }
             } else {
+                Button {
+                    showMealLog = true
+                } label: {
+                    Label("Add meal", systemImage: "plus.circle.fill")
+                }
+                .tactile(.pill, fill: theme.accent)
+
                 ForEach(todaysLogs) { e in
                     PressableCard(action: { entryToDetail = e }) {
                         HStack {

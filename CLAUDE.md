@@ -1,22 +1,22 @@
 # Our-Fitness — Foundation (iOS / SwiftUI)
 
-Native iOS app targeting App Store release. Two modes: **Build** (gain mass) and **Circuit** (drop weight, fix cardiovascular markers).
+Native iOS app targeting App Store release. Two modes: **Build** (gain mass) and **Reset** (drop weight, fix cardiovascular markers).
 
-> `Mode.circuit` Swift symbol; SwiftData raw value `"reset"` for back-compat. `_stashed/` = excluded from build target.
+> User-facing copy says **Reset**. `Mode.circuit` remains the Swift symbol and SwiftData raw value `"reset"` for back-compat; do not rename it without a schema migration. `_stashed/` = excluded from build target.
 > One profile per install (`Components/ProfileAvatar.swift`). Phase 2/3 roadmap: [docs/app-expansion.md](docs/app-expansion.md).
 
 ---
 
 ## Modes
 
-| | Build | Circuit |
+| | Build | Reset |
 |---|---|---|
 | Calories | TDEE + 400–600 | TDEE − 300–500 |
 | Protein g/lb | ~1.0 | 1.0–1.2 |
 | Steps/day | 8,000 | 10,000 |
-| Workouts | rep/set, isometric holds, user exercises | baby exercises, pilates, steps |
+| Workouts | rep/set, isometric holds, user exercises | parenting movements, Pilates, steps |
 
-Circuit auto-seeds: Lifted Baby (30 lb), Lifted Stroller (25 lb), Carried Baby (30 lb). Isometric exercises: `isIsometric: true` on `ExerciseDTO`; hold saves `WorkoutSetModel{reps:1, holdSeconds:N}`; calorie: `CalorieEstimator.caloriesForIsometric`. `MacroTargets.{sodium,addedSugar,saturatedFat,fiber}` populate for Circuit and are surfaced via `Components/HeartHealthCard.swift` (fiber floor + sodium/addedSugar/satFat caps) in `NutritionView`; remaining headroom is computed by `Domain/MacroBudget.swift` → `RemainingMacros`. Build leaves all four nil.
+Reset auto-seeds: Lifted Baby (30 lb), Lifted Stroller (25 lb), Carried Baby (30 lb). Isometric exercises: `isIsometric: true` on `ExerciseDTO`; hold saves `WorkoutSetModel{reps:1, holdSeconds:N}`; calorie: `CalorieEstimator.caloriesForIsometric`. `MacroTargets.{sodium,addedSugar,saturatedFat,fiber}` populate for Reset and are surfaced via `Components/HeartHealthCard.swift` (fiber floor + sodium/addedSugar/satFat caps) in `NutritionView`; remaining headroom is computed by `Domain/MacroBudget.swift` → `RemainingMacros`. Build leaves all four nil.
 
 ---
 
@@ -28,7 +28,7 @@ OurFitness/
   Domain/       ← PURE Swift. No SwiftUI/SwiftData. Fully unit-tested.
   Data/         ← SwiftData @Model classes + Repositories/
   Services/     ← HealthKit, Theme, Haptics, ToastCenter
-  Features/     ← Onboarding, Today, Nutrition, Workouts (Build + Circuit/), Progress, Settings
+  Features/     ← Onboarding, Today, Nutrition, Workouts (Build + Reset UI under legacy Circuit/ folder), Progress, Settings
   Components/   ← ProgressBar, ProgressRing, Card, Banner, AnimatedNumber, TactileButtonStyle…
 _stashed/       ← Outside build target; pending rework
 OurFitnessTests/ ← Hostless XCTest for Domain/* only
@@ -60,14 +60,14 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | Delete set / exercise | `Repos.deleteSet` / `Repos.deleteExercise` + `SetHistorySheet` in `Features/Workouts/WorkoutsView.swift` |
 | Log pilates | `Repos.logPilatesSession` + `Domain/Models.swift` (`PilatesSessionDTO`) |
 | Log cardio | `Repos.logCardio` + `Domain/Models.swift` (`CardioSessionDTO`) |
-| Circuit movements | `Features/Workouts/Circuit/BabyExercisesCard.swift` |
+| Reset movements | `Features/Workouts/Circuit/BabyExercisesCard.swift` (legacy folder name) |
 | Live sessions (timer) | `Features/Workouts/LiveSessionCard.swift` + `Domain/LiveSessionState.swift` + `Services/LiveSessionService.swift` |
 | Live Activity (Lock Screen) | `OurFitnessWidgets/LiveSessionLiveActivity.swift` + `Services/LiveSessionActivityController.swift` — [docs/live-activity-setup.md](docs/live-activity-setup.md) |
 | Exercise MET / muscles | `Domain/ExerciseInfo.swift` → `namedMeta` (first-match order matters; specific before general) |
 | Canonical exercise catalog | `Domain/ExerciseInfo.swift` → `catalog` (public, alphabetical, sourced from `namedMeta`) / `catalogEntry(named:)` |
 | AI exercise insights | `Services/ExerciseInsightService.swift` (iOS 26+, graceful fallback) |
 | AI "what to work on?" suggestions | `Services/WorkoutSuggestionService.swift` (iOS 26+; picks from `catalog`, text-only) + fallback `Domain/ExerciseGoalMatcher.swift` (goal→muscles→exercises, research reasons) → `WorkoutGoalSheet` in `Features/Workouts/WorkoutsView.swift`. Tests: `OurFitnessTests/ExerciseGoalMatcherTests.swift` |
-| Recent sets (today only) | `SetHistorySheet` in `Features/Workouts/WorkoutsView.swift` — @Query bounded to `timestamp >= startOfDay`; full history is in Progress |
+| Recent sessions rule | Today/Train surfaces show today + yesterday only (sets sheet is today-only); older strength, live, cardio, and Pilates sessions live in Progress → Training history |
 | Live-session activities | `Domain/ActivityCatalog.swift` |
 | **Nutrition** | |
 | Food parser (NL → macros) | `Domain/FoodParser.swift` + `Domain/CommonFoods.swift` + `Domain/SQLiteFoodDatabase.swift`. Keystroke = curated only; submit = full USDA DB |
@@ -82,16 +82,16 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | Meal suggestions | `Domain/SuggestedMeals.swift` → `ranked(...)` (optional `recentLogs:`/`favoriteFoodIds:` give an affinity boost; `isPersonalised(...)` flags boosted meals) |
 | Personalised recs / most-logged foods | `Domain/FoodAffinity.swift` → `mostLoggedIds(_:days:limit:end:)` / `frequencyByFoodId(_:days:end:)` (30-day window over foodIds incl. ingredients); fed into `SuggestedMeals.ranked` from `NutritionView` |
 | Meal-logging streak (consecutive days) | `Domain/Streaks.swift` → `loggingStreak(_:minEntriesPerDay:endDate:)`; milestone copy `Domain/EncouragementEngine.swift` → `mealStreakMessage(days:mode:)` (3/7/14/30/60/100); toast `Services/ToastCenter.swift` → `mealStreak(days:mode:)`; chip + milestone toast in `Features/Nutrition/NutritionView.swift` |
-| Circuit heart-health micros (fiber floor + sodium/sugar/satfat caps) | `Components/HeartHealthCard.swift` (Circuit-only; no-op if targets have no caps) — rendered in `NutritionView` after the totals card |
+| Reset heart-health micros (fiber floor + sodium/sugar/satfat caps) | `Components/HeartHealthCard.swift` (Reset-only; no-op if targets have no caps) — rendered in `NutritionView` after the totals card |
 | Remaining macros / headroom under caps | `Domain/MacroBudget.swift` → `remaining(totals:targets:)` returns `RemainingMacros` (caps = room left, negative when over; fiber = signed distance to floor; all four nil in Build) |
 | Personal meal templates | `Domain/Models.swift` (`SavedMealTemplateDTO`) + `Data/PersistenceModels.swift` (`SavedMealTemplateModel`) |
 | Weekly nutrition trend | `Domain/NutritionHistory.swift` + `Features/Nutrition/NutritionTrendSheet.swift` |
 | Calorie math | `Domain/Targets.swift` only |
-| Target rationale copy | `Domain/TargetRationale.swift` (spell out acronyms; "cal" not "kcal"); Circuit micro copy `fiberWhy`/`sodiumWhy`/`addedSugarWhy`/`saturatedFatWhy(for:)` (used by `HeartHealthCard` info sheet) |
+| Target rationale copy | `Domain/TargetRationale.swift` (spell out acronyms; "cal" not "kcal"); Reset micro copy `fiberWhy`/`sodiumWhy`/`addedSugarWhy`/`saturatedFatWhy(for:)` (used by `HeartHealthCard` info sheet) |
 | **Today / Steps** | |
 | Move card (2×3 cols) | `Features/Today/MoveCard.swift` — row 1: Apple Total · Our Total Estimate · Training Only; row 2: Distance · Flights · Heart Rate. Single `metricColumn` helper (uniform 22pt value font, no differential shrink). `activityRow(kcal:)` takes `Int` |
 | Steps (Build) | `Features/Today/StepsCard.swift` |
-| Steps + cardio (Circuit) | `Features/Workouts/Circuit/StepsCardioCard.swift` |
+| Steps + cardio (Reset) | `Features/Workouts/Circuit/StepsCardioCard.swift` (legacy folder name) |
 | Water tracker (Sip preset + day-streak) | `Domain/Water.swift` (4 oz "Sip" cup preset; `streak(_:goalFlOz:end:)`) + `Features/Today/WaterCard.swift` (`AppStorage "waterGoalFlOz.\(profileId)"`; streak chip; `GlassIcon` `.sip` size) |
 | Step milestones / goals | `Domain/Movement.swift` (`defaultStepMilestones`). Per-profile override: `AppStorage "stepsGoal.\(profileId.uuidString)"` |
 | Today burn estimate | `Domain/DailyBurn.swift` → `metEstimate` |
@@ -102,7 +102,7 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | Show/hide trackers | `Features/Progress/EditTrackersSheet.swift` — `AppStorage "progressStats.\(profileId)"` |
 | Training volume | `Features/Progress/ProgressView.swift` → `StatKind.trainingVolume` |
 | Calorie intake vs activity burn | `Domain/EnergyBalance.swift` → `byDay(...)` / `averages(_:)` (intake = `DailyTotals`; burn = `DailyBurn.metEstimate`, walks excluded). Card `energyBalanceCard` (both modes) in `Features/Progress/ProgressView.swift` → detail `Features/Progress/EnergyBalanceDetailSheet.swift` (Charts: intake bars vs burn line + target rule). Tests: `OurFitnessTests/EnergyBalanceTests.swift` |
-| Training history (cross-day) | `Domain/TrainingHistory.swift` → `sessions(sets:exercises:)` (per-day groups, newest first) → `trainingHistoryCard` + `TrainingHistorySheet` in `Features/Progress/ProgressView.swift` (per-line "remove a set" delete). Tests: `OurFitnessTests/TrainingHistoryTests.swift` |
+| Training history (cross-day) | `Domain/TrainingHistory.swift` → strength grouping + `TrainingHistorySheet` in `Features/Progress/ProgressView.swift` for strength, live, cardio, and Pilates sessions. Tests: `OurFitnessTests/TrainingHistoryTests.swift` |
 | Tracker display order | alphabetical by `StatKind.title` at the two render sites (`visibleStats` + `EditTrackersSheet` ForEach); never reorder the enum (persisted CSV) |
 | **Settings / Profile** | |
 | Edit vitals | `Repos.updateVitals` + `Features/Settings/SettingsView.swift` → `EditVitalsSheet` |
@@ -166,7 +166,7 @@ LDL/HDL/cholesterol/A1c not from Apple Health (lab-only) — manual entry.
 
 ## Design rules
 
-- **Build:** warm dark, orange/amber/cream · **Circuit:** warm light, sage/terracotta
+- **Build:** warm dark, orange/amber/cream · **Reset:** warm light, sage/terracotta
 - **"cal" not "kcal"** in all UI strings
 - Every interaction: state change + spring animation + haptic + (wins) toast
 
@@ -196,7 +196,7 @@ Full incident narratives: [docs/ci-history.md](docs/ci-history.md). Setup: [docs
 - **XcodeGen:** never `info:` or `entitlements:` blocks on target — use `INFOPLIST_FILE`/`CODE_SIGN_ENTITLEMENTS` build settings only.
 - **Entitlement missing?** Ladder: latest build → App ID capability → profile has it → `.xcarchive` → IPA.
 - **Xcode 26:** version-sorted glob (not hardcoded). Build dest: `platform=iOS Simulator,name=iPhone 17`. All 4 orientations in `Info.plist`.
-- Secrets: `APPLE_TEAM_ID`, `APP_STORE_CONNECT_API_*`, `KEYCHAIN_PASSWORD`, `MATCH_GIT_URL`, `MATCH_PASSWORD`, `MATCH_GIT_BASIC_AUTHORIZATION`
+- Secrets: `APPLE_TEAM_ID`, `APP_STORE_CONNECT_API_*`, `KEYCHAIN_PASSWORD`, `MATCH_GIT_URL`, `MATCH_PASSWORD`, `MATCH_GIT_BASIC_AUTHORIZATION`, `APPSTORE_PROFILE_BASE64`, `APPSTORE_WIDGET_PROFILE_BASE64`
 
 ---
 

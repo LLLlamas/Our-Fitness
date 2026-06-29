@@ -18,7 +18,7 @@ public enum Mode: String, Codable, CaseIterable, Sendable {
     public var displayName: String {
         switch self {
         case .build:   return "Build"
-        case .circuit: return "Circuit"
+        case .circuit: return "Reset"
         }
     }
 

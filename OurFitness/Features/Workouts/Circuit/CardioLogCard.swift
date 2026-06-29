@@ -17,15 +17,21 @@ struct CardioLogCard: View {
     init(profile: ProfileDTO) {
         self.profile = profile
         let target = profile.id
+        var cal = Calendar(identifier: .iso8601)
+        cal.firstWeekday = 2
+        let weekStart = cal.dateInterval(of: .weekOfYear, for: Date())?.start ?? Dates.startOfYesterday()
+        let cutoff = min(weekStart, Dates.startOfYesterday())
         _sessionModels = Query(
-            filter: #Predicate<CardioSessionModel> { $0.profileId == target },
+            filter: #Predicate<CardioSessionModel> { $0.profileId == target && $0.date >= cutoff },
             sort: \.date,
             order: .reverse
         )
     }
 
     private var sessions: [CardioSessionDTO] { sessionModels.map(\.snapshot) }
-    private var recent: [CardioSessionDTO] { Array(sessions.prefix(5)) }
+    private var recent: [CardioSessionDTO] {
+        Array(sessions.filter { Dates.isTodayOrYesterday($0.date) }.prefix(5))
+    }
     private var minutesThisWeek: Int {
         var cal = Calendar(identifier: .iso8601)
         cal.firstWeekday = 2  // Monday-anchored, matches Movement.sessionsThisWeek
@@ -47,7 +53,7 @@ struct CardioLogCard: View {
                     .font(.system(size: 22, weight: .regular))
                     .foregroundStyle(theme.text)
                 Spacer()
-                Text("\(minutesThisWeek) min · wk")
+                Text("\(minutesThisWeek) min · week")
                     .font(.system(.footnote, design: .monospaced))
                     .foregroundStyle(theme.accent)
             }
@@ -70,7 +76,7 @@ struct CardioLogCard: View {
 
             if !recent.isEmpty {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Recent")
+                    Text("Today & yesterday")
                         .font(.caption).tracking(2).textCase(.uppercase)
                         .foregroundStyle(theme.dim)
                     ForEach(recent) { s in
@@ -129,7 +135,7 @@ private struct CardioLogSheet: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
-                Text("log cardio.")
+                Text("Log cardio")
                     .font(.system(size: 42, weight: .regular))
                     .foregroundStyle(theme.text)
 

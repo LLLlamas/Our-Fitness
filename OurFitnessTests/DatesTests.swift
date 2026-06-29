@@ -22,6 +22,19 @@ final class DatesTests: XCTestCase {
         XCTAssertEqual(Dates.daysBetween("2026-05-20", "2026-05-24"), 4)
     }
 
+    func test_isTodayOrYesterday_uses_local_day_window() {
+        let cal = Calendar(identifier: .gregorian)
+        let now = cal.date(from: DateComponents(year: 2026, month: 5, day: 24, hour: 12))!
+        let yesterday = cal.date(from: DateComponents(year: 2026, month: 5, day: 23, hour: 1))!
+        let older = cal.date(from: DateComponents(year: 2026, month: 5, day: 22, hour: 23))!
+        let tomorrow = cal.date(from: DateComponents(year: 2026, month: 5, day: 25, hour: 0))!
+
+        XCTAssertTrue(Dates.isTodayOrYesterday(now, now: now))
+        XCTAssertTrue(Dates.isTodayOrYesterday(yesterday, now: now))
+        XCTAssertFalse(Dates.isTodayOrYesterday(older, now: now))
+        XCTAssertFalse(Dates.isTodayOrYesterday(tomorrow, now: now))
+    }
+
     func test_formatTimeAgo_just_now() {
         XCTAssertEqual(Dates.formatTimeAgo(Date().addingTimeInterval(-1)), "just now")
     }

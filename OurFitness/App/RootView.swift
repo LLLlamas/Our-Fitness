@@ -136,7 +136,7 @@ struct RootView: View {
         let theme = Theme.for(profile.mode)
         HStack(spacing: 10) {
             ProfileAvatar(profile: profile, onTap: { showSettings = true })
-            Text("our-fitness.")
+            Text("Our Fitness")
                 .font(.system(size: 22, weight: .regular))
                 .foregroundStyle(theme.text)
             Spacer()
