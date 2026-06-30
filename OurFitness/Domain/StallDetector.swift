@@ -114,6 +114,10 @@ public enum StallDetector {
     /// Weeks a marker has sat flat (< 5% drift) versus its most recent reading that's
     /// at least `markerStallWeeks` old. nil when there's no old-enough reading to
     /// compare against, or the marker actually moved ≥ 5% (improved or worsened).
+    ///
+    /// Not `Trends.weeksStalled`: that returns the span back to the last ≥5% move, so
+    /// a marker that *improved* recently would read as "stalled for that span". Here a
+    /// ≥6-week-old baseline is required and a real move (either direction) returns nil.
     private static func flatMarkerWeeks(_ markers: [HealthMarkerDTO], kind: HealthMarkerKind, now: Date) -> Int? {
         let series = Trends.markerSeries(markers, kind: kind)   // ascending by date
         guard let latest = series.last else { return nil }

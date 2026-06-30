@@ -311,7 +311,10 @@ struct TodayView: View {
         }
 
         // Keep-going (stall) nudge — at most once per calendar day, lowest priority.
-        // `detect` returns nil for active users, so most days this is a no-op.
+        // `detect` returns nil for active users, so most days this is a no-op. The day
+        // key is set regardless of outcome (not only when a nudge fires): every stall
+        // threshold is day-granular, so a stall can't newly flip true later the same
+        // day, and this keeps the 30-min timer ticks from re-running detect all day.
         if stallNudgeEnabled, stallNudgeDayKey != dayKey {
             stallNudgeDayKey = dayKey
             if let stall = StallDetector.detect(
