@@ -1,256 +1,28 @@
-# Our-Fitness — Foundation (iOS / SwiftUI)
+# Our-Fitness — agent guide
 
-Native iOS app for two specific humans, two specific modes. **Build** (gain mass, fuel hoops) and **Circuit** (drop weight, fix markers). One device per person, one mode per person, one philosophy: **show up, log honestly, let the numbers tell the truth over time.**
+Native iOS / SwiftUI app (App Store target). One profile per install. Two modes:
 
-Purpose-built for these two. Don't generalize for a third.
+- **Build** — gain lean mass. Picky-eater hardgainer + basketball. Calorie surplus, hypertrophy (6–12 reps), nut-free allergen lock.
+- **Circuit** — drop weight, fix heart-health markers (cholesterol, BP, blood sugar). Steps + cardio + Pilates + parenting movements; fibre-forward, low-sodium. No allergens.
 
----
+> `Mode.circuit` is the Swift symbol; its SwiftData raw value stays `"reset"` for back-compat (needs a schema migration to change). All UI copy says "Circuit".
 
-## The two humans, the two modes
+**`CLAUDE.md` is the source of truth** — codebase map, the "Where to touch" routing table, calorie math, design rules, schema, and CI specifics. Read it first; this file is only the non-negotiable guardrails.
 
-**Build** — gain lean mass, keep playing. Picky-eater hardgainer, basketball 4–5×/week, struggles to eat enough. Enemy is *under-fueling*. Nut-free allergen lock. Food library: the familiar short list (smoothies, spam, rice, eggs, pizza, chocolate milk, nuggets — see [nutrition-plan-research.md](nutrition-plan-research.md)).
+## Hard rules (breaking these breaks the app)
 
-**Circuit** — drop weight, fix the markers. Real labs to move: elevated cholesterol, BP, blood sugar. Enemy is *dense empty calories + sodium creep*. **No food restrictions or allergies.** Food library: DASH + Mediterranean leaning — leafy greens, legumes, whole grains, oily fish, olive oil, nuts/seeds, low sodium, high fiber.
+1. `Domain/` never imports SwiftData or SwiftUI — pure Swift, fully unit-tested.
+2. `Features/` use repositories or `@Query`, never open the `ModelContainer` directly.
+3. Per-profile `@Query` must predicate-scope (`#Predicate { $0.userId == uid }`) — never `.filter` client-side.
+4. HealthKit only via `Services/HealthKitService.swift`. Call `requestAuthorization` ONLY from an explicit user Connect flow (it throws an uncatchable NSException); add only quantity types to read/write sets (correlation types crash auth).
+5. `.swift` filenames unique in the target; all `@Model` classes live in `Data/PersistenceModels.swift`.
+6. Append-only logs; derived figures (daily/weekly/streak) are never stored. DTOs in `Domain/Models.swift`, `@Model` in `Data/PersistenceModels.swift` with `snapshot` adapters, CRUD in `Data/Repositories/Repositories.swift`.
+7. Never hardcode kcal — `MET × bodyWeightKg × hours` (`Domain/CalorieEstimator.swift`). Food/exercise numbers are real (USDA / reference), never model-invented.
 
-| | Build | Circuit |
-|---|---|---|
-| Calories | TDEE + 400–600 | TDEE − 300–500 |
-| Protein g/lb | ~1.0 | 1.0–1.2 |
-| Caps | none beyond macros | sodium ≤1,500 mg, added sugar ≤25 g, sat fat <10%, fiber ≥35 g |
-| Steps/day | 8,000 baseline (hoops adds more) | 10,000 (#1 lever for BP/insulin/LDL) |
-| Suggestion bias | calorie-dense, liquid-friendly, frequency | fiber-dense, satiety, omega-3, low-sodium |
-| Workouts | hypertrophy, 6–12 reps, double-progression | 2–3 strength + 3–4 zone-2 cardio, RPE cap 7 |
+## Build / CI (mac-less)
 
-The two modes share **infrastructure**, not **content**. Resist merging the food libraries with a `mode` tag — they have different philosophies.
+- No local Xcode. Loop: **push → `compile.yml` builds + tests → patch → push.** Green CI = it builds.
+- Tests are **hostless** — `OurFitnessTests` compiles `Domain/` directly, no `@testable import`. Never use a bare `Date()` in streak/weekly tests; pin `now`.
+- XcodeGen (`project.yml`) generates the gitignored `.xcodeproj`. Never put `info:`/`entitlements:` blocks on a target — use `INFOPLIST_FILE` / `CODE_SIGN_ENTITLEMENTS` settings.
 
----
-
-## Tech stack (locked)
-
-- **SwiftUI** (iOS 17+) — declarative UI, native feel, free dark mode
-- **SwiftData** — persistence (SQLite under the hood, `@Model` classes, schema versioning via `VersionedSchema`)
-- **HealthKit** — steps, weight, resting HR, active energy ingest (and optional write-back for logged workouts)
-- **Swift Charts** — built-in trend visualization, no third-party deps
-- **XCTest** — domain layer fully unit-tested
-- **XcodeGen** (`project.yml` → `.xcodeproj`) — `.xcodeproj` is git-ignored; regenerated in CI every run
-- **Fastlane** (Fastfile lanes: `tests`, `compile`, `beta`) — handles signing via App Store Connect API key, no manual `.p12` ever
-- **GitHub Actions** — two workflows: `compile.yml` (every push, 3 min feedback) and `testflight.yml` (manual / `v*` tag, ships to TestFlight)
-- **No backend.** Each device is the source of truth. Future CloudKit sync is one entitlement away if we ever want it.
-
-### Mac-less workflow (lead dev is on Windows)
-
-There is no local Xcode. The dev loop is **push → CI tells you if it compiles → patch → push again**. Full setup and daily-loop instructions live in [README.md](README.md). Key implications for working in this codebase:
-
-- Don't add Mac-only steps to documentation (Xcode previews, local fastlane, `xcodegen generate` from a Mac, etc.) without flagging them as "optional, Mac-only."
-- The compile workflow is the source of truth for "does this build" — if it's green, ship it.
-- Strict concurrency is set to **minimal** in `project.yml` during scaffolding to avoid Sendable churn blocking iteration. Bump to `complete` later when the surface is stable.
-- **CI Xcode:** both workflows run `macos-26`. Xcode is selected dynamically — the **Select Xcode 26** step disables `*beta*.app` by rename, globs `Xcode_26*.app`, drops dangling symlinks, picks the highest valid via `sort -V`, and exports both `DEVELOPER_DIR` and `PATH`. Never hard-code a point-release Xcode app name. Both the build step and the test step use a concrete simulator destination (`platform=iOS Simulator,name=iPhone 17`) with **no `OS=` suffix** — **never `generic/platform=iOS Simulator`**. The build step also passes `ASSETCATALOG_COMPILER_SKIP_APP_STORE_DEPLOYMENT=YES` to suppress actool's SDK-version thinning pass. When the runner image upgrades and the named device disappears, update the destination in both `compile.yml` and `fastlane/Fastfile` to the newest iPhone model present in the available destinations list printed in the xcodebuild error.
-
-### Why native over web wrapper
-HealthKit only works in native iOS apps. Capacitor/PWA can't read step counts. We want phone-as-sensor passively, so native is the only path. Side benefits: real push notifications, Live Activities, Shortcuts intents, App Intents for Siri, Lock Screen widgets — all available later without re-platforming.
-
-### Why SwiftData over Core Data / GRDB
-SwiftData is Apple's modern wrapper, integrates natively with SwiftUI `@Query`, supports CloudKit sync via a single flag, has clean schema migration via `VersionedSchema`. Backing store is still SQLite — durability is identical. For an app this size, the dev velocity wins.
-
----
-
-## Codebase map
-
-```
-OurFitness/
-  App/
-    OurFitnessApp.swift          ← @main entry, ModelContainer wiring
-    RootView.swift               ← profile gate, tab bar, theme injection
-  Domain/                        ← PURE Swift. No SwiftUI/SwiftData. Fully tested.
-    Models.swift                 ← Mode, Sex, ActivityLevel, MacroTargets, DTOs
-    Dates.swift                  ← dayKey, lastNDays, formatTimeAgo
-    Targets.swift                ← Mifflin-St Jeor + mode adjustments
-    CommonFoods.swift            ← curated food library
-    SQLiteFoodDatabase.swift     ← bundled USDA lookup
-    SuggestedMeals.swift         ← ranked meal suggestions
-    Progression.swift            ← linear / double-prog / RPE strategies
-    Trends.swift                 ← rolling avg, weekly weight delta, marker stall
-    Streaks.swift                ← adherence (≥80% cal target days in a row)
-    Steps.swift                  ← step rollups + hit-rate + dense series
-  Data/
-    ModelContainer+App.swift     ← SwiftData container + ModelConfiguration
-    Schema.swift                 ← VersionedSchema + MigrationPlan
-    PersistenceModels.swift      ← @Model classes and snapshot adapters
-    Repositories/                ← Query helpers, batch operations, seeders
-    Seed/
-      Seeder.swift               ← idempotent on launch
-  Services/
-    HealthKitService.swift       ← steps, weight, RHR; auth + observers + writes
-    Theme.swift                  ← mode → color/font tokens (light + dark)
-  Features/
-    Onboarding/                  ← profile creation flow
-    Today/                       ← daily anchor view: macros, movement, water, log
-    Nutrition/                   ← meal log, parser, library, suggestions
-    Workouts/                    ← shared Train tab; Circuit movement cards under Circuit/
-    Progress/                    ← trends, markers, energy balance, training history
-    Settings/                    ← profile, mode, units, Health permissions
-  Components/                    ← ProgressBar, Banner, StatBlock, Card
-  Resources/usda-foods.db        ← bundled food database
-  Assets.xcassets/               ← AppIcon, AccentColor, LaunchBackground
-  Info.plist                     ← HealthKit usage strings (App Store requirement)
-  OurFitness.entitlements        ← HealthKit capability
-Shared/                          ← Live Activity attributes shared with widget
-OurFitnessWidgets/               ← Live Activity / widget extension
-OurFitnessTests/                 ← XCTest suites for Domain/* only
-fastlane/
-  Fastfile                       ← lanes: tests, compile, beta
-  Appfile                        ← bundle id + team id wiring
-Gemfile                          ← Fastlane version pin
-scripts/
-  generate-icon.sh               ← idempotent AppIcon placeholder generator
-  build-food-db.py               ← rebuild bundled food database
-  validate-ci-invariants.sh      ← CI guardrails
-.github/workflows/
-  compile.yml                    ← every push/PR: build + test, no signing
-  testflight.yml                 ← manual or v* tag: sign + ship via fastlane
-project.yml                      ← XcodeGen — single source of truth for project layout
-_stashed/                        ← excluded from target; historical/pending work
-```
-
-**Three architecture rules to keep clean:**
-1. **`Domain/` never imports `SwiftData` or `SwiftUI`.** Pure structs and functions, easy to test.
-2. **`Features/` never opens the SwiftData container directly.** Uses repositories or `@Query` projections.
-3. **HealthKit access goes through `HealthKitService`** — never call `HKHealthStore` from a view.
-4. **All `.swift` filenames within the target must be unique** (Swift compiler requirement). The persistence `@Model` classes live in `Data/PersistenceModels.swift` — don't name any new file `Models.swift`.
-
----
-
-## Where to touch for common changes
-
-| Goal | Files |
-|---|---|
-| Add a new exercise | `Data/Seed/Exercises.swift` |
-| Add a Build food | `Data/Seed/FoodsBuild.swift` |
-| Add a Circuit food | `Domain/CommonFoods.swift` (curated) / `Domain/SuggestedMeals.swift` (`circuit` meals) |
-| New starter program | `Data/Seed/Programs.swift` |
-| Tweak mode caps (sodium/sugar/fiber) | `Domain/Targets.swift` (`ModeRules`) |
-| Change how meals are scored | `Domain/Score.swift` (shared) + `Domain/Suggestions.swift` (mode weights) |
-| Change calorie math | `Domain/Targets.swift` only |
-| New workout progression scheme | `Domain/Progression.swift` — add to the strategy switch |
-| Adjust 14-day auto-adjust thresholds | `Domain/Targets.swift` (`suggestAdjustment`) |
-| Add a tracked health marker | `Domain/Models.swift` (`HealthMarkerKind`) → `Features/Progress/ProgressView.swift` (`resetMarkers` array) |
-| Change daily steps goal | `Domain/Targets.swift` (`ModeRules.stepsDaily`) |
-| Wire a new HealthKit metric | `Services/HealthKitService.swift` + add `@Model` snapshot type if persisted |
-| New tab in the app shell | `App/RootView.swift` `Tab` enum + new folder under `Features/` |
-| Schema change | `Data/Schema.swift` — add a new `VersionedSchema` and migration stage. Never edit shipped schemas. |
-| Add HealthKit permission | `OurFitness.entitlements` (capability) + `Info.plist` (`NSHealthShareUsageDescription`) + `HealthKitService.requestAuth` |
-| Change press feel / variants | `Components/TactileButtonStyle.swift` (`resolved(theme:)` switch) |
-| Change haptic vocabulary | `Services/Haptics.swift` |
-| New toast accent / haptic pairing | `Services/ToastCenter.swift` (`ToastAccent` enum + `fireHaptic(for:)`) |
-| Tweak target-hit flash on bars | `Components/ProgressBar.swift` (`onChange(of: value)` block) |
-| Recent sessions/history | Today/Train show today + yesterday only; older strength, live, cardio, and Pilates sessions live in `Features/Progress/ProgressView.swift` training history |
-
----
-
-## Data model essentials
-
-All entities namespaced per `Profile`. Append-only logs (sets, food entries, body metrics, markers). Daily/weekly/streak/trend figures are *derived*, never stored.
-
-`Domain/Models.swift` holds the value-type DTOs used by domain functions and view state. `Data/PersistenceModels.swift` holds matching `@Model` classes used for persistence. A small adapter on each `@Model` (`var snapshot: ProfileDTO { ... }`) keeps the boundary explicit and tests cheap.
-
-Headline entities:
-- `Profile` — name, mode, biometrics, activity, restrictions, `computedTargets`
-- `MacroTargets` — calories/protein/carbs/fat + `stepsDaily`, plus optional Circuit caps
-- `Exercise`, `WorkoutSet`, `Workout`, `Program` — full gym programming
-- `Food`, `FoodLogEntry` — `modeFit` gates suggestions; log entries denormalize macros
-- `BodyMetric` — weight, body-fat, waist
-- `HealthMarker` — BP, LDL/HDL, triglycerides, A1c, fasting glucose, resting HR (Circuit-critical)
-- `StepCount` — one row per user per day (UPSERT); `source: .manual | .appleHealth`
-
----
-
-## Mode behaviors
-
-**Suggestion algorithm** (same shape, different scoring): filter by `modeFit`, allergens, slot; for Circuit also filter against today's remaining sodium/sugar/sat-fat headroom. Score and return top 5. Build rewards calorie density + liquid (if `lowAppetite`) + cost + protein-gap fill. Circuit rewards fiber + satiety + omega-3 + low sodium + protein-per-calorie.
-
-**14-day auto-adjust** (suggests, never mutates):
-- Build stalled → +200 cal/day; gaining >0.75 lb/wk → drop a multiplier
-- Circuit stalled → −150 cal/day or +1 cardio; losing >1.5 lb/wk → +150 cal (protect muscle); marker not moving after 8 weeks → flag for doctor, never prescribe
-
----
-
-## HealthKit integration
-
-`Services/HealthKitService.swift` owns all HealthKit access. Two modes of use:
-
-1. **Pull on demand** — `todaySteps(for: profile)` returns a fresh number for the Today card.
-2. **Observers** — registered at app launch to wake the app for background step updates (delivered via `HKObserverQuery`), then upsert into the `StepCount` table so trends/streaks just work.
-
-Permissions requested at onboarding:
-- Read: stepCount, bodyMass, restingHeartRate, activeEnergyBurned
-- Write: workouts (so logged sessions show up in Apple Health), bodyMass (so weighing in the app updates Health)
-
-The simulator can't return real Health data — develop UI in the sim, verify HealthKit on a real iPhone.
-
----
-
-## Design direction
-
-Two visual personalities under one shell. Mode picks palette + energy. Typography shared via dynamic type with custom fonts (Bebas Neue for display numerals, Fraunces serif for accents, SF Mono for stat readouts — falls back to system fonts gracefully).
-
-- **Build:** warm dark, orange/amber/cream (matches [nutrition-plan.html](nutrition-plan.html))
-- **Circuit:** warm light, sage/terracotta — calmer, steady
-
-Shared: large headlines, generous whitespace, weekly trend > daily pass/fail, no streak-shame, persistent banners (allergens on Build, caps remaining on Circuit).
-
-System dark mode follows the user's iOS setting; mode tokens override at the screen root via `ThemeProvider`.
-
-### Tactile UX (load-bearing — the app feels alive)
-
-The app is built to feel like a participant, not a form. Every meaningful interaction is multisensory: visible state change + spring animation + haptic + (for wins) a brief toast.
-
-**Components that own the feel:**
-
-| Concern | Lives in | Notes |
-|---|---|---|
-| All button presses | `Components/TactileButtonStyle.swift` | Five variants (`primary`/`secondary`/`pill`/`bump`/`ghost`); subtle top-edge highlight at rest, spring scale-down on press, optional glare sweep on `primary`, light haptic tick on touch-down |
-| Tappable cards (whole card is the action) | `Components/PressableCard.swift` | Same press feel, no glare, accent stroke on press |
-| Number readouts (stats) | `Components/AnimatedNumber.swift` | `.contentTransition(.numericText())` + spring tween; never snaps |
-| Progress bars | `Components/ProgressBar.swift` | Smooth spring fill; **success haptic + bright flash** when value crosses target |
-| Confirmations | `Services/ToastCenter.swift` + `Components/ToastView.swift` | One-toast-at-a-time, animates from top, auto-dismiss ~1.8s; fires matching haptic |
-| All haptics | `Services/Haptics.swift` | Five named patterns (`tap`/`bump`/`success`/`warn`/`selection`) — keep the vocabulary small |
-
-**Rules:**
-
-1. **Every `Button` uses `.tactile(...)`.** Never `buttonStyle(.plain)` or default styling.
-2. **Every meaningful mutation fires a toast.** Logged a meal → `toasts.logged(...)`. Goal hit → `toasts.goalHit(...)`.
-3. **Don't add a 6th button variant.** Reuse one. Visual noise is the enemy of "wants to keep clicking."
-4. **Don't double-haptic.** `.tactile()` already fires `.sensoryFeedback(.impact)` on press. Don't also call `Haptics.tap()` in the action closure. Use `Haptics.bump()` / `.success()` / `.warn()` for *outcome* feedback, not press feedback.
-5. **Whole-card-as-button beats inline buttons inside a card.** Use `PressableCard` and drop the redundant "LOG IT" button.
-
----
-
-## Non-goals (v1)
-
-No third user. No medical advice. No social/sharing/leaderboards. No barcode scan / restaurants / Instacart. No notifications until the daily loop is solid. No Apple Watch app (yet — likely v2 once daily loop is loved).
-
----
-
-## Build order
-
-1. Onboarding + profile creation + HealthKit permission request
-2. Today view (bars, steps from HealthKit, log a meal, log a set)
-3. Suggestion engine surfaced in Today
-4. Workouts: program picker → block runner → set logger with progression target
-5. Progress: weight + steps + markers + lift PRs
-6. Nutrition library browser
-7. Weekly planner + grocery list
-8. Export/import (JSON + SwiftData .store cold backup)
-9. 14-day auto-adjust signals as suggestion cards
-10. Apple Watch companion (post-v1)
-
-**Ship #1–4 before anything below. The daily loop is the product.**
-
----
-
-## Foundation references
-
-- [docs/RepCheck.md](docs/RepCheck.md) — friction-free logging UX; the bar for one-tap actions
-- [docs/nutrition-plan-research.md](docs/nutrition-plan-research.md) — validated Build nutrition spec; food library, math, anchor schedule
-- [nutrition-plan.html](nutrition-plan.html) — Build visual reference (look/feel, not codebase)
-- [README.md](README.md) — local setup, XcodeGen, TestFlight CI
+Everything else: `CLAUDE.md`. Incident history + setup: `docs/`.

@@ -58,9 +58,9 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | Isometric calorie math | `Domain/CalorieEstimator.swift` → `caloriesForIsometric` |
 | Rep counter | `Features/Workouts/RepCounter.swift` → `RepCounterView` |
 | Delete set / exercise | `Repos.deleteSet` / `Repos.deleteExercise` + `SetHistorySheet` in `Features/Workouts/WorkoutsView.swift` |
-| Log pilates | `Repos.logPilatesSession` + `Domain/Models.swift` (`PilatesSessionDTO`) |
+| Log pilates | `Repos.logPilatesSession` + `Domain/Models.swift` (`PilatesSessionDTO`); UI `Features/Workouts/Circuit/PilatesCard.swift` (Train tab, Circuit) |
 | Log cardio | `Repos.logCardio` + `Domain/Models.swift` (`CardioSessionDTO`) |
-| Circuit movements | `Features/Workouts/Circuit/BabyExercisesCard.swift` |
+| Circuit movements (quick-log) | `Features/Workouts/Circuit/BabyExercisesCard.swift` — Train tab (`WorkoutsView` Circuit branch); renders the auto-seeded parenting exercises as tap-to-+1 |
 | Live sessions (timer) | `Features/Workouts/LiveSessionCard.swift` + `Domain/LiveSessionState.swift` + `Services/LiveSessionService.swift` |
 | Live Activity (Lock Screen) | `OurFitnessWidgets/LiveSessionLiveActivity.swift` + `Services/LiveSessionActivityController.swift` — [docs/live-activity-setup.md](docs/live-activity-setup.md) |
 | Exercise MET / muscles | `Domain/ExerciseInfo.swift` → `namedMeta` (first-match order matters; specific before general) |
@@ -91,7 +91,7 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | **Today / Steps** | |
 | Move card (2×3 cols) | `Features/Today/MoveCard.swift` — row 1: Apple Total · Our Total Estimate · Training Only; row 2: Distance · Flights · Heart Rate. Single `metricColumn` helper (uniform 22pt value font, no differential shrink). `activityRow(kcal:)` takes `Int` |
 | Steps (Build) | `Features/Today/StepsCard.swift` |
-| Steps + cardio (Circuit) | `Features/Workouts/Circuit/StepsCardioCard.swift` |
+| Steps + cardio (Circuit, on Today) | `Features/Workouts/Circuit/StepsCardioCard.swift` |
 | Water tracker (presets + day-streak) | `Domain/Water.swift` (presets Sip 4 / S 8 / M 16 / L 32 oz; `streak(_:goalFlOz:end:)`) + `Features/Today/WaterCard.swift` (`AppStorage "waterGoalFlOz.\(profileId)"`; streak chip) |
 | Water quick-log (app-wide FAB) | `Features/Today/WaterQuickLogButton.swift` — tap = repeat last (`AppStorage "waterLastFlOz.\(profileId)"`), press-and-hold = dim screen + radial preset picker; logs via `Repos.addWater`. Overlaid in `App/RootView.swift` |
 | Step milestones / goals | `Domain/Movement.swift` (`defaultStepMilestones`). Per-profile override: `AppStorage "stepsGoal.\(profileId.uuidString)"` |
@@ -108,7 +108,7 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | **Settings / Profile** | |
 | Edit vitals | `Repos.updateVitals` + `Features/Settings/SettingsView.swift` → `EditVitalsSheet` |
 | Switch mode | `Repos.updateMode` + `Features/Settings/SettingsView.swift` → `ModeSwitchSheet` |
-| App tab layout | `App/RootView.swift` — both modes show Today / Meals / Train / Progress (`WorkoutsView` is no longer Build-gated) |
+| App tab layout | `App/RootView.swift` — both modes: Today / Meals / Train / Progress. `WorkoutsView` is mode-aware (Build = lift list + rep counter; Circuit = Pilates + movement quick-log). Today mirrors Build in both (macros/move/water/steps + food log; Circuit adds cardio) |
 | Profile avatar | `Components/ProfileAvatar.swift` |
 | Units (metric ↔ imperial) | `Domain/Units.swift` — canonical storage IMPERIAL; convert only at UI boundary |
 | Sync current weight | `Repos.syncCurrentWeight` — called after progress log, HK sync, TodayView task |
@@ -211,3 +211,5 @@ Full incident narratives: [docs/ci-history.md](docs/ci-history.md). Setup: [docs
 - [docs/nutrition-plan-research.md](docs/nutrition-plan-research.md) — Build nutrition spec
 - [docs/app-expansion.md](docs/app-expansion.md) — Phase 2/3 roadmap (iCloud sync, store polish)
 - [docs/live-activity-setup.md](docs/live-activity-setup.md) — widget signing checklist
+
+> Other `docs/*-plan.md` / `*-implementation.md` are historical design snapshots — some predate shipped behaviour (e.g. they say Circuit has no strength / no Train tab). This file and the code are authoritative when they disagree.
