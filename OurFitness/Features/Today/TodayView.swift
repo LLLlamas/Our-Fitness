@@ -18,6 +18,12 @@ struct TodayView: View {
     @Query private var logModels: [FoodLogEntryModel]
     @Query private var stepModels: [StepCountModel]
     @Query private var waterModels: [WaterEntryModel]
+    // For the once-a-day stall nudge (StallDetector). Sets/pilates/weights are
+    // capped to the last 90 days; markers are low-volume lab entries (queried whole).
+    @Query private var setModels: [WorkoutSetModel]
+    @Query private var pilatesModels: [PilatesSessionModel]
+    @Query private var bodyModels: [BodyMetricModel]
+    @Query private var markerModels: [HealthMarkerModel]
 
     @State private var entryToDetail: FoodLogEntryDTO?
     @State private var showMealLog = false
@@ -42,6 +48,10 @@ struct TodayView: View {
     // User-configurable nudge toggles — mirrored from SettingsView.
     @AppStorage("nudge.meal.enabled") private var mealNudgeEnabled: Bool = true
     @AppStorage("nudge.water.enabled") private var waterNudgeEnabled: Bool = true
+    @AppStorage("nudge.stall.enabled") private var stallNudgeEnabled: Bool = true
+    // Per-profile day key of the last stall check — fires the nudge at most once a
+    // day, persisted so a cold relaunch doesn't re-fire it.
+    @AppStorage private var stallNudgeDayKey: String
 
     // Time-based nudge state — tracks the last hour in which a nudge fired so
     // each kind fires at most once per hour. Reset on day rollover (via @State,
@@ -72,11 +82,29 @@ struct TodayView: View {
             sort: \.timestamp,
             order: .forward
         )
+        let stallCutoff = Calendar.current.date(byAdding: .day, value: -90, to: Date()) ?? Date()
+        _setModels = Query(
+            filter: #Predicate<WorkoutSetModel> { $0.userId == uid && $0.timestamp >= stallCutoff },
+            sort: \.timestamp, order: .reverse
+        )
+        _pilatesModels = Query(
+            filter: #Predicate<PilatesSessionModel> { $0.profileId == uid && $0.date >= stallCutoff },
+            sort: \.date, order: .reverse
+        )
+        _bodyModels = Query(
+            filter: #Predicate<BodyMetricModel> { $0.userId == uid },
+            sort: \.date, order: .forward
+        )
+        _markerModels = Query(
+            filter: #Predicate<HealthMarkerModel> { $0.userId == uid },
+            sort: \.date, order: .forward
+        )
         _macroFiredRaw = AppStorage(wrappedValue: "", "macroFired.\(uid.uuidString)")
         _macroFlagDayKey = AppStorage(wrappedValue: "", "macroFiredDay.\(uid.uuidString)")
         _customStepsGoalRaw = AppStorage(wrappedValue: 0, "stepsGoal.\(uid.uuidString)")
         _customWeeklyDaysRaw = AppStorage(wrappedValue: 5, "stepsWeeklyDays.\(uid.uuidString)")
         _waterGoalFlOz = AppStorage(wrappedValue: Water.defaultGoalFlOz, "waterGoalFlOz.\(uid.uuidString)")
+        _stallNudgeDayKey = AppStorage(wrappedValue: "", "stallNudgeDay.\(uid.uuidString)")
     }
 
     private var today: String { Dates.dayKey() }
@@ -280,6 +308,22 @@ struct TodayView: View {
            ) != nil {
             toasts.waterReminder(currentOz: todayWaterOz, goalOz: waterGoalFlOz, hourOfDay: hour)
             lastWaterNudgeHour = hour
+        }
+
+        // Keep-going (stall) nudge — at most once per calendar day, lowest priority.
+        // `detect` returns nil for active users, so most days this is a no-op.
+        if stallNudgeEnabled, stallNudgeDayKey != dayKey {
+            stallNudgeDayKey = dayKey
+            if let stall = StallDetector.detect(
+                mode: profile.mode,
+                steps: allStepsForProfile,
+                sets: setModels.map(\.snapshot),
+                pilates: pilatesModels.map(\.snapshot),
+                weights: bodyModels.map(\.snapshot),
+                markers: markerModels.map(\.snapshot)
+            ) {
+                toasts.stallNudge(EncouragementEngine.stallMessage(stall, mode: profile.mode))
+            }
         }
     }
 

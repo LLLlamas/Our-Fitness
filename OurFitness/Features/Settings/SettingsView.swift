@@ -16,6 +16,7 @@ struct SettingsView: View {
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
     @AppStorage("nudge.meal.enabled") private var mealNudgeEnabled: Bool = true
     @AppStorage("nudge.water.enabled") private var waterNudgeEnabled: Bool = true
+    @AppStorage("nudge.stall.enabled") private var stallNudgeEnabled: Bool = true
 
     var body: some View {
         NavigationStack {
@@ -154,6 +155,12 @@ struct SettingsView: View {
                 label: "Water reminder",
                 detail: "Reminds you to drink water if you're behind on your daily goal.",
                 isOn: $waterNudgeEnabled,
+                isFirst: false, isLast: false
+            )
+            nudgeToggleRow(
+                label: "Keep-going nudge",
+                detail: "A once-a-day prompt if your steps, workouts, or a tracked number have gone quiet.",
+                isOn: $stallNudgeEnabled,
                 isFirst: false, isLast: true
             )
         }

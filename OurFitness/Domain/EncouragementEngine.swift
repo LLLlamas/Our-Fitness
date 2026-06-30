@@ -450,4 +450,58 @@ public enum EncouragementEngine {
                 tone: .approaching, sfSymbol: "checkmark")
         }
     }
+
+    // MARK: - Stall nudges (copy for `StallDetector.Stall`)
+
+    /// A gentle, science-anchored prompt when the user has stalled. Softened claims
+    /// only — this never prescribes. Pairs with `StallDetector.detect`.
+    public static func stallMessage(_ stall: StallDetector.Stall, mode: Mode) -> EncouragementMessage {
+        switch stall {
+        case .stepsGap(let days):
+            return EncouragementMessage(
+                headline: "\(days) days light on steps",
+                detail: mode == .circuit
+                    ? "Walking is your most repeatable lever for blood pressure and blood sugar. A short walk today restarts the habit."
+                    : "A daily walk keeps recovery and appetite steady without cutting into your training. Even 10 minutes counts.",
+                scienceLine: "Each extra ~1,000 daily steps is linked to roughly 10–12% lower early-death risk (Paluch meta-analysis, 2022).",
+                tone: .nudge, sfSymbol: "figure.walk")
+        case .workoutGap(let days):
+            return EncouragementMessage(
+                headline: "\(days) days since your last set",
+                detail: mode == .circuit
+                    ? "A couple of short strength sessions a week protect muscle while you lean out. A quick one now keeps the habit alive."
+                    : "Muscle responds to frequency — a short session now keeps your progress compounding.",
+                tone: .nudge, sfSymbol: "dumbbell")
+        case .pilatesGap(let days):
+            return EncouragementMessage(
+                headline: "\(days) days since Pilates",
+                detail: "Core and mobility work keeps the daily movements feeling easy. Even 10 minutes counts.",
+                tone: .nudge, sfSymbol: "figure.pilates")
+        case .weightStall(let weeks):
+            return EncouragementMessage(
+                headline: "Weight's been flat ~\(weeks)w",
+                detail: "Plateaus are normal. Nudging steps or cardio up a little — or tightening sodium — usually gets it moving again.",
+                scienceLine: "Adding daily walking reliably restarts a plateau and lowers systolic blood pressure a few points.",
+                tone: .nudge, sfSymbol: "scalemass")
+        case .markerStall(let kind, let weeks):
+            return EncouragementMessage(
+                headline: "\(markerPlainName(kind)) hasn't moved in ~\(weeks)w",
+                detail: "Pair daily steps with the food tips and re-test in a few weeks — these numbers respond slowly, but they do respond.",
+                tone: .nudge, sfSymbol: "heart.text.square")
+        }
+    }
+
+    /// Plain-English marker name for copy (no acronyms left bare).
+    private static func markerPlainName(_ kind: HealthMarkerKind) -> String {
+        switch kind {
+        case .bpSystolic, .bpDiastolic: return "Blood pressure"
+        case .ldl:                      return "LDL cholesterol"
+        case .hdl:                      return "HDL cholesterol"
+        case .triglycerides:            return "Triglycerides"
+        case .totalCholesterol:         return "Cholesterol"
+        case .a1c:                      return "A1c"
+        case .fastingGlucose:           return "Fasting glucose"
+        case .restingHR:                return "Resting heart rate"
+        }
+    }
 }

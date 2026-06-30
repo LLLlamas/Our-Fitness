@@ -150,6 +150,13 @@ public final class ToastCenter: ObservableObject {
                    accent: .info, symbol: msg.sfSymbol), for: 2.4)
     }
 
+    // Stall nudge — a once-per-day "keep going" prompt when the user has gone quiet
+    // on steps / workouts / Pilates, or a tracked number has flatlined.
+    public func stallNudge(_ msg: EncouragementMessage) {
+        show(Toast(title: msg.headline, detail: msg.detail,
+                   accent: .info, symbol: msg.sfSymbol), for: 3.0)
+    }
+
     public func warn(_ msg: String) {
         show(Toast(title: msg, accent: .warn, symbol: "exclamationmark.triangle.fill"))
     }
