@@ -2,6 +2,8 @@
 
 _Research date: 2026-06-02. Grounds: the existing codebase (`Domain/CalorieEstimator.swift`, `Domain/ExerciseInfo.swift`, `Domain/FoodParser.swift`, `Domain/CommonFoods.swift`, `Services/ExerciseInsightService.swift`, `Domain/Models.swift`) + external sources cited at the end._
 
+> Status: background research/proposal. Parts have since shipped (e.g. the curated-food expansion + the indexed `CommonFoods.bestMatch` matcher). Treat as reference, not a current backlog; CLAUDE.md and the code are authoritative.
+
 ---
 
 ## TL;DR — the one principle that decides everything

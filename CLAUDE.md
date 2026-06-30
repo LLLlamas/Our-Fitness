@@ -212,4 +212,4 @@ Full incident narratives: [docs/ci-history.md](docs/ci-history.md). Setup: [docs
 - [docs/app-expansion.md](docs/app-expansion.md) — Phase 2/3 roadmap (iCloud sync, store polish)
 - [docs/live-activity-setup.md](docs/live-activity-setup.md) — widget signing checklist
 
-> Other `docs/*-plan.md` / `*-implementation.md` are historical design snapshots — some predate shipped behaviour (e.g. they say Circuit has no strength / no Train tab). This file and the code are authoritative when they disagree.
+> `docs/encouragement-system-plan.md`, `health-tracking-ui-plan.md`, and `activity-and-ai-expansion-research.md` are dated design specs / research — forward-looking or only partly shipped. This file and the code are authoritative when they disagree.

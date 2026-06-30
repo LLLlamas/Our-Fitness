@@ -7,8 +7,7 @@
 // English — so the ⓘ info sheet says something useful instead of generic
 // category defaults.
 //
-// Guardrails (see implementation-plan.md §9 — "AI never prescribes; it
-// suggests"):
+// Guardrails — AI never prescribes, it only suggests:
 //   • Descriptive only. We do NOT let the model touch MET / calorie math, so
 //     logged calorie estimates stay deterministic.
 //   • General fitness guidance only — the prompt forbids medical claims and
