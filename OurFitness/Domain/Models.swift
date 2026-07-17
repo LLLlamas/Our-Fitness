@@ -687,6 +687,104 @@ public struct WaterEntryDTO: Codable, Equatable, Sendable, Identifiable {
     }
 }
 
+// MARK: - Reminders (V7)
+//
+// A generic recurring-reminder engine. "Plants" ships as the one built-in,
+// fully-fleshed group (species catalog, seeded amount/interval, care sheets);
+// user-created groups hold basic reminders (name + photo + interval) until
+// they get their own customization later. See Domain/PlantCatalog.swift for
+// PlantLightLevel and the species catalog, and Domain/ReminderSchedule.swift
+// for due-date math.
+
+public enum ReminderGroupKind: String, Codable, Sendable {
+    case plants
+    case custom
+}
+
+public struct ReminderGroupDTO: Codable, Equatable, Sendable, Identifiable {
+    public var id: UUID
+    public var userId: UUID
+    public var name: String
+    public var sfSymbol: String
+    public var kind: ReminderGroupKind
+    public var createdAt: Date
+
+    public init(id: UUID = UUID(), userId: UUID, name: String, sfSymbol: String,
+                kind: ReminderGroupKind, createdAt: Date = Date()) {
+        self.id = id
+        self.userId = userId
+        self.name = name
+        self.sfSymbol = sfSymbol
+        self.kind = kind
+        self.createdAt = createdAt
+    }
+}
+
+/// A single recurring reminder. The plant-specific fields (`speciesId` through
+/// `potDiameterInches`) are nil for reminders in a custom (non-plants) group.
+/// `snoozedUntil` is schedule *state* (like `intervalDays`), not a derivable
+/// value, so it lives here rather than being reconstructed from the event log.
+public struct ReminderDTO: Codable, Equatable, Sendable, Identifiable {
+    public var id: UUID
+    public var userId: UUID
+    public var groupId: UUID
+    public var name: String
+    public var photoData: Data?
+    public var intervalDays: Int
+    public var amountFlOz: Double?
+    public var speciesId: String?
+    public var room: String?
+    public var light: PlantLightLevel?
+    public var potDiameterInches: Int?
+    public var notes: String?
+    public var createdAt: Date
+    public var snoozedUntil: Date?
+
+    public init(
+        id: UUID = UUID(), userId: UUID, groupId: UUID, name: String,
+        photoData: Data? = nil, intervalDays: Int, amountFlOz: Double? = nil,
+        speciesId: String? = nil, room: String? = nil, light: PlantLightLevel? = nil,
+        potDiameterInches: Int? = nil, notes: String? = nil,
+        createdAt: Date = Date(), snoozedUntil: Date? = nil
+    ) {
+        self.id = id
+        self.userId = userId
+        self.groupId = groupId
+        self.name = name
+        self.photoData = photoData
+        self.intervalDays = intervalDays
+        self.amountFlOz = amountFlOz
+        self.speciesId = speciesId
+        self.room = room
+        self.light = light
+        self.potDiameterInches = potDiameterInches
+        self.notes = notes
+        self.createdAt = createdAt
+        self.snoozedUntil = snoozedUntil
+    }
+}
+
+/// Append-only completion log ("watered" / "done"). Mirrors WaterEntryDTO's
+/// dual date/timestamp shape.
+public struct ReminderEventDTO: Codable, Equatable, Sendable, Identifiable {
+    public var id: UUID
+    public var userId: UUID
+    public var reminderId: UUID
+    public var date: String      // YYYY-MM-DD local
+    public var amountFlOz: Double?
+    public var timestamp: Date
+
+    public init(id: UUID = UUID(), userId: UUID, reminderId: UUID, date: String,
+                amountFlOz: Double? = nil, timestamp: Date = Date()) {
+        self.id = id
+        self.userId = userId
+        self.reminderId = reminderId
+        self.date = date
+        self.amountFlOz = amountFlOz
+        self.timestamp = timestamp
+    }
+}
+
 public struct RemainingMacros: Equatable, Sendable {
     public var calories: Int
     public var proteinG: Int

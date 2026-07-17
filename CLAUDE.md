@@ -28,7 +28,7 @@ OurFitness/
   Domain/       ← PURE Swift. No SwiftUI/SwiftData. Fully unit-tested.
   Data/         ← SwiftData @Model classes + Repositories/
   Services/     ← HealthKit, Theme, Haptics, ToastCenter
-  Features/     ← Onboarding, Today, Nutrition, Workouts (shared Train tab; Circuit-mode cards under Circuit/ folder), Progress, Settings
+  Features/     ← Onboarding, Today, Nutrition, Workouts (shared Train tab; Circuit-mode cards under Circuit/ folder), Reminders, Progress, Settings
   Components/   ← ProgressBar, ProgressRing, Card, Banner, AnimatedNumber, TactileButtonStyle…
 _stashed/       ← Outside build target; pending rework
 OurFitnessTests/ ← Hostless XCTest for Domain/* only
@@ -98,6 +98,17 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | Today burn estimate | `Domain/DailyBurn.swift` → `metEstimate` |
 | Encouragement / milestones | `Domain/EncouragementEngine.swift` + `Domain/EncouragementMessage.swift` + `Components/ProjectionBar.swift` |
 | Meal/water nudges | `Domain/EncouragementEngine.swift` → `mealLoggingNudge` / `waterNudge`; wired in `Features/Today/TodayView.swift` |
+| **Reminders** | |
+| Plant watering catalog (~26 species: interval/amount/light adjustment/care notes) | `Domain/PlantCatalog.swift` — sourced from university extension services, botanical gardens, ASPCA toxicity data |
+| Reminder due-date math | `Domain/ReminderSchedule.swift` → `nextDueDay`/`daysUntilDue`/`isDue`/`overdueDays`/`fireDate`/`snoozeDate` — pure, injectable now/calendar |
+| Reminder CRUD / groups | `Data/Repositories/Repositories.swift` → `Repos.addReminder`/`updateReminder`/`deleteReminder`/`logReminderDone`/`snoozeReminder` + `addReminderGroup`/`deleteReminderGroup`/`ensurePlantsGroup`. Built-in "Plants" group (undeletable) auto-created for new profiles in `Repos.createProfile`; `Seeder.swift` backstops existing profiles |
+| Reminder / group / event models | `Domain/Models.swift` (`ReminderGroupDTO`, `ReminderDTO`, `ReminderEventDTO` — append-only completion log) |
+| Notification scheduling + lock-screen actions | `Services/ReminderNotificationService.swift` — `UNNotificationCategory` action buttons ("Watered"/"Done" + "Snooze 1 day") work from the lock screen and mirror to a paired Apple Watch with zero watch app needed; `AppNotificationDelegate` handles the actions incl. waking the app from a killed state. Auth requested only from explicit user actions (Add-reminder save / in-tab banner) — never `.onAppear`/`.task` |
+| Watch companion sync | `Services/WatchSyncService.swift` + `Shared/ReminderSyncPayload.swift` — `WatchConnectivity`: `updateApplicationContext` (phone→watch snapshot push), `transferUserInfo` (watch→phone actions), `transferFile` (photo thumbnails). Watch is a thin client with no local SwiftData; phone is source of truth |
+| Reminder / thumbnail photo downscale | `Services/ImageDownscale.swift` — shared by reminder photo capture and watch thumbnails |
+| Reminders tab UI | `Features/Reminders/RemindersView.swift` + `AddReminderSheet.swift` + `ReminderDetailSheet.swift`, `Components/ImagePickerView.swift` |
+| Reminders on/off + reminder hour | `Features/Settings/SettingsView.swift` → `remindersSection` — `AppStorage "reminders.enabled"` (global, default on), `AppStorage "reminderHour.<profile-uuid>"` (per-profile, default 9am) |
+| Watch app (thin client, no local SwiftData) | `OurFitnessWatch/OurFitnessWatchApp.swift` + `WatchReminderStore.swift` + `ReminderListView.swift` + `ReminderDetailView.swift` — compiles `Domain/PlantCatalog.swift` + `ReminderSchedule.swift` + `Shared/ReminderSyncPayload.swift` directly as extra sources (mirrors `OurFitnessTests` compiling `OurFitness/Domain` directly) — [docs/watch-app-setup.md](docs/watch-app-setup.md) |
 | **Progress** | |
 | Add health marker kind | `Domain/Models.swift` (`HealthMarkerKind`) + `Domain/HealthRanges.swift` (exhaustive switches) + `Features/Progress/ProgressView.swift` |
 | Show/hide trackers | `Features/Progress/EditTrackersSheet.swift` — `AppStorage "progressStats.\(profileId)"` |
@@ -108,7 +119,7 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | **Settings / Profile** | |
 | Edit vitals | `Repos.updateVitals` + `Features/Settings/SettingsView.swift` → `EditVitalsSheet` |
 | Switch mode | `Repos.updateMode` + `Features/Settings/SettingsView.swift` → `ModeSwitchSheet` |
-| App tab layout | `App/RootView.swift` — both modes: Today / Meals / Train / Progress. `WorkoutsView` is mode-aware (Build = lift list + rep counter; Circuit = Pilates + movement quick-log). Today mirrors Build in both (macros/move/water/steps + food log; Circuit adds cardio) |
+| App tab layout | `App/RootView.swift` — both modes: Today / Meals / Train / Reminders / Progress. `WorkoutsView` is mode-aware (Build = lift list + rep counter; Circuit = Pilates + movement quick-log). Today mirrors Build in both (macros/move/water/steps + food log; Circuit adds cardio) |
 | Profile avatar | `Components/ProfileAvatar.swift` |
 | Units (metric ↔ imperial) | `Domain/Units.swift` — canonical storage IMPERIAL; convert only at UI boundary |
 | Sync current weight | `Repos.syncCurrentWeight` — called after progress log, HK sync, TodayView task |
@@ -125,7 +136,7 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | Freshness timestamp | `Domain/Freshness.swift` → `label(for:now:staleAfter:)` |
 | Plain-English muscle names | `Domain/ExerciseInfo.swift` → `plainName(forMuscle:)` / `muscleGlossary` |
 | **Schema / Data** | |
-| Schema migration | `Data/Schema.swift` — current SchemaV6. Additive (new optional field / entity) = automatic. Structural = `.custom` stage. |
+| Schema migration | `Data/Schema.swift` — current SchemaV7. Additive (new optional field / entity) = automatic. Structural = `.custom` stage. |
 
 ---
 
@@ -156,7 +167,7 @@ SwiftUI (iOS 17+) · SwiftData · HealthKit · Swift Charts · XCTest · XcodeGe
 
 Append-only logs. Derived figures never stored. DTOs in `Domain/Models.swift`; `@Model` classes in `Data/PersistenceModels.swift` with `snapshot` adapters; CRUD in `Data/Repositories/Repositories.swift`.
 
-Key entities: `ProfileDTO`, `ExerciseDTO` (`isIsometric`), `WorkoutSetDTO` (`holdSeconds?`), `FoodLogEntryDTO` (`ingredients?`), `BodyMetricDTO`, `HealthMarkerDTO`, `StepCountDTO`, `PilatesSessionDTO`, `CardioSessionDTO`, `WaterEntryDTO`, `ActivitySessionDTO`, `SavedMealTemplateDTO`.
+Key entities: `ProfileDTO`, `ExerciseDTO` (`isIsometric`), `WorkoutSetDTO` (`holdSeconds?`), `FoodLogEntryDTO` (`ingredients?`), `BodyMetricDTO`, `HealthMarkerDTO`, `StepCountDTO`, `PilatesSessionDTO`, `CardioSessionDTO`, `WaterEntryDTO`, `ActivitySessionDTO`, `SavedMealTemplateDTO`, `ReminderGroupDTO`, `ReminderDTO`, `ReminderEventDTO`.
 
 **HealthKit crash traps (caused SIGABRT in build 37):**
 - `requestAuthorization` raises uncatchable `NSException` — call ONLY from explicit user Connect flow. Never from `.task`/`.onAppear`.
@@ -194,7 +205,7 @@ Full incident narratives: [docs/ci-history.md](docs/ci-history.md). Setup: [docs
 - **Mac-less workflow:** push → `compile.yml` → patch → push.
 - **Tests hostless:** `OurFitnessTests` compiles `Domain/` directly. No `@testable import`. `scripts/validate-ci-invariants.sh` enforces.
 - **Never bare `Date()` in streak/weekly tests** — pin `now` to fixed mid-week (e.g. `2026-05-27T12:00:00Z`), thread through fixture + function.
-- **Signing:** match repo `LLLlamas/Our-Fitness-Certs`, readonly CI. Manual App Store profile `OurFitness AppStore` → base64 → `APPSTORE_PROFILE_BASE64`. Widget (`com.ourfitness.app.widgets`) needs its own profile.
+- **Signing:** match repo `LLLlamas/Our-Fitness-Certs`, readonly CI. Manual App Store profile `OurFitness AppStore` → base64 → `APPSTORE_PROFILE_BASE64`. Widget (`com.ourfitness.app.widgets`) needs its own profile. Watch companion app (`com.ourfitness.app.watchkitapp`) will need its own profile + an `APPSTORE_WATCH_PROFILE_BASE64` secret before it can ship to TestFlight — not yet added; see [docs/watch-app-setup.md](docs/watch-app-setup.md).
 - **XcodeGen:** never `info:` or `entitlements:` blocks on target — use `INFOPLIST_FILE`/`CODE_SIGN_ENTITLEMENTS` build settings only.
 - **Entitlement missing?** Ladder: latest build → App ID capability → profile has it → `.xcarchive` → IPA.
 - **Xcode 26:** version-sorted glob (not hardcoded). Build dest: `platform=iOS Simulator,name=iPhone 17`. All 4 orientations in `Info.plist`.
@@ -211,5 +222,6 @@ Full incident narratives: [docs/ci-history.md](docs/ci-history.md). Setup: [docs
 - [docs/nutrition-plan-research.md](docs/nutrition-plan-research.md) — Build nutrition spec
 - [docs/app-expansion.md](docs/app-expansion.md) — Phase 2/3 roadmap (iCloud sync, store polish)
 - [docs/live-activity-setup.md](docs/live-activity-setup.md) — widget signing checklist
+- [docs/watch-app-setup.md](docs/watch-app-setup.md) — watch companion app signing checklist
 
 > `docs/encouragement-system-plan.md`, `health-tracking-ui-plan.md`, and `activity-and-ai-expansion-research.md` are dated design specs / research — forward-looking or only partly shipped. This file and the code are authoritative when they disagree.

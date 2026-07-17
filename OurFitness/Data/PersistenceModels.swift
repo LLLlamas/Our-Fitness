@@ -569,3 +569,121 @@ final class SavedMealTemplateModel {
         self.createdAt = s.createdAt
     }
 }
+
+// MARK: - Reminder groups (V7)
+
+@Model
+public final class ReminderGroupModel {
+    @Attribute(.unique) public var id: UUID
+    public var userId: UUID
+    public var name: String
+    public var sfSymbol: String
+    public var kindRaw: String
+    public var createdAt: Date
+
+    public init(snapshot s: ReminderGroupDTO) {
+        self.id = s.id
+        self.userId = s.userId
+        self.name = s.name
+        self.sfSymbol = s.sfSymbol
+        self.kindRaw = s.kind.rawValue
+        self.createdAt = s.createdAt
+    }
+
+    public var snapshot: ReminderGroupDTO {
+        ReminderGroupDTO(id: id, userId: userId, name: name, sfSymbol: sfSymbol,
+                         kind: ReminderGroupKind(rawValue: kindRaw) ?? .custom, createdAt: createdAt)
+    }
+
+    public func rename(_ newName: String) {
+        self.name = newName
+    }
+}
+
+// MARK: - Reminders (V7)
+
+@Model
+public final class ReminderModel {
+    @Attribute(.unique) public var id: UUID
+    public var userId: UUID
+    public var groupId: UUID
+    public var name: String
+    /// Single downscaled photo. External storage keeps it out of the main
+    /// SwiftData store file so the append-only event log stays fast to query.
+    @Attribute(.externalStorage) public var photoData: Data?
+    public var intervalDays: Int
+    public var amountFlOz: Double?
+    public var speciesId: String?
+    public var room: String?
+    public var lightRaw: String?
+    public var potDiameterInches: Int?
+    public var notes: String?
+    public var createdAt: Date
+    public var snoozedUntil: Date?
+
+    public init(snapshot s: ReminderDTO) {
+        self.id = s.id
+        self.userId = s.userId
+        self.groupId = s.groupId
+        self.name = s.name
+        self.photoData = s.photoData
+        self.intervalDays = s.intervalDays
+        self.amountFlOz = s.amountFlOz
+        self.speciesId = s.speciesId
+        self.room = s.room
+        self.lightRaw = s.light?.rawValue
+        self.potDiameterInches = s.potDiameterInches
+        self.notes = s.notes
+        self.createdAt = s.createdAt
+        self.snoozedUntil = s.snoozedUntil
+    }
+
+    public var snapshot: ReminderDTO {
+        ReminderDTO(
+            id: id, userId: userId, groupId: groupId, name: name,
+            photoData: photoData, intervalDays: intervalDays, amountFlOz: amountFlOz,
+            speciesId: speciesId, room: room,
+            light: lightRaw.flatMap(PlantLightLevel.init(rawValue:)),
+            potDiameterInches: potDiameterInches, notes: notes,
+            createdAt: createdAt, snoozedUntil: snoozedUntil
+        )
+    }
+
+    public func apply(_ s: ReminderDTO) {
+        self.name = s.name
+        self.photoData = s.photoData
+        self.intervalDays = s.intervalDays
+        self.amountFlOz = s.amountFlOz
+        self.room = s.room
+        self.lightRaw = s.light?.rawValue
+        self.potDiameterInches = s.potDiameterInches
+        self.notes = s.notes
+        self.snoozedUntil = s.snoozedUntil
+    }
+}
+
+// MARK: - Reminder events (V7)
+
+@Model
+public final class ReminderEventModel {
+    @Attribute(.unique) public var id: UUID
+    public var userId: UUID
+    public var reminderId: UUID
+    public var date: String      // YYYY-MM-DD local
+    public var amountFlOz: Double?
+    public var timestamp: Date
+
+    public init(snapshot s: ReminderEventDTO) {
+        self.id = s.id
+        self.userId = s.userId
+        self.reminderId = s.reminderId
+        self.date = s.date
+        self.amountFlOz = s.amountFlOz
+        self.timestamp = s.timestamp
+    }
+
+    public var snapshot: ReminderEventDTO {
+        ReminderEventDTO(id: id, userId: userId, reminderId: reminderId, date: date,
+                         amountFlOz: amountFlOz, timestamp: timestamp)
+    }
+}

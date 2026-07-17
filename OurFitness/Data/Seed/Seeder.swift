@@ -10,7 +10,11 @@ import SwiftData
 
 public enum Seeder {
     public static func seedAll(_ ctx: ModelContext) {
-        // Intentionally empty. Retained as the App's launch hook so future
-        // first-launch seeding has a single call site to land in.
+        // Backstops the built-in "Plants" reminder group for profiles created
+        // before the Reminders tab shipped. New profiles get it directly from
+        // Repos.createProfile; this just catches everyone else on next launch.
+        for profile in Repos.listProfiles(ctx) {
+            Repos.ensurePlantsGroup(ctx, userId: profile.id)
+        }
     }
 }

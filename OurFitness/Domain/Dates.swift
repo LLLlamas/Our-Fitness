@@ -32,6 +32,12 @@ public enum Dates {
         return f
     }()
 
+    private static let relativeFormatter: RelativeDateTimeFormatter = {
+        let f = RelativeDateTimeFormatter()
+        f.unitsStyle = .full
+        return f
+    }()
+
     /// Local YYYY-MM-DD for a given Date (defaults to now).
     public static func dayKey(_ date: Date = Date()) -> String {
         dayFormatter.string(from: date)
@@ -91,6 +97,13 @@ public enum Dates {
         guard let da = date(fromDayKey: a), let db = date(fromDayKey: b) else { return 0 }
         let comps = Calendar.current.dateComponents([.day], from: da, to: db)
         return comps.day ?? 0
+    }
+
+    /// "3 days ago" / "last week" style label for multi-day gaps — distinct
+    /// from `formatTimeAgo`'s short-window minutes/hours phrasing and from
+    /// Freshness.swift's "as of <time>" staleness labels.
+    public static func formatRelative(_ date: Date, relativeTo: Date = Date()) -> String {
+        relativeFormatter.localizedString(for: date, relativeTo: relativeTo)
     }
 
     /// "just now", "5m ago", "3h ago", or "Mon 3:42 PM".

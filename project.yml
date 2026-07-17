@@ -7,6 +7,7 @@ options:
   bundleIdPrefix: com.ourfitness
   deploymentTarget:
     iOS: "17.0"
+    watchOS: "10.0"
   developmentLanguage: en
   createIntermediateGroups: true
   generateEmptyDirectories: true
@@ -92,11 +93,14 @@ targets:
           PROVISIONING_PROFILE_SPECIFIER: ""
           CODE_SIGNING_REQUIRED: "NO"
           CODE_SIGNING_ALLOWED: "NO"
-    # Embed the widget extension into the app bundle (Plug-Ins/). Without this the
-    # Live Activity has nowhere to render and App Store upload of a half-embedded
-    # archive fails. `embed: true` puts it under Contents/PlugIns and code-signs it.
+    # Embed the widget extension AND the watch companion app into the app bundle.
+    # Without `embed: true` the Live Activity has nowhere to render / the watch
+    # app has nowhere to install, and App Store upload of a half-embedded
+    # archive fails. Widget → Contents/PlugIns; watch app → Contents/Watch.
     dependencies:
       - target: OurFitnessWidgets
+        embed: true
+      - target: OurFitnessWatch
         embed: true
 
   # Widget extension hosting the Live Sessions ActivityKit Live Activity (Lock
@@ -148,6 +152,52 @@ targets:
           CODE_SIGNING_REQUIRED: "NO"
           CODE_SIGNING_ALLOWED: "NO"
 
+  # watchOS companion app for the Reminders tab (single-target watch app, no
+  # separate WatchKit extension). Thin client: no local SwiftData store — it
+  # syncs with the iOS app over WatchConnectivity (Services/WatchSyncService.swift
+  # on the phone side). Compiles the two pure-Foundation Domain files it needs
+  # directly (mirrors how OurFitnessTests compiles OurFitness/Domain directly)
+  # plus the shared wire format, instead of pulling in the whole Domain folder.
+  # Same no-`info:`/`entitlements:`-block rule as every other target.
+  OurFitnessWatch:
+    type: application
+    platform: watchOS
+    sources:
+      - path: OurFitnessWatch
+        excludes:
+          - "**/.DS_Store"
+          # Info.plist is referenced via INFOPLIST_FILE, not compiled.
+          - "Info.plist"
+      - path: OurFitness/Domain/PlantCatalog.swift
+      - path: OurFitness/Domain/ReminderSchedule.swift
+      - path: Shared/ReminderSyncPayload.swift
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.ourfitness.app.watchkitapp
+        PRODUCT_NAME: OurFitnessWatch
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        INFOPLIST_FILE: OurFitnessWatch/Info.plist
+        # Embedded (not standalone) product, same reasoning as the widget extension.
+        SKIP_INSTALL: "YES"
+        TARGETED_DEVICE_FAMILY: "4"
+        ENABLE_PREVIEWS: "YES"
+        # Manual signing — the watch app needs its OWN App Store provisioning
+        # profile (see docs/watch-app-setup.md). The placeholder below must
+        # match the profile name the user generates; CI injects the right one.
+        CODE_SIGN_STYLE: Manual
+        DEVELOPMENT_TEAM: "$(APPLE_TEAM_ID)"
+        CODE_SIGN_IDENTITY: "Apple Distribution"
+        PROVISIONING_PROFILE_SPECIFIER: "OurFitnessWatch AppStore"
+      configs:
+        Debug:
+          # Mirror the app/widget: PR compile workflow runs with signing off.
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: ""
+          PROVISIONING_PROFILE_SPECIFIER: ""
+          CODE_SIGNING_REQUIRED: "NO"
+          CODE_SIGNING_ALLOWED: "NO"
+
   OurFitnessTests:
     type: bundle.unit-test
     platform: iOS
@@ -174,6 +224,7 @@ schemes:
       targets:
         OurFitness: all
         OurFitnessWidgets: all
+        OurFitnessWatch: all
         OurFitnessTests: [test]
     test:
       gatherCoverageData: true

@@ -54,6 +54,7 @@ public enum Repos {
         if mode == .circuit {
             seedCircuitExercises(ctx, profileId: dto.id)
         }
+        ensurePlantsGroup(ctx, userId: dto.id)
         return dto
     }
 
@@ -572,5 +573,168 @@ public enum Repos {
             )))
         }
         try? ctx.save()
+    }
+
+    // MARK: - Reminder groups
+
+    public static func listReminderGroups(_ ctx: ModelContext, userId: UUID) -> [ReminderGroupDTO] {
+        let desc = FetchDescriptor<ReminderGroupModel>(
+            predicate: #Predicate { $0.userId == userId },
+            sortBy: [SortDescriptor(\.createdAt, order: .forward)]
+        )
+        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
+    }
+
+    @discardableResult
+    public static func addReminderGroup(_ ctx: ModelContext, _ g: ReminderGroupDTO) -> ReminderGroupDTO {
+        ctx.insert(ReminderGroupModel(snapshot: g))
+        try? ctx.save()
+        return g
+    }
+
+    public static func renameReminderGroup(_ ctx: ModelContext, id: UUID, name: String) {
+        let desc = FetchDescriptor<ReminderGroupModel>(predicate: #Predicate { $0.id == id })
+        if let target = try? ctx.fetch(desc).first {
+            target.rename(name)
+            try? ctx.save()
+        }
+    }
+
+    /// Deletes a custom group and cascades every reminder in it (which itself
+    /// cascades that reminder's events). Refuses to delete the built-in
+    /// "plants" group. Returns the deleted reminder ids so the caller can also
+    /// cancel their pending notifications (this layer stays notification-free —
+    /// see ReminderNotificationService).
+    @discardableResult
+    public static func deleteReminderGroup(_ ctx: ModelContext, id: UUID) -> [UUID] {
+        let desc = FetchDescriptor<ReminderGroupModel>(predicate: #Predicate { $0.id == id })
+        guard let group = try? ctx.fetch(desc).first, group.kindRaw != ReminderGroupKind.plants.rawValue else {
+            return []
+        }
+        let userId = group.userId
+        let deletedIds = listReminders(ctx, userId: userId).filter { $0.groupId == id }.map(\.id)
+        for reminderId in deletedIds {
+            deleteReminder(ctx, id: reminderId)
+        }
+        ctx.delete(group)
+        try? ctx.save()
+        return deletedIds
+    }
+
+    /// Idempotently ensures a profile has the built-in Plants group. Called
+    /// from `createProfile` (new profiles) and `Seeder.seedAll` (profiles that
+    /// existed before this feature shipped).
+    @discardableResult
+    public static func ensurePlantsGroup(_ ctx: ModelContext, userId: UUID) -> ReminderGroupDTO {
+        if let existing = listReminderGroups(ctx, userId: userId).first(where: { $0.kind == .plants }) {
+            return existing
+        }
+        return addReminderGroup(ctx, ReminderGroupDTO(userId: userId, name: "Plants", sfSymbol: "leaf.fill", kind: .plants))
+    }
+
+    /// Single-group fetch for callers (e.g. notification scheduling) that only
+    /// need one reminder's group, not the whole per-user list.
+    public static func reminderGroup(_ ctx: ModelContext, id: UUID) -> ReminderGroupDTO? {
+        let desc = FetchDescriptor<ReminderGroupModel>(predicate: #Predicate { $0.id == id })
+        return (try? ctx.fetch(desc).first)?.snapshot
+    }
+
+    // MARK: - Reminders
+
+    public static func listReminders(_ ctx: ModelContext, userId: UUID) -> [ReminderDTO] {
+        let desc = FetchDescriptor<ReminderModel>(
+            predicate: #Predicate { $0.userId == userId },
+            sortBy: [SortDescriptor(\.createdAt, order: .forward)]
+        )
+        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
+    }
+
+    public static func reminder(_ ctx: ModelContext, id: UUID) -> ReminderDTO? {
+        let desc = FetchDescriptor<ReminderModel>(predicate: #Predicate { $0.id == id })
+        return (try? ctx.fetch(desc).first)?.snapshot
+    }
+
+    public static func addReminder(_ ctx: ModelContext, _ r: ReminderDTO) {
+        ctx.insert(ReminderModel(snapshot: r))
+        try? ctx.save()
+    }
+
+    public static func updateReminder(_ ctx: ModelContext, _ r: ReminderDTO) {
+        let id = r.id
+        let desc = FetchDescriptor<ReminderModel>(predicate: #Predicate { $0.id == id })
+        guard let model = try? ctx.fetch(desc).first else { return }
+        model.apply(r)
+        try? ctx.save()
+    }
+
+    /// Cascades: deletes the reminder's logged events. Does NOT cancel its
+    /// pending notification — callers go through
+    /// `ReminderNotificationService.cancel(ids:)` alongside this (keeps this
+    /// layer free of UserNotifications).
+    public static func deleteReminder(_ ctx: ModelContext, id: UUID) {
+        let eventDesc = FetchDescriptor<ReminderEventModel>(predicate: #Predicate { $0.reminderId == id })
+        for e in (try? ctx.fetch(eventDesc)) ?? [] {
+            ctx.delete(e)
+        }
+        let desc = FetchDescriptor<ReminderModel>(predicate: #Predicate { $0.id == id })
+        if let target = try? ctx.fetch(desc).first {
+            ctx.delete(target)
+        }
+        try? ctx.save()
+    }
+
+    // MARK: - Reminder events
+
+    /// Logs a completion and clears any active snooze (a real watering
+    /// supersedes a "check back later").
+    public static func logReminderDone(_ ctx: ModelContext, _ e: ReminderEventDTO) {
+        ctx.insert(ReminderEventModel(snapshot: e))
+        let reminderId = e.reminderId
+        let desc = FetchDescriptor<ReminderModel>(predicate: #Predicate { $0.id == reminderId })
+        if let target = try? ctx.fetch(desc).first {
+            target.snoozedUntil = nil
+        }
+        try? ctx.save()
+    }
+
+    public static func deleteReminderEvent(_ ctx: ModelContext, id: UUID) {
+        let desc = FetchDescriptor<ReminderEventModel>(predicate: #Predicate { $0.id == id })
+        if let target = try? ctx.fetch(desc).first {
+            ctx.delete(target)
+            try? ctx.save()
+        }
+    }
+
+    public static func reminderEvents(_ ctx: ModelContext, reminderId: UUID, limit: Int = 50) -> [ReminderEventDTO] {
+        var desc = FetchDescriptor<ReminderEventModel>(
+            predicate: #Predicate { $0.reminderId == reminderId },
+            sortBy: [SortDescriptor(\.timestamp, order: .reverse)]
+        )
+        desc.fetchLimit = limit
+        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
+    }
+
+    public static func lastReminderEvent(_ ctx: ModelContext, reminderId: UUID) -> ReminderEventDTO? {
+        reminderEvents(ctx, reminderId: reminderId, limit: 1).first
+    }
+
+    /// All of a user's reminder events in one fetch (newest first), for
+    /// callers that need "latest per reminder" across many reminders at once
+    /// (e.g. WatchSyncService.pushSnapshot) — fold into a dictionary instead
+    /// of calling `lastReminderEvent` per reminder.
+    public static func listReminderEvents(_ ctx: ModelContext, userId: UUID) -> [ReminderEventDTO] {
+        let desc = FetchDescriptor<ReminderEventModel>(
+            predicate: #Predicate { $0.userId == userId },
+            sortBy: [SortDescriptor(\.timestamp, order: .reverse)]
+        )
+        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
+    }
+
+    public static func snoozeReminder(_ ctx: ModelContext, id: UUID, until: Date) {
+        let desc = FetchDescriptor<ReminderModel>(predicate: #Predicate { $0.id == id })
+        if let target = try? ctx.fetch(desc).first {
+            target.snoozedUntil = until
+            try? ctx.save()
+        }
     }
 }
