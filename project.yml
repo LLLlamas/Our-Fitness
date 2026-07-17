@@ -42,6 +42,11 @@ targets:
       # render it). Single source of truth; the file is #if canImport(ActivityKit)
       # gated so it's inert where the framework is absent.
       - path: Shared/LiveSessionAttributes.swift
+      # Reminders <-> watch wire format — compiled into BOTH the app (Services/
+      # WatchSyncService.swift references ReminderSnapshot/WatchAction/
+      # WatchSyncKeys) and the OurFitnessWatch target. Pure Foundation, no
+      # framework gating needed.
+      - path: Shared/ReminderSyncPayload.swift
     resources:
       - path: OurFitness/Assets.xcassets
       # Offline USDA FoodData Central SQLite/FTS5 database, bundled into the app
