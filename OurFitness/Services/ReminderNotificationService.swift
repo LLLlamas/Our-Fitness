@@ -33,7 +33,9 @@ public enum ReminderNotificationService {
     public static let defaultPreferredHour = ReminderSchedule.defaultReminderHour
     private static let hourKeyPrefix = "reminderHour."
     private static let globalEnabledKey = "reminders.enabled"
-    private static let identifierPrefix = "reminder."
+    // nonisolated: read from the nonisolated `reminderId(fromIdentifier:)` below
+    // (mirrors the nonisolated static let precedent in HealthKitService.swift).
+    nonisolated private static let identifierPrefix = "reminder."
 
     // MARK: - Setup
 
