@@ -99,8 +99,10 @@ public enum ReminderNotificationService {
     /// Parses a scheduled request's identifier back into the reminder id it
     /// was scheduled for, or nil if the identifier isn't one of ours.
     /// Centralizes the "reminder.<uuid>" format so nothing else (notably
-    /// `AppNotificationDelegate`) re-derives it independently.
-    static func reminderId(fromIdentifier id: String) -> UUID? {
+    /// `AppNotificationDelegate`) re-derives it independently. `nonisolated`
+    /// because it's pure string parsing (no actor-isolated state) and is
+    /// called from `willPresent`, a synchronous, non-isolated delegate method.
+    nonisolated static func reminderId(fromIdentifier id: String) -> UUID? {
         guard id.hasPrefix(identifierPrefix) else { return nil }
         return UUID(uuidString: String(id.dropFirst(identifierPrefix.count)))
     }
