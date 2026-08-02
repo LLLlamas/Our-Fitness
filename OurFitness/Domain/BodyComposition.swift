@@ -71,38 +71,6 @@ public enum BodyComposition {
         }
     }
 
-    // MARK: - US Navy circumference BF estimate
-
-    /// Estimates body fat % from tape-measure circumferences.
-    ///
-    /// Men: measure waist at the navel; neck at its narrowest.
-    /// Women: waist at narrowest; hips at widest; neck at narrowest.
-    ///
-    /// Accurate to ±3–4 percentage points when measurements are taken correctly.
-    /// Returns nil when inputs are missing or would produce invalid log arguments.
-    public static func navyBodyFatPct(
-        sex: Sex,
-        heightIn: Double,
-        waistIn: Double,
-        neckIn: Double,
-        hipIn: Double? = nil
-    ) -> Double? {
-        guard heightIn > 0, waistIn > 0, neckIn > 0 else { return nil }
-        let pct: Double
-        switch sex {
-        case .male:
-            let diff = waistIn - neckIn
-            guard diff > 0 else { return nil }
-            pct = 86.010 * log10(diff) - 70.041 * log10(heightIn) + 36.76
-        case .female:
-            guard let hip = hipIn, hip > 0 else { return nil }
-            let sum = waistIn + hip - neckIn
-            guard sum > 0 else { return nil }
-            pct = 163.205 * log10(sum) - 97.684 * log10(heightIn) - 78.387
-        }
-        return max(3.0, min(60.0, pct))
-    }
-
     // MARK: - Guidance copy
 
     /// Shown in the Body Fat detail sheet. Teaches users how to get a number to log.

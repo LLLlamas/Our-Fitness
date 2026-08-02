@@ -55,12 +55,14 @@ struct BabyExercisesCard: View {
         Card {
             VStack(alignment: .leading, spacing: 14) {
                 header
-                if myExercises.isEmpty {
+                let exercises = myExercises
+                if exercises.isEmpty {
                     Text("No exercises yet. Head to Settings or ask to add one.")
                         .font(.callout).foregroundStyle(theme.dim)
                 } else {
                     let counts = countsByExercise
-                    ForEach(myExercises) { exercise in
+                    let lastId = exercises.last?.id
+                    ForEach(exercises) { exercise in
                         ExerciseRow(
                             profile: profile,
                             exercise: exercise,
@@ -69,7 +71,7 @@ struct BabyExercisesCard: View {
                             onUndo: { undoLastSet(for: exercise) },
                             onDelete: { deleteExercise(exercise) }
                         )
-                        if exercise.id != myExercises.last?.id {
+                        if exercise.id != lastId {
                             Divider().background(theme.line)
                         }
                     }

@@ -207,6 +207,10 @@ struct CameraFoodLogSheet: View {
         .onAppear {
             if !scannerAvailable { phase = .fallback(text: "") }
         }
+        .onDisappear {
+            stableTimer?.invalidate()
+            stableTimer = nil
+        }
     }
 
     @ViewBuilder

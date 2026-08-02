@@ -49,18 +49,8 @@ public enum TrainingHistory {
         var days: [String: [String: Accumulator]] = [:]
         for s in sets {
             let key = Dates.dayKey(s.timestamp)
-            var dayMap = days[key] ?? [:]
-            var acc = dayMap[s.exerciseId] ?? Accumulator()
-            let ex = byId[s.exerciseId]
-            acc.name = ex?.name ?? acc.name
-            acc.isIsometric = ex?.isIsometric ?? acc.isIsometric
-            acc.setCount += 1
-            acc.totalReps += s.reps
-            acc.totalHoldSeconds += s.holdSeconds ?? 0
-            acc.calories += Int((s.caloriesEst ?? 0).rounded())
-            acc.entries.append((s.timestamp, s.id))
-            dayMap[s.exerciseId] = acc
-            days[key] = dayMap
+            days[key, default: [:]][s.exerciseId, default: Accumulator()]
+                .add(s, exercise: byId[s.exerciseId])
         }
 
         return days
@@ -99,5 +89,15 @@ public enum TrainingHistory {
         var totalHoldSeconds: Int = 0
         var calories: Int = 0
         var entries: [(Date, UUID)] = []
+
+        mutating func add(_ s: WorkoutSetDTO, exercise ex: ExerciseDTO?) {
+            name = ex?.name ?? name
+            isIsometric = ex?.isIsometric ?? isIsometric
+            setCount += 1
+            totalReps += s.reps
+            totalHoldSeconds += s.holdSeconds ?? 0
+            calories += Int((s.caloriesEst ?? 0).rounded())
+            entries.append((s.timestamp, s.id))
+        }
     }
 }

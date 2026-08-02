@@ -6,7 +6,9 @@ import Foundation
 public enum Steps {
 
     private static func byDate(_ steps: [StepCountDTO]) -> [String: Int] {
-        Dictionary(uniqueKeysWithValues: steps.map { ($0.date, $0.steps) })
+        Dictionary(steps.map { ($0.date, $0) }, uniquingKeysWith: { a, b in
+            b.updatedAt >= a.updatedAt ? b : a
+        }).mapValues(\.steps)
     }
 
     /// Step count for a specific dayKey, or 0 if missing.

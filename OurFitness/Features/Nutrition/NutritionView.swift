@@ -73,7 +73,7 @@ struct NutritionView: View {
         return CommonFoods.all.filter { ids.contains($0.id) }
     }
 
-    private var recentlyLogged: [FoodLogEntryDTO] {
+    private func recentlyLogged(from allLogs: [FoodLogEntryDTO]) -> [FoodLogEntryDTO] {
         var seen = Set<String>()
         var result: [FoodLogEntryDTO] = []
         for log in allLogs.reversed() {
@@ -90,22 +90,8 @@ struct NutritionView: View {
 
     private var allLogs: [FoodLogEntryDTO] { logModels.map(\.snapshot) }
 
-    private var selectedDayLogs: [FoodLogEntryDTO] {
-        allLogs.filter { $0.date == selectedDayKey }
-    }
-
     private var todaysLogs: [FoodLogEntryDTO] {
         allLogs.filter { $0.date == today }
-    }
-
-    private var totals: DailyTotals { DailyTotals.totals(from: selectedDayLogs) }
-
-    /// Consecutive days the user has logged at least one meal (habit streak).
-    private var mealLoggingStreak: Int { Streaks.loggingStreak(allLogs) }
-
-    /// What's left toward today's targets (and room under the Circuit caps).
-    private var remaining: RemainingMacros {
-        MacroBudget.remaining(totals: totals, targets: profile.computedTargets)
     }
 
     private func dayPillLabel(_ key: String) -> String {
@@ -119,17 +105,13 @@ struct NutritionView: View {
         Array(Dates.lastNDays(2).reversed())
     }
 
-    private var rankedSuggestions: [SuggestedMeal] {
+    private func rankedSuggestions(allLogs: [FoodLogEntryDTO], totals: DailyTotals) -> [SuggestedMeal] {
         // Personalised: meals built from foods the user favorites or logs often
         // float toward the top, on top of the macro-gap ranking.
         SuggestedMeals.ranked(
             for: profile, totals: totals,
             recentLogs: allLogs, favoriteFoodIds: favoriteIds
         )
-    }
-
-    private var varietyNudges: [FoodVarietyNudge] {
-        FoodVarietyNudges.nudges(from: allLogs, mode: profile.mode)
     }
 
     private func logMeal(_ meal: SuggestedMeal, slot: Slot = .lunch, multiplier: Double = 1.0) {
@@ -205,6 +187,11 @@ struct NutritionView: View {
     }
 
     var body: some View {
+        let allLogs = logModels.map(\.snapshot)
+        let selectedDayLogs = allLogs.filter { $0.date == selectedDayKey }
+        let todaysLogs = allLogs.filter { $0.date == today }
+        let totals = DailyTotals.totals(from: selectedDayLogs)
+        let mealLoggingStreak = Streaks.loggingStreak(allLogs)
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
                 HStack(alignment: .firstTextBaseline, spacing: 10) {
@@ -229,18 +216,18 @@ struct NutritionView: View {
                     .tactile(.pill, fill: theme.accent)
                 }
 
-                totalsCard
+                totalsCard(totals: totals, mealLoggingStreak: mealLoggingStreak)
                 if profile.mode == .circuit {
                     HeartHealthCard(totals: totals, targets: profile.computedTargets, profile: profile)
                 }
                 daySelector
-                weeklyNutritionCard
+                weeklyNutritionCard(allLogs: allLogs)
 
                 moodMealButton
 
                 if selectedDayKey == today {
-                    suggestionPillRow
-                    smarterSwapsSection
+                    suggestionPillRow(allLogs: allLogs, totals: totals)
+                    smarterSwapsSection(allLogs: allLogs)
                 }
 
                 HStack(spacing: 10) {
@@ -272,7 +259,7 @@ struct NutritionView: View {
                     }
                 }
 
-                logList
+                logList(selectedDayLogs: selectedDayLogs)
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 18)
@@ -462,7 +449,7 @@ struct NutritionView: View {
     // MARK: - Weekly nutrition
 
     @ViewBuilder
-    private var weeklyNutritionCard: some View {
+    private func weeklyNutritionCard(allLogs: [FoodLogEntryDTO]) -> some View {
         let series = NutritionHistory.calorieSeries(allLogs, days: 7)
         let logged = NutritionHistory.daysLogged(allLogs, days: 7)
         let target = Double(profile.computedTargets.calories)
@@ -507,10 +494,10 @@ struct NutritionView: View {
     // MARK: - Suggestion pill row
 
     @ViewBuilder
-    private var suggestionPillRow: some View {
-        let meals = rankedSuggestions
+    private func suggestionPillRow(allLogs: [FoodLogEntryDTO], totals: DailyTotals) -> some View {
+        let meals = rankedSuggestions(allLogs: allLogs, totals: totals)
         let favorites = favoriteFoods
-        let recents = recentlyLogged
+        let recents = recentlyLogged(from: allLogs)
         let hasContent = !savedTemplates.isEmpty || !favorites.isEmpty || !recents.isEmpty || !meals.isEmpty
         if hasContent {
             VStack(alignment: .leading, spacing: 14) {
@@ -621,12 +608,12 @@ struct NutritionView: View {
     }
 
     @ViewBuilder
-    private var smarterSwapsSection: some View {
+    private func smarterSwapsSection(allLogs: [FoodLogEntryDTO]) -> some View {
         // Always show the Smarter Swaps section header. When AI has results,
         // show them with the whyBetter educational line. When AI is unavailable,
         // show the variety nudges as the fallback content.
         let aiItems = aiAlternativeItems
-        let nudges = varietyNudges
+        let nudges = FoodVarietyNudges.nudges(from: allLogs, mode: profile.mode)
 
         // Only render if there's something to show: AI results, nudges, or loading.
         let isLoading: Bool = {
@@ -752,7 +739,7 @@ struct NutritionView: View {
     // MARK: - Totals card
 
     @ViewBuilder
-    private var totalsCard: some View {
+    private func totalsCard(totals: DailyTotals, mealLoggingStreak: Int) -> some View {
         Card {
             VStack(alignment: .leading, spacing: 10) {
                 HStack {
@@ -772,13 +759,15 @@ struct NutritionView: View {
                     }
                 }
                 MacroQuadGrid(totals: totals, targets: profile.computedTargets, profile: profile)
-                if selectedDayKey == today && totals.calories > 0 { toGoLine }
+                if selectedDayKey == today && totals.calories > 0 { toGoLine(totals: totals) }
             }
         }
     }
 
     /// Plain (non-ViewBuilder) copy + symbol for the "what's left today" line.
-    private var toGoSummary: (text: String, symbol: String) {
+    private func toGoSummary(totals: DailyTotals) -> (text: String, symbol: String) {
+        // What's left toward today's targets (and room under the Circuit caps).
+        let remaining = MacroBudget.remaining(totals: totals, targets: profile.computedTargets)
         let calLeft = remaining.calories
         let proteinLeft = remaining.proteinG
         if calLeft > 0 {
@@ -796,8 +785,8 @@ struct NutritionView: View {
     /// One-line "what's left today" headline that gives a reason to come back and
     /// close the day — calories + protein remaining, or a target-reached note.
     @ViewBuilder
-    private var toGoLine: some View {
-        let s = toGoSummary
+    private func toGoLine(totals: DailyTotals) -> some View {
+        let s = toGoSummary(totals: totals)
         HStack(spacing: 6) {
             Image(systemName: s.symbol)
                 .font(.system(size: 11))
@@ -812,7 +801,7 @@ struct NutritionView: View {
     // MARK: - Log list
 
     @ViewBuilder
-    private var logList: some View {
+    private func logList(selectedDayLogs: [FoodLogEntryDTO]) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(selectedDayKey == today ? "Today's log" : Dates.formatLong(selectedDayKey))
                 .font(.system(size: 22, weight: .regular))
@@ -1797,18 +1786,14 @@ private struct FoodLibrarySheet: View {
     private func defaultOrdered() -> [CommonFood] {
         let favs = favoriteIds
         let freq = FoodAffinity.frequencyByFoodId(recentLogs, days: 30)
-        let indexById: [String: Int] = Dictionary(
-            uniqueKeysWithValues: CommonFoods.all.enumerated().map { ($1.id, $0) }
-        )
-        func rank(_ food: CommonFood) -> (Int, Int, Int) {
-            let idx = indexById[food.id] ?? 0
+        let ranked = CommonFoods.all.enumerated().map { idx, food -> (rank: (Int, Int, Int), food: CommonFood) in
             let f = freq[food.id] ?? 0
             // Bucket 0 = favorite, 1 = logged non-favorite, 2 = the rest.
             let bucket = favs.contains(food.id) ? 0 : (f > 0 ? 1 : 2)
             // Within a bucket: higher frequency first (negate), then existing index.
-            return (bucket, -f, idx)
+            return ((bucket, -f, idx), food)
         }
-        return CommonFoods.all.sorted { rank($0) < rank($1) }
+        return ranked.sorted { $0.rank < $1.rank }.map(\.food)
     }
 
     private func toggleFavorite(_ id: String) {
@@ -1816,25 +1801,6 @@ private struct FoodLibrarySheet: View {
         if ids.contains(id) { ids.remove(id) } else { ids.insert(id) }
         favoriteIdsString = ids.joined(separator: ",")
         Haptics.bump()
-    }
-
-    /// Pure search over curated + USDA foods. Static so the `.task` debounce can call
-    /// it off the render path without capturing view state beyond the query string.
-    private static func search(_ query: String) -> [CommonFood] {
-        let q = query.lowercased().trimmingCharacters(in: .whitespaces)
-        guard !q.isEmpty else { return CommonFoods.all }
-        let curated = CommonFoods.all.filter { food in
-            food.name.lowercased().contains(q)
-                || food.aliases.contains { $0.lowercased().contains(q) }
-        }
-        // Broaden with the offline USDA database; curated entries win on name.
-        // SQLite FTS5 query on disk — called off the render path by the debounced
-        // `.task`, so it never scans synchronously in `body`.
-        let curatedNames = Set(curated.map { $0.name.lowercased() })
-        let usda = SQLiteFoodDatabase.shared.search(query: q, limit: 40)
-            .map { $0.asCommonFood }
-            .filter { !curatedNames.contains($0.name.lowercased()) }
-        return curated + usda
     }
 
     var body: some View {
@@ -1917,7 +1883,9 @@ private struct FoodLibrarySheet: View {
             }
             try? await Task.sleep(nanoseconds: 180_000_000)   // 180 ms
             guard !Task.isCancelled else { return }
-            displayedResults = Self.search(q)
+            let results = await FoodSearch.combined(matching: q)
+            guard !Task.isCancelled else { return }
+            displayedResults = results
         }
         .presentationDetents([.large])
         .presentationBackground(theme.bg)

@@ -67,8 +67,9 @@ struct TodayView: View {
         self.profile = profile
         self._health = ObservedObject(wrappedValue: health)
         let uid = profile.id
+        let todayKey = Dates.dayKey()
         _logModels = Query(
-            filter: #Predicate<FoodLogEntryModel> { $0.userId == uid },
+            filter: #Predicate<FoodLogEntryModel> { $0.userId == uid && $0.date == todayKey },
             sort: \.timestamp,
             order: .forward
         )

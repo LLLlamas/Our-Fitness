@@ -116,12 +116,6 @@ public enum Units {
 
     // MARK: - Height (canonical: inches; imperial shows ft-in, metric shows cm)
 
-    /// Height display label. Imperial uses a composite ft-in glyph so there is
-    /// no single suffix; metric is "cm".
-    public static func heightUnit(_ system: UnitSystem) -> String {
-        system == .metric ? "cm" : "ft-in"
-    }
-
     /// Format a canonical height (inches). Imperial → `5'7"`, metric → `170 cm`.
     public static func formatHeight(inches: Double, system: UnitSystem) -> String {
         if system == .metric {

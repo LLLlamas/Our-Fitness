@@ -160,6 +160,7 @@ private struct BuildWorkoutsView: View {
     @ViewBuilder
     private var exercisesSection: some View {
         if profile.mode == .build {
+            let exercises = myExercises
             HStack {
                 Text("Your exercises")
                     .font(.system(size: 22, weight: .regular))
@@ -174,7 +175,7 @@ private struct BuildWorkoutsView: View {
                 .tactile(.pill, fill: theme.accent)
             }
 
-            if myExercises.isEmpty {
+            if exercises.isEmpty {
                 Card {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("No exercises yet.")
@@ -185,7 +186,7 @@ private struct BuildWorkoutsView: View {
                 }
             } else {
                 let stats = statsByExercise
-                ForEach(myExercises) { ex in
+                ForEach(exercises) { ex in
                     exerciseCard(ex, stats: stats[ex.id] ?? ExerciseStats())
                 }
             }

@@ -1391,17 +1391,18 @@ public enum SuggestedMeals {
         }
 
         let loved = lovedFoodIds(recentLogs: recentLogs, favoriteFoodIds: favoriteFoodIds)
-        let sorted = pool.sorted { a, b in
-            let sa = score(a, bias: bias) * affinityMultiplier(a, loved: loved)
-            let sb = score(b, bias: bias) * affinityMultiplier(b, loved: loved)
-            if sa != sb { return sa > sb }
-            // Affinity then name as deterministic tiebreakers.
-            let aa = affinityCount(a, loved: loved)
-            let ab = affinityCount(b, loved: loved)
-            if aa != ab { return aa > ab }
-            return a.name < b.name
+        let scored = pool.map { meal in
+            (meal: meal,
+             score: score(meal, bias: bias) * affinityMultiplier(meal, loved: loved),
+             affinity: affinityCount(meal, loved: loved))
         }
-        return Array(sorted.prefix(limit))
+        let sorted = scored.sorted { a, b in
+            if a.score != b.score { return a.score > b.score }
+            // Affinity then name as deterministic tiebreakers.
+            if a.affinity != b.affinity { return a.affinity > b.affinity }
+            return a.meal.name < b.meal.name
+        }
+        return Array(sorted.prefix(limit)).map(\.meal)
     }
 
     /// True when a meal is built around at least one food the user already eats

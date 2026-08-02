@@ -50,8 +50,12 @@ private struct RepCounterView: View {
         self.exercise = exercise
         let uid = profile.id
         let exId = exercise.id
+        var isoCal = Calendar(identifier: .iso8601)
+        isoCal.firstWeekday = 2
+        let weekStart = isoCal.dateInterval(of: .weekOfYear, for: Date())?.start
+            ?? Calendar.current.startOfDay(for: Date())
         _weekSetModels = Query(
-            filter: #Predicate<WorkoutSetModel> { $0.userId == uid && $0.exerciseId == exId },
+            filter: #Predicate<WorkoutSetModel> { $0.userId == uid && $0.exerciseId == exId && $0.timestamp >= weekStart },
             sort: \.timestamp, order: .reverse
         )
     }

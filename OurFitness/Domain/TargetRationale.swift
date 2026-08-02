@@ -35,14 +35,6 @@ public enum TargetRationale {
         }
     }
 
-    /// Very short goal tag, e.g. for a chip or section subtitle.
-    public static func goalTag(for mode: Mode) -> String {
-        switch mode {
-        case .build:   return "slowly add muscle"
-        case .circuit: return "lose fat · improve heart health"
-        }
-    }
-
     // MARK: - Calories
 
     public struct CalorieBreakdown: Equatable, Sendable {

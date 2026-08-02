@@ -145,19 +145,6 @@ public enum Repos {
         return updateVitals(ctx, profileId: profileId, weightLb: latest)
     }
 
-    public static func saveProfile(_ ctx: ModelContext, _ p: ProfileDTO) {
-        let target = p.id
-        let desc = FetchDescriptor<ProfileModel>(
-            predicate: #Predicate { $0.id == target }
-        )
-        if let existing = try? ctx.fetch(desc).first {
-            existing.apply(p)
-        } else {
-            ctx.insert(ProfileModel(snapshot: p))
-        }
-        try? ctx.save()
-    }
-
     /// Switch a profile's mode at will. Recomputes macro/step targets from the
     /// profile's existing vitals (logs are mode-agnostic and untouched) and, when
     /// switching to Circuit, seeds the parenting exercises (idempotent). Returns
@@ -319,33 +306,9 @@ public enum Repos {
 
     // MARK: - Workouts + sets
 
-    public static func startWorkout(_ ctx: ModelContext, userId: UUID, programId: String?) -> UUID {
-        let id = UUID()
-        ctx.insert(WorkoutModel(id: id, userId: userId, programId: programId))
-        try? ctx.save()
-        return id
-    }
-
-    public static func endWorkout(_ ctx: ModelContext, id: UUID) {
-        let desc = FetchDescriptor<WorkoutModel>(predicate: #Predicate { $0.id == id })
-        if let w = try? ctx.fetch(desc).first {
-            w.endedAt = Date()
-            try? ctx.save()
-        }
-    }
-
     public static func addSet(_ ctx: ModelContext, _ s: WorkoutSetDTO) {
         ctx.insert(WorkoutSetModel(snapshot: s))
         try? ctx.save()
-    }
-
-    public static func setHistory(_ ctx: ModelContext, userId: UUID, exerciseId: String, limit: Int = 50) -> [WorkoutSetDTO] {
-        var desc = FetchDescriptor<WorkoutSetModel>(
-            predicate: #Predicate { $0.userId == userId && $0.exerciseId == exerciseId },
-            sortBy: [SortDescriptor(\.timestamp, order: .reverse)]
-        )
-        desc.fetchLimit = limit
-        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
     }
 
     public static func deleteSet(_ ctx: ModelContext, id: UUID) {
@@ -449,24 +412,6 @@ public enum Repos {
     public static func logPilatesSession(_ ctx: ModelContext, _ s: PilatesSessionDTO) {
         ctx.insert(PilatesSessionModel(snapshot: s))
         try? ctx.save()
-    }
-
-    public static func recentPilatesSessions(
-        _ ctx: ModelContext, profileId: UUID, limit: Int = 5
-    ) -> [PilatesSessionDTO] {
-        var desc = FetchDescriptor<PilatesSessionModel>(
-            predicate: #Predicate { $0.profileId == profileId },
-            sortBy: [SortDescriptor(\.date, order: .reverse)]
-        )
-        desc.fetchLimit = limit
-        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
-    }
-
-    public static func pilatesSessionsThisWeek(
-        _ ctx: ModelContext, profileId: UUID, now: Date = Date()
-    ) -> [PilatesSessionDTO] {
-        let all = listPilatesSessions(ctx, profileId: profileId)
-        return Movement.sessionsThisWeek(all, now: now)
     }
 
     public static func listPilatesSessions(

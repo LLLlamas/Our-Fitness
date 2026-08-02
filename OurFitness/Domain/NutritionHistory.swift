@@ -14,9 +14,11 @@ public enum NutritionHistory {
 
     /// Per-day totals for the last `days`, oldest first (empty days included as zero).
     public static func byDay(_ entries: [FoodLogEntryDTO], days: Int, end: Date = Date()) -> [DayTotals] {
+        let window = Dates.lastNDays(days, end: end)
+        let windowKeys = Set(window)
         var grouped: [String: [FoodLogEntryDTO]] = [:]
-        for e in entries { grouped[e.date, default: []].append(e) }
-        return Dates.lastNDays(days, end: end).map { key in
+        for e in entries where windowKeys.contains(e.date) { grouped[e.date, default: []].append(e) }
+        return window.map { key in
             DayTotals(id: key, day: key, totals: DailyTotals.totals(from: grouped[key] ?? []))
         }
     }

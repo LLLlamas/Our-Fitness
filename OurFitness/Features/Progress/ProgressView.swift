@@ -85,39 +85,8 @@ struct ProgressTabView: View {
     private var markers: [HealthMarkerDTO] { markerModels.map(\.snapshot) }
     private var steps: [StepCountDTO] { stepModels.map(\.snapshot) }
     private var sets: [WorkoutSetDTO] { setModels.map(\.snapshot) }
-    private var exercises: [ExerciseDTO] { exerciseModels.map(\.snapshot) }
-    private var trainingSessions: [TrainingHistory.DaySession] {
-        TrainingHistory.sessions(sets: sets, exercises: exercises)
-    }
-    private var foodLogs: [FoodLogEntryDTO] { foodModels.map(\.snapshot) }
-    private var cardio: [CardioSessionDTO] { cardioModels.map(\.snapshot) }
-    private var pilates: [PilatesSessionDTO] { pilatesModels.map(\.snapshot) }
-    private var activities: [ActivitySessionDTO] { activityModels.map(\.snapshot) }
-    private var trainingHistoryDayKeys: [String] {
-        let keys = Set(
-            trainingSessions.map(\.dayKey)
-            + cardio.map { Dates.dayKey($0.date) }
-            + pilates.map { Dates.dayKey($0.date) }
-            + activities.map { Dates.dayKey($0.date) }
-        )
-        return keys.sorted(by: >)
-    }
-
-    // MARK: - Energy balance (intake vs activity burn)
-
-    private var energyRows: [EnergyBalance.DayBalance] {
-        EnergyBalance.byDay(
-            days: 30,
-            foodLogs: foodLogs, steps: steps, sets: sets,
-            cardio: cardio, pilates: pilates, activities: activities,
-            bodyWeightLb: profile.weightLb
-        )
-    }
 
     private var targetCalories: Int { profile.computedTargets.calories }
-
-    /// Today's intake/burn for the card readout — the last (newest) row.
-    private var todayBalance: EnergyBalance.DayBalance? { energyRows.last }
 
     /// The enabled tracker set: mode defaults until the user customizes, then
     /// whatever they chose (including the empty "none" state).
@@ -152,6 +121,26 @@ struct ProgressTabView: View {
     ]
 
     var body: some View {
+        let body_ = self.body_
+        let markers = self.markers
+        let steps = self.steps
+        let sets = self.sets
+        let cardio = cardioModels.map(\.snapshot)
+        let pilates = pilatesModels.map(\.snapshot)
+        let activities = activityModels.map(\.snapshot)
+        let energyRows = EnergyBalance.byDay(
+            days: 30,
+            foodLogs: foodModels.map(\.snapshot), steps: steps, sets: sets,
+            cardio: cardio, pilates: pilates, activities: activities,
+            bodyWeightLb: profile.weightLb
+        )
+        let trainingSessions = TrainingHistory.sessions(sets: sets, exercises: exerciseModels.map(\.snapshot))
+        let trainingHistoryDayKeys = Set(
+            trainingSessions.map(\.dayKey)
+            + cardio.map { Dates.dayKey($0.date) }
+            + pilates.map { Dates.dayKey($0.date) }
+            + activities.map { Dates.dayKey($0.date) }
+        ).sorted(by: >)
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 HStack(alignment: .firstTextBaseline) {
@@ -175,17 +164,17 @@ struct ProgressTabView: View {
                 } else {
                     LazyVGrid(columns: columns, spacing: 14) {
                         ForEach(visibleStats, id: \.self) { kind in
-                            statCard(for: kind)
+                            statCard(for: kind, body: body_, markers: markers, steps: steps, sets: sets)
                         }
                     }
                 }
 
                 // Calorie intake vs activity burn — shown for both modes.
-                energyBalanceCard
+                energyBalanceCard(energyRows: energyRows)
 
                 // Cross-day training history; Today/Train only keep the daily surface short.
                 if !trainingHistoryDayKeys.isEmpty {
-                    trainingHistoryCard
+                    trainingHistoryCard(dayKeys: trainingHistoryDayKeys)
                 }
             }
             .padding(.horizontal, 20)
@@ -220,9 +209,9 @@ struct ProgressTabView: View {
     // MARK: - Training history card
 
     @ViewBuilder
-    private var trainingHistoryCard: some View {
-        let dayCount = trainingHistoryDayKeys.count
-        let lastDay = trainingHistoryDayKeys.first
+    private func trainingHistoryCard(dayKeys: [String]) -> some View {
+        let dayCount = dayKeys.count
+        let lastDay = dayKeys.first
         PressableCard(action: { showTrainingHistory = true }) {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(spacing: 6) {
@@ -248,7 +237,8 @@ struct ProgressTabView: View {
     // MARK: - Energy balance card
 
     @ViewBuilder
-    private var energyBalanceCard: some View {
+    private func energyBalanceCard(energyRows: [EnergyBalance.DayBalance]) -> some View {
+        let todayBalance = energyRows.last
         let intake = todayBalance?.intake ?? 0
         let burned = todayBalance?.burned ?? 0
         PressableCard(action: { showEnergyBalance = true }) {
@@ -303,10 +293,16 @@ struct ProgressTabView: View {
     // MARK: - Cards
 
     @ViewBuilder
-    private func statCard(for kind: StatKind) -> some View {
+    private func statCard(
+        for kind: StatKind,
+        body body_: [BodyMetricDTO],
+        markers: [HealthMarkerDTO],
+        steps: [StepCountDTO],
+        sets: [WorkoutSetDTO]
+    ) -> some View {
         let value = kind.displayValue(body: body_, markers: markers, steps: steps, sets: sets, profile: profile, system: unitSystem)
         let trend = kind.trendChip(body: body_, markers: markers, steps: steps, sets: sets, profile: profile, system: unitSystem)
-        let tint  = statusTint(for: kind)
+        let tint  = statusTint(for: kind, body: body_, markers: markers)
         StatCard(
             title: kind.title,
             value: value,
@@ -317,17 +313,17 @@ struct ProgressTabView: View {
         )
     }
 
-    private func statusTint(for kind: StatKind) -> Color? {
+    private func statusTint(for kind: StatKind, body body_: [BodyMetricDTO], markers: [HealthMarkerDTO]) -> Color? {
         let status: HealthRanges.RangeStatus
         switch kind {
         case .bp:
-            let sys = latestMarkerValue(.bpSystolic)
-            let dia = latestMarkerValue(.bpDiastolic)
+            let sys = latestMarkerValue(.bpSystolic, in: markers)
+            let dia = latestMarkerValue(.bpDiastolic, in: markers)
             guard sys != nil || dia != nil else { return nil }
             status = HealthRanges.bpStatus(systolic: sys, diastolic: dia)
         case .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose, .restingHR:
             guard let mk = kind.markerKind,
-                  let v = latestMarkerValue(mk) else { return nil }
+                  let v = latestMarkerValue(mk, in: markers) else { return nil }
             status = HealthRanges.status(for: mk, value: v)
         case .bmi:
             guard let w = body_.compactMap(\.weightLb).last else { return nil }
@@ -345,7 +341,7 @@ struct ProgressTabView: View {
         }
     }
 
-    private func latestMarkerValue(_ kind: HealthMarkerKind) -> Double? {
+    private func latestMarkerValue(_ kind: HealthMarkerKind, in markers: [HealthMarkerDTO]) -> Double? {
         markers.filter { $0.kind == kind }
             .sorted { $0.date < $1.date }
             .last?.value
@@ -390,7 +386,7 @@ struct ProgressTabView: View {
                 canLog: kind.canLog,
                 rangeContext: kind.markerKind.map(HealthRanges.context(for:)),
                 personalNote: kind.markerKind.flatMap { mk in
-                    latestMarkerValue(mk).map { TargetRationale.markerMeaning(kind: mk, value: $0, mode: profile.mode) }
+                    latestMarkerValue(mk, in: markers).map { TargetRationale.markerMeaning(kind: mk, value: $0, mode: profile.mode) }
                 },
                 onSave: { value in
                     // Waist is entered in the active unit; convert back to canonical inches.
@@ -772,31 +768,27 @@ private func formattedValue(_ v: Double) -> String {
 private func setsThisWeek(_ sets: [WorkoutSetDTO]) -> Int {
     let cal = Calendar.current
     guard let weekStart = cal.date(from: cal.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date())) else { return 0 }
-    let key = Dates.dayKey(weekStart)
-    return sets.filter { Dates.dayKey($0.timestamp) >= key }.count
+    return sets.filter { $0.timestamp >= weekStart }.count
 }
 
 private func setsLastWeek(_ sets: [WorkoutSetDTO]) -> Int {
     let cal = Calendar.current
     guard let thisWeekStart = cal.date(from: cal.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date())),
           let lastWeekStart = cal.date(byAdding: .weekOfYear, value: -1, to: thisWeekStart) else { return 0 }
-    let thisKey = Dates.dayKey(thisWeekStart)
-    let lastKey = Dates.dayKey(lastWeekStart)
-    return sets.filter { Dates.dayKey($0.timestamp) >= lastKey && Dates.dayKey($0.timestamp) < thisKey }.count
+    return sets.filter { $0.timestamp >= lastWeekStart && $0.timestamp < thisWeekStart }.count
 }
 
 private func trainingVolumeSeries(_ sets: [WorkoutSetDTO]) -> [Trends.Point] {
     let cal = Calendar.current
     guard let cutoff = cal.date(byAdding: .weekOfYear, value: -12, to: Date()) else { return [] }
-    let cutoffKey = Dates.dayKey(cutoff)
-    var weekCounts: [String: Double] = [:]
-    for s in sets where Dates.dayKey(s.timestamp) >= cutoffKey {
+    let cutoffDay = cal.startOfDay(for: cutoff)
+    var weekCounts: [Date: Double] = [:]
+    for s in sets where s.timestamp >= cutoffDay {
         let comps = cal.dateComponents([.yearForWeekOfYear, .weekOfYear], from: s.timestamp)
         guard let weekStart = cal.date(from: comps) else { continue }
-        let key = Dates.dayKey(weekStart)
-        weekCounts[key, default: 0] += 1
+        weekCounts[weekStart, default: 0] += 1
     }
-    return weekCounts.map { Trends.Point(date: $0.key, value: $0.value) }
+    return weekCounts.map { Trends.Point(date: Dates.dayKey($0.key), value: $0.value) }
         .sorted { $0.date < $1.date }
 }
 
@@ -1489,23 +1481,17 @@ private struct TrainingHistorySheet: View {
         )
     }
 
-    private var sessions: [TrainingHistory.DaySession] {
-        TrainingHistory.sessions(sets: setModels.map(\.snapshot), exercises: exerciseModels.map(\.snapshot))
-    }
-    private var cardio: [CardioSessionDTO] { cardioModels.map(\.snapshot) }
-    private var pilates: [PilatesSessionDTO] { pilatesModels.map(\.snapshot) }
-    private var activities: [ActivitySessionDTO] { activityModels.map(\.snapshot) }
-    private var dayKeys: [String] {
-        let keys = Set(
-            sessions.map(\.dayKey)
-            + cardio.map { Dates.dayKey($0.date) }
-            + pilates.map { Dates.dayKey($0.date) }
-            + activities.map { Dates.dayKey($0.date) }
-        )
-        return keys.sorted(by: >)
-    }
-
     var body: some View {
+        let sessions = TrainingHistory.sessions(sets: setModels.map(\.snapshot), exercises: exerciseModels.map(\.snapshot))
+        let sessionsByDay = Dictionary(uniqueKeysWithValues: sessions.map { ($0.dayKey, $0) })
+        let cardioByDay = Dictionary(grouping: cardioModels.map(\.snapshot)) { Dates.dayKey($0.date) }
+        let pilatesByDay = Dictionary(grouping: pilatesModels.map(\.snapshot)) { Dates.dayKey($0.date) }
+        let activitiesByDay = Dictionary(grouping: activityModels.map(\.snapshot)) { Dates.dayKey($0.date) }
+        let dayKeys = Set(sessions.map(\.dayKey))
+            .union(cardioByDay.keys)
+            .union(pilatesByDay.keys)
+            .union(activitiesByDay.keys)
+            .sorted(by: >)
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
                 VStack(alignment: .leading, spacing: 4) {
@@ -1528,7 +1514,17 @@ private struct TrainingHistorySheet: View {
                         }
                     }
                 } else {
-                    ForEach(dayKeys, id: \.self) { daySection($0) }
+                    LazyVStack(alignment: .leading, spacing: 18) {
+                        ForEach(dayKeys, id: \.self) { key in
+                            daySection(
+                                key,
+                                strength: sessionsByDay[key],
+                                cardio: cardioByDay[key] ?? [],
+                                pilates: pilatesByDay[key] ?? [],
+                                activities: activitiesByDay[key] ?? []
+                            )
+                        }
+                    }
                 }
             }
             .padding(.horizontal, 20)
@@ -1539,11 +1535,13 @@ private struct TrainingHistorySheet: View {
     }
 
     @ViewBuilder
-    private func daySection(_ dayKey: String) -> some View {
-        let strength = sessions.first { $0.dayKey == dayKey }
-        let cardioRows = cardio.filter { Dates.dayKey($0.date) == dayKey }
-        let pilatesRows = pilates.filter { Dates.dayKey($0.date) == dayKey }
-        let activityRows = activities.filter { Dates.dayKey($0.date) == dayKey }
+    private func daySection(
+        _ dayKey: String,
+        strength: TrainingHistory.DaySession?,
+        cardio cardioRows: [CardioSessionDTO],
+        pilates pilatesRows: [PilatesSessionDTO],
+        activities activityRows: [ActivitySessionDTO]
+    ) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .firstTextBaseline) {
                 Text(Dates.formatLong(dayKey))
