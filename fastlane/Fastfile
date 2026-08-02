@@ -1,6 +1,7 @@
-# Mac-less workflow.
-# Signing assets live in an encrypted fastlane match repository.
-# CI syncs them into a temporary keychain instead of creating certificates every run.
+# Lanes run locally (primary workflow) and in CI (backup). Env vars come from
+# your local shell / a gitignored fastlane/.env, or GitHub secrets in CI.
+# Signing assets live in an encrypted fastlane match repository; lanes sync
+# them into a temporary keychain instead of creating certificates every run.
 #
 # Required env (set as GitHub secrets, exported by the workflow):
 #   APPLE_TEAM_ID

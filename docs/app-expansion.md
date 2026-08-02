@@ -198,7 +198,7 @@ current models violate.
 ## Verification
 
 **Phase 1**
-- Build: `fastlane compile` (or push → `compile.yml`). Domain tests: `fastlane tests`.
+- Build: `bundle exec fastlane ios compile` (or push → `compile.yml`). Domain tests: `bundle exec fastlane ios tests`.
 - Run on simulator (`/run`): first launch → create profile → confirm only that profile's
   data shows. In Settings, switch Build→Circuit: confirm the sheet previews the target
   change, theme flips light/dark, Train tab disappears, Circuit cards appear in Today, and

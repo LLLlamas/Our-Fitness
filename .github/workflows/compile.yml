@@ -1,6 +1,6 @@
-# Fast feedback workflow. Runs on every push + PR.
-# Generates the Xcode project, compiles, runs unit tests. NO signing.
-# Use this loop to flush Swift errors before triggering TestFlight.
+# Backup CI gate — primary development is local; see docs/setup.md.
+# Runs on every push + PR: generates the Xcode project, compiles, runs unit tests.
+# NO signing. Catches anything a local build/test run missed.
 
 name: Compile + Test
 

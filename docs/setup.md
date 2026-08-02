@@ -1,23 +1,90 @@
 # Our-Fitness — Operations Manual
 
-CI/CD setup, Apple signing, TestFlight workflow, and day-to-day ops.
+Local development, Apple signing, TestFlight releases, backup CI workflows, and day-to-day ops.
 
 ---
 
-## The Mac-less workflow
+## Local development (primary workflow)
 
-You don't have Xcode. You have Windows, GitHub Actions, and App Store Connect. So the loop is:
+Local Xcode is the primary loop. The GitHub Actions workflows stay in the repo as a backup path (see [Daily loop](#daily-loop) and the CI TestFlight section below).
 
-1. Push code from Windows
-2. **`compile.yml`** runs on every push (2–5 min) → tells you if Swift compiles + tests pass
-3. When you want it on your phone → trigger **`testflight.yml`** manually or push a `v*` tag
-4. Fastlane on the macOS runner builds, signs, uploads → TestFlight delivers to your iPhone
+### Prereqs
 
-Iterate fast on `compile.yml`. Only burn TestFlight on builds you actually want to install.
+- **Xcode 26.x** — stable, not beta (see `docs/ci-history.md`), signed into your Apple ID
+- `brew install xcodegen`
+- `bundle install` (fastlane, pinned in `Gemfile`)
+
+### One-time simulator bootstrap
+
+```bash
+sudo xcodebuild -runFirstLaunch      # skipping this = exit 70 (see ci-history.md)
+xcodebuild -downloadPlatform iOS     # download the iOS simulator runtime
+xcrun simctl list devices available  # verify an iPhone 17 appears
+```
+
+### Generate the project
+
+```bash
+xcodegen generate
+```
+
+Re-run after **every** `project.yml` change or any pull that touches it. The `.xcodeproj` is gitignored — never commit it.
+
+### Build + test
+
+Open `OurFitness.xcodeproj` and ⌘R (run) / ⌘U (test). Or from the CLI — these mirror CI exactly, so local green ⇒ CI green:
+
+```bash
+xcodebuild -project OurFitness.xcodeproj -scheme OurFitness -configuration Debug \
+  -destination 'platform=iOS Simulator,name=iPhone 17' \
+  CODE_SIGNING_ALLOWED=NO ASSETCATALOG_COMPILER_SKIP_APP_STORE_DEPLOYMENT=YES build   # or `test`
+```
+
+or the fastlane equivalents:
+
+```bash
+bundle exec fastlane ios compile   # build only, no signing
+bundle exec fastlane ios tests     # unit tests on the simulator
+```
+
+### Pre-push guardrail
+
+```bash
+bash scripts/validate-ci-invariants.sh
+```
+
+Run it **after** `xcodegen generate` — its TEST_HOST checks silently skip without a generated project.
+
+### On-device testing
+
+Run on a tethered iPhone directly from Xcode for anything the simulator can't do: HealthKit (the simulator returns no health data), Live Activities, and future CloudKit sync. Device builds use Xcode's automatic development signing — separate from match, which is App Store distribution only.
 
 ---
 
-## One-time setup (do this once, on the web — no Mac needed)
+## Releasing to TestFlight locally
+
+The Fastfile's release lanes run locally:
+
+```bash
+bundle exec fastlane ios install_appstore_profile   # installs the app + widget App Store profiles from the base64 env vars
+bundle exec fastlane ios beta                       # match (readonly) → archive → upload to TestFlight
+```
+
+Required env vars (the Fastfile header lists them) — export in your shell or a gitignored `fastlane/.env`:
+
+- `APPLE_TEAM_ID`
+- `APP_STORE_CONNECT_API_KEY_ID`, `APP_STORE_CONNECT_API_ISSUER_ID`, `APP_STORE_CONNECT_API_KEY_P8`
+- `KEYCHAIN_PASSWORD` (any random string; `beta` creates a temporary `ourfitness-ci.keychain-db` and makes it the default keychain for the run)
+- `MATCH_GIT_URL`, `MATCH_PASSWORD`, `MATCH_GIT_BASIC_AUTHORIZATION` (basic-auth optional if your local git already reaches the match repo)
+- `APPSTORE_PROFILE_BASE64`, `APPSTORE_WIDGET_PROFILE_BASE64` (for `install_appstore_profile`)
+
+**match stays READONLY** (the default) against the existing certs repo — never create new Apple Distribution certificates locally. Apple's cert slots are limited and a stray cert breaks signing everywhere (see "Persistent TestFlight signing — match" in `docs/ci-history.md`). `MATCH_READONLY=false` + the `sync_signing` lane are for intentional rotation only.
+
+The GitHub Actions **`testflight.yml`** workflow (manual dispatch or a `v*` tag) remains as the backup release path — see [Ship to TestFlight via CI](#ship-to-testflight-via-ci-backup-path).
+
+---
+
+## One-time setup (do this once, on the web)
 
 ### 1. Apple Developer Portal — register the App ID
 
@@ -60,8 +127,8 @@ Create a private GitHub repo just for signing assets, for example `Our-Fitness-S
 
 Create a fine-scoped GitHub token limited to that repo with **Contents: read and write**. Then create the Basic auth value for CI:
 
-```powershell
-[Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("YOUR_GITHUB_USERNAME:YOUR_TOKEN"))
+```bash
+printf '%s' "YOUR_GITHUB_USERNAME:YOUR_TOKEN" | base64
 ```
 
 Keep the output ready for the `MATCH_GIT_BASIC_AUTHORIZATION` secret below.
@@ -79,11 +146,11 @@ Add these signing and App Store secrets:
 | `APPLE_TEAM_ID` | Step 4 above | 10-char alphanumeric |
 | `APP_STORE_CONNECT_API_KEY_ID` | Step 3 above | 10-char alphanumeric |
 | `APP_STORE_CONNECT_API_ISSUER_ID` | Step 3 above | UUID format |
-| `APP_STORE_CONNECT_API_KEY_P8` | Step 3 — open the `.p8` in Notepad, copy ALL of it including the `-----BEGIN PRIVATE KEY-----` / `-----END PRIVATE KEY-----` lines | Preserve newlines as-is when pasting |
-| `KEYCHAIN_PASSWORD` | Make up anything random (e.g. `openssl rand -hex 16` if you have Git Bash) | Used to lock the temporary keychain on the CI runner |
+| `APP_STORE_CONNECT_API_KEY_P8` | Step 3 — `cat` the `.p8` (or open it in TextEdit), copy ALL of it including the `-----BEGIN PRIVATE KEY-----` / `-----END PRIVATE KEY-----` lines | Preserve newlines as-is when pasting |
+| `KEYCHAIN_PASSWORD` | Make up anything random (e.g. `openssl rand -hex 16`) | Used to lock the temporary keychain on the CI runner |
 | `MATCH_GIT_URL` | Step 5 signing repo URL | Example: `https://github.com/YOUR_ORG/Our-Fitness-Signing.git` |
 | `MATCH_PASSWORD` | Make up a long random passphrase | Encrypts/decrypts the signing repo contents |
-| `MATCH_GIT_BASIC_AUTHORIZATION` | Step 5 PowerShell output | Base64 `github-user:token`; token needs access to the private signing repo |
+| `MATCH_GIT_BASIC_AUTHORIZATION` | Step 5 base64 output | Base64 `github-user:token`; token needs access to the private signing repo |
 | `APPSTORE_PROFILE_BASE64` | Manual App Store provisioning profile for `com.ourfitness.app`, base64 encoded | Used by TestFlight export |
 | `APPSTORE_WIDGET_PROFILE_BASE64` | Manual App Store provisioning profile for `com.ourfitness.app.widgets`, base64 encoded | Used by widget/TestFlight export |
 
@@ -102,19 +169,20 @@ No manual `.p12` export is needed. The first signing refresh seeds the encrypted
 ## Daily loop
 
 ```bash
-# On Windows, work normally:
-git add .
-git commit -m "feat: add weekly planner skeleton"
-git push origin main
+xcodegen generate                        # if project.yml changed (or a pull touched it)
+# build + test in Xcode (⌘R / ⌘U), or:
+bundle exec fastlane ios tests
+bash scripts/validate-ci-invariants.sh   # after xcodegen generate
+git add . && git commit -m "feat: add weekly planner skeleton" && git push origin main
 ```
 
-Within ~3 minutes the **Compile + Test** workflow finishes. If it fails, the run page shows the Swift errors with file + line. Patch, push, repeat.
+**`compile.yml`** still runs on every push as a backup gate (~3 min). If local and CI ever disagree, the run page shows the Swift errors with file + line.
 
 ---
 
-## Ship to TestFlight
+## Ship to TestFlight via CI (backup path)
 
-Two ways:
+Prefer the local release above. When you want CI to do it, two ways:
 
 ### Option A — Manual trigger
 - GitHub → **Actions** → **TestFlight** workflow → **Run workflow**
@@ -192,9 +260,9 @@ The compile workflow generates a basic orange-on-black "OF" icon if none is pres
 Our-Fitness/
 ├── OurFitness/                  # Source (see CLAUDE.md for full map)
 ├── OurFitnessTests/             # XCTest suites for the pure Domain layer
-├── project.yml                  # XcodeGen — defines the Xcode project, generated in CI
+├── project.yml                  # XcodeGen — defines the Xcode project, generated locally and in CI
 ├── fastlane/
-│   ├── Fastfile                 # CI lanes: tests, compile, beta
+│   ├── Fastfile                 # Lanes (local + CI): tests, compile, beta
 │   └── Appfile                  # Bundle ID + Team ID wiring
 ├── Gemfile                      # Fastlane version pin
 ├── scripts/
@@ -204,13 +272,4 @@ Our-Fitness/
     └── testflight.yml           # On manual / tag — sign + ship to TestFlight
 ```
 
-The `.xcodeproj` is **deliberately gitignored** — it's regenerated from `project.yml` on every CI run. Don't try to commit it.
-
----
-
-## Adding a Mac later
-
-If you eventually get a Mac, nothing changes — the same workflows keep working. You'd just gain:
-- Local `xcodegen generate && open OurFitness.xcodeproj` for live SwiftUI Previews
-- Local `bundle exec fastlane ios tests` to run tests without pushing
-- Real HealthKit testing (the simulator returns no health data)
+The `.xcodeproj` is **deliberately gitignored** — regenerate it from `project.yml` with `xcodegen generate` locally (CI does the same on every run). Don't try to commit it.

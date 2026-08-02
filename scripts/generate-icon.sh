@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Idempotent AppIcon generator. Runs in CI when no real icon is present.
+# Idempotent AppIcon generator. Runs locally or in CI when no real icon is present.
 # Drop a real 1024x1024 PNG at OurFitness/Assets.xcassets/AppIcon.appiconset/icon.png
 # and this script will skip generation.
 #

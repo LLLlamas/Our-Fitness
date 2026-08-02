@@ -29,7 +29,7 @@ OurFitness/
   Data/         ← SwiftData @Model classes + Repositories/
   Services/     ← HealthKit, Theme, Haptics, ToastCenter
   Features/     ← Onboarding, Today, Nutrition, Workouts (shared Train tab; Circuit-mode cards under Circuit/ folder), Progress, Settings
-  Components/   ← ProgressBar, ProgressRing, Card, Banner, AnimatedNumber, TactileButtonStyle…
+  Components/   ← ProgressBar, ProgressRing, Card, AnimatedNumber, TactileButtonStyle…
 _stashed/       ← Outside build target; pending rework
 OurFitnessTests/ ← Hostless XCTest for Domain/* only
 project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
@@ -191,7 +191,7 @@ LDL/HDL/cholesterol/A1c not from Apple Health (lab-only) — manual entry.
 
 Full incident narratives: [docs/ci-history.md](docs/ci-history.md). Setup: [docs/setup.md](docs/setup.md).
 
-- **Mac-less workflow:** push → `compile.yml` → patch → push.
+- **Local-first:** build/test locally in Xcode or `bundle exec fastlane ios tests` (after `xcodegen generate`); `compile.yml` on push + `testflight.yml` remain as the backup gate/release safety net. TestFlight can also be released locally via fastlane — see [docs/setup.md](docs/setup.md).
 - **Tests hostless:** `OurFitnessTests` compiles `Domain/` directly. No `@testable import`. `scripts/validate-ci-invariants.sh` enforces.
 - **Never bare `Date()` in streak/weekly tests** — pin `now` to fixed mid-week (e.g. `2026-05-27T12:00:00Z`), thread through fixture + function.
 - **Signing:** match repo `LLLlamas/Our-Fitness-Certs`, readonly CI. Manual App Store profile `OurFitness AppStore` → base64 → `APPSTORE_PROFILE_BASE64`. Widget (`com.ourfitness.app.widgets`) needs its own profile.
@@ -204,7 +204,7 @@ Full incident narratives: [docs/ci-history.md](docs/ci-history.md). Setup: [docs
 
 ## References
 
-- [README.md](README.md) — setup, XcodeGen, CI, secrets
+- [README.md](README.md) — getting started, local build + test
 - [docs/ci-history.md](docs/ci-history.md) — incident narratives behind CI rules
 - [docs/setup.md](docs/setup.md) — one-time setup, secrets, daily loop
 - [docs/RepCheck.md](docs/RepCheck.md) — friction-free logging UX bar

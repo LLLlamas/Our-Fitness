@@ -19,6 +19,7 @@ Package.resolved
 Pods/
 
 # Fastlane
+fastlane/.env
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png

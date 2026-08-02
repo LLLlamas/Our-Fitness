@@ -19,6 +19,20 @@ One profile per install. All data stays on-device. Mode is changeable at will in
 
 ---
 
+## Getting started
+
+Requires Xcode 26.x (stable) with the iOS simulator runtime downloaded.
+
+```bash
+brew install xcodegen && bundle install
+xcodegen generate            # .xcodeproj is gitignored — re-run after project.yml changes
+open OurFitness.xcodeproj    # ⌘R to run, ⌘U to test
+```
+
+CLI: `bundle exec fastlane ios compile` (build) / `bundle exec fastlane ios tests` (unit tests). TestFlight releases + full setup: [docs/setup.md](docs/setup.md).
+
+---
+
 ## Docs
 
 - [CLAUDE.md](CLAUDE.md) — architecture, codebase map, where-to-touch for every feature

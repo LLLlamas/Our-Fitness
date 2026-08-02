@@ -19,9 +19,9 @@ Native iOS / SwiftUI app (App Store target). One profile per install. Two modes:
 6. Append-only logs; derived figures (daily/weekly/streak) are never stored. DTOs in `Domain/Models.swift`, `@Model` in `Data/PersistenceModels.swift` with `snapshot` adapters, CRUD in `Data/Repositories/Repositories.swift`.
 7. Never hardcode kcal — `MET × bodyWeightKg × hours` (`Domain/CalorieEstimator.swift`). Food/exercise numbers are real (USDA / reference), never model-invented.
 
-## Build / CI (mac-less)
+## Build / CI (local-first)
 
-- No local Xcode. Loop: **push → `compile.yml` builds + tests → patch → push.** Green CI = it builds.
+- Build/test locally: **`xcodegen generate` → `bundle exec fastlane ios compile` / `ios tests`** (or Xcode ⌘R/⌘U). Green local build + tests = it builds. `compile.yml` on push is the backup gate.
 - Tests are **hostless** — `OurFitnessTests` compiles `Domain/` directly, no `@testable import`. Never use a bare `Date()` in streak/weekly tests; pin `now`.
 - XcodeGen (`project.yml`) generates the gitignored `.xcodeproj`. Never put `info:`/`entitlements:` blocks on a target — use `INFOPLIST_FILE` / `CODE_SIGN_ENTITLEMENTS` settings.
 

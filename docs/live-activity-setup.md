@@ -154,7 +154,7 @@ Live Activities **do not** appear in the iOS Simulator reliably; test on a real
 device (iOS 16.2+; our deployment target is iOS 17, so any supported device
 works).
 
-1. Build to a device (or install the TestFlight build).
+1. Run on a tethered iPhone directly from Xcode (a TestFlight build works too).
 2. Settings → check **Live Activities** is ON for Our-Fitness (and globally under
    Face ID & Passcode / Live Activities). The feature fails soft if it's off —
    the session still runs, there's just no Lock Screen timer.
