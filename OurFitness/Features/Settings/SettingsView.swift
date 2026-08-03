@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import UserNotifications
 
 struct SettingsView: View {
     let profile: ProfileDTO
@@ -184,8 +185,22 @@ struct SettingsView: View {
         }
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-        .onChange(of: remindersEnabled) { _, _ in
-            Task { await ReminderNotificationService.reconcile(ctx, userId: profile.id) }
+        .onChange(of: remindersEnabled) { _, enabled in
+            if enabled {
+                Task { await ReminderNotificationService.reconcile(ctx, userId: profile.id) }
+            } else {
+                // reconcile() no-ops while globally disabled, so clear pending
+                // requests here. "reminder.<uuid>" mirrors the private identifier
+                // scheme in ReminderNotificationService — consolidate into a
+                // service API when that file is next touched.
+                Task {
+                    let center = UNUserNotificationCenter.current()
+                    let ids = await center.pendingNotificationRequests()
+                        .map(\.identifier)
+                        .filter { $0.hasPrefix("reminder.") }
+                    center.removePendingNotificationRequests(withIdentifiers: ids)
+                }
+            }
         }
         .onChange(of: reminderHour) { _, _ in
             Task { await ReminderNotificationService.reconcile(ctx, userId: profile.id) }
@@ -206,7 +221,7 @@ struct SettingsView: View {
             Spacer()
             Picker("", selection: $reminderHour) {
                 ForEach(6..<22, id: \.self) { hour in
-                    Text(hourLabel(hour)).tag(hour)
+                    Text(Self.hourLabels[hour] ?? "").tag(hour)
                 }
             }
             .labelsHidden()
@@ -217,13 +232,11 @@ struct SettingsView: View {
         .background(theme.card)
     }
 
-    private func hourLabel(_ hour: Int) -> String {
-        var comps = DateComponents()
-        comps.hour = hour
-        comps.minute = 0
-        let date = Calendar.current.date(from: comps) ?? Date()
-        return date.formatted(date: .omitted, time: .shortened)
-    }
+    /// Built once — respects the user's 12/24-hour locale setting at first use.
+    private static let hourLabels: [Int: String] = Dictionary(uniqueKeysWithValues: (6..<22).map { hour in
+        let date = Calendar.current.date(from: DateComponents(hour: hour, minute: 0)) ?? Date()
+        return (hour, date.formatted(date: .omitted, time: .shortened))
+    })
 
     @ViewBuilder
     private func nudgeToggleRow(

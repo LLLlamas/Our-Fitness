@@ -172,7 +172,7 @@ struct ReminderDetailSheet: View {
         Button { showImagePicker = true } label: {
             ZStack {
                 RoundedRectangle(cornerRadius: 16, style: .continuous).fill(theme.card2)
-                if let data = reminder.photoData, let img = UIImage(data: data) {
+                if let img = ReminderPhotoCache.image(id: reminder.id, data: reminder.photoData) {
                     Image(uiImage: img).resizable().scaledToFill()
                 } else {
                     Image(systemName: "camera.fill")
@@ -202,6 +202,7 @@ struct ReminderDetailSheet: View {
     private func updatePhoto(_ img: UIImage) {
         showImagePicker = false
         guard let data = ImageDownscale.jpegData(img, maxDimension: 1024) else { return }
+        ReminderPhotoCache.invalidate(id: reminder.id)
         var updated = reminder
         updated.photoData = data
         reminder = updated
@@ -424,16 +425,14 @@ struct ReminderDetailSheet: View {
                             }
                         }
                         Spacer()
-                    }
-                    .padding(.vertical, 4)
-                    .swipeActions(edge: .trailing) {
-                        Button(role: .destructive) { deleteEvent(e) } label: {
+                        Button { deleteEvent(e) } label: {
                             Label("Undo", systemImage: "arrow.uturn.backward")
                         }
+                        .tactile(.ghost)
+                        .accessibilityLabel("Undo entry from \(e.timestamp.formatted(date: .abbreviated, time: .omitted))")
                     }
+                    .padding(.vertical, 4)
                 }
-                Text("Swipe an entry to undo it.")
-                    .font(.caption2).foregroundStyle(theme.dim)
             }
         }
     }

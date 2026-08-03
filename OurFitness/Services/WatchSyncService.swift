@@ -22,6 +22,13 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
     static let shared = WatchSyncService()
 
     private var container: ModelContainer?
+    /// Session-scoped change detection: hash of the `photoData` last handed to
+    /// `transferFile` per reminder, so unchanged photos skip the decode →
+    /// re-encode → transfer pipeline on every foreground/mutation push.
+    private var pushedThumbnailHashes: [UUID: Int] = [:]
+    /// Cleared-hash trigger: the watch prunes its thumbnail cache to the
+    /// pushed profile's reminders, so a profile switch must re-push everything.
+    private var lastPushedUserId: UUID?
 
     private override init() {
         super.init()
@@ -65,27 +72,45 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
         guard let data = try? JSONEncoder().encode(snapshots) else { return }
         try? WCSession.default.updateApplicationContext([WatchSyncKeys.snapshotContextKey: data])
 
-        for r in reminders where r.photoData != nil {
-            pushThumbnail(reminderId: r.id, fullPhotoData: r.photoData!)
+        pushChangedThumbnails(reminders, userId: userId)
+    }
+
+    /// Transfers thumbnails only for photos not yet pushed (or changed) this
+    /// session. A superseded in-flight transfer for the same reminder is
+    /// cancelled — and its temp file removed — before the replacement queues.
+    private func pushChangedThumbnails(_ reminders: [ReminderDTO], userId: UUID) {
+        if userId != lastPushedUserId {
+            pushedThumbnailHashes.removeAll()
+            lastPushedUserId = userId
+        }
+        let outstanding = WCSession.default.outstandingFileTransfers
+        for r in reminders {
+            guard let photo = r.photoData, pushedThumbnailHashes[r.id] != photo.hashValue else { continue }
+            pushedThumbnailHashes[r.id] = photo.hashValue
+            for t in outstanding where t.file.metadata?["reminderId"] as? String == r.id.uuidString {
+                t.cancel()
+                try? FileManager.default.removeItem(at: t.file.fileURL)
+            }
+            pushThumbnail(reminderId: r.id, fullPhotoData: photo)
         }
     }
 
     /// Sends a small (~120px) JPEG thumbnail so the watch can show the actual
     /// plant instead of only an SF Symbol. Best-effort: `transferFile` queues
-    /// on the system side, so this can be called liberally without checking
-    /// reachability first.
+    /// on the system side, so this needs no reachability check, and a failed
+    /// downscale/write just leaves the watch on its sfSymbol fallback.
+    /// Decode/re-encode runs off the main actor; the temp filename is unique
+    /// per transfer so a cancelled predecessor's cleanup can't race the new
+    /// write (the watch reads the reminder id from metadata, not the name).
+    /// Each temp file is deleted in `session(_:didFinish:error:)`.
     private func pushThumbnail(reminderId: UUID, fullPhotoData: Data) {
-        guard WCSession.isSupported(), WCSession.default.activationState == .activated,
-              let thumb = ImageDownscale.jpegData(from: fullPhotoData, maxDimension: 120) else { return }
-
         let tmpURL = FileManager.default.temporaryDirectory
-            .appendingPathComponent(WatchSyncKeys.thumbnailFilePrefix + reminderId.uuidString)
+            .appendingPathComponent(WatchSyncKeys.thumbnailFilePrefix + reminderId.uuidString + "-" + UUID().uuidString)
             .appendingPathExtension("jpg")
-        do {
-            try thumb.write(to: tmpURL, options: .atomic)
+        Task.detached(priority: .utility) {
+            guard let thumb = ImageDownscale.jpegData(from: fullPhotoData, maxDimension: 120),
+                  (try? thumb.write(to: tmpURL, options: .atomic)) != nil else { return }
             WCSession.default.transferFile(tmpURL, metadata: ["reminderId": reminderId.uuidString])
-        } catch {
-            // Best-effort — the watch falls back to the group's sfSymbol.
         }
     }
 
@@ -112,15 +137,53 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
         }
     }
 
+    /// Mirrors RootView's active-profile resolution: `@AppStorage("activeProfileId")`
+    /// with a fallback to the first (oldest-created) profile.
+    private func activeProfile(_ ctx: ModelContext) -> ProfileDTO? {
+        let profiles = Repos.listProfiles(ctx)
+        guard let stored = UserDefaults.standard.string(forKey: "activeProfileId"),
+              let id = UUID(uuidString: stored) else { return profiles.first }
+        return profiles.first(where: { $0.id == id }) ?? profiles.first
+    }
+
     // MARK: - WCSessionDelegate
 
     nonisolated func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        if let error {
+            print("[WatchSync] activation failed:", error.localizedDescription)
+        }
+        sweepStaleTempFiles(session)
         Task { @MainActor in
             guard let container = self.container else { return }
             let ctx = container.mainContext
-            for profile in Repos.listProfiles(ctx) {
-                self.pushSnapshot(ctx, userId: profile.id)
-            }
+            // Only the active profile — every profile would overwrite the same
+            // application-context key, leaving whichever pushed last on the watch.
+            guard let profile = self.activeProfile(ctx) else { return }
+            self.pushSnapshot(ctx, userId: profile.id)
+        }
+    }
+
+    /// Deletes leftover thumbnail temp files (e.g. from a session that died
+    /// mid-transfer) that no outstanding transfer still references.
+    nonisolated private func sweepStaleTempFiles(_ session: WCSession) {
+        let live = Set(session.outstandingFileTransfers.map { $0.file.fileURL.standardizedFileURL })
+        let tmp = FileManager.default.temporaryDirectory
+        let files = (try? FileManager.default.contentsOfDirectory(at: tmp, includingPropertiesForKeys: nil)) ?? []
+        for url in files
+        where url.lastPathComponent.hasPrefix(WatchSyncKeys.thumbnailFilePrefix) && !live.contains(url.standardizedFileURL) {
+            try? FileManager.default.removeItem(at: url)
+        }
+    }
+
+    nonisolated func session(_ session: WCSession, didFinish fileTransfer: WCSessionFileTransfer, error: Error?) {
+        try? FileManager.default.removeItem(at: fileTransfer.file.fileURL)
+        // A failed transfer stays retryable: drop its hash so the next
+        // pushSnapshot re-sends instead of skipping it as already pushed.
+        guard error != nil,
+              let idString = fileTransfer.file.metadata?["reminderId"] as? String,
+              let id = UUID(uuidString: idString) else { return }
+        Task { @MainActor in
+            self.pushedThumbnailHashes.removeValue(forKey: id)
         }
     }
 

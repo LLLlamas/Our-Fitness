@@ -21,6 +21,9 @@ struct RemindersView: View {
 
     @Query private var groupModels: [ReminderGroupModel]
     @Query private var reminderModels: [ReminderModel]
+    // Unbounded by design: only the newest event per reminder is consumed, but
+    // any fetch limit could drop the sole (old) event of a rarely-done reminder
+    // and corrupt its overdue math. Bounding needs a denormalized lastDoneAt.
     @Query private var eventModels: [ReminderEventModel]
 
     @State private var authStatus: UNAuthorizationStatus = .notDetermined
@@ -77,8 +80,9 @@ struct RemindersView: View {
         var id: UUID { reminder.id }
     }
 
-    /// Every reminder's due-day math resolved once per render (never inside a
-    /// ForEach row body) from the pre-built last-done dict.
+    /// Every reminder's due-day math from the pre-built last-done dict.
+    /// Evaluated exactly once per body pass (body-local `let`, threaded into
+    /// the section builders) — never inside a ForEach row body.
     private var statuses: [ReminderStatus] {
         let lastDone = lastDoneById
         let byId = groupsById
@@ -93,15 +97,6 @@ struct RemindersView: View {
         }
     }
 
-    private var dueStatuses: [ReminderStatus] {
-        statuses.filter { $0.daysUntil <= 0 }.sorted { $0.daysUntil < $1.daysUntil }
-    }
-
-    private func upcomingStatuses(in groupId: UUID) -> [ReminderStatus] {
-        statuses.filter { $0.daysUntil > 0 && $0.group.id == groupId }
-            .sorted { $0.daysUntil < $1.daysUntil }
-    }
-
     /// Plant-specific fields are nil for reminders in a custom group (see
     /// ReminderDTO's doc comment) — any of them being set is a reliable flag.
     private func isPlant(_ r: ReminderDTO) -> Bool {
@@ -109,13 +104,14 @@ struct RemindersView: View {
     }
 
     var body: some View {
+        let statuses = self.statuses
         ScrollView {
-            VStack(alignment: .leading, spacing: 18) {
+            LazyVStack(alignment: .leading, spacing: 18) {
                 header
                 permissionBanner
-                dueSection
+                dueSection(statuses)
                 ForEach(orderedGroups) { group in
-                    groupSection(group)
+                    groupSection(group, statuses: statuses)
                 }
                 if reminders.isEmpty {
                     emptyState
@@ -212,13 +208,14 @@ struct RemindersView: View {
     // MARK: - Due section
 
     @ViewBuilder
-    private var dueSection: some View {
-        if !dueStatuses.isEmpty {
+    private func dueSection(_ statuses: [ReminderStatus]) -> some View {
+        let due = statuses.filter { $0.daysUntil <= 0 }.sorted { $0.daysUntil < $1.daysUntil }
+        if !due.isEmpty {
             VStack(alignment: .leading, spacing: 10) {
                 Text("DUE")
                     .font(.system(size: 10, weight: .medium)).tracking(2)
                     .foregroundStyle(theme.dim)
-                ForEach(dueStatuses) { status in
+                ForEach(due) { status in
                     dueRow(status)
                 }
             }
@@ -275,8 +272,9 @@ struct RemindersView: View {
     // MARK: - Per-group sections
 
     @ViewBuilder
-    private func groupSection(_ group: ReminderGroupDTO) -> some View {
-        let upcoming = upcomingStatuses(in: group.id)
+    private func groupSection(_ group: ReminderGroupDTO, statuses: [ReminderStatus]) -> some View {
+        let upcoming = statuses.filter { $0.daysUntil > 0 && $0.group.id == group.id }
+            .sorted { $0.daysUntil < $1.daysUntil }
         if !upcoming.isEmpty {
             VStack(alignment: .leading, spacing: 10) {
                 HStack(spacing: 6) {
@@ -326,7 +324,7 @@ struct RemindersView: View {
     private func thumbnail(_ r: ReminderDTO, group: ReminderGroupDTO) -> some View {
         ZStack {
             Circle().fill(theme.card2)
-            if let data = r.photoData, let uiImage = UIImage(data: data) {
+            if let uiImage = ReminderPhotoCache.image(id: r.id, data: r.photoData) {
                 Image(uiImage: uiImage)
                     .resizable()
                     .scaledToFill()
@@ -359,5 +357,39 @@ struct RemindersView: View {
                 .tactile(.primary, fullWidth: true)
             }
         }
+    }
+}
+
+// MARK: - Decoded photo cache
+
+/// Shared by RemindersView (40×40 thumbnails) and ReminderDetailSheet (header)
+/// so reminder photos aren't JPEG-decoded on every body pass. Entries revalidate
+/// on byte count (photo edits re-encode, so a same-length swap is implausible);
+/// ReminderDetailSheet also invalidates explicitly on photo update.
+enum ReminderPhotoCache {
+    private final class Entry {
+        let byteCount: Int
+        let image: UIImage
+        init(byteCount: Int, image: UIImage) {
+            self.byteCount = byteCount
+            self.image = image
+        }
+    }
+
+    private static let cache = NSCache<NSUUID, Entry>()
+
+    static func image(id: UUID, data: Data?) -> UIImage? {
+        guard let data else { return nil }
+        let key = id as NSUUID
+        if let entry = cache.object(forKey: key), entry.byteCount == data.count {
+            return entry.image
+        }
+        guard let image = UIImage(data: data) else { return nil }
+        cache.setObject(Entry(byteCount: data.count, image: image), forKey: key)
+        return image
+    }
+
+    static func invalidate(id: UUID) {
+        cache.removeObject(forKey: id as NSUUID)
     }
 }

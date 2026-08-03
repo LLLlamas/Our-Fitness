@@ -27,11 +27,13 @@ OurFitness/
   App/          ← @main, ModelContainer, root shell
   Domain/       ← PURE Swift. No SwiftUI/SwiftData. Fully unit-tested.
   Data/         ← SwiftData @Model classes + Repositories/
-  Services/     ← HealthKit, Theme, Haptics, ToastCenter
+  Services/     ← HealthKit, Theme, Haptics, ToastCenter, ReminderNotifications, WatchSync
   Features/     ← Onboarding, Today, Nutrition, Workouts (shared Train tab; Circuit-mode cards under Circuit/ folder), Reminders, Progress, Settings
   Components/   ← ProgressBar, ProgressRing, Card, Banner, AnimatedNumber, TactileButtonStyle…
+Shared/         ← Dual-compiled into multiple targets (LiveSessionAttributes, ReminderSyncPayload); pure Foundation
 _stashed/       ← Outside build target; pending rework
 OurFitnessTests/ ← Hostless XCTest for Domain/* only
+OurFitnessWatch/ ← watchOS companion app — thin client; WatchConnectivity sync, no local SwiftData
 project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 ```
 
@@ -45,6 +47,7 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 4. HealthKit only through `Services/HealthKitService.swift`.
 5. `.swift` filenames unique in target. All `@Model` classes in `Data/PersistenceModels.swift`.
 6. `OurFitnessTests` is hostless: blank `TEST_HOST`/`BUNDLE_LOADER`, no `@testable import OurFitness`.
+7. `Shared/` stays pure Foundation (no SwiftUI/SwiftData/UIKit) — it compiles into app, widget, and watch targets. The watch target also compiles individual `Domain/` files directly (like `OurFitnessTests`), so those files must stay dependency-free.
 
 ---
 

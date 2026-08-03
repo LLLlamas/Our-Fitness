@@ -81,7 +81,7 @@ public enum WatchSyncKeys {
     /// Key inside the `transferUserInfo` dictionary; value is JSON-encoded
     /// `WatchAction` `Data`.
     public static let actionUserInfoKey = "watchAction"
-    /// Prefix for thumbnail file transfers; the full transferred filename is
-    /// "<prefix><reminderId>.jpg".
+    /// Prefix for thumbnail file transfers; the reminder id travels in the
+    /// transfer's `metadata`, not the filename (which is unique per transfer).
     public static let thumbnailFilePrefix = "plant-thumb-"
 }

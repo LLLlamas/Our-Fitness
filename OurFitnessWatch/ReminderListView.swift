@@ -8,34 +8,36 @@ import UIKit
 struct ReminderListView: View {
     @EnvironmentObject var store: WatchReminderStore
 
+    private struct Row: Identifiable {
+        let snapshot: ReminderSnapshot
+        let daysUntil: Int
+        var id: UUID { snapshot.id }
+    }
+
     private struct GroupSection {
         let name: String
         let isPlant: Bool
-        let items: [ReminderSnapshot]
+        let items: [Row]
     }
 
+    // Decorate-sort-undecorate: the calendar-heavy due-day math runs once per
+    // snapshot per body pass, and rows receive the precomputed daysUntil.
     private var sections: [GroupSection] {
-        let grouped = Dictionary(grouping: store.snapshots, by: { $0.groupName })
-        return grouped
+        let rows = store.snapshots.map { s in
+            Row(snapshot: s, daysUntil: ReminderSchedule.daysUntilDue(dueDay: ReminderSchedule.nextDueDay(
+                lastDone: s.lastDoneAt, createdAt: s.createdAt,
+                intervalDays: s.intervalDays, snoozedUntil: s.snoozedUntil
+            )))
+        }
+        return Dictionary(grouping: rows, by: { $0.snapshot.groupName })
             .map { name, items in
-                GroupSection(name: name, isPlant: items.first?.isPlant ?? false, items: sortedByDue(items))
+                GroupSection(name: name, isPlant: items.first?.snapshot.isPlant ?? false,
+                             items: items.sorted { $0.daysUntil < $1.daysUntil })
             }
             .sorted { lhs, rhs in
                 if lhs.isPlant != rhs.isPlant { return lhs.isPlant }
                 return lhs.name.localizedCaseInsensitiveCompare(rhs.name) == .orderedAscending
             }
-    }
-
-    private func sortedByDue(_ items: [ReminderSnapshot]) -> [ReminderSnapshot] {
-        items.sorted { daysUntilDue($0) < daysUntilDue($1) }
-    }
-
-    private func daysUntilDue(_ snapshot: ReminderSnapshot) -> Int {
-        let due = ReminderSchedule.nextDueDay(
-            lastDone: snapshot.lastDoneAt, createdAt: snapshot.createdAt,
-            intervalDays: snapshot.intervalDays, snoozedUntil: snapshot.snoozedUntil
-        )
-        return ReminderSchedule.daysUntilDue(dueDay: due)
     }
 
     var body: some View {
@@ -46,11 +48,11 @@ struct ReminderListView: View {
                 List {
                     ForEach(sections, id: \.name) { section in
                         Section(section.name) {
-                            ForEach(section.items) { snapshot in
+                            ForEach(section.items) { row in
                                 NavigationLink {
-                                    ReminderDetailView(snapshot: snapshot)
+                                    ReminderDetailView(snapshot: row.snapshot)
                                 } label: {
-                                    ReminderRow(snapshot: snapshot)
+                                    ReminderRow(snapshot: row.snapshot, daysUntil: row.daysUntil)
                                 }
                             }
                         }
@@ -80,18 +82,7 @@ struct ReminderListView: View {
 private struct ReminderRow: View {
     @EnvironmentObject var store: WatchReminderStore
     let snapshot: ReminderSnapshot
-
-    private var dueDay: Date {
-        ReminderSchedule.nextDueDay(
-            lastDone: snapshot.lastDoneAt, createdAt: snapshot.createdAt,
-            intervalDays: snapshot.intervalDays, snoozedUntil: snapshot.snoozedUntil
-        )
-    }
-
-    private var dueLabel: (text: String, isOverdue: Bool) {
-        let days = ReminderSchedule.daysUntilDue(dueDay: dueDay)
-        return (ReminderSchedule.dueLabel(daysUntilDue: days), days < 0)
-    }
+    let daysUntil: Int
 
     var body: some View {
         HStack(spacing: 10) {
@@ -100,9 +91,9 @@ private struct ReminderRow: View {
                 Text(snapshot.name)
                     .font(.headline)
                     .lineLimit(1)
-                Text(dueLabel.text)
+                Text(ReminderSchedule.dueLabel(daysUntilDue: daysUntil))
                     .font(.caption2)
-                    .foregroundStyle(dueLabel.isOverdue ? .red : .secondary)
+                    .foregroundStyle(daysUntil < 0 ? .red : .secondary)
             }
         }
     }

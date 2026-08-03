@@ -381,6 +381,13 @@ public enum PlantCatalog {
         ),
     ]
 
+    /// Lowercased search terms per species, parallel to `all` — common name
+    /// first, then aliases. Built once so per-keystroke filtering doesn't
+    /// re-lowercase the whole catalog.
+    public static let searchIndex: [[String]] = all.map { sp in
+        [sp.commonName.lowercased()] + sp.aliases.map { $0.lowercased() }
+    }
+
     public static func species(id: String) -> PlantSpecies? {
         all.first { $0.id == id }
     }

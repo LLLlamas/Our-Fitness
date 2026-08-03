@@ -51,21 +51,50 @@ final class WatchReminderStore: NSObject, ObservableObject, WCSessionDelegate {
         UserDefaults.standard.set(data, forKey: snapshotsDefaultsKey)
     }
 
+    /// Reads cached thumbnail files off the main actor at launch, then merges
+    /// only ids still in `snapshots` and not already set — so a slow load can
+    /// neither clobber a fresher transfer nor resurrect a pruned entry.
     private func loadCachedThumbnails() {
-        guard let files = try? FileManager.default.contentsOfDirectory(
-            at: thumbnailsDirectory, includingPropertiesForKeys: nil
-        ) else { return }
-        for url in files {
-            guard let id = UUID(uuidString: url.deletingPathExtension().lastPathComponent),
-                  let data = try? Data(contentsOf: url) else { continue }
-            thumbnails[id] = data
+        let dir = thumbnailsDirectory
+        Task.detached(priority: .utility) {
+            var loaded: [UUID: Data] = [:]
+            let files = (try? FileManager.default.contentsOfDirectory(at: dir, includingPropertiesForKeys: nil)) ?? []
+            for url in files {
+                guard let id = UUID(uuidString: url.deletingPathExtension().lastPathComponent),
+                      let data = try? Data(contentsOf: url) else { continue }
+                loaded[id] = data
+            }
+            await MainActor.run {
+                let valid = Set(self.snapshots.map(\.id))
+                for (id, data) in loaded where valid.contains(id) && self.thumbnails[id] == nil {
+                    self.thumbnails[id] = data
+                }
+            }
         }
     }
 
+    private func thumbnailURL(for reminderId: UUID) -> URL {
+        thumbnailsDirectory.appendingPathComponent(reminderId.uuidString).appendingPathExtension("jpg")
+    }
+
     private func storeThumbnail(_ data: Data, for reminderId: UUID) {
-        let url = thumbnailsDirectory.appendingPathComponent(reminderId.uuidString).appendingPathExtension("jpg")
-        try? data.write(to: url, options: .atomic)
+        try? data.write(to: thumbnailURL(for: reminderId), options: .atomic)
         thumbnails[reminderId] = data
+    }
+
+    /// Evicts cached thumbnails (memory + disk) for reminders no longer in
+    /// the latest snapshot set (deleted, or another profile's).
+    private func pruneThumbnails(keeping ids: Set<UUID>) {
+        thumbnails = thumbnails.filter { ids.contains($0.key) }
+        let files = (try? FileManager.default.contentsOfDirectory(
+            at: thumbnailsDirectory, includingPropertiesForKeys: nil
+        )) ?? []
+        for url in files {
+            let id = UUID(uuidString: url.deletingPathExtension().lastPathComponent)
+            if id.map(ids.contains) != true {
+                try? FileManager.default.removeItem(at: url)
+            }
+        }
     }
 
     // MARK: - Applying context from the phone
@@ -75,6 +104,7 @@ final class WatchReminderStore: NSObject, ObservableObject, WCSessionDelegate {
               let decoded = try? JSONDecoder().decode([ReminderSnapshot].self, from: data) else { return }
         snapshots = decoded
         persistSnapshots()
+        pruneThumbnails(keeping: Set(decoded.map(\.id)))
     }
 
     // MARK: - Sending wrist actions

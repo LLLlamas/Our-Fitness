@@ -109,42 +109,20 @@ public enum ReminderNotificationService {
         return UUID(uuidString: String(id.dropFirst(identifierPrefix.count)))
     }
 
-    /// (Re)schedules the single pending notification for one reminder, based on
-    /// its current interval/last-completion/snooze state. Call after every
-    /// mutation: add, edit, delete (paired with `cancel`), done, snooze.
-    ///
-    /// Deliberately does NOT check authorization status first (unlike
-    /// `reconcile`, which is the periodic "is this worth doing" sweep) —
-    /// mirrors `LiveSessionNotifier.schedule`: an unauthorized `add()` is a
-    /// harmless no-op (the request just never fires) until the user grants
-    /// permission, at which point the next `reconcile()` picks it up. This
-    /// also keeps the function synchronous, so it stays safe to call directly
-    /// on `ctx` from `@MainActor` UI code without hopping through a
-    /// non-isolated completion-handler closure.
-    public static func reschedule(_ ctx: ModelContext, reminderId: UUID) {
-        guard remindersGloballyEnabled(), let reminder = Repos.reminder(ctx, id: reminderId) else {
-            cancel(ids: [reminderId])
-            return
-        }
-        let center = UNUserNotificationCenter.current()
-        let id = identifier(for: reminderId)
-        center.removePendingNotificationRequests(withIdentifiers: [id])
-        center.removeDeliveredNotifications(withIdentifiers: [id])
-
-        let lastDone = Repos.lastReminderEvent(ctx, reminderId: reminderId)?.timestamp
+    /// Builds the desired pending request for one reminder from pre-fetched
+    /// state — the single source of the identifier/content/trigger format
+    /// shared by `reschedule` and `reconcile`.
+    private static func buildRequest(for reminder: ReminderDTO, isPlant: Bool, lastDone: Date?) -> UNNotificationRequest {
         let dueDay = ReminderSchedule.nextDueDay(
             lastDone: lastDone, createdAt: reminder.createdAt,
             intervalDays: reminder.intervalDays, snoozedUntil: reminder.snoozedUntil
         )
-        let hour = preferredHour(for: reminder.userId)
-        let fireDate = ReminderSchedule.fireDate(dueDay: dueDay, preferredHour: hour)
-
-        let isPlant = Repos.reminderGroup(ctx, id: reminder.groupId)?.kind == .plants
+        let fireDate = ReminderSchedule.fireDate(dueDay: dueDay, preferredHour: preferredHour(for: reminder.userId))
 
         let content = UNMutableNotificationContent()
         content.sound = .default
         content.threadIdentifier = reminder.groupId.uuidString
-        content.userInfo = ["reminderId": reminderId.uuidString]
+        content.userInfo = ["reminderId": reminder.id.uuidString]
 
         if isPlant {
             content.categoryIdentifier = plantCategoryId
@@ -172,7 +150,46 @@ public enum ReminderNotificationService {
         var comps = Calendar.current.dateComponents([.year, .month, .day, .hour], from: fireDate)
         comps.minute = 0
         let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: false)
-        let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
+        return UNNotificationRequest(identifier: identifier(for: reminder.id), content: content, trigger: trigger)
+    }
+
+    /// Whether an already-pending request matches the desired one, so
+    /// `reconcile` can leave it untouched.
+    private static func matches(_ existing: UNNotificationRequest, _ desired: UNNotificationRequest) -> Bool {
+        guard let a = (existing.trigger as? UNCalendarNotificationTrigger)?.dateComponents,
+              let b = (desired.trigger as? UNCalendarNotificationTrigger)?.dateComponents else { return false }
+        return (a.year, a.month, a.day, a.hour, a.minute) == (b.year, b.month, b.day, b.hour, b.minute)
+            && existing.content.title == desired.content.title
+            && existing.content.body == desired.content.body
+            && existing.content.categoryIdentifier == desired.content.categoryIdentifier
+            && existing.content.threadIdentifier == desired.content.threadIdentifier
+    }
+
+    /// (Re)schedules the single pending notification for one reminder, based on
+    /// its current interval/last-completion/snooze state. Call after every
+    /// mutation: add, edit, delete (paired with `cancel`), done, snooze.
+    ///
+    /// Deliberately does NOT check authorization status first (unlike
+    /// `reconcile`, which is the periodic "is this worth doing" sweep) —
+    /// mirrors `LiveSessionNotifier.schedule`: an unauthorized `add()` is a
+    /// harmless no-op (the request just never fires) until the user grants
+    /// permission, at which point the next `reconcile()` picks it up. This
+    /// also keeps the function synchronous, so it stays safe to call directly
+    /// on `ctx` from `@MainActor` UI code without hopping through a
+    /// non-isolated completion-handler closure.
+    public static func reschedule(_ ctx: ModelContext, reminderId: UUID) {
+        guard remindersGloballyEnabled(), let reminder = Repos.reminder(ctx, id: reminderId) else {
+            cancel(ids: [reminderId])
+            return
+        }
+        let center = UNUserNotificationCenter.current()
+        center.removeDeliveredNotifications(withIdentifiers: [identifier(for: reminderId)])
+        let request = buildRequest(
+            for: reminder,
+            isPlant: Repos.reminderGroup(ctx, id: reminder.groupId)?.kind == .plants,
+            lastDone: Repos.lastReminderEvent(ctx, reminderId: reminderId)?.timestamp
+        )
+        // `add` with the same identifier replaces any pending request.
         center.add(request, withCompletionHandler: nil)
     }
 
@@ -187,9 +204,11 @@ public enum ReminderNotificationService {
     }
 
     /// Silent reconcile: prunes pending requests for reminders that no longer
-    /// exist or belong to a different profile, then reschedules every reminder
-    /// owned by `userId`. Never requests authorization — checks settings only.
-    /// Call on `scenePhase == .active` and right after a permission grant.
+    /// exist or belong to a different profile, then re-issues only reminders
+    /// whose desired notification differs from the pending one — runs on every
+    /// foreground, so unchanged reminders cost zero remove/add churn. Never
+    /// requests authorization — checks settings only. Call on
+    /// `scenePhase == .active` and right after a permission grant.
     public static func reconcile(_ ctx: ModelContext, userId: UUID) async {
         guard remindersGloballyEnabled() else { return }
         let center = UNUserNotificationCenter.current()
@@ -198,10 +217,19 @@ public enum ReminderNotificationService {
             || settings.authorizationStatus == .provisional
             || settings.authorizationStatus == .ephemeral else { return }
 
+        // One fetch each of reminders/groups/events (events are newest-first,
+        // so first-seen-wins folds to "latest per reminder") — not the 3
+        // per-reminder fetches `reschedule` does.
         let reminders = Repos.listReminders(ctx, userId: userId)
         let validIds = Set(reminders.map(\.id))
+        let plantGroupIds = Set(Repos.listReminderGroups(ctx, userId: userId).filter { $0.kind == .plants }.map(\.id))
+        var lastDoneById: [UUID: Date] = [:]
+        for e in Repos.listReminderEvents(ctx, userId: userId) where lastDoneById[e.reminderId] == nil {
+            lastDoneById[e.reminderId] = e.timestamp
+        }
 
         let pending = await center.pendingNotificationRequests()
+        let pendingById = Dictionary(uniqueKeysWithValues: pending.map { ($0.identifier, $0) })
         let staleIds: [String] = pending
             .map(\.identifier)
             .filter { $0.hasPrefix(identifierPrefix) }
@@ -214,7 +242,14 @@ public enum ReminderNotificationService {
         }
 
         for reminder in reminders {
-            reschedule(ctx, reminderId: reminder.id)
+            let desired = buildRequest(
+                for: reminder,
+                isPlant: plantGroupIds.contains(reminder.groupId),
+                lastDone: lastDoneById[reminder.id]
+            )
+            if let existing = pendingById[desired.identifier], matches(existing, desired) { continue }
+            center.removeDeliveredNotifications(withIdentifiers: [desired.identifier])
+            center.add(desired, withCompletionHandler: nil)
         }
     }
 
@@ -276,13 +311,18 @@ public enum ReminderNotificationService {
 /// app from a fully-terminated state (the action is what launches the
 /// process — `container` is set in `OurFitnessApp.init()`, which always runs
 /// before this delegate is invoked).
+///
+/// `@MainActor` with `nonisolated` delegate methods (the WatchSyncService
+/// pattern): `container` is written from app init and read inside the
+/// `Task { @MainActor }` hops, so it's never shared mutable state across actors.
+@MainActor
 final class AppNotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
     static let shared = AppNotificationDelegate()
     var container: ModelContainer?
 
     private override init() { super.init() }
 
-    func userNotificationCenter(
+    nonisolated func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void
@@ -317,7 +357,7 @@ final class AppNotificationDelegate: NSObject, UNUserNotificationCenterDelegate 
     /// Only reminder notifications bannered in foreground; every other
     /// notification (e.g. the live-session end ping) keeps today's behavior of
     /// no delegate handling it, so it stays silent in foreground.
-    func userNotificationCenter(
+    nonisolated func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void

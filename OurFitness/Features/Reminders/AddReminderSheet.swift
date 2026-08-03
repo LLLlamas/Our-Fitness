@@ -263,12 +263,17 @@ struct AddReminderSheet: View {
 
     // MARK: - Plant species search
 
+    /// At most 8 results, matched against PlantCatalog.searchIndex with early
+    /// termination — no per-keystroke re-lowercasing of the catalog.
     private var filteredSpecies: [PlantSpecies] {
         let q = speciesQuery.trimmingCharacters(in: .whitespaces).lowercased()
-        guard !q.isEmpty else { return PlantCatalog.all }
-        return PlantCatalog.all.filter { sp in
-            sp.commonName.lowercased().contains(q) || sp.aliases.contains { $0.lowercased().contains(q) }
+        guard !q.isEmpty else { return Array(PlantCatalog.all.prefix(8)) }
+        var hits: [PlantSpecies] = []
+        for (i, terms) in PlantCatalog.searchIndex.enumerated() where terms.contains(where: { $0.contains(q) }) {
+            hits.append(PlantCatalog.all[i])
+            if hits.count == 8 { break }
         }
+        return hits
     }
 
     private var speciesSearchSection: some View {
@@ -284,7 +289,7 @@ struct AddReminderSheet: View {
                 }
 
             VStack(spacing: 8) {
-                ForEach(filteredSpecies.prefix(8)) { sp in
+                ForEach(filteredSpecies) { sp in
                     Button { selectSpecies(sp) } label: {
                         HStack(spacing: 10) {
                             Image(systemName: sp.sfSymbol).foregroundStyle(theme.accent)

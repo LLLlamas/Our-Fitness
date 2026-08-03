@@ -11,6 +11,7 @@ struct ReminderDetailView: View {
     let snapshot: ReminderSnapshot
 
     @State private var intervalDays: Int
+    @State private var pendingIntervalSend: Task<Void, Never>?
 
     init(snapshot: ReminderSnapshot) {
         self.snapshot = snapshot
@@ -88,7 +89,13 @@ struct ReminderDetailView: View {
                     value: $intervalDays, in: PlantCatalog.minIntervalDays...PlantCatalog.maxIntervalDays
                 )
                 .onChange(of: intervalDays) { _, newValue in
-                    store.send(.setInterval(reminderId: snapshot.id, days: newValue))
+                    // Debounce: one transferUserInfo per burst of stepper ticks.
+                    pendingIntervalSend?.cancel()
+                    pendingIntervalSend = Task {
+                        guard (try? await Task.sleep(for: .milliseconds(600))) != nil else { return }
+                        store.send(.setInterval(reminderId: snapshot.id, days: newValue))
+                        pendingIntervalSend = nil
+                    }
                 }
 
                 Button {
@@ -102,6 +109,14 @@ struct ReminderDetailView: View {
             .padding(.horizontal, 2)
         }
         .navigationTitle(snapshot.name)
+        .onDisappear {
+            // Flush a still-pending debounced interval so no tick is lost.
+            if pendingIntervalSend != nil {
+                pendingIntervalSend?.cancel()
+                pendingIntervalSend = nil
+                store.send(.setInterval(reminderId: snapshot.id, days: intervalDays))
+            }
+        }
     }
 
     @ViewBuilder
