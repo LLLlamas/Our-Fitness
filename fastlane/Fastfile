@@ -24,6 +24,11 @@ PROFILE_NAME = "OurFitness AppStore"
 # APPSTORE_WIDGET_PROFILE_BASE64 secret. See docs/live-activity-setup.md.
 WIDGET_BUNDLE_ID    = "com.ourfitness.app.widgets"
 WIDGET_PROFILE_NAME = "OurFitnessWidgets AppStore"
+# Watch companion app — third signed binary, embedded under OurFitness.app/Watch.
+# Profile base64 lives in the APPSTORE_WATCH_PROFILE_BASE64 secret. See
+# docs/watch-app-setup.md.
+WATCH_BUNDLE_ID    = "com.ourfitness.app.watchkitapp"
+WATCH_PROFILE_NAME = "OurFitnessWatch AppStore"
 KEYCHAIN     = "ourfitness-ci.keychain-db"
 OUTPUT_DIR   = "build"
 
@@ -227,6 +232,10 @@ platform :ios do
       ENV.fetch("APPSTORE_WIDGET_PROFILE_BASE64", "").to_s.strip,
       "widget (#{WIDGET_BUNDLE_ID})", expect_healthkit: false
     )
+    install_one_profile(
+      ENV.fetch("APPSTORE_WATCH_PROFILE_BASE64", "").to_s.strip,
+      "watch (#{WATCH_BUNDLE_ID})", expect_healthkit: false
+    )
   end
 
   desc "Ship a build to TestFlight. Syncs signing with match, archives, and uploads."
@@ -268,6 +277,7 @@ platform :ios do
         provisioningProfiles: {
           BUNDLE_ID        => PROFILE_NAME,
           WIDGET_BUNDLE_ID => WIDGET_PROFILE_NAME,
+          WATCH_BUNDLE_ID  => WATCH_PROFILE_NAME,
         },
       },
     )

@@ -111,6 +111,10 @@ Recovery from "reached the maximum number": revoke stale unused Apple Distributi
 
 ---
 
+## Watch app profile missing from TestFlight signing — Aug 3, 2026
+
+The first TestFlight run after adding the `OurFitnessWatch` companion app died at archive with `No profile for team matching 'OurFitnessWatch AppStore'`. The watch target's `PROVISIONING_PROFILE_SPECIFIER` was set in `project.yml` and `docs/watch-app-setup.md` had the full checklist, but the Fastfile install lane, the `beta` export map, and `testflight.yml`'s secret validation only knew about the app and widget profiles — and the portal profile/secret had never been created. Every embedded signed binary (app, widget, watch) needs its own manual App Store profile, its own base64 secret, a line in `install_appstore_profile`, and an entry in the export map. All four are now wired; the workflow fails fast with a pointer to `docs/watch-app-setup.md` when the secret is absent. The same run also surfaced a Swift 6 captured-`var` warning in `WatchReminderStore` (fixed — build locals as `let` before hopping actors).
+
 ## General principle for future apps
 
 Never rely on ephemeral CI `cert`/`sigh` as the long-term signing strategy. Either use `match` from day one or another persistent signing-store pattern that preserves the private key between runners. Keep the CI guard that rejects top-level `cert(` / `sigh(` in the release Fastfile unless there is a deliberate, documented exception.

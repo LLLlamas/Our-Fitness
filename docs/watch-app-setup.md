@@ -87,57 +87,25 @@ Mirror exactly what we already do for the main app and the widget (CLAUDE.md →
 
 ---
 
-## Step 3 — Wire the watch profile into CI signing
+## Step 3 — Add the profile secret (CI wiring is already in place)
 
-Today the Fastfile (`fastlane/Fastfile`) installs profiles from
-`APPSTORE_PROFILE_BASE64` (app) and `APPSTORE_WIDGET_PROFILE_BASE64` (widget),
-and exports with a provisioning map listing both. With the watch app added, the
-export will fail unless you also:
+The repo side is done: `fastlane/Fastfile` declares
+`WATCH_BUNDLE_ID`/`WATCH_PROFILE_NAME`, `install_appstore_profile` installs the
+watch profile from `APPSTORE_WATCH_PROFILE_BASE64`, the `beta` export map lists
+all three binaries, and `testflight.yml` validates the secret up front (a
+missing secret fails the run in seconds with a pointer here, instead of after a
+five-minute archive — that fast-fail replaced the "No profile matching
+'OurFitnessWatch AppStore'" archive error from the first watch-enabled run).
 
-1. **Add a new secret** with the base64 of the watch profile:
-   `APPSTORE_WATCH_PROFILE_BASE64`.
-   - `base64 -i OurFitnessWatch_AppStore.mobileprovision | pbcopy` → paste into
-     a new GitHub repository secret.
-2. **Install it in CI.** In `fastlane/Fastfile`, add a
-   `WATCH_BUNDLE_ID`/`WATCH_PROFILE_NAME` constant pair mirroring the existing
-   `WIDGET_BUNDLE_ID`/`WIDGET_PROFILE_NAME`:
+The only remaining step: **add the secret** with the base64 of the profile from
+Step 2:
 
-   ```ruby
-   WATCH_BUNDLE_ID    = "com.ourfitness.app.watchkitapp"
-   WATCH_PROFILE_NAME = "OurFitnessWatch AppStore"
-   ```
+```bash
+gh secret set APPSTORE_WATCH_PROFILE_BASE64 < <(base64 -i OurFitnessWatch_AppStore.mobileprovision)
+```
 
-   Then add a third call in the `install_appstore_profile` lane, alongside the
-   existing app and widget calls to `install_one_profile` (the helper already
-   handles a profile with zero managed capabilities — pass
-   `expect_healthkit: false`, same as the widget):
-
-   ```ruby
-   install_one_profile(
-     ENV.fetch("APPSTORE_WATCH_PROFILE_BASE64", "").to_s.strip,
-     "watch (#{WATCH_BUNDLE_ID})", expect_healthkit: false
-   )
-   ```
-
-3. **Add the watch app to the export map** in the `beta` lane's `build_app`,
-   alongside the app and widget entries:
-
-   ```ruby
-   provisioningProfiles: {
-     "com.ourfitness.app"            => "OurFitness AppStore",
-     "com.ourfitness.app.widgets"    => "OurFitnessWidgets AppStore",
-     "com.ourfitness.app.watchkitapp" => "OurFitnessWatch AppStore",
-   },
-   ```
-
-> ⚠️ **Do not make these Fastfile edits until the `APPSTORE_WATCH_PROFILE_BASE64`
-> secret and the matching `.mobileprovision` actually exist.** Same caveat as
-> the widget rollout (`docs/live-activity-setup.md`): adding the export-map
-> entry before the secret/profile exist would break the *current* TestFlight
-> build, because `install_appstore_profile` and `xcodebuild -exportArchive`
-> would fail on a missing/empty profile. Make the Fastfile change in the same
-> commit where you add the watch profile secret — this doc is the checklist for
-> that future one-time setup, not something to run today.
+(or paste `base64 -i … | pbcopy` output into a new repository secret in the
+GitHub UI).
 
 ---
 

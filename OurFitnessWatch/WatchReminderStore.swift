@@ -57,12 +57,11 @@ final class WatchReminderStore: NSObject, ObservableObject, WCSessionDelegate {
     private func loadCachedThumbnails() {
         let dir = thumbnailsDirectory
         Task.detached(priority: .utility) {
-            var loaded: [UUID: Data] = [:]
             let files = (try? FileManager.default.contentsOfDirectory(at: dir, includingPropertiesForKeys: nil)) ?? []
-            for url in files {
+            let loaded: [UUID: Data] = files.reduce(into: [:]) { acc, url in
                 guard let id = UUID(uuidString: url.deletingPathExtension().lastPathComponent),
-                      let data = try? Data(contentsOf: url) else { continue }
-                loaded[id] = data
+                      let data = try? Data(contentsOf: url) else { return }
+                acc[id] = data
             }
             await MainActor.run {
                 let valid = Set(self.snapshots.map(\.id))
