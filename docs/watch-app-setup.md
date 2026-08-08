@@ -273,8 +273,14 @@ the same shape the main app ships, which `altool` accepts. There is no
 top-level `CFBundleIconName` key in either bundle despite the error's wording.
 
 > While fixing this, the **main app's** `AppIcon.appiconset/Contents.json` was
-> found to declare a 1024×1024 slot with no `filename`, so `icon.png` sitting
-> beside it was never compiled in. Now referenced explicitly.
+> found to declare a 1024×1024 slot with no `filename`. Shipped builds were
+> unaffected — `scripts/generate-icon.sh` rewrites that file with the
+> `filename` on every CI run — but *local* builds got no app icon. The
+> committed file now matches what the script writes, so the two agree.
+>
+> Note that `generate-icon.sh` covers the **iOS app only**. The watch icon is a
+> real committed asset with no generator backstop; if it is ever deleted, the
+> upload fails with 90713 again rather than falling back to a placeholder.
 
 ---
 
