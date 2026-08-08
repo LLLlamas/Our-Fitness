@@ -183,6 +183,14 @@ targets:
       - path: OurFitness/Domain/PlantCatalog.swift
       - path: OurFitness/Domain/ReminderSchedule.swift
       - path: Shared/ReminderSyncPayload.swift
+    resources:
+      # The watch app needs its OWN asset catalog — it cannot borrow the app's,
+      # because a watchOS AppIcon must be declared with `"platform": "watchos"`.
+      # Without an AppIcon here, actool writes no CFBundleIconName into the watch
+      # Info.plist and the IPA is rejected at upload with altool error 90713
+      # ("Missing Info.plist value ... in the bundle com.ourfitness.app.watchkitapp"),
+      # AFTER a full archive has already been built. See docs/watch-app-setup.md.
+      - path: OurFitnessWatch/Assets.xcassets
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.ourfitness.app.watchkitapp
@@ -194,6 +202,10 @@ targets:
         SKIP_INSTALL: "YES"
         TARGETED_DEVICE_FAMILY: "4"
         ENABLE_PREVIEWS: "YES"
+        # Names the app-icon set in OurFitnessWatch/Assets.xcassets. This setting
+        # is what makes actool emit CFBundleIconName; the resource entry alone
+        # is not enough.
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         # Manual signing — the watch app needs its OWN App Store provisioning
         # profile (see docs/watch-app-setup.md). The placeholder below must
         # match the profile name the user generates; CI injects the right one.

@@ -229,6 +229,53 @@ embed the certificate `match` syncs.
    Step 2 above, being deliberate at step 4 about which certificate is selected.
 4. Re-encode into `APPSTORE_WATCH_PROFILE_BASE64` — Step 3 above.
 
+Resolved 2026-08-08: the profile was regenerated against the May-2027 cert
+(expires 2027/05/25) and the secret re-encoded. The archive then built and
+signed cleanly.
+
+---
+
+## Troubleshooting — "Missing Info.plist value ... CFBundleIconName"
+
+**Symptom** — the archive builds and signs, then `altool` rejects the upload:
+
+```
+Missing Info.plist value. A value for the Info.plist key 'CFBundleIconName' is
+missing in the bundle 'com.ourfitness.app.watchkitapp'. (90713)
+```
+
+**Cause.** The watch app had no asset catalog of its own. It cannot borrow
+`OurFitness/Assets.xcassets` — a watchOS app icon must be declared with
+`"platform": "watchos"` in the appiconset's `Contents.json`, and the app's is
+`"ios"`. With no `AppIcon` for the watch, `actool` writes no `CFBundleIcons`
+into the watch `Info.plist`, and the failure only surfaces at upload time,
+after a full ~10-minute archive.
+
+**Fix** (already in the repo): `OurFitnessWatch/Assets.xcassets` with a single
+1024×1024 `AppIcon.appiconset`, listed under the target's `resources:` in
+`project.yml`, plus `ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon` in its
+`settings.base`. **Both halves are required** — the resource entry alone does
+not make `actool` emit the key.
+
+**Verifying locally** — build for a generic device, not a simulator; simulator
+builds omit icon keys and will mislead you:
+
+```sh
+xcodebuild -project OurFitness.xcodeproj -scheme OurFitnessWatch \
+  -configuration Debug -destination 'generic/platform=watchOS' \
+  -derivedDataPath /tmp/dd build
+plutil -convert xml1 -o - /tmp/dd/Build/Products/Debug-watchos/OurFitnessWatch.app/Info.plist \
+  | grep -A 5 CFBundleIcons
+```
+
+Expect `CFBundleIcons → CFBundlePrimaryIcon → CFBundleIconName = AppIcon` —
+the same shape the main app ships, which `altool` accepts. There is no
+top-level `CFBundleIconName` key in either bundle despite the error's wording.
+
+> While fixing this, the **main app's** `AppIcon.appiconset/Contents.json` was
+> found to declare a 1024×1024 slot with no `filename`, so `icon.png` sitting
+> beside it was never compiled in. Now referenced explicitly.
+
 ---
 
 ## Notes / gotchas
