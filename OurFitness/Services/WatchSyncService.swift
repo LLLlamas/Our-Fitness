@@ -59,6 +59,10 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
             lastDoneById[e.reminderId] = e.timestamp
         }
 
+        // Same for every reminder in this push (it's a per-profile setting),
+        // so it's read once rather than per iteration.
+        let preferredHour = ReminderNotificationService.preferredHour(for: userId)
+
         let snapshots: [ReminderSnapshot] = reminders.compactMap { r in
             guard let group = groupsById[r.groupId] else { return nil }
             return ReminderSnapshot(
@@ -66,7 +70,7 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
                 name: r.name, speciesId: r.speciesId, room: r.room, lightRaw: r.light?.rawValue,
                 potDiameterInches: r.potDiameterInches, intervalDays: r.intervalDays,
                 amountFlOz: r.amountFlOz, createdAt: r.createdAt, snoozedUntil: r.snoozedUntil,
-                lastDoneAt: lastDoneById[r.id]
+                lastDoneAt: lastDoneById[r.id], notes: r.notes, preferredHour: preferredHour
             )
         }
         guard let data = try? JSONEncoder().encode(snapshots) else { return }
@@ -129,7 +133,9 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
 
         case .setInterval(let reminderId, let days):
             guard var reminder = Repos.reminder(ctx, id: reminderId) else { return }
-            reminder.intervalDays = min(PlantCatalog.maxIntervalDays, max(PlantCatalog.minIntervalDays, days))
+            // Generic 1...365 bounds, NOT PlantCatalog's watering range — a
+            // yearly reminder must survive a wrist edit round-trip intact.
+            reminder.intervalDays = ReminderSchedule.clampInterval(days)
             ReminderNotificationService.update(ctx, reminder)
 
         case .snooze(let reminderId):

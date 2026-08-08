@@ -105,12 +105,15 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | **Reminders** | |
 | Plant watering catalog (~26 species: interval/amount/light adjustment/care notes) | `Domain/PlantCatalog.swift` — sourced from university extension services, botanical gardens, ASPCA toxicity data |
 | Reminder due-date math | `Domain/ReminderSchedule.swift` → `nextDueDay`/`daysUntilDue`/`isDue`/`overdueDays`/`fireDate`/`snoozeDate` — pure, injectable now/calendar |
+| Repeat interval (generic, 1–365) | `Domain/ReminderSchedule.swift` → `minIntervalDays`/`maxIntervalDays`/`clampInterval`/`intervalPresets`/`intervalLabel`. **These are the bounds for everything except plant watering** — `PlantCatalog`'s narrower 2–60 governs only the seeded-watering math. Every clamp and every "every N days" string goes through here; hand-rolled interpolation reintroduces the "Every 1 days" plural bug |
+| Interval picker UI (preset pills + stepper) | `Features/Reminders/IntervalPicker.swift` — used by the custom-reminder forms in both reminder sheets; plant watering keeps its own `PlantCatalog`-bounded stepper |
 | Reminder CRUD / groups | `Data/Repositories/Repositories.swift` → `Repos.addReminder`/`updateReminder`/`deleteReminder`/`logReminderDone`/`snoozeReminder` + `addReminderGroup`/`deleteReminderGroup`/`ensurePlantsGroup`. Built-in "Plants" group (undeletable) auto-created for new profiles in `Repos.createProfile`; `Seeder.swift` backstops existing profiles |
 | Reminder / group / event models | `Domain/Models.swift` (`ReminderGroupDTO`, `ReminderDTO`, `ReminderEventDTO` — append-only completion log) |
 | Notification scheduling + lock-screen actions | `Services/ReminderNotificationService.swift` — `UNNotificationCategory` action buttons ("Watered"/"Done" + "Snooze 1 day") work from the lock screen and mirror to a paired Apple Watch with zero watch app needed; `AppNotificationDelegate` handles the actions incl. waking the app from a killed state. Auth requested only from explicit user actions (Add-reminder save / in-tab banner) — never `.onAppear`/`.task` |
 | Watch companion sync | `Services/WatchSyncService.swift` + `Shared/ReminderSyncPayload.swift` — `WatchConnectivity`: `updateApplicationContext` (phone→watch snapshot push), `transferUserInfo` (watch→phone actions), `transferFile` (photo thumbnails). Watch is a thin client with no local SwiftData; phone is source of truth |
 | Reminder / thumbnail photo downscale | `Services/ImageDownscale.swift` — shared by reminder photo capture and watch thumbnails |
-| Reminders tab UI | `Features/Reminders/RemindersView.swift` + `AddReminderSheet.swift` + `ReminderDetailSheet.swift`, `Components/ImagePickerView.swift` |
+| Reminders tab UI | `Features/Reminders/RemindersView.swift` + `AddReminderSheet.swift` + `ReminderDetailSheet.swift` + `IntervalPicker.swift` + `AmountFlOzRow.swift`, `Components/ImagePickerView.swift`. `AddReminderSheet` deliberately has **no default group** (`resolvedGroupId` is nil until tapped) so Add doesn't drop the user into plant species search — don't reinstate a Plants fallback |
+| Is this reminder a plant? | `ReminderDTO.isPlant` (`Domain/Models.swift`) — plant-only fields are nil in a custom group. Note `ReminderSnapshot.isPlant` in `Shared/` answers the same question from `groupKind`, because the wire format can't see Domain types |
 | Reminders on/off + reminder hour | `Features/Settings/SettingsView.swift` → `remindersSection` — `AppStorage "reminders.enabled"` (global, default on), `AppStorage "reminderHour.<profile-uuid>"` (per-profile, default 9am) |
 | Watch app (thin client, no local SwiftData) | `OurFitnessWatch/OurFitnessWatchApp.swift` + `WatchReminderStore.swift` + `ReminderListView.swift` + `ReminderDetailView.swift` — compiles `Domain/PlantCatalog.swift` + `ReminderSchedule.swift` + `Shared/ReminderSyncPayload.swift` directly as extra sources (mirrors `OurFitnessTests` compiling `OurFitness/Domain` directly) — [docs/watch-app-setup.md](docs/watch-app-setup.md) |
 | **Progress** | |
@@ -206,7 +209,14 @@ LDL/HDL/cholesterol/A1c not from Apple Health (lab-only) — manual entry.
 
 Full incident narratives: [docs/ci-history.md](docs/ci-history.md). Setup: [docs/setup.md](docs/setup.md).
 
-- **Mac-less workflow:** push → `compile.yml` → patch → push.
+- **Local Mac (since 2026-08-08):** Xcode 26.6 / Swift 6.3.3 / XcodeGen 2.46 on an M5 Pro. Build and test **locally** — never push to CI to find out whether Swift compiles.
+  ```bash
+  xcodegen generate    # only after editing project.yml
+  xcodebuild -project OurFitness.xcodeproj -scheme OurFitness \
+    -destination 'platform=iOS Simulator,name=iPhone 17' \
+    CODE_SIGNING_ALLOWED=NO build 2>&1 | grep -E '(error:|BUILD)'
+  ```
+  `compile.yml` still runs on push as a clean-room check; a CI-only failure means environment drift, not a Swift error. `testflight.yml` remains the shipping lane — local archive is now possible too ([docs/setup.md](docs/setup.md) → "Simplifying signing").
 - **Tests hostless:** `OurFitnessTests` compiles `Domain/` directly. No `@testable import`. `scripts/validate-ci-invariants.sh` enforces.
 - **Never bare `Date()` in streak/weekly tests** — pin `now` to fixed mid-week (e.g. `2026-05-27T12:00:00Z`), thread through fixture + function.
 - **Signing:** match repo `LLLlamas/Our-Fitness-Certs`, readonly CI. Manual App Store profile `OurFitness AppStore` → base64 → `APPSTORE_PROFILE_BASE64`. Widget (`com.ourfitness.app.widgets`) needs its own profile. Watch companion app (`com.ourfitness.app.watchkitapp`) has its own profile `OurFitnessWatch AppStore` → `APPSTORE_WATCH_PROFILE_BASE64` (regenerated 2026-08-08 against the May-2027 distribution cert, expires 2027-05-25); see [docs/watch-app-setup.md](docs/watch-app-setup.md).

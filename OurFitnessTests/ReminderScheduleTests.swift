@@ -183,4 +183,99 @@ final class ReminderScheduleTests: XCTestCase {
         let result = ReminderSchedule.snoozeDate(now: now, preferredHour: 9, calendar: calendar)
         XCTAssertEqual(result, instant(1, hour: 9))
     }
+
+    // MARK: - clampInterval
+    // Pure integer logic — no clock involved, so nothing to pin here.
+
+    func test_clampInterval_below_floor_raises_to_min() {
+        XCTAssertEqual(ReminderSchedule.clampInterval(0), 1)
+        XCTAssertEqual(ReminderSchedule.clampInterval(-1), 1)
+        XCTAssertEqual(ReminderSchedule.clampInterval(-9_999), 1)
+    }
+
+    func test_clampInterval_at_bounds_is_unchanged() {
+        XCTAssertEqual(ReminderSchedule.clampInterval(ReminderSchedule.minIntervalDays), 1)
+        XCTAssertEqual(ReminderSchedule.clampInterval(ReminderSchedule.maxIntervalDays), 365)
+    }
+
+    func test_clampInterval_inside_range_is_unchanged() {
+        XCTAssertEqual(ReminderSchedule.clampInterval(2), 2)
+        XCTAssertEqual(ReminderSchedule.clampInterval(7), 7)
+        XCTAssertEqual(ReminderSchedule.clampInterval(45), 45)
+        XCTAssertEqual(ReminderSchedule.clampInterval(364), 364)
+    }
+
+    func test_clampInterval_above_ceiling_lowers_to_max() {
+        XCTAssertEqual(ReminderSchedule.clampInterval(366), 365)
+        XCTAssertEqual(ReminderSchedule.clampInterval(10_000), 365)
+    }
+
+    // MARK: - intervalLabel
+
+    func test_intervalLabel_preset_days_return_preset_label() {
+        XCTAssertEqual(ReminderSchedule.intervalLabel(days: 1), "Daily")
+        XCTAssertEqual(ReminderSchedule.intervalLabel(days: 7), "Weekly")
+        XCTAssertEqual(ReminderSchedule.intervalLabel(days: 14), "Every 2 weeks")
+        XCTAssertEqual(ReminderSchedule.intervalLabel(days: 30), "Monthly")
+        XCTAssertEqual(ReminderSchedule.intervalLabel(days: 365), "Yearly")
+    }
+
+    func test_intervalLabel_non_preset_days_fall_back_to_day_count() {
+        XCTAssertEqual(ReminderSchedule.intervalLabel(days: 5), "Every 5 days")
+        XCTAssertEqual(ReminderSchedule.intervalLabel(days: 45), "Every 45 days")
+    }
+
+    func test_intervalLabel_every_preset_resolves_to_its_own_label() {
+        for preset in ReminderSchedule.intervalPresets {
+            XCTAssertEqual(
+                ReminderSchedule.intervalLabel(days: preset.days),
+                preset.label,
+                "interval \(preset.days) must render as its preset label"
+            )
+        }
+    }
+
+    /// Regression: hand-rolled "Every \(days) days" interpolation at each call
+    /// site kept shipping the ungrammatical "Every 1 days". `intervalLabel`
+    /// exists to be the single place that gets this right — a daily cadence
+    /// must read "Daily". Named so the bug can't quietly return.
+    func test_intervalLabel_one_day_is_not_the_Every_1_days_plural_bug() {
+        let label = ReminderSchedule.intervalLabel(days: 1)
+        XCTAssertNotEqual(label, "Every 1 days", "the 'Every 1 days' plural bug is back")
+        XCTAssertEqual(label, "Daily")
+    }
+
+    // MARK: - intervalPresets integrity
+
+    func test_intervalPresets_are_all_within_clamp_bounds() {
+        for preset in ReminderSchedule.intervalPresets {
+            XCTAssertGreaterThanOrEqual(preset.days, ReminderSchedule.minIntervalDays, "\(preset.label) is below the floor")
+            XCTAssertLessThanOrEqual(preset.days, ReminderSchedule.maxIntervalDays, "\(preset.label) is above the ceiling")
+            XCTAssertEqual(ReminderSchedule.clampInterval(preset.days), preset.days, "\(preset.label) must survive clamping unchanged")
+        }
+    }
+
+    func test_intervalPresets_day_values_are_unique() {
+        // `days` is the Identifiable id — a duplicate breaks SwiftUI ForEach.
+        let days = ReminderSchedule.intervalPresets.map(\.days)
+        XCTAssertEqual(Set(days).count, days.count, "duplicate preset day values: \(days)")
+        let ids = ReminderSchedule.intervalPresets.map(\.id)
+        XCTAssertEqual(ids, days, "id must be the day count")
+    }
+
+    func test_intervalPresets_labels_are_non_empty() {
+        for preset in ReminderSchedule.intervalPresets {
+            XCTAssertFalse(
+                preset.label.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+                "preset \(preset.days) has an empty label"
+            )
+        }
+    }
+
+    func test_intervalPresets_are_sorted_ascending_by_days() {
+        // Rendered in order as a pill row, so ordering is a real contract.
+        let days = ReminderSchedule.intervalPresets.map(\.days)
+        XCTAssertEqual(days, days.sorted(), "presets must be listed shortest cadence first")
+        XCTAssertFalse(days.isEmpty)
+    }
 }

@@ -37,12 +37,20 @@ public struct ReminderSnapshot: Codable, Equatable, Sendable, Identifiable {
     public var createdAt: Date
     public var snoozedUntil: Date?
     public var lastDoneAt: Date?
+    public var notes: String?
+    /// The profile's preferred notification hour (0-23), so the watch's
+    /// optimistic snooze lands on the same time the phone will schedule
+    /// rather than assuming `ReminderSchedule.defaultReminderHour`.
+    public var preferredHour: Int?
 
+    /// Every field added after the initial wire format is optional with a
+    /// `nil` default, so a payload encoded by an older build still decodes.
     public init(
         id: UUID, groupId: UUID, groupName: String, groupKind: String, name: String,
         speciesId: String? = nil, room: String? = nil, lightRaw: String? = nil,
         potDiameterInches: Int? = nil, intervalDays: Int, amountFlOz: Double? = nil,
-        createdAt: Date, snoozedUntil: Date? = nil, lastDoneAt: Date? = nil
+        createdAt: Date, snoozedUntil: Date? = nil, lastDoneAt: Date? = nil,
+        notes: String? = nil, preferredHour: Int? = nil
     ) {
         self.id = id
         self.groupId = groupId
@@ -58,6 +66,8 @@ public struct ReminderSnapshot: Codable, Equatable, Sendable, Identifiable {
         self.createdAt = createdAt
         self.snoozedUntil = snoozedUntil
         self.lastDoneAt = lastDoneAt
+        self.notes = notes
+        self.preferredHour = preferredHour
     }
 
     public var isPlant: Bool { groupKind == "plants" }

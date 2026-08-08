@@ -140,7 +140,10 @@ public enum ReminderNotificationService {
         } else {
             content.categoryIdentifier = customCategoryId
             content.title = reminder.name
-            var body = "Every \(reminder.intervalDays) days."
+            // intervalLabel, not interpolation — a daily reminder read
+            // "Every 1 days" before, and it also gets us "Weekly"/"Yearly"
+            // instead of raw day counts now that intervals reach 365.
+            var body = ReminderSchedule.intervalLabel(days: reminder.intervalDays) + "."
             if let notes = reminder.notes, !notes.isEmpty {
                 body += " \(notes)"
             }

@@ -16,6 +16,64 @@ public enum ReminderSchedule {
 
     public static let defaultReminderHour = 9
 
+    // MARK: - Repeat interval
+
+    /// Generic bounds for how often a reminder repeats: daily through yearly.
+    ///
+    /// `PlantCatalog` keeps its own narrower 2...60 range, which governs the
+    /// seeded-watering math (baseline x light multiplier) and nothing else.
+    /// These are the bounds every reminder control and every sync-path clamp
+    /// should use — a sourdough starter is fed daily and a smoke-alarm battery
+    /// is changed yearly, neither of which fits a houseplant's range.
+    public static let minIntervalDays = 1
+    public static let maxIntervalDays = 365
+
+    public static func clampInterval(_ days: Int) -> Int {
+        min(maxIntervalDays, max(minIntervalDays, days))
+    }
+
+    /// A named cadence offered as a one-tap choice, so reaching "yearly" isn't
+    /// 364 stepper taps. `days` remains the only thing stored on a reminder —
+    /// a preset is purely a UI shortcut, and an interval matching none of them
+    /// is equally valid.
+    public struct IntervalPreset: Identifiable, Equatable, Sendable {
+        public let days: Int
+        public let label: String
+        public var id: Int { days }
+
+        public init(days: Int, label: String) {
+            self.days = days
+            self.label = label
+        }
+    }
+
+    public static let intervalPresets: [IntervalPreset] = [
+        IntervalPreset(days: 1, label: "Daily"),
+        IntervalPreset(days: 2, label: "Every 2 days"),
+        IntervalPreset(days: 3, label: "Every 3 days"),
+        IntervalPreset(days: 7, label: "Weekly"),
+        IntervalPreset(days: 14, label: "Every 2 weeks"),
+        IntervalPreset(days: 30, label: "Monthly"),
+        IntervalPreset(days: 90, label: "Every 3 months"),
+        IntervalPreset(days: 180, label: "Every 6 months"),
+        IntervalPreset(days: 365, label: "Yearly")
+    ]
+
+    /// "Daily" / "Weekly" / "Every 5 days" — the preset's name when one
+    /// matches, otherwise a plain day count. Lives here for the same reason
+    /// `dueLabel` does: this file compiles into both the iOS and watch targets,
+    /// so a cadence can't end up worded one way on the phone and another on the
+    /// wrist. Also the single fix for the "Every 1 days" plural bug that
+    /// hand-rolled interpolation kept reintroducing at each call site.
+    public static func intervalLabel(days: Int) -> String {
+        if let preset = intervalPresets.first(where: { $0.days == days }) { return preset.label }
+        // Pluralised in the fallback too, the same way `dueLabel` does it below.
+        // A bare "Every \(days) days" would be correct only because 1 happens to
+        // be a preset — renaming or dropping "Daily" would silently reintroduce
+        // the very bug this function exists to prevent.
+        return "Every \(days) day\(days == 1 ? "" : "s")"
+    }
+
     /// The due DAY (local midnight) for a reminder. Anchor is the last
     /// completion, falling back to when the reminder was created if it has
     /// never been done. A snooze pushes the due day later — never earlier —

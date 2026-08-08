@@ -97,12 +97,6 @@ struct RemindersView: View {
         }
     }
 
-    /// Plant-specific fields are nil for reminders in a custom group (see
-    /// ReminderDTO's doc comment) — any of them being set is a reliable flag.
-    private func isPlant(_ r: ReminderDTO) -> Bool {
-        r.light != nil || r.potDiameterInches != nil || r.speciesId != nil
-    }
-
     var body: some View {
         let statuses = self.statuses
         ScrollView {
@@ -225,7 +219,7 @@ struct RemindersView: View {
     @ViewBuilder
     private func dueRow(_ status: ReminderStatus) -> some View {
         let r = status.reminder
-        let plant = isPlant(r)
+        let plant = r.isPlant
         Card {
             HStack(spacing: 12) {
                 Button { selectedReminder = r } label: {
@@ -262,7 +256,7 @@ struct RemindersView: View {
             _ = ReminderNotificationService.logDone(ctx, reminderId: r.id)
         }
         Haptics.success()
-        let plant = isPlant(r)
+        let plant = r.isPlant
         toasts.show(Toast(
             title: r.name, detail: plant ? "Watered" : "Done",
             accent: .win, symbol: plant ? "drop.fill" : "checkmark.seal.fill"
@@ -317,6 +311,7 @@ struct RemindersView: View {
         var parts: [String] = [group.name]
         if let room = r.room, !room.isEmpty { parts.append(room) }
         if let amount = r.amountFlOz { parts.append("\(Int(amount.rounded())) fl oz") }
+        parts.append(ReminderSchedule.intervalLabel(days: r.intervalDays))
         return parts.joined(separator: " · ")
     }
 
@@ -344,15 +339,15 @@ struct RemindersView: View {
     private var emptyState: some View {
         Card {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Nothing to water yet.")
+                Text("Nothing on the list yet.")
                     .font(.system(size: 17, weight: .semibold))
                     .foregroundStyle(theme.text)
-                Text("Add a plant and I'll work out how often it needs water and remind you.")
+                Text("A plant, a sourdough starter, the air filter — anything on a repeat. Plants get their watering worked out for you; everything else, you pick the cadence.")
                     .font(.callout).foregroundStyle(theme.dim)
                 Button {
                     showAddSheet = true
                 } label: {
-                    Text("Add your first plant").frame(maxWidth: .infinity)
+                    Text("Add your first reminder").frame(maxWidth: .infinity)
                 }
                 .tactile(.primary, fullWidth: true)
             }

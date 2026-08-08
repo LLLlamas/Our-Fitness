@@ -452,4 +452,33 @@ public enum PlantCatalog {
         let byClass = table[waterClass] ?? table[.average]!
         return byClass[potDiameterInches] ?? byClass[6]!
     }
+
+    /// Display string for a pour: whole numbers stay whole ("14"), fractions
+    /// get one decimal ("2.5"). Shared by every amount readout and text field.
+    public static func amountLabel(_ flOz: Double) -> String {
+        flOz.truncatingRemainder(dividingBy: 1) == 0
+            ? String(Int(flOz)) : String(format: "%.1f", flOz)
+    }
+
+    /// A stand-in species so a plant with no catalog match still runs the same
+    /// seeded interval/amount math as a cataloged one — avoids duplicating the
+    /// formulas above. Uses `customId` as its id, matching that constant's
+    /// documented purpose. The care copy is generic-houseplant advice; the care
+    /// card only renders for a genuinely cataloged species, so it is a fallback
+    /// rather than something normally shown.
+    public static func customSpecies(named raw: String) -> PlantSpecies {
+        let trimmed = raw.trimmingCharacters(in: .whitespaces)
+        return PlantSpecies(
+            id: customId, commonName: trimmed.isEmpty ? "Custom plant" : trimmed,
+            botanicalName: "", aliases: [],
+            baselineIntervalDays: 7, lowLightMultiplier: 1.5,
+            soilCheck: "Check the top inch of soil; water when it's dry.",
+            overwateringSigns: "Yellow leaves, mushy stems, or soil that stays wet for days.",
+            underwateringSigns: "Drooping, dry, crispy leaves.",
+            winterNote: "Most houseplants need water less often in winter.",
+            lowLightRating: .tolerates,
+            petToxicity: "Unknown — check the species before keeping pets nearby.",
+            waterClass: .average
+        )
+    }
 }

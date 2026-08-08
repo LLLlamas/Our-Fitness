@@ -59,6 +59,13 @@ struct ReminderDetailView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
+                    // A non-plant reminder has no species card to carry its
+                    // detail, so its notes are the only context on the wrist.
+                    if !live.isPlant, let notes = live.notes, !notes.isEmpty {
+                        Text(notes)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
 
                 VStack(alignment: .leading, spacing: 3) {
@@ -85,8 +92,8 @@ struct ReminderDetailView: View {
                 .tint(.green)
 
                 Stepper(
-                    "Every \(intervalDays) day\(intervalDays == 1 ? "" : "s")",
-                    value: $intervalDays, in: PlantCatalog.minIntervalDays...PlantCatalog.maxIntervalDays
+                    ReminderSchedule.intervalLabel(days: intervalDays),
+                    value: $intervalDays, in: ReminderSchedule.minIntervalDays...ReminderSchedule.maxIntervalDays
                 )
                 .onChange(of: intervalDays) { _, newValue in
                     // Debounce: one transferUserInfo per burst of stepper ticks.

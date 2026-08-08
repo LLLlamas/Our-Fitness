@@ -762,6 +762,14 @@ public struct ReminderDTO: Codable, Equatable, Sendable, Identifiable {
         self.createdAt = createdAt
         self.snoozedUntil = snoozedUntil
     }
+
+    /// The plant-specific fields are nil for reminders in a custom group (see
+    /// the doc comment above), so any of them being set is a reliable flag —
+    /// no group lookup needed at the call site. Computed, so it stays out of
+    /// the Codable representation.
+    public var isPlant: Bool {
+        light != nil || potDiameterInches != nil || speciesId != nil
+    }
 }
 
 /// Append-only completion log ("watered" / "done"). Mirrors WaterEntryDTO's

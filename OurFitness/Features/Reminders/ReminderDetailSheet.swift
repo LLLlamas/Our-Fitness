@@ -58,12 +58,6 @@ struct ReminderDetailSheet: View {
     private var events: [ReminderEventDTO] { eventModels.map(\.snapshot) }
     private var lastDone: Date? { events.first?.timestamp }
 
-    /// Plant-specific fields are nil for reminders in a custom group — see
-    /// ReminderDTO's doc comment.
-    private var isPlant: Bool {
-        reminder.light != nil || reminder.potDiameterInches != nil || reminder.speciesId != nil
-    }
-
     /// Only resolves for a catalog-matched species — a "custom plant" (whose
     /// speciesId is PlantCatalog.customId) legitimately has no research entry.
     private var species: PlantSpecies? {
@@ -71,17 +65,11 @@ struct ReminderDetailSheet: View {
     }
 
     /// Synthetic species used only to recompute suggested interval/amount for
-    /// a custom (non-cataloged) plant — mirrors AddReminderSheet's approach so
-    /// "Reset to suggested" works the same way regardless of provenance.
+    /// a custom (non-cataloged) plant, so "Reset to suggested" works the same
+    /// way regardless of provenance.
     private var syntheticSpeciesForMath: PlantSpecies? {
-        guard isPlant, species == nil else { return nil }
-        return PlantSpecies(
-            id: PlantCatalog.customId, commonName: reminder.name, botanicalName: "", aliases: [],
-            baselineIntervalDays: 7, lowLightMultiplier: 1.5,
-            soilCheck: "", overwateringSigns: "", underwateringSigns: "", winterNote: "",
-            lowLightRating: .tolerates, petToxicity: "Unknown — check the species before keeping pets nearby.",
-            waterClass: .average
-        )
+        guard reminder.isPlant, species == nil else { return nil }
+        return PlantCatalog.customSpecies(named: reminder.name)
     }
 
     private var dueDay: Date {
@@ -95,18 +83,6 @@ struct ReminderDetailSheet: View {
 
     private var dueLabel: String { ReminderSchedule.dueLabel(daysUntilDue: daysUntil) }
 
-    private var amountDisplay: String {
-        amountFlOz.truncatingRemainder(dividingBy: 1) == 0
-            ? String(Int(amountFlOz)) : String(format: "%.1f", amountFlOz)
-    }
-
-    private var amountTextBinding: Binding<String> {
-        Binding(
-            get: { amountDisplay },
-            set: { amountFlOz = Double($0) ?? amountFlOz }
-        )
-    }
-
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
@@ -114,7 +90,7 @@ struct ReminderDetailSheet: View {
                     Text(reminder.name)
                         .font(.system(size: 32, weight: .regular))
                         .foregroundStyle(theme.text)
-                    Text(isPlant ? "PLANT REMINDER" : "REMINDER")
+                    Text(reminder.isPlant ? "PLANT REMINDER" : "REMINDER")
                         .font(.system(size: 10, weight: .medium)).tracking(2)
                         .foregroundStyle(theme.dim)
                 }
@@ -260,7 +236,7 @@ struct ReminderDetailSheet: View {
         VStack(alignment: .leading, spacing: 16) {
             fieldBlock("NAME") { styledField("Name", text: $name) }
 
-            if isPlant {
+            if reminder.isPlant {
                 fieldBlock("ROOM") { styledField("Room", text: $room) }
 
                 fieldBlock("LIGHT") {
@@ -286,12 +262,12 @@ struct ReminderDetailSheet: View {
 
                 wateringBlock
             } else {
-                fieldBlock("REPEATS EVERY") {
-                    Stepper(value: $intervalDays, in: PlantCatalog.minIntervalDays...PlantCatalog.maxIntervalDays) {
-                        Text("\(intervalDays) day\(intervalDays == 1 ? "" : "s")")
-                            .foregroundStyle(theme.text).monospacedDigit()
-                    }
-                    .onChange(of: intervalDays) { _, _ in commitEdits() }
+                fieldBlock("REPEATS") {
+                    // The picker's own label already reads "Daily"/"Every 5
+                    // days", and its onChange covers both pills and stepper
+                    // ticks — so no second .onChange here (that would
+                    // double-commit).
+                    IntervalPicker(days: $intervalDays, onChange: { commitEdits() })
                 }
 
                 fieldBlock("NOTES") { styledField("Any details", text: $notes) }
@@ -322,17 +298,7 @@ struct ReminderDetailSheet: View {
             }
             .onChange(of: intervalDays) { _, _ in commitEdits() }
 
-            HStack {
-                Text("Amount").foregroundStyle(theme.dim)
-                Spacer()
-                TextField("fl oz", text: amountTextBinding)
-                    .keyboardType(.decimalPad)
-                    .focused($isEditing)
-                    .multilineTextAlignment(.trailing)
-                    .foregroundStyle(theme.text)
-                    .frame(width: 56)
-                Text("fl oz").foregroundStyle(theme.dim)
-            }
+            AmountFlOzRow(amountFlOz: $amountFlOz, isEditing: $isEditing)
 
             Text("Water \(PlantCatalog.drainageCopy).")
                 .font(.caption2).foregroundStyle(theme.dim)
@@ -355,7 +321,7 @@ struct ReminderDetailSheet: View {
         let trimmedName = name.trimmingCharacters(in: .whitespaces)
         updated.name = trimmedName.isEmpty ? reminder.name : trimmedName
 
-        if isPlant {
+        if reminder.isPlant {
             let trimmedRoom = room.trimmingCharacters(in: .whitespaces)
             updated.room = trimmedRoom.isEmpty ? nil : trimmedRoom
             updated.intervalDays = intervalDays

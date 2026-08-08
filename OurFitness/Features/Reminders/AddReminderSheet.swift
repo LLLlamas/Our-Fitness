@@ -45,7 +45,17 @@ struct AddReminderSheet: View {
 
     private static let symbolChoices = [
         "bell.fill", "pawprint.fill", "car.fill", "wrench.and.screwdriver.fill",
-        "house.fill", "heart.fill", "gift.fill", "calendar"
+        "house.fill", "heart.fill", "gift.fill", "calendar",
+        "fork.knife", "drop.fill", "leaf.fill", "washer.fill",
+        "scissors", "pills.fill", "bolt.fill", "trash.fill"
+    ]
+
+    /// One-tap starting points for the most common non-plant groups. Tapping
+    /// one only fills the name/symbol fields — the user still taps "Create
+    /// group", so a mis-tap costs nothing.
+    private static let groupSuggestions: [(name: String, symbol: String)] = [
+        ("Kitchen", "fork.knife"), ("Home", "house.fill"), ("Pets", "pawprint.fill"),
+        ("Car", "car.fill"), ("Self-care", "heart.fill")
     ]
 
     init(profile: ProfileDTO, defaultGroupId: UUID? = nil) {
@@ -67,10 +77,13 @@ struct AddReminderSheet: View {
         return plants + custom
     }
 
-    /// Falls back to the Plants group (or the first group) until the user
-    /// explicitly taps a chip — avoids needing an onAppear to seed state.
+    /// Nil until the user taps a chip, unless the caller scoped the sheet to a
+    /// group via `defaultGroupId`. No implicit fallback to Plants: reminders
+    /// aren't plant-shaped any more, so the user picks the group first rather
+    /// than landing in plant species search. Still a computed property, so no
+    /// onAppear is needed to seed state.
     private var resolvedGroupId: UUID? {
-        selectedGroupId ?? defaultGroupId ?? groups.first(where: { $0.kind == .plants })?.id ?? groups.first?.id
+        selectedGroupId ?? defaultGroupId
     }
 
     private var selectedGroup: ReminderGroupDTO? {
@@ -85,37 +98,12 @@ struct AddReminderSheet: View {
         return true
     }
 
-    /// A synthetic species used only to run the same seeded-interval/amount
-    /// math for a "custom plant" (no catalog match) as for a cataloged one —
-    /// avoids duplicating PlantCatalog's formulas. Uses PlantCatalog.customId
-    /// as its id, matching that constant's documented purpose.
+    /// The chosen species, or a synthetic stand-in for a "custom plant" (no
+    /// catalog match) so both run the same seeded-interval/amount math.
     private var speciesForMath: PlantSpecies? {
         if let selectedSpecies { return selectedSpecies }
         guard isCustomPlant else { return nil }
-        return PlantSpecies(
-            id: PlantCatalog.customId, commonName: trimmedName.isEmpty ? "Custom plant" : trimmedName,
-            botanicalName: "", aliases: [],
-            baselineIntervalDays: 7, lowLightMultiplier: 1.5,
-            soilCheck: "Check the top inch of soil; water when it's dry.",
-            overwateringSigns: "Yellow leaves, mushy stems, or soil that stays wet for days.",
-            underwateringSigns: "Drooping, dry, crispy leaves.",
-            winterNote: "Most houseplants need water less often in winter.",
-            lowLightRating: .tolerates,
-            petToxicity: "Unknown — check the species before keeping pets nearby.",
-            waterClass: .average
-        )
-    }
-
-    private var amountDisplay: String {
-        amountFlOz.truncatingRemainder(dividingBy: 1) == 0
-            ? String(Int(amountFlOz)) : String(format: "%.1f", amountFlOz)
-    }
-
-    private var amountTextBinding: Binding<String> {
-        Binding(
-            get: { amountDisplay },
-            set: { amountFlOz = Double($0) ?? amountFlOz }
-        )
+        return PlantCatalog.customSpecies(named: trimmedName)
     }
 
     var body: some View {
@@ -142,6 +130,10 @@ struct AddReminderSheet: View {
                     } else {
                         customFormSection
                     }
+                } else {
+                    Text("Pick a group to start, or make a new one.")
+                        .font(.system(size: 14))
+                        .foregroundStyle(theme.dim)
                 }
             }
             .padding(.horizontal, 20)
@@ -209,23 +201,40 @@ struct AddReminderSheet: View {
 
     private var newGroupForm: some View {
         VStack(alignment: .leading, spacing: 12) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(Self.groupSuggestions, id: \.name) { s in
+                        chip(
+                            title: s.name, symbol: s.symbol,
+                            selected: newGroupName == s.name && newGroupSymbol == s.symbol
+                        ) {
+                            newGroupName = s.name
+                            newGroupSymbol = s.symbol
+                            Haptics.selection()
+                        }
+                    }
+                }
+            }
+
             styledField("Group name (e.g. Car)", text: $newGroupName)
 
-            HStack(spacing: 8) {
-                ForEach(Self.symbolChoices, id: \.self) { sym in
-                    Button {
-                        newGroupSymbol = sym
-                        Haptics.selection()
-                    } label: {
-                        Image(systemName: sym)
-                            .font(.system(size: 15))
-                            .frame(width: 34, height: 34)
-                            .foregroundStyle(newGroupSymbol == sym ? theme.bg : theme.text)
-                            .background(newGroupSymbol == sym ? theme.accent : theme.card)
-                            .clipShape(Circle())
-                            .overlay(Circle().stroke(theme.line, lineWidth: newGroupSymbol == sym ? 0 : 1))
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(Self.symbolChoices, id: \.self) { sym in
+                        Button {
+                            newGroupSymbol = sym
+                            Haptics.selection()
+                        } label: {
+                            Image(systemName: sym)
+                                .font(.system(size: 15))
+                                .frame(width: 34, height: 34)
+                                .foregroundStyle(newGroupSymbol == sym ? theme.bg : theme.text)
+                                .background(newGroupSymbol == sym ? theme.accent : theme.card)
+                                .clipShape(Circle())
+                                .overlay(Circle().stroke(theme.line, lineWidth: newGroupSymbol == sym ? 0 : 1))
+                        }
+                        .tactile(.ghost)
                     }
-                    .tactile(.ghost)
                 }
             }
 
@@ -259,6 +268,14 @@ struct AddReminderSheet: View {
         isCustomPlant = false
         speciesQuery = ""
         name = ""
+        // intervalDays/amountFlOz are shared by the plant and custom forms, and
+        // the custom form's IntervalPicker goes up to 365 while the plant
+        // Stepper is bounded minIntervalDays...maxIntervalDays. Both are
+        // re-seeded by recomputeSuggestion() once a species is picked, but
+        // reset here too so a group switch can never carry an out-of-range
+        // value into the plant form.
+        intervalDays = 7
+        amountFlOz = 14
     }
 
     // MARK: - Plant species search
@@ -408,7 +425,7 @@ struct AddReminderSheet: View {
 
     private var readoutSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Water ~\(amountDisplay) fl oz every \(intervalDays) day\(intervalDays == 1 ? "" : "s")")
+            Text("Water ~\(PlantCatalog.amountLabel(amountFlOz)) fl oz every \(intervalDays) day\(intervalDays == 1 ? "" : "s")")
                 .font(.system(size: 15, weight: .semibold))
                 .foregroundStyle(theme.text)
 
@@ -422,17 +439,7 @@ struct AddReminderSheet: View {
                 }
             }
 
-            HStack {
-                Text("Amount").foregroundStyle(theme.dim)
-                Spacer()
-                TextField("fl oz", text: amountTextBinding)
-                    .keyboardType(.decimalPad)
-                    .focused($isEditing)
-                    .multilineTextAlignment(.trailing)
-                    .foregroundStyle(theme.text)
-                    .frame(width: 56)
-                Text("fl oz").foregroundStyle(theme.dim)
-            }
+            AmountFlOzRow(amountFlOz: $amountFlOz, isEditing: $isEditing)
 
             Text("Water \(PlantCatalog.drainageCopy).")
                 .font(.caption2).foregroundStyle(theme.dim)
@@ -447,16 +454,12 @@ struct AddReminderSheet: View {
 
     private var customFormSection: some View {
         VStack(alignment: .leading, spacing: 20) {
-            fieldBlock(title: "NAME") { styledField("e.g. Change air filter", text: $name) }
+            fieldBlock(title: "NAME") { styledField("e.g. Feed sourdough starter", text: $name) }
 
             photoStep
 
-            fieldBlock(title: "REPEATS EVERY") {
-                Stepper(value: $intervalDays, in: PlantCatalog.minIntervalDays...PlantCatalog.maxIntervalDays) {
-                    Text("\(intervalDays) day\(intervalDays == 1 ? "" : "s")")
-                        .foregroundStyle(theme.text)
-                        .monospacedDigit()
-                }
+            fieldBlock(title: "REPEATS") {
+                IntervalPicker(days: $intervalDays)
             }
 
             fieldBlock(title: "NOTES · OPTIONAL") { styledField("Any details", text: $notes) }

@@ -124,9 +124,15 @@ final class WatchReminderStore: NSObject, ObservableObject, WCSessionDelegate {
         case .done(_, let date):
             snapshots[idx].lastDoneAt = date
         case .setInterval(_, let days):
-            snapshots[idx].intervalDays = min(PlantCatalog.maxIntervalDays, max(PlantCatalog.minIntervalDays, days))
+            // Generic 1...365 bounds, NOT PlantCatalog's watering range —
+            // mirrors the phone-side clamp in WatchSyncService.apply.
+            snapshots[idx].intervalDays = ReminderSchedule.clampInterval(days)
         case .snooze:
-            snapshots[idx].snoozedUntil = ReminderSchedule.snoozeDate(preferredHour: ReminderSchedule.defaultReminderHour)
+            // The profile's own hour rides on the snapshot; falling back to the
+            // default only for a payload from a build that didn't send it.
+            snapshots[idx].snoozedUntil = ReminderSchedule.snoozeDate(
+                preferredHour: snapshots[idx].preferredHour ?? ReminderSchedule.defaultReminderHour
+            )
         }
         persistSnapshots()
     }
