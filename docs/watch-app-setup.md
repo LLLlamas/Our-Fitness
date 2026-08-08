@@ -168,6 +168,69 @@ iOS Simulator:
 
 ---
 
+## Troubleshooting — "doesn't include signing certificate"
+
+**Symptom:**
+
+```
+error: Provisioning profile "OurFitnessWatch AppStore" doesn't include signing
+certificate "Apple Distribution: Lorenzo Llamas (…)". (in target 'OurFitnessWatch')
+```
+
+**What it actually means.** Not that the profile is missing a certificate — that
+it has the *wrong* one. If the account holds two Apple Distribution certificates,
+they share a display name, so the error names a certificate that looks identical
+to the one in the profile and nothing appears wrong.
+
+**The account holds two, and they are only distinguishable by validity window:**
+
+| | Created | Expires | |
+|---|---|---|---|
+| `Apple Distribution: Lorenzo Llamas (GYFN949Q5E)` | 26 May 2026 | **26 May 2027** | ✅ the one `match` syncs — **select this** |
+| `Apple Distribution: Lorenzo Llamas (GYFN949Q5E)` | 16 Apr 2026 | 16 Apr 2027 | ❌ the one baked into the broken watch profile |
+
+The May cert is serial `1F98B39BE713BA620D2867145D06A549`, SHA-1
+`7C0CB6761519C5DF28DD11C1BC2A7606DA03B0BD` — read off the regenerated watch
+profile on 8 Aug 2026. The April cert is serial
+`2483D19F61554E85A19423900C1611DC`, SHA-1
+`73EE5409E44B2B73CF2A3B53EA707387554B8C74`. If a profile embeds that SHA-1, it is
+the stale one. Source for the May dates: the `Installed Certificate` table
+fastlane prints in the `Refresh signing assets in match` / `Ship to TestFlight`
+workflow steps.
+
+⚠️ Do **not** revoke the April certificate to "clean up" — other assets may be
+signed against it, and revoking is the one action here that can break something
+that currently works. Only change which certificate the profile points at.
+
+**How to confirm which is which.** `scripts/verify-profile-certs.sh` runs in
+`testflight.yml` right after the profiles are installed and prints each profile's
+embedded certificate serial and SHA-1 alongside the keychain's identity. To
+inspect a profile by hand:
+
+```sh
+security cms -D -i OurFitnessWatch_AppStore.mobileprovision > /tmp/p.plist
+python3 -c "import plistlib;open('/tmp/c.der','wb').write(plistlib.load(open('/tmp/p.plist','rb'))['DeveloperCertificates'][0])"
+openssl x509 -inform DER -in /tmp/c.der -noout -subject -serial -fingerprint -sha1
+```
+
+**Diagnostic shortcut.** If the app and widget targets archive fine and only the
+watch target fails, the watch profile is the stale one — the other two already
+embed the certificate `match` syncs.
+
+**Fix.**
+
+1. Dispatch TestFlight once with **`refresh_signing` unticked**. Ticked, `match`
+   is permitted to rotate the distribution certificate, which would invalidate
+   all three manual profiles at once and burn a limited cert slot. Every failed
+   run from Aug 4–8 2026 had it ticked; it was never the fix.
+2. Note the certificate `match` installs (the workflow log prints it, and the
+   verify step prints its SHA-1).
+3. Regenerate `OurFitnessWatch AppStore` in the portal against **that** cert —
+   Step 2 above, being deliberate at step 4 about which certificate is selected.
+4. Re-encode into `APPSTORE_WATCH_PROFILE_BASE64` — Step 3 above.
+
+---
+
 ## Notes / gotchas
 
 - **Notification mirroring vs. this companion app are separate features.** A

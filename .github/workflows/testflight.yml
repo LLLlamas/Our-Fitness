@@ -172,6 +172,17 @@ jobs:
       - name: Install App Store provisioning profile (manual, capability-bearing)
         run: bundle exec fastlane ios install_appstore_profile
 
+      # Each manual profile embeds whichever distribution certificate was
+      # selected when it was generated in the portal. If that isn't the cert
+      # match syncs, xcodebuild fails ~4 minutes later with a misleading
+      # "doesn't include signing certificate" error naming a cert whose display
+      # name is identical to the one in the profile. Catch it here instead, and
+      # name the offending profile and both serials. See docs/ci-history.md.
+      - name: Verify profiles embed the signing certificate
+        run: bash scripts/verify-profile-certs.sh "$MATCH_KEYCHAIN_NAME"
+        env:
+          MATCH_KEYCHAIN_NAME: ourfitness-ci.keychain-db
+
       - name: Install XcodeGen
         run: brew install xcodegen
 
