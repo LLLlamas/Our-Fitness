@@ -40,6 +40,28 @@ if grep -n -E '^[[:space:]]*entitlements:[[:space:]]*$' project.yml; then
   exit 1
 fi
 
+# Same trap as `entitlements:`, and the one that actually bit us first (see
+# docs/ci-history.md, "XcodeGen regenerates Info.plist"). An `info:` block makes
+# XcodeGen rewrite Info.plist on every generate, wiping the orientations,
+# HealthKit usage strings, and UILaunchScreen we keep in the checked-in file.
+if grep -n -E '^[[:space:]]*info:[[:space:]]*$' project.yml; then
+  echo "::error::project.yml must NOT have an 'info:' block on any target. XcodeGen regenerates Info.plist on every generate, wiping orientations/HealthKit usage strings/UILaunchScreen. Use INFOPLIST_FILE in 'settings:' instead."
+  exit 1
+fi
+
+# The offline USDA database is declared under `resources:` in project.yml, but a
+# stray `excludes:` entry for the same path on the app target's source glob makes
+# XcodeGen drop the resource entirely — with no warning and no build error,
+# because SQLiteFoodDatabase degrades to empty when the file is missing from the
+# bundle. That shipped silently once; assert on the generated project instead of
+# trusting the YAML. Runs after `xcodegen generate`.
+if [ -f "OurFitness.xcodeproj/project.pbxproj" ]; then
+  if ! grep -q 'usda-foods\.db in Resources' OurFitness.xcodeproj/project.pbxproj; then
+    echo "::error::usda-foods.db is not in any Copy Bundle Resources phase. The app would ship with no USDA food database and silently fall back to curated foods only. Check that 'Resources/usda-foods.db' is NOT listed under the OurFitness target's source 'excludes:' in project.yml."
+    exit 1
+  fi
+fi
+
 if command -v xcodebuild >/dev/null 2>&1 && [ -d "OurFitness.xcodeproj" ]; then
   settings_file="$(mktemp)"
   xcodebuild \

@@ -28,7 +28,8 @@ OurFitness/
   Domain/       ← PURE Swift. No SwiftUI/SwiftData. Fully unit-tested.
   Data/         ← SwiftData @Model classes + Repositories/
   Services/     ← HealthKit, Theme, Haptics, ToastCenter, ReminderNotifications, WatchSync
-  Features/     ← Onboarding, Today, Nutrition, Workouts (shared Train tab; Circuit-mode cards under Circuit/ folder), Reminders, Progress, Settings
+  Features/     ← Onboarding, Today, Nutrition, Workouts (shared Train tab; Circuit-only Train cards under Circuit/ folder), Reminders, Progress, Settings
+                  Rule: a card lives in the folder of the TAB THAT RENDERS IT, not the mode it belongs to.
   Components/   ← ProgressBar, ProgressRing, Card, Banner, AnimatedNumber, TactileButtonStyle…
 Shared/         ← Dual-compiled into multiple targets (LiveSessionAttributes, ReminderSyncPayload); pure Foundation
 _stashed/       ← Outside build target; pending rework
@@ -94,7 +95,7 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | **Today / Steps** | |
 | Move card (2×3 cols) | `Features/Today/MoveCard.swift` — row 1: Apple Total · Our Total Estimate · Training Only; row 2: Distance · Flights · Heart Rate. Single `metricColumn` helper (uniform 22pt value font, no differential shrink). `activityRow(kcal:)` takes `Int` |
 | Steps (Build) | `Features/Today/StepsCard.swift` |
-| Steps + cardio (Circuit, on Today) | `Features/Workouts/Circuit/StepsCardioCard.swift` |
+| Steps + cardio (Circuit, on Today) | `Features/Today/StepsCardioCard.swift` — rendered by `TodayView`, so it lives with its Build-mode counterpart `StepsCard.swift`, not under `Workouts/Circuit/` |
 | Water tracker (presets + day-streak) | `Domain/Water.swift` (presets Sip 4 / S 8 / M 16 / L 32 oz; `streak(_:goalFlOz:end:)`) + `Features/Today/WaterCard.swift` (`AppStorage "waterGoalFlOz.\(profileId)"`; streak chip) |
 | Water quick-log (app-wide FAB) | `Features/Today/WaterQuickLogButton.swift` — tap = repeat last (`AppStorage "waterLastFlOz.\(profileId)"`), press-and-hold = dim screen + radial preset picker; logs via `Repos.addWater`. Overlaid in `App/RootView.swift` |
 | Step milestones / goals | `Domain/Movement.swift` (`defaultStepMilestones`). Per-profile override: `AppStorage "stepsGoal.\(profileId.uuidString)"` |
@@ -208,11 +209,11 @@ Full incident narratives: [docs/ci-history.md](docs/ci-history.md). Setup: [docs
 - **Mac-less workflow:** push → `compile.yml` → patch → push.
 - **Tests hostless:** `OurFitnessTests` compiles `Domain/` directly. No `@testable import`. `scripts/validate-ci-invariants.sh` enforces.
 - **Never bare `Date()` in streak/weekly tests** — pin `now` to fixed mid-week (e.g. `2026-05-27T12:00:00Z`), thread through fixture + function.
-- **Signing:** match repo `LLLlamas/Our-Fitness-Certs`, readonly CI. Manual App Store profile `OurFitness AppStore` → base64 → `APPSTORE_PROFILE_BASE64`. Widget (`com.ourfitness.app.widgets`) needs its own profile. Watch companion app (`com.ourfitness.app.watchkitapp`) will need its own profile + an `APPSTORE_WATCH_PROFILE_BASE64` secret before it can ship to TestFlight — not yet added; see [docs/watch-app-setup.md](docs/watch-app-setup.md).
+- **Signing:** match repo `LLLlamas/Our-Fitness-Certs`, readonly CI. Manual App Store profile `OurFitness AppStore` → base64 → `APPSTORE_PROFILE_BASE64`. Widget (`com.ourfitness.app.widgets`) needs its own profile. Watch companion app (`com.ourfitness.app.watchkitapp`) has its own profile `OurFitnessWatch AppStore` → `APPSTORE_WATCH_PROFILE_BASE64` (added 2026-08-05, expires 2027-04-18); see [docs/watch-app-setup.md](docs/watch-app-setup.md).
 - **XcodeGen:** never `info:` or `entitlements:` blocks on target — use `INFOPLIST_FILE`/`CODE_SIGN_ENTITLEMENTS` build settings only.
 - **Entitlement missing?** Ladder: latest build → App ID capability → profile has it → `.xcarchive` → IPA.
 - **Xcode 26:** version-sorted glob (not hardcoded). Build dest: `platform=iOS Simulator,name=iPhone 17`. All 4 orientations in `Info.plist`.
-- Secrets: `APPLE_TEAM_ID`, `APP_STORE_CONNECT_API_*`, `KEYCHAIN_PASSWORD`, `MATCH_GIT_URL`, `MATCH_PASSWORD`, `MATCH_GIT_BASIC_AUTHORIZATION`, `APPSTORE_PROFILE_BASE64`, `APPSTORE_WIDGET_PROFILE_BASE64`
+- Secrets: `APPLE_TEAM_ID`, `APP_STORE_CONNECT_API_*`, `KEYCHAIN_PASSWORD`, `MATCH_GIT_URL`, `MATCH_PASSWORD`, `MATCH_GIT_BASIC_AUTHORIZATION`, `APPSTORE_PROFILE_BASE64`, `APPSTORE_WIDGET_PROFILE_BASE64`, `APPSTORE_WATCH_PROFILE_BASE64`
 
 ---
 

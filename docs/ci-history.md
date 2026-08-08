@@ -115,6 +115,30 @@ Recovery from "reached the maximum number": revoke stale unused Apple Distributi
 
 The first TestFlight run after adding the `OurFitnessWatch` companion app died at archive with `No profile for team matching 'OurFitnessWatch AppStore'`. The watch target's `PROVISIONING_PROFILE_SPECIFIER` was set in `project.yml` and `docs/watch-app-setup.md` had the full checklist, but the Fastfile install lane, the `beta` export map, and `testflight.yml`'s secret validation only knew about the app and widget profiles — and the portal profile/secret had never been created. Every embedded signed binary (app, widget, watch) needs its own manual App Store profile, its own base64 secret, a line in `install_appstore_profile`, and an entry in the export map. All four are now wired; the workflow fails fast with a pointer to `docs/watch-app-setup.md` when the secret is absent. The same run also surfaced a Swift 6 captured-`var` warning in `WatchReminderStore` (fixed — build locals as `let` before hopping actors).
 
+## XcodeGen source `excludes:` silently dropped a declared resource — Aug 7, 2026
+
+**Symptom:** none. That is what made this one expensive. Every build since Jun 2, 2026 shipped without the offline USDA food database, and nothing failed — not the build, not the tests, not App Store validation. Food search silently fell back to the ~1,200 curated `CommonFoods` entries instead of the 271,896-row USDA set, because `Domain/SQLiteFoodDatabase.swift` is deliberately written to degrade to empty when the file is missing from the bundle.
+
+**Root cause:** commit `721cbee` (the SQLite/FTS5 migration) added the database to the app target in two places at once — as a `resources:` entry, and as an `excludes:` entry on the `path: OurFitness` source glob, with the comment "Bundled as a resource below, not a compile source." The exclude was intended to keep a `.db` out of the compile phase. But XcodeGen applies a source-entry `excludes:` to the file *globally*, not just to that phase, so it also cancelled the `resources:` entry. The generated `project.pbxproj` ended up with zero references to `usda-foods.db` — no `PBXFileReference`, no build file, nothing. The exclude was never needed in the first place: `.db` is not a compilable type, so it would never have landed in Sources anyway. The exclude bought nothing and cost the entire database.
+
+**Why nothing caught it:** every existing guard reads `project.yml`, where both entries were present and looked correct. Nothing asserted against the *generated* project or the built bundle. The graceful-degradation design in `SQLiteFoodDatabase` — good behaviour for the hostless test target, which genuinely has no bundle — removed the last signal that would have surfaced it at runtime.
+
+**Rule:** do not add `Resources/usda-foods.db` to the app target's source `excludes:`. `validate-ci-invariants.sh` now greps the generated `OurFitness.xcodeproj/project.pbxproj` for `usda-foods.db in Resources` and fails the build if it is absent. That check runs after `xcodegen generate` in both workflows. The broader lesson: when a build-shape rule matters, assert on the generated artifact, not on the YAML that was supposed to produce it.
+
+---
+
+## Watch profile signed against the wrong distribution certificate — Aug 4–7, 2026
+
+**Symptom:** `error: Provisioning profile "OurFitnessWatch AppStore" doesn't include signing certificate "Apple Distribution: Lorenzo Llamas (…)". (in target 'OurFitnessWatch')`, failing `build_app` about 8 seconds in. Identical on all three runs after the watch app landed (Aug 4, Aug 6, Aug 7). TestFlight had succeeded on every run from Jun 2 through Jun 29; the watch target is the only new variable.
+
+**Root cause (diagnosed, not yet fixed):** the profile is valid and correctly wired — UUID `4c266a7c-5512-4d02-9397-b9827c0ef999`, app ID `GYFN949Q5E.com.ourfitness.app.watchkitapp`, expiring Apr 16 2027 — but it embeds exactly one distribution certificate, serial `2483D19F61554E85A19423900C1611DC`, and that is not the certificate `match` syncs from the certs repo. The common names are identical, so the error message is misleading: this is two different certs with the same display name, not a missing one.
+
+**Aggravating factor:** all three failed runs were dispatched with `refresh_signing` ticked. That mode lets `match` rotate the Apple Distribution certificate. Rotating invalidates all three manually-created App Store profiles at once, because each embeds whichever cert existed when it was generated — so re-running with the box ticked can move the target rather than fix it, and repeated rotation risks exhausting the account's distribution-certificate slots.
+
+**Fix:** dispatch once with `refresh_signing` **unticked** so `match` installs the existing cert, note that certificate, regenerate `OurFitnessWatch AppStore` in the developer portal against that same certificate, then re-encode it into `APPSTORE_WATCH_PROFILE_BASE64`. See [watch-app-setup.md](watch-app-setup.md).
+
+---
+
 ## General principle for future apps
 
 Never rely on ephemeral CI `cert`/`sigh` as the long-term signing strategy. Either use `match` from day one or another persistent signing-store pattern that preserves the private key between runners. Keep the CI guard that rejects top-level `cert(` / `sigh(` in the release Fastfile unless there is a deliberate, documented exception.

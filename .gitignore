@@ -34,13 +34,22 @@ vendor/bundle/
 .AppleDouble
 .LSOverride
 
+# Build products (belt-and-braces; fastlane already outputs under build/)
+*.ipa
+*.xcarchive
+*.dSYM
+*.dSYM.zip
+
 # Secrets
 *.p8
 *.p12
 *.mobileprovision
 *.cer
-AuthKey_*.p8
+*.certSigningRequest
+*.keystore
 ExportOptions.plist
+.env
+.env.*
 
 # Editor
 .vscode/

@@ -87,7 +87,10 @@ Mirror exactly what we already do for the main app and the widget (CLAUDE.md →
 
 ---
 
-## Step 3 — Add the profile secret (CI wiring is already in place)
+## Step 3 — Add the profile secret ✅ done 2026-08-05
+
+`APPSTORE_WATCH_PROFILE_BASE64` is set (profile `OurFitnessWatch AppStore`,
+expires 2027-04-18). Steps below kept for the next renewal.
 
 The repo side is done: `fastlane/Fastfile` declares
 `WATCH_BUNDLE_ID`/`WATCH_PROFILE_NAME`, `install_appstore_profile` installs the
