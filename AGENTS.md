@@ -19,9 +19,17 @@ Native iOS / SwiftUI app (App Store target). One profile per install. Two modes:
 6. Append-only logs; derived figures (daily/weekly/streak) are never stored. DTOs in `Domain/Models.swift`, `@Model` in `Data/PersistenceModels.swift` with `snapshot` adapters, CRUD in `Data/Repositories/Repositories.swift`.
 7. Never hardcode kcal — `MET × bodyWeightKg × hours` (`Domain/CalorieEstimator.swift`). Food/exercise numbers are real (USDA / reference), never model-invented.
 
-## Build / CI (mac-less)
+## Build / CI (local Mac)
 
-- No local Xcode. Loop: **push → `compile.yml` builds + tests → patch → push.** Green CI = it builds.
+- **Development runs on a MacBook Pro (M5 Pro, macOS 26.6) with Xcode 26.6, Swift 6.3.3, XcodeGen 2.46.** The old mac-less loop is retired. Build and test locally; do not push to CI to discover compile errors.
+  ```bash
+  xcodegen generate    # only after editing project.yml
+  xcodebuild -project OurFitness.xcodeproj -scheme OurFitness \
+    -destination 'platform=iOS Simulator,name=iPhone 17' \
+    CODE_SIGNING_ALLOWED=NO build 2>&1 | grep -E '(error:|BUILD)'
+  ```
+- `compile.yml` still runs on push as a clean-room check. A failure there that passed locally = environment drift (stale DerivedData, untracked file), not a Swift error.
+- TestFlight ships via `testflight.yml`; local `bundle exec fastlane beta` / Xcode Organizer is now viable. Signing is still manual-style + match — don't switch to automatic signing without migrating `testflight.yml` in the same change (see `docs/setup.md`).
 - Tests are **hostless** — `OurFitnessTests` compiles `Domain/` directly, no `@testable import`. Never use a bare `Date()` in streak/weekly tests; pin `now`.
 - XcodeGen (`project.yml`) generates the gitignored `.xcodeproj`. Never put `info:`/`entitlements:` blocks on a target — use `INFOPLIST_FILE` / `CODE_SIGN_ENTITLEMENTS` settings.
 

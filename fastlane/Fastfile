@@ -1,6 +1,12 @@
-# Mac-less workflow.
+# CI signing (originally built for a mac-less workflow; development moved to a
+# local MacBook Pro on 2026-08-08 — see docs/setup.md → "Simplifying signing").
 # Signing assets live in an encrypted fastlane match repository.
 # CI syncs them into a temporary keychain instead of creating certificates every run.
+#
+# These lanes still assume the GitHub Actions runner. Running `beta` locally works,
+# but the match + base64-profile steps exist only because CI has no keychain of its
+# own; on the Mac, Xcode-managed signing would replace most of this. Do not switch
+# project.yml to CODE_SIGN_STYLE: Automatic without migrating testflight.yml too.
 #
 # Required env (set as GitHub secrets, exported by the workflow):
 #   APPLE_TEAM_ID
