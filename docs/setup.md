@@ -4,16 +4,34 @@ CI/CD setup, Apple signing, TestFlight workflow, and day-to-day ops.
 
 ---
 
-## The Mac-less workflow
+## The local-Mac workflow
 
-You don't have Xcode. You have Windows, GitHub Actions, and App Store Connect. So the loop is:
+**As of 2026-08-08 development runs on a MacBook Pro (M5 Pro, macOS 26.6) with Xcode 26.6, Swift 6.3.3, and XcodeGen 2.46 installed locally.** The old Windows / Mac-less loop is retired — do not route a compile check through CI to find out whether Swift builds.
 
-1. Push code from Windows
-2. **`compile.yml`** runs on every push (2–5 min) → tells you if Swift compiles + tests pass
-3. When you want it on your phone → trigger **`testflight.yml`** manually or push a `v*` tag
-4. Fastlane on the macOS runner builds, signs, uploads → TestFlight delivers to your iPhone
+The loop is now:
 
-Iterate fast on `compile.yml`. Only burn TestFlight on builds you actually want to install.
+1. `xcodegen generate` after any `project.yml` change
+2. Build + test locally — seconds, not minutes:
+   ```bash
+   xcodebuild -project OurFitness.xcodeproj -scheme OurFitness \
+     -destination 'platform=iOS Simulator,name=iPhone 17' \
+     CODE_SIGNING_ALLOWED=NO build 2>&1 | grep -E '(error:|warning:|BUILD)' 
+   xcodebuild test -project OurFitness.xcodeproj -scheme OurFitness \
+     -destination 'platform=iOS Simulator,name=iPhone 17' 2>&1 | tail -30
+   ```
+3. Run in the simulator or on a tethered iPhone straight from Xcode
+4. TestFlight only for builds you actually want to distribute (see below)
+
+`compile.yml` still runs on push and stays useful as a clean-room check — it catches "works on my machine" drift (stale DerivedData, an untracked file, a local-only toolchain difference). It is a **safety net, not the feedback loop**.
+
+### TestFlight
+
+Two options now that there's a Mac:
+
+- **`testflight.yml` (current, unchanged)** — manual trigger or a `v*` tag. Fastlane on the macOS runner syncs signing via match, installs the base64 profiles, archives, uploads. All the secrets below still apply.
+- **Local archive (faster, fewer moving parts)** — Xcode → Product → Archive → Distribute App → TestFlight, or `bundle exec fastlane beta`. Requires `bundle install` first (fastlane is in the Gemfile but not yet installed locally, and there is no `Gemfile.lock`).
+
+Local archiving can retire most of the signing apparatus — see "Simplifying signing now that there's a Mac" below.
 
 ---
 
@@ -101,14 +119,18 @@ No manual `.p12` export is needed. The first signing refresh seeds the encrypted
 
 ## Daily loop
 
+Build and test locally first — CI is confirmation, not discovery.
+
 ```bash
-# On Windows, work normally:
-git add .
-git commit -m "feat: add weekly planner skeleton"
-git push origin main
+xcodegen generate            # only after editing project.yml
+xcodebuild -project OurFitness.xcodeproj -scheme OurFitness \
+  -destination 'platform=iOS Simulator,name=iPhone 17' \
+  CODE_SIGNING_ALLOWED=NO build 2>&1 | grep -E '(error:|BUILD)'
+
+git add . && git commit -m "feat: add weekly planner skeleton" && git push origin main
 ```
 
-Within ~3 minutes the **Compile + Test** workflow finishes. If it fails, the run page shows the Swift errors with file + line. Patch, push, repeat.
+Push once it builds green locally. The **Compile + Test** workflow re-checks in a clean room within ~3 minutes; a failure there that passed locally means environment drift (stale DerivedData, an untracked file, a `.gitignore`d artifact the build needs) — not a Swift error.
 
 ---
 
@@ -208,9 +230,25 @@ The `.xcodeproj` is **deliberately gitignored** — it's regenerated from `proje
 
 ---
 
-## Adding a Mac later
+## Simplifying signing now that there's a Mac
 
-If you eventually get a Mac, nothing changes — the same workflows keep working. You'd just gain:
-- Local `xcodegen generate && open OurFitness.xcodeproj` for live SwiftUI Previews
-- Local `bundle exec fastlane ios tests` to run tests without pushing
-- Real HealthKit testing (the simulator returns no health data)
+The existing CI signing apparatus — match, temp keychains, three base64 `.mobileprovision` secrets — exists for exactly one reason: **no Mac.** Apple removed the App Store Connect API endpoint match used to attach capabilities to regenerated profiles (May 2025, ASC API v3.8.0), so profiles had to be hand-made in the portal, base64'd, and injected as secrets. Xcode does not have that limitation — it generates capability-bearing profiles directly.
+
+What the Mac unlocks (all verified present: Xcode 26.6, Swift 6.3.3, XcodeGen 2.46, `altool` and `notarytool` at `/Applications/Xcode.app/Contents/Developer/usr/bin/`):
+
+- **Live SwiftUI Previews** and simulator runs — no push cycle.
+- **Real HealthKit testing** on a tethered iPhone. The simulator returns no health data, so every HealthKit path has been untested until now. This is the single largest correctness gain.
+- **Local test runs** without burning a CI minute.
+- **Local archive → TestFlight**, via Xcode Organizer or `bundle exec fastlane beta`.
+
+**Recommended path (not yet applied — decide before changing `project.yml`):**
+
+1. Sign in at Xcode → Settings → Accounts with the team's Apple ID.
+2. Install the *existing* distribution certificate rather than minting a new one — Apple caps distribution certs at 3 per team, and a fresh one invalidates the profiles already in the match repo:
+   ```bash
+   bundle install
+   bundle exec fastlane match appstore --readonly
+   ```
+3. Only then consider flipping `project.yml` from `CODE_SIGN_STYLE: Manual` + `PROVISIONING_PROFILE_SPECIFIER` to `CODE_SIGN_STYLE: Automatic` for all three targets (app, widget, watch).
+
+**Trade-off, stated plainly:** automatic signing is simpler locally but *diverges from `testflight.yml`*, which assumes manual style and named profiles. Flipping `project.yml` breaks the CI TestFlight lane unless it is migrated at the same time. Pick one lane as canonical — running both is how signing drift starts. Full incident history for why this is delicate: [ci-history.md](ci-history.md).
