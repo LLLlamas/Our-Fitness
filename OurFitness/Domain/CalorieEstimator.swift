@@ -1,6 +1,14 @@
 // MET-based calorie estimates for rep-based, duration-based, and step-based activity.
 // Formula: kcal = METs × bodyWeightKg × hours.
 //
+// DEPENDENCY-FREE ON PURPOSE. This file imports nothing but Foundation and
+// references no other Domain type, so it compiles directly into the watch target
+// (see project.yml → OurFitnessWatch sources) the way ReminderSchedule.swift does.
+// The one estimator that needs a named exercise — caloriesForReps(reps:exercise:) —
+// lives in ExerciseCalories.swift instead, because ExerciseDTO + ExerciseInfo would
+// drag ~1,800 lines of Domain onto the wrist for a function the watch never calls.
+// Keep it that way: anything added here must stay self-contained.
+//
 // Sources:
 //   Ainsworth BE et al. "2011 Compendium of Physical Activities." Med Sci Sports Exerc, 2011.
 //   Tudor-Locke C et al. "How many steps/day are enough?" Sports Med, 2004.
@@ -10,7 +18,10 @@ import Foundation
 
 public enum CalorieEstimator {
 
-    private static let kgPerLb: Double = 0.453592
+    // Internal rather than private: ExerciseCalories.swift extends this enum from
+    // another file in the same module and needs both. Still not public — nothing
+    // outside Domain should be doing its own MET arithmetic.
+    static let kgPerLb: Double = 0.453592
 
     /// Generic rep-based estimate using a flat MET.
     /// Use `caloriesForReps(reps:exercise:bodyWeightLb:)` for a named exercise —
@@ -25,18 +36,6 @@ public enum CalorieEstimator {
         let hours = (Double(reps) * secondsPerRep) / 3600.0
         let mets = loadLb != nil ? 4.0 : 3.5
         return kcal(mets: mets, bodyWeightLb: bodyWeightLb, hours: hours)
-    }
-
-    /// Exercise-specific rep estimate. Uses the named-exercise MET and tempo from
-    /// ExerciseInfo, falling back to category defaults when the name is unknown.
-    public static func caloriesForReps(
-        reps: Int,
-        exercise: ExerciseDTO,
-        bodyWeightLb: Double
-    ) -> Double {
-        let info = ExerciseInfo.meta(for: exercise)
-        let hours = (Double(reps) * info.secondsPerRep) / 3600.0
-        return kcal(mets: info.met, bodyWeightLb: bodyWeightLb, hours: hours)
     }
 
     /// Duration-based estimate (parenting lifts with a known load, pilates, cardio).
@@ -93,7 +92,7 @@ public enum CalorieEstimator {
         return kcal(mets: 4.3, bodyWeightLb: bodyWeightLb, hours: hours)
     }
 
-    private static func kcal(mets: Double, bodyWeightLb: Double, hours: Double) -> Double {
+    static func kcal(mets: Double, bodyWeightLb: Double, hours: Double) -> Double {
         let kg = bodyWeightLb * kgPerLb
         return mets * kg * hours
     }

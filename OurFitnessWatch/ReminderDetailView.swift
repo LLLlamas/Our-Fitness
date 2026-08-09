@@ -7,7 +7,7 @@ import UIKit
 import WatchKit
 
 struct ReminderDetailView: View {
-    @EnvironmentObject var store: WatchReminderStore
+    @EnvironmentObject var store: WatchSyncStore
     let snapshot: ReminderSnapshot
 
     @State private var intervalDays: Int
@@ -22,7 +22,7 @@ struct ReminderDetailView: View {
     /// updates and phone round-trips even though `snapshot` itself is a
     /// value-type snapshot from when this view was pushed.
     private var live: ReminderSnapshot {
-        store.snapshots.first(where: { $0.id == snapshot.id }) ?? snapshot
+        store.reminders.first(where: { $0.id == snapshot.id }) ?? snapshot
     }
 
     private var species: PlantSpecies? {

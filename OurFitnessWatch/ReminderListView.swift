@@ -6,7 +6,7 @@ import SwiftUI
 import UIKit
 
 struct ReminderListView: View {
-    @EnvironmentObject var store: WatchReminderStore
+    @EnvironmentObject var store: WatchSyncStore
 
     private struct Row: Identifiable {
         let snapshot: ReminderSnapshot
@@ -23,7 +23,7 @@ struct ReminderListView: View {
     // Decorate-sort-undecorate: the calendar-heavy due-day math runs once per
     // snapshot per body pass, and rows receive the precomputed daysUntil.
     private var sections: [GroupSection] {
-        let rows = store.snapshots.map { s in
+        let rows = store.reminders.map { s in
             Row(snapshot: s, daysUntil: ReminderSchedule.daysUntilDue(dueDay: ReminderSchedule.nextDueDay(
                 lastDone: s.lastDoneAt, createdAt: s.createdAt,
                 intervalDays: s.intervalDays, snoozedUntil: s.snoozedUntil
@@ -42,7 +42,7 @@ struct ReminderListView: View {
 
     var body: some View {
         Group {
-            if store.snapshots.isEmpty {
+            if store.reminders.isEmpty {
                 emptyState
             } else {
                 List {
@@ -80,7 +80,7 @@ struct ReminderListView: View {
 }
 
 private struct ReminderRow: View {
-    @EnvironmentObject var store: WatchReminderStore
+    @EnvironmentObject var store: WatchSyncStore
     let snapshot: ReminderSnapshot
     let daysUntil: Int
 

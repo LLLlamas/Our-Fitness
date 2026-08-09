@@ -41,11 +41,11 @@ targets:
       # render it). Single source of truth; the file is #if canImport(ActivityKit)
       # gated so it's inert where the framework is absent.
       - path: Shared/LiveSessionAttributes.swift
-      # Reminders <-> watch wire format — compiled into BOTH the app (Services/
-      # WatchSyncService.swift references ReminderSnapshot/WatchAction/
-      # WatchSyncKeys) and the OurFitnessWatch target. Pure Foundation, no
+      # Phone <-> watch wire format — compiled into BOTH the app (Services/
+      # WatchSyncService.swift builds WatchSnapshotEnvelope and applies
+      # WatchAction) and the OurFitnessWatch target. Pure Foundation, no
       # framework gating needed.
-      - path: Shared/ReminderSyncPayload.swift
+      - path: Shared/WatchSyncPayload.swift
     resources:
       - path: OurFitness/Assets.xcassets
       # Offline USDA FoodData Central SQLite/FTS5 database, bundled into the app
@@ -181,9 +181,17 @@ targets:
           - "**/.DS_Store"
           # Info.plist is referenced via INFOPLIST_FILE, not compiled.
           - "Info.plist"
+      # Individual Domain files compiled straight into the watch, the same way
+      # OurFitnessTests compiles Domain directly. Each one MUST stay
+      # dependency-free (Foundation only, no other Domain type) or it drags the
+      # rest of Domain onto the wrist — CalorieEstimator.swift was split for
+      # exactly this reason, see Domain/ExerciseCalories.swift.
       - path: OurFitness/Domain/PlantCatalog.swift
       - path: OurFitness/Domain/ReminderSchedule.swift
-      - path: Shared/ReminderSyncPayload.swift
+      - path: OurFitness/Domain/LiveSessionState.swift
+      - path: OurFitness/Domain/ActivityCatalog.swift
+      - path: OurFitness/Domain/CalorieEstimator.swift
+      - path: Shared/WatchSyncPayload.swift
     resources:
       # The watch app needs its OWN asset catalog — it cannot borrow the app's,
       # because a watchOS AppIcon must be declared with `"platform": "watchos"`.
@@ -229,6 +237,10 @@ targets:
     sources:
       - path: OurFitnessTests
       - path: OurFitness/Domain
+      # The phone<->watch wire format, so its encode/decode and
+      # backward-compatibility rules are unit-testable. Pure Foundation, same as
+      # everything else in this target.
+      - path: Shared/WatchSyncPayload.swift
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.ourfitness.app.tests
