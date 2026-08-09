@@ -207,6 +207,12 @@ targets:
         MARKETING_VERSION: "0.1.0"
         CURRENT_PROJECT_VERSION: "1"
         INFOPLIST_FILE: OurFitnessWatch/Info.plist
+        # HealthKit for on-wrist workout sessions. Build SETTING, never an
+        # `entitlements:` block — XcodeGen would regenerate and clobber the file.
+        # NOTE: adding this capability invalidated the old watch App Store
+        # profile; APPSTORE_WATCH_PROFILE_BASE64 must be regenerated with
+        # HealthKit enabled on the App ID. See docs/watch-app-setup.md.
+        CODE_SIGN_ENTITLEMENTS: OurFitnessWatch/OurFitnessWatch.entitlements
         # Embedded (not standalone) product, same reasoning as the widget extension.
         SKIP_INSTALL: "YES"
         TARGETED_DEVICE_FAMILY: "4"

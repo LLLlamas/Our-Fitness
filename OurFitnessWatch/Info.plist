@@ -38,5 +38,24 @@
   <array>
     <string>UIInterfaceOrientationPortrait</string>
   </array>
+  <!--
+    HealthKit. Both usage strings are required: the watch READS heart rate and
+    active energy during a live session, and WRITES the finished HKWorkout so
+    the Activity rings get credit. A missing string is a launch-time crash the
+    moment the framework is touched, not a warning.
+  -->
+  <key>NSHealthShareUsageDescription</key>
+  <string>Our Fitness reads your heart rate and active energy during a workout so it can show live stats on your wrist.</string>
+  <key>NSHealthUpdateUsageDescription</key>
+  <string>Our Fitness saves your finished workouts to Health so they count toward your Activity rings.</string>
+  <!--
+    Without workout-processing the app is suspended the moment you drop your
+    wrist, which kills the HKWorkoutSession mid-session. This is the entire
+    reason a watch app can track a workout at all.
+  -->
+  <key>WKBackgroundModes</key>
+  <array>
+    <string>workout-processing</string>
+  </array>
 </dict>
 </plist>

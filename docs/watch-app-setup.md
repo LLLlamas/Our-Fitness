@@ -53,10 +53,23 @@ without linking the app target.
 1. developer.apple.com → **Certificates, Identifiers & Profiles → Identifiers → +**.
 2. Type **App IDs → App**.
 3. Bundle ID: **explicit** → `com.ourfitness.app.watchkitapp`.
-4. Capabilities: **none** required for `WatchConnectivity` — it needs no
-   managed capability or entitlement, same as the widget's ActivityKit. Do not
-   enable HealthKit / Background Delivery on the watch app id; it doesn't use
-   them and it only complicates the profile.
+4. Capabilities: **HealthKit** (and nothing else).
+   > ⚠️ **This changed.** Through 2026-08-08 this step read "Capabilities:
+   > **none**", because the watch app only did `WatchConnectivity`, which needs
+   > no managed capability. On-wrist workout tracking
+   > (`OurFitnessWatch/WatchWorkoutSession.swift` — `HKWorkoutSession` +
+   > `HKLiveWorkoutBuilder`) changed that: the watch now reads heart rate and
+   > active energy from its own sensors and writes the finished `HKWorkout` so
+   > Activity rings get credit.
+   >
+   > Do **not** also enable Background Delivery. The phone owns background
+   > health sync; the watch reads only while a session is running, and
+   > `WKBackgroundModes: workout-processing` in `OurFitnessWatch/Info.plist` is
+   > what keeps that alive with the wrist down.
+   >
+   > **Enabling this invalidates any existing watch profile** — you must
+   > regenerate it (Step 2) and refresh `APPSTORE_WATCH_PROFILE_BASE64`, or the
+   > next TestFlight upload fails. This is a capability change, not a renewal.
 5. Register.
 
 You do **not** create a new app record in App Store Connect — the watch app
@@ -294,11 +307,30 @@ top-level `CFBundleIconName` key in either bundle despite the error's wording.
   (browsing reminders, thumbnails, etc.) added by the `OurFitnessWatch` target.
 - **Thin client, no local persistence:** the watch app has no SwiftData store.
   If the watch and phone are unpaired/out of range, the watch shows the last
-  synced snapshot (`WatchReminderStore`) until connectivity resumes — it does
-  not independently track state.
-- **No push / background modes added:** sync relies on `WatchConnectivity`'s
-  own transfer queuing (`updateApplicationContext`, `transferUserInfo`,
-  `transferFile`); no APNs, no `UIBackgroundModes` entries were added for this.
+  synced envelope (`WatchSyncStore`) until connectivity resumes — it does
+  not independently track state. Wrist actions taken offline are not lost:
+  `transferUserInfo` queues them and the phone applies them on reconnect.
+- **One envelope, not a key per feature.** `updateApplicationContext` REPLACES
+  the whole context dictionary, so two features each pushing their own key
+  would silently clobber each other. Everything the watch needs travels in a
+  single `WatchSnapshotEnvelope` (`Shared/WatchSyncPayload.swift`), built in one
+  pass by `WatchSyncService.pushSnapshot`. Do not add a second context key.
+- **The watch computes almost nothing.** Today's numbers, meal shortcut macros
+  and per-exercise counts all arrive pre-computed, because resolving them on
+  the wrist would drag `Models.swift` + `ExerciseInfo.swift` + `CommonFoods.swift`
+  into the watch target. When the watch logs something it sends an id and the
+  phone re-resolves the real values — a stale snapshot must never be able to
+  write wrong macros. The watch compiles only five dependency-free Domain files;
+  `CalorieEstimator.swift` was split (see `Domain/ExerciseCalories.swift`) to
+  keep it that way.
+- **No APNs; one background mode.** Sync still relies purely on
+  `WatchConnectivity`'s own transfer queuing. The only background mode is
+  `WKBackgroundModes: workout-processing`, required for `HKWorkoutSession` to
+  survive a wrist-down — there are still no `UIBackgroundModes` entries.
+- **HealthKit crash traps apply on the watch too** (CLAUDE.md, "caused SIGABRT
+  in build 37"): `requestAuthorization` raises an *uncatchable* `NSException`,
+  so it is called only from the explicit Start-workout tap, never from
+  `.task`/`.onAppear`. Quantity types only in the read/write sets.
 - **watchOS deployment target:** watchOS 10.0 (`project.yml` →
   `OurFitnessWatch` target). Keep in sync with whatever the Apple Watch
   hardware support matrix requires at release time.

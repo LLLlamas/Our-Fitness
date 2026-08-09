@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Entitlements for the OurFitnessWatch companion app.
+
+  Wired via the target's CODE_SIGN_ENTITLEMENTS build setting in project.yml —
+  NEVER an `entitlements:` block, which XcodeGen would regenerate and clobber
+  (same trap documented for the app's Info.plist and the widget).
+
+  HealthKit ONLY. Deliberately narrower than the phone's
+  OurFitness/OurFitness.entitlements:
+    - no `healthkit.access` array — that is for clinical health records, which
+      this app does not read.
+    - no `healthkit.background-delivery` — the phone owns background sync. The
+      watch reads live sensor data only while a workout session is running, and
+      WKBackgroundModes `workout-processing` (Info.plist) is what keeps that
+      alive with the wrist down.
+
+  ⚠️ Adding this capability INVALIDATED the previous `OurFitnessWatch AppStore`
+  provisioning profile. The profile must be regenerated at developer.apple.com
+  with HealthKit enabled on the com.ourfitness.app.watchkitapp App ID, and
+  APPSTORE_WATCH_PROFILE_BASE64 updated, or TestFlight upload will fail.
+  See docs/watch-app-setup.md.
+-->
+<plist version="1.0">
+<dict>
+  <key>com.apple.developer.healthkit</key>
+  <true/>
+</dict>
+</plist>

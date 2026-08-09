@@ -20,6 +20,7 @@ import WatchKit
 
 struct WatchLiveSessionView: View {
     @EnvironmentObject private var store: WatchSyncStore
+    @ObservedObject private var workout = WatchWorkoutSession.shared
 
     var body: some View {
         if let session = store.liveSession {
@@ -85,6 +86,17 @@ struct WatchLiveSessionView: View {
                     Text("≈ \(liveCal) cal")
                         .font(.system(.footnote, design: .monospaced))
                         .foregroundStyle(.secondary)
+
+                    // Sensor readings, only when a HealthKit workout is actually
+                    // running. Deliberately shown ALONGSIDE the MET estimate above
+                    // rather than replacing it: the phone stores the deterministic
+                    // MET figure, so swapping in a different number here would make
+                    // the wrist and the app disagree about the same session.
+                    if let bpm = workout.heartRateBpm {
+                        Label("\(bpm) bpm", systemImage: "heart.fill")
+                            .font(.system(.footnote, design: .monospaced))
+                            .foregroundStyle(.pink)
+                    }
                 }
                 .padding(.vertical, 2)
             }
@@ -135,6 +147,9 @@ private struct EndSessionButton: View {
                 startDate: session.startDate,
                 elapsedSeconds: max(0, Int(Date().timeIntervalSince(session.startDate)))
             ))
+            // Saves the HKWorkout so the Activity rings get credit. Independent
+            // of the action above — the session is logged by the phone either way.
+            Task { await WatchWorkoutSession.shared.endWorkout() }
         } label: {
             Label("End session", systemImage: "stop.circle.fill")
                 .frame(maxWidth: .infinity)

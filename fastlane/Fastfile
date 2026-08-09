@@ -238,9 +238,14 @@ platform :ios do
       ENV.fetch("APPSTORE_WIDGET_PROFILE_BASE64", "").to_s.strip,
       "widget (#{WIDGET_BUNDLE_ID})", expect_healthkit: false
     )
+    # The watch app carries HealthKit as of the on-wrist workout session
+    # (OurFitnessWatch/WatchWorkoutSession.swift), so its profile must declare
+    # the capability. If this check reports ZERO entitlements, the profile
+    # predates that change — regenerate it with HealthKit enabled on the App ID
+    # and refresh APPSTORE_WATCH_PROFILE_BASE64. See docs/watch-app-setup.md.
     install_one_profile(
       ENV.fetch("APPSTORE_WATCH_PROFILE_BASE64", "").to_s.strip,
-      "watch (#{WATCH_BUNDLE_ID})", expect_healthkit: false
+      "watch (#{WATCH_BUNDLE_ID})", expect_healthkit: true
     )
   end
 
