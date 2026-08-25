@@ -75,10 +75,11 @@ end
 
 # Install one manually-generated provisioning profile (decoded from a base64
 # secret) into Xcode's profiles dir, keyed by the UUID inside the profile so the
-# provisioning subsystem indexes it. `expect_healthkit:` runs the app-only
-# entitlement diagnostic; the widget profile legitimately carries ZERO managed
-# capabilities, so that check is skipped for it.
-def install_one_profile(profile_b64, label, expect_healthkit: false)
+# provisioning subsystem indexes it. `expect_entitlements:` is the exact set of
+# com.apple.developer.* keys this binary's .entitlements file declares — the
+# profile must carry every one of them or signing silently strips it. Pass `[]`
+# for a binary with no managed capabilities (the widget) to skip the check.
+def install_one_profile(profile_b64, label, expect_entitlements: [])
   UI.user_error!(
     "#{label} profile base64 is empty. Generate the App Store profile in " \
     "developer.apple.com → Profiles, base64-encode the .mobileprovision, and " \
@@ -118,28 +119,31 @@ def install_one_profile(profile_b64, label, expect_healthkit: false)
   end
 
   entitlements = plist.scan(/<key>(com\.apple\.developer\.[a-zA-Z0-9._-]+)<\/key>/).flatten.uniq.sort
-  unless expect_healthkit
+  if expect_entitlements.empty?
     # Widget has no managed capabilities — zero entitlements is correct here.
     UI.message("#{label} profile entitlements: #{entitlements.empty? ? '(none — expected for the widget)' : entitlements.join(', ')}")
     return
   end
 
+  UI.message("#{label} profile entitlements (com.apple.developer.*):")
   if entitlements.empty?
-    UI.error("#{label} profile declares ZERO com.apple.developer.* entitlements. " \
-             "This means the profile was generated without any capabilities " \
-             "attached. Regenerate at developer.apple.com → Profiles → +.")
+    UI.message("  (none)")
   else
-    UI.message("#{label} profile entitlements (com.apple.developer.*):")
     entitlements.each { |k| UI.message("  • #{k}") }
-    missing = %w[com.apple.developer.healthkit
-                 com.apple.developer.healthkit.background-delivery] - entitlements
-    if missing.any?
-      UI.error("#{label} profile is MISSING these expected entitlements: #{missing.join(', ')}. " \
-               "Signing will strip them from the IPA. Regenerate the profile in " \
-               "developer.apple.com (delete the old one first, then create a new " \
-               "one — Edit/Save on an existing profile does NOT refresh capabilities).")
-    end
   end
+
+  # Hard-fail here rather than let xcodebuild discover it five minutes into the
+  # archive ("Provisioning profile … doesn't include the HealthKit capability").
+  # The build cannot recover from a capability-less profile, so failing at the
+  # install step keeps the diagnosis next to the fix.
+  missing = expect_entitlements - entitlements
+  UI.user_error!(
+    "#{label} profile is MISSING these expected entitlements: #{missing.join(', ')}. " \
+    "Signing would strip them from the IPA. Regenerate the profile in " \
+    "developer.apple.com (delete the old one first, then create a new " \
+    "one — Edit/Save on an existing profile does NOT refresh capabilities), " \
+    "then re-save the base64 as the matching repository secret."
+  ) if missing.any?
 end
 
 def match_options(api_key)
@@ -232,20 +236,26 @@ platform :ios do
     # extension (no managed capabilities). See docs/live-activity-setup.md.
     install_one_profile(
       ENV.fetch("APPSTORE_PROFILE_BASE64", "").to_s.strip,
-      "app (#{BUNDLE_ID})", expect_healthkit: true
+      "app (#{BUNDLE_ID})",
+      expect_entitlements: %w[com.apple.developer.healthkit
+                              com.apple.developer.healthkit.background-delivery]
     )
     install_one_profile(
       ENV.fetch("APPSTORE_WIDGET_PROFILE_BASE64", "").to_s.strip,
-      "widget (#{WIDGET_BUNDLE_ID})", expect_healthkit: false
+      "widget (#{WIDGET_BUNDLE_ID})", expect_entitlements: []
     )
     # The watch app carries HealthKit as of the on-wrist workout session
     # (OurFitnessWatch/WatchWorkoutSession.swift), so its profile must declare
-    # the capability. If this check reports ZERO entitlements, the profile
-    # predates that change — regenerate it with HealthKit enabled on the App ID
-    # and refresh APPSTORE_WATCH_PROFILE_BASE64. See docs/watch-app-setup.md.
+    # the capability. HealthKit ONLY — OurFitnessWatch.entitlements deliberately
+    # omits background-delivery (the phone owns background sync), so expecting it
+    # here would fail a correctly-generated profile. If this check reports ZERO
+    # entitlements, the profile predates the on-wrist workout change — regenerate
+    # it with HealthKit enabled on the App ID and refresh
+    # APPSTORE_WATCH_PROFILE_BASE64. See docs/watch-app-setup.md.
     install_one_profile(
       ENV.fetch("APPSTORE_WATCH_PROFILE_BASE64", "").to_s.strip,
-      "watch (#{WATCH_BUNDLE_ID})", expect_healthkit: true
+      "watch (#{WATCH_BUNDLE_ID})",
+      expect_entitlements: %w[com.apple.developer.healthkit]
     )
   end
 
