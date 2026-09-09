@@ -93,6 +93,7 @@ jobs:
             echo "::error::APPSTORE_WATCH_PROFILE_BASE64 secret is not set. The OurFitnessWatch companion app is a third signed binary and needs its own App Store profile for com.ourfitness.app.watchkitapp. See docs/watch-app-setup.md Steps 1-3."
             exit 1
           fi
+          python3 scripts/check-match-access.py
           if [ "$MATCH_READONLY" = "false" ]; then
             echo "::warning title=Signing mode::REFRESH — match will rotate the Apple Distribution cert in $MATCH_GIT_URL. Only use for cert rotation; the provisioning profile is managed via APPSTORE_PROFILE_BASE64, not match."
             exit 0
