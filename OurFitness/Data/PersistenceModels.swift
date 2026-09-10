@@ -620,6 +620,10 @@ public final class ReminderModel {
     public var notes: String?
     public var createdAt: Date
     public var snoozedUntil: Date?
+    // Medication-group extras. New optional fields are an additive SwiftData
+    // migration — SchemaV7 stays as-is, no migration stage needed.
+    public var dosage: String?
+    public var patternReminderEnabled: Bool?
 
     public init(snapshot s: ReminderDTO) {
         self.id = s.id
@@ -636,6 +640,8 @@ public final class ReminderModel {
         self.notes = s.notes
         self.createdAt = s.createdAt
         self.snoozedUntil = s.snoozedUntil
+        self.dosage = s.dosage
+        self.patternReminderEnabled = s.patternReminderEnabled
     }
 
     public var snapshot: ReminderDTO {
@@ -645,7 +651,8 @@ public final class ReminderModel {
             speciesId: speciesId, room: room,
             light: lightRaw.flatMap(PlantLightLevel.init(rawValue:)),
             potDiameterInches: potDiameterInches, notes: notes,
-            createdAt: createdAt, snoozedUntil: snoozedUntil
+            createdAt: createdAt, snoozedUntil: snoozedUntil,
+            dosage: dosage, patternReminderEnabled: patternReminderEnabled
         )
     }
 
@@ -659,6 +666,8 @@ public final class ReminderModel {
         self.potDiameterInches = s.potDiameterInches
         self.notes = s.notes
         self.snoozedUntil = s.snoozedUntil
+        self.dosage = s.dosage
+        self.patternReminderEnabled = s.patternReminderEnabled
     }
 }
 
@@ -672,6 +681,10 @@ public final class ReminderEventModel {
     public var date: String      // YYYY-MM-DD local
     public var amountFlOz: Double?
     public var timestamp: Date
+    /// What was actually taken at this event — independent of the medication's
+    /// recommended dosage, which logging never rewrites. Additive optional, so
+    /// SchemaV7 stands unchanged.
+    public var dosageTaken: String?
 
     public init(snapshot s: ReminderEventDTO) {
         self.id = s.id
@@ -680,10 +693,12 @@ public final class ReminderEventModel {
         self.date = s.date
         self.amountFlOz = s.amountFlOz
         self.timestamp = s.timestamp
+        self.dosageTaken = s.dosageTaken
     }
 
     public var snapshot: ReminderEventDTO {
         ReminderEventDTO(id: id, userId: userId, reminderId: reminderId, date: date,
-                         amountFlOz: amountFlOz, timestamp: timestamp)
+                         amountFlOz: amountFlOz, timestamp: timestamp,
+                         dosageTaken: dosageTaken)
     }
 }

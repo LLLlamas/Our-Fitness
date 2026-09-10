@@ -689,16 +689,33 @@ public struct WaterEntryDTO: Codable, Equatable, Sendable, Identifiable {
 
 // MARK: - Reminders (V7)
 //
-// A generic recurring-reminder engine. "Plants" ships as the one built-in,
-// fully-fleshed group (species catalog, seeded amount/interval, care sheets);
+// A generic recurring-reminder engine. Two built-in, fully-fleshed groups ship
+// with it: "Plants" (species catalog, seeded amount/interval, care sheets) and
+// "Medication" (dosage + a learned "you usually take this around now" nudge);
 // user-created groups hold basic reminders (name + photo + interval) until
 // they get their own customization later. See Domain/PlantCatalog.swift for
-// PlantLightLevel and the species catalog, and Domain/ReminderSchedule.swift
-// for due-date math.
+// PlantLightLevel and the species catalog, Domain/ReminderSchedule.swift for
+// due-date math, and Domain/MedicationPattern.swift for the habit inference.
 
 public enum ReminderGroupKind: String, Codable, Sendable {
+    case medication
     case plants
     case custom
+
+    /// Fixed render order for reminder groups — medication, then plants, then
+    /// user-created groups. Explicit rather than alphabetical so a built-in
+    /// group can never be reordered by a rename, and so both the Reminders tab
+    /// and the add sheet sort the same way.
+    ///
+    /// Raw values are strings, so adding a case here (or reordering them) is
+    /// storage-safe — nothing persisted depends on declaration order.
+    public var sortRank: Int {
+        switch self {
+        case .medication: return 0
+        case .plants: return 1
+        case .custom: return 2
+        }
+    }
 }
 
 public struct ReminderGroupDTO: Codable, Equatable, Sendable, Identifiable {
@@ -721,7 +738,10 @@ public struct ReminderGroupDTO: Codable, Equatable, Sendable, Identifiable {
 }
 
 /// A single recurring reminder. The plant-specific fields (`speciesId` through
-/// `potDiameterInches`) are nil for reminders in a custom (non-plants) group.
+/// `potDiameterInches`) are nil for reminders in a custom (non-plants) group,
+/// and the medication-specific fields (`dosage`, `patternReminderEnabled`) are
+/// likewise nil outside a medication group — one struct carries every group's
+/// extras, each set nil where it doesn't apply.
 /// `snoozedUntil` is schedule *state* (like `intervalDays`), not a derivable
 /// value, so it lives here rather than being reconstructed from the event log.
 public struct ReminderDTO: Codable, Equatable, Sendable, Identifiable {
@@ -739,13 +759,21 @@ public struct ReminderDTO: Codable, Equatable, Sendable, Identifiable {
     public var notes: String?
     public var createdAt: Date
     public var snoozedUntil: Date?
+    /// Recommended dosage display text — "1 tablet", "10 mg", "5 mL". Free text
+    /// rather than a value + unit pair because prescriptions are written in
+    /// whatever unit the label uses, and we only ever show it back.
+    public var dosage: String?
+    /// Per-medication opt-in for the "you usually log this around now" nudge.
+    /// nil (older rows, and everything outside a medication group) reads as off.
+    public var patternReminderEnabled: Bool?
 
     public init(
         id: UUID = UUID(), userId: UUID, groupId: UUID, name: String,
         photoData: Data? = nil, intervalDays: Int, amountFlOz: Double? = nil,
         speciesId: String? = nil, room: String? = nil, light: PlantLightLevel? = nil,
         potDiameterInches: Int? = nil, notes: String? = nil,
-        createdAt: Date = Date(), snoozedUntil: Date? = nil
+        createdAt: Date = Date(), snoozedUntil: Date? = nil,
+        dosage: String? = nil, patternReminderEnabled: Bool? = nil
     ) {
         self.id = id
         self.userId = userId
@@ -761,12 +789,16 @@ public struct ReminderDTO: Codable, Equatable, Sendable, Identifiable {
         self.notes = notes
         self.createdAt = createdAt
         self.snoozedUntil = snoozedUntil
+        self.dosage = dosage
+        self.patternReminderEnabled = patternReminderEnabled
     }
 
     /// The plant-specific fields are nil for reminders in a custom group (see
     /// the doc comment above), so any of them being set is a reliable flag —
     /// no group lookup needed at the call site. Computed, so it stays out of
-    /// the Codable representation.
+    /// the Codable representation. The medication fields deliberately stay out
+    /// of this check: a medication reminder sets `dosage`, never light/pot/
+    /// species, so it can't read as a plant.
     public var isPlant: Bool {
         light != nil || potDiameterInches != nil || speciesId != nil
     }
@@ -781,15 +813,22 @@ public struct ReminderEventDTO: Codable, Equatable, Sendable, Identifiable {
     public var date: String      // YYYY-MM-DD local
     public var amountFlOz: Double?
     public var timestamp: Date
+    /// What the user says they actually took for THIS event. Deliberately
+    /// independent of the medication's recommended `ReminderDTO.dosage`:
+    /// logging half a tablet today records that fact on the event and must
+    /// never rewrite the recommendation.
+    public var dosageTaken: String?
 
     public init(id: UUID = UUID(), userId: UUID, reminderId: UUID, date: String,
-                amountFlOz: Double? = nil, timestamp: Date = Date()) {
+                amountFlOz: Double? = nil, timestamp: Date = Date(),
+                dosageTaken: String? = nil) {
         self.id = id
         self.userId = userId
         self.reminderId = reminderId
         self.date = date
         self.amountFlOz = amountFlOz
         self.timestamp = timestamp
+        self.dosageTaken = dosageTaken
     }
 }
 

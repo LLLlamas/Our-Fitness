@@ -10,11 +10,13 @@ import SwiftData
 
 public enum Seeder {
     public static func seedAll(_ ctx: ModelContext) {
-        // Backstops the built-in "Plants" reminder group for profiles created
-        // before the Reminders tab shipped. New profiles get it directly from
-        // Repos.createProfile; this just catches everyone else on next launch.
+        // Backstops the built-in "Plants" and "Medication" reminder groups for
+        // profiles created before those groups shipped. New profiles get both
+        // directly from Repos.createProfile; this just catches everyone else on
+        // next launch. Both calls are idempotent.
         for profile in Repos.listProfiles(ctx) {
             Repos.ensurePlantsGroup(ctx, userId: profile.id)
+            Repos.ensureMedicationGroup(ctx, userId: profile.id)
         }
     }
 }

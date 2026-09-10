@@ -55,6 +55,7 @@ public enum Repos {
             seedCircuitExercises(ctx, profileId: dto.id)
         }
         ensurePlantsGroup(ctx, userId: dto.id)
+        ensureMedicationGroup(ctx, userId: dto.id)
         return dto
     }
 
@@ -601,14 +602,16 @@ public enum Repos {
     }
 
     /// Deletes a custom group and cascades every reminder in it (which itself
-    /// cascades that reminder's events). Refuses to delete the built-in
-    /// "plants" group. Returns the deleted reminder ids so the caller can also
-    /// cancel their pending notifications (this layer stays notification-free —
-    /// see ReminderNotificationService).
+    /// cascades that reminder's events). Only `.custom` groups are deletable —
+    /// both built-ins ("Plants" and "Medication") are refused, since
+    /// `ensure…Group` would just recreate them on the next launch. Returns the
+    /// deleted reminder ids so the caller can also cancel their pending
+    /// notifications (this layer stays notification-free — see
+    /// ReminderNotificationService).
     @discardableResult
     public static func deleteReminderGroup(_ ctx: ModelContext, id: UUID) -> [UUID] {
         let desc = FetchDescriptor<ReminderGroupModel>(predicate: #Predicate { $0.id == id })
-        guard let group = try? ctx.fetch(desc).first, group.kindRaw != ReminderGroupKind.plants.rawValue else {
+        guard let group = try? ctx.fetch(desc).first, group.kindRaw == ReminderGroupKind.custom.rawValue else {
             return []
         }
         let userId = group.userId
@@ -630,6 +633,17 @@ public enum Repos {
             return existing
         }
         return addReminderGroup(ctx, ReminderGroupDTO(userId: userId, name: "Plants", sfSymbol: "leaf.fill", kind: .plants))
+    }
+
+    /// Idempotently ensures a profile has the built-in Medication group. Same
+    /// shape and call sites as `ensurePlantsGroup` — `createProfile` for new
+    /// profiles, `Seeder.seedAll` for ones that predate the feature.
+    @discardableResult
+    public static func ensureMedicationGroup(_ ctx: ModelContext, userId: UUID) -> ReminderGroupDTO {
+        if let existing = listReminderGroups(ctx, userId: userId).first(where: { $0.kind == .medication }) {
+            return existing
+        }
+        return addReminderGroup(ctx, ReminderGroupDTO(userId: userId, name: "Medication", sfSymbol: "pills.fill", kind: .medication))
     }
 
     /// Single-group fetch for callers (e.g. notification scheduling) that only
