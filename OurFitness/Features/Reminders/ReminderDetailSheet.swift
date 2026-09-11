@@ -272,8 +272,11 @@ struct ReminderDetailSheet: View {
         let stamps = events.map(\.timestamp)
         guard MedicationPattern.hasDisplayablePattern(stamps, now: now, calendar: calendar),
               let minuteOfDay = MedicationPattern.typicalMinuteOfDay(stamps, now: now, calendar: calendar),
-              let typical = calendar.date(byAdding: .minute, value: minuteOfDay,
-                                          to: calendar.startOfDay(for: now))
+              // Set the wall-clock time rather than adding minutes to midnight:
+              // on a DST day the elapsed-minutes form reads an hour off, the
+              // same way it once did in MedicationPattern.fireInstant.
+              let typical = calendar.date(bySettingHour: minuteOfDay / 60, minute: minuteOfDay % 60,
+                                          second: 0, of: now)
         else { return "Keep logging this medication to see your recent timing pattern." }
         return "Usually logged around \(typical.formatted(date: .omitted, time: .shortened))"
     }
