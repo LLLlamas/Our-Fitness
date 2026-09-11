@@ -128,6 +128,16 @@ struct MoveCard: View {
                     Spacer()
                 }
 
+                // Steps leads the card. It's the metric most of the numbers
+                // below are made of — the MET estimate, the distance, a good
+                // share of the active energy — so reading it first makes the
+                // rest of the grid make sense. Full width rather than a fourth
+                // column because it's the only one here carrying a goal, and a
+                // progress bar needs the room.
+                stepsRow
+
+                Divider().background(theme.line)
+
                 // Row 1: Apple Total · Our Estimate · Training
                 HStack(alignment: .top, spacing: 0) {
                     metricColumn(
@@ -238,6 +248,71 @@ struct MoveCard: View {
             .fill(theme.line.opacity(0.6))
             .frame(width: 0.5)
             .padding(.vertical, 2)
+    }
+
+    private var stepsGoalMet: Bool {
+        effectiveStepsGoal > 0 && todaySteps >= effectiveStepsGoal
+    }
+
+    private var stepsPct: Double {
+        guard effectiveStepsGoal > 0 else { return 0 }
+        return min(1, Double(todaySteps) / Double(effectiveStepsGoal))
+    }
+
+    /// Same value font and dim/label treatment as `metricColumn` so the card
+    /// still reads as one grid, plus the goal and bar a column has no room for.
+    /// Opens the Move info sheet, which already explains the steps figure — the
+    /// goal itself is edited on the steps card, which owns that control.
+    private var stepsRow: some View {
+        Button { showInfo = true } label: {
+            VStack(alignment: .leading, spacing: 6) {
+                HStack(spacing: 4) {
+                    Image(systemName: "shoeprints.fill")
+                        .font(.system(size: 9))
+                        .foregroundStyle(theme.dim)
+                    Text("STEPS")
+                        .font(.system(size: 8, weight: .semibold)).tracking(1.2)
+                        .foregroundStyle(theme.dim)
+                    Spacer()
+                    Text("\(todaySteps.formatted()) / \(effectiveStepsGoal.formatted())")
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundStyle(stepsGoalMet ? theme.ok : theme.dim)
+                        .monospacedDigit()
+                        .contentTransition(.numericText())
+                }
+
+                HStack(alignment: .firstTextBaseline, spacing: 8) {
+                    Text(todaySteps > 0 ? todaySteps.formatted() : "-")
+                        .font(.system(size: 22, weight: .bold, design: .monospaced))
+                        .foregroundStyle(theme.text)
+                        .contentTransition(.numericText())
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.9)
+                    Text(stepsKcal > 0 ? "~\(stepsKcal) cal walking" : "steps today")
+                        .font(.system(size: 10))
+                        .foregroundStyle(theme.dim)
+                    Spacer(minLength: 0)
+                }
+
+                // Same inline bar as StepsCard: Capsule track, cornerRadius-3
+                // fill, goal colour on completion.
+                GeometryReader { geo in
+                    ZStack(alignment: .leading) {
+                        Capsule().fill(theme.barBg)
+                        RoundedRectangle(cornerRadius: 3, style: .continuous)
+                            .fill(stepsGoalMet ? theme.barOk : theme.barFill)
+                            .frame(width: geo.size.width * stepsPct)
+                    }
+                }
+                .frame(height: 5)
+                .animation(.spring(response: 0.5, dampingFraction: 0.85), value: stepsPct)
+            }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .tactile(.ghost)
+        .accessibilityLabel("Steps today: \(todaySteps.formatted()) of \(effectiveStepsGoal.formatted())")
     }
 
     @ViewBuilder
