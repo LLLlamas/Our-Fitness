@@ -27,3 +27,4 @@ One profile per install. All data stays on-device. Mode is changeable at will in
 - [docs/live-activity-setup.md](docs/live-activity-setup.md) — Live Activity / widget signing checklist
 - [docs/RepCheck.md](docs/RepCheck.md) — friction-free logging UX
 - [docs/nutrition-plan-research.md](docs/nutrition-plan-research.md) — Build nutrition spec
+- [docs/medication-reminders-plan.md](docs/medication-reminders-plan.md) — medication logging spec, with the notification wording rules it ships under

@@ -1,5 +1,25 @@
 # OurFitness — Medication Reminders & Logging Feature Plan
 
+> **Status: shipped** on `feature/reminders-plants` (September 2026). The rest of
+> this document is the original spec, kept for the reasoning behind the design —
+> where it and the code disagree, the code and [CLAUDE.md](../CLAUDE.md) win.
+>
+> Shipped: the Medication category first in the list, add/edit a medication with a
+> recommended dosage, one-tap logging of the dose actually taken with its
+> timestamp, history grouped by day, the recent-timing pattern, and the opt-in
+> pattern notification. Built on the existing reminder group/reminder/event
+> entities rather than a parallel `Medication`/`MedicationLog` pair — see §8,
+> which asked for exactly that.
+>
+> Deliberately not shipped: fixed prescription schedules, multiple inferred dose
+> slots per day (the data model allows multiple logs per day; only the inference
+> is single-slot), archive-vs-delete as separate actions, and a privacy mode that
+> hides the medication name in the notification.
+>
+> **§12 and §16 are binding, not advisory.** The notification may only ever say a
+> dose has not been *logged*. The app cannot distinguish a dose taken but not
+> logged from one deliberately skipped from one a clinician changed.
+
 ## Purpose
 
 Expand the existing **Reminders** feature in OurFitness beyond plant-watering routines so it can also support **simple medication logging, history, pattern visibility, and opt-in reminder notifications**.
