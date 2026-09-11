@@ -176,8 +176,8 @@ struct SettingsView: View {
                 isFirst: false, isLast: false
             )
             nudgeToggleRow(
-                label: "Reminders (plants & more)",
-                detail: "Notifications from your Reminders tab — plant watering and anything else you add.",
+                label: "Reminders (medication, plants & more)",
+                detail: "Notifications from your Reminders tab — medication, plant watering, and anything else you add. Turning this off silences all of them.",
                 isOn: $remindersEnabled,
                 isFirst: false, isLast: false
             )

@@ -2,10 +2,16 @@
 //
 // One pending UNNotificationRequest per reminder, identifier "reminder.<uuid>",
 // firing via a calendar trigger at the reminder's due day + the profile's
-// preferred hour. Two categories carry action buttons ("Watered ✓"/"Done ✓"
-// and "Snooze 1 day") that work from the lock screen AND a mirrored Apple
-// Watch notification without unlocking the phone — no watch app is needed for
-// that path (see docs/watch-app-setup.md for the full watch companion app).
+// preferred hour. Three categories carry action buttons ("Watered ✓"/"Done ✓"/
+// "Log taken ✓" and "Snooze 1 day") that work from the lock screen AND a
+// mirrored Apple Watch notification without unlocking the phone — no watch app
+// is needed for that path (see docs/watch-app-setup.md for the full watch
+// companion app).
+//
+// Medication is the exception to "due day + preferred hour": it has no
+// interval and no snooze, and fires at a time inferred from the completion log
+// (Domain/MedicationPattern.swift), so it is the one kind whose desired
+// request can legitimately be *nothing at all*.
 //
 // Authorization is requested ONLY from an explicit user action (Add-reminder
 // save, or the in-tab "turn on reminders" banner) — never from .onAppear/.task.
@@ -27,6 +33,7 @@ public enum ReminderNotificationService {
 
     public static let plantCategoryId = "PLANT_WATER"
     public static let customCategoryId = "REMINDER_DONE"
+    public static let medicationCategoryId = "MED_LOG"
     public static let doneActionId = "REMINDER_DONE_ACTION"
     public static let snoozeActionId = "REMINDER_SNOOZE_ACTION"
 
@@ -39,8 +46,9 @@ public enum ReminderNotificationService {
 
     // MARK: - Setup
 
-    /// Registers both notification categories. Safe to call unconditionally on
-    /// every launch — registering categories never prompts for permission.
+    /// Registers all three notification categories. Safe to call
+    /// unconditionally on every launch — registering categories never prompts
+    /// for permission.
     public static func registerCategories() {
         let done = UNNotificationAction(identifier: doneActionId, title: "Watered ✓", options: [])
         let snooze = UNNotificationAction(identifier: snoozeActionId, title: "Snooze 1 day", options: [])
@@ -55,7 +63,20 @@ public enum ReminderNotificationService {
             intentIdentifiers: [], options: []
         )
 
-        UNUserNotificationCenter.current().setNotificationCategories([plantCategory, customCategory])
+        // Medication gets ONE action and no snooze: snoozing is interval
+        // semantics ("push the due day out"), which a pattern-scheduled
+        // medication has no concept of — a snoozedUntil written here would be
+        // ignored by the scheduler. Reusing `doneActionId` rather than minting
+        // a medication-specific identifier means AppNotificationDelegate needs
+        // no new case: the tap logs a dose through the same logDone path.
+        let medDone = UNNotificationAction(identifier: doneActionId, title: "Log taken ✓", options: [])
+        let medicationCategory = UNNotificationCategory(
+            identifier: medicationCategoryId, actions: [medDone],
+            intentIdentifiers: [], options: []
+        )
+
+        UNUserNotificationCenter.current()
+            .setNotificationCategories([plantCategory, customCategory, medicationCategory])
     }
 
     /// CALL ONLY FROM AN EXPLICIT USER ACTION. Returns whether notifications
@@ -112,52 +133,99 @@ public enum ReminderNotificationService {
     /// Builds the desired pending request for one reminder from pre-fetched
     /// state — the single source of the identifier/content/trigger format
     /// shared by `reschedule` and `reconcile`.
-    private static func buildRequest(for reminder: ReminderDTO, isPlant: Bool, lastDone: Date?) -> UNNotificationRequest {
-        let dueDay = ReminderSchedule.nextDueDay(
-            lastDone: lastDone, createdAt: reminder.createdAt,
-            intervalDays: reminder.intervalDays, snoozedUntil: reminder.snoozedUntil
-        )
-        let fireDate = ReminderSchedule.fireDate(dueDay: dueDay, preferredHour: preferredHour(for: reminder.userId))
-
+    ///
+    /// `recentEventTimes` is only read for `.medication` (which infers its fire
+    /// time from the completion log); the interval kinds need `lastDone` alone.
+    ///
+    /// Returns nil when the reminder should have NO pending notification —
+    /// today that is medication with the nudge switched off, or medication with
+    /// no history to infer a routine from. Both callers must treat nil as
+    /// "cancel whatever is pending", not as "leave it alone".
+    private static func buildRequest(for reminder: ReminderDTO, kind: ReminderGroupKind,
+                                     lastDone: Date?, recentEventTimes: [Date]) -> UNNotificationRequest? {
         let content = UNMutableNotificationContent()
         content.sound = .default
         content.threadIdentifier = reminder.groupId.uuidString
         content.userInfo = ["reminderId": reminder.id.uuidString]
 
-        if isPlant {
-            content.categoryIdentifier = plantCategoryId
-            content.title = "Time to water \(reminder.name)"
-            var body = ""
-            if let amount = reminder.amountFlOz {
-                body += "About \(Int(amount.rounded())) fl oz — \(PlantCatalog.drainageCopy)."
+        // Component set differs by kind, so each branch produces its own:
+        // plants/custom fire on the hour, medication needs minute precision.
+        var comps: DateComponents
+
+        switch kind {
+        case .medication:
+            // SAFETY REQUIREMENT — DO NOT "IMPROVE" THIS COPY.
+            //
+            // The app only knows what has been LOGGED. It cannot tell a dose
+            // that was taken but not logged from one deliberately skipped from
+            // one a clinician changed or stopped. So this notification may only
+            // ever speak about the log: never "take X now", never "you missed a
+            // dose", and never a dose amount in the body. Anything stronger
+            // turns a missing tap into medical instruction the app has no
+            // grounds to give.
+            guard reminder.patternReminderEnabled == true,
+                  let fireDate = MedicationPattern.nextFireDate(
+                    recentEventTimes, now: Date(), calendar: .current
+                  )
+            else { return nil }
+
+            content.categoryIdentifier = medicationCategoryId
+            content.title = "Medication reminder"
+            content.body = "You usually log \(reminder.name) around this time. No log has been recorded yet today."
+
+            // Minute included (and never zeroed): the pattern time is a real
+            // clock time read off the user's own logs, so an 8:35 routine must
+            // not be floored to 8:00 the way the on-the-hour kinds are.
+            comps = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: fireDate)
+
+        case .plants, .custom:
+            let dueDay = ReminderSchedule.nextDueDay(
+                lastDone: lastDone, createdAt: reminder.createdAt,
+                intervalDays: reminder.intervalDays, snoozedUntil: reminder.snoozedUntil
+            )
+            let fireDate = ReminderSchedule.fireDate(dueDay: dueDay, preferredHour: preferredHour(for: reminder.userId))
+
+            if kind == .plants {
+                content.categoryIdentifier = plantCategoryId
+                content.title = "Time to water \(reminder.name)"
+                var body = ""
+                if let amount = reminder.amountFlOz {
+                    body += "About \(Int(amount.rounded())) fl oz — \(PlantCatalog.drainageCopy)."
+                } else {
+                    body += "Check the soil and water if it's dry — \(PlantCatalog.drainageCopy)."
+                }
+                if let room = reminder.room, !room.isEmpty {
+                    body += " (\(room))"
+                }
+                content.body = body
             } else {
-                body += "Check the soil and water if it's dry — \(PlantCatalog.drainageCopy)."
+                content.categoryIdentifier = customCategoryId
+                content.title = reminder.name
+                // intervalLabel, not interpolation — a daily reminder read
+                // "Every 1 days" before, and it also gets us "Weekly"/"Yearly"
+                // instead of raw day counts now that intervals reach 365.
+                var body = ReminderSchedule.intervalLabel(days: reminder.intervalDays) + "."
+                if let notes = reminder.notes, !notes.isEmpty {
+                    body += " \(notes)"
+                }
+                content.body = body
             }
-            if let room = reminder.room, !room.isEmpty {
-                body += " (\(room))"
-            }
-            content.body = body
-        } else {
-            content.categoryIdentifier = customCategoryId
-            content.title = reminder.name
-            // intervalLabel, not interpolation — a daily reminder read
-            // "Every 1 days" before, and it also gets us "Weekly"/"Yearly"
-            // instead of raw day counts now that intervals reach 365.
-            var body = ReminderSchedule.intervalLabel(days: reminder.intervalDays) + "."
-            if let notes = reminder.notes, !notes.isEmpty {
-                body += " \(notes)"
-            }
-            content.body = body
+
+            comps = Calendar.current.dateComponents([.year, .month, .day, .hour], from: fireDate)
+            comps.minute = 0
         }
 
-        var comps = Calendar.current.dateComponents([.year, .month, .day, .hour], from: fireDate)
-        comps.minute = 0
         let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: false)
         return UNNotificationRequest(identifier: identifier(for: reminder.id), content: content, trigger: trigger)
     }
 
     /// Whether an already-pending request matches the desired one, so
     /// `reconcile` can leave it untouched.
+    ///
+    /// Minute is part of the comparison and both kinds supply it — the
+    /// interval kinds as an explicit 0, medication as the real pattern minute
+    /// — so a medication whose inferred time shifts by 20 minutes correctly
+    /// reads as changed rather than matching on the hour alone.
     private static func matches(_ existing: UNNotificationRequest, _ desired: UNNotificationRequest) -> Bool {
         guard let a = (existing.trigger as? UNCalendarNotificationTrigger)?.dateComponents,
               let b = (desired.trigger as? UNCalendarNotificationTrigger)?.dateComponents else { return false }
@@ -187,11 +255,29 @@ public enum ReminderNotificationService {
         }
         let center = UNUserNotificationCenter.current()
         center.removeDeliveredNotifications(withIdentifiers: [identifier(for: reminderId)])
-        let request = buildRequest(
-            for: reminder,
-            isPlant: Repos.reminderGroup(ctx, id: reminder.groupId)?.kind == .plants,
-            lastDone: Repos.lastReminderEvent(ctx, reminderId: reminderId)?.timestamp
-        )
+
+        let kind = Repos.reminderGroup(ctx, id: reminder.groupId)?.kind ?? .custom
+        // Medication reads its fire time off the whole recent completion log,
+        // so it needs the event list; the interval kinds only ever need the
+        // latest event. Events come back newest-first, so `.first` is the same
+        // value `lastReminderEvent` would return — medication still costs one
+        // event fetch here, not two.
+        let recentEventTimes: [Date] = kind == .medication
+            ? Repos.reminderEvents(ctx, reminderId: reminderId, limit: 60).map(\.timestamp)
+            : []
+        let lastDone = kind == .medication
+            ? recentEventTimes.first
+            : Repos.lastReminderEvent(ctx, reminderId: reminderId)?.timestamp
+
+        guard let request = buildRequest(for: reminder, kind: kind,
+                                         lastDone: lastDone, recentEventTimes: recentEventTimes) else {
+            // No desired notification at all (medication with the nudge off, or
+            // with no routine to infer yet). Cancel rather than fall through —
+            // otherwise a request from before the switch was flipped stays
+            // pending and fires anyway.
+            cancel(ids: [reminderId])
+            return
+        }
         // `add` with the same identifier replaces any pending request.
         center.add(request, withCompletionHandler: nil)
     }
@@ -225,10 +311,18 @@ public enum ReminderNotificationService {
         // per-reminder fetches `reschedule` does.
         let reminders = Repos.listReminders(ctx, userId: userId)
         let validIds = Set(reminders.map(\.id))
-        let plantGroupIds = Set(Repos.listReminderGroups(ctx, userId: userId).filter { $0.kind == .plants }.map(\.id))
+        var kindByGroupId: [UUID: ReminderGroupKind] = [:]
+        for g in Repos.listReminderGroups(ctx, userId: userId) { kindByGroupId[g.id] = g.kind }
+
+        // Latest-per-reminder and full-history-per-reminder folded in the SAME
+        // pass over the one events fetch. Medication needs the history to infer
+        // its time; adding a per-reminder fetch for that would undo the
+        // "one fetch each" property this whole sweep is built around.
         var lastDoneById: [UUID: Date] = [:]
-        for e in Repos.listReminderEvents(ctx, userId: userId) where lastDoneById[e.reminderId] == nil {
-            lastDoneById[e.reminderId] = e.timestamp
+        var eventTimesById: [UUID: [Date]] = [:]
+        for e in Repos.listReminderEvents(ctx, userId: userId) {
+            if lastDoneById[e.reminderId] == nil { lastDoneById[e.reminderId] = e.timestamp }
+            eventTimesById[e.reminderId, default: []].append(e.timestamp)
         }
 
         let pending = await center.pendingNotificationRequests()
@@ -245,11 +339,21 @@ public enum ReminderNotificationService {
         }
 
         for reminder in reminders {
-            let desired = buildRequest(
+            guard let desired = buildRequest(
                 for: reminder,
-                isPlant: plantGroupIds.contains(reminder.groupId),
-                lastDone: lastDoneById[reminder.id]
-            )
+                kind: kindByGroupId[reminder.groupId] ?? .custom,
+                lastDone: lastDoneById[reminder.id],
+                recentEventTimes: eventTimesById[reminder.id] ?? []
+            ) else {
+                // This reminder should have nothing pending. It survives the
+                // stale-id prune above (it still exists), so drop it here —
+                // that prune only catches deleted/foreign reminders.
+                let id = identifier(for: reminder.id)
+                if pendingById[id] != nil {
+                    center.removePendingNotificationRequests(withIdentifiers: [id])
+                }
+                continue
+            }
             if let existing = pendingById[desired.identifier], matches(existing, desired) { continue }
             center.removeDeliveredNotifications(withIdentifiers: [desired.identifier])
             center.add(desired, withCompletionHandler: nil)
@@ -273,21 +377,50 @@ public enum ReminderNotificationService {
     }
 
     /// Logs a completion (now, or at `date` for backdating) and syncs.
+    /// `dosageTaken` records what was actually taken for a medication event —
+    /// pass it only when the user said so.
     @discardableResult
-    public static func logDone(_ ctx: ModelContext, reminderId: UUID, date: Date = Date()) -> ReminderDTO? {
+    public static func logDone(_ ctx: ModelContext, reminderId: UUID, date: Date = Date(),
+                               dosageTaken: String? = nil) -> ReminderDTO? {
         guard let reminder = Repos.reminder(ctx, id: reminderId) else { return nil }
+
+        // A one-tap log — lock-screen "Log taken ✓", the watch, the tab's Done
+        // button — carries no amount, and for a medication that tap means "I
+        // took the dose I'm supposed to take". So an absent `dosageTaken` falls
+        // back to the reminder's configured `dosage`, which makes the history
+        // read back truthfully instead of blank. An explicit value (half a
+        // tablet) always wins, and this never writes back to `reminder.dosage`.
+        var resolvedDosage = dosageTaken
+        if resolvedDosage == nil,
+           Repos.reminderGroup(ctx, id: reminder.groupId)?.kind == .medication {
+            resolvedDosage = reminder.dosage
+        }
+
         Repos.logReminderDone(ctx, ReminderEventDTO(
             userId: reminder.userId, reminderId: reminderId,
-            date: Dates.dayKey(date), amountFlOz: reminder.amountFlOz, timestamp: date
+            date: Dates.dayKey(date), amountFlOz: reminder.amountFlOz, timestamp: date,
+            dosageTaken: resolvedDosage
         ))
+        // This is the mechanism behind "a log cancels the nudge": syncAfterChange
+        // reschedules, and the event just written makes MedicationPattern's
+        // hasLogToday true, so the rebuilt request moves to tomorrow's pattern
+        // time (replacing today's pending one) rather than firing this evening.
         syncAfterChange(ctx, reminderId: reminderId, userId: reminder.userId)
         return reminder
     }
 
     /// Snoozes to tomorrow at the profile's preferred hour and syncs.
+    /// No-ops (returns nil) for medication.
     @discardableResult
     public static func snooze(_ ctx: ModelContext, reminderId: UUID) -> ReminderDTO? {
         guard let reminder = Repos.reminder(ctx, id: reminderId) else { return nil }
+        // Snooze is interval semantics — "push the due day out" — and
+        // medication has no interval: it's scheduled from the logged pattern,
+        // which never reads `snoozedUntil`. There's no snooze affordance on its
+        // notification or in the UI either, so anything reaching here is a
+        // mistake. Refuse rather than persist state nothing will act on.
+        guard Repos.reminderGroup(ctx, id: reminder.groupId)?.kind != .medication else { return nil }
+
         let until = ReminderSchedule.snoozeDate(preferredHour: preferredHour(for: reminder.userId))
         Repos.snoozeReminder(ctx, id: reminderId, until: until)
         syncAfterChange(ctx, reminderId: reminderId, userId: reminder.userId)
@@ -310,7 +443,7 @@ public enum ReminderNotificationService {
 }
 
 /// Handles taps on notification action buttons ("Watered ✓" / "Done ✓" /
-/// "Snooze 1 day") and the notification body, including when they wake the
+/// "Log taken ✓" / "Snooze 1 day") and the notification body, including when they wake the
 /// app from a fully-terminated state (the action is what launches the
 /// process — `container` is set in `OurFitnessApp.init()`, which always runs
 /// before this delegate is invoked).
