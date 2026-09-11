@@ -43,6 +43,10 @@ struct AddReminderSheet: View {
 
     @State private var dosage = ""
     @State private var patternReminderEnabled = false
+    @State private var hasDoseTime = false
+    @State private var doseTime = MedicationPattern.date(
+        minuteOfDay: Self.defaultDoseMinute, on: Date(), calendar: .current
+    ) ?? Date()
 
     @FocusState private var isEditing: Bool
 
@@ -482,7 +486,10 @@ struct AddReminderSheet: View {
                 styledField("e.g. 1 tablet, 10 mg, 5 mL", text: $dosage)
             }
 
-            photoStep
+            // No photo step here, unlike plants and custom reminders: a plant is
+            // identified by looking at it, a medication by its name and dosage.
+
+            doseTimeSection
 
             fieldBlock(title: "NOTES · OPTIONAL") { styledField("Any details", text: $notes) }
 
@@ -492,18 +499,56 @@ struct AddReminderSheet: View {
         }
     }
 
+    /// 8:00 AM — where the picker opens when someone switches a dose time on,
+    /// so the common case is one tap rather than a scroll.
+    private static let defaultDoseMinute = 8 * 60
+
+    /// Optional on purpose. A medication with no set time still works exactly as
+    /// it did before this field existed: the app infers the timing from the log
+    /// (`MedicationPattern`). Setting one is for people who take a dose at a
+    /// fixed hour and want the record read against it.
+    private var doseTimeSection: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Toggle(isOn: $hasDoseTime) {
+                Text("Set a time to take this")
+                    .font(.system(size: 14))
+                    .foregroundStyle(theme.text)
+            }
+            .onChange(of: hasDoseTime) { _, _ in Haptics.selection() }
+
+            if hasDoseTime {
+                DatePicker("Dose time", selection: $doseTime, displayedComponents: [.hourAndMinute])
+                    .labelsHidden()
+                    .foregroundStyle(theme.text)
+            }
+
+            Text(hasDoseTime
+                 ? "Your history shows each dose against this time."
+                 : "Optional. Without one, timings come from when you actually log it.")
+                .font(.caption2).foregroundStyle(theme.dim)
+        }
+        .padding(14)
+        .background(theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+    }
+
     /// Opt-in, off by default — a medication nudge is a safety-adjacent thing
     /// to switch on for someone, so it's always the user's tap.
     private var patternReminderToggle: some View {
         VStack(alignment: .leading, spacing: 6) {
             Toggle(isOn: $patternReminderEnabled) {
-                Text("Remind me if I haven't logged this around my usual time")
+                Text(hasDoseTime
+                     ? "Remind me if I haven't logged this by its set time"
+                     : "Remind me if I haven't logged this around my usual time")
                     .font(.system(size: 14))
                     .foregroundStyle(theme.text)
             }
             .onChange(of: patternReminderEnabled) { _, _ in Haptics.selection() }
 
-            Text("Off by default. When it's on, the nudge goes by when you usually log this — and only if nothing's been logged that day.")
+            Text(hasDoseTime
+                 ? "Off by default. When it's on, the nudge goes by the time you set above — and only if nothing's been logged that day."
+                 : "Off by default. When it's on, the nudge goes by when you usually log this — and only if nothing's been logged that day.")
                 .font(.caption2).foregroundStyle(theme.dim)
         }
         .padding(14)
@@ -603,9 +648,13 @@ struct AddReminderSheet: View {
                 // Medication ignores the repeat interval entirely, but the
                 // field isn't optional — store 1 rather than whatever a
                 // previously-selected group left in the shared state.
-                photoData: photoBytes, intervalDays: 1,
+                // photoData stays nil — the medication form has no photo step.
+                photoData: nil, intervalDays: 1,
                 notes: trimmedNotes.isEmpty ? nil : trimmedNotes,
-                dosage: trimmedDosage, patternReminderEnabled: patternReminderEnabled
+                dosage: trimmedDosage, patternReminderEnabled: patternReminderEnabled,
+                scheduledMinuteOfDay: hasDoseTime
+                    ? MedicationPattern.minuteOfDay(of: doseTime, calendar: .current)
+                    : nil
             )
         } else if group.kind == .plants {
             let speciesIdValue = isCustomPlant ? PlantCatalog.customId : selectedSpecies?.id

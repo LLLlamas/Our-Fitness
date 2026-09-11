@@ -33,6 +33,7 @@ struct RemindersView: View {
     @State private var authStatus: UNAuthorizationStatus = .notDetermined
     @State private var showAddSheet = false
     @State private var showAddMedicationSheet = false
+    @State private var showMedicationHistory = false
     @State private var selectedReminder: ReminderDTO?
     @State private var loggingMedication: ReminderDTO?
 
@@ -146,6 +147,10 @@ struct RemindersView: View {
         .background(theme.bg.ignoresSafeArea())
         .sheet(isPresented: $showAddSheet) {
             AddReminderSheet(profile: profile)
+                .themed(profile.mode)
+        }
+        .sheet(isPresented: $showMedicationHistory) {
+            MedicationHistorySheet(profile: profile, medications: medications)
                 .themed(profile.mode)
         }
         .sheet(isPresented: $showAddMedicationSheet) {
@@ -262,7 +267,12 @@ struct RemindersView: View {
                         .foregroundStyle(theme.dim)
                     Spacer()
                     if !meds.isEmpty {
-                        Button("+ Add medication") { showAddMedicationSheet = true }
+                        // The full record, across every medication. The cards
+                        // below only ever show the LAST log; this is the way
+                        // to the rest of it without opening each one in turn.
+                        Button("History") { showMedicationHistory = true }
+                            .tactile(.ghost)
+                        Button("+ Add") { showAddMedicationSheet = true }
                             .tactile(.ghost)
                     }
                 }
@@ -285,13 +295,21 @@ struct RemindersView: View {
             VStack(alignment: .leading, spacing: 12) {
                 Button { selectedReminder = r } label: {
                     HStack(spacing: 12) {
-                        thumbnail(r, group: group)
+                        // A fixed symbol, not `thumbnail` — the medication forms
+                        // have no photo step, so there is never a picture to
+                        // show and an empty camera circle would only invite a
+                        // tap that does nothing.
+                        medicationIcon(group: group)
                         VStack(alignment: .leading, spacing: 2) {
                             Text(r.name)
                                 .font(.system(size: 15, weight: .semibold))
                                 .foregroundStyle(theme.text)
                             if let dosage = r.dosage, !dosage.isEmpty {
                                 Text("Recommended: \(dosage)")
+                                    .font(.caption2).foregroundStyle(theme.dim)
+                            }
+                            if let minute = r.scheduledMinuteOfDay {
+                                Text("Set for \(MedicationPattern.clockLabel(minuteOfDay: minute))")
                                     .font(.caption2).foregroundStyle(theme.dim)
                             }
                             Text(lastLoggedLabel(lastLogged))
@@ -315,6 +333,17 @@ struct RemindersView: View {
                 .accessibilityLabel("Log a dose of \(r.name)")
             }
         }
+    }
+
+    private func medicationIcon(group: ReminderGroupDTO) -> some View {
+        ZStack {
+            Circle().fill(theme.card2)
+            Image(systemName: group.sfSymbol)
+                .font(.system(size: 16))
+                .foregroundStyle(theme.accent)
+        }
+        .frame(width: 40, height: 40)
+        .overlay(Circle().stroke(theme.line, lineWidth: 1))
     }
 
     /// "Last logged: Today • 8:12 AM" — deliberately about the LOG, not the

@@ -441,12 +441,181 @@ final class MedicationPatternTests: XCTestCase {
                        instant(0, hour: 8, minute: 39))
     }
 
+    // MARK: - Minute-of-day conversions
+
+    func test_clampMinuteOfDay_holds_a_real_clock_time() {
+        XCTAssertEqual(MedicationPattern.clampMinuteOfDay(-1), 0)
+        XCTAssertEqual(MedicationPattern.clampMinuteOfDay(0), 0)
+        XCTAssertEqual(MedicationPattern.clampMinuteOfDay(minutes(8, 0)), minutes(8, 0))
+        XCTAssertEqual(MedicationPattern.clampMinuteOfDay(1_439), 1_439)
+        XCTAssertEqual(MedicationPattern.clampMinuteOfDay(1_440), 1_439, "a full day is not a time of day")
+        XCTAssertEqual(MedicationPattern.clampMinuteOfDay(99_999), 1_439)
+    }
+
+    func test_minuteOfDay_and_date_round_trip() {
+        let noon = instant(0, hour: 12, minute: 34)
+        XCTAssertEqual(MedicationPattern.minuteOfDay(of: noon, calendar: calendar), minutes(12, 34))
+
+        let rebuilt = try? XCTUnwrap(
+            MedicationPattern.date(minuteOfDay: minutes(12, 34), on: today, calendar: calendar)
+        )
+        XCTAssertEqual(rebuilt, noon)
+    }
+
+    func test_date_from_minuteOfDay_clamps_rather_than_rolling_into_the_next_day() {
+        let built = try? XCTUnwrap(
+            MedicationPattern.date(minuteOfDay: 5_000, on: today, calendar: calendar)
+        )
+        XCTAssertEqual(built, instant(0, hour: 23, minute: 59))
+    }
+
+    // MARK: - Set time beats inferred time
+
+    func test_effectiveMinuteOfDay_prefers_the_set_time() {
+        let history = steadyMorningRoutine()   // median 08:09
+        XCTAssertEqual(
+            MedicationPattern.effectiveMinuteOfDay(scheduled: minutes(21, 0), timestamps: history,
+                                                   now: now, calendar: calendar),
+            minutes(21, 0)
+        )
+    }
+
+    func test_effectiveMinuteOfDay_falls_back_to_the_log_then_to_nil() {
+        XCTAssertEqual(
+            MedicationPattern.effectiveMinuteOfDay(scheduled: nil, timestamps: steadyMorningRoutine(),
+                                                   now: now, calendar: calendar),
+            minutes(8, 9)
+        )
+        XCTAssertNil(
+            MedicationPattern.effectiveMinuteOfDay(scheduled: nil, timestamps: [],
+                                                   now: now, calendar: calendar)
+        )
+    }
+
+    /// The point of a set time: it schedules on day one, where the inferred
+    /// path has nothing to work with and returns nil.
+    func test_nextFireDate_with_a_set_time_needs_no_history_at_all() {
+        XCTAssertNil(MedicationPattern.nextFireDate([], now: now, calendar: calendar))
+
+        let fire = MedicationPattern.nextFireDate([], scheduled: minutes(9, 0),
+                                                  now: now, calendar: calendar)
+        XCTAssertEqual(fire, instant(0, hour: 9, minute: 30), "set time + 30 min grace, today")
+    }
+
+    func test_nextFireDate_set_time_already_logged_today_rolls_to_tomorrow() {
+        let loggedThisMorning = [instant(0, hour: 7, minute: 15)]
+        let fire = MedicationPattern.nextFireDate(loggedThisMorning, scheduled: minutes(9, 0),
+                                                  now: now, calendar: calendar)
+        XCTAssertEqual(fire, instant(1, hour: 9, minute: 30))
+    }
+
+    /// A set time overrides the observed median even when the median would
+    /// produce a *different day's* fire instant — proof the override happens
+    /// before the today/tomorrow decision, not after it.
+    func test_nextFireDate_set_time_overrides_the_observed_median() {
+        let history = steadyMorningRoutine()   // median 08:09 -> would fire 08:39 today
+
+        XCTAssertEqual(MedicationPattern.nextFireDate(history, now: now, calendar: calendar),
+                       instant(0, hour: 8, minute: 39))
+
+        // 06:00 set + grace = 06:30, already gone by at 08:00 local -> tomorrow.
+        XCTAssertEqual(
+            MedicationPattern.nextFireDate(history, scheduled: minutes(6, 0), now: now, calendar: calendar),
+            instant(1, hour: 6, minute: 30)
+        )
+    }
+
+    /// Same spring-forward guarantee as the inferred path: the fire instant is
+    /// the wall-clock time the person reads, 23 real hours later on the short day.
+    func test_nextFireDate_set_time_survives_spring_forward() throws {
+        func moment(_ dayOfMonth: Int, _ hour: Int, _ minute: Int) -> Date {
+            calendar.date(from: DateComponents(
+                year: 2027, month: 3, day: dayOfMonth, hour: hour, minute: minute
+            ))!
+        }
+        let dstNow = moment(13, 8, 0)      // Saturday 2027-03-13 08:00 EST
+
+        // 06:00 set + grace = 06:30, already passed at 08:00 -> the 23-hour day.
+        let fire = try XCTUnwrap(
+            MedicationPattern.nextFireDate([], scheduled: minutes(6, 0), now: dstNow, calendar: calendar)
+        )
+        let comps = calendar.dateComponents([.month, .day, .hour, .minute], from: fire)
+        XCTAssertEqual(comps.day, 14)
+        XCTAssertEqual(comps.hour, 6, "same wall-clock hour, not a fixed 24h offset")
+        XCTAssertEqual(comps.minute, 30)
+        XCTAssertEqual(fire.timeIntervalSince(moment(13, 6, 30)), 23 * 3_600, accuracy: 0.001)
+    }
+
+    // MARK: - Reading a log against its set time
+
+    func test_minutesFromScheduled_is_signed() {
+        let scheduled = minutes(8, 0)
+        XCTAssertEqual(
+            MedicationPattern.minutesFromScheduled(logged: instant(0, hour: 8), scheduled: scheduled,
+                                                   calendar: calendar), 0)
+        XCTAssertEqual(
+            MedicationPattern.minutesFromScheduled(logged: instant(0, hour: 8, minute: 12),
+                                                   scheduled: scheduled, calendar: calendar), 12)
+        XCTAssertEqual(
+            MedicationPattern.minutesFromScheduled(logged: instant(0, hour: 7, minute: 40),
+                                                   scheduled: scheduled, calendar: calendar), -20)
+        XCTAssertNil(
+            MedicationPattern.minutesFromScheduled(logged: instant(0, hour: 8), scheduled: nil,
+                                                   calendar: calendar))
+    }
+
+    /// The case the wrap-around rule exists for: a bedtime medication logged
+    /// after midnight is 80 minutes LATE, not 22 hours 40 early.
+    func test_minutesFromScheduled_wraps_to_the_nearest_occurrence() {
+        let bedtime = minutes(23, 0)
+        XCTAssertEqual(
+            MedicationPattern.minutesFromScheduled(logged: instant(1, hour: 0, minute: 20),
+                                                   scheduled: bedtime, calendar: calendar), 80)
+        // And the mirror image: an 00:30 medication logged at 23:50 the night
+        // before is 40 minutes early, not 23 hours 20 late.
+        XCTAssertEqual(
+            MedicationPattern.minutesFromScheduled(logged: instant(0, hour: 23, minute: 50),
+                                                   scheduled: minutes(0, 30), calendar: calendar), -40)
+    }
+
+    func test_durationLabel_drops_minutes_on_whole_hours() {
+        XCTAssertEqual(MedicationPattern.durationLabel(minutes: 0), "0 min")
+        XCTAssertEqual(MedicationPattern.durationLabel(minutes: 45), "45 min")
+        XCTAssertEqual(MedicationPattern.durationLabel(minutes: 60), "1 hr")
+        XCTAssertEqual(MedicationPattern.durationLabel(minutes: 130), "2 hr 10 min")
+    }
+
+    /// Asserts the copy this app owns — the clock face itself is locale
+    /// formatting and is deliberately not pinned here.
+    func test_timingLabel_states_the_gap_without_judging_the_dose() throws {
+        let scheduled = minutes(8, 0)
+
+        XCTAssertEqual(
+            MedicationPattern.timingLabel(loggedAt: instant(0, hour: 8, minute: 3),
+                                          scheduled: scheduled, calendar: calendar),
+            "On time", "inside the tolerance, no number")
+
+        let late = try XCTUnwrap(MedicationPattern.timingLabel(
+            loggedAt: instant(0, hour: 9, minute: 10), scheduled: scheduled, calendar: calendar))
+        XCTAssertTrue(late.hasPrefix("1 hr 10 min after "), late)
+
+        let early = try XCTUnwrap(MedicationPattern.timingLabel(
+            loggedAt: instant(0, hour: 7, minute: 30), scheduled: scheduled, calendar: calendar))
+        XCTAssertTrue(early.hasPrefix("30 min before "), early)
+
+        // No set time means no comparison to draw at all.
+        XCTAssertNil(MedicationPattern.timingLabel(loggedAt: instant(0, hour: 8),
+                                                   scheduled: nil, calendar: calendar))
+    }
+
     // MARK: - Constants
 
     func test_constants_are_the_documented_values() {
         XCTAssertEqual(MedicationPattern.lookbackDays, 7)
         XCTAssertEqual(MedicationPattern.defaultGraceMinutes, 30)
         XCTAssertEqual(MedicationPattern.minDaysForDisplay, 2)
+        XCTAssertEqual(MedicationPattern.minutesPerDay, 1_440)
+        XCTAssertEqual(MedicationPattern.onTimeToleranceMinutes, 5)
         XCTAssertLessThan(MedicationPattern.minDaysForDisplay, MedicationPattern.lookbackDays)
     }
 }

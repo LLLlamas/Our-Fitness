@@ -39,11 +39,14 @@ struct ReminderDetailSheet: View {
     @State private var potDiameter: Int
     @State private var dosage: String
     @State private var patternReminderEnabled: Bool
+    @State private var hasDoseTime: Bool
+    @State private var doseTime: Date
 
     @State private var showImagePicker = false
     @State private var showDeleteConfirm = false
     @State private var showCareSheet = false
     @State private var showLogSheet = false
+    @State private var showFullHistory = false
     @FocusState private var isEditing: Bool
 
     init(profile: ProfileDTO, reminder: ReminderDTO, groupKind: ReminderGroupKind) {
@@ -59,6 +62,13 @@ struct ReminderDetailSheet: View {
         _potDiameter = State(initialValue: reminder.potDiameterInches ?? 6)
         _dosage = State(initialValue: reminder.dosage ?? "")
         _patternReminderEnabled = State(initialValue: reminder.patternReminderEnabled ?? false)
+        _hasDoseTime = State(initialValue: reminder.scheduledMinuteOfDay != nil)
+        // Seeded from the stored minute so the picker opens on the set time;
+        // 8am is only the starting point for a medication that has none yet.
+        _doseTime = State(initialValue: MedicationPattern.date(
+            minuteOfDay: reminder.scheduledMinuteOfDay ?? Self.defaultDoseMinute,
+            on: Date(), calendar: .current
+        ) ?? Date())
 
         let uid = profile.id
         let rid = reminder.id
@@ -110,7 +120,10 @@ struct ReminderDetailSheet: View {
                         .foregroundStyle(theme.dim)
                 }
 
-                photoHeader
+                // Medication is identified by name and dosage, not by sight —
+                // its forms have no photo step, so there's nothing to show or
+                // tap here.
+                if !isMedication { photoHeader }
                 statsCard
 
                 if let species {
@@ -157,6 +170,13 @@ struct ReminderDetailSheet: View {
         }
         .sheet(isPresented: $showLogSheet) {
             LogMedicationSheet(profile: profile, reminder: reminder)
+                .themed(profile.mode)
+        }
+        .sheet(isPresented: $showFullHistory) {
+            // Scoped to this one medication: with a single entry in
+            // `medications` the sheet's filter chips stay hidden and the join
+            // narrows to it.
+            MedicationHistorySheet(profile: profile, medications: [reminder])
                 .themed(profile.mode)
         }
         .confirmationDialog(
@@ -255,6 +275,14 @@ struct ReminderDetailSheet: View {
                     Text(lastDone.map { Dates.formatRelative($0) } ?? "Never")
                         .foregroundStyle(theme.text).fontWeight(.medium)
                 }
+                if let minute = reminder.scheduledMinuteOfDay {
+                    HStack {
+                        Text("Set for").foregroundStyle(theme.dim)
+                        Spacer()
+                        Text(MedicationPattern.clockLabel(minuteOfDay: minute))
+                            .foregroundStyle(theme.text).fontWeight(.medium)
+                    }
+                }
                 Text(patternLine)
                     .font(.caption).foregroundStyle(theme.dim)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -265,7 +293,9 @@ struct ReminderDetailSheet: View {
 
     /// Describes what the LOG shows, never a prescription: "usually logged
     /// around", not "scheduled for". Stays quiet until MedicationPattern says
-    /// there's enough history to claim a routine at all.
+    /// there's enough history to claim a routine at all. This stays the OBSERVED
+    /// timing even when a dose time is set — the set time has its own row above,
+    /// and the value of showing both is seeing where they differ.
     private var patternLine: String {
         let now = Date()
         let calendar = Calendar.current
@@ -334,6 +364,8 @@ struct ReminderDetailSheet: View {
                     styledField("e.g. 1 tablet, 10 mg, 5 mL", text: $dosage)
                 }
 
+                doseTimeSection
+
                 fieldBlock("NOTES") { styledField("Any details", text: $notes) }
 
                 patternReminderToggle
@@ -376,18 +408,56 @@ struct ReminderDetailSheet: View {
         }
     }
 
+    /// Where the picker opens for a medication that has no set time yet.
+    private static let defaultDoseMinute = 8 * 60
+
+    /// Same optional dose time as the add sheet, committing on change like
+    /// every other non-text control here. Switching it off clears the stored
+    /// minute, which puts the medication back on inferred timing rather than
+    /// leaving a stale time behind.
+    private var doseTimeSection: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Toggle(isOn: $hasDoseTime) {
+                Text("Set a time to take this")
+                    .font(.system(size: 14))
+                    .foregroundStyle(theme.text)
+            }
+            .onChange(of: hasDoseTime) { _, _ in commitEdits() }
+
+            if hasDoseTime {
+                DatePicker("Dose time", selection: $doseTime, displayedComponents: [.hourAndMinute])
+                    .labelsHidden()
+                    .foregroundStyle(theme.text)
+                    .onChange(of: doseTime) { _, _ in commitEdits() }
+            }
+
+            Text(hasDoseTime
+                 ? "Your history shows each dose against this time."
+                 : "Optional. Without one, timings come from when you actually log it.")
+                .font(.caption2).foregroundStyle(theme.dim)
+        }
+        .padding(14)
+        .background(theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+    }
+
     /// Same opt-in toggle as the add sheet, committing on change like every
     /// other non-text control here.
     private var patternReminderToggle: some View {
         VStack(alignment: .leading, spacing: 6) {
             Toggle(isOn: $patternReminderEnabled) {
-                Text("Remind me if I haven't logged this around my usual time")
+                Text(hasDoseTime
+                     ? "Remind me if I haven't logged this by its set time"
+                     : "Remind me if I haven't logged this around my usual time")
                     .font(.system(size: 14))
                     .foregroundStyle(theme.text)
             }
             .onChange(of: patternReminderEnabled) { _, _ in commitEdits() }
 
-            Text("The nudge goes by when you usually log this — and only if nothing's been logged that day.")
+            Text(hasDoseTime
+                 ? "The nudge goes by the time you set above — and only if nothing's been logged that day."
+                 : "The nudge goes by when you usually log this — and only if nothing's been logged that day.")
                 .font(.caption2).foregroundStyle(theme.dim)
         }
         .padding(14)
@@ -450,6 +520,9 @@ struct ReminderDetailSheet: View {
             let trimmedNotes = notes.trimmingCharacters(in: .whitespaces)
             updated.notes = trimmedNotes.isEmpty ? nil : trimmedNotes
             updated.patternReminderEnabled = patternReminderEnabled
+            updated.scheduledMinuteOfDay = hasDoseTime
+                ? MedicationPattern.minuteOfDay(of: doseTime, calendar: .current)
+                : nil
         } else if reminder.isPlant {
             let trimmedRoom = room.trimmingCharacters(in: .whitespaces)
             updated.room = trimmedRoom.isEmpty ? nil : trimmedRoom
@@ -509,14 +582,15 @@ struct ReminderDetailSheet: View {
                     .font(.caption).foregroundStyle(theme.dim)
             } else if isMedication {
                 ForEach(medicationHistoryDays) { day in
-                    Text(day.title)
+                    Text(MedicationHistory.dayTitle(day.id, now: Date(), calendar: .current))
                         .font(.caption).fontWeight(.semibold)
                         .foregroundStyle(theme.dim)
                         .padding(.top, 6)
-                    ForEach(day.events) { e in
+                    ForEach(day.entries) { e in
                         medicationHistoryRow(e)
                     }
                 }
+                fullHistoryButton
             } else {
                 ForEach(events.prefix(30)) { e in
                     HStack {
@@ -530,7 +604,7 @@ struct ReminderDetailSheet: View {
                             }
                         }
                         Spacer()
-                        Button { deleteEvent(e) } label: {
+                        Button { deleteEvent(id: e.id) } label: {
                             Label("Undo", systemImage: "arrow.uturn.backward")
                         }
                         .tactile(.ghost)
@@ -542,49 +616,63 @@ struct ReminderDetailSheet: View {
         }
     }
 
-    /// One local day's logs. Built once per body pass from the (newest-first)
-    /// event query, so day order falls out of the fetch rather than a re-sort.
-    private struct HistoryDay: Identifiable {
-        let id: Date            // start of day
-        let title: String
-        let events: [ReminderEventDTO]
+    /// How many recent DAYS of doses this sheet shows inline. Everything older
+    /// is one tap away in the full history rather than absent — nothing is
+    /// dropped, only deferred.
+    ///
+    /// A window rather than a row count because this sheet's ScrollView holds an
+    /// eager VStack (photo, stats, editable fields, history, delete are one
+    /// column, not a list). Years of three-a-day doses rendered eagerly here
+    /// would build every row up front; `MedicationHistorySheet` is a LazyVStack
+    /// and carries the uncapped record.
+    private static let inlineHistoryDays = 14
+
+    private var allMedicationHistoryDays: [MedicationLogDay] {
+        MedicationHistory.byDay(
+            MedicationHistory.entries(events: events, medications: [reminder]),
+            calendar: .current
+        )
     }
 
-    private var medicationHistoryDays: [HistoryDay] {
-        let calendar = Calendar.current
-        var order: [Date] = []
-        var byDay: [Date: [ReminderEventDTO]] = [:]
-        for e in events.prefix(60) {
-            let day = calendar.startOfDay(for: e.timestamp)
-            if byDay[day] == nil { order.append(day) }
-            byDay[day, default: []].append(e)
-        }
-        return order.map {
-            HistoryDay(id: $0, title: dayTitle($0, calendar: calendar), events: byDay[$0] ?? [])
-        }
+    private var medicationHistoryDays: [MedicationLogDay] {
+        Array(allMedicationHistoryDays.prefix(Self.inlineHistoryDays))
     }
 
-    /// "Today" / "Yesterday" / weekday inside the last week / abbreviated date
-    /// beyond it — the question a history scan answers is "which day", and a
-    /// weekday name carries that faster than a date for the recent past.
-    private func dayTitle(_ day: Date, calendar: Calendar) -> String {
-        if calendar.isDateInToday(day) { return "Today" }
-        if calendar.isDateInYesterday(day) { return "Yesterday" }
-        let daysAgo = calendar.dateComponents(
-            [.day], from: day, to: calendar.startOfDay(for: Date())
-        ).day ?? 0
-        if daysAgo < 7 { return day.formatted(.dateTime.weekday(.wide)) }
-        return day.formatted(date: .abbreviated, time: .omitted)
+    /// The button only appears when there is genuinely more to see, so it never
+    /// promises a fuller record than exists.
+    @ViewBuilder
+    private var fullHistoryButton: some View {
+        let all = allMedicationHistoryDays
+        if all.count > Self.inlineHistoryDays {
+            let totals = MedicationHistory.totals(all)
+            Button {
+                showFullHistory = true
+            } label: {
+                HStack {
+                    Image(systemName: "list.bullet.rectangle")
+                    Text("See all \(totals.doses) doses")
+                }
+                .frame(maxWidth: .infinity)
+            }
+            .tactile(.secondary, fullWidth: true)
+            .padding(.top, 6)
+        }
     }
 
     @ViewBuilder
-    private func medicationHistoryRow(_ e: ReminderEventDTO) -> some View {
-        HStack {
-            Text(medicationRowLabel(e))
-                .font(.system(size: 14, weight: .medium))
-                .foregroundStyle(theme.text)
+    private func medicationHistoryRow(_ e: MedicationLogEntry) -> some View {
+        HStack(alignment: .top) {
+            VStack(alignment: .leading, spacing: 1) {
+                Text(medicationRowLabel(e))
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(theme.text)
+                if let timing = MedicationHistory.timingLabel(e, calendar: .current) {
+                    Text(timing)
+                        .font(.caption2).foregroundStyle(theme.dim)
+                }
+            }
             Spacer()
-            Button { deleteEvent(e) } label: {
+            Button { deleteEvent(id: e.id) } label: {
                 Label("Undo", systemImage: "arrow.uturn.backward")
             }
             .tactile(.ghost)
@@ -593,14 +681,14 @@ struct ReminderDetailSheet: View {
         .padding(.vertical, 4)
     }
 
-    private func medicationRowLabel(_ e: ReminderEventDTO) -> String {
+    private func medicationRowLabel(_ e: MedicationLogEntry) -> String {
         let time = e.timestamp.formatted(date: .omitted, time: .shortened)
         guard let taken = e.dosageTaken, !taken.isEmpty else { return time }
         return "\(time) — \(taken)"
     }
 
-    private func deleteEvent(_ e: ReminderEventDTO) {
-        Repos.deleteReminderEvent(ctx, id: e.id)
+    private func deleteEvent(id: UUID) {
+        Repos.deleteReminderEvent(ctx, id: id)
         ReminderNotificationService.syncAfterChange(ctx, reminderId: reminder.id, userId: profile.id)
         Haptics.warn()
         toasts.show(Toast(title: "Removed", detail: "Log entry undone", accent: .warn, symbol: "arrow.uturn.backward"))

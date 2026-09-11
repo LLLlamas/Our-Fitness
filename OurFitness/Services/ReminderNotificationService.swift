@@ -165,17 +165,27 @@ public enum ReminderNotificationService {
             // grounds to give.
             guard reminder.patternReminderEnabled == true,
                   let fireDate = MedicationPattern.nextFireDate(
-                    recentEventTimes, now: Date(), calendar: .current
+                    recentEventTimes, scheduled: reminder.scheduledMinuteOfDay,
+                    now: Date(), calendar: .current
                   )
             else { return nil }
 
             content.categoryIdentifier = medicationCategoryId
             content.title = "Medication reminder"
-            content.body = "You usually log \(reminder.name) around this time. No log has been recorded yet today."
+            // Both wordings are statements about the LOG and nothing else. The
+            // set-time one names the time the user themselves entered; it still
+            // does not say to take anything, because a set time says when a dose
+            // was planned, not that the app knows one is due.
+            if let minute = reminder.scheduledMinuteOfDay {
+                content.body = "\(reminder.name) is set for \(MedicationPattern.clockLabel(minuteOfDay: minute)). No log has been recorded yet today."
+            } else {
+                content.body = "You usually log \(reminder.name) around this time. No log has been recorded yet today."
+            }
 
-            // Minute included (and never zeroed): the pattern time is a real
-            // clock time read off the user's own logs, so an 8:35 routine must
-            // not be floored to 8:00 the way the on-the-hour kinds are.
+            // Minute included (and never zeroed): the dose time is a real clock
+            // time — set by the user, or read off their own logs — so an 8:35
+            // routine must not be floored to 8:00 the way the on-the-hour kinds
+            // are.
             comps = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: fireDate)
 
         case .plants, .custom:
