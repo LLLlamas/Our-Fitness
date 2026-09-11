@@ -117,7 +117,15 @@ public enum ReminderNotificationService {
 
     // MARK: - Scheduling
 
-    private static func identifier(for reminderId: UUID) -> String { identifierPrefix + reminderId.uuidString }
+    /// `reminder.<uuid>` for a single request, `reminder.<uuid>#<minute>` for
+    /// one of a medication's set-time alarms. The suffix is what lets several
+    /// daily alarms coexist for the same medication; `reminderId(fromIdentifier:)`
+    /// strips it, so every existing caller keeps working unchanged.
+    private static func identifier(for reminderId: UUID, minuteOfDay: Int? = nil) -> String {
+        let base = identifierPrefix + reminderId.uuidString
+        guard let minuteOfDay else { return base }
+        return "\(base)#\(minuteOfDay)"
+    }
 
     /// Parses a scheduled request's identifier back into the reminder id it
     /// was scheduled for, or nil if the identifier isn't one of ours.
@@ -127,7 +135,9 @@ public enum ReminderNotificationService {
     /// called from `willPresent`, a synchronous, non-isolated delegate method.
     nonisolated static func reminderId(fromIdentifier id: String) -> UUID? {
         guard id.hasPrefix(identifierPrefix) else { return nil }
-        return UUID(uuidString: String(id.dropFirst(identifierPrefix.count)))
+        let body = id.dropFirst(identifierPrefix.count)
+        let uuidPart = body.split(separator: "#", maxSplits: 1).first.map(String.init) ?? String(body)
+        return UUID(uuidString: uuidPart)
     }
 
     /// Builds the desired pending request for one reminder from pre-fetched
@@ -141,8 +151,8 @@ public enum ReminderNotificationService {
     /// today that is medication with the nudge switched off, or medication with
     /// no history to infer a routine from. Both callers must treat nil as
     /// "cancel whatever is pending", not as "leave it alone".
-    private static func buildRequest(for reminder: ReminderDTO, kind: ReminderGroupKind,
-                                     lastDone: Date?, recentEventTimes: [Date]) -> UNNotificationRequest? {
+    private static func buildRequests(for reminder: ReminderDTO, kind: ReminderGroupKind,
+                                      lastDone: Date?, recentEventTimes: [Date]) -> [UNNotificationRequest] {
         let content = UNMutableNotificationContent()
         content.sound = .default
         content.threadIdentifier = reminder.groupId.uuidString
@@ -154,39 +164,7 @@ public enum ReminderNotificationService {
 
         switch kind {
         case .medication:
-            // SAFETY REQUIREMENT — DO NOT "IMPROVE" THIS COPY.
-            //
-            // The app only knows what has been LOGGED. It cannot tell a dose
-            // that was taken but not logged from one deliberately skipped from
-            // one a clinician changed or stopped. So this notification may only
-            // ever speak about the log: never "take X now", never "you missed a
-            // dose", and never a dose amount in the body. Anything stronger
-            // turns a missing tap into medical instruction the app has no
-            // grounds to give.
-            guard reminder.patternReminderEnabled == true,
-                  let fireDate = MedicationPattern.nextFireDate(
-                    recentEventTimes, scheduled: reminder.scheduledMinuteOfDay,
-                    now: Date(), calendar: .current
-                  )
-            else { return nil }
-
-            content.categoryIdentifier = medicationCategoryId
-            content.title = "Medication reminder"
-            // Both wordings are statements about the LOG and nothing else. The
-            // set-time one names the time the user themselves entered; it still
-            // does not say to take anything, because a set time says when a dose
-            // was planned, not that the app knows one is due.
-            if let minute = reminder.scheduledMinuteOfDay {
-                content.body = "\(reminder.name) is set for \(MedicationPattern.clockLabel(minuteOfDay: minute)). No log has been recorded yet today."
-            } else {
-                content.body = "You usually log \(reminder.name) around this time. No log has been recorded yet today."
-            }
-
-            // Minute included (and never zeroed): the dose time is a real clock
-            // time — set by the user, or read off their own logs — so an 8:35
-            // routine must not be floored to 8:00 the way the on-the-hour kinds
-            // are.
-            comps = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: fireDate)
+            return medicationRequests(for: reminder, recentEventTimes: recentEventTimes)
 
         case .plants, .custom:
             let dueDay = ReminderSchedule.nextDueDay(
@@ -226,7 +204,90 @@ public enum ReminderNotificationService {
         }
 
         let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: false)
-        return UNNotificationRequest(identifier: identifier(for: reminder.id), content: content, trigger: trigger)
+        return [UNNotificationRequest(identifier: identifier(for: reminder.id), content: content, trigger: trigger)]
+    }
+
+    /// A medication's pending notifications — several, when it has several set
+    /// times.
+    ///
+    /// SET TIMES ARE DAILY REPEATING ALARMS: one request per time, `repeats:
+    /// true` on an hour+minute trigger. That is the entire reliability story.
+    /// The one-shot requests this used to build were re-armed only when the app
+    /// ran, so a nudge ignored without opening the app was the LAST one that
+    /// medication ever produced — silence from then on, for exactly the person
+    /// least likely to notice. A repeating trigger is re-fired by iOS forever
+    /// with no app involvement, and needs no fire instant, no grace period and
+    /// no re-arm path, so it deletes that whole class of bug rather than
+    /// patching it.
+    ///
+    /// With NO set times the inferred behaviour is unchanged: one one-shot
+    /// request at the observed time plus grace (`MedicationPattern.nextFireDate`).
+    private static func medicationRequests(for reminder: ReminderDTO,
+                                           recentEventTimes: [Date]) -> [UNNotificationRequest] {
+        guard reminder.patternReminderEnabled == true else { return [] }
+
+        let times = reminder.scheduledMinutesOfDay
+        if !times.isEmpty {
+            return times.map { minute in
+                // Hour and minute ONLY: no year/month/day, which is what makes
+                // the trigger recur daily. The user picked the minute, so there
+                // is deliberately no grace period here — 8:00 means 8:00.
+                var comps = DateComponents()
+                comps.hour = minute / 60
+                comps.minute = minute % 60
+                let clock = MedicationPattern.clockLabel(minuteOfDay: minute)
+                return UNNotificationRequest(
+                    identifier: identifier(for: reminder.id, minuteOfDay: minute),
+                    content: medicationContent(
+                        for: reminder,
+                        body: "\(reminder.name) is set for \(clock). Tap to log this dose."
+                    ),
+                    trigger: UNCalendarNotificationTrigger(dateMatching: comps, repeats: true)
+                )
+            }
+        }
+
+        guard let fireDate = MedicationPattern.nextFireDate(
+            recentEventTimes, now: Date(), calendar: .current
+        ) else { return [] }
+        // Minute included (and never zeroed): the observed time is a real clock
+        // time read off the user's own logs, so an 8:35 routine must not be
+        // floored to 8:00 the way the on-the-hour kinds are.
+        let comps = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: fireDate)
+        return [UNNotificationRequest(
+            identifier: identifier(for: reminder.id),
+            content: medicationContent(
+                for: reminder,
+                body: "You usually log \(reminder.name) around this time. No log has been recorded yet today."
+            ),
+            trigger: UNCalendarNotificationTrigger(dateMatching: comps, repeats: false)
+        )]
+    }
+
+    /// SAFETY REQUIREMENT — DO NOT "IMPROVE" THIS COPY.
+    ///
+    /// The app only knows what has been LOGGED. It cannot tell a dose that was
+    /// taken but not logged from one deliberately skipped from one a clinician
+    /// changed or stopped. So a medication notification may only ever speak
+    /// about the log or about a time the user themselves entered: never "take X
+    /// now", never "you missed a dose", and never a dose amount in the body.
+    /// Anything stronger turns a missing tap into medical instruction the app
+    /// has no grounds to give.
+    ///
+    /// Note the set-time body says a time was SET and invites a log — it does
+    /// not assert a dose is due, which a repeating alarm could not know anyway.
+    private static func medicationContent(for reminder: ReminderDTO, body: String) -> UNMutableNotificationContent {
+        let content = UNMutableNotificationContent()
+        content.sound = .default
+        // Threaded per MEDICATION, not per group. Every medication lives in the
+        // one built-in Medication group, so threading by group collapsed three
+        // different doses into a single stack that is read and dismissed as one.
+        content.threadIdentifier = reminder.id.uuidString
+        content.userInfo = ["reminderId": reminder.id.uuidString]
+        content.categoryIdentifier = medicationCategoryId
+        content.title = "Medication reminder"
+        content.body = body
+        return content
     }
 
     /// Whether an already-pending request matches the desired one, so
@@ -279,27 +340,54 @@ public enum ReminderNotificationService {
             ? recentEventTimes.first
             : Repos.lastReminderEvent(ctx, reminderId: reminderId)?.timestamp
 
-        guard let request = buildRequest(for: reminder, kind: kind,
-                                         lastDone: lastDone, recentEventTimes: recentEventTimes) else {
-            // No desired notification at all (medication with the nudge off, or
-            // with no routine to infer yet). Cancel rather than fall through —
-            // otherwise a request from before the switch was flipped stays
-            // pending and fires anyway.
-            cancel(ids: [reminderId])
-            return
+        let requests = buildRequests(for: reminder, kind: kind,
+                                     lastDone: lastDone, recentEventTimes: recentEventTimes)
+
+        // Clear by REMINDER id, not by the identifiers we're about to add: a set
+        // time the user just deleted still has an alarm pending under an
+        // identifier the new list no longer mentions, and `add` only replaces
+        // identifiers it collides with. An empty `requests` therefore cancels
+        // everything, which is also the medication-switched-off case.
+        center.getPendingNotificationRequests { pending in
+            let mine = pending.map(\.identifier).filter { Self.reminderId(fromIdentifier: $0) == reminderId }
+            if !mine.isEmpty {
+                center.removePendingNotificationRequests(withIdentifiers: mine)
+            }
+            for request in requests {
+                center.add(request, withCompletionHandler: nil)
+            }
         }
-        // `add` with the same identifier replaces any pending request.
-        center.add(request, withCompletionHandler: nil)
     }
 
-    /// Cancels the pending + delivered notification for each id. Call
+    /// Cancels the pending + delivered notifications for each id. Call
     /// alongside `Repos.deleteReminder` / `Repos.deleteReminderGroup`.
+    ///
+    /// Sweeps by reminder id rather than by exact identifier: a medication holds
+    /// one repeating alarm per set time, under identifiers the call site has no
+    /// way to enumerate — and a repeating alarm that outlived its medication
+    /// would fire daily, forever, for something that no longer exists.
     public static func cancel(ids: [UUID]) {
         guard !ids.isEmpty else { return }
-        let identifiers = ids.map(identifier(for:))
+        let targets = Set(ids)
         let center = UNUserNotificationCenter.current()
-        center.removePendingNotificationRequests(withIdentifiers: identifiers)
-        center.removeDeliveredNotifications(withIdentifiers: identifiers)
+
+        func isOurs(_ identifier: String) -> Bool {
+            guard let id = reminderId(fromIdentifier: identifier) else { return false }
+            return targets.contains(id)
+        }
+
+        center.getPendingNotificationRequests { requests in
+            let matching = requests.map(\.identifier).filter(isOurs)
+            if !matching.isEmpty {
+                center.removePendingNotificationRequests(withIdentifiers: matching)
+            }
+        }
+        center.getDeliveredNotifications { delivered in
+            let matching = delivered.map(\.request.identifier).filter(isOurs)
+            if !matching.isEmpty {
+                center.removeDeliveredNotifications(withIdentifiers: matching)
+            }
+        }
     }
 
     /// Silent reconcile: prunes pending requests for reminders that no longer
@@ -349,24 +437,31 @@ public enum ReminderNotificationService {
         }
 
         for reminder in reminders {
-            guard let desired = buildRequest(
+            let desired = buildRequests(
                 for: reminder,
                 kind: kindByGroupId[reminder.groupId] ?? .custom,
                 lastDone: lastDoneById[reminder.id],
                 recentEventTimes: eventTimesById[reminder.id] ?? []
-            ) else {
-                // This reminder should have nothing pending. It survives the
-                // stale-id prune above (it still exists), so drop it here —
-                // that prune only catches deleted/foreign reminders.
-                let id = identifier(for: reminder.id)
-                if pendingById[id] != nil {
-                    center.removePendingNotificationRequests(withIdentifiers: [id])
-                }
-                continue
+            )
+            let desiredIds = Set(desired.map(\.identifier))
+
+            // Anything still pending for this reminder that the desired set no
+            // longer contains: a deleted set time, or the whole medication
+            // switched off. These survive the stale-id prune above (the reminder
+            // itself still exists), so they have to be dropped here. An empty
+            // `desired` makes this the "cancel everything" path.
+            let obsolete = pending
+                .map(\.identifier)
+                .filter { reminderId(fromIdentifier: $0) == reminder.id && !desiredIds.contains($0) }
+            if !obsolete.isEmpty {
+                center.removePendingNotificationRequests(withIdentifiers: obsolete)
             }
-            if let existing = pendingById[desired.identifier], matches(existing, desired) { continue }
-            center.removeDeliveredNotifications(withIdentifiers: [desired.identifier])
-            center.add(desired, withCompletionHandler: nil)
+
+            for request in desired {
+                if let existing = pendingById[request.identifier], matches(existing, request) { continue }
+                center.removeDeliveredNotifications(withIdentifiers: [request.identifier])
+                center.add(request, withCompletionHandler: nil)
+            }
         }
     }
 

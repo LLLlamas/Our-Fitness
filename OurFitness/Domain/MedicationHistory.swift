@@ -35,18 +35,18 @@ public struct MedicationLogEntry: Equatable, Sendable, Identifiable {
     public var timestamp: Date
     public var dosageTaken: String?
     public var recommendedDosage: String?
-    public var scheduledMinuteOfDay: Int?
+    public var scheduledMinutesOfDay: [Int]
 
     public init(id: UUID, reminderId: UUID, medicationName: String, timestamp: Date,
                 dosageTaken: String? = nil, recommendedDosage: String? = nil,
-                scheduledMinuteOfDay: Int? = nil) {
+                scheduledMinutesOfDay: [Int] = []) {
         self.id = id
         self.reminderId = reminderId
         self.medicationName = medicationName
         self.timestamp = timestamp
         self.dosageTaken = dosageTaken
         self.recommendedDosage = recommendedDosage
-        self.scheduledMinuteOfDay = scheduledMinuteOfDay
+        self.scheduledMinutesOfDay = scheduledMinutesOfDay
     }
 }
 
@@ -85,7 +85,7 @@ public enum MedicationHistory {
     public static func entries(events: [ReminderEventDTO],
                                medications: [ReminderDTO]) -> [MedicationLogEntry] {
         let byId = Dictionary(medications.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
-        return events.compactMap { e in
+        return events.compactMap { e -> MedicationLogEntry? in
             guard let med = byId[e.reminderId] else { return nil }
             return MedicationLogEntry(
                 id: e.id,
@@ -94,7 +94,7 @@ public enum MedicationHistory {
                 timestamp: e.timestamp,
                 dosageTaken: e.dosageTaken,
                 recommendedDosage: med.dosage,
-                scheduledMinuteOfDay: med.scheduledMinuteOfDay
+                scheduledMinutesOfDay: med.scheduledMinutesOfDay
             )
         }
     }
@@ -124,21 +124,23 @@ public enum MedicationHistory {
 
     // MARK: - Reading a dose against its set time
 
-    /// Signed minutes between when a dose was logged and the time it was set
-    /// for; nil when that medication has no set time. See
-    /// `MedicationPattern.minutesFromScheduled` for the wrap-around rule.
+    /// Signed minutes between when a dose was logged and the set time it reads
+    /// against; nil when that medication has no set times. See
+    /// `MedicationPattern.minutesFromNearest` for the nearest-time and
+    /// wrap-around rules.
     public static func minutesFromScheduled(_ entry: MedicationLogEntry,
                                             calendar: Calendar) -> Int? {
-        MedicationPattern.minutesFromScheduled(
-            logged: entry.timestamp, scheduled: entry.scheduledMinuteOfDay, calendar: calendar
+        MedicationPattern.minutesFromNearest(
+            logged: entry.timestamp, times: entry.scheduledMinutesOfDay, calendar: calendar
         )
     }
 
-    /// "12 min after 8:00 AM" for one history row; nil when the medication has
-    /// no set time, which means the row renders the logged time alone.
+    /// "12 min after 8:00 AM" for one history row, read against whichever set
+    /// time is closest; nil when the medication has no set times, which means
+    /// the row renders the logged time alone.
     public static func timingLabel(_ entry: MedicationLogEntry, calendar: Calendar) -> String? {
         MedicationPattern.timingLabel(
-            loggedAt: entry.timestamp, scheduled: entry.scheduledMinuteOfDay, calendar: calendar
+            loggedAt: entry.timestamp, times: entry.scheduledMinutesOfDay, calendar: calendar
         )
     }
 

@@ -41,10 +41,10 @@ final class MedicationHistoryTests: XCTestCase {
     private let groupId = UUID()
 
     private func medication(_ name: String, dosage: String? = nil,
-                            scheduledMinuteOfDay: Int? = nil) -> ReminderDTO {
+                            scheduledMinutesOfDay: [Int] = []) -> ReminderDTO {
         ReminderDTO(
             userId: userId, groupId: groupId, name: name, intervalDays: 1,
-            dosage: dosage, scheduledMinuteOfDay: scheduledMinuteOfDay
+            dosage: dosage, scheduledMinutesOfDay: scheduledMinutesOfDay
         )
     }
 
@@ -58,7 +58,7 @@ final class MedicationHistoryTests: XCTestCase {
     // MARK: - Joining
 
     func test_entries_carry_the_medication_name_dosage_and_set_time() throws {
-        let med = medication("Vitamin D", dosage: "1 tablet", scheduledMinuteOfDay: 8 * 60)
+        let med = medication("Vitamin D", dosage: "1 tablet", scheduledMinutesOfDay: [8 * 60])
         let entries = MedicationHistory.entries(
             events: [event(med, at: instant(0, hour: 8, minute: 4), dosageTaken: "2 tablets")],
             medications: [med]
@@ -67,7 +67,7 @@ final class MedicationHistoryTests: XCTestCase {
         XCTAssertEqual(entry.medicationName, "Vitamin D")
         XCTAssertEqual(entry.recommendedDosage, "1 tablet")
         XCTAssertEqual(entry.dosageTaken, "2 tablets", "what was taken, not what was recommended")
-        XCTAssertEqual(entry.scheduledMinuteOfDay, 8 * 60)
+        XCTAssertEqual(entry.scheduledMinutesOfDay, [8 * 60])
     }
 
     /// The join is also the filter: a plant watering shares the event table with
@@ -195,7 +195,7 @@ final class MedicationHistoryTests: XCTestCase {
 
     func test_timingLabel_is_nil_without_a_set_time_and_states_the_gap_with_one() throws {
         let untimed = medication("Vitamin D")
-        let timed = medication("Metformin", scheduledMinuteOfDay: 8 * 60)
+        let timed = medication("Metformin", scheduledMinutesOfDay: [8 * 60, 20 * 60])
 
         let entries = MedicationHistory.entries(
             events: [
@@ -211,7 +211,7 @@ final class MedicationHistoryTests: XCTestCase {
     }
 
     func test_minutesFromScheduled_matches_the_pattern_math() {
-        let med = medication("Metformin", scheduledMinuteOfDay: 8 * 60)
+        let med = medication("Metformin", scheduledMinutesOfDay: [8 * 60, 20 * 60])
         let entries = MedicationHistory.entries(
             events: [event(med, at: instant(0, hour: 7, minute: 45))], medications: [med]
         )

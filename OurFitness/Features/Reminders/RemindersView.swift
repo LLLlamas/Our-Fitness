@@ -308,8 +308,8 @@ struct RemindersView: View {
                                 Text("Recommended: \(dosage)")
                                     .font(.caption2).foregroundStyle(theme.dim)
                             }
-                            if let minute = r.scheduledMinuteOfDay {
-                                Text("Set for \(MedicationPattern.clockLabel(minuteOfDay: minute))")
+                            if !r.scheduledMinutesOfDay.isEmpty {
+                                Text("Set for \(MedicationPattern.clockList(r.scheduledMinutesOfDay))")
                                     .font(.caption2).foregroundStyle(theme.dim)
                             }
                             Text(lastLoggedLabel(lastLogged))

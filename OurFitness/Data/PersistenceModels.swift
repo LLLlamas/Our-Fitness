@@ -624,9 +624,10 @@ public final class ReminderModel {
     // migration — SchemaV7 stays as-is, no migration stage needed.
     public var dosage: String?
     public var patternReminderEnabled: Bool?
-    /// Configured dose time as minutes from local midnight — see
-    /// `ReminderDTO.scheduledMinuteOfDay`.
-    public var scheduledMinuteOfDay: Int?
+    /// Configured dose times as minutes from local midnight — see
+    /// `ReminderDTO.scheduledMinutesOfDay`. Defaulted, so rows written before
+    /// this field existed migrate additively (SchemaV7 stays as-is).
+    public var scheduledMinutesOfDay: [Int] = []
 
     public init(snapshot s: ReminderDTO) {
         self.id = s.id
@@ -645,7 +646,7 @@ public final class ReminderModel {
         self.snoozedUntil = s.snoozedUntil
         self.dosage = s.dosage
         self.patternReminderEnabled = s.patternReminderEnabled
-        self.scheduledMinuteOfDay = s.scheduledMinuteOfDay
+        self.scheduledMinutesOfDay = s.scheduledMinutesOfDay
     }
 
     public var snapshot: ReminderDTO {
@@ -657,7 +658,7 @@ public final class ReminderModel {
             potDiameterInches: potDiameterInches, notes: notes,
             createdAt: createdAt, snoozedUntil: snoozedUntil,
             dosage: dosage, patternReminderEnabled: patternReminderEnabled,
-            scheduledMinuteOfDay: scheduledMinuteOfDay
+            scheduledMinutesOfDay: scheduledMinutesOfDay
         )
     }
 
@@ -673,7 +674,7 @@ public final class ReminderModel {
         self.snoozedUntil = s.snoozedUntil
         self.dosage = s.dosage
         self.patternReminderEnabled = s.patternReminderEnabled
-        self.scheduledMinuteOfDay = s.scheduledMinuteOfDay
+        self.scheduledMinutesOfDay = s.scheduledMinutesOfDay
     }
 }
 

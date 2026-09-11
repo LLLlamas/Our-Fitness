@@ -39,8 +39,7 @@ struct ReminderDetailSheet: View {
     @State private var potDiameter: Int
     @State private var dosage: String
     @State private var patternReminderEnabled: Bool
-    @State private var hasDoseTime: Bool
-    @State private var doseTime: Date
+    @State private var doseTimes: [Int]
 
     @State private var showImagePicker = false
     @State private var showDeleteConfirm = false
@@ -62,13 +61,7 @@ struct ReminderDetailSheet: View {
         _potDiameter = State(initialValue: reminder.potDiameterInches ?? 6)
         _dosage = State(initialValue: reminder.dosage ?? "")
         _patternReminderEnabled = State(initialValue: reminder.patternReminderEnabled ?? false)
-        _hasDoseTime = State(initialValue: reminder.scheduledMinuteOfDay != nil)
-        // Seeded from the stored minute so the picker opens on the set time;
-        // 8am is only the starting point for a medication that has none yet.
-        _doseTime = State(initialValue: MedicationPattern.date(
-            minuteOfDay: reminder.scheduledMinuteOfDay ?? Self.defaultDoseMinute,
-            on: Date(), calendar: .current
-        ) ?? Date())
+        _doseTimes = State(initialValue: reminder.scheduledMinutesOfDay)
 
         let uid = profile.id
         let rid = reminder.id
@@ -275,12 +268,13 @@ struct ReminderDetailSheet: View {
                     Text(lastDone.map { Dates.formatRelative($0) } ?? "Never")
                         .foregroundStyle(theme.text).fontWeight(.medium)
                 }
-                if let minute = reminder.scheduledMinuteOfDay {
-                    HStack {
+                if !reminder.scheduledMinutesOfDay.isEmpty {
+                    HStack(alignment: .top) {
                         Text("Set for").foregroundStyle(theme.dim)
                         Spacer()
-                        Text(MedicationPattern.clockLabel(minuteOfDay: minute))
+                        Text(MedicationPattern.clockList(reminder.scheduledMinutesOfDay))
                             .foregroundStyle(theme.text).fontWeight(.medium)
+                            .multilineTextAlignment(.trailing)
                     }
                 }
                 Text(patternLine)
@@ -364,7 +358,9 @@ struct ReminderDetailSheet: View {
                     styledField("e.g. 1 tablet, 10 mg, 5 mL", text: $dosage)
                 }
 
-                doseTimeSection
+                fieldBlock("TIMES") {
+                    DoseTimesEditor(minutes: $doseTimes, onChange: { commitEdits() })
+                }
 
                 fieldBlock("NOTES") { styledField("Any details", text: $notes) }
 
@@ -408,56 +404,22 @@ struct ReminderDetailSheet: View {
         }
     }
 
-    /// Where the picker opens for a medication that has no set time yet.
-    private static let defaultDoseMinute = 8 * 60
-
-    /// Same optional dose time as the add sheet, committing on change like
-    /// every other non-text control here. Switching it off clears the stored
-    /// minute, which puts the medication back on inferred timing rather than
-    /// leaving a stale time behind.
-    private var doseTimeSection: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Toggle(isOn: $hasDoseTime) {
-                Text("Set a time to take this")
-                    .font(.system(size: 14))
-                    .foregroundStyle(theme.text)
-            }
-            .onChange(of: hasDoseTime) { _, _ in commitEdits() }
-
-            if hasDoseTime {
-                DatePicker("Dose time", selection: $doseTime, displayedComponents: [.hourAndMinute])
-                    .labelsHidden()
-                    .foregroundStyle(theme.text)
-                    .onChange(of: doseTime) { _, _ in commitEdits() }
-            }
-
-            Text(hasDoseTime
-                 ? "Your history shows each dose against this time."
-                 : "Optional. Without one, timings come from when you actually log it.")
-                .font(.caption2).foregroundStyle(theme.dim)
-        }
-        .padding(14)
-        .background(theme.card)
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-    }
-
     /// Same opt-in toggle as the add sheet, committing on change like every
     /// other non-text control here.
     private var patternReminderToggle: some View {
         VStack(alignment: .leading, spacing: 6) {
             Toggle(isOn: $patternReminderEnabled) {
-                Text(hasDoseTime
-                     ? "Remind me if I haven't logged this by its set time"
-                     : "Remind me if I haven't logged this around my usual time")
+                Text(doseTimes.isEmpty
+                     ? "Remind me if I haven't logged this around my usual time"
+                     : "Remind me at each time above")
                     .font(.system(size: 14))
                     .foregroundStyle(theme.text)
             }
             .onChange(of: patternReminderEnabled) { _, _ in commitEdits() }
 
-            Text(hasDoseTime
-                 ? "The nudge goes by the time you set above — and only if nothing's been logged that day."
-                 : "The nudge goes by when you usually log this — and only if nothing's been logged that day.")
+            Text(doseTimes.isEmpty
+                 ? "The nudge goes by when you usually log this — and only if nothing's been logged that day."
+                 : "Fires every day at each time you set, whether or not the app is open.")
                 .font(.caption2).foregroundStyle(theme.dim)
         }
         .padding(14)
@@ -519,10 +481,13 @@ struct ReminderDetailSheet: View {
             updated.dosage = trimmedDosage.isEmpty ? nil : trimmedDosage
             let trimmedNotes = notes.trimmingCharacters(in: .whitespaces)
             updated.notes = trimmedNotes.isEmpty ? nil : trimmedNotes
-            updated.patternReminderEnabled = patternReminderEnabled
-            updated.scheduledMinuteOfDay = hasDoseTime
-                ? MedicationPattern.minuteOfDay(of: doseTime, calendar: .current)
-                : nil
+            // Normalise here rather than in the editor: sorting mid-edit would
+            // move a row out from under the user's finger.
+            let times = MedicationPattern.normalizedTimes(doseTimes)
+            updated.scheduledMinutesOfDay = times
+            // Adding a time is asking to be reminded at it. Never the reverse —
+            // removing every time leaves the switch as the user last set it.
+            updated.patternReminderEnabled = times.isEmpty ? patternReminderEnabled : true
         } else if reminder.isPlant {
             let trimmedRoom = room.trimmingCharacters(in: .whitespaces)
             updated.room = trimmedRoom.isEmpty ? nil : trimmedRoom

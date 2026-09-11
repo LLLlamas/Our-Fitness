@@ -1,12 +1,18 @@
 // Habit inference for medication reminders: "you usually take this around
 // 8am — it hasn't been logged yet today."
 //
-// Two timings can exist for one medication and they are not the same thing: a
-// SET time (`ReminderDTO.scheduledMinuteOfDay`, stated by the user) and an
-// OBSERVED one (`typicalMinuteOfDay`, read off the log). A set time always
-// wins where both exist — it needs no history, so it works from day one, and
-// history is read against it. The observed pattern remains the only timing for
-// medications with no set time, exactly as before.
+// Two kinds of timing live here and they are handled in deliberately different
+// ways:
+//
+//   SET times (`ReminderDTO.scheduledMinutesOfDay`, stated by the user) are
+//   alarms. Each becomes a daily repeating notification at that clock time, so
+//   nothing in this file computes a fire instant for them and nothing has to
+//   re-arm them — see ReminderNotificationService. What this file offers them
+//   is clock formatting and reading a log back against them.
+//
+//   The OBSERVED time (`typicalMinuteOfDay`) is inferred from the log for a
+//   medication with no set times, and DOES need a computed next-fire instant,
+//   which is what `nextFireDate` is for. That path is unchanged.
 //
 // Unlike ReminderSchedule, which answers "which calendar DAY is this due",
 // this file answers "at what TIME OF DAY does this user actually do it", read
@@ -78,25 +84,34 @@ public enum MedicationPattern {
         return date.formatted(date: .omitted, time: .shortened)
     }
 
+    /// "8:00 AM, 8:00 PM" — every set time in order, for a card or a stats row.
+    /// Empty string when there are none, which callers treat as "show nothing".
+    public static func clockList(_ times: [Int], calendar: Calendar = .current) -> String {
+        normalizedTimes(times)
+            .map { clockLabel(minuteOfDay: $0, calendar: calendar) }
+            .joined(separator: ", ")
+    }
+
     /// Doses logged within this many minutes of their set time read as "on
     /// time" rather than as a number — the picker stores whole minutes, and a
     /// 3-minute gap is noise, not information.
     public static let onTimeToleranceMinutes = 5
 
-    /// "12 min after 8:00 AM" / "20 min before 8:00 AM" / "On time". A plain
-    /// statement of when the LOG happened relative to the time the user set —
-    /// never a judgement about the dose itself, which the app cannot make (see
-    /// the safety note in ReminderNotificationService).
+    /// "12 min after 8:00 AM" / "20 min before 8:00 AM" / "On time", read
+    /// against the closest set time. A plain statement of when the LOG happened
+    /// relative to a time the user set — never a judgement about the dose
+    /// itself, which the app cannot make (see the safety note in
+    /// ReminderNotificationService).
     ///
-    /// nil when the medication has no set time, which is the signal to render
-    /// nothing at all rather than a placeholder.
-    public static func timingLabel(loggedAt: Date, scheduled: Int?, calendar: Calendar) -> String? {
-        guard let scheduled,
-              let delta = minutesFromScheduled(logged: loggedAt, scheduled: scheduled, calendar: calendar)
+    /// nil when there are no set times, which is the signal to render nothing
+    /// at all rather than a placeholder.
+    public static func timingLabel(loggedAt: Date, times: [Int], calendar: Calendar) -> String? {
+        guard let time = nearestTime(to: loggedAt, times: times, calendar: calendar),
+              let delta = minutesFromNearest(logged: loggedAt, times: times, calendar: calendar)
         else { return nil }
-        let clock = clockLabel(minuteOfDay: scheduled, calendar: calendar)
         if abs(delta) <= onTimeToleranceMinutes { return "On time" }
         let gap = durationLabel(minutes: abs(delta))
+        let clock = clockLabel(minuteOfDay: time, calendar: calendar)
         return delta > 0 ? "\(gap) after \(clock)" : "\(gap) before \(clock)"
     }
 
@@ -162,32 +177,55 @@ public enum MedicationPattern {
         dayCount(timestamps, now: now, calendar: calendar) >= minDaysForDisplay
     }
 
-    // MARK: - Set vs observed time
+    // MARK: - Set times
 
-    /// The minute-of-day this medication's timing should key off: the stated
-    /// dose time when there is one, otherwise the median of the recent log.
-    /// nil only when neither exists.
-    public static func effectiveMinuteOfDay(scheduled: Int?, timestamps: [Date],
-                                            now: Date, calendar: Calendar) -> Int? {
-        if let scheduled { return clampMinuteOfDay(scheduled) }
-        return typicalMinuteOfDay(timestamps, now: now, calendar: calendar)
+    /// Clamped, de-duplicated and sorted. Every stored list goes through this,
+    /// so nothing downstream has to cope with 8:00 appearing twice or the
+    /// evening dose sitting before the morning one.
+    public static func normalizedTimes(_ times: [Int]) -> [Int] {
+        Array(Set(times.map(clampMinuteOfDay))).sorted()
     }
 
-    /// Signed minutes between a logged dose and the time it was set for —
-    /// positive = logged after, negative = logged before. nil with no set time.
+    /// Signed minutes between a logged dose and the set time it belongs to —
+    /// positive = logged after, negative = logged before. nil when there are no
+    /// set times.
     ///
-    /// Normalised to the NEAREST occurrence of the set time rather than the
-    /// same calendar day's: a 11pm medication logged at 12:20am reads as 80
-    /// minutes late, not 1,360 minutes early. Anything more than half a day
-    /// either side is therefore reported against the adjacent day, which is the
-    /// only reading that makes sense for a once-daily dose.
-    public static func minutesFromScheduled(logged: Date, scheduled: Int?,
-                                            calendar: Calendar) -> Int? {
-        guard let scheduled else { return nil }
-        var delta = minuteOfDay(of: logged, calendar: calendar) - clampMinuteOfDay(scheduled)
-        if delta > minutesPerDay / 2 { delta -= minutesPerDay }
-        if delta < -minutesPerDay / 2 { delta += minutesPerDay }
-        return delta
+    /// The dose is matched to the CLOSEST set time, which is what makes this
+    /// work for a twice-daily medication: a log at 20:14 reads against the 20:00
+    /// dose, not the 08:00 one. Distance wraps around midnight, so an 11pm dose
+    /// logged at 12:20am is 80 minutes late rather than 22 hours early.
+    public static func minutesFromNearest(logged: Date, times: [Int],
+                                          calendar: Calendar) -> Int? {
+        guard let time = nearestTime(to: logged, times: times, calendar: calendar) else { return nil }
+        return wrapped(minuteOfDay(of: logged, calendar: calendar) - time)
+    }
+
+    /// Which set time a logged dose reads against — the closest one, wrapping
+    /// around midnight. nil when there are no set times.
+    public static func nearestTime(to logged: Date, times: [Int], calendar: Calendar) -> Int? {
+        let times = normalizedTimes(times)
+        guard !times.isEmpty else { return nil }
+        let loggedMinute = minuteOfDay(of: logged, calendar: calendar)
+        return times.min { abs(wrapped(loggedMinute - $0)) < abs(wrapped(loggedMinute - $1)) }
+    }
+
+    /// Shifts a raw minute difference into -720..<720, i.e. reports it against
+    /// the nearest occurrence rather than the same calendar day's.
+    private static func wrapped(_ delta: Int) -> Int {
+        var d = delta
+        if d > minutesPerDay / 2 { d -= minutesPerDay }
+        if d < -minutesPerDay / 2 { d += minutesPerDay }
+        return d
+    }
+
+    /// How many of today's set times have come round already — the count of
+    /// doses the day has called for so far. Compared against the number logged
+    /// today to decide whether anything is outstanding; deliberately a count
+    /// rather than a per-slot matching, because which physical dose a given log
+    /// was meant to be is not something the app can know.
+    public static func timesReached(_ times: [Int], now: Date, calendar: Calendar) -> Int {
+        let nowMinute = minuteOfDay(of: now, calendar: calendar)
+        return normalizedTimes(times).filter { $0 <= nowMinute }.count
     }
 
     // MARK: - Today
@@ -198,20 +236,18 @@ public enum MedicationPattern {
 
     // MARK: - Scheduling
 
-    /// When to fire the "hasn't been logged yet" nudge: the effective dose time
-    /// plus a grace period. Today if nothing is logged yet today and that
-    /// instant is still ahead; otherwise the same clock time tomorrow. nil when
-    /// there is neither a set time nor usable history.
+    /// When to fire the "hasn't been logged yet" nudge for a medication with NO
+    /// set times: the typical time plus a grace period. Today if nothing is
+    /// logged yet today and that instant is still ahead; otherwise the same
+    /// clock time tomorrow. nil when there's no usable history.
     ///
-    /// A set time schedules from the very first day. Without one, a single day
-    /// of history is enough (that is the spec's yesterday-based reminder, as the
-    /// degenerate median). The grace period applies either way — someone whose
-    /// dose is set for 8am is not late at 8:01.
-    public static func nextFireDate(_ timestamps: [Date], scheduled: Int? = nil,
-                                    now: Date, calendar: Calendar,
+    /// One day of history is enough to schedule (that is the spec's
+    /// yesterday-based reminder, as the degenerate median). Set times never come
+    /// through here — they are daily repeating alarms with no instant to
+    /// compute and no grace period, because the user picked the minute.
+    public static func nextFireDate(_ timestamps: [Date], now: Date, calendar: Calendar,
                                     graceMinutes: Int = defaultGraceMinutes) -> Date? {
-        guard let minuteOfDay = effectiveMinuteOfDay(scheduled: scheduled, timestamps: timestamps,
-                                                     now: now, calendar: calendar) else { return nil }
+        guard let minuteOfDay = typicalMinuteOfDay(timestamps, now: now, calendar: calendar) else { return nil }
 
         let today = calendar.startOfDay(for: now)
         if !hasLogToday(timestamps, now: now, calendar: calendar),

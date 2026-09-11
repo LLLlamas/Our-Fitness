@@ -766,17 +766,19 @@ public struct ReminderDTO: Codable, Equatable, Sendable, Identifiable {
     /// Per-medication opt-in for the "you usually log this around now" nudge.
     /// nil (older rows, and everything outside a medication group) reads as off.
     public var patternReminderEnabled: Bool?
-    /// The dose time the user CONFIGURED, as minutes from local midnight
-    /// (0..<1440). Distinct from `MedicationPattern.typicalMinuteOfDay`, which
-    /// infers a time from the completion log: this one is stated, so it applies
-    /// from the first day with no history at all, and history can be read
-    /// against it. nil means "no set time" — the inferred pattern is then the
-    /// only timing the app has, exactly as before this field existed.
+    /// The dose times the user CONFIGURED, each as minutes from local midnight
+    /// (0..<1440), sorted. A medication taken morning and night holds two.
     ///
-    /// Stored as a minute rather than a Date because it is a wall-clock time of
-    /// day with no calendar day attached; see `MedicationPattern.fireInstant`
-    /// for why fire instants are rebuilt from components rather than offsets.
-    public var scheduledMinuteOfDay: Int?
+    /// Distinct from `MedicationPattern.typicalMinuteOfDay`, which infers a
+    /// single time from the completion log: these are stated, so they apply
+    /// from the first day with no history at all, and each becomes its own
+    /// daily alarm. Empty means "no set times" — the inferred pattern is then
+    /// the only timing the app has, exactly as before this field existed.
+    ///
+    /// Minutes rather than Dates because these are wall-clock times of day with
+    /// no calendar day attached; see `MedicationPattern.fireInstant` for why
+    /// fire instants are rebuilt from components rather than offsets.
+    public var scheduledMinutesOfDay: [Int]
 
     public init(
         id: UUID = UUID(), userId: UUID, groupId: UUID, name: String,
@@ -785,7 +787,7 @@ public struct ReminderDTO: Codable, Equatable, Sendable, Identifiable {
         potDiameterInches: Int? = nil, notes: String? = nil,
         createdAt: Date = Date(), snoozedUntil: Date? = nil,
         dosage: String? = nil, patternReminderEnabled: Bool? = nil,
-        scheduledMinuteOfDay: Int? = nil
+        scheduledMinutesOfDay: [Int] = []
     ) {
         self.id = id
         self.userId = userId
@@ -803,7 +805,7 @@ public struct ReminderDTO: Codable, Equatable, Sendable, Identifiable {
         self.snoozedUntil = snoozedUntil
         self.dosage = dosage
         self.patternReminderEnabled = patternReminderEnabled
-        self.scheduledMinuteOfDay = scheduledMinuteOfDay
+        self.scheduledMinutesOfDay = MedicationPattern.normalizedTimes(scheduledMinutesOfDay)
     }
 
     /// The plant-specific fields are nil for reminders in a custom group (see
