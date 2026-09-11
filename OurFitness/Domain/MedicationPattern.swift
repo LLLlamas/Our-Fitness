@@ -31,6 +31,8 @@ public enum MedicationPattern {
     /// Below this many recent days we don't claim a pattern in the UI.
     public static let minDaysForDisplay = 2
 
+    private static let minutesPerDay = 24 * 60
+
     // MARK: - Recent history
 
     /// Earliest log per local calendar day across the last `lookbackDays` days,
@@ -115,12 +117,27 @@ public enum MedicationPattern {
                            graceMinutes: graceMinutes, calendar: calendar)
     }
 
-    /// Offsetting from the day's start by minutes through the calendar (rather
-    /// than adding a time interval to a Date) is what makes a grace period that
-    /// spills past midnight, and a DST day that is 23 or 25 hours long, land on
-    /// the wall-clock time a person would expect.
+    /// The instant `minuteOfDay + graceMinutes` after the start of `dayStart`,
+    /// expressed as a WALL-CLOCK time rather than an elapsed one.
+    ///
+    /// The distinction is the whole point. Adding the total as minutes would be
+    /// an elapsed offset, and on the 23-hour spring-forward day that lands an
+    /// 06:35 routine at 07:35 — an hour early by the clock the person actually
+    /// reads. So the day part is added as calendar DAYS (letting the calendar
+    /// absorb the short or long day) and the remainder is SET as an hour and
+    /// minute. A grace period that spills past midnight is exactly the case
+    /// where the total exceeds a day, which is why the split exists at all.
     private static func fireInstant(dayStart: Date, minuteOfDay: Int, graceMinutes: Int,
                                     calendar: Calendar) -> Date? {
-        calendar.date(byAdding: .minute, value: minuteOfDay + graceMinutes, to: dayStart)
+        let total = minuteOfDay + graceMinutes
+        guard let targetDay = calendar.date(byAdding: .day, value: total / minutesPerDay, to: dayStart) else {
+            return nil
+        }
+        let remainder = total % minutesPerDay
+        // A wall-clock time that doesn't exist on a spring-forward day (02:30)
+        // resolves forward to the next real instant, which is the behaviour a
+        // person expects from an alarm set for a skipped hour.
+        return calendar.date(bySettingHour: remainder / 60, minute: remainder % 60,
+                             second: 0, of: targetDay)
     }
 }

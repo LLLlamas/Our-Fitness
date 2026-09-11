@@ -440,6 +440,10 @@ final class WatchSyncPayloadTests: XCTestCase {
         XCTAssertFalse(snapshot(groupKind: "").isPlant)
         XCTAssertFalse(snapshot(groupKind: "Plants").isPlant, "raw values are case-sensitive")
         XCTAssertFalse(snapshot(groupKind: "plant").isPlant)
+        // A newly-added group kind must not start reading as a plant on the
+        // wire — that would put a watering amount and a species row on the
+        // wrist for a pill bottle.
+        XCTAssertFalse(snapshot(groupKind: "medication").isPlant)
     }
 
     func test_isPlant_survives_the_round_trip() throws {
