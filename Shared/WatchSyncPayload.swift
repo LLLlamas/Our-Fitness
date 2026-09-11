@@ -24,9 +24,16 @@
 import Foundation
 
 /// A read-only projection of one reminder for the watch's list/detail UI.
-/// `groupKind` is the raw string of `ReminderGroupKind` ("plants"/"custom") —
-/// this file intentionally doesn't depend on the Domain module's enum so it
-/// stays a zero-dependency wire format compiled identically into both targets.
+/// `groupKind` is the raw string of `ReminderGroupKind`
+/// ("medication"/"plants"/"custom") — this file intentionally doesn't depend on
+/// the Domain module's enum so it stays a zero-dependency wire format compiled
+/// identically into both targets.
+///
+/// A medication reminder needs NO field of its own here: the wrist only has to
+/// tell medication apart from a plant to render it (which `groupKind` already
+/// does), and when it sends `.done` the phone re-resolves the dose from its own
+/// store before writing — the same rule as meal logging, so a stale snapshot
+/// can never put a wrong dose in the log. Resist adding a `dosage` here.
 public struct ReminderSnapshot: Codable, Equatable, Sendable, Identifiable {
     public var id: UUID
     public var groupId: UUID

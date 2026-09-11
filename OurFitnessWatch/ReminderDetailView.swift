@@ -1,6 +1,11 @@
 // Detail screen for one reminder: photo, plant-care stats (for catalog
 // species), due-date math, and the three wrist actions (done / interval /
 // snooze). Plain native watchOS SwiftUI -- no iOS Theme/Card/Haptics.
+//
+// Everything that reads differently per kind goes through `WatchReminderKind`
+// (declared in ReminderListView.swift) rather than another `isPlant` ternary:
+// with three kinds the ternaries stopped being readable, and the copy, glyph,
+// and which controls even appear all key off the same one value.
 
 import SwiftUI
 import UIKit
@@ -25,10 +30,33 @@ struct ReminderDetailView: View {
         store.reminders.first(where: { $0.id == snapshot.id }) ?? snapshot
     }
 
+    private var kind: WatchReminderKind { WatchReminderKind(live) }
+
     private var species: PlantSpecies? {
-        guard live.isPlant, let speciesId = live.speciesId else { return nil }
+        guard kind == .plants, let speciesId = live.speciesId else { return nil }
         return PlantCatalog.species(id: speciesId)
     }
+
+    private var lastDoneLabel: String {
+        switch kind {
+        case .plants: return "Last watered"
+        case .medication: return "Last logged"
+        case .custom: return "Last done"
+        }
+    }
+
+    private var actionTitle: String {
+        switch kind {
+        case .plants: return "Watered"
+        case .medication: return "Log taken"
+        case .custom: return "Done"
+        }
+    }
+
+    /// A medication's schedule comes from the phone's logging-pattern
+    /// inference, not from a repeat interval, so editing the interval here
+    /// would write a value nothing reads -- and snoozing has nothing to move.
+    private var showsIntervalAndSnooze: Bool { kind != .medication }
 
     private var dueDay: Date {
         ReminderSchedule.nextDueDay(
@@ -61,7 +89,7 @@ struct ReminderDetailView: View {
                     }
                     // A non-plant reminder has no species card to carry its
                     // detail, so its notes are the only context on the wrist.
-                    if !live.isPlant, let notes = live.notes, !notes.isEmpty {
+                    if kind != .plants, let notes = live.notes, !notes.isEmpty {
                         Text(notes)
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -69,7 +97,7 @@ struct ReminderDetailView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 3) {
-                    Text(live.isPlant ? "Last watered: \(lastDoneText)" : "Last done: \(lastDoneText)")
+                    Text("\(lastDoneLabel): \(lastDoneText)")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     Text(dueText)
@@ -85,33 +113,35 @@ struct ReminderDetailView: View {
                     WKInterfaceDevice.current().play(.success)
                     store.send(.done(reminderId: snapshot.id, date: Date()))
                 } label: {
-                    Label(live.isPlant ? "Watered" : "Done", systemImage: "checkmark.circle.fill")
+                    Label(actionTitle, systemImage: "checkmark.circle.fill")
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(.green)
 
-                Stepper(
-                    ReminderSchedule.intervalLabel(days: intervalDays),
-                    value: $intervalDays, in: ReminderSchedule.minIntervalDays...ReminderSchedule.maxIntervalDays
-                )
-                .onChange(of: intervalDays) { _, newValue in
-                    // Debounce: one transferUserInfo per burst of stepper ticks.
-                    pendingIntervalSend?.cancel()
-                    pendingIntervalSend = Task {
-                        guard (try? await Task.sleep(for: .milliseconds(600))) != nil else { return }
-                        store.send(.setInterval(reminderId: snapshot.id, days: newValue))
-                        pendingIntervalSend = nil
+                if showsIntervalAndSnooze {
+                    Stepper(
+                        ReminderSchedule.intervalLabel(days: intervalDays),
+                        value: $intervalDays, in: ReminderSchedule.minIntervalDays...ReminderSchedule.maxIntervalDays
+                    )
+                    .onChange(of: intervalDays) { _, newValue in
+                        // Debounce: one transferUserInfo per burst of stepper ticks.
+                        pendingIntervalSend?.cancel()
+                        pendingIntervalSend = Task {
+                            guard (try? await Task.sleep(for: .milliseconds(600))) != nil else { return }
+                            store.send(.setInterval(reminderId: snapshot.id, days: newValue))
+                            pendingIntervalSend = nil
+                        }
                     }
-                }
 
-                Button {
-                    store.send(.snooze(reminderId: snapshot.id))
-                } label: {
-                    Label("Snooze 1 day", systemImage: "moon.zzz.fill")
-                        .frame(maxWidth: .infinity)
+                    Button {
+                        store.send(.snooze(reminderId: snapshot.id))
+                    } label: {
+                        Label("Snooze 1 day", systemImage: "moon.zzz.fill")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
                 }
-                .buttonStyle(.bordered)
             }
             .padding(.horizontal, 2)
         }
@@ -136,9 +166,9 @@ struct ReminderDetailView: View {
                 .frame(maxWidth: .infinity)
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         } else {
-            Image(systemName: live.isPlant ? "leaf.fill" : "bell.fill")
+            Image(systemName: kind.symbol)
                 .font(.system(size: 36))
-                .foregroundStyle(live.isPlant ? .green : .orange)
+                .foregroundStyle(kind.tint)
                 .frame(height: 84)
                 .frame(maxWidth: .infinity)
         }
