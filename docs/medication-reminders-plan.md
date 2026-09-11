@@ -11,10 +11,18 @@
 > entities rather than a parallel `Medication`/`MedicationLog` pair — see §8,
 > which asked for exactly that.
 >
-> Deliberately not shipped: fixed prescription schedules, multiple inferred dose
-> slots per day (the data model allows multiple logs per day; only the inference
-> is single-slot), archive-vs-delete as separate actions, and a privacy mode that
-> hides the medication name in the notification.
+> **Shipped after the original spec** (and superseding parts of it, noted inline):
+> user-set dose times, several per medication (`ReminderDTO.scheduledMinutesOfDay`),
+> each firing as its own **daily repeating** notification; every logged dose read
+> back against the closest set time ("12 min after 8:00 AM"); an all-medications
+> history screen (`MedicationHistorySheet`); an in-app banner naming a medication
+> the day has called for and that hasn't been logged; and no photo on a
+> medication. See §12, §14, §15, §21 and §30 for what each replaced.
+>
+> Deliberately not shipped: multiple *inferred* dose slots per day (a medication
+> with no set times still infers one time from the log), PRN/as-needed status,
+> editing an existing log, archive-vs-delete as separate actions, and a privacy
+> mode that hides the medication name in the notification.
 >
 > **§12 and §16 are binding, not advisory.** The notification may only ever say a
 > dose has not been *logged*. The app cannot distinguish a dose taken but not
@@ -528,6 +536,25 @@ Vitamin D hasn't been logged yet today.
 Yesterday it was logged around 8:05 AM.
 ```
 
+**Approved third form — a medication with a SET time** (shipped; `buildRequest`'s
+`.medication` branch emits this whenever `scheduledMinutesOfDay` is non-empty):
+
+```text
+Medication reminder
+
+Vitamin D is set for 8:00 AM. Tap to log this dose.
+```
+
+Why this is still compliant, and why the wording is exactly this: it names a time
+the **user themselves entered** and invites a **log**. It does not assert that a
+dose is due — which a daily repeating alarm could not know anyway, since it fires
+whether or not anything was logged. "Tap to log this dose" is an instruction to
+record, never to take.
+
+The title is always the generic `"Medication reminder"`, and no body ever
+contains a dosage — that is what satisfies §24's rule against notification
+previews exposing dosage information.
+
 ### Avoid
 
 ```text
@@ -605,6 +632,35 @@ P1: recent-history median
 P2: multiple daily dose slots
 ```
 
+## Status — what shipped, and the rung the ladder didn't anticipate
+
+P0 and P1 both shipped as one thing: the recent-history median *is* the
+yesterday-based reminder when there's a single day of history (the degenerate
+median). `MedicationPattern.typicalMinuteOfDay` + `nextFireDate`.
+
+Above both sits a rung this ladder never contemplated — a time the user simply
+**states**. It needs no history at all, so it works on day one, and it is not a
+guess the app has to defend.
+
+The two are scheduled in deliberately different ways, and the difference matters
+more than the timing does:
+
+| | Inferred time | Set times |
+|---|---|---|
+| Source | median of the log | typed by the user |
+| Trigger | one-shot at time + 30 min grace | **daily repeating**, at the exact minute |
+| Grace | 30 min | none — they picked the minute |
+| Re-armed by | the app running | nobody; iOS repeats it forever |
+| Suppressed by a log that day | yes | no |
+
+The one-shot form has a failure mode that is easy to miss and bad in exactly the
+wrong direction: it is re-armed only by `reschedule`/`reconcile`, both of which
+need the app to run. A nudge ignored *without opening the app* was therefore the
+last one that medication ever produced — silence from then on, for precisely the
+person least likely to notice. Repeating triggers exist to remove that class of
+bug rather than patch it, which is why set times do not go through `nextFireDate`
+at all.
+
 ---
 
 # 15. Multiple Doses in One Day
@@ -627,6 +683,28 @@ A user may need to log:
 
 For v1 notifications, it is acceptable to keep the pattern-reminder behavior simple and document multiple daily schedule inference as a later enhancement.
 
+## Status — shipped
+
+**Storage always allowed this and still does.** `ReminderEventDTO` is append-only;
+`MedicationHistory.byDay` renders every dose of a day earliest-first, and
+`MedicationLogDay.doseCount` vs `medicationCount` keeps "three doses" distinct
+from "three medications".
+
+**Scheduling now allows it too.** `ReminderDTO.scheduledMinutesOfDay` is a *list*.
+A medication taken at 8:00 AM, 2:00 PM and 8:00 PM holds three, each one its own
+daily repeating notification under its own identifier
+(`reminder.<uuid>#<minute>`). Add and remove them in `DoseTimesEditor`, shared by
+the add form and the detail sheet.
+
+Reading a dose back against the right time is by **nearest set time**
+(`MedicationPattern.nearestTime`), wrapping around midnight — so a log at 8:14 PM
+reads against the 8:00 PM dose, not the morning one, and an 11 PM medication
+logged at 12:20 AM is 80 minutes late rather than 22 hours early.
+
+What is still *not* inferred: a medication with **no** set times infers a single
+time from its log, as before. Inferring several slots from behaviour remains
+future work — but it is now the only part of this section that is.
+
 ---
 
 # 16. Notification Safety Rules
@@ -638,7 +716,14 @@ Recommended safeguards:
 3. Never recommend taking an extra or replacement dose.
 4. Never infer dose amount from missed logs.
 5. Do not automatically modify recommended dosage.
-6. If a log exists near the expected time window, suppress the notification.
+6. ~~If a log exists near the expected time window, suppress the notification.~~
+   **Superseded.** This applies only to the *inferred* path, and more broadly than
+   written: `MedicationPattern.hasLogToday` means **any** log on the local
+   calendar day suppresses that day's nudge and rolls it to tomorrow.
+   A medication with **set times** suppresses nothing — each set time is a daily
+   repeating alarm that fires regardless, which is the deliberate trade for it
+   never going silent (see §14). Suppression for those lives in the UI instead:
+   the in-app banner clears once the day's logs match the times reached.
 7. When the app opens, reconcile/cancel stale pending notifications.
 8. Recompute notifications if:
    - medication is edited,
@@ -1183,8 +1268,10 @@ All existing plant reminders remain present and functional.
 
 Potential later features:
 
-- fixed medication schedules
-- multiple scheduled times per day
+- ~~fixed medication schedules~~ — **shipped** (`scheduledMinutesOfDay`)
+- ~~multiple scheduled times per day~~ — **shipped**; several set times per
+  medication, each a daily repeating alarm. Inferring several slots from the log
+  is still future work
 - PRN/as-needed mode
 - snooze notification
 - "log from notification" action

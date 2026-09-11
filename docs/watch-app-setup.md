@@ -29,10 +29,10 @@ includes the watch app.
 | Piece | Location |
 |---|---|
 | Phone-side sync driver | `Services/WatchSyncService.swift` |
-| Wire format shared by phone + watch | `Shared/ReminderSyncPayload.swift` |
+| Wire format shared by phone + watch | `Shared/WatchSyncPayload.swift` |
 | Photo/thumbnail downscale (shared) | `Services/ImageDownscale.swift` |
 | Watch app entry point (`@main`) | `OurFitnessWatch/OurFitnessWatchApp.swift` |
-| Watch-side in-memory store (no SwiftData) | `OurFitnessWatch/WatchReminderStore.swift` |
+| Watch-side in-memory store (no SwiftData) | `OurFitnessWatch/WatchSyncStore.swift` |
 | Watch list / detail UI | `OurFitnessWatch/ReminderListView.swift` + `ReminderDetailView.swift` |
 | Watch target + embedding | `project.yml` (`OurFitnessWatch` target, `dependencies: embed: true` on the app) |
 
@@ -41,7 +41,7 @@ Bundle ids:
 - Watch app: **`com.ourfitness.app.watchkitapp`** (must be a child of the app id)
 
 The watch target compiles `OurFitness/Domain/PlantCatalog.swift`,
-`OurFitness/Domain/ReminderSchedule.swift`, and `Shared/ReminderSyncPayload.swift`
+`OurFitness/Domain/ReminderSchedule.swift`, and `Shared/WatchSyncPayload.swift`
 directly as extra sources rather than pulling in the whole `Domain/` folder —
 the same pattern `OurFitnessTests` uses to compile `OurFitness/Domain` directly
 without linking the app target.
