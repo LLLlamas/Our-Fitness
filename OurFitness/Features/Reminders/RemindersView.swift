@@ -1,6 +1,10 @@
 // Reminders tab root — recurring household reminders. Plants ship as the one
 // fully-fleshed group (species catalog, seeded interval/amount, care sheet);
-// user-created groups are simpler (name + photo + interval).
+// user-created groups are simpler (name + photo + interval). Medication is its
+// own shape entirely: it sits above everything else in a section of its own and
+// is deliberately kept OUT of the interval-driven Due/upcoming lists, because
+// "every N days" says nothing useful about a daily medication and an app-side
+// "overdue" badge would read as a missed-dose claim we can't stand behind.
 //
 // Per-profile @Query on all three reminder entities (hard rule: predicate-
 // scoped, never client-side .filter — see TodayView/NutritionView/etc). "Last
@@ -28,7 +32,9 @@ struct RemindersView: View {
 
     @State private var authStatus: UNAuthorizationStatus = .notDetermined
     @State private var showAddSheet = false
+    @State private var showAddMedicationSheet = false
     @State private var selectedReminder: ReminderDTO?
+    @State private var loggingMedication: ReminderDTO?
 
     init(profile: ProfileDTO) {
         self.profile = profile
@@ -55,12 +61,30 @@ struct RemindersView: View {
         Dictionary(uniqueKeysWithValues: groups.map { ($0.id, $0) })
     }
 
-    /// Plants first, then custom groups alphabetically.
+    /// Built-in groups first (medication, then plants — see
+    /// `ReminderGroupKind.sortRank`), then custom groups alphabetically.
     private var orderedGroups: [ReminderGroupDTO] {
-        let plants = groups.filter { $0.kind == .plants }
-        let custom = groups.filter { $0.kind == .custom }
+        groups.sorted {
+            $0.kind.sortRank != $1.kind.sortRank
+                ? $0.kind.sortRank < $1.kind.sortRank
+                : $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
+        }
+    }
+
+    /// Medication renders in its own always-visible section above Due, so it's
+    /// excluded from the per-group upcoming sections below.
+    private var intervalGroups: [ReminderGroupDTO] {
+        orderedGroups.filter { $0.kind != .medication }
+    }
+
+    private var medicationGroup: ReminderGroupDTO? {
+        groups.first(where: { $0.kind == .medication })
+    }
+
+    private var medications: [ReminderDTO] {
+        guard let gid = medicationGroup?.id else { return [] }
+        return reminders.filter { $0.groupId == gid }
             .sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
-        return plants + custom
     }
 
     /// Latest event timestamp per reminder, built once per render. Events
@@ -80,14 +104,17 @@ struct RemindersView: View {
         var id: UUID { reminder.id }
     }
 
-    /// Every reminder's due-day math from the pre-built last-done dict.
-    /// Evaluated exactly once per body pass (body-local `let`, threaded into
-    /// the section builders) — never inside a ForEach row body.
+    /// Every interval-driven reminder's due-day math from the pre-built
+    /// last-done dict. Evaluated exactly once per body pass (body-local `let`,
+    /// threaded into the section builders) — never inside a ForEach row body.
+    ///
+    /// Medication is filtered out here, so it can't surface in Due or in a
+    /// per-group upcoming list: repeat-interval semantics don't apply to it.
     private var statuses: [ReminderStatus] {
         let lastDone = lastDoneById
         let byId = groupsById
         return reminders.compactMap { r -> ReminderStatus? in
-            guard let group = byId[r.groupId] else { return nil }
+            guard let group = byId[r.groupId], group.kind != .medication else { return nil }
             let due = ReminderSchedule.nextDueDay(
                 lastDone: lastDone[r.id], createdAt: r.createdAt,
                 intervalDays: r.intervalDays, snoozedUntil: r.snoozedUntil
@@ -103,8 +130,9 @@ struct RemindersView: View {
             LazyVStack(alignment: .leading, spacing: 18) {
                 header
                 permissionBanner
+                medicationSection
                 dueSection(statuses)
-                ForEach(orderedGroups) { group in
+                ForEach(intervalGroups) { group in
                     groupSection(group, statuses: statuses)
                 }
                 if reminders.isEmpty {
@@ -120,8 +148,24 @@ struct RemindersView: View {
             AddReminderSheet(profile: profile)
                 .themed(profile.mode)
         }
+        .sheet(isPresented: $showAddMedicationSheet) {
+            if let group = medicationGroup {
+                AddReminderSheet(profile: profile, defaultGroupId: group.id)
+                    .themed(profile.mode)
+            }
+        }
         .sheet(item: $selectedReminder) { reminder in
-            ReminderDetailSheet(profile: profile, reminder: reminder)
+            // The group kind is resolved here, once per presentation, rather
+            // than per row — the detail sheet needs it for its medication
+            // branch and ReminderDTO deliberately has no `isMedication`.
+            ReminderDetailSheet(
+                profile: profile, reminder: reminder,
+                groupKind: groupsById[reminder.groupId]?.kind ?? .custom
+            )
+            .themed(profile.mode)
+        }
+        .sheet(item: $loggingMedication) { reminder in
+            LogMedicationSheet(profile: profile, reminder: reminder)
                 .themed(profile.mode)
         }
         .task { authStatus = await currentAuthStatus() }
@@ -135,7 +179,7 @@ struct RemindersView: View {
                 Text("Reminders")
                     .font(.system(size: 56, weight: .regular))
                     .foregroundStyle(theme.text)
-                Text("Plants and household routines — one tap when they're done.")
+                Text("Medication, plants, and household routines — one tap when they're done.")
                     .font(.callout).foregroundStyle(theme.dim)
             }
             Spacer()
@@ -197,6 +241,107 @@ struct RemindersView: View {
 
     private func currentAuthStatus() async -> UNAuthorizationStatus {
         await UNUserNotificationCenter.current().notificationSettings().authorizationStatus
+    }
+
+    // MARK: - Medication section
+    //
+    // Always visible (when the built-in group exists), always first, empty or
+    // not: the whole point is that a medication is one scroll-free tap away.
+
+    @ViewBuilder
+    private var medicationSection: some View {
+        if let group = medicationGroup {
+            let meds = medications
+            VStack(alignment: .leading, spacing: 10) {
+                HStack(spacing: 6) {
+                    Image(systemName: group.sfSymbol)
+                        .font(.system(size: 11))
+                        .foregroundStyle(theme.accent)
+                    Text(group.name.uppercased())
+                        .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                    Spacer()
+                    if !meds.isEmpty {
+                        Button("+ Add medication") { showAddMedicationSheet = true }
+                            .tactile(.ghost)
+                    }
+                }
+
+                if meds.isEmpty {
+                    medicationEmptyState
+                } else {
+                    let lastDone = lastDoneById
+                    ForEach(meds) { med in
+                        medicationCard(med, group: group, lastLogged: lastDone[med.id])
+                    }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func medicationCard(_ r: ReminderDTO, group: ReminderGroupDTO, lastLogged: Date?) -> some View {
+        Card {
+            VStack(alignment: .leading, spacing: 12) {
+                Button { selectedReminder = r } label: {
+                    HStack(spacing: 12) {
+                        thumbnail(r, group: group)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(r.name)
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundStyle(theme.text)
+                            if let dosage = r.dosage, !dosage.isEmpty {
+                                Text("Recommended: \(dosage)")
+                                    .font(.caption2).foregroundStyle(theme.dim)
+                            }
+                            Text(lastLoggedLabel(lastLogged))
+                                .font(.caption2).foregroundStyle(theme.dim)
+                        }
+                        Spacer(minLength: 0)
+                        Image(systemName: "chevron.right")
+                            .font(.caption).foregroundStyle(theme.dim)
+                    }
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+
+                // Full-width and spelled out: logging a dose is the one action
+                // on this card that has to be unmissable, so no icon-only
+                // control here (unlike the plant/custom due rows).
+                Button { loggingMedication = r } label: {
+                    Text("Log Taken").frame(maxWidth: .infinity)
+                }
+                .tactile(.primary, fullWidth: true)
+                .accessibilityLabel("Log a dose of \(r.name)")
+            }
+        }
+    }
+
+    /// "Last logged: Today • 8:12 AM" — deliberately about the LOG, not the
+    /// dose. A missing entry means nothing was recorded, not that nothing was
+    /// taken, so no "missed" phrasing anywhere on this surface.
+    private func lastLoggedLabel(_ date: Date?) -> String {
+        guard let date else { return "No doses logged yet" }
+        let time = date.formatted(date: .omitted, time: .shortened)
+        let cal = Calendar.current
+        if cal.isDateInToday(date) { return "Last logged: Today • \(time)" }
+        if cal.isDateInYesterday(date) { return "Last logged: Yesterday • \(time)" }
+        return "Last logged: \(date.formatted(date: .abbreviated, time: .omitted)) • \(time)"
+    }
+
+    private var medicationEmptyState: some View {
+        Card {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Keep medication logs organized in one place.")
+                    .font(.callout).foregroundStyle(theme.dim)
+                Button {
+                    showAddMedicationSheet = true
+                } label: {
+                    Text("Add medication").frame(maxWidth: .infinity)
+                }
+                .tactile(.primary, fullWidth: true)
+            }
+        }
     }
 
     // MARK: - Due section

@@ -41,6 +41,9 @@ struct AddReminderSheet: View {
     @State private var notes = ""
     @State private var lastWateredPick: LastWateredPick = .today
 
+    @State private var dosage = ""
+    @State private var patternReminderEnabled = false
+
     @FocusState private var isEditing: Bool
 
     private static let symbolChoices = [
@@ -70,11 +73,15 @@ struct AddReminderSheet: View {
 
     private var groups: [ReminderGroupDTO] { groupModels.map(\.snapshot) }
 
+    /// Built-in groups first (medication, then plants — see
+    /// `ReminderGroupKind.sortRank`), then custom groups alphabetically. Same
+    /// order as the Reminders tab, from the same rank.
     private var orderedGroups: [ReminderGroupDTO] {
-        let plants = groups.filter { $0.kind == .plants }
-        let custom = groups.filter { $0.kind == .custom }
-            .sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
-        return plants + custom
+        groups.sorted {
+            $0.kind.sortRank != $1.kind.sortRank
+                ? $0.kind.sortRank < $1.kind.sortRank
+                : $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
+        }
     }
 
     /// Nil until the user taps a chip, unless the caller scoped the sheet to a
@@ -91,10 +98,12 @@ struct AddReminderSheet: View {
     }
 
     private var trimmedName: String { name.trimmingCharacters(in: .whitespaces) }
+    private var trimmedDosage: String { dosage.trimmingCharacters(in: .whitespaces) }
 
     private var canSave: Bool {
         guard let group = selectedGroup, !trimmedName.isEmpty else { return false }
         if group.kind == .plants { return selectedSpecies != nil || isCustomPlant }
+        if group.kind == .medication { return !trimmedDosage.isEmpty }
         return true
     }
 
@@ -121,13 +130,16 @@ struct AddReminderSheet: View {
                 groupPickerSection
 
                 if let group = selectedGroup {
-                    if group.kind == .plants {
+                    switch group.kind {
+                    case .plants:
                         if selectedSpecies == nil && !isCustomPlant {
                             speciesSearchSection
                         } else {
                             plantFormSection
                         }
-                    } else {
+                    case .medication:
+                        medicationFormSection
+                    case .custom:
                         customFormSection
                     }
                 } else {
@@ -276,6 +288,10 @@ struct AddReminderSheet: View {
         // value into the plant form.
         intervalDays = 7
         amountFlOz = 14
+        // Medication-only state, cleared for the same reason: a group switch
+        // must never carry a dosage — or an opted-in nudge — into another kind.
+        dosage = ""
+        patternReminderEnabled = false
     }
 
     // MARK: - Plant species search
@@ -450,6 +466,52 @@ struct AddReminderSheet: View {
         .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
     }
 
+    // MARK: - Medication form
+    //
+    // No REPEATS block: a medication isn't a "every N days" chore, and the
+    // only scheduled nudge it can get is the opt-in pattern one below, which
+    // reads the routine off the log rather than off a configured cadence.
+
+    private var medicationFormSection: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            fieldBlock(title: "NAME") { styledField("e.g. Vitamin D", text: $name) }
+
+            // Free text, never a number + unit pair: labels are written in
+            // tablets, mg, mL, puffs — we only ever show this back.
+            fieldBlock(title: "RECOMMENDED DOSAGE") {
+                styledField("e.g. 1 tablet, 10 mg, 5 mL", text: $dosage)
+            }
+
+            photoStep
+
+            fieldBlock(title: "NOTES · OPTIONAL") { styledField("Any details", text: $notes) }
+
+            patternReminderToggle
+
+            saveButton
+        }
+    }
+
+    /// Opt-in, off by default — a medication nudge is a safety-adjacent thing
+    /// to switch on for someone, so it's always the user's tap.
+    private var patternReminderToggle: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Toggle(isOn: $patternReminderEnabled) {
+                Text("Remind me if I haven't logged this around my usual time")
+                    .font(.system(size: 14))
+                    .foregroundStyle(theme.text)
+            }
+            .onChange(of: patternReminderEnabled) { _, _ in Haptics.selection() }
+
+            Text("Off by default. When it's on, the nudge goes by when you usually log this — and only if nothing's been logged that day.")
+                .font(.caption2).foregroundStyle(theme.dim)
+        }
+        .padding(14)
+        .background(theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+    }
+
     // MARK: - Custom (non-plant) form
 
     private var customFormSection: some View {
@@ -534,7 +596,18 @@ struct AddReminderSheet: View {
         let photoBytes = photo.flatMap { ImageDownscale.jpegData($0, maxDimension: 1024) }
 
         let dto: ReminderDTO
-        if group.kind == .plants {
+        if group.kind == .medication {
+            let trimmedNotes = notes.trimmingCharacters(in: .whitespaces)
+            dto = ReminderDTO(
+                id: reminderId, userId: profile.id, groupId: groupId, name: trimmedName,
+                // Medication ignores the repeat interval entirely, but the
+                // field isn't optional — store 1 rather than whatever a
+                // previously-selected group left in the shared state.
+                photoData: photoBytes, intervalDays: 1,
+                notes: trimmedNotes.isEmpty ? nil : trimmedNotes,
+                dosage: trimmedDosage, patternReminderEnabled: patternReminderEnabled
+            )
+        } else if group.kind == .plants {
             let speciesIdValue = isCustomPlant ? PlantCatalog.customId : selectedSpecies?.id
             let trimmedRoom = room.trimmingCharacters(in: .whitespaces)
             dto = ReminderDTO(
@@ -568,9 +641,17 @@ struct AddReminderSheet: View {
         Haptics.success()
         toasts.show(Toast(
             title: trimmedName, detail: "Reminder added",
-            accent: .win, symbol: group.kind == .plants ? "drop.fill" : "checkmark.seal.fill"
+            accent: .win, symbol: toastSymbol(for: group.kind)
         ))
         dismiss()
+    }
+
+    private func toastSymbol(for kind: ReminderGroupKind) -> String {
+        switch kind {
+        case .medication: return "pills.fill"
+        case .plants:     return "drop.fill"
+        case .custom:     return "checkmark.seal.fill"
+        }
     }
 }
 

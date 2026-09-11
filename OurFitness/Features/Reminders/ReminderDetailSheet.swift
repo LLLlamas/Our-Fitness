@@ -2,6 +2,12 @@
 // speciesId resolves to a catalog entry), watering/interval editing, history,
 // snooze, and delete.
 //
+// Medication swaps the interval half of this sheet out entirely: recommended
+// dosage instead of REPEATS, an observed timing pattern instead of a due date,
+// per-dose history rows, and no snooze (there's no scheduled due day to push).
+// Its kind comes in from the caller — ReminderDTO has `isPlant` but
+// deliberately no `isMedication`, so the group is the only source of truth.
+//
 // Field edits commit immediately (Stepper/Picker/pot pills on change, text
 // fields on submit or on losing focus) rather than behind a separate "Save"
 // button — each commit calls Repos.updateReminder + reschedule + pushSnapshot
@@ -13,6 +19,7 @@ import UIKit
 
 struct ReminderDetailSheet: View {
     let profile: ProfileDTO
+    let groupKind: ReminderGroupKind
 
     @Environment(\.modelContext) private var ctx
     @Environment(\.theme) private var theme
@@ -30,14 +37,18 @@ struct ReminderDetailSheet: View {
     @State private var notes: String
     @State private var light: PlantLightLevel
     @State private var potDiameter: Int
+    @State private var dosage: String
+    @State private var patternReminderEnabled: Bool
 
     @State private var showImagePicker = false
     @State private var showDeleteConfirm = false
     @State private var showCareSheet = false
+    @State private var showLogSheet = false
     @FocusState private var isEditing: Bool
 
-    init(profile: ProfileDTO, reminder: ReminderDTO) {
+    init(profile: ProfileDTO, reminder: ReminderDTO, groupKind: ReminderGroupKind) {
         self.profile = profile
+        self.groupKind = groupKind
         _reminder = State(initialValue: reminder)
         _name = State(initialValue: reminder.name)
         _room = State(initialValue: reminder.room ?? "")
@@ -46,6 +57,8 @@ struct ReminderDetailSheet: View {
         _notes = State(initialValue: reminder.notes ?? "")
         _light = State(initialValue: reminder.light ?? .bright)
         _potDiameter = State(initialValue: reminder.potDiameterInches ?? 6)
+        _dosage = State(initialValue: reminder.dosage ?? "")
+        _patternReminderEnabled = State(initialValue: reminder.patternReminderEnabled ?? false)
 
         let uid = profile.id
         let rid = reminder.id
@@ -57,6 +70,8 @@ struct ReminderDetailSheet: View {
 
     private var events: [ReminderEventDTO] { eventModels.map(\.snapshot) }
     private var lastDone: Date? { events.first?.timestamp }
+
+    private var isMedication: Bool { groupKind == .medication }
 
     /// Only resolves for a catalog-matched species — a "custom plant" (whose
     /// speciesId is PlantCatalog.customId) legitimately has no research entry.
@@ -90,7 +105,7 @@ struct ReminderDetailSheet: View {
                     Text(reminder.name)
                         .font(.system(size: 32, weight: .regular))
                         .foregroundStyle(theme.text)
-                    Text(reminder.isPlant ? "PLANT REMINDER" : "REMINDER")
+                    Text(kicker)
                         .font(.system(size: 10, weight: .medium)).tracking(2)
                         .foregroundStyle(theme.dim)
                 }
@@ -102,11 +117,17 @@ struct ReminderDetailSheet: View {
                     careCardButton(species)
                 }
 
+                if isMedication { logTakenButton }
+
                 editableSection
 
-                if isDue { snoozeButton }
+                // Snooze pushes a due DAY — medication has none, so it's a
+                // plant/custom-only control.
+                if isDue && !isMedication { snoozeButton }
 
                 historySection
+
+                if isMedication { medicationFooterNote }
 
                 deleteButton
             }
@@ -133,6 +154,10 @@ struct ReminderDetailSheet: View {
             if let species {
                 PlantCareInfoSheet(species: species).themed(profile.mode)
             }
+        }
+        .sheet(isPresented: $showLogSheet) {
+            LogMedicationSheet(profile: profile, reminder: reminder)
+                .themed(profile.mode)
         }
         .confirmationDialog(
             "Delete \(reminder.name)?", isPresented: $showDeleteConfirm, titleVisibility: .visible
@@ -190,25 +215,90 @@ struct ReminderDetailSheet: View {
 
     // MARK: - Stats
 
+    private var kicker: String {
+        if isMedication { return "MEDICATION" }
+        return reminder.isPlant ? "PLANT REMINDER" : "REMINDER"
+    }
+
+    @ViewBuilder
     private var statsCard: some View {
+        if isMedication {
+            medicationStatsCard
+        } else {
+            Card {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack {
+                        Text("Last done").foregroundStyle(theme.dim)
+                        Spacer()
+                        Text(lastDone.map { Dates.formatRelative($0) } ?? "Never")
+                            .foregroundStyle(theme.text).fontWeight(.medium)
+                    }
+                    HStack {
+                        Text(isDue ? "Status" : "Next due").foregroundStyle(theme.dim)
+                        Spacer()
+                        Text(dueLabel)
+                            .foregroundStyle(isDue ? theme.warn : theme.text)
+                            .fontWeight(.semibold)
+                    }
+                }
+                .font(.callout)
+            }
+        }
+    }
+
+    private var medicationStatsCard: some View {
         Card {
             VStack(alignment: .leading, spacing: 10) {
                 HStack {
-                    Text("Last done").foregroundStyle(theme.dim)
+                    Text("Last logged").foregroundStyle(theme.dim)
                     Spacer()
                     Text(lastDone.map { Dates.formatRelative($0) } ?? "Never")
                         .foregroundStyle(theme.text).fontWeight(.medium)
                 }
-                HStack {
-                    Text(isDue ? "Status" : "Next due").foregroundStyle(theme.dim)
-                    Spacer()
-                    Text(dueLabel)
-                        .foregroundStyle(isDue ? theme.warn : theme.text)
-                        .fontWeight(.semibold)
-                }
+                Text(patternLine)
+                    .font(.caption).foregroundStyle(theme.dim)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             .font(.callout)
         }
+    }
+
+    /// Describes what the LOG shows, never a prescription: "usually logged
+    /// around", not "scheduled for". Stays quiet until MedicationPattern says
+    /// there's enough history to claim a routine at all.
+    private var patternLine: String {
+        let now = Date()
+        let calendar = Calendar.current
+        let stamps = events.map(\.timestamp)
+        guard MedicationPattern.hasDisplayablePattern(stamps, now: now, calendar: calendar),
+              let minuteOfDay = MedicationPattern.typicalMinuteOfDay(stamps, now: now, calendar: calendar),
+              let typical = calendar.date(byAdding: .minute, value: minuteOfDay,
+                                          to: calendar.startOfDay(for: now))
+        else { return "Keep logging this medication to see your recent timing pattern." }
+        return "Usually logged around \(typical.formatted(date: .omitted, time: .shortened))"
+    }
+
+    // MARK: - Log a dose
+
+    private var logTakenButton: some View {
+        Button {
+            showLogSheet = true
+        } label: {
+            HStack {
+                Image(systemName: "pills.fill")
+                Text("Log taken")
+            }
+            .frame(maxWidth: .infinity)
+        }
+        .tactile(.primary, fullWidth: true)
+        .accessibilityLabel("Log a dose of \(reminder.name)")
+    }
+
+    private var medicationFooterNote: some View {
+        Text("OurFitness helps you track what you log. It does not replace medication instructions from your doctor, pharmacist, or medication label.")
+            .font(.caption2)
+            .foregroundStyle(theme.dim)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     // MARK: - Plant care
@@ -236,7 +326,15 @@ struct ReminderDetailSheet: View {
         VStack(alignment: .leading, spacing: 16) {
             fieldBlock("NAME") { styledField("Name", text: $name) }
 
-            if reminder.isPlant {
+            if isMedication {
+                fieldBlock("RECOMMENDED DOSAGE") {
+                    styledField("e.g. 1 tablet, 10 mg, 5 mL", text: $dosage)
+                }
+
+                fieldBlock("NOTES") { styledField("Any details", text: $notes) }
+
+                patternReminderToggle
+            } else if reminder.isPlant {
                 fieldBlock("ROOM") { styledField("Room", text: $room) }
 
                 fieldBlock("LIGHT") {
@@ -273,6 +371,26 @@ struct ReminderDetailSheet: View {
                 fieldBlock("NOTES") { styledField("Any details", text: $notes) }
             }
         }
+    }
+
+    /// Same opt-in toggle as the add sheet, committing on change like every
+    /// other non-text control here.
+    private var patternReminderToggle: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Toggle(isOn: $patternReminderEnabled) {
+                Text("Remind me if I haven't logged this around my usual time")
+                    .font(.system(size: 14))
+                    .foregroundStyle(theme.text)
+            }
+            .onChange(of: patternReminderEnabled) { _, _ in commitEdits() }
+
+            Text("The nudge goes by when you usually log this — and only if nothing's been logged that day.")
+                .font(.caption2).foregroundStyle(theme.dim)
+        }
+        .padding(14)
+        .background(theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
     }
 
     private var wateringBlock: some View {
@@ -321,7 +439,15 @@ struct ReminderDetailSheet: View {
         let trimmedName = name.trimmingCharacters(in: .whitespaces)
         updated.name = trimmedName.isEmpty ? reminder.name : trimmedName
 
-        if reminder.isPlant {
+        if isMedication {
+            // No intervalDays write: medication was stored with 1 and nothing
+            // in its UI can change it.
+            let trimmedDosage = dosage.trimmingCharacters(in: .whitespaces)
+            updated.dosage = trimmedDosage.isEmpty ? nil : trimmedDosage
+            let trimmedNotes = notes.trimmingCharacters(in: .whitespaces)
+            updated.notes = trimmedNotes.isEmpty ? nil : trimmedNotes
+            updated.patternReminderEnabled = patternReminderEnabled
+        } else if reminder.isPlant {
             let trimmedRoom = room.trimmingCharacters(in: .whitespaces)
             updated.room = trimmedRoom.isEmpty ? nil : trimmedRoom
             updated.intervalDays = intervalDays
@@ -378,6 +504,16 @@ struct ReminderDetailSheet: View {
             if events.isEmpty {
                 Text("No history yet.")
                     .font(.caption).foregroundStyle(theme.dim)
+            } else if isMedication {
+                ForEach(medicationHistoryDays) { day in
+                    Text(day.title)
+                        .font(.caption).fontWeight(.semibold)
+                        .foregroundStyle(theme.dim)
+                        .padding(.top, 6)
+                    ForEach(day.events) { e in
+                        medicationHistoryRow(e)
+                    }
+                }
             } else {
                 ForEach(events.prefix(30)) { e in
                     HStack {
@@ -401,6 +537,63 @@ struct ReminderDetailSheet: View {
                 }
             }
         }
+    }
+
+    /// One local day's logs. Built once per body pass from the (newest-first)
+    /// event query, so day order falls out of the fetch rather than a re-sort.
+    private struct HistoryDay: Identifiable {
+        let id: Date            // start of day
+        let title: String
+        let events: [ReminderEventDTO]
+    }
+
+    private var medicationHistoryDays: [HistoryDay] {
+        let calendar = Calendar.current
+        var order: [Date] = []
+        var byDay: [Date: [ReminderEventDTO]] = [:]
+        for e in events.prefix(60) {
+            let day = calendar.startOfDay(for: e.timestamp)
+            if byDay[day] == nil { order.append(day) }
+            byDay[day, default: []].append(e)
+        }
+        return order.map {
+            HistoryDay(id: $0, title: dayTitle($0, calendar: calendar), events: byDay[$0] ?? [])
+        }
+    }
+
+    /// "Today" / "Yesterday" / weekday inside the last week / abbreviated date
+    /// beyond it — the question a history scan answers is "which day", and a
+    /// weekday name carries that faster than a date for the recent past.
+    private func dayTitle(_ day: Date, calendar: Calendar) -> String {
+        if calendar.isDateInToday(day) { return "Today" }
+        if calendar.isDateInYesterday(day) { return "Yesterday" }
+        let daysAgo = calendar.dateComponents(
+            [.day], from: day, to: calendar.startOfDay(for: Date())
+        ).day ?? 0
+        if daysAgo < 7 { return day.formatted(.dateTime.weekday(.wide)) }
+        return day.formatted(date: .abbreviated, time: .omitted)
+    }
+
+    @ViewBuilder
+    private func medicationHistoryRow(_ e: ReminderEventDTO) -> some View {
+        HStack {
+            Text(medicationRowLabel(e))
+                .font(.system(size: 14, weight: .medium))
+                .foregroundStyle(theme.text)
+            Spacer()
+            Button { deleteEvent(e) } label: {
+                Label("Undo", systemImage: "arrow.uturn.backward")
+            }
+            .tactile(.ghost)
+            .accessibilityLabel("Undo log from \(e.timestamp.formatted(date: .abbreviated, time: .shortened))")
+        }
+        .padding(.vertical, 4)
+    }
+
+    private func medicationRowLabel(_ e: ReminderEventDTO) -> String {
+        let time = e.timestamp.formatted(date: .omitted, time: .shortened)
+        guard let taken = e.dosageTaken, !taken.isEmpty else { return time }
+        return "\(time) — \(taken)"
     }
 
     private func deleteEvent(_ e: ReminderEventDTO) {
