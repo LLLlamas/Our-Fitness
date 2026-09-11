@@ -359,7 +359,12 @@ struct ReminderDetailSheet: View {
                 }
 
                 fieldBlock("TIMES") {
-                    DoseTimesEditor(minutes: $doseTimes, onChange: { commitEdits() })
+                    DoseTimesEditor(minutes: $doseTimes, onChange: {
+                        commitEdits()
+                        // Adding a time switches the nudge on (see commitEdits),
+                        // so this is the same explicit moment as the toggle.
+                        if !doseTimes.isEmpty { requestAuthorizationThenSync() }
+                    })
                 }
 
                 fieldBlock("NOTES") { styledField("Any details", text: $notes) }
@@ -415,7 +420,10 @@ struct ReminderDetailSheet: View {
                     .font(.system(size: 14))
                     .foregroundStyle(theme.text)
             }
-            .onChange(of: patternReminderEnabled) { _, _ in commitEdits() }
+            .onChange(of: patternReminderEnabled) { _, enabled in
+                commitEdits()
+                if enabled { requestAuthorizationThenSync() }
+            }
 
             Text(doseTimes.isEmpty
                  ? "The nudge goes by when you usually log this — and only if nothing's been logged that day."
@@ -467,6 +475,21 @@ struct ReminderDetailSheet: View {
         intervalDays = PlantCatalog.seededIntervalDays(for: sp, light: light)
         amountFlOz = PlantCatalog.suggestedAmountFlOz(waterClass: sp.waterClass, potDiameterInches: potDiameter)
         commitEdits()
+    }
+
+    /// Switching a reminder on is an explicit user action, and the only moment
+    /// on this sheet where asking for notification permission is allowed (never
+    /// `.onAppear`/`.task` — see CLAUDE.md).
+    ///
+    /// Without it, someone who declined the prompt when they saved their first
+    /// reminder could turn this on, watch the switch stay on, and receive
+    /// nothing at all — `reschedule` deliberately doesn't check authorization,
+    /// so an unauthorized `add()` is a silent no-op.
+    private func requestAuthorizationThenSync() {
+        Task { @MainActor in
+            await ReminderNotificationService.requestAuthorizationIfNeeded()
+            ReminderNotificationService.syncAfterChange(ctx, reminderId: reminder.id, userId: profile.id)
+        }
     }
 
     private func commitEdits() {

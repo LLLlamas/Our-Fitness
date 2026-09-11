@@ -92,6 +92,10 @@ struct RootView: View {
     private func appShell(for profile: ProfileDTO) -> some View {
         VStack(spacing: 0) {
             header(for: profile)
+            // Under the header rather than over the content: an unlogged dose
+            // should be visible on every tab, and pushing the tab down beats
+            // covering whatever the person was reading.
+            MedicationDueBanner(profile: profile)
             TabView(selection: $tab) {
                 TodayView(profile: profile, health: health)
                     .tag(Tab.today)
