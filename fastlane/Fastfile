@@ -303,12 +303,27 @@ platform :ios do
       },
     )
 
+    # nil, NOT "" — and deliberately no default string.
+    #
+    # Supplying ANY changelog silently overrides skip_waiting_for_build_processing:
+    # fastlane then polls App Store Connect until the build appears so it can set
+    # "What to Test", which costs ~120s. That is worth paying when there are notes
+    # to set and pure waste when there are not.
+    #
+    # Both halves of this used to get it wrong. testflight.yml defaults the input
+    # to "", and "" is truthy in Ruby, so `ENV[...] || default` never fell back —
+    # every ship passed changelog: "" and paid the full wait to set an empty
+    # string. Restoring the `||` default would not fix it either: a default string
+    # is still a changelog, so it would still trigger the wait on every ship.
+    changelog = ENV["CHANGELOG"].to_s.strip
+    changelog = nil if changelog.empty?
+
     upload_to_testflight(
       api_key: api_key,
       skip_waiting_for_build_processing: true,
       skip_submission: true,                 # we'll choose when to push to reviewers
       ipa: "#{OUTPUT_DIR}/ipa/OurFitness.ipa",
-      changelog: ENV["CHANGELOG"] || "Internal build #{run_number || Time.now.to_i}",
+      changelog: changelog,
     )
   end
 
