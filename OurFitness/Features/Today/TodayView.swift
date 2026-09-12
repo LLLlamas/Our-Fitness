@@ -25,8 +25,6 @@ struct TodayView: View {
     @Query private var bodyModels: [BodyMetricModel]
     @Query private var markerModels: [HealthMarkerModel]
 
-    @State private var entryToDetail: FoodLogEntryDTO?
-    @State private var showMealLog = false
 
     @AppStorage("hasBackfilled.steps") private var hasBackfilledRaw: String = ""
 
@@ -67,8 +65,13 @@ struct TodayView: View {
         self.profile = profile
         self._health = ObservedObject(wrappedValue: health)
         let uid = profile.id
+        let todayKey = Dates.dayKey()
+        // Bound to today. Meal LOGGING lives in the Meals tab now; all this
+        // tab still needs is the day's macro totals and the nudge counts, so
+        // loading the user's whole logging history to render one day was pure
+        // cost — and cost that grew every day they used the app.
         _logModels = Query(
-            filter: #Predicate<FoodLogEntryModel> { $0.userId == uid },
+            filter: #Predicate<FoodLogEntryModel> { $0.userId == uid && $0.date == todayKey },
             sort: \.timestamp,
             order: .forward
         )
@@ -113,9 +116,8 @@ struct TodayView: View {
         Water.total(waterModels.map(\.snapshot), on: today)
     }
 
-    private var todaysLogs: [FoodLogEntryDTO] {
-        logModels.map(\.snapshot).filter { $0.date == today }
-    }
+    /// Already today-only by predicate — no client-side date filter needed.
+    private var todaysLogs: [FoodLogEntryDTO] { logModels.map(\.snapshot) }
     private var totals: DailyTotals { DailyTotals.totals(from: todaysLogs) }
 
     // Step data — used by both Build (linear bar) and Circuit (ring + strip)
@@ -193,25 +195,6 @@ struct TodayView: View {
         }
         .onReceive(nudgeTimer) { _ in
             checkTimeNudges()
-        }
-        .sheet(item: $entryToDetail) { entry in
-            MealIngredientDetailSheet(
-                mode: .editing(entry: entry),
-                profile: profile,
-                onDone: { entryToDetail = nil }
-            )
-            .themed(profile.mode)
-        }
-        .sheet(isPresented: $showMealLog) {
-            NLMealLogSheet(profile: profile, targetDate: today) { dto in
-                Repos.addFoodLog(ctx, dto)
-                toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
-                let foodName = dto.foodId ?? dto.customName ?? ""
-                if !foodName.isEmpty {
-                    FoodAlternativeService.shared.prefetch(for: foodName, mode: profile.mode)
-                }
-            }
-            .themed(profile.mode)
         }
     }
 
@@ -348,8 +331,6 @@ struct TodayView: View {
             streakWeeks: stepStreakWeeks
         )
         focusFooter(.steps)
-
-        recentLogs
     }
 
     @ViewBuilder
@@ -376,54 +357,6 @@ struct TodayView: View {
             mode: profile.mode,
             onConnectHealth: connectHealth
         )
-        recentLogs
-    }
-
-    @ViewBuilder
-    private var recentLogs: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Today's log")
-                .font(.system(size: 22, weight: .regular))
-                .foregroundStyle(theme.text)
-            if todaysLogs.isEmpty {
-                PressableCard(action: { showMealLog = true }) {
-                    HStack(spacing: 12) {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.system(size: 22))
-                            .foregroundStyle(theme.accent)
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Log a meal")
-                                .font(.system(size: 15, weight: .semibold))
-                                .foregroundStyle(theme.text)
-                            Text("Quick text entry for today")
-                                .font(.caption)
-                                .foregroundStyle(theme.dim)
-                        }
-                        Spacer(minLength: 0)
-                    }
-                }
-            } else {
-                Button {
-                    showMealLog = true
-                } label: {
-                    Label("Add meal", systemImage: "plus.circle.fill")
-                }
-                .tactile(.pill, fill: theme.accent)
-
-                ForEach(todaysLogs) { e in
-                    PressableCard(action: { entryToDetail = e }) {
-                        HStack {
-                            Text(e.customName ?? "Meal")
-                                .foregroundStyle(theme.text)
-                            Spacer()
-                            Text("\(e.perServing.calories) cal")
-                                .font(.system(.footnote, design: .monospaced))
-                                .foregroundStyle(theme.accent)
-                        }
-                    }
-                }
-            }
-        }
     }
 
     // MARK: - Connect Apple Health
