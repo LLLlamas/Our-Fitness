@@ -307,7 +307,7 @@ struct SettingsView: View {
         Task {
             // Always re-request — HealthKit only prompts for types not yet authorized,
             // so this is a no-op when fully granted and picks up any new types added
-            // in app updates (e.g. flightsClimbed, distanceWalkingRunning, basalEnergyBurned).
+            // in app updates (e.g. flightsClimbed, distanceWalkingRunning).
             _ = await health.connectAndPersist(profileId: profile.id, ctx: ctx, toasts: toasts)
             // RootView's .task(id: StepObserverKey) re-fires on grant transition and arms the observer.
         }

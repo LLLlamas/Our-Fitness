@@ -1,9 +1,8 @@
-// Body composition calculations: BMI, fat mass, lean mass, and US Navy
+// Body composition calculations: BMI, fat mass and lean mass
 // circumference body fat estimation.
 //
 // Sources:
 //   CDC / NIH standard BMI formula.
-//   Hodgdon & Beckett (1984): US Navy circumference BF method.
 //   Gallagher et al. (2000): body fat category thresholds by sex/age.
 //   ACSM's Guidelines for Exercise Testing and Prescription, 11th ed. (2022).
 
@@ -71,37 +70,6 @@ public enum BodyComposition {
         }
     }
 
-    // MARK: - US Navy circumference BF estimate
-
-    /// Estimates body fat % from tape-measure circumferences.
-    ///
-    /// Men: measure waist at the navel; neck at its narrowest.
-    /// Women: waist at narrowest; hips at widest; neck at narrowest.
-    ///
-    /// Accurate to ±3–4 percentage points when measurements are taken correctly.
-    /// Returns nil when inputs are missing or would produce invalid log arguments.
-    public static func navyBodyFatPct(
-        sex: Sex,
-        heightIn: Double,
-        waistIn: Double,
-        neckIn: Double,
-        hipIn: Double? = nil
-    ) -> Double? {
-        guard heightIn > 0, waistIn > 0, neckIn > 0 else { return nil }
-        let pct: Double
-        switch sex {
-        case .male:
-            let diff = waistIn - neckIn
-            guard diff > 0 else { return nil }
-            pct = 86.010 * log10(diff) - 70.041 * log10(heightIn) + 36.76
-        case .female:
-            guard let hip = hipIn, hip > 0 else { return nil }
-            let sum = waistIn + hip - neckIn
-            guard sum > 0 else { return nil }
-            pct = 163.205 * log10(sum) - 97.684 * log10(heightIn) - 78.387
-        }
-        return max(3.0, min(60.0, pct))
-    }
 
     // MARK: - Guidance copy
 
@@ -109,7 +77,7 @@ public enum BodyComposition {
     public static let measurementGuide: String = """
     How to measure your body fat %:
 
-    1. Tape measure (US Navy method) — measure waist at the navel and neck at its narrowest point. Women also measure hips at the widest. This app can estimate it once you log those measurements. Accurate to ±3–4%.
+    1. Tape measure (US Navy method) — measure waist at the navel and neck at its narrowest point. Women also measure hips at the widest. Accurate to ±3–4% when a calculator is used.
 
     2. DEXA scan — gold standard. A 10-minute scan at a sports medicine clinic (typically $50–150). Reports total fat, lean, and bone mass split by region.
 

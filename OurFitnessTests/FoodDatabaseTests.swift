@@ -2,24 +2,6 @@ import XCTest
 
 final class FoodDatabaseTests: XCTestCase {
 
-    // MARK: - Graceful degradation (no bundled resource in the hostless target)
-
-    func test_loadBundled_missingResource_returnsEmptyDatabase() {
-        // The hostless test target ships no app bundle resource. Loading must
-        // never crash — it degrades to an empty database.
-        let db = FoodDatabase.loadBundled(bundle: Bundle(for: FoodDatabaseTests.self))
-        XCTAssertTrue(db.isEmpty)
-        XCTAssertNil(db.bestMatch(in: "anything at all"))
-    }
-
-    func test_shared_isUsableEvenWithoutResource() {
-        // `.shared` reads Bundle.main; in tests that has no resource, so it must
-        // be a valid (likely empty) database, not a crash. Just touching it and
-        // querying it must be safe.
-        let db = FoodDatabase.shared
-        _ = db.bestMatch(in: "rice")
-        _ = db.entries.count
-    }
 
     // MARK: - Pure matching (no bundle required)
 

@@ -125,7 +125,11 @@ public struct MacroTargets: Codable, Equatable, Sendable {
     public var carbsG: Int
     public var fatG: Int
     public var stepsDaily: Int
-    // Legacy caps (formerly Circuit-only). Retained on the data model; UI no longer renders them.
+    // Circuit heart-health caps + fibre floor. LIVE: Components/HeartHealthCard.swift
+    // renders these (mounted in NutritionView), Domain/MacroBudget.swift computes
+    // headroom from them, and Domain/TargetRationale.swift writes the four …Why
+    // strings. Build leaves all four nil. They were briefly documented here as
+    // legacy; deleting them on that basis would take a shipped feature with them.
     public var sodiumMgMax: Int?
     public var addedSugarGMax: Int?
     public var saturatedFatGMax: Int?

@@ -67,10 +67,6 @@ public final class ToastCenter: ObservableObject {
                    accent: .ok, symbol: "checkmark"))
     }
 
-    public func goalHit(_ label: String) {
-        show(Toast(title: "\(label) hit", detail: "Nice work — keep stacking.",
-                   accent: .win, symbol: "flame.fill"), for: 2.4)
-    }
 
     public func pilatesLogged(minutes: Int) {
         show(Toast(title: "Pilates logged",
@@ -95,17 +91,7 @@ public final class ToastCenter: ObservableObject {
                    symbol: msg.sfSymbol), for: 2.4)
     }
 
-    // Pilates weekly goal
-    public func pilatesGoalHit(_ msg: EncouragementMessage) {
-        show(Toast(title: msg.headline, detail: msg.detail,
-                   accent: .win, symbol: msg.sfSymbol), for: 2.4)
-    }
 
-    // Streak milestone
-    public func streakMilestone(_ msg: EncouragementMessage) {
-        show(Toast(title: msg.headline, detail: msg.detail,
-                   accent: .win, symbol: msg.sfSymbol), for: 3.0)
-    }
 
     // Meal-logging streak milestone — self-gating: only shows at a milestone day.
     public func mealStreak(days: Int, mode: Mode) {

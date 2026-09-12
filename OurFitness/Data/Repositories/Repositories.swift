@@ -147,18 +147,6 @@ public enum Repos {
         return updateVitals(ctx, profileId: profileId, weightLb: latest)
     }
 
-    public static func saveProfile(_ ctx: ModelContext, _ p: ProfileDTO) {
-        let target = p.id
-        let desc = FetchDescriptor<ProfileModel>(
-            predicate: #Predicate { $0.id == target }
-        )
-        if let existing = try? ctx.fetch(desc).first {
-            existing.apply(p)
-        } else {
-            ctx.insert(ProfileModel(snapshot: p))
-        }
-        try? ctx.save()
-    }
 
     /// Switch a profile's mode at will. Recomputes macro/step targets from the
     /// profile's existing vitals (logs are mode-agnostic and untouched) and, when
@@ -186,12 +174,6 @@ public enum Repos {
 
     // MARK: - Exercises
 
-    public static func listExercises(_ ctx: ModelContext) -> [ExerciseDTO] {
-        let desc = FetchDescriptor<ExerciseModel>(
-            sortBy: [SortDescriptor(\.name)]
-        )
-        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
-    }
 
     public static func exercises(_ ctx: ModelContext, forProfile profileId: UUID) -> [ExerciseDTO] {
         let desc = FetchDescriptor<ExerciseModel>(
@@ -321,20 +303,7 @@ public enum Repos {
 
     // MARK: - Workouts + sets
 
-    public static func startWorkout(_ ctx: ModelContext, userId: UUID, programId: String?) -> UUID {
-        let id = UUID()
-        ctx.insert(WorkoutModel(id: id, userId: userId, programId: programId))
-        try? ctx.save()
-        return id
-    }
 
-    public static func endWorkout(_ ctx: ModelContext, id: UUID) {
-        let desc = FetchDescriptor<WorkoutModel>(predicate: #Predicate { $0.id == id })
-        if let w = try? ctx.fetch(desc).first {
-            w.endedAt = Date()
-            try? ctx.save()
-        }
-    }
 
     public static func addSet(_ ctx: ModelContext, _ s: WorkoutSetDTO) {
         ctx.insert(WorkoutSetModel(snapshot: s))
@@ -453,23 +422,7 @@ public enum Repos {
         try? ctx.save()
     }
 
-    public static func recentPilatesSessions(
-        _ ctx: ModelContext, profileId: UUID, limit: Int = 5
-    ) -> [PilatesSessionDTO] {
-        var desc = FetchDescriptor<PilatesSessionModel>(
-            predicate: #Predicate { $0.profileId == profileId },
-            sortBy: [SortDescriptor(\.date, order: .reverse)]
-        )
-        desc.fetchLimit = limit
-        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
-    }
 
-    public static func pilatesSessionsThisWeek(
-        _ ctx: ModelContext, profileId: UUID, now: Date = Date()
-    ) -> [PilatesSessionDTO] {
-        let all = listPilatesSessions(ctx, profileId: profileId)
-        return Movement.sessionsThisWeek(all, now: now)
-    }
 
     public static func listPilatesSessions(
         _ ctx: ModelContext, profileId: UUID
@@ -504,16 +457,6 @@ public enum Repos {
         }
     }
 
-    public static func listCardio(
-        _ ctx: ModelContext, profileId: UUID, limit: Int = 50
-    ) -> [CardioSessionDTO] {
-        var desc = FetchDescriptor<CardioSessionModel>(
-            predicate: #Predicate { $0.profileId == profileId },
-            sortBy: [SortDescriptor(\.date, order: .reverse)]
-        )
-        desc.fetchLimit = limit
-        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
-    }
 
     // MARK: - Live activity sessions
 
@@ -522,16 +465,6 @@ public enum Repos {
         try? ctx.save()
     }
 
-    public static func listActivitySessions(
-        _ ctx: ModelContext, userId: UUID, limit: Int = 50
-    ) -> [ActivitySessionDTO] {
-        var desc = FetchDescriptor<ActivitySessionModel>(
-            predicate: #Predicate { $0.profileId == userId },
-            sortBy: [SortDescriptor(\.date, order: .reverse)]
-        )
-        desc.fetchLimit = limit
-        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
-    }
 
     public static func deleteActivitySession(_ ctx: ModelContext, id: UUID) {
         let desc = FetchDescriptor<ActivitySessionModel>(predicate: #Predicate { $0.id == id })
@@ -593,13 +526,6 @@ public enum Repos {
         return g
     }
 
-    public static func renameReminderGroup(_ ctx: ModelContext, id: UUID, name: String) {
-        let desc = FetchDescriptor<ReminderGroupModel>(predicate: #Predicate { $0.id == id })
-        if let target = try? ctx.fetch(desc).first {
-            target.rename(name)
-            try? ctx.save()
-        }
-    }
 
     /// Deletes a custom group and cascades every reminder in it (which itself
     /// cascades that reminder's events). Only `.custom` groups are deletable —

@@ -41,7 +41,6 @@ public final class HealthKitService: ObservableObject {
         if let t = HKObjectType.quantityType(forIdentifier: .bloodGlucose)           { s.insert(t) }
         if let t = HKObjectType.quantityType(forIdentifier: .flightsClimbed)         { s.insert(t) }
         if let t = HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning)  { s.insert(t) }
-        if let t = HKObjectType.quantityType(forIdentifier: .basalEnergyBurned)       { s.insert(t) }
         // NOTE: do NOT add the bloodPressure *correlation* type here. Authorizing
         // its component quantity types (systolic/diastolic, above) is sufficient to
         // run the correlation query in latestBloodPressure(); including the
@@ -90,14 +89,6 @@ public final class HealthKitService: ObservableObject {
         }
     }
 
-    /// Open iOS Settings → app entry. User adjusts per-metric Health toggles in Settings.app.
-    public func openSystemSettings() {
-        #if canImport(UIKit)
-        if let url = URL(string: UIApplication.openSettingsURLString) {
-            UIApplication.shared.open(url)
-        }
-        #endif
-    }
 
     // MARK: - Background step observer
 
@@ -195,18 +186,6 @@ public final class HealthKitService: ObservableObject {
 
     // MARK: - Resting heart rate
 
-    public func latestRestingHR() async -> Int? {
-        guard let type = HKQuantityType.quantityType(forIdentifier: .restingHeartRate) else { return nil }
-        let sort = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: false)
-        return await withCheckedContinuation { cont in
-            let q = HKSampleQuery(sampleType: type, predicate: nil, limit: 1, sortDescriptors: [sort]) { _, samples, _ in
-                let sample = (samples as? [HKQuantitySample])?.first
-                let bpm = sample?.quantity.doubleValue(for: Self.bpmUnit)
-                cont.resume(returning: bpm.map(Int.init))
-            }
-            store.execute(q)
-        }
-    }
 
     // MARK: - Generic latest-sample read
 
@@ -226,11 +205,6 @@ public final class HealthKitService: ObservableObject {
         }
     }
 
-    /// Most recent (non-resting) heart-rate reading in bpm.
-    public func latestHeartRate() async -> Int? {
-        let bpm = await latestQuantity(.heartRate, unit: Self.bpmUnit)
-        return bpm.map { Int($0.value) }
-    }
 
     /// Most recent heart-rate reading in bpm with its timestamp.
     public func latestHeartRateWithDate() async -> (value: Int, date: Date)? {
@@ -311,45 +285,7 @@ public final class HealthKitService: ObservableObject {
         }
     }
 
-    /// Resting (basal) energy burned in kcal for a local-calendar day.
-    public func restingEnergy(for date: Date = Date()) async -> Double {
-        guard let type = HKQuantityType.quantityType(forIdentifier: .basalEnergyBurned) else { return 0 }
-        let (start, end) = Self.dayBounds(date)
-        let predicate = HKQuery.predicateForSamples(withStart: start, end: end, options: [.strictStartDate])
-        return await withCheckedContinuation { cont in
-            let q = HKStatisticsQuery(quantityType: type, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, stats, _ in
-                cont.resume(returning: stats?.sumQuantity()?.doubleValue(for: .kilocalorie()) ?? 0)
-            }
-            store.execute(q)
-        }
-    }
 
-    /// Daily active-energy totals (kcal) across the last `days`, keyed by dayKey.
-    public func dailyActiveEnergy(days: Int, end: Date = Date()) async -> [String: Double] {
-        guard let type = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned), days > 0 else { return [:] }
-        let cal = Calendar.current
-        let endStart = cal.startOfDay(for: end)
-        guard let startDay = cal.date(byAdding: .day, value: -(days - 1), to: endStart) else { return [:] }
-        let endExclusive = cal.date(byAdding: .day, value: 1, to: endStart) ?? end
-        var interval = DateComponents(); interval.day = 1
-        return await withCheckedContinuation { cont in
-            let q = HKStatisticsCollectionQuery(
-                quantityType: type,
-                quantitySamplePredicate: HKQuery.predicateForSamples(withStart: startDay, end: endExclusive, options: [.strictStartDate]),
-                options: .cumulativeSum,
-                anchorDate: startDay,
-                intervalComponents: interval
-            )
-            q.initialResultsHandler = { _, collection, _ in
-                var out: [String: Double] = [:]
-                collection?.enumerateStatistics(from: startDay, to: endExclusive) { stats, _ in
-                    out[Dates.dayKey(stats.startDate)] = stats.sumQuantity()?.doubleValue(for: .kilocalorie()) ?? 0
-                }
-                cont.resume(returning: out)
-            }
-            store.execute(q)
-        }
-    }
 
     // MARK: - Body + marker sync
 
