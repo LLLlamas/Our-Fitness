@@ -264,15 +264,23 @@ targets:
 schemes:
   OurFitness:
     build:
+      # The app targets are deliberately NOT in the `test` action. OurFitnessTests
+      # is hostless (blank TEST_HOST/BUNDLE_LOADER) and compiles Domain/ directly,
+      # so it links none of them — `all` made `xcodebuild test` build the app,
+      # widget and watch and then throw them away, ~100s per run in both workflows.
+      #
+      # COUPLING, do not break: compile.yml's own "Build (Debug, no signing)" step
+      # is now the only thing that compiles the app targets in CI. If that step is
+      # ever removed, CI stops compiling the app at all.
       targets:
-        OurFitness: all
-        OurFitnessWidgets: all
-        OurFitnessWatch: all
+        OurFitness: [run, profile, analyze, archive]
+        OurFitnessWidgets: [run, profile, analyze, archive]
+        OurFitnessWatch: [run, profile, analyze, archive]
         OurFitnessTests: [test]
     test:
-      gatherCoverageData: true
-      coverageTargets:
-        - OurFitness
+      # No gatherCoverageData: nothing reads it — no Codecov step, no threshold,
+      # no artifact — and it was aimed at the app target, which hostless tests
+      # never execute, so the figure was meaningless as well as unread.
       targets:
         - OurFitnessTests
     run:
