@@ -152,7 +152,18 @@ struct ProgressTabView: View {
     ]
 
     var body: some View {
-        ScrollView {
+        // Snapshot each query ONCE per pass. Every one of these rebuilds DTOs
+        // from an unbounded per-profile query, and the cards below used to read
+        // them repeatedly: the tracker grid twice per tracker, the history day
+        // keys three times, the energy balance twice.
+        let bodyDTOs = body_
+        let markerDTOs = markers
+        let stepDTOs = steps
+        let setDTOs = sets
+        let historyDayKeys = trainingHistoryDayKeys
+        let balance = todayBalance
+
+        return ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 HStack(alignment: .firstTextBaseline) {
                     Text("Progress")
@@ -175,17 +186,18 @@ struct ProgressTabView: View {
                 } else {
                     LazyVGrid(columns: columns, spacing: 14) {
                         ForEach(visibleStats, id: \.self) { kind in
-                            statCard(for: kind)
+                            statCard(for: kind, body_: bodyDTOs, markers: markerDTOs,
+                                     steps: stepDTOs, sets: setDTOs)
                         }
                     }
                 }
 
                 // Calorie intake vs activity burn — shown for both modes.
-                energyBalanceCard
+                energyBalanceCard(balance: balance)
 
                 // Cross-day training history; Today/Train only keep the daily surface short.
-                if !trainingHistoryDayKeys.isEmpty {
-                    trainingHistoryCard
+                if !historyDayKeys.isEmpty {
+                    trainingHistoryCard(dayKeys: historyDayKeys)
                 }
             }
             .padding(.horizontal, 20)
@@ -220,9 +232,9 @@ struct ProgressTabView: View {
     // MARK: - Training history card
 
     @ViewBuilder
-    private var trainingHistoryCard: some View {
-        let dayCount = trainingHistoryDayKeys.count
-        let lastDay = trainingHistoryDayKeys.first
+    private func trainingHistoryCard(dayKeys: [String]) -> some View {
+        let dayCount = dayKeys.count
+        let lastDay = dayKeys.first
         PressableCard(action: { showTrainingHistory = true }) {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(spacing: 6) {
@@ -248,9 +260,9 @@ struct ProgressTabView: View {
     // MARK: - Energy balance card
 
     @ViewBuilder
-    private var energyBalanceCard: some View {
-        let intake = todayBalance?.intake ?? 0
-        let burned = todayBalance?.burned ?? 0
+    private func energyBalanceCard(balance: EnergyBalance.DayBalance?) -> some View {
+        let intake = balance?.intake ?? 0
+        let burned = balance?.burned ?? 0
         PressableCard(action: { showEnergyBalance = true }) {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(spacing: 6) {
@@ -302,11 +314,20 @@ struct ProgressTabView: View {
 
     // MARK: - Cards
 
+    /// Takes the four snapshot arrays rather than reading the computed
+    /// properties, which each rebuild DTOs from the whole unbounded query. This
+    /// is called once per visible tracker and used to read them TWICE per call —
+    /// at 13 trackers that was ~104 full rebuilds of the user's entire body,
+    /// marker, step and set history for one pass of the grid.
     @ViewBuilder
-    private func statCard(for kind: StatKind) -> some View {
+    private func statCard(
+        for kind: StatKind,
+        body_: [BodyMetricDTO], markers: [HealthMarkerDTO],
+        steps: [StepCountDTO], sets: [WorkoutSetDTO]
+    ) -> some View {
         let value = kind.displayValue(body: body_, markers: markers, steps: steps, sets: sets, profile: profile, system: unitSystem)
         let trend = kind.trendChip(body: body_, markers: markers, steps: steps, sets: sets, profile: profile, system: unitSystem)
-        let tint  = statusTint(for: kind)
+        let tint  = statusTint(for: kind, markers: markers)
         StatCard(
             title: kind.title,
             value: value,
@@ -317,17 +338,18 @@ struct ProgressTabView: View {
         )
     }
 
-    private func statusTint(for kind: StatKind) -> Color? {
+    private func statusTint(for kind: StatKind, markers: [HealthMarkerDTO]) -> Color? {
         let status: HealthRanges.RangeStatus
         switch kind {
         case .bp:
-            let sys = latestMarkerValue(.bpSystolic)
-            let dia = latestMarkerValue(.bpDiastolic)
+            let latest = latestByKind(markers)
+            let sys = latest[.bpSystolic]
+            let dia = latest[.bpDiastolic]
             guard sys != nil || dia != nil else { return nil }
             status = HealthRanges.bpStatus(systolic: sys, diastolic: dia)
         case .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose, .restingHR:
             guard let mk = kind.markerKind,
-                  let v = latestMarkerValue(mk) else { return nil }
+                  let v = latestByKind(markers)[mk] else { return nil }
             status = HealthRanges.status(for: mk, value: v)
         case .bmi:
             guard let w = body_.compactMap(\.weightLb).last else { return nil }
@@ -345,10 +367,14 @@ struct ProgressTabView: View {
         }
     }
 
-    private func latestMarkerValue(_ kind: HealthMarkerKind) -> Double? {
-        markers.filter { $0.kind == kind }
-            .sorted { $0.date < $1.date }
-            .last?.value
+    /// Latest value per marker kind, in ONE pass and with no sort.
+    ///
+    /// The marker query is already `sort: \.date, order: .forward`, so the last
+    /// value seen per kind is the newest — the previous per-kind
+    /// `filter → sorted → last` re-sorted the whole marker history on every
+    /// call, and `statusTint` called it twice for blood pressure alone.
+    private func latestByKind(_ markers: [HealthMarkerDTO]) -> [HealthMarkerKind: Double] {
+        markers.reduce(into: [:]) { latest, marker in latest[marker.kind] = marker.value }
     }
 
     // MARK: - Detail sheets
@@ -390,7 +416,7 @@ struct ProgressTabView: View {
                 canLog: kind.canLog,
                 rangeContext: kind.markerKind.map(HealthRanges.context(for:)),
                 personalNote: kind.markerKind.flatMap { mk in
-                    latestMarkerValue(mk).map { TargetRationale.markerMeaning(kind: mk, value: $0, mode: profile.mode) }
+                    latestByKind(markers)[mk].map { TargetRationale.markerMeaning(kind: mk, value: $0, mode: profile.mode) }
                 },
                 onSave: { value in
                     // Waist is entered in the active unit; convert back to canonical inches.
@@ -1495,19 +1521,41 @@ private struct TrainingHistorySheet: View {
     private var cardio: [CardioSessionDTO] { cardioModels.map(\.snapshot) }
     private var pilates: [PilatesSessionDTO] { pilatesModels.map(\.snapshot) }
     private var activities: [ActivitySessionDTO] { activityModels.map(\.snapshot) }
-    private var dayKeys: [String] {
-        let keys = Set(
-            sessions.map(\.dayKey)
-            + cardio.map { Dates.dayKey($0.date) }
-            + pilates.map { Dates.dayKey($0.date) }
-            + activities.map { Dates.dayKey($0.date) }
-        )
-        return keys.sorted(by: >)
+    /// Everything this sheet renders, bucketed by day in ONE pass.
+    ///
+    /// Built once per body evaluation and handed down to each row. Before this,
+    /// `daySection` re-derived all four collections per day — including
+    /// `TrainingHistory.sessions` over every set the user had ever logged — so
+    /// the sheet cost O(days x all-time sets). At 200 logged days and a few
+    /// thousand sets that is a multi-second hang on open, and it grew with use.
+    private struct HistoryIndex {
+        var dayKeys: [String] = []
+        var strength: [String: TrainingHistory.DaySession] = [:]
+        var cardio: [String: [CardioSessionDTO]] = [:]
+        var pilates: [String: [PilatesSessionDTO]] = [:]
+        var activities: [String: [ActivitySessionDTO]] = [:]
+    }
+
+    private var historyIndex: HistoryIndex {
+        var index = HistoryIndex()
+        for session in sessions { index.strength[session.dayKey] = session }
+        for row in cardio { index.cardio[Dates.dayKey(row.date), default: []].append(row) }
+        for row in pilates { index.pilates[Dates.dayKey(row.date), default: []].append(row) }
+        for row in activities { index.activities[Dates.dayKey(row.date), default: []].append(row) }
+
+        let keys = Set(index.strength.keys)
+            .union(index.cardio.keys)
+            .union(index.pilates.keys)
+            .union(index.activities.keys)
+        index.dayKeys = keys.sorted(by: >)
+        return index
     }
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 18) {
+            // Lazy: this list is unbounded by design, and an eager VStack built
+            // every day section up front on open.
+            LazyVStack(alignment: .leading, spacing: 18) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Training history")
                         .font(.system(size: 38, weight: .regular))
@@ -1518,7 +1566,8 @@ private struct TrainingHistorySheet: View {
                         .foregroundStyle(theme.dim)
                 }
 
-                if dayKeys.isEmpty {
+                let index = historyIndex
+                if index.dayKeys.isEmpty {
                     Card {
                         VStack(alignment: .leading, spacing: 6) {
                             Text("No training logged yet.")
@@ -1528,7 +1577,7 @@ private struct TrainingHistorySheet: View {
                         }
                     }
                 } else {
-                    ForEach(dayKeys, id: \.self) { daySection($0) }
+                    ForEach(index.dayKeys, id: \.self) { daySection($0, index: index) }
                 }
             }
             .padding(.horizontal, 20)
@@ -1539,11 +1588,11 @@ private struct TrainingHistorySheet: View {
     }
 
     @ViewBuilder
-    private func daySection(_ dayKey: String) -> some View {
-        let strength = sessions.first { $0.dayKey == dayKey }
-        let cardioRows = cardio.filter { Dates.dayKey($0.date) == dayKey }
-        let pilatesRows = pilates.filter { Dates.dayKey($0.date) == dayKey }
-        let activityRows = activities.filter { Dates.dayKey($0.date) == dayKey }
+    private func daySection(_ dayKey: String, index: HistoryIndex) -> some View {
+        let strength = index.strength[dayKey]
+        let cardioRows = index.cardio[dayKey] ?? []
+        let pilatesRows = index.pilates[dayKey] ?? []
+        let activityRows = index.activities[dayKey] ?? []
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .firstTextBaseline) {
                 Text(Dates.formatLong(dayKey))
