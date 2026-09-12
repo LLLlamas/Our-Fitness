@@ -196,8 +196,21 @@ jobs:
       - name: Validate CI invariants
         run: bash scripts/validate-ci-invariants.sh
 
-      # Tests first — never ship a red build.
+      # Tests first — never ship a red build. But only where this is the FIRST
+      # gate: compile.yml runs the same suite on every push to main/feature/**/
+      # fix/** and on every PR, so a manually-dispatched ship would be running
+      # it a second time on a commit that already passed — ~4 minutes of a
+      # ~13-minute ship, for an answer we have.
+      #
+      # Tags are the exception and the reason this step still exists: compile.yml
+      # does NOT trigger on tags, so a `v*` release has no prior run and keeps
+      # its own gate.
+      #
+      # The trade, stated plainly: dispatching a ship from a branch whose
+      # compile.yml went red no longer gets caught here. That is now visible in
+      # the Actions tab rather than enforced in the lane.
       - name: Run tests
+        if: startsWith(github.ref, 'refs/tags/')
         run: bundle exec fastlane ios tests
 
       - name: Ship to TestFlight
