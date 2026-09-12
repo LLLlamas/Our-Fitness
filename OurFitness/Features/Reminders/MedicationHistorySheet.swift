@@ -53,9 +53,13 @@ struct MedicationHistorySheet: View {
     }
 
     var body: some View {
-        ScrollView {
+        // Once per pass: `days` runs the whole join+group pipeline over an
+        // unbounded event query, and this is the surface that deliberately
+        // carries the full record.
+        let days = self.days
+        return ScrollView {
             LazyVStack(alignment: .leading, spacing: 14) {
-                header
+                header(days: days)
 
                 if medications.count > 1 { filterChips }
 
@@ -83,19 +87,19 @@ struct MedicationHistorySheet: View {
 
     // MARK: - Header
 
-    private var header: some View {
+    private func header(days: [MedicationLogDay]) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text("Medication history")
                 .font(.system(size: 28, weight: .regular))
                 .foregroundStyle(theme.text)
-            Text(totalsLine)
+            Text(totalsLine(days: days))
                 .font(.caption).foregroundStyle(theme.dim)
         }
     }
 
     /// "142 doses logged across 37 days". Counted off the same grouped days the
     /// list renders, so the two can never disagree.
-    private var totalsLine: String {
+    private func totalsLine(days: [MedicationLogDay]) -> String {
         let t = MedicationHistory.totals(days)
         guard t.doses > 0 else { return "Nothing logged yet" }
         return "\(t.doses) dose\(t.doses == 1 ? "" : "s") logged across \(t.days) day\(t.days == 1 ? "" : "s")"

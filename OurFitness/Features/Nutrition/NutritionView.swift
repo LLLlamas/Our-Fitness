@@ -463,8 +463,9 @@ struct NutritionView: View {
 
     @ViewBuilder
     private var weeklyNutritionCard: some View {
-        let series = NutritionHistory.calorieSeries(allLogs, days: 7)
-        let logged = NutritionHistory.daysLogged(allLogs, days: 7)
+        let logs = allLogs
+        let series = NutritionHistory.calorieSeries(logs, days: 7)
+        let logged = NutritionHistory.daysLogged(logs, days: 7)
         let target = Double(profile.computedTargets.calories)
         if logged > 0 {
             PressableCard(action: { showNutritionTrend = true }) {
@@ -760,15 +761,18 @@ struct NutritionView: View {
                         .font(.caption).tracking(2).textCase(.uppercase)
                         .foregroundStyle(theme.dim)
                     Spacer()
-                    if mealLoggingStreak >= 2 {
-                        Label("\(mealLoggingStreak)-day streak", systemImage: "flame.fill")
+                    // One walk, not three. `mealLoggingStreak` re-reads the
+                    // whole food-log history every time it is touched.
+                    let streak = mealLoggingStreak
+                    if streak >= 2 {
+                        Label("\(streak)-day streak", systemImage: "flame.fill")
                             .font(.system(size: 10, weight: .semibold))
                             .foregroundStyle(theme.accent)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 3)
                             .background(theme.accent.opacity(0.12))
                             .clipShape(Capsule())
-                            .accessibilityLabel("\(mealLoggingStreak) day logging streak")
+                            .accessibilityLabel("\(streak) day logging streak")
                     }
                 }
                 MacroQuadGrid(totals: totals, targets: profile.computedTargets, profile: profile)
@@ -779,8 +783,9 @@ struct NutritionView: View {
 
     /// Plain (non-ViewBuilder) copy + symbol for the "what's left today" line.
     private var toGoSummary: (text: String, symbol: String) {
-        let calLeft = remaining.calories
-        let proteinLeft = remaining.proteinG
+        let left = remaining
+        let calLeft = left.calories
+        let proteinLeft = left.proteinG
         if calLeft > 0 {
             let t = proteinLeft > 0
                 ? "\(calLeft) cal · \(proteinLeft)g protein to go"
@@ -817,10 +822,11 @@ struct NutritionView: View {
             Text(selectedDayKey == today ? "Today's log" : Dates.formatLong(selectedDayKey))
                 .font(.system(size: 22, weight: .regular))
                 .foregroundStyle(theme.text)
-            if selectedDayLogs.isEmpty {
+            let dayLogs = selectedDayLogs
+            if dayLogs.isEmpty {
                 emptyLogState
             } else {
-                ForEach(selectedDayLogs) { e in
+                ForEach(dayLogs) { e in
                     LogRow(entry: e, onTap: { entryToDetail = e },
                            canDelete: true) {
                         Repos.deleteFoodLog(ctx, id: e.id)

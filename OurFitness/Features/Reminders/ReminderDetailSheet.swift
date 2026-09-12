@@ -569,7 +569,10 @@ struct ReminderDetailSheet: View {
                 Text("No history yet.")
                     .font(.caption).foregroundStyle(theme.dim)
             } else if isMedication {
-                ForEach(medicationHistoryDays) { day in
+                // One pipeline run for both the inline list and the
+                // more-to-see button underneath it.
+                let allDays = allMedicationHistoryDays
+                ForEach(medicationHistoryDays(allDays)) { day in
                     Text(MedicationHistory.dayTitle(day.id, now: Date(), calendar: .current))
                         .font(.caption).fontWeight(.semibold)
                         .foregroundStyle(theme.dim)
@@ -578,7 +581,7 @@ struct ReminderDetailSheet: View {
                         medicationHistoryRow(e)
                     }
                 }
-                fullHistoryButton
+                fullHistoryButton(allDays: allDays)
             } else {
                 ForEach(events.prefix(30)) { e in
                     HStack {
@@ -622,15 +625,14 @@ struct ReminderDetailSheet: View {
         )
     }
 
-    private var medicationHistoryDays: [MedicationLogDay] {
-        Array(allMedicationHistoryDays.prefix(Self.inlineHistoryDays))
+    private func medicationHistoryDays(_ all: [MedicationLogDay]) -> [MedicationLogDay] {
+        Array(all.prefix(Self.inlineHistoryDays))
     }
 
     /// The button only appears when there is genuinely more to see, so it never
     /// promises a fuller record than exists.
     @ViewBuilder
-    private var fullHistoryButton: some View {
-        let all = allMedicationHistoryDays
+    private func fullHistoryButton(allDays all: [MedicationLogDay]) -> some View {
         if all.count > Self.inlineHistoryDays {
             let totals = MedicationHistory.totals(all)
             Button {
