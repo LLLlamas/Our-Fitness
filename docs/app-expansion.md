@@ -136,13 +136,12 @@ current models violate.
 
 ### Work
 
-- **New schema: `SchemaV4`** in `Data/Schema.swift` (never edit a shipped schema —
-  CLAUDE.md rule). Register the same model set with the CloudKit-compatible changes above.
-  Bump `AppSchema.current`. Because the live store currently opens V3 from a fresh URL
-  with **no migration plan**, moving to CloudKit also means a fresh CloudKit-backed store;
-  write a `.custom` migration stage (lightweight stages proved fragile here — see
-  `ModelContainer+App.swift` header) or accept a clean cutover, depending on whether any
-  TestFlight data must survive.
+- **Next unshipped schema** in `Data/Schema.swift`: determine its version when implementing this phase; the current local store uses **SchemaV7**, not the original plan’s V3/V4. Never reuse a shipped version.
+  Register the CloudKit-compatible model set and update `AppSchema.current`.
+  The live container opens `OurFitness.store` without a staged migration plan.
+  Design and test a data-preserving migration before changing its configuration;
+  this roadmap does not authorize a fresh-store cutover or loss of existing logs.
+  See `Data/ModelContainer+App.swift` for the historical store change.
 - **`Data/ModelContainer+App.swift`**: switch the live `ModelConfiguration` to a CloudKit
   configuration — `ModelConfiguration(..., cloudKitDatabase: .private("iCloud.com.ourfitness.app"))`.
   Keep `makeInMemory()` (tests/previews) on a local-only config.
@@ -189,7 +188,7 @@ current models violate.
 
 1. **Phase 1** as one PR (single-profile + mode switching + isolation fixes) — shippable
    to the existing TestFlight circle immediately, no schema/entitlement churn.
-2. **Phase 2** as a dedicated PR (SchemaV4 + CloudKit + entitlements) — the risky one;
+2. **Phase 2** as a dedicated PR (next unshipped schema + CloudKit + entitlements) — the risky one;
    test sync on two physical devices before merging.
 3. **Phase 3** alongside the first real App Store Connect submission.
 
@@ -198,11 +197,11 @@ current models violate.
 ## Verification
 
 **Phase 1**
-- Build: `fastlane compile` (or push → `compile.yml`). Domain tests: `fastlane tests`.
+- Build and test locally using [setup.md](setup.md#the-local-mac-workflow); CI is a clean-room confirmation.
 - Run on simulator (`/run`): first launch → create profile → confirm only that profile's
   data shows. In Settings, switch Build→Circuit: confirm the sheet previews the target
-  change, theme flips light/dark, Train tab disappears, Circuit cards appear in Today, and
-  targets on Today reflect the new mode. Switch back: Train returns.
+  change, theme flips light/dark, Train changes its mode-specific content, Circuit cardio appears in Today, and
+  targets on Today reflect the new mode. Both modes retain Today / Meals / Train / Reminders / Progress.
 - Regression: log food / a workout / body weight, switch mode, confirm logs persist.
 
 **Phase 2**

@@ -148,7 +148,7 @@ struct NutritionView: View {
             customName: meal.name,
             perServing: scaled
         )
-        Repos.addFoodLog(ctx, dto)
+        guard Repos.addFoodLog(ctx, dto) else { return }
         toasts.logged(meal.name, calories: scaled.calories)
         FoodAlternativeService.shared.prefetch(for: meal.name, mode: profile.mode)
     }
@@ -168,7 +168,7 @@ struct NutritionView: View {
                 fiberG: Int((Double(food.fiberG) * multiplier).rounded())
             )
         )
-        Repos.addFoodLog(ctx, dto)
+        guard Repos.addFoodLog(ctx, dto) else { return }
         toasts.logged(food.name, calories: dto.perServing.calories)
         FoodAlternativeService.shared.prefetch(for: food.name, mode: profile.mode)
     }
@@ -295,18 +295,19 @@ struct NutritionView: View {
         }
         .sheet(isPresented: $showLogSheet) {
             NLMealLogSheet(profile: profile, targetDate: selectedDayKey) { dto in
-                Repos.addFoodLog(ctx, dto)
+                guard Repos.addFoodLog(ctx, dto) else { return false }
                 toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
                 let foodName = dto.foodId ?? dto.customName ?? ""
                 if !foodName.isEmpty {
                     FoodAlternativeService.shared.prefetch(for: foodName, mode: profile.mode)
                 }
+                return true
             }
             .themed(profile.mode)
         }
         .sheet(isPresented: $showSuggestions) {
             SuggestionsSheet(profile: profile, totals: totals, targetDate: selectedDayKey) { dto in
-                Repos.addFoodLog(ctx, dto)
+                guard Repos.addFoodLog(ctx, dto) else { return }
                 toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
                 showSuggestions = false
                 let foodName = dto.foodId ?? dto.customName ?? ""
@@ -371,7 +372,7 @@ struct NutritionView: View {
                 targetDate: selectedDayKey,
                 onDone: { savedTemplateToLog = nil },
                 onDeleteTemplate: {
-                    Repos.deleteSavedTemplate(ctx, id: template.id)
+                    guard Repos.deleteSavedTemplate(ctx, id: template.id) else { return }
                     Haptics.warn()
                     toasts.show(Toast(title: "Recipe deleted", detail: template.name, accent: .warn, symbol: "trash"))
                     savedTemplateToLog = nil
@@ -391,7 +392,7 @@ struct NutritionView: View {
         }
         .sheet(isPresented: $showCameraLog) {
             CameraFoodLogSheet(profile: profile, slot: .lunch) { dto in
-                Repos.addFoodLog(ctx, dto)
+                guard Repos.addFoodLog(ctx, dto) else { return }
                 toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
                 let foodName = dto.foodId ?? dto.customName ?? ""
                 if !foodName.isEmpty {
@@ -405,7 +406,7 @@ struct NutritionView: View {
                 profile: profile, totals: totals, targetDate: selectedDayKey,
                 recentLogs: allLogs, favoriteFoodIds: favoriteIds
             ) { dto in
-                Repos.addFoodLog(ctx, dto)
+                guard Repos.addFoodLog(ctx, dto) else { return }
                 toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
                 showMoodSheet = false
                 let foodName = dto.foodId ?? dto.customName ?? ""
@@ -529,7 +530,7 @@ struct NutritionView: View {
                             .tactile(.pill)
                             .contextMenu {
                                 Button(role: .destructive) {
-                                    Repos.deleteSavedTemplate(ctx, id: template.id)
+                                    guard Repos.deleteSavedTemplate(ctx, id: template.id) else { return }
                                     Haptics.warn()
                                     toasts.show(Toast(title: "Recipe deleted", detail: template.name, accent: .warn, symbol: "trash"))
                                 } label: {
@@ -688,7 +689,7 @@ struct NutritionView: View {
                                         fiberG: item.scaledFiberG
                                     )
                                 )
-                                Repos.addFoodLog(ctx, dto)
+                                guard Repos.addFoodLog(ctx, dto) else { return }
                                 toasts.logged(item.food.name, calories: item.scaledCalories)
                                 FoodAlternativeService.shared.prefetch(for: item.food.name, mode: profile.mode)
                             } label: {
@@ -829,7 +830,7 @@ struct NutritionView: View {
                 ForEach(dayLogs) { e in
                     LogRow(entry: e, onTap: { entryToDetail = e },
                            canDelete: true) {
-                        Repos.deleteFoodLog(ctx, id: e.id)
+                        guard Repos.deleteFoodLog(ctx, id: e.id) else { return }
                         Haptics.warn()
                         toasts.show(Toast(title: "Removed", detail: e.customName ?? "Meal", accent: .warn, symbol: "minus.circle.fill"))
                     }
@@ -1110,7 +1111,7 @@ struct MacroChip: View {
 struct NLMealLogSheet: View {
     let profile: ProfileDTO
     let targetDate: String
-    let onSave: (FoodLogEntryDTO) -> Void
+    let onSave: (FoodLogEntryDTO) -> Bool
 
     @Environment(\.theme) private var theme
     @Environment(\.dismiss) private var dismiss
@@ -1130,7 +1131,7 @@ struct NLMealLogSheet: View {
     private enum Field: Hashable { case input, cal, protein, carbs, fat }
     @FocusState private var focused: Field?
 
-    init(profile: ProfileDTO, targetDate: String, onSave: @escaping (FoodLogEntryDTO) -> Void) {
+    init(profile: ProfileDTO, targetDate: String, onSave: @escaping (FoodLogEntryDTO) -> Bool) {
         self.profile = profile
         self.targetDate = targetDate
         self.onSave = onSave
@@ -1209,7 +1210,7 @@ struct NLMealLogSheet: View {
                         perServing: resolvedPerServing,
                         ingredients: mealIngredients
                     )
-                    onSave(dto)
+                    guard onSave(dto) else { return }
                     dismiss()
                 } label: {
                     Text("Save")

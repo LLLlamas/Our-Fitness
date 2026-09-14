@@ -40,6 +40,7 @@ struct RootView: View {
 
     @State private var tab: Tab = .today
     @State private var showSettings = false
+    @State private var showSaveError = false
     @Environment(\.scenePhase) private var scenePhase
 
     private var profiles: [ProfileDTO] { profileModels.map(\.snapshot) }
@@ -68,6 +69,14 @@ struct RootView: View {
             }
             ToastHost()
                 .themed(active?.mode ?? .build)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .repositoryWriteFailed)) { _ in
+            showSaveError = true
+        }
+        .alert("Couldn't save your change", isPresented: $showSaveError) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("The change wasn't saved. Please try again. If this continues, check available device storage. An unfinished live session remains available to retry.")
         }
     }
 

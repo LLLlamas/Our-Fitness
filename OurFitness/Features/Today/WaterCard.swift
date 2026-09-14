@@ -41,14 +41,14 @@ struct WaterCard: View {
     // No explicit Haptics — the buttons use `.tactile(...)` (press haptic), and
     // ProgressBar fires a success haptic when the day crosses the goal (outcome).
     private func add(_ oz: Double) {
-        Repos.addWater(ctx, WaterEntryDTO(userId: profile.id, date: today, flOz: oz))
+        guard Repos.addWater(ctx, WaterEntryDTO(userId: profile.id, date: today, flOz: oz)) else { return }
         toasts.show(Toast(title: "+\(Units.formatVolumeWithUnit(flOz: oz, system: unitSystem))", detail: "Water logged",
                           accent: .ok, symbol: "drop.fill"))
     }
 
     private func undoLast() {
         guard let last = entries.filter({ $0.date == today }).max(by: { $0.timestamp < $1.timestamp }) else { return }
-        Repos.deleteWater(ctx, id: last.id)
+        guard Repos.deleteWater(ctx, id: last.id) else { return }
         toasts.show(Toast(title: "Removed", detail: "Last water entry",
                           accent: .warn, symbol: "arrow.uturn.backward"))
     }

@@ -14,6 +14,7 @@ struct TodayView: View {
     @Environment(\.modelContext) private var ctx
     @Environment(\.theme) private var theme
     @EnvironmentObject private var toasts: ToastCenter
+    @State private var healthRefreshGeneration = 0
 
     @Query private var logModels: [FoodLogEntryModel]
     @Query private var stepModels: [StepCountModel]
@@ -153,15 +154,16 @@ struct TodayView: View {
                 MacroQuadGrid(totals: totals, targets: profile.computedTargets, profile: profile)
 
                 if profile.healthGranted {
-                    MoveCard(profile: profile, health: health)
+                    MoveCard(profile: profile, health: health, refreshGeneration: healthRefreshGeneration)
                 }
 
                 WaterCard(profile: profile)
 
+                // Build has no steps section of its own — steps live in the
+                // Move card above. Circuit still keeps one, because its card
+                // carries cardio logging and the weekly view too.
                 if profile.mode == .circuit {
                     circuitContent
-                } else {
-                    buildContent
                 }
             }
             .padding(.horizontal, 20)
@@ -182,6 +184,7 @@ struct TodayView: View {
             }
         }
         .refreshable {
+            healthRefreshGeneration += 1
             await refreshToday()
             if profile.healthGranted {
                 await health.syncFromHealth(profileId: profile.id, ctx: ctx)
@@ -342,21 +345,6 @@ struct TodayView: View {
             FocusInfoButton(kind: kind)
         }
         .padding(.horizontal, 4)
-    }
-
-    // MARK: - Build content
-
-    @ViewBuilder
-    private var buildContent: some View {
-        StepsCard(
-            steps: todaysSteps,
-            goal: profile.computedTargets.stepsDaily,
-            profileId: profile.id,
-            healthGranted: profile.healthGranted,
-            weightLb: profile.weightLb,
-            mode: profile.mode,
-            onConnectHealth: connectHealth
-        )
     }
 
     // MARK: - Connect Apple Health

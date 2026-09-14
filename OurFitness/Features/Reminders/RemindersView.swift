@@ -427,7 +427,7 @@ struct RemindersView: View {
 
     private func logDone(_ r: ReminderDTO) {
         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-            _ = ReminderNotificationService.logDone(ctx, reminderId: r.id)
+            guard ReminderNotificationService.logDone(ctx, reminderId: r.id) != nil else { return }
         }
         Haptics.success()
         let plant = r.isPlant

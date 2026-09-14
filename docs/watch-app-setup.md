@@ -1,18 +1,16 @@
-# Watch app setup (Reminders companion — Apple Watch)
+# Watch app setup (Apple Watch companion)
 
-The Reminders tab now has a **watchOS companion app** (`OurFitnessWatch`): a thin
-client with no local SwiftData store that mirrors reminders synced over
-`WatchConnectivity` from the phone (`Services/WatchSyncService.swift`). You can
-check a reminder off, snooze it, or just glance at what's due, right from the
-wrist.
+`OurFitnessWatch` has four tabs: Today (glance and water), Train (quick sets and
+live sessions), Meals (shortcuts), and Reminders. The phone remains the source of
+truth for logged records. The watch caches the received snapshot envelope in
+UserDefaults and plant thumbnails on disk so it can display data after a cold
+launch without connectivity. On-wrist workout sessions provide HealthKit telemetry.
+See [privacy-security.md](privacy-security.md) for storage and data-flow details.
 
-This works in code already, but **shipping it to TestFlight / the App Store
-needs a few one-time manual steps** because the watch app is a *second* signed
-binary embedded in the app, and our signing pipeline currently provisions only
-the main app (plus the widget extension — see
-[docs/live-activity-setup.md](live-activity-setup.md), the exact template this
-doc follows). Do all of the following before cutting a TestFlight build that
-includes the watch app.
+The repository already signs and embeds all three binaries: phone app, widget
+extension, and watch app. These steps cover provisioning setup/renewal and device
+verification. Check portal capabilities and secret validity at release time;
+repository configuration does not establish their current external state.
 
 > The notification-mirroring path is **already live and needs none of this**:
 > `Services/ReminderNotificationService.swift` posts a local notification with
@@ -32,7 +30,7 @@ includes the watch app.
 | Wire format shared by phone + watch | `Shared/WatchSyncPayload.swift` |
 | Photo/thumbnail downscale (shared) | `Services/ImageDownscale.swift` |
 | Watch app entry point (`@main`) | `OurFitnessWatch/OurFitnessWatchApp.swift` |
-| Watch-side in-memory store (no SwiftData) | `OurFitnessWatch/WatchSyncStore.swift` |
+| Watch snapshot store and disk caches (no SwiftData) | `OurFitnessWatch/WatchSyncStore.swift` |
 | Watch list / detail UI | `OurFitnessWatch/ReminderListView.swift` + `ReminderDetailView.swift` |
 | Watch target + embedding | `project.yml` (`OurFitnessWatch` target, `dependencies: embed: true` on the app) |
 
@@ -41,7 +39,8 @@ Bundle ids:
 - Watch app: **`com.ourfitness.app.watchkitapp`** (must be a child of the app id)
 
 The watch target compiles `OurFitness/Domain/PlantCatalog.swift`,
-`OurFitness/Domain/ReminderSchedule.swift`, and `Shared/WatchSyncPayload.swift`
+`ReminderSchedule.swift`, `LiveSessionState.swift`, `ActivityCatalog.swift`,
+`CalorieEstimator.swift`, and `Shared/WatchSyncPayload.swift`
 directly as extra sources rather than pulling in the whole `Domain/` folder —
 the same pattern `OurFitnessTests` uses to compile `OurFitness/Domain` directly
 without linking the app target.
@@ -181,6 +180,20 @@ iOS Simulator:
 
 ---
 
+### Additional checks for the current four-tab app
+
+- Sync a profile, then verify Today totals/water, Train quick sets, Meals shortcuts,
+  and medication/plant reminders against the phone.
+- Cold-launch the watch out of range and verify cached data displays. Queue a
+  supported logging action, reconnect, and verify the intended phone record.
+- Start and finish a live session from the watch; verify permission is requested
+  only from Start, the timer survives wrist-down, and phone history receives it.
+  Check HealthKit telemetry on a paired physical watch; simulator results do not
+  establish real sensor behavior.
+- Update/delete a plant photo on the phone and verify watch thumbnail refresh and
+  eviction after synchronization.
+
+
 ## Troubleshooting — "doesn't include signing certificate"
 
 **Symptom:**
@@ -305,7 +318,8 @@ top-level `CFBundleIconName` key in either bundle despite the error's wording.
   mirroring from `Services/ReminderNotificationService.swift`, not
   `WatchConnectivity`. This doc only covers the richer companion **app**
   (browsing reminders, thumbnails, etc.) added by the `OurFitnessWatch` target.
-- **Thin client, no local persistence:** the watch app has no SwiftData store.
+- **Thin client with local caches:** the watch app has no SwiftData store, but
+  persists its envelope in UserDefaults and thumbnails in its caches directory.
   If the watch and phone are unpaired/out of range, the watch shows the last
   synced envelope (`WatchSyncStore`) until connectivity resumes — it does
   not independently track state. Wrist actions taken offline are not lost:
@@ -330,7 +344,8 @@ top-level `CFBundleIconName` key in either bundle despite the error's wording.
 - **HealthKit crash traps apply on the watch too** (CLAUDE.md, "caused SIGABRT
   in build 37"): `requestAuthorization` raises an *uncatchable* `NSException`,
   so it is called only from the explicit Start-workout tap, never from
-  `.task`/`.onAppear`. Quantity types only in the read/write sets.
+  `.task`/`.onAppear`. Reads use quantity types; writes additionally include
+  `HKObjectType.workoutType()` to record workouts. Preserve the correlation-type guard.
 - **watchOS deployment target:** watchOS 10.0 (`project.yml` →
   `OurFitnessWatch` target). Keep in sync with whatever the Apple Watch
   hardware support matrix requires at release time.

@@ -220,7 +220,7 @@ struct ReminderDetailSheet: View {
         var updated = reminder
         updated.photoData = data
         reminder = updated
-        Repos.updateReminder(ctx, updated)
+        guard Repos.updateReminder(ctx, updated) else { return }
         WatchSyncService.shared.pushSnapshot(ctx, userId: updated.userId)
         Haptics.bump()
         toasts.show(Toast(title: "Photo updated", accent: .ok, symbol: "photo.fill"))
@@ -528,7 +528,7 @@ struct ReminderDetailSheet: View {
         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
             reminder = updated
         }
-        ReminderNotificationService.update(ctx, updated)
+        guard ReminderNotificationService.update(ctx, updated) else { return }
         Haptics.bump()
     }
 
@@ -548,7 +548,7 @@ struct ReminderDetailSheet: View {
     }
 
     private func snooze() {
-        ReminderNotificationService.snooze(ctx, reminderId: reminder.id)
+        guard ReminderNotificationService.snooze(ctx, reminderId: reminder.id) != nil else { return }
         Haptics.success()
         toasts.show(Toast(
             title: "Snoozed", detail: "\(reminder.name) · back tomorrow",
@@ -678,7 +678,7 @@ struct ReminderDetailSheet: View {
     }
 
     private func deleteEvent(id: UUID) {
-        Repos.deleteReminderEvent(ctx, id: id)
+        guard Repos.deleteReminderEvent(ctx, id: id) else { return }
         ReminderNotificationService.syncAfterChange(ctx, reminderId: reminder.id, userId: profile.id)
         Haptics.warn()
         toasts.show(Toast(title: "Removed", detail: "Log entry undone", accent: .warn, symbol: "arrow.uturn.backward"))
@@ -700,7 +700,7 @@ struct ReminderDetailSheet: View {
     }
 
     private func delete() {
-        ReminderNotificationService.remove(ctx, reminderId: reminder.id, userId: profile.id)
+        guard ReminderNotificationService.remove(ctx, reminderId: reminder.id, userId: profile.id) else { return }
         Haptics.warn()
         toasts.show(Toast(title: "\(reminder.name) deleted", accent: .warn, symbol: "trash.fill"))
         dismiss()

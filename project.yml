@@ -47,6 +47,7 @@ targets:
       # framework gating needed.
       - path: Shared/WatchSyncPayload.swift
     resources:
+      - path: OurFitness/PrivacyInfo.xcprivacy
       - path: OurFitness/Assets.xcassets
       # Offline USDA FoodData Central SQLite/FTS5 database, bundled into the app
       # only (NOT the hostless test target — SQLiteFoodDatabase degrades to empty
@@ -193,6 +194,7 @@ targets:
       - path: OurFitness/Domain/CalorieEstimator.swift
       - path: Shared/WatchSyncPayload.swift
     resources:
+      - path: OurFitnessWatch/PrivacyInfo.xcprivacy
       # The watch app needs its OWN asset catalog — it cannot borrow the app's,
       # because a watchOS AppIcon must be declared with `"platform": "watchos"`.
       # Without an AppIcon here, actool writes no CFBundleIconName into the watch
@@ -261,6 +263,29 @@ targets:
         CODE_SIGNING_REQUIRED: "NO"
         CODE_SIGNING_ALLOWED: "NO"
 
+  OurFitnessPersistenceTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: OurFitnessPersistenceTests
+      - path: OurFitness/Domain
+      - path: OurFitness/Data/PersistenceModels.swift
+      - path: OurFitness/Data/Repositories
+      - path: OurFitness/Services/LiveSessionService.swift
+      - path: OurFitness/Services/LiveSessionCompletionService.swift
+      - path: OurFitness/Services/LiveSessionActivityController.swift
+      - path: Shared/LiveSessionAttributes.swift
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.ourfitness.app.persistence-tests
+        TEST_HOST: ""
+        BUNDLE_LOADER: ""
+        GENERATE_INFOPLIST_FILE: "YES"
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: ""
+        CODE_SIGNING_REQUIRED: "NO"
+        CODE_SIGNING_ALLOWED: "NO"
+
 schemes:
   OurFitness:
     build:
@@ -277,12 +302,14 @@ schemes:
         OurFitnessWidgets: [run, profile, analyze, archive]
         OurFitnessWatch: [run, profile, analyze, archive]
         OurFitnessTests: [test]
+        OurFitnessPersistenceTests: [test]
     test:
       # No gatherCoverageData: nothing reads it — no Codecov step, no threshold,
       # no artifact — and it was aimed at the app target, which hostless tests
       # never execute, so the figure was meaningless as well as unread.
       targets:
         - OurFitnessTests
+        - OurFitnessPersistenceTests
     run:
       config: Debug
     archive:

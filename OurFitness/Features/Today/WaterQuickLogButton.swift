@@ -229,7 +229,7 @@ struct WaterQuickLogButton: View {
     }
 
     private func logAmount(_ oz: Double) {
-        Repos.addWater(ctx, WaterEntryDTO(userId: profile.id, date: Dates.dayKey(), flOz: oz))
+        guard Repos.addWater(ctx, WaterEntryDTO(userId: profile.id, date: Dates.dayKey(), flOz: oz)) else { return }
         lastFlOz = oz
         Haptics.success()
         toasts.show(Toast(title: "+\(Units.formatVolumeWithUnit(flOz: oz, system: unitSystem))",

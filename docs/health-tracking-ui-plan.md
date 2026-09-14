@@ -1,6 +1,8 @@
 # Health-Tracking UI & Readability Refresh — Implementation Plan
 
-> **Status:** Spec for a future implementation agent. Researched and scoped 2026-06-01.
+> **Status:** Historical implementation spec, researched and scoped 2026-06-01.
+> The dated implementation record below reports all seven workstreams complete;
+> [CLAUDE.md](../CLAUDE.md) and current code take precedence for present behavior.
 > All design decisions below were confirmed with the product owner. Where a value
 > is an assumption rather than a confirmed decision it is tagged **[ASSUMED]** —
 > verify before shipping but proceed with the default if unanswered.

@@ -125,12 +125,12 @@ private struct BuildWorkoutsView: View {
         }
         .sheet(isPresented: $showAddSheet) {
             AddExerciseSheet(profileId: profile.id) { name, lo, hi, tracksWeight, isIsometric in
-                Repos.createExercise(
+                guard Repos.createExercise(
                     ctx, profileId: profile.id, name: name,
                     defaultRepsBottom: lo, defaultRepsTop: hi,
                     tracksWeight: tracksWeight,
                     isIsometric: isIsometric
-                )
+                ) != nil else { return }
                 Haptics.bump()
                 toasts.show(Toast(title: name, detail: "Exercise added", accent: .win, symbol: "plus.circle.fill"))
             }
@@ -496,7 +496,7 @@ private struct SetHistorySheet: View {
                             isPresented: $confirmDeleteExercise,
                             titleVisibility: .visible) {
             Button("Delete exercise and all its sets", role: .destructive) {
-                Repos.deleteExercise(ctx, id: exercise.id)
+                guard Repos.deleteExercise(ctx, id: exercise.id) else { return }
                 Haptics.warn()
                 toasts.show(Toast(title: "\(exercise.name) deleted",
                                   detail: "Exercise and its sets removed.",
@@ -519,7 +519,7 @@ private struct SetHistorySheet: View {
             }
             Spacer()
             Button(role: .destructive) {
-                Repos.deleteSet(ctx, id: s.id)
+                guard Repos.deleteSet(ctx, id: s.id) else { return }
                 Haptics.warn()
                 toasts.show(Toast(title: "Set removed",
                                   detail: primaryLabel(s),
@@ -717,14 +717,14 @@ private struct WorkoutGoalSheet: View {
     }
 
     private func add(_ g: ExerciseGoalMatcher.GoalSuggestion) {
-        Repos.createExercise(
+        guard Repos.createExercise(
             ctx, profileId: profile.id, name: g.exerciseName,
             defaultRepsBottom: g.repRange.lowerBound, defaultRepsTop: g.repRange.upperBound,
             tracksWeight: g.tracksWeight,
             kind: g.isIsometric ? .duration : .reps,
             muscleGroups: g.muscleGroups,
             isIsometric: g.isIsometric
-        )
+        ) != nil else { return }
         added.insert(g.exerciseName.lowercased())
         Haptics.bump()
         toasts.show(Toast(title: g.exerciseName, detail: "Added to your exercises",

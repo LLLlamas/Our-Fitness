@@ -7,8 +7,16 @@ import SwiftData
 struct MoveCard: View {
     let profile: ProfileDTO
     @ObservedObject var health: HealthKitService
+    let refreshGeneration: Int
 
     @Environment(\.theme) private var theme
+    @Environment(\.scenePhase) private var scenePhase
+
+    private struct HealthRefreshKey: Equatable {
+        let profileId: UUID
+        let generation: Int
+        let isActive: Bool
+    }
 
     @Query private var stepModels: [StepCountModel]
     @Query private var setModels: [WorkoutSetModel]
@@ -24,6 +32,9 @@ struct MoveCard: View {
     @State private var flightsClimbed: Int = 0
     @State private var walkingDistanceMiles: Double = 0
     @State private var showInfo = false
+    @State private var showStepsInfo = false
+    @State private var showStepsGoalPicker = false
+    @State private var stepsPickerGoal: Int = 10_000
     @State private var showEnergyInfo = false
     @State private var showMetTotalInfo = false
     @State private var showExercisesInfo = false
@@ -41,9 +52,10 @@ struct MoveCard: View {
         customStepsGoalRaw > 0 ? customStepsGoalRaw : profile.computedTargets.stepsDaily
     }
 
-    init(profile: ProfileDTO, health: HealthKitService) {
+    init(profile: ProfileDTO, health: HealthKitService, refreshGeneration: Int = 0) {
         self.profile = profile
         self._health = ObservedObject(wrappedValue: health)
+        self.refreshGeneration = refreshGeneration
         let uid = profile.id
         _customStepsGoalRaw = AppStorage(wrappedValue: 0, "stepsGoal.\(uid.uuidString)")
         let todayKey = Dates.dayKey()
@@ -189,7 +201,24 @@ struct MoveCard: View {
                 }
             }
         }
-        .task(id: profile.id) { await load() }
+        .task(id: HealthRefreshKey(profileId: profile.id, generation: refreshGeneration,
+                                  isActive: scenePhase == .active)) {
+            guard scenePhase == .active else { return }
+            await load()
+        }
+        .onChange(of: todaySteps) { old, new in
+            if old < effectiveStepsGoal && new >= effectiveStepsGoal { Haptics.success() }
+        }
+        .sheet(isPresented: $showStepsInfo) {
+            StepsInfoSheet(
+                steps: todaySteps, goal: effectiveStepsGoal,
+                stepsKcal: stepsKcal, weightKg: weightKg, mode: profile.mode
+            )
+            .themed(profile.mode)
+        }
+        .sheet(isPresented: $showStepsGoalPicker) {
+            stepsGoalPickerSheet.themed(profile.mode)
+        }
         .sheet(isPresented: $showInfo) {
             MoveInfoSheet(
                 profile: profile, metTotal: metTotal,
@@ -261,58 +290,117 @@ struct MoveCard: View {
 
     /// Same value font and dim/label treatment as `metricColumn` so the card
     /// still reads as one grid, plus the goal and bar a column has no room for.
-    /// Opens the Move info sheet, which already explains the steps figure — the
-    /// goal itself is edited on the steps card, which owns that control.
+    /// This row is the only place steps live on Today, so it carries both
+    /// controls: the count/goal chip opens the goal picker, the rest of the row
+    /// opens the steps info sheet.
     private var stepsRow: some View {
-        Button { showInfo = true } label: {
-            VStack(alignment: .leading, spacing: 6) {
-                HStack(spacing: 4) {
-                    Image(systemName: "shoeprints.fill")
-                        .font(.system(size: 9))
-                        .foregroundStyle(theme.dim)
-                    Text("STEPS")
-                        .font(.system(size: 8, weight: .semibold)).tracking(1.2)
-                        .foregroundStyle(theme.dim)
-                    Spacer()
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 4) {
+                Image(systemName: "shoeprints.fill")
+                    .font(.system(size: 9))
+                    .foregroundStyle(theme.dim)
+                Text("STEPS")
+                    .font(.system(size: 8, weight: .semibold)).tracking(1.2)
+                    .foregroundStyle(theme.dim)
+                Spacer()
+                Button {
+                    stepsPickerGoal = effectiveStepsGoal
+                    showStepsGoalPicker = true
+                } label: {
                     Text("\(todaySteps.formatted()) / \(effectiveStepsGoal.formatted())")
                         .font(.system(size: 10, design: .monospaced))
                         .foregroundStyle(stepsGoalMet ? theme.ok : theme.dim)
                         .monospacedDigit()
                         .contentTransition(.numericText())
+                        .underline(color: (stepsGoalMet ? theme.ok : theme.dim).opacity(0.4))
+                        .padding(.vertical, 4)
+                        .padding(.leading, 8)
                 }
-
-                HStack(alignment: .firstTextBaseline, spacing: 8) {
-                    Text(todaySteps > 0 ? todaySteps.formatted() : "-")
-                        .font(.system(size: 22, weight: .bold, design: .monospaced))
-                        .foregroundStyle(theme.text)
-                        .contentTransition(.numericText())
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.9)
-                    Text(stepsKcal > 0 ? "~\(stepsKcal) cal walking" : "steps today")
-                        .font(.system(size: 10))
-                        .foregroundStyle(theme.dim)
-                    Spacer(minLength: 0)
-                }
-
-                // Same inline bar as StepsCard: Capsule track, cornerRadius-3
-                // fill, goal colour on completion.
-                GeometryReader { geo in
-                    ZStack(alignment: .leading) {
-                        Capsule().fill(theme.barBg)
-                        RoundedRectangle(cornerRadius: 3, style: .continuous)
-                            .fill(stepsGoalMet ? theme.barOk : theme.barFill)
-                            .frame(width: geo.size.width * stepsPct)
-                    }
-                }
-                .frame(height: 5)
-                .animation(.spring(response: 0.5, dampingFraction: 0.85), value: stepsPct)
+                .tactile(.ghost)
+                .accessibilityLabel("Daily steps goal: \(effectiveStepsGoal.formatted())")
             }
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
-            .frame(maxWidth: .infinity, alignment: .leading)
+
+            Button { showStepsInfo = true } label: {
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack(alignment: .firstTextBaseline, spacing: 8) {
+                        Text(todaySteps > 0 ? todaySteps.formatted() : "-")
+                            .font(.system(size: 22, weight: .bold, design: .monospaced))
+                            .foregroundStyle(theme.text)
+                            .contentTransition(.numericText())
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.9)
+                        Text(stepsKcal > 0 ? "~\(stepsKcal) cal walking" : "steps today")
+                            .font(.system(size: 10))
+                            .foregroundStyle(theme.dim)
+                        Spacer(minLength: 0)
+                    }
+
+                    // Capsule track, cornerRadius-3 fill, goal colour on completion.
+                    GeometryReader { geo in
+                        ZStack(alignment: .leading) {
+                            Capsule().fill(theme.barBg)
+                            RoundedRectangle(cornerRadius: 3, style: .continuous)
+                                .fill(stepsGoalMet ? theme.barOk : theme.barFill)
+                                .frame(width: geo.size.width * stepsPct)
+                        }
+                    }
+                    .frame(height: 5)
+                    .animation(.spring(response: 0.5, dampingFraction: 0.85), value: stepsPct)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .tactile(.ghost)
+            .accessibilityLabel("Steps today: \(todaySteps.formatted()) of \(effectiveStepsGoal.formatted())")
         }
-        .tactile(.ghost)
-        .accessibilityLabel("Steps today: \(todaySteps.formatted()) of \(effectiveStepsGoal.formatted())")
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+    }
+
+    @ViewBuilder
+    private var stepsGoalPickerSheet: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Daily Steps Goal")
+                    .font(.system(size: 28, weight: .regular))
+                    .foregroundStyle(theme.text)
+                Text("Mode default is \(profile.computedTargets.stepsDaily.formatted()) steps.")
+                    .font(.caption)
+                    .foregroundStyle(theme.dim)
+            }
+            .padding(.top, 28)
+            .padding(.horizontal, 20)
+
+            Picker("Goal", selection: $stepsPickerGoal) {
+                ForEach(Array(stride(from: 2000, through: 25000, by: 500)), id: \.self) { val in
+                    Text("\(val.formatted()) steps").tag(val)
+                }
+            }
+            .pickerStyle(.wheel)
+            .background(theme.card2)
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .padding(.horizontal, 20)
+            .padding(.vertical, 8)
+
+            HStack(spacing: 12) {
+                Button("Reset to default") {
+                    customStepsGoalRaw = 0
+                    showStepsGoalPicker = false
+                }
+                .tactile(.secondary, fullWidth: true)
+                Button("Save") {
+                    customStepsGoalRaw = stepsPickerGoal
+                    showStepsGoalPicker = false
+                    Haptics.success()
+                }
+                .tactile(.primary, fullWidth: true)
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 28)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .presentationDetents([.medium])
+        .presentationDragIndicator(.visible)
+        .presentationBackground(theme.bg)
     }
 
     @ViewBuilder
@@ -351,15 +439,21 @@ struct MoveCard: View {
     }
 
     private func load() async {
-        appleEnergyKcal = await health.activeEnergy()
-        appleEnergyDate = await health.latestActiveEnergySampleDate()
-        if let hr = await health.latestHeartRateWithDate() {
-            bpm = hr.value; bpmDate = hr.date
-        } else {
-            bpm = nil; bpmDate = nil
-        }
-        flightsClimbed = await health.flightsClimbed()
-        walkingDistanceMiles = await health.walkingRunningDistanceMiles()
+        // Independent reads run together. A replaced refresh must not publish
+        // old results after a newer pull-to-refresh or foreground transition.
+        async let energy = health.activeEnergy()
+        async let energyDate = health.latestActiveEnergySampleDate()
+        async let heartRate = health.latestHeartRateWithDate()
+        async let flights = health.flightsClimbed()
+        async let distance = health.walkingRunningDistanceMiles()
+        let readings = await (energy, energyDate, heartRate, flights, distance)
+        guard !Task.isCancelled else { return }
+        appleEnergyKcal = readings.0
+        appleEnergyDate = readings.1
+        bpm = readings.2?.value
+        bpmDate = readings.2?.date
+        flightsClimbed = readings.3
+        walkingDistanceMiles = readings.4
     }
 
     private func asOfText(_ date: Date?) -> String {
@@ -459,6 +553,91 @@ private struct MoveInfoSheet: View {
                 .fixedSize(horizontal: false, vertical: true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+// MARK: - Steps info sheet
+
+private struct StepsInfoSheet: View {
+    let steps: Int
+    let goal: Int
+    let stepsKcal: Int
+    let weightKg: Int
+    let mode: Mode
+
+    @Environment(\.theme) private var theme
+
+    // Fat burned: at an easy walking pace roughly half your calories come from
+    // burning fat (the share drops as you speed up). Source: Achten & Jeukendrup,
+    // Nutrition, 2004. ~9 cal per gram of fat.
+    private var fatGrams: Int { max(0, Int((Double(stepsKcal) * 0.50 / 9.0).rounded())) }
+
+    // Step category per Tudor-Locke & Bassett (2004) classification, in plain English.
+    private var stepCategory: (label: String, description: String) {
+        switch steps {
+        case 0..<5000:
+            return ("Sedentary", "Under 5,000 steps so far. Adding a short daily walk is the single easiest health upgrade you can make.")
+        case 5000..<7500:
+            return ("Low active", "5,000–7,499 steps. Better than sitting — a 10–15 minute walk gets you over 7,500, where the benefits really start to stack up.")
+        case 7500..<10000:
+            return ("Somewhat active", "7,500–9,999 steps. You're in the sweet spot — most of walking's health payoff lands right around here.")
+        case 10000..<12500:
+            return ("Active", "10,000+ steps. Strong, consistent movement that supports your heart and your everyday calorie burn.")
+        default:
+            return ("Highly active", "12,500+ steps. Excellent — among the most active step counts, linked with the best fitness and longevity numbers.")
+        }
+    }
+
+    var body: some View {
+        ColumnInfoScaffold(title: "steps.", subtitle: "TODAY · \(steps.formatted()) STEPS") {
+
+            ColumnInfoSection(title: "Your numbers today") {
+                VStack(spacing: 6) {
+                    ColumnBigNumberRow(
+                        icon: "figure.walk",
+                        name: "Calories burned walking",
+                        detail: "MET 4.3 × \(weightKg) kg × \(steps.formatted()) steps",
+                        value: "~\(stepsKcal)",
+                        unit: "cal"
+                    )
+                    ColumnBigNumberRow(
+                        icon: "drop.fill",
+                        name: "Roughly how much was fat",
+                        detail: "About half your walking calories come from fat at an easy pace",
+                        value: "~\(fatGrams)",
+                        unit: "g"
+                    )
+                }
+            }
+
+            ColumnInfoSection(title: "Your activity level") {
+                ColumnBreakdownRow(label: stepCategory.label, detail: stepCategory.description)
+            }
+
+            ColumnInfoSection(title: "Why your \(goal.formatted())-step goal") {
+                ColumnInfoBody(text: TargetRationale.stepsWhy(mode: mode, goal: goal))
+            }
+
+            ColumnInfoSection(title: "What walking does for you") {
+                VStack(alignment: .leading, spacing: 8) {
+                    researchRow("Every extra 1,000–2,000 steps a day lowers your risk of dying early — with most of the gain showing up by about 7,000–8,000 steps.")
+                    researchRow("Walking regularly brings blood pressure down a few points over a couple of months.")
+                    researchRow("A single walk improves how your body handles blood sugar for the next day or two.")
+                    Text("Sources: Tudor-Locke & Bassett, Sports Med, 2004; Saint-Maurice et al., JAMA, 2020; Hanson & Jones, Br J Sports Med, 2015; Ainsworth et al., 2011 Compendium.")
+                        .font(.caption2)
+                        .foregroundStyle(theme.dim)
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func researchRow(_ text: String) -> some View {
+        HStack(alignment: .top, spacing: 8) {
+            Text("·").foregroundStyle(theme.accent).font(.callout)
+            Text(text).font(.callout).foregroundStyle(theme.dim)
+                .fixedSize(horizontal: false, vertical: true)
+        }
     }
 }
 

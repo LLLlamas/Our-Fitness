@@ -13,6 +13,7 @@ The loop is now:
 1. `xcodegen generate` after any `project.yml` change
 2. Build + test locally — seconds, not minutes:
    ```bash
+   set -o pipefail
    xcodebuild -project OurFitness.xcodeproj -scheme OurFitness \
      -destination 'platform=iOS Simulator,name=iPhone 17' \
      CODE_SIGNING_ALLOWED=NO build 2>&1 | grep -E '(error:|warning:|BUILD)' 
@@ -104,6 +105,7 @@ Add these signing and App Store secrets:
 | `MATCH_GIT_BASIC_AUTHORIZATION` | Step 5 PowerShell output | Base64 `github-user:token`; token needs access to the private signing repo |
 | `APPSTORE_PROFILE_BASE64` | Manual App Store provisioning profile for `com.ourfitness.app`, base64 encoded | Used by TestFlight export |
 | `APPSTORE_WIDGET_PROFILE_BASE64` | Manual App Store provisioning profile for `com.ourfitness.app.widgets`, base64 encoded | Used by widget/TestFlight export |
+| `APPSTORE_WATCH_PROFILE_BASE64` | Manual App Store provisioning profile for `com.ourfitness.app.watchkitapp`, base64 encoded | Must include watch HealthKit capability and the distribution certificate synced by match; see [watch setup](watch-app-setup.md) |
 
 Optional repository variables:
 
@@ -142,6 +144,7 @@ Two ways:
 - GitHub → **Actions** → **TestFlight** workflow → **Run workflow**
 - Optional: fill in a changelog (visible to testers in the TestFlight app)
 - Leave **refresh_signing** unchecked for normal releases. Check it only when bootstrapping or intentionally rotating signing assets.
+- Verify the selected commit has a successful **Compile + Test** run before clicking **Run workflow**. Manual dispatch currently skips the TestFlight workflow’s unit-test step; a previous green run on a different commit is insufficient.
 - Click **Run workflow**
 
 ### Option B — Tag push
@@ -150,9 +153,9 @@ git tag v0.1.4
 git push --tags
 ```
 
-Either way, the workflow:
-1. Runs unit tests (fails the build if any test fails)
-2. Syncs the Apple Distribution certificate from encrypted fastlane match storage and installs the app/widget App Store provisioning profiles from the base64 secrets
+Both paths sync the Apple Distribution certificate from encrypted fastlane match storage and install the app, widget, and watch profiles from their base64 secrets. The workflow then:
+1. Runs unit tests **for tag releases only**; manual dispatch relies on the prior Compile + Test verification described above
+2. Uses manual signing for all three binaries
 3. Bumps `CFBundleVersion` to the GitHub run number
 4. Archives + exports IPA
 5. Uploads via fastlane `pilot`

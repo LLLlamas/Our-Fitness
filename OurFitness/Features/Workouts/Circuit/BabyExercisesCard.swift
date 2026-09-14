@@ -78,13 +78,13 @@ struct BabyExercisesCard: View {
         }
         .sheet(isPresented: $showAddMovement) {
             AddCircuitMovementSheet(profileId: profile.id) { name, kind, loadLb in
-                Repos.createExercise(
+                guard Repos.createExercise(
                     ctx, profileId: profile.id, name: name,
                     defaultRepsBottom: 1, defaultRepsTop: 20,
                     tracksWeight: loadLb != nil,
                     loadLb: loadLb,
                     kind: kind
-                )
+                ) != nil else { return }
                 Haptics.bump()
                 toasts.show(Toast(title: name, detail: "Movement added", accent: .win, symbol: "plus.circle.fill"))
             }
@@ -155,7 +155,7 @@ struct BabyExercisesCard: View {
             reps: amount,
             caloriesEst: cal
         )
-        Repos.addSet(ctx, dto)
+        guard Repos.addSet(ctx, dto) else { return }
         ringTrigger += 1
         Task { @MainActor in
             ringGlow = true
@@ -179,14 +179,14 @@ struct BabyExercisesCard: View {
         let exId = exercise.id
         // Find the most recently logged set today for this exercise (query already scoped to profile)
         guard let latest = setModels.first(where: { $0.exerciseId == exId }) else { return }
-        Repos.deleteSet(ctx, id: latest.id)
+        guard Repos.deleteSet(ctx, id: latest.id) else { return }
         Haptics.warn()
         toasts.show(Toast(title: "Undone", detail: "\(exercise.name) · last rep removed",
                           accent: .warn, symbol: "arrow.uturn.backward"))
     }
 
     private func deleteExercise(_ exercise: ExerciseDTO) {
-        Repos.deleteExercise(ctx, id: exercise.id)
+        guard Repos.deleteExercise(ctx, id: exercise.id) else { return }
         Haptics.warn()
         toasts.show(Toast(title: "Removed", detail: "\(exercise.name) deleted",
                           accent: .warn, symbol: "trash"))

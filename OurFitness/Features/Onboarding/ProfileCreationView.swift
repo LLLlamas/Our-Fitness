@@ -175,13 +175,13 @@ struct ProfileCreationView: View {
     }
 
     private func submit() {
-        let dto = Repos.createProfile(
+        guard let dto = Repos.createProfile(
             ctx,
             name: name.trimmingCharacters(in: .whitespaces),
             mode: mode, sex: sex,
             heightIn: heightIn, weightLb: weightLb, age: age,
             activity: activity
-        )
+        ) else { return }
         created = dto
         step = .connectHealth
     }
@@ -221,7 +221,7 @@ struct ProfileCreationView: View {
     private func finish(granted: Bool) {
         guard let dto = created else { return }
         if granted {
-            Repos.setHealthGranted(ctx, profileId: dto.id, granted: true)
+            guard Repos.setHealthGranted(ctx, profileId: dto.id, granted: true) else { return }
         }
         onCreate(dto)
         dismiss()

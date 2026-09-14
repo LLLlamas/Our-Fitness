@@ -476,9 +476,9 @@ struct ProgressTabView: View {
         let today = Dates.dayKey()
         switch kind {
         case .weight:
-            Repos.addBody(ctx, BodyMetricDTO(
+            guard Repos.addBody(ctx, BodyMetricDTO(
                 userId: profile.id, date: today, weightLb: value
-            ))
+            )) else { return }
             // Re-point the profile (the source recommendations read) at this weight
             // and recompute targets so calorie/protein/water goals track current weight.
             Repos.syncCurrentWeight(ctx, profileId: profile.id)
@@ -487,25 +487,25 @@ struct ProgressTabView: View {
                               detail: Units.formatWeightWithUnit(lb: value, system: unitSystem),
                               accent: .ok, symbol: "scalemass.fill"))
         case .bodyFat:
-            Repos.addBody(ctx, BodyMetricDTO(
+            guard Repos.addBody(ctx, BodyMetricDTO(
                 userId: profile.id, date: today, bodyFatPct: value
-            ))
+            )) else { return }
             toasts.show(Toast(title: "Body fat logged",
                               detail: String(format: "%.1f %%", value),
                               accent: .ok, symbol: "scalemass.fill"))
         case .waist:
-            Repos.addBody(ctx, BodyMetricDTO(
+            guard Repos.addBody(ctx, BodyMetricDTO(
                 userId: profile.id, date: today, waistIn: value
-            ))
+            )) else { return }
             toasts.show(Toast(title: "Waist logged",
                               detail: Units.formatLengthWithUnit(inches: value, system: unitSystem),
                               accent: .ok, symbol: "ruler"))
         case .restingHR, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
             guard let markerKind = kind.markerKind else { return }
-            Repos.addMarker(ctx, HealthMarkerDTO(
+            guard Repos.addMarker(ctx, HealthMarkerDTO(
                 userId: profile.id, date: today,
                 kind: markerKind, value: value, source: "manual"
-            ))
+            )) else { return }
             toasts.show(Toast(title: "\(kind.title) logged",
                               detail: "\(formattedValue(value)) \(kind.unit(system: unitSystem))",
                               accent: .ok, symbol: "heart.text.square.fill"))
@@ -1275,14 +1275,14 @@ private struct BPDetailSheet: View {
         guard let sys = Double(systolicDraft), sys > 0,
               let dia = Double(diastolicDraft), dia > 0 else { return }
         let today = Dates.dayKey()
-        Repos.addMarker(ctx, HealthMarkerDTO(
+        guard Repos.addMarker(ctx, HealthMarkerDTO(
             userId: profile.id, date: today,
             kind: .bpSystolic, value: sys, source: "manual"
-        ))
-        Repos.addMarker(ctx, HealthMarkerDTO(
+        )) else { return }
+        guard Repos.addMarker(ctx, HealthMarkerDTO(
             userId: profile.id, date: today,
             kind: .bpDiastolic, value: dia, source: "manual"
-        ))
+        )) else { return }
         toasts.show(Toast(title: "BP logged",
                           detail: "\(Int(sys))/\(Int(dia)) mmHg",
                           accent: .ok, symbol: "heart.text.square.fill"))
@@ -1680,7 +1680,7 @@ private struct TrainingHistorySheet: View {
             calories: Int((session.caloriesEst ?? 0).rounded()),
             deleteLabel: "Delete \(session.type.label) session"
         ) {
-            Repos.deleteCardioSession(ctx, id: session.id)
+            guard Repos.deleteCardioSession(ctx, id: session.id) else { return }
         }
     }
 
@@ -1698,7 +1698,7 @@ private struct TrainingHistorySheet: View {
             calories: calories,
             deleteLabel: "Delete Pilates session"
         ) {
-            Repos.deletePilatesSession(ctx, id: session.id)
+            guard Repos.deletePilatesSession(ctx, id: session.id) else { return }
         }
     }
 
@@ -1712,7 +1712,7 @@ private struct TrainingHistorySheet: View {
             calories: Int((session.caloriesEst ?? 0).rounded()),
             deleteLabel: "Delete \(session.activityName) session"
         ) {
-            Repos.deleteActivitySession(ctx, id: session.id)
+            guard Repos.deleteActivitySession(ctx, id: session.id) else { return }
         }
     }
 
@@ -1754,7 +1754,7 @@ private struct TrainingHistorySheet: View {
 
     private func removeLastSet(_ line: TrainingHistory.ExerciseLine) {
         guard let id = line.setIds.first else { return }
-        Repos.deleteSet(ctx, id: id)
+        guard Repos.deleteSet(ctx, id: id) else { return }
         Haptics.warn()
         toasts.show(Toast(title: "Set removed", detail: line.name, accent: .warn, symbol: "trash.fill"))
     }

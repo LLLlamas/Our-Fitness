@@ -137,7 +137,7 @@ struct MedicationDueBanner: View {
     /// One tap logs a dose now, at the recommended dosage — `logDone` resolves
     /// the amount, exactly as the lock-screen action does.
     private func log(_ med: ReminderDTO) {
-        _ = ReminderNotificationService.logDone(ctx, reminderId: med.id, date: Date())
+        guard ReminderNotificationService.logDone(ctx, reminderId: med.id, date: Date()) != nil else { return }
         Haptics.success()
         toasts.show(Toast(
             title: med.name,

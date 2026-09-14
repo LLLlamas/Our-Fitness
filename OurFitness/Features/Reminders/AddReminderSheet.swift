@@ -268,7 +268,7 @@ struct AddReminderSheet: View {
         let trimmed = newGroupName.trimmingCharacters(in: .whitespaces)
         guard !trimmed.isEmpty else { return }
         let dto = ReminderGroupDTO(userId: profile.id, name: trimmed, sfSymbol: newGroupSymbol, kind: .custom)
-        Repos.addReminderGroup(ctx, dto)
+        guard Repos.addReminderGroup(ctx, dto) != nil else { return }
         selectedGroupId = dto.id
         showNewGroupForm = false
         newGroupName = ""
@@ -643,14 +643,15 @@ struct AddReminderSheet: View {
                 notes: trimmedNotes.isEmpty ? nil : trimmedNotes
             )
         }
-        Repos.addReminder(ctx, dto)
-
+        let initialEvent: ReminderEventDTO?
         if group.kind == .plants, let backdate = lastWateredPick.date() {
-            Repos.logReminderDone(ctx, ReminderEventDTO(
+            initialEvent = ReminderEventDTO(
                 userId: profile.id, reminderId: reminderId, date: Dates.dayKey(backdate),
-                amountFlOz: dto.amountFlOz, timestamp: backdate
-            ))
+                amountFlOz: dto.amountFlOz, timestamp: backdate)
+        } else {
+            initialEvent = nil
         }
+        guard Repos.addReminder(ctx, dto, initialEvent: initialEvent) else { return }
 
         Task { @MainActor in
             await ReminderNotificationService.requestAuthorizationIfNeeded()

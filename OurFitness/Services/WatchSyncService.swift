@@ -25,6 +25,21 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
     static let shared = WatchSyncService()
 
     private var container: ModelContainer?
+    private var changeObservers: [NSObjectProtocol] = []
+    private var snapshotTask: Task<Void, Never>?
+
+    /// Coalesce save bursts and goal/session changes into one latest-state push.
+    private func scheduleSnapshot() {
+        guard WCSession.isSupported(), WCSession.default.isPaired, WCSession.default.isWatchAppInstalled else { return }
+        snapshotTask?.cancel()
+        snapshotTask = Task { [weak self] in
+            try? await Task.sleep(for: .milliseconds(250))
+            guard !Task.isCancelled, let self, let container = self.container else { return }
+            let ctx = container.mainContext
+            guard let profile = self.activeProfile(ctx) else { return }
+            self.pushSnapshot(ctx, userId: profile.id)
+        }
+    }
     /// Session-scoped change detection: hash of the `photoData` last handed to
     /// `transferFile` per reminder, so unchanged photos skip the decode →
     /// re-encode → transfer pipeline on every foreground/mutation push.
@@ -40,6 +55,16 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
     /// Call once from `OurFitnessApp.init()`, right after the container is built.
     func activate(container: ModelContainer) {
         self.container = container
+        if changeObservers.isEmpty {
+            for name in [Notification.Name.repositoryDidSave, .liveSessionDidChange,
+                         UserDefaults.didChangeNotification] {
+                changeObservers.append(NotificationCenter.default.addObserver(
+                    forName: name, object: nil, queue: .main
+                ) { [weak self] _ in
+                    Task { @MainActor [weak self] in self?.scheduleSnapshot() }
+                })
+            }
+        }
         guard WCSession.isSupported() else { return }
         WCSession.default.delegate = self
         WCSession.default.activate()
@@ -56,7 +81,8 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
     /// The rule throughout is one fetch per entity, folded in memory; never a
     /// per-row fetch inside a loop.
     func pushSnapshot(_ ctx: ModelContext, userId: UUID) {
-        guard WCSession.isSupported(), WCSession.default.activationState == .activated else { return }
+        guard WCSession.isSupported(), WCSession.default.activationState == .activated,
+              WCSession.default.isPaired, WCSession.default.isWatchAppInstalled else { return }
         // The profile carries mode + body weight, which the watch needs for its
         // theme and for DISPLAYING (never computing) calorie figures. Without it
         // there is no envelope to build.
@@ -93,7 +119,8 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
         // ONE fetch of the whole food log, reused three ways: today's totals, the
         // 30-day affinity ranking, and the name/macro lookup that resolves the
         // ranked ids. Fetching per purpose would triple the same query.
-        let allLogs = Repos.listFoodLog(ctx, userId: userId)
+        let window = Dates.lastNDays(30, end: now)
+        let allLogs = Repos.foodLogs(ctx, userId: userId, inDayRange: window[0]...todayKey)
 
         let envelope = WatchSnapshotEnvelope(
             profileId: userId,
@@ -133,11 +160,11 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
         let targets = profile.computedTargets
         let uid = profile.id.uuidString
 
-        let steps = Steps.stepsForDay(Repos.listSteps(ctx, userId: profile.id), day: todayKey)
-        // Mirrors StepsCard/TodayView: the per-profile override is an Int where
+        let steps = Steps.stepsForDay(Repos.steps(ctx, userId: profile.id, on: todayKey), day: todayKey)
+        // Mirrors MoveCard/TodayView: the per-profile override is an Int where
         // 0 (or absent) means "use the plan's target".
         let customStepsGoal = Self.intDefault("stepsGoal.\(uid)") ?? 0
-        let water = Water.total(Repos.listWater(ctx, userId: profile.id), on: todayKey)
+        let water = Water.total(Repos.water(ctx, userId: profile.id, on: todayKey), on: todayKey)
         let waterGoal = Self.doubleDefault("waterGoalFlOz.\(uid)") ?? Water.defaultGoalFlOz
 
         return TodaySnapshot(
@@ -318,6 +345,7 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
     private func apply(_ action: WatchAction) {
         guard let container else { return }
         let ctx = container.mainContext
+        defer { scheduleSnapshot() } // Reconcile optimistic wrist state even after a rejected/failed action.
 
         switch action {
         case .done(let reminderId, let date):
@@ -334,15 +362,17 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
             ReminderNotificationService.snooze(ctx, reminderId: reminderId)
 
         case .logWater(let flOz, let date):
-            guard flOz > 0, let profile = activeProfile(ctx) else { return }
-            Repos.addWater(ctx, WaterEntryDTO(userId: profile.id, date: Dates.dayKey(date), flOz: flOz))
+            guard flOz.isFinite, flOz > 0, flOz <= 1024,
+                  SessionInputValidation.validDate(date, now: Date()), let profile = activeProfile(ctx) else { return }
+            guard Repos.addWater(ctx, WaterEntryDTO(userId: profile.id, date: Dates.dayKey(date), flOz: flOz, timestamp: date)) else { return }
             // Keep the phone's tap-to-repeat amount in step with the wrist's, so
             // WaterQuickLogButton offers what the user last actually drank.
             UserDefaults.standard.set(flOz, forKey: "waterLastFlOz.\(profile.id.uuidString)")
             pushSnapshot(ctx, userId: profile.id)
 
         case .logQuickSet(let exerciseId, let amount, let date):
-            guard amount > 0, let profile = activeProfile(ctx),
+            guard (1...10000).contains(amount), SessionInputValidation.validDate(date, now: Date()),
+                  let profile = activeProfile(ctx),
                   let exercise = Repos.exercises(ctx, forProfile: profile.id)
                     .first(where: { $0.id == exerciseId })
             else { return }
@@ -356,10 +386,10 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
                     reps: amount, loadLb: exercise.loadLb, bodyWeightLb: profile.weightLb)
             // `date` (not now) so an action queued offline lands on the day it
             // was taken — which is also the day the watch already counted it on.
-            Repos.addSet(ctx, WorkoutSetDTO(
+            guard Repos.addSet(ctx, WorkoutSetDTO(
                 userId: profile.id, exerciseId: exercise.id, weightLb: nil,
                 reps: amount, timestamp: date, caloriesEst: cal
-            ))
+            )) else { return }
             pushSnapshot(ctx, userId: profile.id)
 
         case .undoQuickSet(let exerciseId, let date):
@@ -370,7 +400,7 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
             guard let latest = Repos.setHistory(ctx, userId: profile.id, exerciseId: exerciseId)
                 .first(where: { Dates.dayKey($0.timestamp) == dayKey })
             else { return }
-            Repos.deleteSet(ctx, id: latest.id)
+            guard Repos.deleteSet(ctx, id: latest.id) else { return }
             pushSnapshot(ctx, userId: profile.id)
 
         case .logMeal(let shortcutId, let source, let slot, let date):
@@ -387,39 +417,37 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
                     print("[WatchSync] logMeal: template \(shortcutId) no longer exists — ignored")
                     return
                 }
-                Repos.addFoodLog(ctx, FoodLogEntryDTO(
+                guard Repos.addFoodLog(ctx, FoodLogEntryDTO(
                     userId: profile.id, date: dayKey, slot: slotValue,
                     customName: template.name, perServing: template.totalPerServing,
                     timestamp: date, ingredients: template.ingredients
-                ))
+                )) else { return }
             } else {
                 guard let entry = Self.loggedFoodIndex(Repos.listFoodLog(ctx, userId: profile.id))[shortcutId] else {
                     print("[WatchSync] logMeal: food \(shortcutId) not in this profile's log history — ignored")
                     return
                 }
-                Repos.addFoodLog(ctx, FoodLogEntryDTO(
+                guard Repos.addFoodLog(ctx, FoodLogEntryDTO(
                     userId: profile.id, date: dayKey, slot: slotValue,
                     foodId: shortcutId, customName: entry.name,
                     perServing: entry.perServing, timestamp: date
-                ))
+                )) else { return }
             }
             pushSnapshot(ctx, userId: profile.id)
 
-        case .startLiveSession(let activityId, let activityName, let met, let expectedMinutes, let startDate):
-            guard let profile = activeProfile(ctx) else { return }
-            let state = LiveSessionState(
-                startDate: startDate, activityId: activityId, activityName: activityName,
-                met: met, expectedMinutes: expectedMinutes, profileId: profile.id
-            )
+        case .startLiveSession(let activityId, _, let met, let expectedMinutes, let startDate):
+            guard let profile = activeProfile(ctx),
+                  let state = SessionInputValidation.start(
+                    activityId: activityId, suppliedMET: met, expectedMinutes: expectedMinutes,
+                    startDate: startDate, profileId: profile.id, now: Date()) else { return }
+            let activityName = state.activityName
             // Both devices can start a session. Keep whichever started LATER —
             // an earlier start arriving now is a stale queued action, not the
             // session the user is actually in — and say which one was dropped.
             if let existing = LiveSessionStore.active(for: profile.id) {
                 guard state.startDate > existing.startDate else {
-                    print("[WatchSync] startLiveSession: discarded '\(activityName)' started \(startDate) — '\(existing.activityName)' started later (\(existing.startDate))")
                     return
                 }
-                print("[WatchSync] startLiveSession: replacing '\(existing.activityName)' (\(existing.startDate)) with the later '\(activityName)' (\(startDate))")
             }
             LiveSessionStore.save(state)
             // Best-effort, as in LiveSessionCard.start(): the Live Activity needs
@@ -441,46 +469,10 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
             pushSnapshot(ctx, userId: profile.id)
 
         case .endLiveSession(let startDate, let elapsedSeconds):
-            guard let profile = activeProfile(ctx),
-                  let state = LiveSessionStore.active(for: profile.id) else { return }
-            // A queued end for a session that already finished — or that was
-            // superseded by a later start — must not close the CURRENT one.
-            // Sub-second tolerance: the anchor round-trips through two separate
-            // JSON encodings (UserDefaults and the wire).
-            guard abs(state.startDate.timeIntervalSince(startDate)) < 1 else {
-                print("[WatchSync] endLiveSession: stale action for \(startDate) — active session started \(state.startDate); ignored")
-                return
-            }
-            // Elapsed comes from the wrist because a queued action can be
-            // delivered long after the user stopped, when now − startDate would
-            // wildly overstate it; clamped to wall clock so it can't exceed the
-            // time since the anchor either. Calories are recomputed from the
-            // STORED session's MET and the profile's current weight.
-            let elapsed = min(max(0, Double(elapsedSeconds)), Double(state.elapsedSeconds()))
-            let actualMinutes = max(1, Int((elapsed / 60.0).rounded()))
-            let cal = CalorieEstimator.caloriesForActivity(
-                met: state.met, minutes: elapsed / 60.0, bodyWeightLb: profile.weightLb
-            )
-            // Pilates routes to its own model so it credits the pilates weekly
-            // streak, exactly as LiveSessionCard.end() does.
-            if state.activityId == ActivityCatalog.pilatesId {
-                Repos.logPilatesSession(ctx, PilatesSessionDTO(
-                    profileId: profile.id, date: state.startDate,
-                    durationMinutes: actualMinutes, focusAreas: []
-                ))
-            } else {
-                Repos.logActivitySession(ctx, ActivitySessionDTO(
-                    profileId: profile.id, date: state.startDate,
-                    activityId: state.activityId, activityName: state.activityName,
-                    met: state.met, durationMinutes: actualMinutes,
-                    expectedMinutes: state.expectedMinutes, caloriesEst: cal
-                ))
-            }
-            LiveSessionNotifier.cancel()
-            LiveSessionStore.clear()
-            if #available(iOS 16.2, *) {
-                LiveSessionActivityController.end()
-            }
+            guard let profile = activeProfile(ctx) else { return }
+            _ = LiveSessionCompletionService.finish(
+                ctx, profileId: profile.id, startDate: startDate,
+                elapsedSeconds: elapsedSeconds, bodyWeightLb: profile.weightLb)
             pushSnapshot(ctx, userId: profile.id)
         }
     }

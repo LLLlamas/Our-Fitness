@@ -215,7 +215,7 @@ private struct RepCounterView: View {
             reps: reps,
             caloriesEst: kcal
         )
-        Repos.addSet(ctx, dto)
+        guard Repos.addSet(ctx, dto) else { return }
         setsLogged += 1
 
         lastProjection = EncouragementEngine.repProjection(
@@ -433,7 +433,7 @@ private struct IsometricTimerView: View {
             caloriesEst: kcal,
             holdSeconds: secs
         )
-        Repos.addSet(ctx, dto)
+        guard Repos.addSet(ctx, dto) else { return }
         Haptics.success()
         toasts.show(Toast(
             title: "Hold logged",

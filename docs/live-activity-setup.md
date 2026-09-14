@@ -6,10 +6,10 @@ even when the app is backgrounded (e.g. you switch to Spotify). The timer counts
 on the **system** side via `Text(timerInterval:)`, anchored to the same
 `startDate` the app already persists — the app does not have to be awake.
 
-This works in code already, but **shipping it to TestFlight / the App Store
-needs a few one-time manual steps** because a widget extension is a *second*
-signed binary embedded in the app, and our signing pipeline currently provisions
-only the main app. Do all of the following before cutting a TestFlight build.
+The repository already signs and embeds the app, widget, and watch targets. The
+steps below document provisioning setup and renewal, plus device verification.
+Portal capabilities, certificate validity, and GitHub secret contents must be
+checked when shipping; their current external state cannot be inferred from code.
 
 > ActivityKit itself needs **no special capability and no entitlement** — neither
 > the app nor the widget. The only app-side requirement (`NSSupportsLiveActivities`
@@ -75,51 +75,25 @@ app's manually-generated-profile flow, generate it by hand:
 
 ---
 
-## Step 3 — Wire the widget profile into CI signing
+## Step 3 — Maintain the widget profile in CI signing
 
-Today the Fastfile (`fastlane/Fastfile`) installs **one** profile from the
-`APPSTORE_PROFILE_BASE64` secret and exports with a provisioning map that lists
-**only the app**:
+`fastlane/Fastfile` already installs all three profiles in
+`install_appstore_profile` and supplies all three entries to the `beta` export map:
 
 ```ruby
-export_options: {
-  provisioningProfiles: {
-    BUNDLE_ID => PROFILE_NAME,            # com.ourfitness.app → "OurFitness AppStore"
-  },
-}
+provisioningProfiles: {
+  "com.ourfitness.app"             => "OurFitness AppStore",
+  "com.ourfitness.app.widgets"     => "OurFitnessWidgets AppStore",
+  "com.ourfitness.app.watchkitapp" => "OurFitnessWatch AppStore",
+},
 ```
 
-`xcodebuild -exportArchive` requires a profile entry for **every** embedded
-signed binary, including the widget extension. With the widget added, the export
-will fail unless you also:
-
-1. **Add a second secret** with the base64 of the widget profile, e.g.
-   `APPSTORE_WIDGET_PROFILE_BASE64`.
-   - `base64 -i OurFitnessWidgets_AppStore.mobileprovision | pbcopy` → paste into a
-     new GitHub repository secret.
-2. **Install it in CI** alongside the app profile. The existing
-   `install_appstore_profile` lane installs one profile; either generalize it to
-   loop over both base64 secrets, or add a second install step for the widget
-   secret. (It indexes by the UUID inside the profile, so installing two profiles
-   into `~/Library/MobileDevice/Provisioning Profiles` is fine.)
-3. **Add the widget to the export map** in the `beta` lane's `build_app`:
-
-   ```ruby
-   provisioningProfiles: {
-     "com.ourfitness.app"         => "OurFitness AppStore",
-     "com.ourfitness.app.widgets" => "OurFitnessWidgets AppStore",
-   },
-   ```
-
-4. Optionally extend the `match` sync if you decide to manage the widget cert/
-   profile through match instead of the manual secret — but the manual route
-   above matches the app's existing pattern and avoids match's managed-capability
-   limitations.
-
-> These Fastfile edits were intentionally **not** committed with the feature code:
-> adding the export-map entry before the secret/profile exist would break the
-> *current* app-only TestFlight build. Make the Fastfile change in the same commit
-> where you add the widget profile secret.
+Maintain `APPSTORE_WIDGET_PROFILE_BASE64` with the widget profile generated in
+Step 2. Its embedded certificate must match the distribution certificate synced
+by match. The TestFlight workflow checks that each secret exists, installs all
+three profiles, and verifies their certificates before archiving. No additional
+Fastfile integration is needed when renewing an unchanged bundle ID/profile name.
+See [setup.md](setup.md#github-secrets) for the complete secret inventory.
 
 ---
 

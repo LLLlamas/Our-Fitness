@@ -1,4 +1,6 @@
-# CLAUDE.md — RepCheck
+# RepCheck — predecessor UX reference
+
+> Historical guide for the earlier HTML/React tracker, retained for its low-friction logging ideas. Its files, commands, storage, and deployment instructions do not describe this native SwiftUI repository. See [CLAUDE.md](../CLAUDE.md) for current architecture.
 
 Mobile-first single-page tracker for daily bodyweight reps. **Fully self-contained single HTML file** — React + ReactDOM + compiled app code all inlined. Zero network requests at runtime (except web fonts, which are optional). Works via `file://`, `https://`, or anywhere. localStorage only.
 

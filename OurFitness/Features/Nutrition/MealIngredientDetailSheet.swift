@@ -222,7 +222,7 @@ struct MealIngredientDetailSheet: View {
             perServing: perServing,
             ingredients: ingredients
         )
-        Repos.addFoodLog(ctx, dto)
+        guard Repos.addFoodLog(ctx, dto) else { return }
         Haptics.success()
         toasts.show(Toast(title: "Logged", detail: name, accent: .ok, symbol: "checkmark.circle.fill"))
         onDone()
@@ -236,7 +236,7 @@ struct MealIngredientDetailSheet: View {
         updated.slot = slot
         updated.ingredients = ingredients
         updated.perServing = totals
-        Repos.updateFoodLog(ctx, updated)
+        guard Repos.updateFoodLog(ctx, updated) else { return }
         Haptics.success()
         toasts.show(Toast(title: "Updated", detail: name, accent: .ok, symbol: "checkmark.circle.fill"))
         onDone()
@@ -245,7 +245,7 @@ struct MealIngredientDetailSheet: View {
 
     private func deleteEntry() {
         guard case let .editing(entry) = mode else { return }
-        Repos.deleteFoodLog(ctx, id: entry.id)
+        guard Repos.deleteFoodLog(ctx, id: entry.id) else { return }
         Haptics.warn()
         toasts.show(Toast(title: "Removed", detail: name, accent: .warn, symbol: "minus.circle.fill"))
         onDone()
@@ -661,7 +661,7 @@ struct SaveTemplateSheet: View {
             emoji: templateEmoji.isEmpty ? "🍽️" : templateEmoji,
             ingredients: ingredients
         )
-        Repos.addSavedTemplate(ctx, template)
+        guard Repos.addSavedTemplate(ctx, template) else { return }
         Haptics.success()
         toasts.show(Toast(title: "Recipe saved", detail: trimmedName, accent: .ok, symbol: "bookmark.fill"))
         dismiss()

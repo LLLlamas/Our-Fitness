@@ -25,15 +25,16 @@ Circuit auto-seeds: Lifted Baby (30 lb), Lifted Stroller (25 lb), Carried Baby (
 ```
 OurFitness/
   App/          ← @main, ModelContainer, root shell
-  Domain/       ← PURE Swift. No SwiftUI/SwiftData. Fully unit-tested.
+  Domain/       ← PURE Swift. No SwiftUI/SwiftData. Hostless unit-test target.
   Data/         ← SwiftData @Model classes + Repositories/
   Services/     ← HealthKit, Theme, Haptics, ToastCenter, ReminderNotifications, WatchSync
   Features/     ← Onboarding, Today, Nutrition, Workouts (shared Train tab; Circuit-only Train cards under Circuit/ folder), Reminders, Progress, Settings
                   Rule: a card lives in the folder of the TAB THAT RENDERS IT, not the mode it belongs to.
   Components/   ← ProgressBar, ProgressRing, Card, Banner, AnimatedNumber, TactileButtonStyle…
-Shared/         ← Dual-compiled into multiple targets (LiveSessionAttributes, WatchSyncPayload); pure Foundation
+Shared/         ← Shared contracts: Foundation-only WatchSyncPayload; ActivityKit LiveSessionAttributes for app/widget
 _stashed/       ← Outside build target; pending rework
-OurFitnessTests/ ← Hostless XCTest for Domain/* only
+OurFitnessTests/ ← Hostless XCTest for Domain/* and shared watch payload
+OurFitnessPersistenceTests/ ← Separate hostless SwiftData/repository/session regression tests
 OurFitnessWatch/ ← watchOS companion app — thin client; WatchConnectivity sync, no local SwiftData
 project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 ```
@@ -45,10 +46,10 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 1. `Domain/` never imports `SwiftData` or `SwiftUI`.
 2. `Features/` uses repositories or `@Query` — never opens the container directly.
 3. **Per-profile `@Query` must predicate-scope** (`#Predicate { $0.userId == uid }`) — never `.filter` client-side. See `TodayView`, `NutritionView`, `ProgressTabView`, `WorkoutsView`.
-4. HealthKit only through `Services/HealthKitService.swift`.
+4. Phone HealthKit only through `Services/HealthKitService.swift`; watch workout sessions only through `OurFitnessWatch/WatchWorkoutSession.swift`. Authorization requires an explicit phone Connect or watch Start-workout action.
 5. `.swift` filenames unique in target. All `@Model` classes in `Data/PersistenceModels.swift`.
 6. `OurFitnessTests` is hostless: blank `TEST_HOST`/`BUNDLE_LOADER`, no `@testable import OurFitness`.
-7. `Shared/` stays pure Foundation (no SwiftUI/SwiftData/UIKit) — it compiles into app, widget, and watch targets. The watch target also compiles individual `Domain/` files directly (like `OurFitnessTests`), so those files must stay dependency-free.
+7. `Shared/WatchSyncPayload.swift` stays Foundation-only and compiles into phone, watch, and tests. `Shared/LiveSessionAttributes.swift` uses ActivityKit and compiles into phone and widget only. Neither contract imports SwiftUI/SwiftData/UIKit. The watch also compiles selected `Domain/` files directly, so keep their dependencies within that explicit source set.
 
 ---
 
@@ -65,7 +66,7 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | Log pilates | `Repos.logPilatesSession` + `Domain/Models.swift` (`PilatesSessionDTO`); UI `Features/Workouts/Circuit/PilatesCard.swift` (Train tab, Circuit) |
 | Log cardio | `Repos.logCardio` + `Domain/Models.swift` (`CardioSessionDTO`) |
 | Circuit movements (quick-log) | `Features/Workouts/Circuit/BabyExercisesCard.swift` — Train tab (`WorkoutsView` Circuit branch); renders the auto-seeded parenting exercises as tap-to-+1 |
-| Live sessions (timer) | `Features/Workouts/LiveSessionCard.swift` + `Domain/LiveSessionState.swift` + `Services/LiveSessionService.swift` |
+| Live sessions (timer) | `Features/Workouts/LiveSessionCard.swift` + `Domain/LiveSessionState.swift` + `Services/LiveSessionService.swift`; phone/watch completion is centralized in `Services/LiveSessionCompletionService.swift` + `Data/Repositories/Repos+SessionCompletion.swift` |
 | Live Activity (Lock Screen) | `OurFitnessWidgets/LiveSessionLiveActivity.swift` + `Services/LiveSessionActivityController.swift` — [docs/live-activity-setup.md](docs/live-activity-setup.md) |
 | Exercise MET / muscles | `Domain/ExerciseInfo.swift` → `namedMeta` (first-match order matters; specific before general) |
 | Canonical exercise catalog | `Domain/ExerciseInfo.swift` → `catalog` (public, alphabetical, sourced from `namedMeta`) / `catalogEntry(named:)` |
@@ -93,9 +94,9 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | Calorie math | `Domain/Targets.swift` only |
 | Target rationale copy | `Domain/TargetRationale.swift` (spell out acronyms; "cal" not "kcal"); Circuit micro copy `fiberWhy`/`sodiumWhy`/`addedSugarWhy`/`saturatedFatWhy(for:)` (used by `HeartHealthCard` info sheet) |
 | **Today / Steps** | |
-| Move card (steps row + 2×3 cols) | `Features/Today/MoveCard.swift` — `stepsRow` on top (full width: value + goal + inline bar, taps into the Move info sheet); row 1: Apple Total · Our Total Estimate · Training Only; row 2: Distance · Flights · Heart Rate. Steps leads because the rows below are largely derived from it. The steps GOAL is still edited on `StepsCard` — the Move tile reads `AppStorage "stepsGoal.<uuid>"`, never writes it. Single `metricColumn` helper (uniform 22pt value font, no differential shrink). `activityRow(kcal:)` takes `Int` |
-| Steps (Build) | `Features/Today/StepsCard.swift` |
-| Steps + cardio (Circuit, on Today) | `Features/Today/StepsCardioCard.swift` — rendered by `TodayView`, so it lives with its Build-mode counterpart `StepsCard.swift`, not under `Workouts/Circuit/` |
+| Move card (steps row + 2×3 cols) | `Features/Today/MoveCard.swift` — `stepsRow` on top (full width: value + goal + inline bar); row 1: Apple Total · Our Total Estimate · Training Only; row 2: Distance · Flights · Heart Rate. Steps leads because the rows below are largely derived from it. Single `metricColumn` helper (uniform 22pt value font, no differential shrink). `activityRow(kcal:)` takes `Int` |
+| Steps (Build) | `Features/Today/MoveCard.swift` → `stepsRow`. There is deliberately **no separate steps card** on Today any more — the Move card is the only place steps live, so its row carries both controls the old `StepsCard` owned: the count/goal chip opens `stepsGoalPickerSheet` (writes `AppStorage "stepsGoal.<uuid>"`), the rest of the row opens `StepsInfoSheet`. Move only renders when `profile.healthGranted`; ungranted Build shows `connectHealthCard` at the top of `TodayView` instead |
+| Steps + cardio (Circuit, on Today) | `Features/Today/StepsCardioCard.swift` — rendered by `TodayView`, not under `Workouts/Circuit/`. Circuit keeps its own steps card because it also carries cardio logging and the weekly view; it has its own goal picker (daily + days/week) writing the same `AppStorage` key |
 | Water tracker (presets + day-streak) | `Domain/Water.swift` (presets Sip 4 / S 8 / M 16 / L 32 oz; `streak(_:goalFlOz:end:)`) + `Features/Today/WaterCard.swift` (`AppStorage "waterGoalFlOz.\(profileId)"`; streak chip) |
 | Water quick-log (app-wide FAB) | `Features/Today/WaterQuickLogButton.swift` — tap = repeat last (`AppStorage "waterLastFlOz.\(profileId)"`), press-and-hold = dim screen + radial preset picker; logs via `Repos.addWater`. Overlaid in `App/RootView.swift` |
 | Step milestones / goals | `Domain/Movement.swift` (`defaultStepMilestones`). Per-profile override: `AppStorage "stepsGoal.\(profileId.uuidString)"` |
@@ -189,13 +190,13 @@ SwiftUI (iOS 17+) · SwiftData · HealthKit · Swift Charts · XCTest · XcodeGe
 
 ## Data model
 
-Append-only logs. Derived figures never stored. DTOs in `Domain/Models.swift`; `@Model` classes in `Data/PersistenceModels.swift` with `snapshot` adapters; CRUD in `Data/Repositories/Repositories.swift`.
+Append-only logs. Derived figures never stored. DTOs in `Domain/Models.swift`; `@Model` classes in `Data/PersistenceModels.swift` with `snapshot` adapters; CRUD in `Data/Repositories/Repositories.swift`. Writes return success (Bool or optional DTO); callers must check before showing success or dismissing. `RepositoryWrite` saves explicitly, rolls back failures and re-fetches affected models to restore retained UI values, and posts success/failure notifications. Profile creation and Circuit seeding share a commit boundary.
 
 Key entities: `ProfileDTO`, `ExerciseDTO` (`isIsometric`), `WorkoutSetDTO` (`holdSeconds?`), `FoodLogEntryDTO` (`ingredients?`), `BodyMetricDTO`, `HealthMarkerDTO`, `StepCountDTO`, `PilatesSessionDTO`, `CardioSessionDTO`, `WaterEntryDTO`, `ActivitySessionDTO`, `SavedMealTemplateDTO`, `ReminderGroupDTO`, `ReminderDTO`, `ReminderEventDTO`.
 
 **HealthKit crash traps (caused SIGABRT in build 37):**
-- `requestAuthorization` raises uncatchable `NSException` — call ONLY from explicit user Connect flow. Never from `.task`/`.onAppear`.
-- Add only quantity types to `readTypes`/`writeTypes` — correlation types (e.g. blood pressure) crash auth.
+- Authorization configuration errors have raised uncatchable `NSException` — call ONLY from an explicit phone Connect flow or watch Start-workout action. Never from `.task`/`.onAppear`.
+- Phone `readTypes`/`writeTypes` contain quantity types; preserve the correlation-type crash guard (e.g. blood pressure). The watch also requests `HKObjectType.workoutType()` in its write set for `HKWorkoutSession` recording.
 
 LDL/HDL/cholesterol/A1c not from Apple Health (lab-only) — manual entry.
 
@@ -228,6 +229,7 @@ Full incident narratives: [docs/ci-history.md](docs/ci-history.md). Setup: [docs
 
 - **Local Mac (since 2026-08-08):** Xcode 26.6 / Swift 6.3.3 / XcodeGen 2.46 on an M5 Pro. Build and test **locally** — never push to CI to find out whether Swift compiles.
   ```bash
+  set -o pipefail
   xcodegen generate    # only after editing project.yml
   xcodebuild -project OurFitness.xcodeproj -scheme OurFitness \
     -destination 'platform=iOS Simulator,name=iPhone 17' \
@@ -243,6 +245,31 @@ Full incident narratives: [docs/ci-history.md](docs/ci-history.md). Setup: [docs
 - Secrets: `APPLE_TEAM_ID`, `APP_STORE_CONNECT_API_*`, `KEYCHAIN_PASSWORD`, `MATCH_GIT_URL`, `MATCH_PASSWORD`, `MATCH_GIT_BASIC_AUTHORIZATION`, `APPSTORE_PROFILE_BASE64`, `APPSTORE_WIDGET_PROFILE_BASE64`, `APPSTORE_WATCH_PROFILE_BASE64`
 
 ---
+
+## Milestone documentation
+
+Update affected Markdown in every milestone commit alongside its code. Record current behavior, changed architecture/routing, validation actually performed, and remaining limitations. Keep dated incident narratives and research intact, with explicit historical/planned status where guidance has been superseded. Do not claim tests or external signing state were verified without evidence.
+
+## Audit remediation and handoff
+
+Read [docs/audit-handoff.md](docs/audit-handoff.md) before continuing this audit.
+Update it at meaningful checkpoints and before usage exhaustion; record unverified
+edits explicitly. Update affected docs in the same milestone commit.
+
+Successful repository saves, live-session changes, and defaults changes schedule
+one coalesced phone-to-watch snapshot. The snapshot fetches 30 days of food logs
+and today's water/steps through `Repos+SnapshotReads.swift`; historical shortcut
+resolution and full medication history remain available. Move refreshes its
+Health readings on pull-to-refresh and foregrounding. Watch water keeps the
+original action timestamp. `SessionInputValidation` resolves known activity
+values on the phone and permits bounded custom intensity only for Other.
+
+The separate hostless `OurFitnessPersistenceTests` target compiles Domain,
+persistence models/repositories and selected session services directly. It checks
+failed-save recovery, completion idempotency, stale runners, seeded profiles and
+query equivalence with multi-year fixtures. System notification cleanup is
+injected out of hostless tests; physical phone/watch integration still needs
+manual verification. No historical schema or persisted raw value was changed.
 
 ## References
 

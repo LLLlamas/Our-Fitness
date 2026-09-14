@@ -501,11 +501,11 @@ public enum ReminderNotificationService {
             resolvedDosage = reminder.dosage
         }
 
-        Repos.logReminderDone(ctx, ReminderEventDTO(
+        guard Repos.logReminderDone(ctx, ReminderEventDTO(
             userId: reminder.userId, reminderId: reminderId,
             date: Dates.dayKey(date), amountFlOz: reminder.amountFlOz, timestamp: date,
             dosageTaken: resolvedDosage
-        ))
+        )) else { return nil }
         // This is the mechanism behind "a log cancels the nudge": syncAfterChange
         // reschedules, and the event just written makes MedicationPattern's
         // hasLogToday true, so the rebuilt request moves to tomorrow's pattern
@@ -527,23 +527,27 @@ public enum ReminderNotificationService {
         guard Repos.reminderGroup(ctx, id: reminder.groupId)?.kind != .medication else { return nil }
 
         let until = ReminderSchedule.snoozeDate(preferredHour: preferredHour(for: reminder.userId))
-        Repos.snoozeReminder(ctx, id: reminderId, until: until)
+        guard Repos.snoozeReminder(ctx, id: reminderId, until: until) else { return nil }
         syncAfterChange(ctx, reminderId: reminderId, userId: reminder.userId)
         return reminder
     }
 
     /// Applies a full-fidelity `ReminderDTO` update (interval/amount/room/etc.) and syncs.
-    public static func update(_ ctx: ModelContext, _ updated: ReminderDTO) {
-        Repos.updateReminder(ctx, updated)
+    @discardableResult
+    public static func update(_ ctx: ModelContext, _ updated: ReminderDTO) -> Bool {
+        guard Repos.updateReminder(ctx, updated) else { return false }
         syncAfterChange(ctx, reminderId: updated.id, userId: updated.userId)
+        return true
     }
 
     /// Cancels the notification, deletes the reminder (cascading its events),
     /// and pushes the watch snapshot so the deletion shows up there too.
-    public static func remove(_ ctx: ModelContext, reminderId: UUID, userId: UUID) {
+    @discardableResult
+    public static func remove(_ ctx: ModelContext, reminderId: UUID, userId: UUID) -> Bool {
+        guard Repos.deleteReminder(ctx, id: reminderId) else { return false }
         cancel(ids: [reminderId])
-        Repos.deleteReminder(ctx, id: reminderId)
         WatchSyncService.shared.pushSnapshot(ctx, userId: userId)
+        return true
     }
 }
 

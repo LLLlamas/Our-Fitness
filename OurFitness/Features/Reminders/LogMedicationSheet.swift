@@ -92,10 +92,10 @@ struct LogMedicationSheet: View {
 
     private func save() {
         let when = takenAt
-        _ = ReminderNotificationService.logDone(
+        guard ReminderNotificationService.logDone(
             ctx, reminderId: reminder.id, date: when,
             dosageTaken: trimmedDosage.isEmpty ? nil : trimmedDosage
-        )
+        ) != nil else { return }
         Haptics.success()
         toasts.show(Toast(
             title: reminder.name,

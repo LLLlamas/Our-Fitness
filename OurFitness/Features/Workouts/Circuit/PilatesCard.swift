@@ -67,7 +67,7 @@ struct PilatesCard: View {
         }
         .sheet(isPresented: $showLogSheet) {
             PilatesLogSheet(profileId: profile.id) { dto in
-                Repos.logPilatesSession(ctx, dto)
+                guard Repos.logPilatesSession(ctx, dto) else { return }
                 toasts.pilatesLogged(minutes: dto.durationMinutes)
             }
             .themed(theme.mode)
@@ -140,7 +140,7 @@ struct PilatesCard: View {
     }
 
     private func deleteSession(_ session: PilatesSessionDTO) {
-        Repos.deletePilatesSession(ctx, id: session.id)
+        guard Repos.deletePilatesSession(ctx, id: session.id) else { return }
         toasts.show(Toast(title: "Session removed", detail: "Pilates session deleted.",
                           accent: .warn, symbol: "trash.fill"))
     }

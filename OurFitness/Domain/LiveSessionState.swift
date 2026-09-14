@@ -31,6 +31,8 @@ public struct LiveSessionState: Codable, Equatable, Sendable {
 
     /// Seconds elapsed since the session started, derived from the anchor.
     public func elapsedSeconds(now: Date = Date()) -> Int {
-        max(0, Int(now.timeIntervalSince(startDate)))
+        let seconds = now.timeIntervalSince(startDate)
+        guard seconds.isFinite, seconds > 0 else { return 0 }
+        return Int(min(seconds, Double(Int.max / 2)))
     }
 }
