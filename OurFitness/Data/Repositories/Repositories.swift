@@ -7,6 +7,48 @@ import SwiftData
 
 public enum Repos {
 
+    // MARK: - Imperative fetches for non-@Query consumers
+    //
+    // Features/ reads through @Query (architectural rule 3), so these look
+    // callerless on this branch. They are NOT: `WatchSyncService` and `Seeder`
+    // on feature/reminders-plants call all three, and that branch's
+    // `OurFitnessPersistenceTests` target compiles Data/ (unlike the hostless
+    // OurFitnessTests here, which only compiles Domain/). A dead-code sweep
+    // deleted them on grep evidence from this branch alone and would have
+    // broken the watch app at merge. Do not remove without grepping every
+    // branch that ships a target compiling Data/.
+
+    public static func listProfiles(_ ctx: ModelContext) -> [ProfileDTO] {
+        let desc = FetchDescriptor<ProfileModel>(
+            sortBy: [SortDescriptor(\.createdAt, order: .forward)]
+        )
+        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
+    }
+
+    public static func listFoodLog(_ ctx: ModelContext, userId: UUID, date: String? = nil) -> [FoodLogEntryDTO] {
+        var desc: FetchDescriptor<FoodLogEntryModel>
+        if let date {
+            desc = FetchDescriptor<FoodLogEntryModel>(
+                predicate: #Predicate { $0.userId == userId && $0.date == date },
+                sortBy: [SortDescriptor(\.timestamp, order: .forward)]
+            )
+        } else {
+            desc = FetchDescriptor<FoodLogEntryModel>(
+                predicate: #Predicate { $0.userId == userId },
+                sortBy: [SortDescriptor(\.timestamp, order: .reverse)]
+            )
+        }
+        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
+    }
+
+    public static func listSavedTemplates(_ ctx: ModelContext, userId: UUID) -> [SavedMealTemplateDTO] {
+        let descriptor = FetchDescriptor<SavedMealTemplateModel>(
+            predicate: #Predicate { $0.userId == userId },
+            sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
+        )
+        return (try? ctx.fetch(descriptor))?.map(\.snapshot) ?? []
+    }
+
     // MARK: - Profiles
 
     public static func setHealthGranted(_ ctx: ModelContext, profileId: UUID, granted: Bool) {
