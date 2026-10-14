@@ -264,6 +264,28 @@ targets:
         CODE_SIGNING_REQUIRED: "NO"
         CODE_SIGNING_ALLOWED: "NO"
 
+  # UI smoke test. Separate from OurFitnessTests on purpose: that target is
+  # hostless and links none of the app targets, which is what keeps `xcodebuild
+  # test` fast. A UI test MUST launch the real app, so it gets its own target
+  # and its own scheme — the OurFitness scheme's `test` action is deliberately
+  # left alone so CI's cadence is unchanged.
+  OurFitnessUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: OurFitnessUITests
+    dependencies:
+      - target: OurFitness
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.ourfitness.app.uitests
+        TEST_TARGET_NAME: OurFitness
+        GENERATE_INFOPLIST_FILE: "YES"
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: ""
+        CODE_SIGNING_REQUIRED: "NO"
+        CODE_SIGNING_ALLOWED: "NO"
+
   OurFitnessPersistenceTests:
     type: bundle.unit-test
     platform: iOS
@@ -315,3 +337,16 @@ schemes:
       config: Debug
     archive:
       config: Release
+
+  # Run with: xcodebuild -scheme OurFitnessUITests -destination '...' test
+  # Not in the OurFitness scheme, so `xcodebuild test` stays hostless and fast.
+  OurFitnessUITests:
+    build:
+      targets:
+        OurFitness: [run]
+        OurFitnessUITests: [test]
+    test:
+      targets:
+        - OurFitnessUITests
+    run:
+      config: Debug
