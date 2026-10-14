@@ -1,6 +1,11 @@
 # Health-Tracking UI & Readability Refresh — Implementation Plan
 
 > **Status:** Spec for a future implementation agent. Researched and scoped 2026-06-01.
+>
+> **Stale file names (14 Oct 2026):** `StepsCardioCard` was merged into
+> `Features/Today/StepsCard.swift` (one mode-aware card); `CardioLogCard` was
+> deleted as unreachable — cardio is logged via `LogPastSessionSheet` on the
+> Train tab.
 > All design decisions below were confirmed with the product owner. Where a value
 > is an assumption rather than a confirmed decision it is tagged **[ASSUMED]** —
 > verify before shipping but proceed with the default if unanswered.

@@ -223,5 +223,6 @@ Full incident narratives: [docs/ci-history.md](docs/ci-history.md). Setup: [docs
 - [docs/nutrition-plan-research.md](docs/nutrition-plan-research.md) — Build nutrition spec
 - [docs/app-expansion.md](docs/app-expansion.md) — Phase 2/3 roadmap (iCloud sync, store polish)
 - [docs/live-activity-setup.md](docs/live-activity-setup.md) — widget signing checklist
+- [docs/health-data-audit.md](docs/health-data-audit.md) — **read before changing any health/fitness number.** What was wrong and fixed, what is verified correct, and the open sourcing questions that must not be "fixed" without checking the actual guideline
 
 > `docs/encouragement-system-plan.md`, `health-tracking-ui-plan.md`, and `activity-and-ai-expansion-research.md` are dated design specs / research — forward-looking or only partly shipped. This file and the code are authoritative when they disagree.

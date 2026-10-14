@@ -1,5 +1,11 @@
 # Expanding exercises, activities & food detection — research + proposal
 
+> **Stale file names (14 Oct 2026):** `CardioLogCard` was deleted — it had been
+> unreachable, and it estimated every cardio type at 3.5 MET. Logging a finished
+> activity now goes through `LogPastSessionSheet` (Train tab), which writes
+> `ActivitySessionDTO` with the activity's real MET. `CardioSessionDTO` is a
+> read-only legacy path. The proposal in section 4 below is therefore already shipped.
+
 _Research date: 2026-06-02. Grounds: the existing codebase (`Domain/CalorieEstimator.swift`, `Domain/ExerciseInfo.swift`, `Domain/FoodParser.swift`, `Domain/CommonFoods.swift`, `Services/ExerciseInsightService.swift`, `Domain/Models.swift`) + external sources cited at the end._
 
 > Status: background research/proposal. Parts have since shipped (e.g. the curated-food expansion + the indexed `CommonFoods.bestMatch` matcher). Treat as reference, not a current backlog; CLAUDE.md and the code are authoritative.

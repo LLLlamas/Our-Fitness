@@ -4,9 +4,15 @@
 // not neck/hips), so the guidance copy below must not promise one.
 //
 // Sources:
-//   CDC / NIH standard BMI formula.
-//   Gallagher et al. (2000): body fat category thresholds by sex/age.
-//   ACSM's Guidelines for Exercise Testing and Prescription, 11th ed. (2022).
+//   CDC / NIH standard BMI formula (18.5 / 25 / 30 cut-points).
+//
+// UNVERIFIED SOURCE — `bodyFatCategory` thresholds. These were previously
+// attributed to Gallagher et al. (2000), but that paper's thresholds are
+// age-stratified and these buckets are not, so the citation did not describe
+// the code. The values match a widely-used fitness-industry classification
+// table, but no primary source has been confirmed for them. Do not re-add a
+// citation here without checking it against the actual publication, and do
+// not treat these labels as clinical guidance. See docs/health-data-audit.md.
 
 import Foundation
 

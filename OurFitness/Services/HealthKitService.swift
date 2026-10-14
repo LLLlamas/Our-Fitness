@@ -1,6 +1,6 @@
 // Single owner of HealthKit access. Views never touch HKHealthStore directly.
 // Read: steps, body mass, heart rate, resting HR, active energy, exercise time,
-//       body fat %, waist, blood pressure, blood glucose.
+//       body fat %, waist, blood pressure, blood glucose (fasting-marked only).
 // Write: workouts, body mass (optional, mirrors in-app logs to Apple Health).
 // syncFromHealth() pulls latest body/marker readings into the app's logs.
 
@@ -265,6 +265,49 @@ public final class HealthKitService: ObservableObject {
         }
     }
 
+    // MARK: - Blood glucose (fasting only)
+
+    /// Most recent blood-glucose reading (mg/dL) that HealthKit itself marks as a
+    /// *pre-meal* measurement — the only kind that may be stored as
+    /// `HealthMarkerKind.fastingGlucose`.
+    ///
+    /// HealthKit carries the meal context in `HKMetadataKeyBloodGlucoseMealTime`
+    /// as an NSNumber wrapping `HKBloodGlucoseMealTime` (`.preprandial` = just
+    /// before a meal, `.postprandial` = after). Mislabelling matters clinically:
+    /// a post-meal 150 mg/dL is unremarkable, but filed as *fasting* glucose
+    /// `HealthRanges.status(for:)` scores it >= 126 -> .high, i.e. the app would
+    /// report the ADA diabetes cut-point off a normal reading. So two samples get
+    /// skipped rather than mislabelled:
+    ///   - samples marked `.postprandial`
+    ///   - samples with no meal-time metadata at all (the common case: CGM feeds
+    ///     and most manual entries carry none)
+    /// Keeping those would need a separate non-fasting glucose `HealthMarkerKind`.
+    ///
+    /// The predicate asks Health for pre-meal samples only, so the newest *fasting*
+    /// reading is found even when a later non-fasting one exists; the metadata is
+    /// re-checked in the handler so nothing unmarked can slip through.
+    private func latestFastingGlucoseMgDL() async -> (value: Double, date: Date)? {
+        guard let type = HKQuantityType.quantityType(forIdentifier: .bloodGlucose) else { return nil }
+        let unit = Self.mgPerDLUnit
+        let preMealOnly = HKQuery.predicateForObjects(
+            withMetadataKey: HKMetadataKeyBloodGlucoseMealTime,
+            allowedValues: [HKBloodGlucoseMealTime.preprandial.rawValue]
+        )
+        let sort = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: false)
+        return await withCheckedContinuation { cont in
+            let q = HKSampleQuery(sampleType: type, predicate: preMealOnly, limit: 1,
+                                  sortDescriptors: [sort]) { _, samples, _ in
+                guard let s = (samples as? [HKQuantitySample])?.first,
+                      let raw = s.metadata?[HKMetadataKeyBloodGlucoseMealTime] as? NSNumber,
+                      HKBloodGlucoseMealTime(rawValue: raw.intValue) == .preprandial else {
+                    cont.resume(returning: nil); return
+                }
+                cont.resume(returning: (s.quantity.doubleValue(for: unit), s.endDate))
+            }
+            store.execute(q)
+        }
+    }
+
     // MARK: - Active energy ("Move")
 
     /// Active energy burned (kcal) for a local-calendar day.
@@ -374,7 +417,8 @@ public final class HealthKitService: ObservableObject {
     /// markers and writes any not-yet-recorded value into the app's logs, stamped
     /// with the sample's own day. Deduped by (day, field/kind) so repeated calls
     /// are cheap and idempotent. Resting HR, BP, and glucose land as markers;
-    /// body fat % and waist land as body metrics.
+    /// body fat % and waist land as body metrics. Glucose only lands when Health
+    /// marks the sample pre-meal (see `latestFastingGlucoseMgDL()`).
     public func syncFromHealth(profileId: UUID, ctx: ModelContext) async {
         guard isAvailable else { return }
 
@@ -403,7 +447,10 @@ public final class HealthKitService: ObservableObject {
             upsertMarker(ctx, profileId: profileId, day: day, kind: .bpSystolic, value: bp.sys)
             upsertMarker(ctx, profileId: profileId, day: day, kind: .bpDiastolic, value: bp.dia)
         }
-        if let glu = await latestQuantity(.bloodGlucose, unit: Self.mgPerDLUnit) {
+        // Only a HealthKit-confirmed pre-meal sample may be filed as fasting
+        // glucose — unmarked and post-meal readings are dropped on purpose.
+        // See latestFastingGlucoseMgDL().
+        if let glu = await latestFastingGlucoseMgDL() {
             upsertMarker(ctx, profileId: profileId, day: Dates.dayKey(glu.date), kind: .fastingGlucose, value: glu.value)
         }
     }

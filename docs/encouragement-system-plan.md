@@ -1,6 +1,10 @@
 # Encouragement System — Design Plan
 
 > Status: Partially implemented. `EncouragementEngine`, `EncouragementMessage`, `ToastCenter` hooks, and `ProjectionBar` exist; notification scheduling and the larger sheet system remain future work.
+>
+> **Stale file names (14 Oct 2026):** `StepsCardioCard` no longer exists — the two
+> steps cards were merged into one mode-aware `Features/Today/StepsCard.swift`.
+> Read every `StepsCardioCard` reference below as that file.
 
 ---
 
