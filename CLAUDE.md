@@ -50,6 +50,9 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 5. `.swift` filenames unique in target. All `@Model` classes in `Data/PersistenceModels.swift`.
 6. `OurFitnessTests` is hostless: blank `TEST_HOST`/`BUNDLE_LOADER`, no `@testable import OurFitness`.
 7. `Shared/WatchSyncPayload.swift` stays Foundation-only and compiles into phone, watch, and tests. `Shared/LiveSessionAttributes.swift` uses ActivityKit and compiles into phone and widget only. Neither contract imports SwiftUI/SwiftData/UIKit. The watch also compiles selected `Domain/` files directly, so keep their dependencies within that explicit source set.
+   - Concretely: `CalorieEstimator.swift` is in the watch's source list and `Units.swift` is **not**, which is why `CalorieEstimator` keeps a file-local `kgPerLb` instead of using `Units.kgPerLb`. "Deduplicating" that constant breaks the watch build. Check `project.yml` → `OurFitnessWatch.sources` before pointing one watch-compiled file at another `Domain/` file.
+8. **One surface per job.** Steps render in `StepsCard` only; food is logged in `AddFoodSheet` (Meals) only; day history is `MealHistoryList` only; cardio is logged in `LogPastSessionSheet` only. Before adding a card, sheet or row, find the existing one and extend it. Duplicate surfaces drift apart — the pair that triggered this rule showed the same step count against two different goal stores and two different burn formulas.
+9. **Every `Repos` write returns success** (`Bool`, or an optional DTO) via `RepositoryWrite.perform`. Callers MUST `guard … else { return }` before dismissing a sheet, firing a toast, or celebrating. A write that silently failed while the UI said "Logged" is the bug this prevents.
 
 ---
 
@@ -85,7 +88,7 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | Camera food label scanner | `Features/Nutrition/CameraFoodLogSheet.swift` (iOS 17+ VisionKit, iOS 26+ AI) |
 | AI food alternatives | `Services/FoodAlternativeService.swift` (iOS 26+; prefetch after every log; scaffolding + `foodAlternatives.v2.*` cache from `OnDeviceModel`) |
 | AI "what are you in the mood for?" | `Services/MealIdeaService.swift` (iOS 26+; prompt puts the craving first, mode/history as tie-breaks; scaffolding from `OnDeviceModel`) + fallback `Domain/MealCravingMatcher.swift` — flavours have strong/weak signals scored by density, antagonist suppression (salty↔sweet/fruity, warm↔cold) and gated+capped affinity, so a stated flavour never returns its opposite; plus a Build (protein/calorie) / Circuit (fibre/lean) macro tilt → `MoodMealSheet` in `NutritionView`. Tests: `MealCravingMatcherTests` |
-| Meal log UI + day history + past-day logging | `Features/Nutrition/NutritionView.swift` — day strip (last 7 days, dot = has logs) + calendar `DayPickerSheet` for any earlier day; trend sheet day detail → "Open this day in the log" |
+| Meal log UI + day history + past-day logging | `Features/Nutrition/NutritionView.swift` — day strip (last 7 days, dot = has logs) for quick switching + a history button opening `Features/Nutrition/MealHistorySheet.swift`. **`MealHistoryList` is THE day-history list** (one row per logged day: date · totals · the meals eaten); the trend sheet's "Recent days" renders the same component, so never write a second one. All three entry points route through `NutritionView.selectDay(_:)` so animation + haptic match. No calendar picker — a grid makes users hunt through empty dates; the list shows the days they actually logged |
 | Ingredient-level editing / logging | `Features/Nutrition/MealIngredientDetailSheet.swift` — takes `targetDate:` for past-day logging |
 | Meal suggestions (no standalone UI) | `Domain/SuggestedMeals.swift` → meal pool + `ranked(...)`, consumed only as `MealCravingMatcher`'s fallback; ideas UI is `MoodMealSheet` only (Suggestions sheet/"for you" row removed as redundant) |
 | Personalised recs / most-logged foods | `Domain/FoodAffinity.swift` → `mostLoggedIds(_:days:limit:end:)` / `frequencyByFoodId(_:days:end:)` (30-day window over foodIds incl. ingredients); feeds `AddFoodSheet` ordering + `MealCravingMatcher` |
@@ -98,7 +101,7 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | Calorie / macro target math | `Domain/Targets.swift` only (intake side: BMR → TDEE → targets). Activity *burn* math is `Domain/CalorieEstimator.swift` — see Calorie math |
 | Target rationale copy | `Domain/TargetRationale.swift` (spell out acronyms; "cal" not "kcal"); Circuit micro copy `fiberWhy`/`sodiumWhy`/`addedSugarWhy`/`saturatedFatWhy(for:)` (used by `HeartHealthCard` info sheet) |
 | **Today / Steps** | |
-| Move card (2×3 cols) | `Features/Today/MoveCard.swift` — row 1: Apple Total · Our Total Estimate · Training Only; row 2: Distance · Flights · Heart Rate. Single `metricColumn` helper (uniform 22pt value font, no differential shrink). `activityRow(kcal:)` takes `Int`. Burn figures come from `DailyBurn.breakdown` (never re-derive MET math or the step-overlap exclusions here — `countedCardio` / `countedActivities` read `DailyBurn`'s sets); unit conversions via `Units.kgPerLb` / `Units.kmPerMile`; the 7 column info sheets sit on `Components/InfoSheet.swift`. Move only renders when `profile.healthGranted` — ungranted, `TodayView` shows `connectHealthCard` at the top instead |
+| Move card (2×3 cols) | `Features/Today/MoveCard.swift` — row 1: Apple Total · Our Total Estimate · Training Only; row 2: Distance · Flights · Heart Rate. **No steps row** — steps live only in `StepsCard` (it had a duplicate count, goal, goal-picker and info sheet, plus a stale gross-MET formula string). Single `metricColumn` helper (uniform 22pt value font, no differential shrink). `activityRow(kcal:)` takes `Int`. Burn figures come from `DailyBurn.breakdown` (never re-derive MET math or the step-overlap exclusions here — `countedCardio` / `countedActivities` read `DailyBurn`'s sets); unit conversions via `Units.kgPerLb` / `Units.kmPerMile`; the 7 column info sheets sit on `Components/InfoSheet.swift`. Move only renders when `profile.healthGranted` — ungranted, `TodayView` shows `connectHealthCard` at the top instead |
 | Steps card (both modes, Today only) | `Features/Today/StepsCard.swift` — one mode-aware card: Build = hero count + `ProgressBar`; Circuit = `ProgressRing` + projection + pace-vs-yesterday + 7-day strip + week-to-date active cal / exercise min. One goal-picker sheet (shared `Components/GoalPickerSheet.swift`; days/week wheel is Circuit-only) + one info sheet (shared `Components/InfoSheet.swift`). Goal keys live in `StepsGoalPrefs` in the same file. Never add a second steps card |
 | Water tracker (presets + day-streak) | `Domain/Water.swift` (presets Sip 4 / S 8 / M 16 / L 32 oz; `total(_:on:)`, `streak(_:goalFlOz:end:)`) + `Features/Today/WaterCard.swift` (streak chip = shared `Components/StreakChip.swift`) |
 | Log water (shared path — use for ANY new water surface) | `Features/Today/WaterLogging.swift` → `WaterLog.add(_:for:on:context:lastFlOz:unitSystem:toasts:)` — one write + remembers the repeat-last amount + one copy of the toast; also owns the `waterGoalFlOz.\(profileId)` / `waterLastFlOz.\(profileId)` AppStorage keys. No explicit haptic (ToastCenter.show fires one) |
@@ -152,7 +155,7 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | **Settings / Profile** | |
 | Edit vitals | `Repos.updateVitals` + `Features/Settings/SettingsView.swift` → `EditVitalsSheet` |
 | Switch mode | `Repos.updateMode` + `Features/Settings/SettingsView.swift` → `ModeSwitchSheet` |
-| App tab layout | `App/RootView.swift` — both modes: Today / Meals / Train / Reminders / Progress. `WorkoutsView` is mode-aware (Build = lift list + rep counter; Circuit = Pilates + movement quick-log). Today mirrors Build in both (macros/move/water/steps + food log; Circuit adds cardio) |
+| App tab layout | `App/RootView.swift` — both modes: Today / Meals / Train / Reminders / Progress. `WorkoutsView` is mode-aware (Build = lift list + rep counter; Circuit = Pilates + movement quick-log). Today is a **read-only status board**: macros · move · water · steps, and a log list with no tap target. One surface per job — logging food happens on Meals, nowhere else |
 | Profile avatar | `Components/ProfileAvatar.swift` |
 | Units (metric ↔ imperial) | `Domain/Units.swift` — canonical storage IMPERIAL; convert only at UI boundary |
 | Sync current weight | `Repos.syncCurrentWeight` — called after progress log, HK sync, TodayView task |
@@ -272,9 +275,14 @@ Update affected Markdown in every milestone commit alongside its code. Record cu
 
 ## Audit remediation and handoff
 
-Read [docs/audit-handoff.md](docs/audit-handoff.md) before continuing this audit.
-Update it at meaningful checkpoints and before usage exhaustion; record unverified
-edits explicitly. Update affected docs in the same milestone commit.
+[docs/audit-handoff.md](docs/audit-handoff.md) is a **historical record** of the
+2026-09-14 session, superseded on 14 Oct 2026 — read it for why the reminders and
+watch work landed the way it did, not for current state. The open backlog it fed
+into is [docs/next-audit-scope.md](docs/next-audit-scope.md) (privacy controls,
+erase-local-data, measured performance), which is still accurate.
+
+When a session hands off, record unverified edits explicitly and update affected
+docs in the same milestone commit.
 
 Successful repository saves, live-session changes, and defaults changes schedule
 one coalesced phone-to-watch snapshot. The snapshot fetches 30 days of food logs

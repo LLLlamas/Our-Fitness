@@ -1,8 +1,12 @@
 // Today tab — single-screen daily overview.
 //
-// Same shape in both modes: macro rings | move/steps | water | steps (+ cardio in
-// Circuit) | recent food log. Strength, live sessions, Pilates, and Circuit's
-// parenting movements live in the Train tab.
+// Same shape in both modes: macro rings | move | water | steps | today's food log.
+// Strength, live sessions, Pilates, and Circuit's parenting movements live in the
+// Train tab.
+//
+// Everything here is a READOUT. Steps live in exactly one card (`StepsCard`) —
+// `MoveCard` deliberately shows none — and food logging lives only on the Meals
+// tab, so this tab presents no add/edit affordance for either.
 
 import SwiftUI
 import SwiftData
@@ -25,9 +29,6 @@ struct TodayView: View {
     @Query private var pilatesModels: [PilatesSessionModel]
     @Query private var bodyModels: [BodyMetricModel]
     @Query private var markerModels: [HealthMarkerModel]
-
-    @State private var entryToDetail: FoodLogEntryDTO?
-    @State private var showMealLog = false
 
     // Real HealthKit figures for StepsCard's Circuit variant — loaded in
     // refreshToday(). nil / empty means "Health gave us nothing", and the card
@@ -172,14 +173,15 @@ struct TodayView: View {
 
                 WaterCard(profile: profile)
 
-                // Mode-aware tail: one StepsCard serves both modes (Build =
-                // hero count + bar, Circuit = ring + weekly strip), followed by
-                // today's food log. Circuit adds the focus footer between them.
+                // Tail: one StepsCard serves both modes (Build = hero count +
+                // bar, Circuit = ring + weekly strip), then today's food log.
+                // Circuit adds its "why steps" focus footer between the two —
+                // the only difference, so there's one layout, not two.
+                stepsCard
                 if profile.mode == .circuit {
-                    circuitContent
-                } else {
-                    buildContent
+                    focusFooter(.steps)
                 }
+                recentLogs
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 18)
@@ -213,25 +215,6 @@ struct TodayView: View {
         }
         .onReceive(nudgeTimer) { _ in
             checkTimeNudges()
-        }
-        .sheet(item: $entryToDetail) { entry in
-            MealIngredientDetailSheet(
-                mode: .editing(entry: entry),
-                profile: profile,
-                onDone: { entryToDetail = nil }
-            )
-            .themed(profile.mode)
-        }
-        .sheet(isPresented: $showMealLog) {
-            AddFoodSheet(profile: profile, targetDate: today) { dto in
-                Repos.addFoodLog(ctx, dto)
-                toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
-                let foodName = dto.foodId ?? dto.customName ?? ""
-                if !foodName.isEmpty {
-                    FoodAlternativeService.shared.prefetch(for: foodName, mode: profile.mode)
-                }
-            }
-            .themed(profile.mode)
         }
     }
 
@@ -350,21 +333,11 @@ struct TodayView: View {
         }
     }
 
-    // MARK: - Circuit content
-    //
-    // Mirrors Build's daily layout (steps + food log). Steps and cardio stay here as
-    // daily-activity metrics; live sessions, Pilates, and the parenting movements now
-    // live in the Train tab.
-    @ViewBuilder
-    private var circuitContent: some View {
-        stepsCard
-        focusFooter(.steps)
-
-        recentLogs
-    }
+    // MARK: - Steps
 
     // One mode-aware steps card for both modes (Build = hero count + bar,
-    // Circuit = ring + weekly strip + week-to-date Health stats).
+    // Circuit = ring + weekly strip + week-to-date Health stats). The only
+    // steps surface on Today — MoveCard shows none.
     @ViewBuilder
     private var stepsCard: some View {
         StepsCard(
@@ -391,14 +364,10 @@ struct TodayView: View {
         .padding(.horizontal, 4)
     }
 
-    // MARK: - Build content
-
-    @ViewBuilder
-    private var buildContent: some View {
-        stepsCard
-        recentLogs
-    }
-
+    /// Read-only. Adding, editing and deleting food all live on the Meals tab —
+    /// one logging surface, not two — so these rows are plain `Card`s with no tap
+    /// target and there is no add button. `todaysLogs` still feeds `MacroQuadGrid`
+    /// and the meal nudge, so the day's food-log query stays.
     @ViewBuilder
     private var recentLogs: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -406,16 +375,16 @@ struct TodayView: View {
                 .font(.system(size: 22, weight: .regular))
                 .foregroundStyle(theme.text)
             if todaysLogs.isEmpty {
-                PressableCard(action: { showMealLog = true }) {
+                Card {
                     HStack(spacing: 12) {
-                        Image(systemName: "plus.circle.fill")
+                        Image(systemName: "fork.knife")
                             .font(.system(size: 22))
-                            .foregroundStyle(theme.accent)
+                            .foregroundStyle(theme.dim)
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("Log a meal")
+                            Text("Nothing logged yet")
                                 .font(.system(size: 15, weight: .semibold))
                                 .foregroundStyle(theme.text)
-                            Text("Quick text entry for today")
+                            Text("Food is logged on the Meals tab.")
                                 .font(.caption)
                                 .foregroundStyle(theme.dim)
                         }
@@ -423,15 +392,8 @@ struct TodayView: View {
                     }
                 }
             } else {
-                Button {
-                    showMealLog = true
-                } label: {
-                    Label("Add meal", systemImage: "plus.circle.fill")
-                }
-                .tactile(.pill, fill: theme.accent)
-
                 ForEach(todaysLogs) { e in
-                    PressableCard(action: { entryToDetail = e }) {
+                    Card {
                         HStack {
                             Text(e.customName ?? "Meal")
                                 .foregroundStyle(theme.text)

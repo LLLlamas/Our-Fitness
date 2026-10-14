@@ -1,6 +1,22 @@
 # Audit remediation handoff — 2026-09-14
 
-## Current state: verified milestone authorized for commit, push and TestFlight
+> **HISTORICAL RECORD — superseded 14 Oct 2026.** Everything below describes the
+> state of a session a month ago, including a TestFlight release that is no
+> longer the current one. It is kept because its decisions explain how the
+> reminders/watch work got here, not because it describes today.
+>
+> For current state: `CLAUDE.md` and the code are authoritative. The branch this
+> handoff was written on (`feature/reminders-plants`) was merged into `main` on
+> 14 Oct 2026 — the watch app, reminders and the `RepositoryWrite` success
+> contract all live on `main` now. Health/fitness numbers were audited
+> separately; see [health-data-audit.md](health-data-audit.md), which supersedes
+> any calorie or marker figure quoted below.
+>
+> The forward-looking backlog in [next-audit-scope.md](next-audit-scope.md) is
+> still accurate — privacy controls, the erase-local-data flow and the measured
+> performance work remain undone.
+
+## Current state as of 2026-09-14: verified milestone authorized for commit, push and TestFlight
 
 The user approved the three-agent audit and continuing remediation. The user
 explicitly requires checkpoints before usage exhaustion so another agent can

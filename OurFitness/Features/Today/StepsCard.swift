@@ -10,9 +10,9 @@
 
 import SwiftUI
 
-/// The per-profile steps-goal overrides. Keys live here so the card's picker and
-/// TodayView's streak math can't drift apart. (MoveCard still spells the daily
-/// key itself — folding it in is a separate change.)
+/// The per-profile steps-goal overrides. The one place these keys are spelled on
+/// the phone, so the card's picker and TodayView's streak math can't drift apart.
+/// (`WatchSyncService` reads the daily key by name to put the goal on the wrist.)
 enum StepsGoalPrefs {
     static func dailyKey(_ profileId: UUID) -> String { "stepsGoal.\(profileId.uuidString)" }
     static func weeklyDaysKey(_ profileId: UUID) -> String { "stepsWeeklyDays.\(profileId.uuidString)" }

@@ -51,4 +51,35 @@ public enum NutritionHistory {
     public static func daysLogged(_ entries: [FoodLogEntryDTO], days: Int, end: Date = Date()) -> Int {
         byDay(entries, days: days, end: end).filter { $0.totals.calories > 0 }.count
     }
+
+    /// Hard ceiling on an auto-sized window, so a years-old log can't make a
+    /// history view walk thousands of days to render a screenful.
+    public static let maxAutoWindow = 400
+
+    /// Days that actually have food logged, **newest first** — the backing data
+    /// for any "what did I eat" history list.
+    ///
+    /// The window sizes itself to the oldest entry rather than taking a fixed
+    /// day count, so the list reaches as far back as the user's data goes and no
+    /// further. `maxDays` caps it; without one the cap is `maxAutoWindow`.
+    /// Empty days are dropped — the point is reviewing what was eaten.
+    public static func loggedDays(
+        _ entries: [FoodLogEntryDTO], maxDays: Int? = nil, end: Date = Date()
+    ) -> [DayTotals] {
+        byDay(entries, days: autoWindow(entries, maxDays: maxDays, end: end), end: end)
+            .filter { $0.totals.calories > 0 }
+            .reversed()
+    }
+
+    /// Days spanned by `entries` (inclusive of both ends), clamped to at least 1
+    /// and at most `maxDays` / `maxAutoWindow`. Zero when there is nothing logged.
+    public static func autoWindow(
+        _ entries: [FoodLogEntryDTO], maxDays: Int? = nil, end: Date = Date()
+    ) -> Int {
+        guard let oldest = entries.map(\.date).min(),
+              let oldestDate = Dates.date(fromDayKey: oldest) else { return 0 }
+        let endDay = Calendar.current.startOfDay(for: end)
+        let span = (Calendar.current.dateComponents([.day], from: oldestDate, to: endDay).day ?? 0) + 1
+        return min(max(span, 1), maxDays ?? maxAutoWindow)
+    }
 }

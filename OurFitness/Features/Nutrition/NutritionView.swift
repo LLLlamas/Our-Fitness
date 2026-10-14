@@ -1,6 +1,7 @@
 // Meal log tab. One "Add food" sheet (AddFoodSheet) covers search, free-text
 // describe, recipes, favorites and recents; "What are you in the mood for?"
-// covers ideas. The day strip + calendar browse any past day's log.
+// covers ideas. The day strip switches between recent days; the history
+// button opens MealHistorySheet — a scrollable list of every logged day.
 
 import SwiftUI
 import SwiftData
@@ -15,7 +16,7 @@ struct NutritionView: View {
     @Query private var logModels: [FoodLogEntryModel]
     @AppStorage private var favoriteIdsString: String
     @State private var showAddFood = false
-    @State private var showDayPicker = false
+    @State private var showMealHistory = false
     @State private var entryToDetail: FoodLogEntryDTO?
     @State private var showNutritionTrend = false
     @State private var showNutritionInsight = false
@@ -205,9 +206,11 @@ struct NutritionView: View {
             }
             .themed(profile.mode)
         }
-        .sheet(isPresented: $showDayPicker) {
-            DayPickerSheet(selectedDayKey: $selectedDayKey)
-                .themed(profile.mode)
+        .sheet(isPresented: $showMealHistory) {
+            MealHistorySheet(logs: allLogs) { dayKey in
+                selectDay(dayKey)
+            }
+            .themed(profile.mode)
         }
         .sheet(item: $entryToDetail) { entry in
             MealIngredientDetailSheet(
@@ -219,7 +222,7 @@ struct NutritionView: View {
         }
         .sheet(isPresented: $showNutritionTrend) {
             NutritionTrendSheet(profile: profile, logs: allLogs) { dayKey in
-                selectedDayKey = dayKey
+                selectDay(dayKey)
             }
             .themed(profile.mode)
         }
@@ -323,8 +326,8 @@ struct NutritionView: View {
         }
     }
 
-    /// History strip: last 7 days (newest first) with a dot on days that have
-    /// logs, plus a calendar button for any earlier day.
+    /// Day strip: last 7 days (newest first) with a dot on days that have logs,
+    /// plus a history button that lists every logged day further back.
     @ViewBuilder
     private func daySelector(allLogs: [FoodLogEntryDTO]) -> some View {
         let loggedDays = Set(allLogs.map(\.date))
@@ -333,10 +336,7 @@ struct NutritionView: View {
                 HStack(spacing: 8) {
                     ForEach(recentDayKeys, id: \.self) { key in
                         Button {
-                            withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
-                                selectedDayKey = key
-                            }
-                            Haptics.selection()
+                            selectDay(key)
                         } label: {
                             HStack(spacing: 5) {
                                 Text(dayPillLabel(key))
@@ -354,13 +354,13 @@ struct NutritionView: View {
                 }
             }
             Button {
-                showDayPicker = true
+                showMealHistory = true
             } label: {
-                Image(systemName: "calendar")
+                Image(systemName: "clock.arrow.circlepath")
                     .font(.system(size: 14, weight: .medium))
             }
             .tactile(.pill)
-            .accessibilityLabel("Pick a day")
+            .accessibilityLabel("Meal history")
         }
     }
 
@@ -569,6 +569,16 @@ struct NutritionView: View {
         .padding(.top, 2)
     }
 
+    /// Single place the selected day changes, from the strip, the history sheet
+    /// or the weekly trend sheet — so the animation and haptic stay identical.
+    private func selectDay(_ key: String) {
+        guard key != selectedDayKey else { return }
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+            selectedDayKey = key
+        }
+        Haptics.selection()
+    }
+
     // MARK: - Log list
 
     @ViewBuilder
@@ -628,51 +638,6 @@ struct NutritionView: View {
         .background(theme.card)
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(theme.line, lineWidth: 1))
-    }
-}
-
-// MARK: - Day picker sheet
-
-/// Calendar for jumping to any past day's meal log (future days disabled).
-private struct DayPickerSheet: View {
-    @Binding var selectedDayKey: String
-    @Environment(\.theme) private var theme
-    @Environment(\.dismiss) private var dismiss
-    @State private var date: Date = Date()
-
-    var body: some View {
-        NavigationStack {
-            DatePicker("Day", selection: $date, in: ...Date(), displayedComponents: .date)
-                .datePickerStyle(.graphical)
-                .tint(theme.accent)
-                .padding(.horizontal, 16)
-                .navigationTitle("Meal history")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button("Today") {
-                            selectedDayKey = Dates.dayKey()
-                            dismiss()
-                        }
-                        .tactile(.ghost)
-                    }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Done") { dismiss() }.tactile(.ghost)
-                    }
-                }
-        }
-        .onAppear { date = Dates.date(fromDayKey: selectedDayKey) ?? Date() }
-        .onChange(of: date) { _, newDate in
-            let key = Dates.dayKey(newDate)
-            guard key != selectedDayKey else { return }
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
-                selectedDayKey = key
-            }
-            Haptics.selection()
-            dismiss()
-        }
-        .presentationDetents([.large])
-        .presentationBackground(theme.bg)
     }
 }
 
