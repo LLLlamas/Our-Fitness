@@ -1,9 +1,10 @@
-// Body composition calculations: BMI, fat mass, lean mass, and US Navy
-// circumference body fat estimation.
+// Body composition calculations: BMI, fat mass, and lean mass from a body fat
+// percentage the user measures and logs themselves. No estimator here — the app
+// does not derive body fat from circumference measurements (it stores waist only,
+// not neck/hips), so the guidance copy below must not promise one.
 //
 // Sources:
 //   CDC / NIH standard BMI formula.
-//   Hodgdon & Beckett (1984): US Navy circumference BF method.
 //   Gallagher et al. (2000): body fat category thresholds by sex/age.
 //   ACSM's Guidelines for Exercise Testing and Prescription, 11th ed. (2022).
 
@@ -77,7 +78,7 @@ public enum BodyComposition {
     public static let measurementGuide: String = """
     How to measure your body fat %:
 
-    1. Tape measure (US Navy method) — measure waist at the navel and neck at its narrowest point. Women also measure hips at the widest. This app can estimate it once you log those measurements. Accurate to ±3–4%.
+    1. Tape measure (US Navy method) — measure waist at the navel and neck at its narrowest point. Women also measure hips at the widest. Run those numbers through any US Navy body fat calculator, then log the result here. Accurate to ±3–4%.
 
     2. DEXA scan — gold standard. A 10-minute scan at a sports medicine clinic (typically $50–150). Reports total fat, lean, and bone mass split by region.
 

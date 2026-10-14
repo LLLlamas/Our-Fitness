@@ -17,6 +17,9 @@
 //
 // Results are cached (per exercise identity) in UserDefaults so generation runs
 // at most once per custom exercise.
+//
+// Availability, the session/do-catch envelope and the cache live in
+// Services/OnDeviceModel.swift — shared with the other four AI services.
 
 import Foundation
 #if canImport(FoundationModels)
@@ -57,29 +60,22 @@ public final class ExerciseInsightService: @unchecked Sendable {
     public static let shared = ExerciseInsightService()
     private init() {}
 
-    private let cacheVersion = "v1"
+    /// Key shape preserved: `aiExerciseInsight.v1.<identity>`.
+    private let cache = OnDeviceModel.Cache<GeneratedExerciseInsight>(
+        prefix: "aiExerciseInsight", version: "v1"
+    )
 
     // MARK: - Availability
 
     /// True only when the on-device model can actually run right now.
-    public var isAvailable: Bool {
-        if #available(iOS 26.0, *) {
-            #if canImport(FoundationModels)
-            return SystemLanguageModel.default.availability == .available
-            #else
-            return false
-            #endif
-        }
-        return false
-    }
+    public var isAvailable: Bool { OnDeviceModel.isAvailable }
 
     // MARK: - Public API
 
     /// Returns a cached insight if present (instant, sync). Use this for the
     /// first render so a previously generated exercise shows immediately.
     public func cached(for exercise: ExerciseDTO) -> GeneratedExerciseInsight? {
-        guard let data = UserDefaults.standard.data(forKey: cacheKey(for: exercise)) else { return nil }
-        return try? JSONDecoder().decode(GeneratedExerciseInsight.self, from: data)
+        cache.value(for: identity(of: exercise))
     }
 
     /// Generates (or returns cached) plain-language muscles + benefits for a
@@ -87,28 +83,23 @@ public final class ExerciseInsightService: @unchecked Sendable {
     /// callers should fall back to `ExerciseInfo.meta(for:)`.
     public func insight(for exercise: ExerciseDTO) async -> GeneratedExerciseInsight? {
         if let hit = cached(for: exercise) { return hit }
-        guard isAvailable else { return nil }
 
         #if canImport(FoundationModels)
         if #available(iOS 26.0, *) {
-            do {
-                let session = LanguageModelSession { Self.instructions }
-                let response = try await session.respond(
+            guard let draft = await OnDeviceModel.generate(instructions: Self.instructions, { session in
+                try await session.respond(
                     to: prompt(for: exercise),
                     generating: ExerciseInsightDraft.self
-                )
-                let draft = response.content
-                let insight = GeneratedExerciseInsight(
-                    primaryMuscles: clean(draft.primaryMuscles, max: 4),
-                    secondaryMuscles: clean(draft.secondaryMuscles, max: 4),
-                    benefits: clean(draft.benefits, max: 4)
-                )
-                guard !insight.primaryMuscles.isEmpty || !insight.benefits.isEmpty else { return nil }
-                store(insight, for: exercise)
-                return insight
-            } catch {
-                return nil
-            }
+                ).content
+            }) else { return nil }
+            let insight = GeneratedExerciseInsight(
+                primaryMuscles: clean(draft.primaryMuscles, max: 4),
+                secondaryMuscles: clean(draft.secondaryMuscles, max: 4),
+                benefits: clean(draft.benefits, max: 4)
+            )
+            guard !insight.primaryMuscles.isEmpty || !insight.benefits.isEmpty else { return nil }
+            cache.set(insight, for: identity(of: exercise))
+            return insight
         }
         #endif
         return nil
@@ -150,13 +141,7 @@ public final class ExerciseInsightService: @unchecked Sendable {
 
     // MARK: - Cache
 
-    private func cacheKey(for ex: ExerciseDTO) -> String {
-        let identity = "\(ex.name.lowercased())|\(ex.category.rawValue)|\(Int(ex.loadLb ?? 0))|\(ex.isIsometric)"
-        return "aiExerciseInsight.\(cacheVersion).\(identity)"
-    }
-
-    private func store(_ insight: GeneratedExerciseInsight, for ex: ExerciseDTO) {
-        guard let data = try? JSONEncoder().encode(insight) else { return }
-        UserDefaults.standard.set(data, forKey: cacheKey(for: ex))
+    private func identity(of ex: ExerciseDTO) -> String {
+        "\(ex.name.lowercased())|\(ex.category.rawValue)|\(Int(ex.loadLb ?? 0))|\(ex.isIsometric)"
     }
 }

@@ -19,6 +19,9 @@
 // `picks(forGoal:)` returns an empty array and callers fall back to the
 // deterministic `ExerciseGoalMatcher`. FoundationModels needs no entitlement;
 // this lives in Services/ (Domain stays framework-free).
+//
+// Availability + the session/do-catch envelope + the Build/Circuit mode line come
+// from Services/OnDeviceModel.swift, shared with the other four AI services.
 
 import Foundation
 #if canImport(FoundationModels)
@@ -65,16 +68,7 @@ public final class WorkoutSuggestionService: @unchecked Sendable {
     // MARK: - Availability
 
     /// True only when the on-device model can run right now.
-    public var isAvailable: Bool {
-        if #available(iOS 26.0, *) {
-            #if canImport(FoundationModels)
-            return SystemLanguageModel.default.availability == .available
-            #else
-            return false
-            #endif
-        }
-        return false
-    }
+    public var isAvailable: Bool { OnDeviceModel.isAvailable }
 
     // MARK: - Public API
 
@@ -84,20 +78,16 @@ public final class WorkoutSuggestionService: @unchecked Sendable {
     public func picks(forGoal goal: String, mode: Mode, limit: Int = 5) async -> [WorkoutAIPick] {
         let trimmed = goal.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return [] }
-        guard isAvailable else { return [] }
 
         #if canImport(FoundationModels)
         if #available(iOS 26.0, *) {
-            do {
-                let session = LanguageModelSession { Self.instructions }
-                let response = try await session.respond(
+            guard let draft = await OnDeviceModel.generate(instructions: Self.instructions, { session in
+                try await session.respond(
                     to: prompt(forGoal: trimmed, mode: mode),
                     generating: WorkoutSuggestionDraft.self
-                )
-                return clean(response.content.picks, limit: limit)
-            } catch {
-                return []
-            }
+                ).content
+            }) else { return [] }
+            return clean(draft.picks, limit: limit)
         }
         #endif
         return []
@@ -121,13 +111,11 @@ public final class WorkoutSuggestionService: @unchecked Sendable {
         let menu = ExerciseInfo.catalog
             .map { "- \($0.name): \($0.muscleGroups.joined(separator: ", "))" }
             .joined(separator: "\n")
-        let modeLine: String
-        switch mode {
-        case .build:
-            modeLine = "They are gaining lean mass and training for hypertrophy — all else equal, lean toward weighted, progressable strength exercises (roughly 6–12 reps)."
-        case .circuit:
-            modeLine = "They are losing body fat and improving heart-health markers — all else equal, lean toward higher-calorie-burn, conditioning, and joint-friendly options. The goal still comes first."
-        }
+        let modeLine = OnDeviceModel.modeLine(
+            mode,
+            build: "They are gaining lean mass and training for hypertrophy — all else equal, lean toward weighted, progressable strength exercises (roughly 6–12 reps).",
+            circuit: "They are losing body fat and improving heart-health markers — all else equal, lean toward higher-calorie-burn, conditioning, and joint-friendly options. The goal still comes first."
+        )
         return """
         Goal: "\(goal)".
         \(modeLine)

@@ -29,6 +29,10 @@
 // `alternatives(for:...)` returns an empty array and callers degrade gracefully.
 // FoundationModels needs no entitlement; this lives in Services/ (Domain is
 // framework-free).
+//
+// Availability, the session/do-catch envelope, the Build/Circuit mode line and the
+// result cache all come from Services/OnDeviceModel.swift, shared with the other
+// four AI services.
 
 import Foundation
 #if canImport(FoundationModels)
@@ -74,22 +78,17 @@ public final class FoodAlternativeService: @unchecked Sendable {
     public static let shared = FoodAlternativeService()
     private init() {}
 
-    private let cacheVersion = "v2"
-    private let cachePrefix = "foodAlternatives"
+    /// Key shape preserved: `foodAlternatives.v2.<sanitised-name>.<mode>`.
+    /// Entries are name+why pairs, not resolved items — the food DB may have
+    /// changed, so we re-resolve on every cold read.
+    private let cache = OnDeviceModel.Cache<[[String: String]]>(
+        prefix: "foodAlternatives", version: "v2"
+    )
 
     // MARK: - Availability
 
     /// True only when the on-device model can run right now.
-    public var isAvailable: Bool {
-        if #available(iOS 26.0, *) {
-            #if canImport(FoundationModels)
-            return SystemLanguageModel.default.availability == .available
-            #else
-            return false
-            #endif
-        }
-        return false
-    }
+    public var isAvailable: Bool { OnDeviceModel.isAvailable }
 
     // MARK: - Public API
 
@@ -151,35 +150,34 @@ public final class FoodAlternativeService: @unchecked Sendable {
     ) async -> [FoodAlternative] {
         let cleanName = foodName.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !cleanName.isEmpty else { return [] }
+        // Availability is checked before the cache (as it always has been): with no
+        // model there are no alternatives, cached or otherwise.
         guard isAvailable else { return [] }
 
         // Check cache first — avoid re-running the model for the same query.
-        let key = cacheKey(for: cleanName, mode: mode)
-        if let cached = cachedEntries(for: key) {
+        let key = cache.key(identity(for: cleanName, mode: mode))
+        if let cached = cache.value(forKey: key), !cached.isEmpty {
             return resolve(entries: cached)
         }
 
         #if canImport(FoundationModels)
         if #available(iOS 26.0, *) {
-            do {
-                let session = LanguageModelSession { Self.systemInstructions }
-                let userPrompt = buildPrompt(
-                    foodName: cleanName,
-                    mode: mode,
-                    recentFoodNames: recentFoodNames,
-                    favoriteFoodNames: favoriteFoodNames
-                )
-                let response = try await session.respond(
+            let userPrompt = buildPrompt(
+                foodName: cleanName,
+                mode: mode,
+                recentFoodNames: recentFoodNames,
+                favoriteFoodNames: favoriteFoodNames
+            )
+            guard let draft = await OnDeviceModel.generate(instructions: Self.systemInstructions, { session in
+                try await session.respond(
                     to: userPrompt,
                     generating: AlternativeDraft.self
-                )
-                let entries = cleanEntries(response.content.alternatives)
-                guard !entries.isEmpty else { return [] }
-                storeEntries(entries, for: key)
-                return resolve(entries: entries)
-            } catch {
-                return []
-            }
+                ).content
+            }) else { return [] }
+            let entries = cleanEntries(draft.alternatives)
+            guard !entries.isEmpty else { return [] }
+            cache.set(entries, forKey: key)
+            return resolve(entries: entries)
         }
         #endif
         return []
@@ -222,12 +220,11 @@ public final class FoodAlternativeService: @unchecked Sendable {
 
         parts.append("Food to find alternatives for: \"\(foodName)\".")
 
-        switch mode {
-        case .build:
-            parts.append("Goal: Build mode (gaining lean muscle mass). Prioritise alternatives with similar or higher protein content. Whole-food protein sources are preferred.")
-        case .circuit:
-            parts.append("Goal: Circuit mode (losing body fat and improving heart-health markers). Prioritise alternatives that are lower in saturated fat and sodium, higher in fibre, and ideally rich in omega-3 fatty acids.")
-        }
+        parts.append(OnDeviceModel.modeLine(
+            mode,
+            build: "Goal: Build mode (gaining lean muscle mass). Prioritise alternatives with similar or higher protein content. Whole-food protein sources are preferred.",
+            circuit: "Goal: Circuit mode (losing body fat and improving heart-health markers). Prioritise alternatives that are lower in saturated fat and sodium, higher in fibre, and ideally rich in omega-3 fatty acids."
+        ))
 
         let contextFoods = (recentFoodNames + favoriteFoodNames)
             .map { $0.lowercased() }
@@ -280,25 +277,11 @@ public final class FoodAlternativeService: @unchecked Sendable {
 
     // MARK: - Cache
 
-    private func cacheKey(for foodName: String, mode: Mode) -> String {
+    private func identity(for foodName: String, mode: Mode) -> String {
         let sanitised = foodName
             .lowercased()
             .components(separatedBy: .whitespacesAndNewlines)
             .joined(separator: "_")
-        return "\(cachePrefix).\(cacheVersion).\(sanitised).\(mode.rawValue)"
-    }
-
-    /// Load cached alternative entries (name+why dicts, not resolved items — the DB
-    /// may have changed so we re-resolve on every cold read).
-    private func cachedEntries(for key: String) -> [[String: String]]? {
-        guard let data = UserDefaults.standard.data(forKey: key),
-              let entries = try? JSONDecoder().decode([[String: String]].self, from: data),
-              !entries.isEmpty else { return nil }
-        return entries
-    }
-
-    private func storeEntries(_ entries: [[String: String]], for key: String) {
-        guard let data = try? JSONEncoder().encode(entries) else { return }
-        UserDefaults.standard.set(data, forKey: key)
+        return "\(sanitised).\(mode.rawValue)"
     }
 }

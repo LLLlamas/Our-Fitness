@@ -20,6 +20,9 @@
 // enabled, or on any failure, `parse` returns nil and callers fall back to the
 // unchanged `FoodParser.parse(text:)` string path. FoundationModels needs no
 // entitlement; this lives in Services/ (Domain stays framework-free).
+//
+// Availability + the session/do-catch envelope come from
+// Services/OnDeviceModel.swift, shared with the other four AI services.
 
 import Foundation
 #if canImport(FoundationModels)
@@ -57,16 +60,7 @@ public final class MealParseService: @unchecked Sendable {
     // MARK: - Availability
 
     /// True only when the on-device model can actually run right now.
-    public var isAvailable: Bool {
-        if #available(iOS 26.0, *) {
-            #if canImport(FoundationModels)
-            return SystemLanguageModel.default.availability == .available
-            #else
-            return false
-            #endif
-        }
-        return false
-    }
+    public var isAvailable: Bool { OnDeviceModel.isAvailable }
 
     // MARK: - Public API
 
@@ -77,21 +71,17 @@ public final class MealParseService: @unchecked Sendable {
     public func parse(_ text: String) async -> [FoodParser.ExtractedItem]? {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return nil }
-        guard isAvailable else { return nil }
 
         #if canImport(FoundationModels)
         if #available(iOS 26.0, *) {
-            do {
-                let session = LanguageModelSession { Self.instructions }
-                let response = try await session.respond(
+            guard let draft = await OnDeviceModel.generate(instructions: Self.instructions, { session in
+                try await session.respond(
                     to: "Meal description: \"\(trimmed)\".",
                     generating: MealParseDraft.self
-                )
-                let items = clean(response.content.items)
-                return items.isEmpty ? nil : items
-            } catch {
-                return nil
-            }
+                ).content
+            }) else { return nil }
+            let items = clean(draft.items)
+            return items.isEmpty ? nil : items
         }
         #endif
         return nil

@@ -73,7 +73,6 @@ struct RootView: View {
         if profiles.isEmpty {
             ProfileCreationView { dto in
                 activeProfileIdString = dto.id.uuidString
-                Haptics.success()
                 toasts.show(Toast(title: "Welcome, \(dto.name).",
                                   detail: "Targets locked. Let's go.",
                                   accent: .win, symbol: "checkmark.seal.fill"),

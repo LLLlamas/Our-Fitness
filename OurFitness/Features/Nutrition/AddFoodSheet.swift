@@ -214,7 +214,6 @@ struct AddFoodSheet: View {
 
     private func deleteTemplate(id: UUID, name: String) {
         Repos.deleteSavedTemplate(ctx, id: id)
-        Haptics.warn()
         toasts.show(Toast(title: "Recipe deleted", detail: name, accent: .warn, symbol: "trash"))
     }
 

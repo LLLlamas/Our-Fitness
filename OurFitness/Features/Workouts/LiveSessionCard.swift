@@ -153,14 +153,22 @@ private struct ActivityPicker: View {
 
                 LazyVGrid(columns: columns, spacing: 12) {
                     ForEach(ActivityCatalog.all) { activity in
-                        activityTile(activity)
+                        ActivityTile(activity: activity, isSelected: selectedId == activity.id) {
+                            selectedId = activity.id
+                            if activity.id == ActivityCatalog.otherId {
+                                customMET = ActivityCatalog.otherDefaultMET
+                            }
+                        }
                     }
                 }
 
                 if selected != nil {
                     durationSection
                     if isOther {
-                        intensitySection
+                        IntensitySection(
+                            met: $customMET,
+                            footnote: "How hard it feels — light (2), moderate (5), or intense (10+). Drives the calorie estimate."
+                        )
                     }
                     Button {
                         start()
@@ -176,42 +184,6 @@ private struct ActivityPicker: View {
         }
         .presentationDetents([.large])
         .presentationBackground(theme.bg)
-    }
-
-    @ViewBuilder
-    private func activityTile(_ activity: Activity) -> some View {
-        let isSel = selectedId == activity.id
-        Button {
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                selectedId = activity.id
-                if activity.id == ActivityCatalog.otherId { customMET = ActivityCatalog.otherDefaultMET }
-            }
-            Haptics.selection()
-        } label: {
-            VStack(spacing: 8) {
-                Image(systemName: activity.symbol)
-                    .font(.system(size: 26))
-                    .foregroundStyle(isSel ? theme.bg : theme.accent)
-                Text(activity.name)
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(isSel ? theme.bg : theme.text)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.8)
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 92)
-            .padding(8)
-            .background(isSel ? theme.accent : theme.card)
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .stroke(isSel ? theme.accent : theme.line, lineWidth: 1)
-            )
-        }
-        .buttonStyle(TilePressStyle())
-        .accessibilityLabel(activity.name)
-        .accessibilityAddTraits(isSel ? .isSelected : [])
     }
 
     @ViewBuilder
@@ -254,43 +226,6 @@ private struct ActivityPicker: View {
             .background(theme.card)
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
             .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-        }
-    }
-
-    @ViewBuilder
-    private var intensitySection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("INTENSITY")
-                .font(.system(size: 10, weight: .medium)).tracking(2)
-                .foregroundStyle(theme.dim)
-            VStack(alignment: .leading, spacing: 6) {
-                HStack {
-                    Text(intensityLabel)
-                        .font(.system(size: 15, weight: .medium))
-                        .foregroundStyle(theme.text)
-                    Spacer()
-                    Text(String(format: "%.1f MET", customMET))
-                        .font(.system(.footnote, design: .monospaced))
-                        .foregroundStyle(theme.accent)
-                }
-                Slider(value: $customMET, in: 2...12, step: 0.5)
-                    .tint(theme.accent)
-                Text("How hard it feels — light (2), moderate (5), or intense (10+). Drives the calorie estimate.")
-                    .font(.caption2).foregroundStyle(theme.dim)
-            }
-            .padding(10)
-            .background(theme.card)
-            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-        }
-    }
-
-    private var intensityLabel: String {
-        switch customMET {
-        case ..<3.5:  return "Light"
-        case ..<6.0:  return "Moderate"
-        case ..<8.5:  return "Vigorous"
-        default:      return "Intense"
         }
     }
 
@@ -617,7 +552,6 @@ private struct RecentActivitySessions: View {
             }
             Button(role: .destructive) {
                 Repos.deleteActivitySession(ctx, id: s.id)
-                Haptics.warn()
                 toasts.show(Toast(title: "Session removed", detail: s.activityName,
                                   accent: .warn, symbol: "trash.fill"))
             } label: {
@@ -638,7 +572,6 @@ private struct RecentActivitySessions: View {
             }
             Button(role: .destructive) {
                 Repos.deleteActivitySession(ctx, id: s.id)
-                Haptics.warn()
                 toasts.show(Toast(title: "Session removed", detail: s.activityName,
                                   accent: .warn, symbol: "trash.fill"))
             } label: {
@@ -783,7 +716,6 @@ private struct EditSessionDurationSheet: View {
         Repos.updateActivitySession(
             ctx, id: session.id, durationMinutes: totalMinutes, bodyWeightLb: profile.weightLb
         )
-        Haptics.success()
         toasts.show(Toast(
             title: "Duration updated",
             detail: "\(session.activityName) · \(totalMinutes) min · ~\(estimatedCal) cal",
@@ -795,10 +727,17 @@ private struct EditSessionDurationSheet: View {
 
 // MARK: - Log a past session
 
-/// "I forgot to start the timer" entry point: pick an activity, enter the duration,
-/// and log a completed `ActivitySessionDTO` (or `PilatesSessionDTO` for pilates,
-/// mirroring the live runner's end path) without using the live timer.
-private struct LogPastSessionSheet: View {
+/// The ONE manual session-logging sheet — "I forgot to start the timer". Pick an
+/// activity, enter the duration, and log a completed `ActivitySessionDTO` (or
+/// `PilatesSessionDTO` for pilates, mirroring the live runner's end path) without
+/// using the live timer.
+///
+/// Pass `lockedActivityId` to open preselected to one activity and hide the grid —
+/// that is how `PilatesCard`'s "Log Pilates" button reaches here, so Pilates has a
+/// single form app-wide. When pilates is the chosen activity the sheet also collects
+/// focus areas + notes, the two `PilatesSessionDTO` fields the generic form has no
+/// use for.
+struct LogPastSessionSheet: View {
     private enum LogDay: String, CaseIterable, Hashable, Identifiable {
         case today, yesterday
         var id: String { rawValue }
@@ -821,6 +760,9 @@ private struct LogPastSessionSheet: View {
     }
 
     let profile: ProfileDTO
+    /// When set, the sheet opens on that activity and the picker grid is replaced by
+    /// a static header — the caller already decided what is being logged.
+    let lockedActivityId: String?
 
     @Environment(\.modelContext) private var ctx
     @Environment(\.theme) private var theme
@@ -831,8 +773,16 @@ private struct LogPastSessionSheet: View {
     @State private var totalMinutes: Int = 30
     @State private var customMET: Double = ActivityCatalog.otherDefaultMET
     @State private var logDay: LogDay = .today
+    @State private var focusAreas: Set<PilatesFocusArea> = []
+    @State private var notes: String = ""
 
     private let columns = [GridItem(.adaptive(minimum: 96), spacing: 12)]
+
+    init(profile: ProfileDTO, lockedActivityId: String? = nil) {
+        self.profile = profile
+        self.lockedActivityId = lockedActivityId
+        _selectedId = State(initialValue: lockedActivityId)
+    }
 
     private var selected: Activity? {
         guard let id = selectedId else { return nil }
@@ -840,6 +790,8 @@ private struct LogPastSessionSheet: View {
     }
 
     private var isOther: Bool { selectedId == ActivityCatalog.otherId }
+
+    private var isPilates: Bool { selectedId == ActivityCatalog.pilatesId }
 
     private var met: Double { isOther ? customMET : (selected?.met ?? ActivityCatalog.otherDefaultMET) }
 
@@ -849,21 +801,35 @@ private struct LogPastSessionSheet: View {
         ).rounded())
     }
 
+    private var title: String {
+        guard lockedActivityId != nil, let name = selected?.name else { return "Log session" }
+        return "Log \(name)"
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                Text("Log session")
+                Text(title)
                     .font(.system(size: 34, weight: .regular))
                     .foregroundStyle(theme.text)
 
-                Text("Activity")
-                    .font(.system(size: 10, weight: .medium)).tracking(2)
-                    .textCase(.uppercase)
-                    .foregroundStyle(theme.dim)
+                if let activity = selected, lockedActivityId != nil {
+                    SessionActivityHeader(activityName: activity.name, symbol: activity.symbol)
+                } else {
+                    Text("Activity")
+                        .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .textCase(.uppercase)
+                        .foregroundStyle(theme.dim)
 
-                LazyVGrid(columns: columns, spacing: 12) {
-                    ForEach(ActivityCatalog.all) { activity in
-                        activityTile(activity)
+                    LazyVGrid(columns: columns, spacing: 12) {
+                        ForEach(ActivityCatalog.all) { activity in
+                            ActivityTile(activity: activity, isSelected: selectedId == activity.id) {
+                                selectedId = activity.id
+                                if activity.id == ActivityCatalog.otherId {
+                                    customMET = ActivityCatalog.otherDefaultMET
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -888,7 +854,18 @@ private struct LogPastSessionSheet: View {
                     DurationWheel(totalMinutes: $totalMinutes)
 
                     if isOther {
-                        intensitySection
+                        IntensitySection(
+                            met: $customMET,
+                            footnote: "How hard it felt — light (2), moderate (5), or intense (10+). Drives the calorie estimate."
+                        )
+                    }
+
+                    if isPilates {
+                        focusSection
+                        if !focusAreas.isEmpty {
+                            recoveryHintSection
+                        }
+                        notesSection
                     }
 
                     Text("≈ \(estimatedCal) cal")
@@ -912,75 +889,75 @@ private struct LogPastSessionSheet: View {
         .presentationBackground(theme.bg)
     }
 
-    @ViewBuilder
-    private func activityTile(_ activity: Activity) -> some View {
-        let isSel = selectedId == activity.id
-        Button {
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                selectedId = activity.id
-                if activity.id == ActivityCatalog.otherId { customMET = ActivityCatalog.otherDefaultMET }
-            }
-        } label: {
-            VStack(spacing: 8) {
-                Image(systemName: activity.symbol)
-                    .font(.system(size: 26))
-                    .foregroundStyle(isSel ? theme.bg : theme.accent)
-                Text(activity.name)
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(isSel ? theme.bg : theme.text)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.8)
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 92)
-            .padding(8)
-            .background(isSel ? theme.accent : theme.card)
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .stroke(isSel ? theme.accent : theme.line, lineWidth: 1)
-            )
-        }
-        .buttonStyle(TilePressStyle())
-        .accessibilityLabel(activity.name)
-        .accessibilityAddTraits(isSel ? .isSelected : [])
-    }
+    // MARK: - Pilates-only sections
 
     @ViewBuilder
-    private var intensitySection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("INTENSITY")
-                .font(.system(size: 10, weight: .medium)).tracking(2)
+    private var focusSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Focus areas")
+                .font(.caption).tracking(2).textCase(.uppercase)
                 .foregroundStyle(theme.dim)
-            VStack(alignment: .leading, spacing: 6) {
-                HStack {
-                    Text(intensityLabel)
-                        .font(.system(size: 15, weight: .medium))
-                        .foregroundStyle(theme.text)
-                    Spacer()
-                    Text(String(format: "%.1f MET", customMET))
-                        .font(.system(.footnote, design: .monospaced))
-                        .foregroundStyle(theme.accent)
+            FlowLayout(spacing: 8) {
+                ForEach(PilatesFocusArea.allCases, id: \.self) { area in
+                    Button {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                            if focusAreas.contains(area) { focusAreas.remove(area) }
+                            else { focusAreas.insert(area) }
+                        }
+                    } label: {
+                        Text(area.label)
+                    }
+                    .tactile(.pill, fill: focusAreas.contains(area) ? theme.accent : nil)
                 }
-                Slider(value: $customMET, in: 2...12, step: 0.5)
-                    .tint(theme.accent)
-                Text("How hard it felt — light (2), moderate (5), or intense (10+). Drives the calorie estimate.")
-                    .font(.caption2).foregroundStyle(theme.dim)
             }
-            .padding(10)
-            .background(theme.card)
-            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
         }
     }
 
-    private var intensityLabel: String {
-        switch customMET {
-        case ..<3.5:  return "Light"
-        case ..<6.0:  return "Moderate"
-        case ..<8.5:  return "Vigorous"
-        default:      return "Intense"
+    @ViewBuilder
+    private var recoveryHintSection: some View {
+        let hint = Movement.postPilatesHint(areas: Array(focusAreas))
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 6) {
+                Image(systemName: "leaf.fill")
+                    .font(.system(size: 11))
+                    .foregroundStyle(theme.accent)
+                Text("Recovery · rest \(hint.recoveryHours)h")
+                    .font(.caption).tracking(2).textCase(.uppercase)
+                    .foregroundStyle(theme.dim)
+            }
+            Text("Muscles: \(hint.musclesWorked.joined(separator: ", "))")
+                .font(.caption).foregroundStyle(theme.text)
+            Text("\(hint.primaryNeed) within \(hint.windowMinutes) min.")
+                .font(.caption).foregroundStyle(theme.dim)
+            Text("Try: \(hint.recoveryFoods.joined(separator: " · "))")
+                .font(.caption).italic().foregroundStyle(theme.dim)
+            if !hint.formCues.isEmpty {
+                Divider().background(theme.line)
+                ForEach(Array(hint.formCues.enumerated()), id: \.offset) { _, cue in
+                    Text("· \(cue)")
+                        .font(.caption).foregroundStyle(theme.text)
+                }
+            }
+        }
+        .padding(12)
+        .background(theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+    }
+
+    @ViewBuilder
+    private var notesSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Notes (optional)")
+                .font(.caption).tracking(2).textCase(.uppercase)
+                .foregroundStyle(theme.dim)
+            TextField("How did it feel?", text: $notes, axis: .vertical)
+                .lineLimit(2...4)
+                .padding(10)
+                .background(theme.card)
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+                .foregroundStyle(theme.text)
         }
     }
 
@@ -988,13 +965,15 @@ private struct LogPastSessionSheet: View {
         guard let activity = selected else { return }
         let minutes = max(1, totalMinutes)
         // Pilates routes to its own model so it credits the pilates weekly streak,
-        // mirroring the live runner's end path.
+        // mirroring the live runner's end path. Focus areas keep the canonical
+        // `allCases` order so the stored array is stable regardless of tap order.
         if activity.id == ActivityCatalog.pilatesId {
             Repos.logPilatesSession(ctx, PilatesSessionDTO(
                 profileId: profile.id,
                 date: logDay.date,
                 durationMinutes: minutes,
-                focusAreas: []
+                focusAreas: PilatesFocusArea.allCases.filter { focusAreas.contains($0) },
+                notes: notes.isEmpty ? nil : notes
             ))
         } else {
             let cal = CalorieEstimator.caloriesForActivity(
@@ -1011,7 +990,6 @@ private struct LogPastSessionSheet: View {
                 caloriesEst: cal
             ))
         }
-        Haptics.success()
         toasts.show(Toast(
             title: "\(activity.name) logged",
             detail: "\(minutes) min · ~\(estimatedCal) cal",
@@ -1021,17 +999,129 @@ private struct LogPastSessionSheet: View {
     }
 }
 
-// MARK: - Tile press style
+// MARK: - Shared activity-grid + intensity pieces
 
-/// Press feedback for the activity grid tiles: spring scale only, no chrome —
-/// the tiles draw their own selected/unselected fill and fire a selection haptic
-/// in their action, so this just adds the tactile lift without overriding visuals.
-/// (Avoids `.buttonStyle(.plain)`, which is banned, and `.tactile`, which would
-/// restyle the custom tile background/foreground.)
-private struct TilePressStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
-            .animation(.spring(response: 0.28, dampingFraction: 0.6), value: configuration.isPressed)
+/// One tile in the activity grid. Single definition shared by the live picker and
+/// the log-a-session sheet. Draws its own selected/unselected fill, so it uses the
+/// `.ghost` tactile variant — the one variant that adds the press lift + touch-down
+/// tick without repainting the label (no new ButtonStyle; the five are the five).
+private struct ActivityTile: View {
+    let activity: Activity
+    let isSelected: Bool
+    let onSelect: () -> Void
+
+    @Environment(\.theme) private var theme
+
+    var body: some View {
+        Button {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                onSelect()
+            }
+            Haptics.selection()
+        } label: {
+            VStack(spacing: 8) {
+                Image(systemName: activity.symbol)
+                    .font(.system(size: 26))
+                    .foregroundStyle(isSelected ? theme.bg : theme.accent)
+                Text(activity.name)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(isSelected ? theme.bg : theme.text)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.8)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 92)
+            .background(isSelected ? theme.accent : theme.card)
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .stroke(isSelected ? theme.accent : theme.line, lineWidth: 1)
+            )
+        }
+        .tactile(.ghost)
+        .accessibilityLabel(activity.name)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+    }
+}
+
+/// MET slider for the "Other" activity. Single definition shared by the live picker
+/// and the log-a-session sheet; `footnote` carries the only copy difference (the
+/// picker asks how hard it *feels*, the log sheet how hard it *felt*).
+private struct IntensitySection: View {
+    @Binding var met: Double
+    let footnote: String
+
+    @Environment(\.theme) private var theme
+
+    private var label: String {
+        switch met {
+        case ..<3.5:  return "Light"
+        case ..<6.0:  return "Moderate"
+        case ..<8.5:  return "Vigorous"
+        default:      return "Intense"
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("INTENSITY")
+                .font(.system(size: 10, weight: .medium)).tracking(2)
+                .foregroundStyle(theme.dim)
+            VStack(alignment: .leading, spacing: 6) {
+                HStack {
+                    Text(label)
+                        .font(.system(size: 15, weight: .medium))
+                        .foregroundStyle(theme.text)
+                    Spacer()
+                    Text(String(format: "%.1f MET", met))
+                        .font(.system(.footnote, design: .monospaced))
+                        .foregroundStyle(theme.accent)
+                }
+                Slider(value: $met, in: 2...12, step: 0.5)
+                    .tint(theme.accent)
+                Text(footnote)
+                    .font(.caption2).foregroundStyle(theme.dim)
+            }
+            .padding(10)
+            .background(theme.card)
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+        }
+    }
+}
+
+/// Simple flow layout for the Pilates focus-area chip row.
+private struct FlowLayout: Layout {
+    let spacing: CGFloat
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let width = proposal.width ?? .infinity
+        return arrange(subviews: subviews, width: width).size
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        let positions = arrange(subviews: subviews, width: bounds.width).positions
+        for (idx, sub) in subviews.enumerated() {
+            sub.place(at: CGPoint(x: bounds.minX + positions[idx].x,
+                                  y: bounds.minY + positions[idx].y),
+                      proposal: .unspecified)
+        }
+    }
+
+    private func arrange(subviews: Subviews, width: CGFloat) -> (positions: [CGPoint], size: CGSize) {
+        var positions: [CGPoint] = []
+        var x: CGFloat = 0, y: CGFloat = 0, rowHeight: CGFloat = 0, maxX: CGFloat = 0
+        for sub in subviews {
+            let s = sub.sizeThatFits(.unspecified)
+            if x + s.width > width && x > 0 {
+                x = 0; y += rowHeight + spacing; rowHeight = 0
+            }
+            positions.append(CGPoint(x: x, y: y))
+            x += s.width + spacing
+            rowHeight = max(rowHeight, s.height)
+            maxX = max(maxX, x - spacing)
+        }
+        return (positions, CGSize(width: maxX, height: y + rowHeight))
     }
 }

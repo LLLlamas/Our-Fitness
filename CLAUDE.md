@@ -54,29 +54,32 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 |---|---|
 | **Workouts** | |
 | Add exercise | `Data/Repositories/Repositories.swift` → `Repos.createExercise` |
+| Add-exercise sheet (both modes) | `Features/Workouts/WorkoutsView.swift` → `AddExerciseSheet` — ONE sheet, fields vary by `mode:` (Build = tracks-weight + isometric; Circuit = reps/duration + load). Hands back an `AddExerciseSheet.Draft`; the call site owns the rep range + `Repos.createExercise`. Used by `WorkoutsView` and `BabyExercisesCard` — never add a second add-exercise sheet |
+| Exercise ⓘ info sheet (both modes) | `Features/Workouts/ExerciseInfoSheet.swift` → `ExerciseInfoSheet(exercise:profile:todayCount:todayKcal:)` — ONE sheet for Build (lift list, rep counter, isometric timer) and Circuit (movement quick-log). Content priority: `Movement.postExerciseHint` → `ExerciseInfo.meta` → on-device AI (only when neither library knows the movement). Single `loadAIIfNeeded` |
 | Isometric timer UI | `Features/Workouts/RepCounter.swift` → `IsometricTimerView` |
 | Isometric calorie math | `Domain/CalorieEstimator.swift` → `caloriesForIsometric` |
 | Rep counter | `Features/Workouts/RepCounter.swift` → `RepCounterView` |
 | Delete set / exercise | `Repos.deleteSet` / `Repos.deleteExercise` + `SetHistorySheet` in `Features/Workouts/WorkoutsView.swift` |
-| Log pilates | `Repos.logPilatesSession` + `Domain/Models.swift` (`PilatesSessionDTO`); UI `Features/Workouts/Circuit/PilatesCard.swift` (Train tab, Circuit) |
+| Log pilates | `Repos.logPilatesSession` + `Domain/Models.swift` (`PilatesSessionDTO`). ONE manual form: `LogPastSessionSheet` in `Features/Workouts/LiveSessionCard.swift` (focus-area chips + notes appear when the chosen activity is Pilates). `Features/Workouts/Circuit/PilatesCard.swift` (Train tab, Circuit) is ring/streak/history only and opens that sheet via `lockedActivityId: ActivityCatalog.pilatesId`; a live session with the Pilates activity writes the same DTO from `LiveSessionRunner.end()`. Never add a second Pilates form |
 | Log cardio | `Repos.logCardio` + `Domain/Models.swift` (`CardioSessionDTO`) |
 | Circuit movements (quick-log) | `Features/Workouts/Circuit/BabyExercisesCard.swift` — Train tab (`WorkoutsView` Circuit branch); renders the auto-seeded parenting exercises as tap-to-+1 |
-| Live sessions (timer) | `Features/Workouts/LiveSessionCard.swift` + `Domain/LiveSessionState.swift` + `Services/LiveSessionService.swift` |
+| Live sessions (timer) | `Features/Workouts/LiveSessionCard.swift` + `Domain/LiveSessionState.swift` + `Services/LiveSessionService.swift`. `ActivityTile` / `IntensitySection` in that file are shared by `ActivityPicker` (start live) and `LogPastSessionSheet` (log after the fact) — single definitions, don't re-copy |
 | Live Activity (Lock Screen) | `OurFitnessWidgets/LiveSessionLiveActivity.swift` + `Services/LiveSessionActivityController.swift` — [docs/live-activity-setup.md](docs/live-activity-setup.md) |
 | Exercise MET / muscles | `Domain/ExerciseInfo.swift` → `namedMeta` (first-match order matters; specific before general) |
 | Canonical exercise catalog | `Domain/ExerciseInfo.swift` → `catalog` (public, alphabetical, sourced from `namedMeta`) / `catalogEntry(named:)` |
-| AI exercise insights | `Services/ExerciseInsightService.swift` (iOS 26+, graceful fallback) |
+| AI exercise insights | `Services/ExerciseInsightService.swift` (iOS 26+, graceful fallback; scaffolding from `OnDeviceModel`) — consumed only by `Features/Workouts/ExerciseInfoSheet.swift` |
 | AI "what to work on?" suggestions | `Services/WorkoutSuggestionService.swift` + fallback `Domain/ExerciseGoalMatcher.swift` (goal→muscles→exercises, research reasons) — both take `mode:` for a Build (loadable lifts) / Circuit (higher-burn, joint-friendly) tilt → `WorkoutGoalSheet` in `WorkoutsView`. Tests: `ExerciseGoalMatcherTests` |
+| **Shared on-device-AI scaffolding** | `Services/OnDeviceModel.swift` — `isAvailable`, `generate(instructions:_:)` (session + do/catch, returns nil on any failure → caller falls back to its Domain matcher), `modeLine(_:build:circuit:)`, `Cache<Value>` (JSON in UserDefaults). All five AI services use it; prompts + `@Generable` shapes stay in each service |
 | Recent sessions rule | Today/Train surfaces show today + yesterday only (sets sheet is today-only); older strength, live, cardio, and Pilates sessions live in Progress → Training history |
 | Live-session activities | `Domain/ActivityCatalog.swift` |
 | **Nutrition** | |
 | Food parser (NL → macros) | `Domain/FoodParser.swift` → `matchFood` uses `CommonFoods.bestMatch` (first-token index, size-independent) then USDA `Domain/SQLiteFoodDatabase.swift`. Keystroke = curated only; submit = full USDA DB. Tests: `FoodParserTests` |
 | Add / update curated food | `Domain/CommonFoods.swift` (~1,200 foods; 16 category arrays + `expanded`) — aliases drive matching, curated shadows USDA. Append new foods to `expanded` (tie-break = `all` order; check Atwater + no alias collisions) |
 | Add food (search + describe + browse, one sheet) | `Features/Nutrition/AddFoodSheet.swift` — single field: empty = recipes/recently logged/favorites pills + full library (`LazyVStack`, order favorites → `FoodAffinity.frequencyByFoodId` 30-day → rest via `defaultOrdered`); typed = "Log ‘…’" describe card (pushes `DescribeMealForm`: AI/full-DB parse + manual macros) + `FoodSearch.combined` matches. Picks confirm in `MealIngredientDetailSheet`. Used by Meals + Today; never add a second food-search/log sheet |
-| AI meal parser | `Services/MealParseService.swift` (iOS 26+; text-only model; numbers from DB) |
+| AI meal parser | `Services/MealParseService.swift` (iOS 26+; text-only model; numbers from DB; scaffolding from `OnDeviceModel`) |
 | Camera food label scanner | `Features/Nutrition/CameraFoodLogSheet.swift` (iOS 17+ VisionKit, iOS 26+ AI) |
-| AI food alternatives | `Services/FoodAlternativeService.swift` (iOS 26+; prefetch after every log) |
-| AI "what are you in the mood for?" | `Services/MealIdeaService.swift` (iOS 26+; prompt puts the craving first, mode/history as tie-breaks) + fallback `Domain/MealCravingMatcher.swift` — flavours have strong/weak signals scored by density, antagonist suppression (salty↔sweet/fruity, warm↔cold) and gated+capped affinity, so a stated flavour never returns its opposite; plus a Build (protein/calorie) / Circuit (fibre/lean) macro tilt → `MoodMealSheet` in `NutritionView`. Tests: `MealCravingMatcherTests` |
+| AI food alternatives | `Services/FoodAlternativeService.swift` (iOS 26+; prefetch after every log; scaffolding + `foodAlternatives.v2.*` cache from `OnDeviceModel`) |
+| AI "what are you in the mood for?" | `Services/MealIdeaService.swift` (iOS 26+; prompt puts the craving first, mode/history as tie-breaks; scaffolding from `OnDeviceModel`) + fallback `Domain/MealCravingMatcher.swift` — flavours have strong/weak signals scored by density, antagonist suppression (salty↔sweet/fruity, warm↔cold) and gated+capped affinity, so a stated flavour never returns its opposite; plus a Build (protein/calorie) / Circuit (fibre/lean) macro tilt → `MoodMealSheet` in `NutritionView`. Tests: `MealCravingMatcherTests` |
 | Meal log UI + day history + past-day logging | `Features/Nutrition/NutritionView.swift` — day strip (last 7 days, dot = has logs) + calendar `DayPickerSheet` for any earlier day; trend sheet day detail → "Open this day in the log" |
 | Ingredient-level editing / logging | `Features/Nutrition/MealIngredientDetailSheet.swift` — takes `targetDate:` for past-day logging |
 | Meal suggestions (no standalone UI) | `Domain/SuggestedMeals.swift` → meal pool + `ranked(...)`, consumed only as `MealCravingMatcher`'s fallback; ideas UI is `MoodMealSheet` only (Suggestions sheet/"for you" row removed as redundant) |
@@ -90,10 +93,10 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | Target rationale copy | `Domain/TargetRationale.swift` (spell out acronyms; "cal" not "kcal"); Circuit micro copy `fiberWhy`/`sodiumWhy`/`addedSugarWhy`/`saturatedFatWhy(for:)` (used by `HeartHealthCard` info sheet) |
 | **Today / Steps** | |
 | Move card (2×3 cols) | `Features/Today/MoveCard.swift` — row 1: Apple Total · Our Total Estimate · Training Only; row 2: Distance · Flights · Heart Rate. Single `metricColumn` helper (uniform 22pt value font, no differential shrink). `activityRow(kcal:)` takes `Int` |
-| Steps (Build) | `Features/Today/StepsCard.swift` |
-| Steps + cardio (Circuit, on Today) | `Features/Workouts/Circuit/StepsCardioCard.swift` |
-| Water tracker (presets + day-streak) | `Domain/Water.swift` (presets Sip 4 / S 8 / M 16 / L 32 oz; `streak(_:goalFlOz:end:)`) + `Features/Today/WaterCard.swift` (`AppStorage "waterGoalFlOz.\(profileId)"`; streak chip) |
-| Water quick-log (app-wide FAB) | `Features/Today/WaterQuickLogButton.swift` — tap = repeat last (`AppStorage "waterLastFlOz.\(profileId)"`), press-and-hold = dim screen + radial preset picker; logs via `Repos.addWater`. Overlaid in `App/RootView.swift` |
+| Steps card (both modes, Today only) | `Features/Today/StepsCard.swift` — one mode-aware card: Build = hero count + `ProgressBar`; Circuit = `ProgressRing` + projection + pace-vs-yesterday + 7-day strip + week-to-date active cal / exercise min. One goal-picker sheet (days/week section is Circuit-only) + one info sheet. Goal keys live in `StepsGoalPrefs` in the same file. Never add a second steps card |
+| Water tracker (presets + day-streak) | `Domain/Water.swift` (presets Sip 4 / S 8 / M 16 / L 32 oz; `total(_:on:)`, `streak(_:goalFlOz:end:)`) + `Features/Today/WaterCard.swift` (streak chip = shared `Components/StreakChip.swift`) |
+| Log water (shared path — use for ANY new water surface) | `Features/Today/WaterLogging.swift` → `WaterLog.add(_:for:on:context:lastFlOz:unitSystem:toasts:)` — one write + remembers the repeat-last amount + one copy of the toast; also owns the `waterGoalFlOz.\(profileId)` / `waterLastFlOz.\(profileId)` AppStorage keys. No explicit haptic (ToastCenter.show fires one) |
+| Water quick-log (app-wide FAB) | `Features/Today/WaterQuickLogButton.swift` — tap = repeat last, press-and-hold = dim screen + radial preset picker; logs via `WaterLog.add`. Overlaid in `App/RootView.swift` |
 | Step milestones / goals | `Domain/Movement.swift` (`defaultStepMilestones`). Per-profile override: `AppStorage "stepsGoal.\(profileId.uuidString)"` |
 | Today burn estimate | `Domain/DailyBurn.swift` → `metEstimate` |
 | Encouragement / milestones | `Domain/EncouragementEngine.swift` + `Domain/EncouragementMessage.swift` + `Components/ProjectionBar.swift` |
@@ -120,7 +123,7 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | Circular progress | `Components/ProgressRing.swift` — never inline `Circle().trim` |
 | Progress-fill replay (sweep from 0 on appear) | `Components/VisibilityReveal.swift` → `.revealOnAppear($reveal)` — resets to 0 on scroll-out, springs to full on re-entry. Used by `ProgressBar` + `MacroQuadGrid` (`pct * reveal`) |
 | Haptics | `Services/Haptics.swift` |
-| Toast | `Services/ToastCenter.swift` + `Components/ToastView.swift` |
+| Toast | `Services/ToastCenter.swift` + `Components/ToastView.swift` — `show(_:for:)` for a `Toast`, `show(_:accent:for:)` for an `EncouragementMessage` (every encouragement wrapper is a one-liner over it). `show` fires the outcome haptic itself: never call `Haptics.*` right before it |
 | Scroll haptics | `Services/Haptics.swift` → `.scrollHapticTicks()` on top-level tab `ScrollView`s |
 | Freshness timestamp | `Domain/Freshness.swift` → `label(for:now:staleAfter:)` |
 | Plain-English muscle names | `Domain/ExerciseInfo.swift` → `plainName(forMuscle:)` / `muscleGlossary` |

@@ -16,6 +16,9 @@ struct WaterCard: View {
 
     @Query private var entryModels: [WaterEntryModel]
     @AppStorage private var goalFlOz: Double
+    /// Shared with the floating quick-log button: logging from here updates its
+    /// "tap = repeat last" amount. Written only via `WaterLog.add`.
+    @AppStorage private var lastFlOz: Double
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
     @State private var showInfo = false
 
@@ -27,7 +30,8 @@ struct WaterCard: View {
             filter: #Predicate<WaterEntryModel> { $0.userId == uid && $0.timestamp >= cutoff },
             sort: \.timestamp, order: .forward
         )
-        _goalFlOz = AppStorage(wrappedValue: Water.defaultGoalFlOz, "waterGoalFlOz.\(uid.uuidString)")
+        _goalFlOz = AppStorage(wrappedValue: Water.defaultGoalFlOz, WaterLog.goalStorageKey(uid))
+        _lastFlOz = AppStorage(wrappedValue: WaterLog.defaultLastFlOz, WaterLog.lastAmountStorageKey(uid))
     }
 
     private var entries: [WaterEntryDTO] { entryModels.map(\.snapshot) }
@@ -38,12 +42,14 @@ struct WaterCard: View {
     private var canUndo: Bool { entries.contains { $0.date == today } }
     private var waterStreak: Int { Water.streak(entries, goalFlOz: goalFlOz) }
 
-    // No explicit Haptics — the buttons use `.tactile(...)` (press haptic), and
-    // ProgressBar fires a success haptic when the day crosses the goal (outcome).
+    // Shared logging path (write + remember last amount + toast) lives in
+    // `WaterLog.add` so the floating quick-log button behaves identically.
+    // No explicit Haptics — the buttons use `.tactile(...)` (press haptic),
+    // ToastCenter.show fires the outcome haptic, and ProgressBar fires a success
+    // haptic when the day crosses the goal.
     private func add(_ oz: Double) {
-        Repos.addWater(ctx, WaterEntryDTO(userId: profile.id, date: today, flOz: oz))
-        toasts.show(Toast(title: "+\(Units.formatVolumeWithUnit(flOz: oz, system: unitSystem))", detail: "Water logged",
-                          accent: .ok, symbol: "drop.fill"))
+        WaterLog.add(oz, for: profile, on: today, context: ctx,
+                     lastFlOz: $lastFlOz, unitSystem: unitSystem, toasts: toasts)
     }
 
     private func undoLast() {
@@ -67,14 +73,9 @@ struct WaterCard: View {
                     Text("WATER")
                         .font(.system(size: 10, weight: .medium)).tracking(2)
                         .foregroundStyle(theme.dim)
+                    // Only brag from two days up — one day isn't a streak.
                     if waterStreak >= 2 {
-                        Text("\(waterStreak)-day streak")
-                            .font(.system(size: 10, weight: .semibold))
-                            .foregroundStyle(theme.accent)
-                            .padding(.horizontal, 7)
-                            .padding(.vertical, 3)
-                            .background(theme.accent.opacity(0.12))
-                            .clipShape(Capsule())
+                        StreakChip(days: waterStreak, tint: theme.accent)
                     }
                     Spacer()
                     Button { showInfo = true } label: {

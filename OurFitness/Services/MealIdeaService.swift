@@ -18,6 +18,9 @@
 // Fully optional. On iOS < 26, without Apple Intelligence, or on any failure,
 // `ideas(forCraving:...)` returns an empty array and callers fall back to the
 // deterministic `MealCravingMatcher` ("recommend according to previous meals").
+//
+// Availability + the session/do-catch envelope + the Build/Circuit mode line come
+// from Services/OnDeviceModel.swift, shared with the other four AI services.
 
 import Foundation
 #if canImport(FoundationModels)
@@ -64,16 +67,7 @@ public final class MealIdeaService: @unchecked Sendable {
     // MARK: - Availability
 
     /// True only when the on-device model can run right now.
-    public var isAvailable: Bool {
-        if #available(iOS 26.0, *) {
-            #if canImport(FoundationModels)
-            return SystemLanguageModel.default.availability == .available
-            #else
-            return false
-            #endif
-        }
-        return false
-    }
+    public var isAvailable: Bool { OnDeviceModel.isAvailable }
 
     // MARK: - Public API
 
@@ -88,20 +82,16 @@ public final class MealIdeaService: @unchecked Sendable {
     ) async -> [MealIdea] {
         let trimmed = craving.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return [] }
-        guard isAvailable else { return [] }
 
         #if canImport(FoundationModels)
         if #available(iOS 26.0, *) {
-            do {
-                let session = LanguageModelSession { Self.instructions }
-                let response = try await session.respond(
+            guard let draft = await OnDeviceModel.generate(instructions: Self.instructions, { session in
+                try await session.respond(
                     to: prompt(craving: trimmed, mode: mode, recentFoodNames: recentFoodNames),
                     generating: MealIdeaDraft.self
-                )
-                return resolve(cleanEntries(response.content.ideas), limit: limit)
-            } catch {
-                return []
-            }
+                ).content
+            }) else { return [] }
+            return resolve(cleanEntries(draft.ideas), limit: limit)
         }
         #endif
         return []
@@ -126,12 +116,11 @@ public final class MealIdeaService: @unchecked Sendable {
 
     private func prompt(craving: String, mode: Mode, recentFoodNames: [String]) -> String {
         var parts = ["What they're in the mood for: \"\(craving)\". This craving comes first — every suggestion must match it."]
-        switch mode {
-        case .build:
-            parts.append("All else equal, they are gaining lean muscle, so lean toward the higher-protein option among foods that still match the craving.")
-        case .circuit:
-            parts.append("All else equal, they are losing body fat and improving heart health, so lean toward the lighter / higher-fibre option among foods that still match the craving — but if they asked for something salty or indulgent, honour that.")
-        }
+        parts.append(OnDeviceModel.modeLine(
+            mode,
+            build: "All else equal, they are gaining lean muscle, so lean toward the higher-protein option among foods that still match the craving.",
+            circuit: "All else equal, they are losing body fat and improving heart health, so lean toward the lighter / higher-fibre option among foods that still match the craving — but if they asked for something salty or indulgent, honour that."
+        ))
         let context = recentFoodNames.map { $0.lowercased() }.filter { !$0.isEmpty }
         let unique = (NSOrderedSet(array: context).array as? [String] ?? context).prefix(10)
         if !unique.isEmpty {

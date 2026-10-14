@@ -10,8 +10,6 @@ import Foundation
 
 public enum CalorieEstimator {
 
-    private static let kgPerLb: Double = 0.453592
-
     /// Generic rep-based estimate using a flat MET.
     /// Use `caloriesForReps(reps:exercise:bodyWeightLb:)` for a named exercise —
     /// it picks the research-backed MET and tempo from ExerciseInfo.
@@ -94,7 +92,7 @@ public enum CalorieEstimator {
     }
 
     private static func kcal(mets: Double, bodyWeightLb: Double, hours: Double) -> Double {
-        let kg = bodyWeightLb * kgPerLb
+        let kg = bodyWeightLb * Units.kgPerLb
         return mets * kg * hours
     }
 }

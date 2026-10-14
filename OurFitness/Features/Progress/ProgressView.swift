@@ -1689,7 +1689,6 @@ private struct TrainingHistorySheet: View {
             Spacer()
             Button(role: .destructive) {
                 onDelete()
-                Haptics.warn()
                 toasts.show(Toast(title: "Session removed", detail: title, accent: .warn, symbol: "trash.fill"))
             } label: {
                 Image(systemName: "minus.circle")
@@ -1704,7 +1703,6 @@ private struct TrainingHistorySheet: View {
     private func removeLastSet(_ line: TrainingHistory.ExerciseLine) {
         guard let id = line.setIds.first else { return }
         Repos.deleteSet(ctx, id: id)
-        Haptics.warn()
         toasts.show(Toast(title: "Set removed", detail: line.name, accent: .warn, symbol: "trash.fill"))
     }
 

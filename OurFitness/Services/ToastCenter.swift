@@ -1,6 +1,11 @@
 // Lightweight one-toast-at-a-time confirmation system.
 // Inject at the app root via .environmentObject; views call ToastCenter.show(...).
 // Fires a matching haptic so feedback is multisensory: visible + felt at the same time.
+//
+// IMPORTANT: `show` already fires the outcome haptic (see `fireHaptic`). Call sites
+// must NOT call `Haptics.*` for the same outcome right before showing a toast —
+// that's two haptics for one action. Press-feedback haptics (`.tactile(...)`,
+// scroll ticks) are a different thing and stay.
 
 import SwiftUI
 
@@ -60,6 +65,16 @@ public final class ToastCenter: ObservableObject {
         }
     }
 
+    /// Show an `EncouragementMessage`. The engine owns the copy; the caller picks
+    /// the accent (which also picks the haptic) and how long it lingers.
+    ///
+    /// Every encouragement wrapper below is a one-liner over this — add a wrapper
+    /// only when it needs to call the engine itself or gate on a nil message.
+    public func show(_ msg: EncouragementMessage, accent: ToastAccent, for seconds: Double = 2.4) {
+        show(Toast(title: msg.headline, detail: msg.detail,
+                   accent: accent, symbol: msg.sfSymbol), for: seconds)
+    }
+
     // Convenience constructors
 
     public func logged(_ name: String, calories: Int) {
@@ -67,63 +82,34 @@ public final class ToastCenter: ObservableObject {
                    accent: .ok, symbol: "checkmark"))
     }
 
-    public func goalHit(_ label: String) {
-        show(Toast(title: "\(label) hit", detail: "Nice work — keep stacking.",
-                   accent: .win, symbol: "flame.fill"), for: 2.4)
-    }
-
-    public func pilatesLogged(minutes: Int) {
-        show(Toast(title: "Pilates logged",
-                   detail: "\(minutes) min · locked in.",
-                   accent: .ok, symbol: "checkmark"))
-    }
-
-    // Encouragement-engine driven toasts (Phase 1). The engine owns the copy;
-    // these map a message's tone to the toast accent + duration.
+    // Encouragement-engine driven toasts (Phase 1). All of these are thin wrappers
+    // over `show(_:accent:for:)` — they exist because they either call the engine
+    // themselves, gate on a nil message, or pick the accent from the message tone.
 
     // Step milestone — mode-aware copy from EncouragementEngine
     public func stepMilestone(_ steps: Int, mode: Mode) {
-        let msg = EncouragementEngine.stepMilestoneMessage(steps: steps, mode: mode)
-        show(Toast(title: msg.headline, detail: msg.detail,
-                   accent: .win, symbol: msg.sfSymbol), for: 2.4)
+        show(EncouragementEngine.stepMilestoneMessage(steps: steps, mode: mode), accent: .win)
     }
 
-    // Workout volume milestone
+    // Workout volume milestone — accent follows the message's tone
     public func workoutMilestone(_ msg: EncouragementMessage) {
-        show(Toast(title: msg.headline, detail: msg.detail,
-                   accent: msg.tone == .impressed ? .win : .ok,
-                   symbol: msg.sfSymbol), for: 2.4)
-    }
-
-    // Pilates weekly goal
-    public func pilatesGoalHit(_ msg: EncouragementMessage) {
-        show(Toast(title: msg.headline, detail: msg.detail,
-                   accent: .win, symbol: msg.sfSymbol), for: 2.4)
-    }
-
-    // Streak milestone
-    public func streakMilestone(_ msg: EncouragementMessage) {
-        show(Toast(title: msg.headline, detail: msg.detail,
-                   accent: .win, symbol: msg.sfSymbol), for: 3.0)
+        show(msg, accent: msg.tone == .impressed ? .win : .ok)
     }
 
     // Meal-logging streak milestone — self-gating: only shows at a milestone day.
     public func mealStreak(days: Int, mode: Mode) {
         guard let msg = EncouragementEngine.mealStreakMessage(days: days, mode: mode) else { return }
-        show(Toast(title: msg.headline, detail: msg.detail,
-                   accent: .win, symbol: msg.sfSymbol), for: 3.0)
+        show(msg, accent: .win, for: 3.0)
     }
 
     // Macro goal hit
     public func macroGoalHit(_ msg: EncouragementMessage) {
-        show(Toast(title: msg.headline, detail: msg.detail,
-                   accent: .win, symbol: msg.sfSymbol), for: 2.4)
+        show(msg, accent: .win)
     }
 
     // Macro approaching (lighter — .ok not .win)
     public func macroApproaching(_ msg: EncouragementMessage) {
-        show(Toast(title: msg.headline, detail: msg.detail,
-                   accent: .ok, symbol: msg.sfSymbol), for: 2.0)
+        show(msg, accent: .ok, for: 2.0)
     }
 
     // Time-based nudge toasts — fired from TodayView's periodic timer.
@@ -136,8 +122,7 @@ public final class ToastCenter: ObservableObject {
             hourOfDay: hourOfDay,
             mode: mode
         ) else { return }
-        show(Toast(title: msg.headline, detail: msg.detail,
-                   accent: .info, symbol: msg.sfSymbol), for: 2.4)
+        show(msg, accent: .info)
     }
 
     public func waterReminder(currentOz: Double, goalOz: Double, hourOfDay: Int) {
@@ -146,15 +131,13 @@ public final class ToastCenter: ObservableObject {
             goalOz: goalOz,
             hourOfDay: hourOfDay
         ) else { return }
-        show(Toast(title: msg.headline, detail: msg.detail,
-                   accent: .info, symbol: msg.sfSymbol), for: 2.4)
+        show(msg, accent: .info)
     }
 
     // Stall nudge — a once-per-day "keep going" prompt when the user has gone quiet
     // on steps / workouts / Pilates, or a tracked number has flatlined.
     public func stallNudge(_ msg: EncouragementMessage) {
-        show(Toast(title: msg.headline, detail: msg.detail,
-                   accent: .info, symbol: msg.sfSymbol), for: 3.0)
+        show(msg, accent: .info, for: 3.0)
     }
 
     public func warn(_ msg: String) {

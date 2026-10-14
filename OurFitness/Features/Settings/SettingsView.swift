@@ -202,7 +202,6 @@ struct SettingsView: View {
     private func setUnitSystem(_ system: UnitSystem) {
         guard system != unitSystem else { return }
         unitSystem = system
-        Haptics.success()
         toasts.show(Toast(title: "\(system.displayName) units",
                           detail: "Measurements now shown in \(system.displayName.lowercased()).",
                           accent: .win, symbol: "ruler.fill"))
@@ -217,7 +216,6 @@ struct SettingsView: View {
             ctx, profileId: profile.id,
             weightLb: weightLb, heightIn: heightIn, age: age, sex: sex, activity: activity
         ) != nil else { return }
-        Haptics.success()
         toasts.show(Toast(title: "Profile updated",
                           detail: "Targets recomputed from your new numbers.",
                           accent: .win, symbol: "checkmark.circle.fill"))
@@ -226,7 +224,6 @@ struct SettingsView: View {
 
     private func switchMode(to newMode: Mode) {
         guard Repos.updateMode(ctx, profileId: profile.id, to: newMode) != nil else { return }
-        Haptics.success()
         toasts.show(Toast(title: "Switched to \(newMode.displayName)",
                           detail: "Targets recomputed. Your logs are kept.",
                           accent: .win, symbol: "checkmark.circle.fill"))

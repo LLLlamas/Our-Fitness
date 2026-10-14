@@ -5,8 +5,6 @@ import Foundation
 
 public enum Targets {
 
-    private static let lbToKg = 0.45359237
-    private static let inToCm = 2.54
 
     public struct ModeRules: Sendable {
         public let calorieAdjust: Int
@@ -46,8 +44,8 @@ public enum Targets {
 
     /// Mifflin-St Jeor BMR. Output rounded to int.
     public static func bmr(sex: Sex, weightLb: Double, heightIn: Double, age: Int) -> Int {
-        let kg = weightLb * lbToKg
-        let cm = heightIn * inToCm
+        let kg = weightLb * Units.kgPerLb
+        let cm = heightIn * Units.cmPerInch
         let base = 10 * kg + 6.25 * cm - 5 * Double(age)
         return Int((sex == .male ? base + 5 : base - 161).rounded())
     }

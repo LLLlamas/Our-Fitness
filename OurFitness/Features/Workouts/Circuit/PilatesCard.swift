@@ -1,7 +1,8 @@
 // Circuit Train — Pilates card.
 //
 // - Progress ring: sessions this week / weekly goal (editable — tap "/" in ring)
-// - "Log Pilates" PressableCard → sheet (duration slider, focus chips, notes)
+// - "Log Pilates" PressableCard → the shared `LogPastSessionSheet` preselected to
+//   Pilates (duration, day, focus chips, notes) — the one manual logging form
 // - Today/yesterday sessions strip with calorie estimates
 // - Weekly streak indicator (no streak-shame)
 // - Info sheet: muscles worked + post-session nutrition hint
@@ -65,12 +66,12 @@ struct PilatesCard: View {
             }
             recentStrip
         }
+        // One manual session form app-wide: this opens the shared log sheet
+        // (LiveSessionCard.swift) preselected to Pilates, which collects duration,
+        // day, focus areas + notes and writes the PilatesSessionDTO itself.
         .sheet(isPresented: $showLogSheet) {
-            PilatesLogSheet(profileId: profile.id) { dto in
-                Repos.logPilatesSession(ctx, dto)
-                toasts.pilatesLogged(minutes: dto.durationMinutes)
-            }
-            .themed(theme.mode)
+            LogPastSessionSheet(profile: profile, lockedActivityId: ActivityCatalog.pilatesId)
+                .themed(theme.mode)
         }
         .sheet(isPresented: $showGoalPicker) {
             goalPickerSheet.themed(theme.mode)
@@ -231,178 +232,5 @@ struct PilatesCard: View {
         .presentationDetents([.medium])
         .presentationDragIndicator(.visible)
         .presentationBackground(theme.bg)
-    }
-}
-
-// MARK: - Log sheet
-
-private struct PilatesLogSheet: View {
-    let profileId: UUID
-    let onSave: (PilatesSessionDTO) -> Void
-
-    @Environment(\.theme) private var theme
-    @Environment(\.dismiss) private var dismiss
-
-    @State private var duration: Double = 30
-    @State private var focusAreas: Set<PilatesFocusArea> = []
-    @State private var notes: String = ""
-
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 18) {
-                Text("Log Pilates")
-                    .font(.system(size: 42, weight: .regular))
-                    .foregroundStyle(theme.text)
-
-                durationSection
-                focusSection
-
-                if !focusAreas.isEmpty {
-                    recoveryHintSection
-                }
-
-                notesSection
-
-                Button {
-                    let dto = PilatesSessionDTO(
-                        profileId: profileId,
-                        durationMinutes: Int(duration),
-                        focusAreas: PilatesFocusArea.allCases.filter { focusAreas.contains($0) },
-                        notes: notes.isEmpty ? nil : notes
-                    )
-                    onSave(dto)
-                    dismiss()
-                } label: {
-                    Text("Save session")
-                }
-                .tactile(.primary, fullWidth: true)
-                .disabled(focusAreas.isEmpty)
-                .opacity(focusAreas.isEmpty ? 0.6 : 1)
-            }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
-        }
-        .presentationDetents([.large])
-        .presentationBackground(theme.bg)
-    }
-
-    @ViewBuilder
-    private var durationSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(alignment: .firstTextBaseline) {
-                Text("Duration")
-                    .font(.caption).tracking(2).textCase(.uppercase)
-                    .foregroundStyle(theme.dim)
-                Spacer()
-                Text("\(Int(duration)) min")
-                    .font(.system(.callout, design: .monospaced))
-                    .foregroundStyle(theme.accent2)
-            }
-            Slider(value: $duration, in: 5...90, step: 5)
-                .tint(theme.accent2)
-        }
-    }
-
-    @ViewBuilder
-    private var focusSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Focus areas")
-                .font(.caption).tracking(2).textCase(.uppercase)
-                .foregroundStyle(theme.dim)
-            FlowLayout(spacing: 8) {
-                ForEach(PilatesFocusArea.allCases, id: \.self) { area in
-                    Button {
-                        if focusAreas.contains(area) { focusAreas.remove(area) }
-                        else { focusAreas.insert(area) }
-                    } label: {
-                        Text(area.label)
-                    }
-                    .tactile(.pill, fill: focusAreas.contains(area) ? theme.accent2 : nil)
-                }
-            }
-        }
-    }
-
-    @ViewBuilder
-    private var recoveryHintSection: some View {
-        let hint = Movement.postPilatesHint(areas: Array(focusAreas))
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 6) {
-                Image(systemName: "leaf.fill")
-                    .font(.system(size: 11))
-                    .foregroundStyle(theme.accent2)
-                Text("Recovery · rest \(hint.recoveryHours)h")
-                    .font(.caption).tracking(2).textCase(.uppercase)
-                    .foregroundStyle(theme.dim)
-            }
-            Text("Muscles: \(hint.musclesWorked.joined(separator: ", "))")
-                .font(.caption).foregroundStyle(theme.text)
-            Text("\(hint.primaryNeed) within \(hint.windowMinutes) min.")
-                .font(.caption).foregroundStyle(theme.dim)
-            Text("Try: \(hint.recoveryFoods.joined(separator: " · "))")
-                .font(.caption).italic().foregroundStyle(theme.dim)
-            if !hint.formCues.isEmpty {
-                Divider().background(theme.line)
-                ForEach(Array(hint.formCues.enumerated()), id: \.offset) { _, cue in
-                    Text("· \(cue)")
-                        .font(.caption).foregroundStyle(theme.text)
-                }
-            }
-        }
-        .padding(12)
-        .background(theme.card)
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-    }
-
-    @ViewBuilder
-    private var notesSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Notes (optional)")
-                .font(.caption).tracking(2).textCase(.uppercase)
-                .foregroundStyle(theme.dim)
-            TextField("How did it feel?", text: $notes, axis: .vertical)
-                .lineLimit(2...4)
-                .padding(10)
-                .background(theme.card)
-                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-                .foregroundStyle(theme.text)
-        }
-    }
-}
-
-// Simple flow layout for chip rows.
-private struct FlowLayout: Layout {
-    let spacing: CGFloat
-
-    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
-        let width = proposal.width ?? .infinity
-        return arrange(subviews: subviews, width: width).size
-    }
-
-    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
-        let positions = arrange(subviews: subviews, width: bounds.width).positions
-        for (idx, sub) in subviews.enumerated() {
-            sub.place(at: CGPoint(x: bounds.minX + positions[idx].x,
-                                  y: bounds.minY + positions[idx].y),
-                      proposal: .unspecified)
-        }
-    }
-
-    private func arrange(subviews: Subviews, width: CGFloat) -> (positions: [CGPoint], size: CGSize) {
-        var positions: [CGPoint] = []
-        var x: CGFloat = 0, y: CGFloat = 0, rowHeight: CGFloat = 0, maxX: CGFloat = 0
-        for sub in subviews {
-            let s = sub.sizeThatFits(.unspecified)
-            if x + s.width > width && x > 0 {
-                x = 0; y += rowHeight + spacing; rowHeight = 0
-            }
-            positions.append(CGPoint(x: x, y: y))
-            x += s.width + spacing
-            rowHeight = max(rowHeight, s.height)
-            maxX = max(maxX, x - spacing)
-        }
-        return (positions, CGSize(width: maxX, height: y + rowHeight))
     }
 }

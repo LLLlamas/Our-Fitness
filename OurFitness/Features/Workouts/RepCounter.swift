@@ -94,7 +94,7 @@ private struct RepCounterView: View {
         .presentationDetents([.large])
         .presentationBackground(theme.bg)
         .sheet(isPresented: $showInfo) {
-            BuildExerciseInfoSheet(exercise: exercise, profile: profile)
+            ExerciseInfoSheet(exercise: exercise, profile: profile)
                 .themed(theme.mode)
         }
         .toolbar {
@@ -294,7 +294,7 @@ private struct IsometricTimerView: View {
         .presentationBackground(theme.bg)
         .onReceive(ticker) { _ in tick() }
         .sheet(isPresented: $showInfo) {
-            BuildExerciseInfoSheet(exercise: exercise, profile: profile)
+            ExerciseInfoSheet(exercise: exercise, profile: profile)
                 .themed(theme.mode)
         }
     }
@@ -396,7 +396,7 @@ private struct IsometricTimerView: View {
             }
             Divider().frame(height: 36)
             VStack(spacing: 2) {
-                Text(holdDurationLabel(totalSecSession))
+                Text(formattedHoldDuration(totalSecSession))
                     .font(.system(size: 28, weight: .semibold, design: .monospaced))
                     .foregroundStyle(theme.accent)
                     .contentTransition(.numericText())
@@ -438,7 +438,6 @@ private struct IsometricTimerView: View {
             holdSeconds: secs
         )
         Repos.addSet(ctx, dto)
-        Haptics.success()
         toasts.show(Toast(
             title: "Hold logged",
             detail: "\(shortDurationLabel(secs)) · ~\(Int(kcal)) cal",
@@ -451,179 +450,5 @@ private struct IsometricTimerView: View {
         if s < 60 { return "\(s)s" }
         let m = s / 60; let r = s % 60
         return r > 0 ? "\(m)m \(r)s" : "\(m)m"
-    }
-
-    private func holdDurationLabel(_ s: Int) -> String {
-        if s < 90 { return "\(s)s" }
-        if s < 4200 {
-            let m = s / 60; let r = s % 60
-            return r > 0 ? "\(m)m \(r)s" : "\(m)m"
-        }
-        let h = s / 3600; let m = (s % 3600) / 60
-        return m > 0 ? "\(h)h \(m)m" : "\(h)h"
-    }
-}
-
-// MARK: - Exercise info sheet (Build mode)
-
-struct BuildExerciseInfoSheet: View {
-    let exercise: ExerciseDTO
-    let profile: ProfileDTO
-
-    @Environment(\.theme) private var theme
-
-    // On-device AI fills in muscles + benefits for custom exercises we don't
-    // have curated copy for. Nil until (and unless) generation succeeds.
-    @State private var ai: GeneratedExerciseInsight?
-    @State private var aiLoading = false
-
-    private var info: ExerciseInfo.Meta { ExerciseInfo.meta(for: exercise) }
-
-    /// Custom exercise with no hand-written entry → eligible for AI enrichment.
-    private var canUseAI: Bool { !ExerciseInfo.hasCuratedMeta(for: exercise) }
-    private var usingAI: Bool { ai != nil }
-
-    private var displayPrimary: [String] {
-        if let ai, !ai.primaryMuscles.isEmpty { return ai.primaryMuscles }
-        return info.muscleGroups
-    }
-    private var displaySecondary: [String] {
-        if let ai { return ai.secondaryMuscles }
-        return info.secondaryMuscles
-    }
-    private var displayBenefits: [String] {
-        if let ai, !ai.benefits.isEmpty { return ai.benefits }
-        return info.benefits
-    }
-
-    private var sampleCalLabel: String {
-        if exercise.isIsometric {
-            let cal30 = CalorieEstimator.caloriesForIsometric(seconds: 30, met: info.met, bodyWeightLb: profile.weightLb)
-            let cal60 = CalorieEstimator.caloriesForIsometric(seconds: 60, met: info.met, bodyWeightLb: profile.weightLb)
-            return "~\(Int(cal30)) cal / 30s · ~\(Int(cal60)) cal / 60s at your weight"
-        }
-        let reps10 = CalorieEstimator.caloriesForReps(reps: 10, exercise: exercise, bodyWeightLb: profile.weightLb)
-        return "~\(Int(reps10)) cal per 10 reps at your weight"
-    }
-
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(exercise.name.lowercased() + ".")
-                        .font(.system(size: 42, weight: .regular))
-                        .foregroundStyle(theme.text)
-                    Text(sampleCalLabel)
-                        .font(.system(size: 11, weight: .medium)).tracking(2)
-                        .textCase(.uppercase)
-                        .foregroundStyle(theme.dim)
-                }
-
-                if aiLoading { aiLoadingRow }
-                muscleSection
-                benefitsSection
-                recoverySection
-                if usingAI { aiAttribution }
-            }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
-        }
-        .presentationDetents([.large])
-        .presentationBackground(theme.bg)
-        .task(id: exercise.id) { await loadAIIfNeeded() }
-    }
-
-    private func loadAIIfNeeded() async {
-        guard canUseAI, ai == nil else { return }
-        if let cached = ExerciseInsightService.shared.cached(for: exercise) {
-            ai = cached
-            return
-        }
-        guard ExerciseInsightService.shared.isAvailable else { return }
-        aiLoading = true
-        ai = await ExerciseInsightService.shared.insight(for: exercise)
-        aiLoading = false
-    }
-
-    @ViewBuilder
-    private var aiLoadingRow: some View {
-        HStack(spacing: 8) {
-            ProgressView().controlSize(.small)
-            Text("Generating insights with Apple Intelligence…")
-                .font(.caption).foregroundStyle(theme.dim)
-        }
-    }
-
-    @ViewBuilder
-    private var aiAttribution: some View {
-        HStack(alignment: .top, spacing: 6) {
-            Image(systemName: "sparkles")
-                .font(.system(size: 10)).foregroundStyle(theme.accent)
-            Text("Muscles and benefits for this custom exercise were generated on-device by Apple Intelligence. General fitness guidance, not medical advice.")
-                .font(.caption2).foregroundStyle(theme.dim)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-    }
-
-    @ViewBuilder
-    private var muscleSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Muscles worked")
-                .font(.caption).tracking(2).textCase(.uppercase)
-                .foregroundStyle(theme.dim)
-            Text(ExerciseInfo.plainMuscleList(displayPrimary))
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundStyle(theme.text)
-                .fixedSize(horizontal: false, vertical: true)
-            if !displaySecondary.isEmpty {
-                Text("Also: \(ExerciseInfo.plainMuscleList(displaySecondary, separator: ", "))")
-                    .font(.caption)
-                    .foregroundStyle(theme.dim)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-        }
-        .padding(12)
-        .background(theme.card)
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.accent.opacity(0.25), lineWidth: 1))
-    }
-
-    @ViewBuilder
-    private var benefitsSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("What it does")
-                .font(.caption).tracking(2).textCase(.uppercase)
-                .foregroundStyle(theme.dim)
-            ForEach(Array(displayBenefits.enumerated()), id: \.offset) { _, b in
-                HStack(alignment: .top, spacing: 8) {
-                    Text("·")
-                        .foregroundStyle(theme.accent)
-                    Text(b)
-                        .font(.callout)
-                        .foregroundStyle(theme.text)
-                }
-            }
-        }
-    }
-
-    @ViewBuilder
-    private var recoverySection: some View {
-        let hint = Movement.postExerciseHint(for: exercise)
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 6) {
-                Image(systemName: "leaf.fill").font(.system(size: 11)).foregroundStyle(theme.accent)
-                Text("Recovery · rest \(hint.recoveryHours)h")
-                    .font(.caption).tracking(2).textCase(.uppercase)
-                    .foregroundStyle(theme.dim)
-            }
-            Text("\(hint.primaryNeed) within \(hint.windowMinutes) min.")
-                .font(.caption).foregroundStyle(theme.text)
-            Text("Try: \(hint.recoveryFoods.joined(separator: " · "))")
-                .font(.caption).italic().foregroundStyle(theme.dim)
-        }
-        .padding(12)
-        .background(theme.card)
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
     }
 }

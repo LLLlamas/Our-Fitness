@@ -8,8 +8,9 @@
 //                      hold-a-button / flick-to-choose radial from console games.
 //
 // Self-contained: it owns its own water @Query (today's total, for the progress
-// ring), the per-profile goal + last-amount in AppStorage, and logs through the
-// same `Repos.addWater` path the Water card uses. Numbers are never invented.
+// ring) and the per-profile goal + last-amount in AppStorage. Logging goes
+// through `WaterLog.add` (Features/Today/WaterLogging.swift) — the same path the
+// Water card uses, so the two can't drift. Numbers are never invented.
 
 import SwiftUI
 import SwiftData
@@ -46,16 +47,14 @@ struct WaterQuickLogButton: View {
             filter: #Predicate<WaterEntryModel> { $0.userId == uid && $0.timestamp >= dayStart },
             sort: \.timestamp, order: .forward
         )
-        _goalFlOz = AppStorage(wrappedValue: Water.defaultGoalFlOz, "waterGoalFlOz.\(uid.uuidString)")
-        _lastFlOz = AppStorage(wrappedValue: Water.presets.first?.flOz ?? 4, "waterLastFlOz.\(uid.uuidString)")
+        _goalFlOz = AppStorage(wrappedValue: Water.defaultGoalFlOz, WaterLog.goalStorageKey(uid))
+        _lastFlOz = AppStorage(wrappedValue: WaterLog.defaultLastFlOz, WaterLog.lastAmountStorageKey(uid))
     }
 
+    /// Query is already bounded to today's entries; `Water.total` re-filters by
+    /// day key so a log made just before midnight can't leak into the new day.
     private var todayOz: Double {
-        let today = Dates.dayKey()
-        return entryModels.reduce(0) { acc, model in
-            let entry = model.snapshot
-            return acc + (entry.date == today ? entry.flOz : 0)
-        }
+        Water.total(entryModels.map(\.snapshot), on: Dates.dayKey())
     }
     private var pct: Double { goalFlOz > 0 ? min(1, todayOz / goalFlOz) : 0 }
     private var presets: [Water.CupPreset] { Water.presets }
@@ -225,15 +224,15 @@ struct WaterQuickLogButton: View {
     // MARK: - Logging
 
     private func logLast() {
-        logAmount(lastFlOz > 0 ? lastFlOz : (Water.presets.first?.flOz ?? 4))
+        logAmount(lastFlOz > 0 ? lastFlOz : WaterLog.defaultLastFlOz)
     }
 
+    /// Shared path with the Water card — write, remember the amount, confirm.
+    /// No explicit haptic: `ToastCenter.show` fires one for the .ok accent, and
+    /// firing a second here was a felt double-tap.
     private func logAmount(_ oz: Double) {
-        Repos.addWater(ctx, WaterEntryDTO(userId: profile.id, date: Dates.dayKey(), flOz: oz))
-        lastFlOz = oz
-        Haptics.success()
-        toasts.show(Toast(title: "+\(Units.formatVolumeWithUnit(flOz: oz, system: unitSystem))",
-                          detail: "Water logged", accent: .ok, symbol: "drop.fill"))
+        WaterLog.add(oz, for: profile, context: ctx,
+                     lastFlOz: $lastFlOz, unitSystem: unitSystem, toasts: toasts)
     }
 }
 

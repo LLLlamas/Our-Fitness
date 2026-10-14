@@ -223,7 +223,6 @@ struct MealIngredientDetailSheet: View {
             ingredients: ingredients
         )
         Repos.addFoodLog(ctx, dto)
-        Haptics.success()
         toasts.show(Toast(title: "Logged", detail: name, accent: .ok, symbol: "checkmark.circle.fill"))
         onDone()
         dismiss()
@@ -237,7 +236,6 @@ struct MealIngredientDetailSheet: View {
         updated.ingredients = ingredients
         updated.perServing = totals
         Repos.updateFoodLog(ctx, updated)
-        Haptics.success()
         toasts.show(Toast(title: "Updated", detail: name, accent: .ok, symbol: "checkmark.circle.fill"))
         onDone()
         dismiss()
@@ -246,7 +244,6 @@ struct MealIngredientDetailSheet: View {
     private func deleteEntry() {
         guard case let .editing(entry) = mode else { return }
         Repos.deleteFoodLog(ctx, id: entry.id)
-        Haptics.warn()
         toasts.show(Toast(title: "Removed", detail: name, accent: .warn, symbol: "minus.circle.fill"))
         onDone()
         dismiss()
@@ -655,7 +652,6 @@ struct SaveTemplateSheet: View {
             ingredients: ingredients
         )
         Repos.addSavedTemplate(ctx, template)
-        Haptics.success()
         toasts.show(Toast(title: "Recipe saved", detail: trimmedName, accent: .ok, symbol: "bookmark.fill"))
         dismiss()
     }

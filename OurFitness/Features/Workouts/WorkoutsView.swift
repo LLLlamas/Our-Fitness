@@ -1,21 +1,11 @@
 import SwiftUI
 import SwiftData
 
+// MARK: - Train tab (both modes; Build = lifts, Circuit = Pilates + movements)
+
+/// The Train tab root. Mode-aware: Build shows the lift list + rep counter,
+/// Circuit shows Pilates plus the parenting-movement quick-log.
 struct WorkoutsView: View {
-    let profile: ProfileDTO
-
-    @Environment(\.modelContext) private var ctx
-    @Environment(\.theme) private var theme
-
-    var body: some View {
-        BuildWorkoutsView(profile: profile)
-            .background(theme.bg.ignoresSafeArea())
-    }
-}
-
-// MARK: - Workouts content (both modes; Build = lifts, Circuit = Pilates + movements)
-
-private struct BuildWorkoutsView: View {
     let profile: ProfileDTO
 
     @Environment(\.modelContext) private var ctx
@@ -91,17 +81,6 @@ private struct BuildWorkoutsView: View {
         }
     }
 
-    private func holdLabel(_ seconds: Int) -> String {
-        guard seconds > 0 else { return "—" }
-        if seconds < 90 { return "\(seconds)s" }
-        if seconds < 4200 {
-            let m = seconds / 60; let s = seconds % 60
-            return s > 0 ? "\(m)m \(s)s" : "\(m)m"
-        }
-        let h = seconds / 3600; let m = (seconds % 3600) / 60
-        return m > 0 ? "\(h)h \(m)m" : "\(h)h"
-    }
-
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
@@ -123,16 +102,17 @@ private struct BuildWorkoutsView: View {
             .padding(.vertical, 18)
             .scrollHapticTicks()
         }
+        .background(theme.bg.ignoresSafeArea())
         .sheet(isPresented: $showAddSheet) {
-            AddExerciseSheet(profileId: profile.id) { name, lo, hi, tracksWeight, isIsometric in
+            AddExerciseSheet(mode: profile.mode) { draft in
                 Repos.createExercise(
-                    ctx, profileId: profile.id, name: name,
-                    defaultRepsBottom: lo, defaultRepsTop: hi,
-                    tracksWeight: tracksWeight,
-                    isIsometric: isIsometric
+                    ctx, profileId: profile.id, name: draft.name,
+                    defaultRepsBottom: 8, defaultRepsTop: 12,
+                    tracksWeight: draft.tracksWeight,
+                    kind: draft.kind,
+                    isIsometric: draft.isIsometric
                 )
-                Haptics.bump()
-                toasts.show(Toast(title: name, detail: "Exercise added", accent: .win, symbol: "plus.circle.fill"))
+                toasts.show(Toast(title: draft.name, detail: "Exercise added", accent: .win, symbol: "plus.circle.fill"))
             }
             .themed(profile.mode)
         }
@@ -141,7 +121,7 @@ private struct BuildWorkoutsView: View {
                 .themed(profile.mode)
         }
         .sheet(item: $activeInfo) { ex in
-            BuildExerciseInfoSheet(exercise: ex, profile: profile)
+            ExerciseInfoSheet(exercise: ex, profile: profile)
                 .themed(profile.mode)
         }
         .sheet(item: $activeHistory) { ex in
@@ -310,7 +290,7 @@ private struct BuildWorkoutsView: View {
             Text(label.uppercased())
                 .font(.system(size: 9, weight: .medium)).tracking(1.5)
                 .foregroundStyle(theme.dim)
-            Text(holdLabel(seconds))
+            Text(seconds > 0 ? formattedHoldDuration(seconds) : "—")
                 .font(.system(size: 20, weight: .semibold, design: .monospaced))
                 .foregroundStyle(seconds > 0 ? theme.text : theme.dim)
                 .contentTransition(.numericText())
@@ -329,68 +309,112 @@ private struct BuildWorkoutsView: View {
     }
 }
 
-// MARK: - Add exercise sheet
+// MARK: - Shared duration formatter
 
-private struct AddExerciseSheet: View {
-    let profileId: UUID
-    let onSave: (String, Int, Int, Bool, Bool) -> Void
+/// One hold/duration label for the Train tab (`WorkoutsView` stats cells and
+/// `RepCounter`'s isometric session summary). Seconds under 90 stay seconds,
+/// then minutes, then hours — never add a second copy of this.
+func formattedHoldDuration(_ seconds: Int) -> String {
+    if seconds < 90 { return "\(seconds)s" }
+    if seconds < 4200 {
+        let m = seconds / 60; let s = seconds % 60
+        return s > 0 ? "\(m)m \(s)s" : "\(m)m"
+    }
+    let h = seconds / 3600; let m = (seconds % 3600) / 60
+    return m > 0 ? "\(h)h \(m)m" : "\(h)h"
+}
+
+// MARK: - Add exercise sheet (both modes)
+
+/// One add-exercise sheet for the whole Train tab. The fields vary by mode —
+/// Build asks whether the lift tracks weight and whether it's an isometric
+/// hold; Circuit asks reps-vs-duration and an optional carried load — but the
+/// title, button style and focus behaviour are the same in both.
+struct AddExerciseSheet: View {
+    /// What the sheet collected. Callers own the rep range and the `Repos` call,
+    /// because Build and Circuit seed different defaults.
+    struct Draft {
+        var name: String
+        var kind: ExerciseKind
+        var tracksWeight: Bool
+        var isIsometric: Bool
+        var loadLb: Double?
+    }
+
+    let mode: Mode
+    let onSave: (Draft) -> Void
 
     @Environment(\.theme) private var theme
     @Environment(\.dismiss) private var dismiss
 
     @State private var name: String = ""
+    @State private var kind: ExerciseKind = .reps
     @State private var tracksWeight: Bool = true
     @State private var isIsometric: Bool = false
+    @State private var loadRaw: String = ""
     @FocusState private var nameFocused: Bool
+    @FocusState private var loadFocused: Bool
+
+    @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
+
+    private var isCircuit: Bool { mode == .circuit }
+
+    private var loadLb: Double? {
+        // Field is in the active unit; persist canonical lb.
+        guard !loadRaw.isEmpty, let v = Double(loadRaw), v > 0 else { return nil }
+        return Units.weightToLb(v, system: unitSystem)
+    }
 
     private var canSave: Bool {
         !name.trimmingCharacters(in: .whitespaces).isEmpty
     }
 
+    private var draft: Draft {
+        let load = isCircuit ? loadLb : nil
+        return Draft(
+            name: name.trimmingCharacters(in: .whitespaces),
+            kind: isCircuit ? kind : (isIsometric ? .duration : .reps),
+            // Circuit has no weight toggle — a carried load is what it tracks.
+            tracksWeight: isCircuit ? (load != nil) : tracksWeight,
+            isIsometric: isCircuit ? false : isIsometric,
+            loadLb: load
+        )
+    }
+
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 18) {
-                Text("Add exercise")
-                    .font(.system(size: 42, weight: .regular))
-                    .foregroundStyle(theme.text)
+            VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(isCircuit ? "Add movement" : "Add exercise")
+                        .font(.system(size: 36, weight: .regular))
+                        .foregroundStyle(theme.text)
+                    Text(isCircuit
+                         ? "Quick-log it from the Movements card with one tap."
+                         : "Tracks reps, calories, and muscle history.")
+                        .font(.caption).foregroundStyle(theme.dim)
+                }
 
-                TextField("Name (e.g. Pull-ups)", text: $name)
-                    .padding(10).background(theme.card)
+                fieldLabel("Name")
+                TextField(isCircuit ? "e.g. Carried Baby" : "e.g. Pull-ups", text: $name)
+                    .focused($nameFocused)
+                    .padding(12)
+                    .background(theme.card)
                     .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                     .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                     .foregroundStyle(theme.text)
-                    .focused($nameFocused)
 
-                Toggle(isOn: $tracksWeight) {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Tracks weight")
-                            .foregroundStyle(theme.text)
-                        Text("Shows a weight field when logging")
-                            .font(.caption).foregroundStyle(theme.dim)
-                    }
-                }
-                .tint(theme.accent)
-                .disabled(isIsometric)
-                .opacity(isIsometric ? 0.4 : 1)
-
-                Toggle(isOn: $isIsometric) {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Isometric hold")
-                            .foregroundStyle(theme.text)
-                        Text("Plank, dead hang, wall sit — counts seconds, not reps")
-                            .font(.caption).foregroundStyle(theme.dim)
-                    }
-                }
-                .tint(theme.accent)
-                .onChange(of: isIsometric) { _, on in
-                    if on { tracksWeight = false }
+                if isCircuit {
+                    circuitFields
+                } else {
+                    buildFields
                 }
 
                 Button {
-                    onSave(name.trimmingCharacters(in: .whitespaces), 8, 12, tracksWeight, isIsometric)
+                    guard canSave else { return }
+                    onSave(draft)
                     dismiss()
                 } label: {
-                    Text("Save")
+                    Text(isCircuit ? "Add movement" : "Save")
                 }
                 .tactile(.primary, fullWidth: true)
                 .disabled(!canSave)
@@ -401,11 +425,72 @@ private struct AddExerciseSheet: View {
         }
         .presentationDetents([.medium, .large])
         .presentationBackground(theme.bg)
+        .presentationDragIndicator(.visible)
+        .onAppear { nameFocused = true }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                Button("Done") { nameFocused = false }
+                Button("Done") { nameFocused = false; loadFocused = false }
             }
+        }
+    }
+
+    @ViewBuilder
+    private func fieldLabel(_ text: String) -> some View {
+        Text(text.uppercased())
+            .font(.system(size: 10, weight: .medium)).tracking(2)
+            .foregroundStyle(theme.dim)
+    }
+
+    @ViewBuilder
+    private var buildFields: some View {
+        Toggle(isOn: $tracksWeight) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Tracks weight")
+                    .foregroundStyle(theme.text)
+                Text("Shows a weight field when logging")
+                    .font(.caption).foregroundStyle(theme.dim)
+            }
+        }
+        .tint(theme.accent)
+        .disabled(isIsometric)
+        .opacity(isIsometric ? 0.4 : 1)
+
+        Toggle(isOn: $isIsometric) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Isometric hold")
+                    .foregroundStyle(theme.text)
+                Text("Plank, dead hang, wall sit — counts seconds, not reps")
+                    .font(.caption).foregroundStyle(theme.dim)
+            }
+        }
+        .tint(theme.accent)
+        .onChange(of: isIsometric) { _, on in
+            if on { tracksWeight = false }
+        }
+    }
+
+    @ViewBuilder
+    private var circuitFields: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            fieldLabel("Type")
+            Picker("Type", selection: $kind) {
+                Text("Reps").tag(ExerciseKind.reps)
+                Text("Duration (min)").tag(ExerciseKind.duration)
+            }
+            .pickerStyle(.segmented)
+        }
+
+        VStack(alignment: .leading, spacing: 8) {
+            fieldLabel("Load (\(Units.weightUnit(unitSystem))) · optional")
+            TextField(unitSystem == .metric ? "e.g. 14" : "e.g. 30", text: $loadRaw)
+                .keyboardType(.decimalPad)
+                .focused($loadFocused)
+                .padding(12)
+                .background(theme.card)
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+                .foregroundStyle(theme.text)
         }
     }
 }
@@ -498,7 +583,6 @@ private struct SetHistorySheet: View {
                             titleVisibility: .visible) {
             Button("Delete exercise and all its sets", role: .destructive) {
                 Repos.deleteExercise(ctx, id: exercise.id)
-                Haptics.warn()
                 toasts.show(Toast(title: "\(exercise.name) deleted",
                                   detail: "Exercise and its sets removed.",
                                   accent: .warn, symbol: "trash.fill"))
@@ -521,7 +605,6 @@ private struct SetHistorySheet: View {
             Spacer()
             Button(role: .destructive) {
                 Repos.deleteSet(ctx, id: s.id)
-                Haptics.warn()
                 toasts.show(Toast(title: "Set removed",
                                   detail: primaryLabel(s),
                                   accent: .warn, symbol: "trash.fill"))
@@ -727,7 +810,6 @@ private struct WorkoutGoalSheet: View {
             isIsometric: g.isIsometric
         )
         added.insert(g.exerciseName.lowercased())
-        Haptics.bump()
         toasts.show(Toast(title: g.exerciseName, detail: "Added to your exercises",
                           accent: .win, symbol: "plus.circle.fill"))
     }

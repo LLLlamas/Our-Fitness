@@ -28,17 +28,26 @@ struct TodayView: View {
     @State private var entryToDetail: FoodLogEntryDTO?
     @State private var showMealLog = false
 
+    // Real HealthKit figures for StepsCard's Circuit variant — loaded in
+    // refreshToday(). nil / empty means "Health gave us nothing", and the card
+    // hides those rows rather than showing zeros.
+    @State private var intradayStepsToday: [Int] = []
+    @State private var intradayStepsYesterday: [Int] = []
+    @State private var activeEnergyCalThisWeek: Int?
+    @State private var exerciseMinutesThisWeek: Int?
+
     @AppStorage("hasBackfilled.steps") private var hasBackfilledRaw: String = ""
 
     // One-shot-per-day flags for macro encouragement toasts. Comma-separated keys
     // stored in AppStorage so cold-launch re-fires are suppressed. Reset when the
-    // day key rolls over. Same pattern as milestonesFired in StepsCardioCard.
+    // day key rolls over. Same pattern as milestonesFired in StepsCard.
     // Keys: "protein-approaching", "protein-goal", "calorie-approaching", "calorie-goal"
     @AppStorage private var macroFiredRaw: String
     @AppStorage private var macroFlagDayKey: String
 
-    // Mirror the same AppStorage keys used in StepsCardioCard so the streak
-    // calculation here uses the user's configured goals, not the mode defaults.
+    // Mirror the same AppStorage keys used by StepsCard's goal picker (via
+    // StepsGoalPrefs) so the streak calculation here uses the user's configured
+    // goals, not the mode defaults.
     @AppStorage private var customStepsGoalRaw: Int
     @AppStorage private var customWeeklyDaysRaw: Int
 
@@ -102,8 +111,10 @@ struct TodayView: View {
         )
         _macroFiredRaw = AppStorage(wrappedValue: "", "macroFired.\(uid.uuidString)")
         _macroFlagDayKey = AppStorage(wrappedValue: "", "macroFiredDay.\(uid.uuidString)")
-        _customStepsGoalRaw = AppStorage(wrappedValue: 0, "stepsGoal.\(uid.uuidString)")
-        _customWeeklyDaysRaw = AppStorage(wrappedValue: 5, "stepsWeeklyDays.\(uid.uuidString)")
+        _customStepsGoalRaw = AppStorage(wrappedValue: 0, StepsGoalPrefs.dailyKey(uid))
+        _customWeeklyDaysRaw = AppStorage(
+            wrappedValue: StepsGoalPrefs.defaultWeeklyDays, StepsGoalPrefs.weeklyDaysKey(uid)
+        )
         _waterGoalFlOz = AppStorage(wrappedValue: Water.defaultGoalFlOz, "waterGoalFlOz.\(uid.uuidString)")
         _stallNudgeDayKey = AppStorage(wrappedValue: "", "stallNudgeDay.\(uid.uuidString)")
     }
@@ -128,7 +139,7 @@ struct TodayView: View {
     }
     private var weeklySteps: [Trends.Point] { Steps.series(allStepsForProfile, days: 7) }
     private var effectiveStepsGoal: Int {
-        customStepsGoalRaw > 0 ? customStepsGoalRaw : profile.computedTargets.stepsDaily
+        StepsGoalPrefs.resolve(custom: customStepsGoalRaw, modeDefault: profile.computedTargets.stepsDaily)
     }
     private var stepStreakWeeks: Int {
         Movement.stepWeeklyStreak(
@@ -338,19 +349,27 @@ struct TodayView: View {
     // live in the Train tab.
     @ViewBuilder
     private var circuitContent: some View {
-        StepsCardioCard(
-            profile: profile,
-            todaysSteps: todaysSteps,
-            weeklySeries: weeklySteps,
-            intradayToday: [],
-            intradayYesterday: [],
-            activeEnergyKcalThisWeek: 0,
-            exerciseMinutesThisWeek: 0,
-            streakWeeks: stepStreakWeeks
-        )
+        stepsCard
         focusFooter(.steps)
 
         recentLogs
+    }
+
+    // One mode-aware steps card for both modes (Build = hero count + bar,
+    // Circuit = ring + weekly strip + week-to-date Health stats).
+    @ViewBuilder
+    private var stepsCard: some View {
+        StepsCard(
+            profile: profile,
+            steps: todaysSteps,
+            weeklySeries: weeklySteps,
+            streakWeeks: stepStreakWeeks,
+            intradayToday: intradayStepsToday,
+            intradayYesterday: intradayStepsYesterday,
+            activeEnergyKcalThisWeek: activeEnergyCalThisWeek,
+            exerciseMinutesThisWeek: exerciseMinutesThisWeek,
+            onConnectHealth: connectHealth
+        )
     }
 
     @ViewBuilder
@@ -368,15 +387,7 @@ struct TodayView: View {
 
     @ViewBuilder
     private var buildContent: some View {
-        StepsCard(
-            steps: todaysSteps,
-            goal: profile.computedTargets.stepsDaily,
-            profileId: profile.id,
-            healthGranted: profile.healthGranted,
-            weightLb: profile.weightLb,
-            mode: profile.mode,
-            onConnectHealth: connectHealth
-        )
+        stepsCard
         recentLogs
     }
 
@@ -495,6 +506,20 @@ struct TodayView: View {
             Repos.setSteps(ctx, userId: profile.id, date: today,
                            steps: n, source: .appleHealth)
         }
+        await refreshStepsCardExtras()
+    }
+
+    /// The pace-vs-yesterday line and the week-to-date stats only exist in the
+    /// Circuit variant of StepsCard, so only pay for those reads there. Reads
+    /// only — no requestAuthorization on this path (see refreshToday()).
+    private func refreshStepsCardExtras() async {
+        guard profile.mode == .circuit else { return }
+        intradayStepsToday = await health.hourlyCumulativeSteps()
+        if let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) {
+            intradayStepsYesterday = await health.hourlyCumulativeSteps(for: yesterday)
+        }
+        activeEnergyCalThisWeek = await health.activeEnergyThisWeekCal()
+        exerciseMinutesThisWeek = await health.exerciseMinutesThisWeek()
     }
 }
 
