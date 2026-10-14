@@ -434,7 +434,7 @@ struct IngredientFoodSearchSheet: View {
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
         .presentationBackground(theme.bg)
-        // Debounce the USDA FTS5 scan off the main thread — mirrors FoodLibrarySheet.
+        // Debounce the USDA FTS5 scan off the main thread — mirrors AddFoodSheet.
         // Empty query shows curated-only immediately; non-empty waits 180 ms then
         // suspends the main actor while the SQLite query runs on the background queue.
         .task(id: query) {

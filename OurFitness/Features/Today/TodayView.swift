@@ -204,7 +204,7 @@ struct TodayView: View {
             .themed(profile.mode)
         }
         .sheet(isPresented: $showMealLog) {
-            NLMealLogSheet(profile: profile, targetDate: today) { dto in
+            AddFoodSheet(profile: profile, targetDate: today) { dto in
                 Repos.addFoodLog(ctx, dto)
                 toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
                 let foodName = dto.foodId ?? dto.customName ?? ""

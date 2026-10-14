@@ -176,6 +176,15 @@ private struct DayMealDetailSheet: View {
                         }
                     }
                 }
+
+                // Jump the Meals tab to this day so its entries can be edited,
+                // deleted, or added to.
+                Button {
+                    onViewInLog(day.id)
+                } label: {
+                    Label("Open this day in the log", systemImage: "square.and.pencil")
+                }
+                .tactile(.secondary, fullWidth: true)
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
