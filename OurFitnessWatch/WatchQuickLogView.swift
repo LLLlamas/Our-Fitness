@@ -34,11 +34,13 @@ struct WatchQuickLogView: View {
 
     private var emptyState: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("No movements yet")
+            // Same rule as the other watch empty states: with no sync there is
+            // no basis for claiming the phone has no movements.
+            Text(store.hasSynced ? "No movements yet" : "Not synced yet")
                 .font(.headline)
             Text(store.hasSynced
                  ? "Add movements on your phone"
-                 : "Open OurFitness on your phone to sync")
+                 : "Open Our Fitness on your iPhone")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
         }

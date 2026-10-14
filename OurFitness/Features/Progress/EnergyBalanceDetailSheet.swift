@@ -13,56 +13,26 @@ struct EnergyBalanceDetailSheet: View {
 
     @Environment(\.theme) private var theme
 
-    /// Cap the chart window so very long histories stay legible.
-    private var chartRows: [EnergyBalance.DayBalance] {
-        rows.suffix(30).map { $0 }
-    }
-
-    /// Most-recent-first slice for the list under the chart.
-    private var recentRows: [EnergyBalance.DayBalance] {
-        rows.suffix(10).reversed().map { $0 }
-    }
-
-    private var averages: (intake: Int, burned: Int) {
-        EnergyBalance.averages(rows)
-    }
-
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                header
+        // Hoisted once: each of these walks `rows`, and they were previously
+        // computed properties read two or three times per pass.
+        let chartRows = rows.suffix(30).map { $0 }
+        let recentRows = rows.suffix(10).reversed().map { $0 }
+        let averages = EnergyBalance.averages(rows)
+        InfoSheetScaffold(title: "Energy balance", subtitle: "CALORIES IN vs ACTIVITY BURN") {
+            avgSummary(averages: averages)
 
-                avgSummary
+            chartSection(chartRows: chartRows)
 
-                chartSection
+            recentSection(recentRows: recentRows)
 
-                recentSection
-
-                note
-            }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
-        }
-        .presentationDetents([.medium, .large])
-        .presentationBackground(theme.bg)
-    }
-
-    // MARK: Header
-
-    private var header: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("Energy balance")
-                .font(.system(size: 42, weight: .regular))
-                .foregroundStyle(theme.text)
-            Text("CALORIES IN vs ACTIVITY BURN")
-                .font(.system(size: 10, weight: .medium)).tracking(2)
-                .foregroundStyle(theme.dim)
+            InfoFootnote("Burn = active calories from steps + logged training — the energy on top of what you'd burn at rest, so it's not a whole-day expenditure. Walks, runs and hikes you log are left out because their steps are already counted. Target is your daily calorie goal. Net = calories in minus activity burn.")
         }
     }
 
     // MARK: Average summary
 
-    private var avgSummary: some View {
+    private func avgSummary(averages: (intake: Int, burned: Int)) -> some View {
         HStack(spacing: 12) {
             summaryCell(label: "AVG IN", value: averages.intake, accent: theme.accent)
             summaryCell(label: "TARGET", value: targetCalories, accent: theme.text)
@@ -94,12 +64,8 @@ struct EnergyBalanceDetailSheet: View {
     // MARK: Chart
 
     @ViewBuilder
-    private var chartSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Daily intake vs burn")
-                .font(.caption).tracking(2).textCase(.uppercase)
-                .foregroundStyle(theme.dim)
-
+    private func chartSection(chartRows: [EnergyBalance.DayBalance]) -> some View {
+        InfoSection(title: "Daily intake vs burn") {
             if chartRows.allSatisfy({ $0.intake == 0 && $0.burned == 0 }) {
                 Text("Log meals and training to see your intake and burn trend.")
                     .font(.callout).foregroundStyle(theme.dim)
@@ -175,12 +141,8 @@ struct EnergyBalanceDetailSheet: View {
     // MARK: Recent list
 
     @ViewBuilder
-    private var recentSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Recent days")
-                .font(.caption).tracking(2).textCase(.uppercase)
-                .foregroundStyle(theme.dim)
-
+    private func recentSection(recentRows: [EnergyBalance.DayBalance]) -> some View {
+        InfoSection(title: "Recent days") {
             if recentRows.allSatisfy({ $0.intake == 0 && $0.burned == 0 }) {
                 Text("Nothing logged yet.")
                     .font(.callout).foregroundStyle(theme.dim)
@@ -231,14 +193,5 @@ struct EnergyBalanceDetailSheet: View {
         .background(theme.card)
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-    }
-
-    // MARK: Footer note
-
-    private var note: some View {
-        Text("Burn = active calories from steps + logged training — the energy on top of what you'd burn at rest, so it's not a whole-day expenditure. Walks, runs and hikes you log are left out because their steps are already counted. Target is your daily calorie goal. Net = calories in minus activity burn.")
-            .font(.footnote)
-            .foregroundStyle(theme.dim)
-            .fixedSize(horizontal: false, vertical: true)
     }
 }

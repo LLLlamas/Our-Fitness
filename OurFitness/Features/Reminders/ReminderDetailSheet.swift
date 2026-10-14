@@ -72,7 +72,12 @@ struct ReminderDetailSheet: View {
     }
 
     private var events: [ReminderEventDTO] { eventModels.map(\.snapshot) }
-    private var lastDone: Date? { events.first?.timestamp }
+
+    /// Off the MODEL, not through `events`: this is read by `dueDay`,
+    /// `daysUntil`, `isDue` and `dueLabel`, so going via `events.first` built a
+    /// DTO for every event this reminder has ever logged, four times a render,
+    /// to look at one timestamp. The query is sorted newest-first.
+    private var lastDone: Date? { eventModels.first?.timestamp }
 
     private var isMedication: Bool { groupKind == .medication }
 
@@ -222,7 +227,7 @@ struct ReminderDetailSheet: View {
         reminder = updated
         guard Repos.updateReminder(ctx, updated) else { return }
         WatchSyncService.shared.pushSnapshot(ctx, userId: updated.userId)
-        Haptics.bump()
+        // ToastCenter.show fires the accent's haptic (.ok -> bump) itself.
         toasts.show(Toast(title: "Photo updated", accent: .ok, symbol: "photo.fill"))
     }
 
@@ -293,7 +298,9 @@ struct ReminderDetailSheet: View {
     private var patternLine: String {
         let now = Date()
         let calendar = Calendar.current
-        let stamps = events.map(\.timestamp)
+        // Timestamps straight off the models — MedicationPattern wants dates,
+        // and snapshotting the whole log to hand it a `[Date]` was pure waste.
+        let stamps = eventModels.map(\.timestamp)
         guard MedicationPattern.hasDisplayablePattern(stamps, now: now, calendar: calendar),
               let minuteOfDay = MedicationPattern.typicalMinuteOfDay(stamps, now: now, calendar: calendar),
               // Set the wall-clock time rather than adding minutes to midnight:
@@ -360,10 +367,17 @@ struct ReminderDetailSheet: View {
 
                 fieldBlock("TIMES") {
                     DoseTimesEditor(minutes: $doseTimes, onChange: {
+                        // The editor's time pickers report every minute the
+                        // wheel passes through, so this fires repeatedly during
+                        // one edit. Only the transition OFF -> ON is the
+                        // explicit "I want to be reminded" moment that may ask
+                        // for permission; re-asking (and re-pushing to the
+                        // watch) on each tick is work, not consent.
+                        let wasEnabled = reminder.patternReminderEnabled == true
                         commitEdits()
-                        // Adding a time switches the nudge on (see commitEdits),
-                        // so this is the same explicit moment as the toggle.
-                        if !doseTimes.isEmpty { requestAuthorizationThenSync() }
+                        if !wasEnabled, reminder.patternReminderEnabled == true {
+                            requestAuthorizationThenSync()
+                        }
                     })
                 }
 
@@ -549,7 +563,6 @@ struct ReminderDetailSheet: View {
 
     private func snooze() {
         guard ReminderNotificationService.snooze(ctx, reminderId: reminder.id) != nil else { return }
-        Haptics.success()
         toasts.show(Toast(
             title: "Snoozed", detail: "\(reminder.name) · back tomorrow",
             accent: .ok, symbol: "moon.zzz.fill"
@@ -565,7 +578,7 @@ struct ReminderDetailSheet: View {
                 .font(.system(size: 10, weight: .medium)).tracking(2)
                 .foregroundStyle(theme.dim)
 
-            if events.isEmpty {
+            if eventModels.isEmpty {
                 Text("No history yet.")
                     .font(.caption).foregroundStyle(theme.dim)
             } else if isMedication {
@@ -583,7 +596,9 @@ struct ReminderDetailSheet: View {
                 }
                 fullHistoryButton(allDays: allDays)
             } else {
-                ForEach(events.prefix(30)) { e in
+                // Slice first, snapshot second: `events.prefix(30)` built a DTO
+                // for the whole log and then threw all but 30 away.
+                ForEach(eventModels.prefix(30).map(\.snapshot)) { e in
                     HStack {
                         VStack(alignment: .leading, spacing: 1) {
                             Text(e.timestamp, style: .date)
@@ -680,7 +695,7 @@ struct ReminderDetailSheet: View {
     private func deleteEvent(id: UUID) {
         guard Repos.deleteReminderEvent(ctx, id: id) else { return }
         ReminderNotificationService.syncAfterChange(ctx, reminderId: reminder.id, userId: profile.id)
-        Haptics.warn()
+        // .warn's haptic comes from ToastCenter.show.
         toasts.show(Toast(title: "Removed", detail: "Log entry undone", accent: .warn, symbol: "arrow.uturn.backward"))
     }
 
@@ -701,7 +716,6 @@ struct ReminderDetailSheet: View {
 
     private func delete() {
         guard ReminderNotificationService.remove(ctx, reminderId: reminder.id, userId: profile.id) else { return }
-        Haptics.warn()
         toasts.show(Toast(title: "\(reminder.name) deleted", accent: .warn, symbol: "trash.fill"))
         dismiss()
     }

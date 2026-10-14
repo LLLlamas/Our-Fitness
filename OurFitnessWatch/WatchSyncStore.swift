@@ -18,6 +18,7 @@
 import Foundation
 import Combine
 import WatchConnectivity
+import UIKit
 
 @MainActor
 final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
@@ -25,7 +26,11 @@ final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
 
     /// nil until the first successful sync (or cache load) — `hasSynced`.
     @Published private(set) var envelope: WatchSnapshotEnvelope?
-    @Published private(set) var thumbnails: [UUID: Data] = [:]
+    /// Already-DECODED images, not JPEG bytes. A row's thumbnail is re-read on
+    /// every body pass (and a watch list re-renders on every envelope push and
+    /// every arriving transfer), so decoding at render time meant decoding the
+    /// same JPEG dozens of times. Decode once, here, on the way in.
+    @Published private(set) var thumbnails: [UUID: UIImage] = [:]
 
     /// New key: the cached value is now a whole envelope, not a bare
     /// `[ReminderSnapshot]`. The old `watch.cachedReminderSnapshots` blob has an
@@ -40,6 +45,17 @@ final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
     /// the phone hasn't acknowledged yet, and is worthless across a relaunch.
     private var lastLoggedAmount: [String: Int] = [:]
     private let legacySnapshotsDefaultsKey = "watch.cachedReminderSnapshots"
+
+    /// Raw bytes of the last application context we acted on, so a re-delivery
+    /// of the identical context is a no-op rather than a rollback of optimistic
+    /// state. In-memory only: after a relaunch there is no optimistic state left
+    /// to protect, and reapplying the stored context is then exactly right.
+    private var lastReceivedContextData: Data?
+
+    /// Actions encoded before `WCSession` finished activating. `transferUserInfo`
+    /// may only be called on an ACTIVATED session, so these wait here and flush
+    /// from the activation callback instead of being dropped (or raising).
+    private var pendingActions: [Data] = []
     private let thumbnailsDirectory: URL
 
     /// Only ever used before the first sync, so a calorie readout shows a
@@ -94,10 +110,13 @@ final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
         let dir = thumbnailsDirectory
         Task.detached(priority: .utility) {
             let files = (try? FileManager.default.contentsOfDirectory(at: dir, includingPropertiesForKeys: nil)) ?? []
-            let loaded: [UUID: Data] = files.reduce(into: [:]) { acc, url in
+            // Read AND decode off the main actor — the decode is the expensive
+            // half, and doing it here is why no view has to.
+            let loaded: [UUID: UIImage] = files.reduce(into: [:]) { acc, url in
                 guard let id = UUID(uuidString: url.deletingPathExtension().lastPathComponent),
-                      let data = try? Data(contentsOf: url) else { return }
-                acc[id] = data
+                      let data = try? Data(contentsOf: url),
+                      let image = UIImage(data: data) else { return }
+                acc[id] = image
             }
             await MainActor.run {
                 let valid = Set(self.reminders.map(\.id))
@@ -112,9 +131,12 @@ final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
         thumbnailsDirectory.appendingPathComponent(reminderId.uuidString).appendingPathExtension("jpg")
     }
 
+    /// `data` is kept only long enough to hit the disk cache; the in-memory
+    /// value is the decoded image (see `thumbnails`).
     private func storeThumbnail(_ data: Data, for reminderId: UUID) {
         try? data.write(to: thumbnailURL(for: reminderId), options: .atomic)
-        thumbnails[reminderId] = data
+        guard let image = UIImage(data: data) else { return }
+        thumbnails[reminderId] = image
     }
 
     /// Evicts cached thumbnails (memory + disk) for reminders no longer in
@@ -135,8 +157,16 @@ final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
     // MARK: - Applying context from the phone
 
     private func applyApplicationContext(_ context: [String: Any]) {
-        guard let data = context[WatchSyncKeys.snapshotContextKey] as? Data,
-              let decoded = decodeEnvelope(from: data) else { return }
+        guard let data = context[WatchSyncKeys.snapshotContextKey] as? Data else { return }
+        // The SAME context is handed to us again on every activation
+        // (`receivedApplicationContext` is the last one the system holds), and
+        // reapplying it would roll back any optimistic update taken since —
+        // the wrist's own water/quick-log tap would visibly un-happen on the
+        // next launch. Distinct pushes always differ, because the phone stamps
+        // `generatedAt` on each one, so byte-identical means "nothing new".
+        guard data != lastReceivedContextData else { return }
+        guard let decoded = decodeEnvelope(from: data) else { return }
+        lastReceivedContextData = data
         // A phone newer than this watch build changed the format under us.
         // Decoding it as if it were this version is the failure mode to avoid,
         // so keep the last good envelope and wait for the watch app to update.
@@ -179,7 +209,32 @@ final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
     func send(_ action: WatchAction) {
         applyOptimistic(action)
         guard WCSession.isSupported(), let data = try? JSONEncoder().encode(action) else { return }
+        deliver(data)
+    }
+
+    /// `transferUserInfo` may only be called on an ACTIVATED session, and
+    /// activation is asynchronous — a tap in the first moments after launch can
+    /// land before it completes. The phone guards its own `updateApplicationContext`
+    /// the same way (`WatchSyncService.pushSnapshot`); here the action is queued
+    /// rather than dropped, because the optimistic update has already been applied
+    /// and a dropped action would leave the two devices disagreeing.
+    private func deliver(_ data: Data) {
+        guard WCSession.default.activationState == .activated else {
+            pendingActions.append(data)
+            return
+        }
         WCSession.default.transferUserInfo([WatchSyncKeys.actionUserInfoKey: data])
+    }
+
+    /// Drains the queue exactly once — emptied BEFORE the transfers are handed
+    /// over, so a re-entrant activation callback can't send any action twice.
+    private func flushPendingActions() {
+        guard !pendingActions.isEmpty, WCSession.default.activationState == .activated else { return }
+        let queued = pendingActions
+        pendingActions.removeAll()
+        for data in queued {
+            WCSession.default.transferUserInfo([WatchSyncKeys.actionUserInfoKey: data])
+        }
     }
 
     /// Best-effort local echo of what the phone is about to do. Anything it
@@ -249,6 +304,8 @@ final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
         let context = session.receivedApplicationContext
         Task { @MainActor in
             self.applyApplicationContext(context)
+            // Anything tapped before activation finished goes out now.
+            self.flushPendingActions()
         }
     }
 

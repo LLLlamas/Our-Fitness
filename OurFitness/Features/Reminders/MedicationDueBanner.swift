@@ -41,8 +41,12 @@ struct MedicationDueBanner: View {
         let dayStart = Calendar.current.startOfDay(for: Date())
         _groupModels = Query(filter: #Predicate<ReminderGroupModel> { $0.userId == uid })
         _reminderModels = Query(filter: #Predicate<ReminderModel> { $0.userId == uid }, sort: \.name)
-        // Today only — the banner asks "what does today still owe", and older
-        // events can't answer it.
+        // A lower BOUND, not the day filter. This view is created once and lives
+        // in RootView for the whole session, so `dayStart` is frozen at whatever
+        // day the app was launched on — which is why the day itself is applied
+        // in `logCountByReminder` against the ticking `now` instead. Keeping the
+        // bound in the predicate still stops the query dragging in the entire
+        // event history.
         _eventModels = Query(
             filter: #Predicate<ReminderEventModel> { $0.userId == uid && $0.timestamp >= dayStart }
         )
@@ -62,8 +66,20 @@ struct MedicationDueBanner: View {
             .filter { $0.groupId == gid && !$0.scheduledMinutesOfDay.isEmpty }
     }
 
-    private var logCountByReminder: [UUID: Int] {
-        eventModels.reduce(into: [:]) { counts, e in counts[e.reminderId, default: 0] += 1 }
+    /// Today's log count per reminder, where "today" is the day of the ticking
+    /// `now` — NOT the day this view was initialised on.
+    ///
+    /// Left to the query's frozen `dayStart` bound alone, an app that stayed
+    /// alive past midnight counted YESTERDAY's doses against today's set times:
+    /// three logged yesterday meant three times had to come round again before
+    /// the banner could ever reappear, so a medication's in-app alert went
+    /// quiet from the second day onwards — silently, and for the one surface
+    /// that's meant to be right even when notifications are off.
+    private func logCountByReminder(on day: Date, calendar: Calendar) -> [UUID: Int] {
+        eventModels.reduce(into: [:]) { counts, e in
+            guard calendar.isDate(e.timestamp, inSameDayAs: day) else { return }
+            counts[e.reminderId, default: 0] += 1
+        }
     }
 
     /// Medications the day has called for more times than have been logged.
@@ -74,8 +90,8 @@ struct MedicationDueBanner: View {
     /// copy rules forbid. Two times reached and two logged reads as settled,
     /// whatever order they happened in.
     private var outstanding: [ReminderDTO] {
-        let logs = logCountByReminder
         let calendar = Calendar.current
+        let logs = logCountByReminder(on: now, calendar: calendar)
         return timedMedications.filter { med in
             let reached = MedicationPattern.timesReached(
                 med.scheduledMinutesOfDay, now: now, calendar: calendar
@@ -127,7 +143,10 @@ struct MedicationDueBanner: View {
     /// dose amount — see the copy rules on ReminderNotificationService.
     private func headline(_ med: ReminderDTO, othersCount: Int) -> String {
         guard othersCount > 0 else { return "\(med.name) isn't logged yet" }
-        return "\(med.name) and \(othersCount) other\(othersCount == 1 ? "" : "s") aren't logged yet"
+        // Verb agrees with the subject: "and 1 other ISN'T", "and 2 others
+        // AREN'T". The claim itself is unchanged — still only about the log.
+        guard othersCount > 1 else { return "\(med.name) and 1 other isn't logged yet" }
+        return "\(med.name) and \(othersCount) others aren't logged yet"
     }
 
     private func subline(_ med: ReminderDTO) -> String {
@@ -137,13 +156,16 @@ struct MedicationDueBanner: View {
     /// One tap logs a dose now, at the recommended dosage — `logDone` resolves
     /// the amount, exactly as the lock-screen action does.
     private func log(_ med: ReminderDTO) {
-        guard ReminderNotificationService.logDone(ctx, reminderId: med.id, date: Date()) != nil else { return }
-        Haptics.success()
+        // One instant for the event, the toast and the re-evaluation, so the
+        // "Logged at" time can't disagree with the timestamp that was stored.
+        let when = Date()
+        guard ReminderNotificationService.logDone(ctx, reminderId: med.id, date: when) != nil else { return }
+        // ToastCenter.show fires .win's success haptic itself — no Haptics here.
         toasts.show(Toast(
             title: med.name,
-            detail: "Logged at \(Date().formatted(date: .omitted, time: .shortened))",
+            detail: "Logged at \(when.formatted(date: .omitted, time: .shortened))",
             accent: .win, symbol: "pills.fill"
         ))
-        now = Date()
+        now = when
     }
 }

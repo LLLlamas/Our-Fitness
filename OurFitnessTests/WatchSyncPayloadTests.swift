@@ -475,6 +475,61 @@ final class WatchSyncPayloadTests: XCTestCase {
         XCTAssertTrue(decoded.isDuration)
     }
 
+    // MARK: - Nested elements are NOT decode-hardened
+
+    /// The envelope and `TodaySnapshot` hand-write `init(from:)` so a missing key
+    /// falls back to a default. The nested ELEMENT types — `ReminderSnapshot`,
+    /// `QuickLogExercise`, `MealShortcut`, `LiveSessionSnapshot` — do not: they
+    /// use synthesised `Codable`, where a missing non-Optional key throws.
+    ///
+    /// This test pins the CONSEQUENCE, which is worse than it looks: the throw
+    /// happens inside `decodeIfPresent([ReminderSnapshot].self, …)`, which
+    /// propagates rather than yielding nil, so one element missing one key costs
+    /// the watch the WHOLE envelope — today's numbers and meal shortcuts
+    /// included — and it falls back to its cached snapshot silently.
+    ///
+    /// Read this as a boundary, not an endorsement: adding a non-Optional field
+    /// to any of those four structs is a BREAKING wire change and needs
+    /// `WatchSnapshotEnvelope.currentSchemaVersion` bumped (or element-level
+    /// lossy decoding added), not just a memberwise default. If you harden them,
+    /// this test should be the one that fails.
+    func test_a_nested_element_missing_a_required_key_loses_the_whole_envelope() throws {
+        let object = try XCTUnwrap(
+            JSONSerialization.jsonObject(with: minimalEnvelopeJSON()) as? [String: Any]
+        )
+        // Every non-Optional key on the single ReminderSnapshot in the fixture.
+        for key in ["id", "groupId", "groupName", "groupKind", "name", "intervalDays", "createdAt"] {
+            var mutated = object
+            var reminders = try XCTUnwrap(mutated["reminders"] as? [[String: Any]])
+            XCTAssertNotNil(reminders[0].removeValue(forKey: key),
+                            "\(key) was not in the minimal payload — fixture drifted")
+            mutated["reminders"] = reminders
+            let data = try JSONSerialization.data(withJSONObject: mutated)
+            XCTAssertThrowsError(
+                try makeDecoder().decode(WatchSnapshotEnvelope.self, from: data),
+                "ReminderSnapshot.\(key) is currently required; if that changed, update this test"
+            )
+        }
+    }
+
+    /// Same boundary from the other direction: an element carrying an UNKNOWN
+    /// extra key is fine, because synthesised decoding ignores keys it has no
+    /// property for. Only MISSING keys are the hazard.
+    func test_a_nested_element_tolerates_an_unknown_key() throws {
+        var object = try XCTUnwrap(
+            JSONSerialization.jsonObject(with: minimalEnvelopeJSON()) as? [String: Any]
+        )
+        var reminders = try XCTUnwrap(object["reminders"] as? [[String: Any]])
+        reminders[0]["dosageFromSomeFuturePhoneBuild"] = "500 mg"
+        object["reminders"] = reminders
+        let decoded = try makeDecoder().decode(
+            WatchSnapshotEnvelope.self,
+            from: try JSONSerialization.data(withJSONObject: object)
+        )
+        XCTAssertEqual(decoded.reminders.count, 1)
+        XCTAssertEqual(decoded.reminders.first?.name, "Fiddle Leaf Fig")
+    }
+
     // MARK: - Transport keys
 
     func test_syncKeys_are_stable() {

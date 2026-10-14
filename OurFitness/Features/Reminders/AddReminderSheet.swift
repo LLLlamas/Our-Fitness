@@ -272,7 +272,8 @@ struct AddReminderSheet: View {
         selectedGroupId = dto.id
         showNewGroupForm = false
         newGroupName = ""
-        Haptics.bump()
+        // No Haptics here: ToastCenter.show already fires the accent's haptic
+        // (.win -> success), and a bump on top of it was two in a row.
         toasts.show(Toast(title: trimmed, detail: "Group added", accent: .win, symbol: newGroupSymbol))
     }
 
@@ -658,7 +659,7 @@ struct AddReminderSheet: View {
             ReminderNotificationService.syncAfterChange(ctx, reminderId: reminderId, userId: profile.id)
         }
 
-        Haptics.success()
+        // .win's success haptic comes from ToastCenter.show.
         toasts.show(Toast(
             title: trimmedName, detail: "Reminder added",
             accent: .win, symbol: toastSymbol(for: group.kind)

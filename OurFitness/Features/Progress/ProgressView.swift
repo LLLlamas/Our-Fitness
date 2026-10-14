@@ -15,8 +15,6 @@ struct ProgressTabView: View {
     @Query private var markerModels: [HealthMarkerModel]
     @Query private var stepModels: [StepCountModel]
     @Query private var setModels: [WorkoutSetModel]
-    // Exercise names for the cross-day training-history list (sets reference exerciseId).
-    @Query private var exerciseModels: [ExerciseModel]
     // Energy-balance card inputs. Scoped per-profile like everything else.
     @Query private var foodModels: [FoodLogEntryModel]
     @Query private var cardioModels: [CardioSessionModel]
@@ -56,10 +54,6 @@ struct ProgressTabView: View {
         _setModels = Query(
             filter: #Predicate<WorkoutSetModel> { $0.userId == uid },
             sort: \.timestamp, order: .forward
-        )
-        _exerciseModels = Query(
-            filter: #Predicate<ExerciseModel> { $0.profileId == uid },
-            sort: \.name, order: .forward
         )
         // Food uses userId; cardio/pilates/activities use profileId (mirrors MoveCard).
         _foodModels = Query(
@@ -145,13 +139,18 @@ struct ProgressTabView: View {
         )
         let enabled = enabledSet(body: body_, markers: markers)
         let visibleStats = visibleStats(in: enabled)
-        let trainingSessions = TrainingHistory.sessions(sets: sets, exercises: exerciseModels.map(\.snapshot))
-        let trainingHistoryDayKeys = Set(
-            trainingSessions.map(\.dayKey)
+        // The card only needs "how many days" and "which was last", so take the
+        // day keys straight off the sets. `TrainingHistory.sessions` buckets by
+        // the same `Dates.dayKey($0.timestamp)` but also groups, accumulates and
+        // sorts every exercise line — a full history rebuild (plus a second
+        // unbounded exercise-name query) on every pass of this tab, all to
+        // produce a count. The sheet still builds the real sessions when opened.
+        let trainingHistoryDays = Set(
+            sets.map { Dates.dayKey($0.timestamp) }
             + cardio.map { Dates.dayKey($0.date) }
             + pilates.map { Dates.dayKey($0.date) }
             + activities.map { Dates.dayKey($0.date) }
-        ).sorted(by: >)
+        )
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 HStack(alignment: .firstTextBaseline) {
@@ -195,8 +194,10 @@ struct ProgressTabView: View {
                 energyBalanceCard(energyRows: energyRows)
 
                 // Cross-day training history; Today/Train only keep the daily surface short.
-                if !trainingHistoryDayKeys.isEmpty {
-                    trainingHistoryCard(dayKeys: trainingHistoryDayKeys)
+                if !trainingHistoryDays.isEmpty {
+                    // Lexicographic max on yyyy-MM-dd is the most recent day.
+                    trainingHistoryCard(dayCount: trainingHistoryDays.count,
+                                        lastDay: trainingHistoryDays.max())
                 }
             }
             .padding(.horizontal, 20)
@@ -230,9 +231,7 @@ struct ProgressTabView: View {
     // MARK: - Training history card
 
     @ViewBuilder
-    private func trainingHistoryCard(dayKeys: [String]) -> some View {
-        let dayCount = dayKeys.count
-        let lastDay = dayKeys.first
+    private func trainingHistoryCard(dayCount: Int, lastDay: String?) -> some View {
         PressableCard(action: { showTrainingHistory = true }) {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(spacing: 6) {
@@ -1317,16 +1316,17 @@ private struct TrainingHistorySheet: View {
                         }
                     }
                 } else {
-                    LazyVStack(alignment: .leading, spacing: 18) {
-                        ForEach(dayKeys, id: \.self) { key in
-                            daySection(
-                                key,
-                                strength: sessionsByDay[key],
-                                cardio: cardioByDay[key] ?? [],
-                                pilates: pilatesByDay[key] ?? [],
-                                activities: activitiesByDay[key] ?? []
-                            )
-                        }
+                    // Straight into the enclosing LazyVStack (same spacing): a
+                    // second LazyVStack nested in the first is one eager child
+                    // from the outer stack's point of view, which defeats it.
+                    ForEach(dayKeys, id: \.self) { key in
+                        daySection(
+                            key,
+                            strength: sessionsByDay[key],
+                            cardio: cardioByDay[key] ?? [],
+                            pilates: pilatesByDay[key] ?? [],
+                            activities: activitiesByDay[key] ?? []
+                        )
                     }
                 }
             }
@@ -1506,7 +1506,7 @@ private struct TrainingHistorySheet: View {
     private func removeLastSet(_ line: TrainingHistory.ExerciseLine) {
         guard let id = line.setIds.first else { return }
         guard Repos.deleteSet(ctx, id: id) else { return }
-        Haptics.warn()
+        // No Haptics.warn() here — ToastCenter fires the .warn accent's haptic.
         toasts.show(Toast(title: "Set removed", detail: line.name, accent: .warn, symbol: "trash.fill"))
     }
 

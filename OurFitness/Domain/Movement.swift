@@ -72,7 +72,7 @@ public enum Movement {
         sessions: [PilatesSessionDTO],
         goalSessions: Int = 3,
         now: Date = Date(),
-        calendar: Calendar = Calendar(identifier: .iso8601)
+        calendar: Calendar = Dates.isoCalendar
     ) -> Int {
         guard goalSessions > 0 else { return 0 }
         var cal = calendar
@@ -120,7 +120,7 @@ public enum Movement {
         dailyGoal: Int,
         daysPerWeek: Int = 5,
         now: Date = Date(),
-        calendar: Calendar = Calendar(identifier: .iso8601)
+        calendar: Calendar = Dates.isoCalendar
     ) -> Int {
         guard dailyGoal > 0, daysPerWeek > 0 else { return 0 }
         var cal = calendar
@@ -328,7 +328,7 @@ public enum Movement {
     public static func sessionsThisWeek(
         _ sessions: [PilatesSessionDTO],
         now: Date = Date(),
-        calendar: Calendar = Calendar(identifier: .iso8601)
+        calendar: Calendar = Dates.isoCalendar
     ) -> [PilatesSessionDTO] {
         var cal = calendar
         cal.firstWeekday = 2

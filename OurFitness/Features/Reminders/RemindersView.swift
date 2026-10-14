@@ -56,7 +56,8 @@ struct RemindersView: View {
 
     private var groups: [ReminderGroupDTO] { groupModels.map(\.snapshot) }
     private var reminders: [ReminderDTO] { reminderModels.map(\.snapshot) }
-    private var events: [ReminderEventDTO] { eventModels.map(\.snapshot) }
+    // No `events` DTO list: `lastDoneById` is the only consumer and folds
+    // straight off `eventModels` (see below).
 
     private var groupsById: [UUID: ReminderGroupDTO] {
         Dictionary(uniqueKeysWithValues: groups.map { ($0.id, $0) })
@@ -90,9 +91,14 @@ struct RemindersView: View {
 
     /// Latest event timestamp per reminder, built once per render. Events
     /// arrive newest-first (query sort), so the first hit per id wins.
+    ///
+    /// Folded straight off the models: this walks every event the profile has
+    /// ever logged, and only two fields of each are wanted, so going through
+    /// `events` snapshotted the entire completion history into DTOs to read
+    /// them. Nothing else here needs the DTO form.
     private var lastDoneById: [UUID: Date] {
         var dict: [UUID: Date] = [:]
-        for e in events where dict[e.reminderId] == nil {
+        for e in eventModels where dict[e.reminderId] == nil {
             dict[e.reminderId] = e.timestamp
         }
         return dict
@@ -111,8 +117,11 @@ struct RemindersView: View {
     ///
     /// Medication is filtered out here, so it can't surface in Due or in a
     /// per-group upcoming list: repeat-interval semantics don't apply to it.
-    private var statuses: [ReminderStatus] {
-        let lastDone = lastDoneById
+    ///
+    /// Takes the last-done dict rather than reading `lastDoneById` itself: the
+    /// medication section needs the same dict, and that fold walks every event
+    /// this profile has ever logged. One fold per body pass, passed to both.
+    private func statuses(_ lastDone: [UUID: Date]) -> [ReminderStatus] {
         let byId = groupsById
         return reminders.compactMap { r -> ReminderStatus? in
             guard let group = byId[r.groupId], group.kind != .medication else { return nil }
@@ -126,12 +135,13 @@ struct RemindersView: View {
     }
 
     var body: some View {
-        let statuses = self.statuses
+        let lastDone = lastDoneById
+        let statuses = self.statuses(lastDone)
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 18) {
                 header
                 permissionBanner
-                medicationSection
+                medicationSection(lastDone: lastDone)
                 dueSection(statuses)
                 ForEach(intervalGroups) { group in
                     groupSection(group, statuses: statuses)
@@ -234,11 +244,14 @@ struct RemindersView: View {
     private func enableNotifications() async {
         let granted = await ReminderNotificationService.requestAuthorizationIfNeeded()
         authStatus = await currentAuthStatus()
-        for r in reminders {
-            ReminderNotificationService.reschedule(ctx, reminderId: r.id)
-        }
+        // `reconcile` rather than a `reschedule` per reminder: it's the purpose-
+        // built "right after a permission grant" sweep (see its doc comment),
+        // and it costs one fetch each of reminders/groups/events instead of
+        // three per reminder — plus it leaves already-correct pending requests
+        // alone rather than removing and re-adding every one of them.
+        await ReminderNotificationService.reconcile(ctx, userId: profile.id)
         if granted {
-            Haptics.success()
+            // ToastCenter.show fires .win's success haptic itself.
             toasts.show(Toast(title: "Reminders on", detail: "You'll be pinged when something's due.",
                               accent: .win, symbol: "bell.fill"))
         }
@@ -254,7 +267,7 @@ struct RemindersView: View {
     // not: the whole point is that a medication is one scroll-free tap away.
 
     @ViewBuilder
-    private var medicationSection: some View {
+    private func medicationSection(lastDone: [UUID: Date]) -> some View {
         if let group = medicationGroup {
             let meds = medications
             VStack(alignment: .leading, spacing: 10) {
@@ -280,7 +293,6 @@ struct RemindersView: View {
                 if meds.isEmpty {
                     medicationEmptyState
                 } else {
-                    let lastDone = lastDoneById
                     ForEach(meds) { med in
                         medicationCard(med, group: group, lastLogged: lastDone[med.id])
                     }
@@ -426,11 +438,18 @@ struct RemindersView: View {
     }
 
     private func logDone(_ r: ReminderDTO) {
-        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-            guard ReminderNotificationService.logDone(ctx, reminderId: r.id) != nil else { return }
+        // The write stays inside `withAnimation` (that's what springs the row
+        // out of the Due list), but its RESULT has to be guarded out here:
+        // `return` inside the closure left only the closure, so a write that
+        // failed still fell through to the toast — "Watered" over nothing
+        // saved, which is the exact bug hard rule 9 exists to stop.
+        let logged = withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            ReminderNotificationService.logDone(ctx, reminderId: r.id)
         }
-        Haptics.success()
+        guard logged != nil else { return }
         let plant = r.isPlant
+        // No Haptics call here: ToastCenter.show fires the accent's haptic
+        // (.win -> Haptics.success), so adding one doubles it up.
         toasts.show(Toast(
             title: r.name, detail: plant ? "Watered" : "Done",
             accent: .win, symbol: plant ? "drop.fill" : "checkmark.seal.fill"
@@ -474,7 +493,10 @@ struct RemindersView: View {
                         .font(.caption2).foregroundStyle(theme.dim)
                 }
                 Spacer(minLength: 0)
-                Text("in \(status.daysUntil) day\(status.daysUntil == 1 ? "" : "s")")
+                // Same `dueLabel` the Due rows use — this row had its own
+                // hand-rolled copy of the plural, which is the drift that
+                // function exists to prevent (and only agreed with it by luck).
+                Text(ReminderSchedule.dueLabel(daysUntilDue: status.daysUntil))
                     .font(.system(.caption, design: .monospaced))
                     .foregroundStyle(theme.dim)
             }

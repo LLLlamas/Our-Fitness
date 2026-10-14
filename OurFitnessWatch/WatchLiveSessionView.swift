@@ -197,6 +197,9 @@ private struct ActivityPickerView: View {
 
     private func start(_ activity: Activity, minutes: Int) {
         WKInterfaceDevice.current().play(.success)
+        // ONE start instant, shared by the wire action and the HKWorkoutSession,
+        // so the phone's row and the saved HKWorkout cover the same interval.
+        let startDate = Date()
         // "Other" already carries ActivityCatalog.otherDefaultMET as its MET, so
         // there's no custom-intensity slider to mirror from the phone here.
         store.send(.startLiveSession(
@@ -204,8 +207,15 @@ private struct ActivityPickerView: View {
             activityName: activity.name,
             met: activity.met,
             expectedMinutes: minutes,
-            startDate: Date()
+            startDate: startDate
         ))
+        // THE one call site for the on-wrist workout session, and the reason the
+        // runner can show heart rate at all. It is also the only place watch
+        // HealthKit authorization is ever requested — an explicit Start tap, per
+        // CLAUDE.md hard rule 4 and the uncatchable-NSException trap. Fails soft:
+        // if HealthKit is unavailable or denied, the timed session runs regardless
+        // and the phone still stores the deterministic MET estimate.
+        Task { await WatchWorkoutSession.shared.startWorkout(activityId: activity.id, startDate: startDate) }
         pending = nil
         dismiss()   // back to Train, where the runner takes over
     }

@@ -60,12 +60,6 @@ struct NutritionView: View {
 
     private var today: String { Dates.dayKey() }
 
-    private var allLogs: [FoodLogEntryDTO] { logModels.map(\.snapshot) }
-
-    private var todaysLogs: [FoodLogEntryDTO] {
-        allLogs.filter { $0.date == today }
-    }
-
     private func dayPillLabel(_ key: String) -> String {
         if key == today { return "Today" }
         let yesterday = Dates.dayKey(Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date())
@@ -259,18 +253,26 @@ struct NutritionView: View {
         // Key on profile.id + the id of the most recent today's log so the section
         // refreshes when the user logs a new food today (subject changes), but not
         // on every single entry change (e.g. edits to older days).
+        //
+        // Both the id and the work take the snapshots `body` already built. Read
+        // off computed properties, this line re-mapped the user's entire food-log
+        // history into DTOs on every single pass of this view.
         .task(id: "\(profile.id)-\(todaysLogs.last?.id.uuidString ?? "none")") {
-            await loadAlternatives()
+            await loadAlternatives(allLogs: allLogs, todaysLogs: todaysLogs)
         }
     }
 
     // MARK: - Load AI alternatives
 
-    private func loadAlternatives() async {
+    private func loadAlternatives(allLogs: [FoodLogEntryDTO], todaysLogs: [FoodLogEntryDTO]) async {
         guard FoodAlternativeService.shared.isAvailable else {
             alternativesState = .unavailable
             return
         }
+
+        // One pass over the history: this is also the fallback subject below, and
+        // it used to be derived twice in the no-logs-today path.
+        let frequents = FoodAlternativeService.shared.learnedFrequents(from: allLogs)
 
         // Subject: the most recently logged food today. If today has no logs,
         // fall back to the most frequent food from the last 30 days. If neither
@@ -279,7 +281,6 @@ struct NutritionView: View {
         if let lastToday = todaysLogs.last {
             targetFood = lastToday.foodId ?? lastToday.customName ?? ""
         } else {
-            let frequents = FoodAlternativeService.shared.learnedFrequents(from: allLogs)
             targetFood = frequents.first ?? ""
         }
 
@@ -288,7 +289,6 @@ struct NutritionView: View {
             return
         }
 
-        let frequents = FoodAlternativeService.shared.learnedFrequents(from: allLogs)
         let favNames = favoriteFoods.map { $0.name }
         alternativesState = .loading
         let results = await FoodAlternativeService.shared.alternatives(
@@ -515,8 +515,8 @@ struct NutritionView: View {
                         .font(.caption).tracking(2).textCase(.uppercase)
                         .foregroundStyle(theme.dim)
                     Spacer()
-                    // One walk, not three. `mealLoggingStreak` re-reads the
-                    // whole food-log history every time it is touched.
+                    // Passed in, not recomputed: `Streaks.loggingStreak` re-reads
+                    // the whole food-log history, so `body` walks it once.
                     let streak = mealLoggingStreak
                     if streak >= 2 {
                         Label("\(streak)-day streak", systemImage: "flame.fill")
@@ -592,10 +592,9 @@ struct NutritionView: View {
                 emptyLogState
             } else {
                 ForEach(dayLogs) { e in
-                    LogRow(entry: e, onTap: { entryToDetail = e },
-                           canDelete: true) {
+                    LogRow(entry: e, onTap: { entryToDetail = e }) {
                         guard Repos.deleteFoodLog(ctx, id: e.id) else { return }
-                        Haptics.warn()
+                        // ToastCenter fires the .warn accent's haptic already.
                         toasts.show(Toast(title: "Removed", detail: e.customName ?? "Meal", accent: .warn, symbol: "minus.circle.fill"))
                     }
                 }
@@ -646,7 +645,6 @@ struct NutritionView: View {
 private struct LogRow: View {
     let entry: FoodLogEntryDTO
     let onTap: () -> Void
-    var canDelete: Bool = true
     let onDelete: () -> Void
     @Environment(\.theme) private var theme
 
@@ -662,13 +660,11 @@ private struct LogRow: View {
                         .foregroundStyle(theme.dim)
                 }
                 Spacer(minLength: 0)
-                if canDelete {
-                    Button(action: onDelete) {
-                        Image(systemName: "xmark")
-                    }
-                    .tactile(.ghost)
-                    .accessibilityLabel("Remove \(entry.customName ?? "meal")")
+                Button(action: onDelete) {
+                    Image(systemName: "xmark")
                 }
+                .tactile(.ghost)
+                .accessibilityLabel("Remove \(entry.customName ?? "meal")")
             }
         }
     }
@@ -847,8 +843,8 @@ private struct MealDetailSheet: View {
 
 // MARK: - Shared macro chip
 
-/// Compact macro readout cell. Shared by the meal/food/logged-entry detail
-/// sheets and the weekly nutrition trend sheet.
+/// Compact macro readout cell. Shared by the meal-idea detail sheet here and by
+/// `DescribeMealForm`'s parsed-macro readout in AddFoodSheet.
 struct MacroChip: View {
     let label: String
     let value: Int
@@ -1140,17 +1136,7 @@ private struct NutritionInsightSheet: View {
 
     private var targets: MacroTargets { profile.computedTargets }
 
-    private var avg7: DailyTotals { NutritionHistory.averagePerLoggedDay(logs, days: 7) }
-    private var logged7: Int { NutritionHistory.daysLogged(logs, days: 7) }
-
-    private var latestLDL: HealthMarkerDTO? {
-        markerModels.map(\.snapshot).first { $0.kind == .ldl }
-    }
-    private var latestBP: HealthMarkerDTO? {
-        markerModels.map(\.snapshot).first { $0.kind == .bpSystolic }
-    }
-
-    private var proteinStatus: String {
+    private func proteinStatus(avg7: DailyTotals, logged7: Int, targets: MacroTargets) -> String {
         guard logged7 > 0 else { return "No data yet — log a few days to see your average." }
         let pct = Int(Double(avg7.proteinG) / Double(targets.proteinG) * 100)
         if pct >= 90 { return "You're hitting your protein target — great for muscle support." }
@@ -1158,7 +1144,7 @@ private struct NutritionInsightSheet: View {
         return "Protein is well below target. Prioritise protein-dense foods at each meal."
     }
 
-    private var calorieStatus: String {
+    private func calorieStatus(avg7: DailyTotals, logged7: Int, targets: MacroTargets) -> String {
         guard logged7 > 0 else { return "Log meals consistently to track your calorie pattern." }
         let pct = Int(Double(avg7.calories) / Double(targets.calories) * 100)
         switch profile.mode {
@@ -1179,82 +1165,83 @@ private struct NutritionInsightSheet: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Nutrition goals")
-                        .font(.system(size: 42, weight: .regular))
-                        .foregroundStyle(theme.text)
-                    Text("YOUR TARGETS · PLAIN ENGLISH")
-                        .font(.system(size: 10, weight: .medium)).tracking(2)
-                        .foregroundStyle(theme.dim)
-                }
-
-                infoBlock(icon: "target", title: "Your daily targets") {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("**\(targets.calories) calories** — \(profile.mode == .build ? "surplus" : "slight deficit") from your maintenance")
-                            .font(.callout).foregroundStyle(theme.text)
-                        Text(unitSystem == .metric
-                             ? "**\(targets.proteinG)g protein** — \(String(format: "%.1f", Double(targets.proteinG) / (profile.weightLb * Units.kgPerLb)))g per kilogram of body weight"
-                             : "**\(targets.proteinG)g protein** — \(String(format: "%.1f", Double(targets.proteinG) / profile.weightLb))g per pound of body weight")
-                            .font(.callout).foregroundStyle(theme.text)
-                        Text("**\(targets.carbsG)g carbs** — primary fuel for movement and brain function")
-                            .font(.callout).foregroundStyle(theme.text)
-                        Text("**\(targets.fatG)g fat** — supports hormones, joint health, and fat-soluble vitamins")
-                            .font(.callout).foregroundStyle(theme.text)
-                    }
-                }
-
-                infoBlock(icon: "flame.fill", title: "What this means for you") {
-                    Text(modeBlurb)
+        // Each of these walked the full log / marker history on every read, and
+        // each was read between two and six times per pass. The two marker
+        // lookups also rebuilt every HealthMarkerDTO twice over.
+        let targets = self.targets
+        let avg7 = NutritionHistory.averagePerLoggedDay(logs, days: 7)
+        let logged7 = NutritionHistory.daysLogged(logs, days: 7)
+        let markers = markerModels.map(\.snapshot)
+        let hasLDL = markers.contains { $0.kind == .ldl }
+        let hasBP = markers.contains { $0.kind == .bpSystolic }
+        // `[.large]` as it shipped — this sheet is long enough that opening at
+        // medium reads as truncated.
+        InfoSheetScaffold(title: "Nutrition goals", subtitle: "YOUR TARGETS · PLAIN ENGLISH",
+                          detents: [.large]) {
+            infoBlock(icon: "target", title: "Your daily targets") {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("**\(targets.calories) calories** — \(profile.mode == .build ? "surplus" : "slight deficit") from your maintenance")
+                        .font(.callout).foregroundStyle(theme.text)
+                    Text(unitSystem == .metric
+                         ? "**\(targets.proteinG)g protein** — \(String(format: "%.1f", Double(targets.proteinG) / (profile.weightLb * Units.kgPerLb)))g per kilogram of body weight"
+                         : "**\(targets.proteinG)g protein** — \(String(format: "%.1f", Double(targets.proteinG) / profile.weightLb))g per pound of body weight")
+                        .font(.callout).foregroundStyle(theme.text)
+                    Text("**\(targets.carbsG)g carbs** — primary fuel for movement and brain function")
+                        .font(.callout).foregroundStyle(theme.text)
+                    Text("**\(targets.fatG)g fat** — supports hormones, joint health, and fat-soluble vitamins")
                         .font(.callout).foregroundStyle(theme.text)
                 }
-
-                if logged7 > 0 {
-                    infoBlock(icon: "chart.bar.fill", title: "Your last \(logged7) logged days") {
-                        VStack(alignment: .leading, spacing: 8) {
-                            statRow(label: "Average calories", value: "\(avg7.calories) cal", target: "\(targets.calories) cal")
-                            statRow(label: "Average protein", value: "\(avg7.proteinG)g", target: "\(targets.proteinG)g")
-                            statRow(label: "Average carbs", value: "\(avg7.carbsG)g", target: "\(targets.carbsG)g")
-                            statRow(label: "Average fat", value: "\(avg7.fatG)g", target: "\(targets.fatG)g")
-                        }
-                    }
-
-                    infoBlock(icon: "person.fill", title: "Reading your data") {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text(calorieStatus).font(.callout).foregroundStyle(theme.text)
-                            Text(proteinStatus).font(.callout).foregroundStyle(theme.text)
-                        }
-                    }
-                }
-
-                if latestLDL != nil || latestBP != nil {
-                    infoBlock(icon: "heart.fill", title: "Dietary tips for your markers") {
-                        VStack(alignment: .leading, spacing: 8) {
-                            if latestLDL != nil {
-                                Text("**Cholesterol on file** — limit saturated fat, choose oats, legumes, and fatty fish. Soluble fiber (oats, beans) actively lowers LDL.")
-                                    .font(.callout).foregroundStyle(theme.text)
-                            }
-                            if latestBP != nil {
-                                Text("**Blood pressure on file** — reduce sodium, increase potassium-rich foods (bananas, sweet potato, spinach). DASH diet pattern is well-supported.")
-                                    .font(.callout).foregroundStyle(theme.text)
-                            }
-                        }
-                    }
-                }
-
-                Text("Targets are estimated from your height, weight, age, activity level, and mode. Log consistently for the most accurate picture.")
-                    .font(.caption).foregroundStyle(theme.dim)
-                    .padding(10)
-                    .background(theme.card)
-                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                    .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
+
+            infoBlock(icon: "flame.fill", title: "What this means for you") {
+                Text(modeBlurb)
+                    .font(.callout).foregroundStyle(theme.text)
+            }
+
+            if logged7 > 0 {
+                infoBlock(icon: "chart.bar.fill", title: "Your last \(logged7) logged days") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        statRow(label: "Average calories", value: "\(avg7.calories) cal", target: "\(targets.calories) cal")
+                        statRow(label: "Average protein", value: "\(avg7.proteinG)g", target: "\(targets.proteinG)g")
+                        statRow(label: "Average carbs", value: "\(avg7.carbsG)g", target: "\(targets.carbsG)g")
+                        statRow(label: "Average fat", value: "\(avg7.fatG)g", target: "\(targets.fatG)g")
+                    }
+                }
+
+                infoBlock(icon: "person.fill", title: "Reading your data") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(calorieStatus(avg7: avg7, logged7: logged7, targets: targets))
+                            .font(.callout).foregroundStyle(theme.text)
+                        Text(proteinStatus(avg7: avg7, logged7: logged7, targets: targets))
+                            .font(.callout).foregroundStyle(theme.text)
+                    }
+                }
+            }
+
+            if hasLDL || hasBP {
+                infoBlock(icon: "heart.fill", title: "Dietary tips for your markers") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        if hasLDL {
+                            Text("**Cholesterol on file** — limit saturated fat, choose oats, legumes, and fatty fish. Soluble fiber (oats, beans) actively lowers LDL.")
+                                .font(.callout).foregroundStyle(theme.text)
+                        }
+                        if hasBP {
+                            Text("**Blood pressure on file** — reduce sodium, increase potassium-rich foods (bananas, sweet potato, spinach). DASH diet pattern is well-supported.")
+                                .font(.callout).foregroundStyle(theme.text)
+                        }
+                    }
+                }
+            }
+
+            // Kept boxed at .caption rather than swapped for `InfoFootnote`:
+            // this one is a card in the stack, not small print at the foot.
+            Text("Targets are estimated from your height, weight, age, activity level, and mode. Log consistently for the most accurate picture.")
+                .font(.caption).foregroundStyle(theme.dim)
+                .padding(10)
+                .background(theme.card)
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
         }
-        .presentationDetents([.large])
-        .presentationBackground(theme.bg)
     }
 
     @ViewBuilder

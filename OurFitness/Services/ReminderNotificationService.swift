@@ -325,7 +325,20 @@ public enum ReminderNotificationService {
             return
         }
         let center = UNUserNotificationCenter.current()
-        center.removeDeliveredNotifications(withIdentifiers: [identifier(for: reminderId)])
+        // Delivered items are swept by REMINDER id for the same reason `cancel`
+        // does it: a medication's set-time alarms are delivered under
+        // "reminder.<uuid>#<minute>", so clearing the bare "reminder.<uuid>"
+        // left every one of them sitting in Notification Center. They are also
+        // the ones that most need clearing — a repeating trigger delivers again
+        // every day, so an un-swept stack grows one stale "not logged yet" card
+        // per day, each still tappable as a fresh "Log taken ✓".
+        center.getDeliveredNotifications { delivered in
+            let mine = delivered.map(\.request.identifier)
+                .filter { Self.reminderId(fromIdentifier: $0) == reminderId }
+            if !mine.isEmpty {
+                center.removeDeliveredNotifications(withIdentifiers: mine)
+            }
+        }
 
         let kind = Repos.reminderGroup(ctx, id: reminder.groupId)?.kind ?? .custom
         // Medication reads its fire time off the whole recent completion log,

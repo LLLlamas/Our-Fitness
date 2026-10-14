@@ -14,10 +14,13 @@ struct NutritionTrendSheet: View {
     @Environment(\.theme) private var theme
     @Environment(\.dismiss) private var dismiss
 
-    private var series: [Trends.Point] { NutritionHistory.calorieSeries(logs, days: 30) }
-    private var target: Int { profile.computedTargets.calories }
-
     var body: some View {
+        // One walk of the log history per pass: `series` used to be a computed
+        // property read twice (the has-data check and the chart itself).
+        let series = NutritionHistory.calorieSeries(logs, days: 30)
+        let target = profile.computedTargets.calories
+        // Same rows as the Meals history sheet, scoped to the charted window.
+        let days = MealHistoryDay.rows(from: logs, maxDays: 30)
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 VStack(alignment: .leading, spacing: 4) {
@@ -30,7 +33,7 @@ struct NutritionTrendSheet: View {
                 }
 
                 if series.contains(where: { $0.value > 0 }) {
-                    chart
+                    chart(series: series, target: target)
                 } else {
                     Text("Log meals across a few days to see your trend.")
                         .font(.callout).foregroundStyle(theme.dim)
@@ -40,7 +43,7 @@ struct NutritionTrendSheet: View {
                         .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                 }
 
-                recentSection
+                recentSection(days: days)
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
@@ -51,7 +54,7 @@ struct NutritionTrendSheet: View {
     }
 
     @ViewBuilder
-    private var chart: some View {
+    private func chart(series: [Trends.Point], target: Int) -> some View {
         Chart {
             ForEach(series, id: \.date) { p in
                 BarMark(
@@ -69,12 +72,11 @@ struct NutritionTrendSheet: View {
     }
 
     @ViewBuilder
-    private var recentSection: some View {
+    private func recentSection(days: [MealHistoryDay]) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Recent days".uppercased())
                 .font(.caption).tracking(2).foregroundStyle(theme.dim)
-            // Same rows as the Meals history sheet, scoped to the charted window.
-            MealHistoryList(logs: logs, maxDays: 30) { dayKey in
+            MealHistoryList(days: days) { dayKey in
                 onSelectDay?(dayKey)
                 dismiss()
             }

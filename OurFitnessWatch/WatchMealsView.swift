@@ -16,12 +16,16 @@ struct WatchMealsView: View {
     @State private var justLoggedId: String?
     @State private var clearTask: Task<Void, Never>?
 
-    private var templates: [MealShortcut] {
-        store.mealShortcuts.filter { $0.source == "template" }
-    }
-
-    private var recents: [MealShortcut] {
-        store.mealShortcuts.filter { $0.source != "template" }
+    /// ONE pass over the shortcuts, not a filter per section — both lists are
+    /// read on every body pass and the second filter was walking the same array
+    /// again to compute its complement.
+    private var grouped: (templates: [MealShortcut], recents: [MealShortcut]) {
+        var templates: [MealShortcut] = []
+        var recents: [MealShortcut] = []
+        for s in store.mealShortcuts {
+            if s.source == "template" { templates.append(s) } else { recents.append(s) }
+        }
+        return (templates, recents)
     }
 
     var body: some View {
@@ -29,15 +33,16 @@ struct WatchMealsView: View {
             if store.mealShortcuts.isEmpty {
                 emptyState
             } else {
+                let lists = grouped
                 List {
-                    if !templates.isEmpty {
+                    if !lists.templates.isEmpty {
                         Section("Saved meals") {
-                            ForEach(templates) { row($0) }
+                            ForEach(lists.templates) { row($0) }
                         }
                     }
-                    if !recents.isEmpty {
+                    if !lists.recents.isEmpty {
                         Section("Recent") {
-                            ForEach(recents) { row($0) }
+                            ForEach(lists.recents) { row($0) }
                         }
                     }
                 }
@@ -52,9 +57,14 @@ struct WatchMealsView: View {
             Image(systemName: "fork.knife")
                 .font(.largeTitle)
                 .foregroundStyle(.secondary)
-            Text("No meals yet")
+            Text(store.hasSynced ? "No meals yet" : "Not synced yet")
                 .font(.headline)
-            Text("Saved meals and foods you log often on your phone show up here")
+            // Before the first sync the watch has no idea whether there are any
+            // saved meals, so it must not claim there are none (same rule as
+            // WatchQuickLogView's empty state).
+            Text(store.hasSynced
+                 ? "Saved meals and foods you log often on your phone show up here"
+                 : "Open Our Fitness on your iPhone")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)

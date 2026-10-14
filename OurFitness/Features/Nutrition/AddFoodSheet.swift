@@ -213,7 +213,8 @@ struct AddFoodSheet: View {
     }
 
     private func deleteTemplate(id: UUID, name: String) {
-        Repos.deleteSavedTemplate(ctx, id: id)
+        // Don't say "deleted" for a write that didn't commit.
+        guard Repos.deleteSavedTemplate(ctx, id: id) else { return }
         toasts.show(Toast(title: "Recipe deleted", detail: name, accent: .warn, symbol: "trash"))
     }
 

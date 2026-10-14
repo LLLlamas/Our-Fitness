@@ -223,7 +223,7 @@ struct MealIngredientDetailSheet: View {
             ingredients: ingredients
         )
         guard Repos.addFoodLog(ctx, dto) else { return }
-        Haptics.success()
+        // ToastCenter fires the accent's haptic — a Haptics call here is two taps.
         toasts.show(Toast(title: "Logged", detail: name, accent: .ok, symbol: "checkmark.circle.fill"))
         onDone()
         dismiss()
@@ -237,7 +237,6 @@ struct MealIngredientDetailSheet: View {
         updated.ingredients = ingredients
         updated.perServing = totals
         guard Repos.updateFoodLog(ctx, updated) else { return }
-        Haptics.success()
         toasts.show(Toast(title: "Updated", detail: name, accent: .ok, symbol: "checkmark.circle.fill"))
         onDone()
         dismiss()
@@ -246,7 +245,6 @@ struct MealIngredientDetailSheet: View {
     private func deleteEntry() {
         guard case let .editing(entry) = mode else { return }
         guard Repos.deleteFoodLog(ctx, id: entry.id) else { return }
-        Haptics.warn()
         toasts.show(Toast(title: "Removed", detail: name, accent: .warn, symbol: "minus.circle.fill"))
         onDone()
         dismiss()
@@ -655,7 +653,6 @@ struct SaveTemplateSheet: View {
             ingredients: ingredients
         )
         guard Repos.addSavedTemplate(ctx, template) else { return }
-        Haptics.success()
         toasts.show(Toast(title: "Recipe saved", detail: trimmedName, accent: .ok, symbol: "bookmark.fill"))
         dismiss()
     }

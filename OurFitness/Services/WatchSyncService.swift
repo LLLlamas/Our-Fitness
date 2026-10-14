@@ -142,7 +142,16 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
         )
 
         guard let data = try? JSONEncoder().encode(envelope) else { return }
-        try? WCSession.default.updateApplicationContext([WatchSyncKeys.snapshotContextKey: data])
+        // NOT `try?`. The application context is a size-limited dictionary, and
+        // `reminders` (user notes) and `quickLogExercises` (every exercise the
+        // profile owns) are both uncapped — so this call CAN start failing on a
+        // heavy profile. Swallowed, the symptom is a watch that silently stops
+        // updating forever; logged, the size is at least visible in a console.
+        do {
+            try WCSession.default.updateApplicationContext([WatchSyncKeys.snapshotContextKey: data])
+        } catch {
+            print("[WatchSync] updateApplicationContext failed (\(data.count) bytes):", error.localizedDescription)
+        }
 
         pushChangedThumbnails(reminders, userId: userId)
     }

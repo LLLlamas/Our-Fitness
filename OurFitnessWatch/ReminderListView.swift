@@ -52,12 +52,59 @@ enum WatchReminderKind {
     }
 }
 
+/// One reminder's resolved due status. The `nextDueDay → daysUntilDue → dueLabel`
+/// chain was spelled out separately in this file and in `ReminderDetailView`,
+/// which is exactly how a list row and the detail it opens start disagreeing
+/// about the same reminder. Both now build this instead. Shared here for the
+/// same reason `WatchReminderKind` is.
+struct WatchDueStatus {
+    let dueDay: Date
+    let daysUntil: Int
+    /// Kept so medication can report what was recorded instead of a due date.
+    let lastDone: Date?
+
+    init(_ snapshot: ReminderSnapshot, now: Date = Date()) {
+        lastDone = snapshot.lastDoneAt
+        dueDay = ReminderSchedule.nextDueDay(
+            lastDone: snapshot.lastDoneAt, createdAt: snapshot.createdAt,
+            intervalDays: snapshot.intervalDays, snoozedUntil: snapshot.snoozedUntil
+        )
+        daysUntil = ReminderSchedule.daysUntilDue(dueDay: dueDay, now: now)
+    }
+
+    var isDue: Bool { daysUntil <= 0 }
+    var label: String { ReminderSchedule.dueLabel(daysUntilDue: daysUntil) }
+
+    /// Status text for a row, and whether it may be shown in red.
+    ///
+    /// MEDICATION IS DELIBERATELY EXCLUDED from the interval-driven due/overdue
+    /// wording. `RemindersView` on the phone makes the same exclusion and says
+    /// why: an app-side "overdue" badge reads as a missed-dose claim we cannot
+    /// stand behind. A daily medication carries a placeholder `intervalDays`,
+    /// so the generic chain would render a med taken this morning as "23 days
+    /// overdue" in red. The wrist is the surface most likely to be glanced at
+    /// and believed, so it must not make that claim either.
+    ///
+    /// For medication we state only what was actually recorded: when the last
+    /// dose was logged. Never a judgement about a dose that was missed.
+    func status(for kind: WatchReminderKind, now: Date = Date()) -> (text: String, isAlarming: Bool) {
+        guard kind == .medication else { return (label, daysUntil < 0) }
+        guard let last = lastDone else { return ("No doses logged yet", false) }
+        if Calendar.current.isDate(last, inSameDayAs: now) { return ("Logged today", false) }
+        let days = Calendar.current.dateComponents([.day],
+                                                   from: Calendar.current.startOfDay(for: last),
+                                                   to: Calendar.current.startOfDay(for: now)).day ?? 0
+        if days == 1 { return ("Last logged yesterday", false) }
+        return ("Last logged \(days) days ago", false)
+    }
+}
+
 struct ReminderListView: View {
     @EnvironmentObject var store: WatchSyncStore
 
     private struct Row: Identifiable {
         let snapshot: ReminderSnapshot
-        let daysUntil: Int
+        let due: WatchDueStatus
         var id: UUID { snapshot.id }
     }
 
@@ -68,24 +115,34 @@ struct ReminderListView: View {
     }
 
     // Decorate-sort-undecorate: the calendar-heavy due-day math runs once per
-    // snapshot per body pass, and rows receive the precomputed daysUntil.
+    // snapshot per body pass, and rows receive the precomputed status.
     private var sections: [GroupSection] {
-        let rows = store.reminders.map { s in
-            Row(snapshot: s, daysUntil: ReminderSchedule.daysUntilDue(dueDay: ReminderSchedule.nextDueDay(
-                lastDone: s.lastDoneAt, createdAt: s.createdAt,
-                intervalDays: s.intervalDays, snoozedUntil: s.snoozedUntil
-            )))
-        }
+        // One `now` for the whole pass, so two rows can't be labelled against
+        // clocks a millisecond apart across a midnight boundary.
+        let now = Date()
+        let rows = store.reminders.map { Row(snapshot: $0, due: WatchDueStatus($0, now: now)) }
         return Dictionary(grouping: rows, by: { $0.snapshot.groupName })
             .map { name, items in
                 GroupSection(name: name,
                              kind: items.first.map { WatchReminderKind($0.snapshot) } ?? .custom,
-                             items: items.sorted { $0.daysUntil < $1.daysUntil })
+                             // Medication has no meaningful due ordering (see
+                             // WatchDueStatus.status) — sort it by name instead.
+                             items: Self.sorted(items))
             }
             .sorted { lhs, rhs in
                 if lhs.kind.sortRank != rhs.kind.sortRank { return lhs.kind.sortRank < rhs.kind.sortRank }
                 return lhs.name.localizedCaseInsensitiveCompare(rhs.name) == .orderedAscending
             }
+    }
+
+    /// Due-soonest first, except medication which sorts by name.
+    private static func sorted(_ items: [Row]) -> [Row] {
+        guard items.first.map({ WatchReminderKind($0.snapshot) }) == .medication else {
+            return items.sorted { $0.due.daysUntil < $1.due.daysUntil }
+        }
+        return items.sorted {
+            $0.snapshot.name.localizedCaseInsensitiveCompare($1.snapshot.name) == .orderedAscending
+        }
     }
 
     var body: some View {
@@ -100,7 +157,7 @@ struct ReminderListView: View {
                                 NavigationLink {
                                     ReminderDetailView(snapshot: row.snapshot)
                                 } label: {
-                                    ReminderRow(snapshot: row.snapshot, daysUntil: row.daysUntil)
+                                    ReminderRow(snapshot: row.snapshot, due: row.due)
                                 }
                             }
                         }
@@ -111,14 +168,19 @@ struct ReminderListView: View {
         .navigationTitle("Reminders")
     }
 
+    // "No reminders yet" is a CLAIM about the phone's data, and before the
+    // first sync the watch knows nothing — so it says that instead, the same
+    // way WatchQuickLogView and WatchTodayView do.
     private var emptyState: some View {
         VStack(spacing: 8) {
-            Image(systemName: "drop.fill")
+            Image(systemName: store.hasSynced ? "drop.fill" : "iphone.radiowaves.left.and.right")
                 .font(.largeTitle)
                 .foregroundStyle(.secondary)
-            Text("No reminders yet")
+            Text(store.hasSynced ? "No reminders yet" : "Not synced yet")
                 .font(.headline)
-            Text("Add reminders on your phone")
+            Text(store.hasSynced
+                 ? "Add reminders on your phone"
+                 : "Open Our Fitness on your iPhone")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -130,7 +192,7 @@ struct ReminderListView: View {
 private struct ReminderRow: View {
     @EnvironmentObject var store: WatchSyncStore
     let snapshot: ReminderSnapshot
-    let daysUntil: Int
+    let due: WatchDueStatus
 
     var body: some View {
         HStack(spacing: 10) {
@@ -139,16 +201,18 @@ private struct ReminderRow: View {
                 Text(snapshot.name)
                     .font(.headline)
                     .lineLimit(1)
-                Text(ReminderSchedule.dueLabel(daysUntilDue: daysUntil))
+                let status = due.status(for: WatchReminderKind(snapshot))
+                Text(status.text)
                     .font(.caption2)
-                    .foregroundStyle(daysUntil < 0 ? .red : .secondary)
+                    .foregroundStyle(status.isAlarming ? .red : .secondary)
             }
         }
     }
 
     @ViewBuilder
     private var thumbnailView: some View {
-        if let data = store.thumbnails[snapshot.id], let uiImage = UIImage(data: data) {
+        // Already decoded by WatchSyncStore — never decode in a body.
+        if let uiImage = store.thumbnails[snapshot.id] {
             Image(uiImage: uiImage)
                 .resizable()
                 .scaledToFill()

@@ -92,7 +92,11 @@ public enum Dates {
 
     /// Monday-first ISO calendar in the device timezone. Built once — constructing
     /// a Calendar is not free and the week helpers run inside view bodies.
-    private static let isoCalendar: Calendar = {
+    ///
+    /// Public so callers that take an injectable `calendar:` (see `Movement`'s
+    /// weekly-streak helpers) can default to this instead of building a fresh
+    /// one on every call. Already has `firstWeekday = 2`.
+    public static let isoCalendar: Calendar = {
         var cal = Calendar(identifier: .iso8601)
         cal.firstWeekday = 2  // Monday — ISO weeks
         cal.timeZone = TimeZone.current

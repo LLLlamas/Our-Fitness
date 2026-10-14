@@ -26,18 +26,21 @@ struct ReminderDetailView: View {
     /// The freshest known copy of this reminder -- reflects optimistic
     /// updates and phone round-trips even though `snapshot` itself is a
     /// value-type snapshot from when this view was pushed.
+    ///
+    /// Resolved ONCE per body pass and threaded down, not read from a dozen
+    /// computed properties: each read is a linear scan of every reminder, and
+    /// the stat/label/due/species properties between them used to perform ten
+    /// of them for a single render.
     private var live: ReminderSnapshot {
         store.reminders.first(where: { $0.id == snapshot.id }) ?? snapshot
     }
 
-    private var kind: WatchReminderKind { WatchReminderKind(live) }
-
-    private var species: PlantSpecies? {
+    private func species(_ live: ReminderSnapshot, kind: WatchReminderKind) -> PlantSpecies? {
         guard kind == .plants, let speciesId = live.speciesId else { return nil }
         return PlantCatalog.species(id: speciesId)
     }
 
-    private var lastDoneLabel: String {
+    private func lastDoneLabel(_ kind: WatchReminderKind) -> String {
         switch kind {
         case .plants: return "Last watered"
         case .medication: return "Last logged"
@@ -45,7 +48,7 @@ struct ReminderDetailView: View {
         }
     }
 
-    private var actionTitle: String {
+    private func actionTitle(_ kind: WatchReminderKind) -> String {
         switch kind {
         case .plants: return "Watered"
         case .medication: return "Log taken"
@@ -56,40 +59,36 @@ struct ReminderDetailView: View {
     /// A medication's schedule comes from the phone's logging-pattern
     /// inference, not from a repeat interval, so editing the interval here
     /// would write a value nothing reads -- and snoozing has nothing to move.
-    private var showsIntervalAndSnooze: Bool { kind != .medication }
+    private func showsIntervalAndSnooze(_ kind: WatchReminderKind) -> Bool { kind != .medication }
 
-    private var dueDay: Date {
-        ReminderSchedule.nextDueDay(
-            lastDone: live.lastDoneAt, createdAt: live.createdAt,
-            intervalDays: live.intervalDays, snoozedUntil: live.snoozedUntil
-        )
-    }
-
-    private var dueText: String {
-        ReminderSchedule.dueLabel(daysUntilDue: ReminderSchedule.daysUntilDue(dueDay: dueDay))
-    }
-
-    private var lastDoneText: String {
+    private func lastDoneText(_ live: ReminderSnapshot) -> String {
         guard let last = live.lastDoneAt else { return "Never" }
         return last.formatted(date: .abbreviated, time: .omitted)
     }
 
     var body: some View {
+        // The one resolution per render. `WatchDueStatus` is the same due math
+        // the list row used to reach this screen (see ReminderListView), so the
+        // two cannot word the same reminder differently.
+        let current = live
+        let kind = WatchReminderKind(current)
+        let due = WatchDueStatus(current)
+
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
-                photoView
+                photoView(kind)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(snapshot.name)
+                    Text(current.name)
                         .font(.title3.bold())
-                    if let room = live.room, !room.isEmpty {
+                    if let room = current.room, !room.isEmpty {
                         Text(room)
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
                     // A non-plant reminder has no species card to carry its
                     // detail, so its notes are the only context on the wrist.
-                    if kind != .plants, let notes = live.notes, !notes.isEmpty {
+                    if kind != .plants, let notes = current.notes, !notes.isEmpty {
                         Text(notes)
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -97,15 +96,15 @@ struct ReminderDetailView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 3) {
-                    Text("\(lastDoneLabel): \(lastDoneText)")
+                    Text("\(lastDoneLabel(kind)): \(lastDoneText(current))")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                    Text(dueText)
+                    Text(due.label)
                         .font(.caption.bold())
-                        .foregroundStyle(ReminderSchedule.isDue(dueDay: dueDay) ? .red : .primary)
+                        .foregroundStyle(due.isDue ? .red : .primary)
                 }
 
-                if let species {
+                if let species = species(current, kind: kind) {
                     speciesInfo(species)
                 }
 
@@ -113,13 +112,13 @@ struct ReminderDetailView: View {
                     WKInterfaceDevice.current().play(.success)
                     store.send(.done(reminderId: snapshot.id, date: Date()))
                 } label: {
-                    Label(actionTitle, systemImage: "checkmark.circle.fill")
+                    Label(actionTitle(kind), systemImage: "checkmark.circle.fill")
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(.green)
 
-                if showsIntervalAndSnooze {
+                if showsIntervalAndSnooze(kind) {
                     Stepper(
                         ReminderSchedule.intervalLabel(days: intervalDays),
                         value: $intervalDays, in: ReminderSchedule.minIntervalDays...ReminderSchedule.maxIntervalDays
@@ -135,6 +134,7 @@ struct ReminderDetailView: View {
                     }
 
                     Button {
+                        WKInterfaceDevice.current().play(.click)
                         store.send(.snooze(reminderId: snapshot.id))
                     } label: {
                         Label("Snooze 1 day", systemImage: "moon.zzz.fill")
@@ -145,7 +145,7 @@ struct ReminderDetailView: View {
             }
             .padding(.horizontal, 2)
         }
-        .navigationTitle(snapshot.name)
+        .navigationTitle(current.name)
         .onDisappear {
             // Flush a still-pending debounced interval so no tick is lost.
             if pendingIntervalSend != nil {
@@ -157,8 +157,9 @@ struct ReminderDetailView: View {
     }
 
     @ViewBuilder
-    private var photoView: some View {
-        if let data = store.thumbnails[snapshot.id], let uiImage = UIImage(data: data) {
+    private func photoView(_ kind: WatchReminderKind) -> some View {
+        // Already decoded by WatchSyncStore — never decode in a body.
+        if let uiImage = store.thumbnails[snapshot.id] {
             Image(uiImage: uiImage)
                 .resizable()
                 .scaledToFill()

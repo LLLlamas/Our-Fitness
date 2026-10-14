@@ -53,15 +53,17 @@ struct MealHistoryDay: Identifiable {
 
 /// The day-history list itself. Rendered by `MealHistorySheet` (all days) and by
 /// `NutritionTrendSheet` under its chart (last 30 days, matching the bars).
+///
+/// Takes rows already built by `MealHistoryDay.rows` rather than the raw logs:
+/// both hosts need the row count for their own header, and building them here
+/// too meant aggregating the whole food-log history twice per pass.
 struct MealHistoryList: View {
-    let logs: [FoodLogEntryDTO]
-    var maxDays: Int? = nil
+    let days: [MealHistoryDay]
     let onSelectDay: (String) -> Void
 
     @Environment(\.theme) private var theme
 
     var body: some View {
-        let days = MealHistoryDay.rows(from: logs, maxDays: maxDays)
         LazyVStack(alignment: .leading, spacing: 8) {
             if days.isEmpty {
                 Text("Nothing logged yet.")
@@ -122,7 +124,7 @@ struct MealHistorySheet: View {
                         .foregroundStyle(theme.dim)
                 }
 
-                MealHistoryList(logs: logs) { dayKey in
+                MealHistoryList(days: days) { dayKey in
                     onSelectDay(dayKey)
                     dismiss()
                 }

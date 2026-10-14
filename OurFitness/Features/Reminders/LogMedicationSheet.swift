@@ -96,7 +96,7 @@ struct LogMedicationSheet: View {
             ctx, reminderId: reminder.id, date: when,
             dosageTaken: trimmedDosage.isEmpty ? nil : trimmedDosage
         ) != nil else { return }
-        Haptics.success()
+        // ToastCenter.show fires .win's success haptic itself.
         toasts.show(Toast(
             title: reminder.name,
             detail: "Logged at \(when.formatted(date: .omitted, time: .shortened))",

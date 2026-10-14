@@ -50,10 +50,7 @@ private struct RepCounterView: View {
         self.exercise = exercise
         let uid = profile.id
         let exId = exercise.id
-        var isoCal = Calendar(identifier: .iso8601)
-        isoCal.firstWeekday = 2
-        let weekStart = isoCal.dateInterval(of: .weekOfYear, for: Date())?.start
-            ?? Calendar.current.startOfDay(for: Date())
+        let weekStart = Dates.startOfISOWeek()
         _weekSetModels = Query(
             filter: #Predicate<WorkoutSetModel> { $0.userId == uid && $0.exerciseId == exId && $0.timestamp >= weekStart },
             sort: \.timestamp, order: .reverse
@@ -66,12 +63,12 @@ private struct RepCounterView: View {
     // Sets logged this ISO week for this exercise (Monday-anchored, matching
     // the WorkoutsView stats helper). Approximates per-muscle weekly volume.
     private var setsThisWeekForMuscle: Int {
-        var isoCal = Calendar(identifier: .iso8601)
-        isoCal.firstWeekday = 2
-        guard let week = isoCal.dateInterval(of: .weekOfYear, for: Date()) else {
-            return 0
-        }
-        return weekSetModels.filter { week.contains($0.timestamp) }.count
+        // Re-filter rather than trust the query alone: `weekStart` is frozen at
+        // init, so a view that outlives midnight on a Sunday would otherwise
+        // count last week's sets. Dates.startOfISOWeek reuses one shared
+        // calendar — building one here ran on every render.
+        let weekStart = Dates.startOfISOWeek()
+        return weekSetModels.filter { $0.timestamp >= weekStart }.count
     }
 
     var body: some View {

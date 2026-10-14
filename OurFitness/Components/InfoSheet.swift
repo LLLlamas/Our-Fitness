@@ -27,6 +27,9 @@ public struct InfoSheetScaffold<Content: View>: View {
     public let titleSize: CGFloat
     /// Some sheets show the grabber, some don't. `false` == no modifier applied.
     public let dragIndicator: Bool
+    /// Most ⓘ sheets open at medium and can be dragged up. A few are long
+    /// enough that opening at medium reads as truncated — those pass `[.large]`.
+    public let detents: Set<PresentationDetent>
     public let content: () -> Content
 
     @Environment(\.theme) private var theme
@@ -36,12 +39,14 @@ public struct InfoSheetScaffold<Content: View>: View {
         subtitle: String,
         titleSize: CGFloat = 42,
         dragIndicator: Bool = false,
+        detents: Set<PresentationDetent> = [.medium, .large],
         @ViewBuilder content: @escaping () -> Content
     ) {
         self.title = title
         self.subtitle = subtitle
         self.titleSize = titleSize
         self.dragIndicator = dragIndicator
+        self.detents = detents
         self.content = content
     }
 
@@ -61,7 +66,7 @@ public struct InfoSheetScaffold<Content: View>: View {
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
         }
-        .presentationDetents([.medium, .large])
+        .presentationDetents(detents)
         .presentationDragIndicator(dragIndicator ? .visible : .automatic)
         .presentationBackground(theme.bg)
     }
