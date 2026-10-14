@@ -27,7 +27,7 @@ jobs:
   ship:
     name: Sign + Archive + Upload via Fastlane
     runs-on: macos-26
-    timeout-minutes: 45
+    timeout-minutes: 75
 
     env:
       APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
