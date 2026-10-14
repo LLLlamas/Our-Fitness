@@ -398,7 +398,10 @@ struct TodayView: View {
                             Text(e.customName ?? "Meal")
                                 .foregroundStyle(theme.text)
                             Spacer()
-                            Text("\(e.perServing.calories) cal")
+                            // Scaled by servings, matching the Meals row and the
+                            // macro rings above. `perServing` here made the same
+                            // entry read differently on Today than on Meals.
+                            Text("\(e.totalNutrition.calories) cal")
                                 .font(.system(.footnote, design: .monospaced))
                                 .foregroundStyle(theme.accent)
                         }

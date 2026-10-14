@@ -21,6 +21,7 @@ struct RemindersView: View {
 
     @Environment(\.modelContext) private var ctx
     @Environment(\.theme) private var theme
+    @Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject private var toasts: ToastCenter
 
     @Query private var groupModels: [ReminderGroupModel]
@@ -183,7 +184,12 @@ struct RemindersView: View {
             LogMedicationSheet(profile: profile, reminder: reminder)
                 .themed(profile.mode)
         }
-        .task { authStatus = await currentAuthStatus() }
+        // Keyed on scenePhase, not bare: this view lives for the whole app
+        // session inside the TabView, and authorization is requested AFTER a
+        // reminder is saved. Un-keyed, denying the prompt left authStatus at
+        // .notDetermined, so the "notifications are off" banner did not appear
+        // until the next cold launch — in the one session where it mattered.
+        .task(id: scenePhase) { authStatus = await currentAuthStatus() }
     }
 
     // MARK: - Header

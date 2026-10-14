@@ -52,7 +52,11 @@ enum WaterLog {
                     lastFlOz: Binding<Double>,
                     unitSystem: UnitSystem,
                     toasts: ToastCenter) {
-        Repos.addWater(context, WaterEntryDTO(userId: profile.id, date: day, flOz: flOz))
+        // Hard rule 9. `addWater` is @discardableResult, so dropping the Bool
+        // compiled silently and showed a green "Water logged" over a failed
+        // write — while RootView's write-failure alert fired at the same time.
+        guard Repos.addWater(context, WaterEntryDTO(userId: profile.id, date: day, flOz: flOz))
+        else { return }
         lastFlOz.wrappedValue = flOz
         toasts.show(Toast(title: "+\(Units.formatVolumeWithUnit(flOz: flOz, system: unitSystem))",
                           detail: "Water logged",

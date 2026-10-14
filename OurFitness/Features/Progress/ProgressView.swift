@@ -190,8 +190,14 @@ struct ProgressTabView: View {
                     }
                 }
 
-                // Calorie intake vs activity burn — shown for both modes.
-                energyBalanceCard(energyRows: energyRows)
+                // Calorie intake vs activity burn — shown for both modes, but
+                // only once there is something to compare. Ungated, a fresh
+                // install saw "Calories in 0 / 2800 cal · BURNED 0", which
+                // reads as broken rather than empty. (Training history two
+                // lines below was already gated this way.)
+                if energyRows.contains(where: { $0.intake > 0 || $0.burned > 0 }) {
+                    energyBalanceCard(energyRows: energyRows)
+                }
 
                 // Cross-day training history; Today/Train only keep the daily surface short.
                 if !trainingHistoryDays.isEmpty {
@@ -334,6 +340,7 @@ struct ProgressTabView: View {
             unit: kind.unit(system: unitSystem),
             trend: trend,
             valueAccent: tint,
+            canLog: kind.canLog,
             action: { activeStat = kind }
         )
     }

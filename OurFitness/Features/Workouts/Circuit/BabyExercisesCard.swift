@@ -66,8 +66,17 @@ struct BabyExercisesCard: View {
                 header
                 let exercises = myExercises
                 if exercises.isEmpty {
-                    Text("No movements yet. Tap + above to add one — then log it with a single tap.")
-                        .font(.callout).foregroundStyle(theme.dim)
+                    // A labelled button beats "tap the + above" pointing at a
+                    // 14pt glyph for someone opening this tab the first time.
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("No movements yet. Add one, then log it with a single tap.")
+                            .font(.callout).foregroundStyle(theme.dim)
+                            .fixedSize(horizontal: false, vertical: true)
+                        Button { showAddMovement = true } label: {
+                            Label("Add your first movement", systemImage: "plus")
+                        }
+                        .tactile(.secondary, fullWidth: true)
+                    }
                 } else {
                     let counts = countsByExercise
                     let lastId = exercises.last?.id
@@ -214,6 +223,8 @@ private struct ExerciseRow: View {
 
     @Environment(\.theme) private var theme
     @State private var showInfo = false
+    @State private var showSets = false
+    @State private var confirmDelete = false
 
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
@@ -263,6 +274,17 @@ private struct ExerciseRow: View {
                 }
                 .tactile(.ghost)
                 .accessibilityLabel("Undo last \(exercise.name)")
+
+                // Undo only removes the last tap. This opens today's individual
+                // logs so a wrong count can be corrected instead of re-tapped —
+                // the same sheet Build uses, never a second set editor.
+                Button { showSets = true } label: {
+                    Image(systemName: "clock.arrow.circlepath")
+                        .font(.system(size: 13))
+                        .foregroundStyle(theme.dim)
+                }
+                .tactile(.ghost)
+                .accessibilityLabel("Edit today's \(exercise.name) logs")
             }
 
             Button { showInfo = true } label: {
@@ -294,20 +316,34 @@ private struct ExerciseRow: View {
             }
         }
         .padding(.vertical, 4)
-        .swipeActions(edge: .trailing) {
-            Button(role: .destructive) {
-                onDelete()
-            } label: {
-                Label("Remove", systemImage: "trash")
-            }
-            .tint(.red)
+        // Attached to the row, not to the clock button: deleting the last set
+        // from inside the sheet hides that button, which would yank the sheet
+        // out from under the user mid-edit.
+        .sheet(isPresented: $showSets) {
+            SetHistorySheet(profile: profile, exercise: exercise)
+                .themed(theme.mode)
         }
+        // No .swipeActions here: these rows live in a Card's VStack, not a List,
+        // where that modifier is a no-op — it looked like a delete affordance and
+        // wasn't one. Removing a movement is a confirmed action in the context
+        // menu below, and in the "Delete movement" button inside the sets sheet.
         .contextMenu {
+            if todayCount > 0 {
+                Button { showSets = true } label: {
+                    Label("Edit today's logs", systemImage: "pencil")
+                }
+            }
             Button(role: .destructive) {
-                onDelete()
+                confirmDelete = true
             } label: {
                 Label("Remove movement", systemImage: "trash")
             }
+        }
+        .confirmationDialog("Remove \(exercise.name)?",
+                            isPresented: $confirmDelete,
+                            titleVisibility: .visible) {
+            Button("Remove movement and all its logs", role: .destructive) { onDelete() }
+            Button("Cancel", role: .cancel) {}
         }
     }
 }

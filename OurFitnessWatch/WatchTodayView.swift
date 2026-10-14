@@ -34,6 +34,7 @@ struct WatchTodayView: View {
             if store.hasSynced {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 14) {
+                        staleNotice
                         caloriesSection
                         macrosRow
                         stepsSection
@@ -65,6 +66,41 @@ struct WatchTodayView: View {
                 .multilineTextAlignment(.center)
         }
         .padding()
+    }
+
+    // MARK: - Staleness
+
+    // The same honesty rule as the "Not synced yet" state above, one step later:
+    // that one stops the watch claiming the phone has no data, this one stops it
+    // presenting an OLD day's data as today's. The phone pushes only on
+    // activation, foreground and mutation, so a watch opened on a morning the
+    // phone hasn't been touched is showing yesterday's calories, steps and water
+    // under a "Today" title with nothing to say so.
+    //
+    // Shown ONLY once the snapshot predates today — the case where every number
+    // below is wrong rather than merely a few hours old. A same-day snapshot gets
+    // no row: there is no wrist-side refresh to offer, and a permanent timestamp
+    // above the hero number is noise at 40mm.
+    //
+    // A DAY boundary, not an hours threshold, because the day key is what the
+    // numbers themselves are folded on phone-side (`Dates.dayKey`).
+    @ViewBuilder
+    private var staleNotice: some View {
+        if let generatedAt = store.snapshotGeneratedAt,
+           !Calendar.current.isDateInToday(generatedAt) {
+            VStack(alignment: .leading, spacing: 1) {
+                Label(
+                    "From \(generatedAt.formatted(date: .abbreviated, time: .omitted))",
+                    systemImage: "exclamationmark.triangle.fill"
+                )
+                .font(.caption2.bold())
+                .foregroundStyle(.orange)
+                Text("Open Our Fitness on your iPhone to update")
+                    .font(.system(size: 10))
+                    .foregroundStyle(.secondary)
+            }
+            .accessibilityElement(children: .combine)
+        }
     }
 
     // MARK: - Calories

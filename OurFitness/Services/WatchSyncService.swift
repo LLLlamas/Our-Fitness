@@ -191,8 +191,26 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
     /// by the profile, name-sorted — so the two devices show the same rows in the
     /// same order. `loggedToday` is the SUM OF REPS (for a duration exercise the
     /// reps field carries minutes), matching the card's per-row count exactly.
+    /// Only exercises a single tap can record CORRECTLY.
+    ///
+    /// `.logQuickSet` writes `weightLb: nil` and `reps: amount` — there is no
+    /// weight input on the wrist and no hold timer. So:
+    ///   • compound/isolation lifts are excluded. They carry a per-set weight,
+    ///     and a wrist "+1" on a barbell press logged a weightless rep that then
+    ///     counted toward Build's training volume. Wrong data is worse than a
+    ///     missing button.
+    ///   • isometric exercises are excluded. A hold is `{reps: 1, holdSeconds: N}`
+    ///     billed by `caloriesForIsometric`; one tap would log it as a rep.
+    /// Circuit's parenting movements and other bodyweight/duration work are
+    /// unaffected — they carry a fixed `loadLb` on the exercise, which the
+    /// calorie math already uses, so a tap records exactly what happened.
+    ///
+    /// Adding either back means a wire field plus a real input affordance, not
+    /// just lifting this filter.
     private func quickLogExercises(_ ctx: ModelContext, userId: UUID, now: Date) -> [QuickLogExercise] {
-        let exercises = Repos.exercises(ctx, forProfile: userId)
+        let exercises = Repos.exercises(ctx, forProfile: userId).filter {
+            !$0.isIsometric && $0.category != .compound && $0.category != .isolation
+        }
         guard !exercises.isEmpty else { return [] }
         let repsToday = todayRepsByExercise(ctx, userId: userId, now: now)
         return exercises.map {

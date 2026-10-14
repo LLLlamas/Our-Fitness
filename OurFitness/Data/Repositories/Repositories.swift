@@ -356,6 +356,98 @@ public enum Repos {
         }
     }
 
+    /// Correct a logged set after the fact — a mistyped weight, an over-counted
+    /// rep, a hold that ran short. The counterpart to `deleteSet`: before this
+    /// existed, 135 lb fat-fingered as 1350 could only be deleted and re-logged.
+    ///
+    /// **Recomputes `caloriesEst`.** That figure is a MET estimate frozen at log
+    /// time, so leaving it alone after a reps/weight/hold change would leave a
+    /// number the set no longer supports — the same reason
+    /// `updateActivitySession` recomputes from its stored MET. A set row stores
+    /// no MET, so the estimate is re-derived by `recomputedSetCalories` below.
+    ///
+    /// Callers pass the complete new shape (reps, weight, hold); `reps` is
+    /// clamped to at least 1, and for an isometric row it stays the hold count
+    /// (pass the existing value — only `holdSeconds` is the user's edit there).
+    /// `timestamp` is deliberately untouched: this corrects what was logged, not
+    /// when. Returns false (nothing written) if the set or its exercise is gone.
+    @discardableResult
+    public static func updateSet(
+        _ ctx: ModelContext,
+        id: UUID,
+        reps: Int,
+        weightLb: Double?,
+        holdSeconds: Int? = nil,
+        bodyWeightLb: Double,
+        mode: Mode
+    ) -> Bool {
+        RepositoryWrite.perform(ctx) {
+            let desc = FetchDescriptor<WorkoutSetModel>(predicate: #Predicate { $0.id == id })
+            guard let target = try ctx.fetch(desc).first else { throw RepositoryWriteError.missingRecord }
+            let exId = target.exerciseId
+            let exDesc = FetchDescriptor<ExerciseModel>(predicate: #Predicate { $0.id == exId })
+            guard let exercise = try ctx.fetch(exDesc).first?.snapshot else {
+                throw RepositoryWriteError.missingRecord
+            }
+
+            let newReps = max(1, reps)
+            let newHold = holdSeconds.map { max(1, $0) }
+            target.reps = newReps
+            target.weightLb = weightLb
+            target.holdSeconds = newHold
+            target.caloriesEst = setCaloriesEstimate(
+                exercise: exercise, mode: mode,
+                reps: newReps, holdSeconds: newHold,
+                bodyWeightLb: bodyWeightLb
+            )
+        }
+    }
+
+    /// The log-time calorie math, re-derived for an edited set.
+    ///
+    /// Public so the edit sheet can preview the exact figure the save will store
+    /// instead of keeping a second copy of the branching below — one definition,
+    /// no drift between what the user is shown and what is written.
+    ///
+    /// A set row stores no MET, so which estimator produced its `caloriesEst`
+    /// has to be inferred from the same facts the three logging surfaces branch
+    /// on. Keep these branches in step with them — an edit must land on the
+    /// number the original log would have produced:
+    ///   • `holdSeconds` set → isometric hold, exercise MET
+    ///     (`RepCounter.swift` → `IsometricTimerView.completeHold`)
+    ///   • Circuit → the flat, load-aware quick-log estimate; `reps` carries
+    ///     minutes for a `.duration` movement and reps otherwise
+    ///     (`Circuit/BabyExercisesCard.swift` → `logActivity`)
+    ///   • Build → the exercise's researched MET and tempo
+    ///     (`RepCounter.swift` → `RepCounterView.saveSet`)
+    ///
+    /// All four estimators are activity-only (MET − 1); never hand-roll the
+    /// product here.
+    public static func setCaloriesEstimate(
+        exercise: ExerciseDTO, mode: Mode, reps: Int, holdSeconds: Int?, bodyWeightLb: Double
+    ) -> Double {
+        if let seconds = holdSeconds {
+            return CalorieEstimator.caloriesForIsometric(
+                seconds: Double(seconds),
+                met: ExerciseInfo.meta(for: exercise).met,
+                bodyWeightLb: bodyWeightLb
+            )
+        }
+        guard mode == .circuit else {
+            return CalorieEstimator.caloriesForReps(
+                reps: reps, exercise: exercise, bodyWeightLb: bodyWeightLb
+            )
+        }
+        if exercise.kind == .duration {
+            return CalorieEstimator.caloriesForDuration(
+                minutes: Double(reps), loadLb: exercise.loadLb, bodyWeightLb: bodyWeightLb
+            )
+        }
+        return CalorieEstimator.caloriesForReps(
+            reps: reps, loadLb: exercise.loadLb, bodyWeightLb: bodyWeightLb
+        )
+    }
+
     // MARK: - Water
 
     @discardableResult
@@ -450,6 +542,21 @@ public enum Repos {
             sortBy: [SortDescriptor(\.date, order: .reverse)]
         )
         return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
+    }
+
+    /// Correct a logged Pilates session (duration, focus areas, notes). Unlike a
+    /// set or an activity session there is no stored calorie figure to refresh:
+    /// `PilatesSessionDTO` keeps only the duration and every surface derives the
+    /// burn from it through `CalorieEstimator.caloriesForPilates`, so the
+    /// estimate follows the new duration on its own.
+    @discardableResult
+    public static func updatePilatesSession(_ ctx: ModelContext, _ s: PilatesSessionDTO) -> Bool {
+        RepositoryWrite.perform(ctx) {
+            let id = s.id
+            let desc = FetchDescriptor<PilatesSessionModel>(predicate: #Predicate { $0.id == id })
+            guard let model = try ctx.fetch(desc).first else { throw RepositoryWriteError.missingRecord }
+            model.apply(s)
+        }
     }
 
     @discardableResult

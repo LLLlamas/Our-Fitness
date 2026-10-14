@@ -89,6 +89,19 @@ final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
     var bodyWeightLb: Double { envelope?.bodyWeightLb ?? Self.fallbackBodyWeightLb }
     var hasSynced: Bool { envelope != nil }
 
+    /// When the phone BUILT the snapshot these numbers come from — the one thing
+    /// that tells a stale screen apart from a current one. `today` is folded from
+    /// the phone's logs for the day of this instant, so once it rolls over a day
+    /// the whole Today screen is reporting yesterday under a "Today" title.
+    ///
+    /// Nil when there is nothing honest to say: before the first sync, and for a
+    /// payload from a build that didn't stamp the field (`init(from:)` decodes a
+    /// missing key as `.distantPast`, which must never reach a UI as a date).
+    var snapshotGeneratedAt: Date? {
+        guard let at = envelope?.generatedAt, at.timeIntervalSince1970 > 0 else { return nil }
+        return at
+    }
+
     // MARK: - Local caches
 
     private func loadCachedEnvelope() {

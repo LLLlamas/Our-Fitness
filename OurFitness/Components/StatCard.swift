@@ -13,6 +13,10 @@ public struct StatCard: View {
     /// markers that are out of healthy range (theme.ok / theme.warn). When nil
     /// the value falls back to `theme.text` — the original behaviour.
     public let valueAccent: Color?
+    /// Whether tapping this card can actually log a value. Derived stats
+    /// (steps average, training volume, BMI) have no log form in their detail
+    /// sheet, so they must not invite a tap that does nothing.
+    public let canLog: Bool
     public let action: () -> Void
 
     @Environment(\.theme) private var theme
@@ -23,6 +27,7 @@ public struct StatCard: View {
         unit: String?,
         trend: String?,
         valueAccent: Color? = nil,
+        canLog: Bool = true,
         action: @escaping () -> Void
     ) {
         self.title = title
@@ -30,6 +35,7 @@ public struct StatCard: View {
         self.unit = unit
         self.trend = trend
         self.valueAccent = valueAccent
+        self.canLog = canLog
         self.action = action
     }
 
@@ -59,7 +65,11 @@ public struct StatCard: View {
                             .font(.system(size: 11, design: .monospaced))
                             .foregroundStyle(theme.dim)
                     } else if value == nil {
-                        Text("Tap to log")
+                        // "Tap to log" only where tapping CAN log. Steps,
+                        // training volume and BMI are derived — their detail
+                        // sheet has no log form, so the prompt was a dead end
+                        // on two of Build's three default trackers.
+                        Text(canLog ? "Tap to log" : "No data yet")
                             .font(.system(size: 11))
                             .foregroundStyle(theme.dim)
                     }

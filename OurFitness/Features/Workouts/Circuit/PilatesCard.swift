@@ -21,6 +21,7 @@ struct PilatesCard: View {
     @State private var showLogSheet = false
     @State private var showGoalPicker = false
     @State private var pickerGoal: Int = 3
+    @State private var editing: PilatesSessionDTO?
 
     @AppStorage private var weeklyGoalRaw: Int
 
@@ -75,6 +76,23 @@ struct PilatesCard: View {
         }
         .sheet(isPresented: $showGoalPicker) {
             goalPickerSheet.themed(theme.mode)
+        }
+        // Shared duration editor (LiveSessionCard.swift) — one sheet for both
+        // session kinds. A Pilates session stores no calorie figure, so the burn
+        // follows the new duration without a recompute.
+        .sheet(item: $editing) { session in
+            EditDurationSheet(
+                activityName: "Pilates",
+                symbol: "figure.pilates",
+                initialMinutes: session.durationMinutes,
+                calories: { minutes in
+                    Int(CalorieEstimator.caloriesForPilates(
+                        minutes: Double(minutes), bodyWeightLb: profile.weightLb
+                    ).rounded())
+                },
+                onSave: { minutes in saveDuration(session, minutes: minutes) }
+            )
+            .themed(theme.mode)
         }
     }
 
@@ -146,6 +164,23 @@ struct PilatesCard: View {
                           accent: .warn, symbol: "trash.fill"))
     }
 
+    /// Correct a logged session's length — "it was 45 minutes, not 30". Returns
+    /// false on a failed write so the sheet stays open.
+    private func saveDuration(_ session: PilatesSessionDTO, minutes: Int) -> Bool {
+        var updated = session
+        updated.durationMinutes = max(1, minutes)
+        guard Repos.updatePilatesSession(ctx, updated) else { return false }
+        let cal = Int(CalorieEstimator.caloriesForPilates(
+            minutes: Double(updated.durationMinutes), bodyWeightLb: profile.weightLb
+        ).rounded())
+        toasts.show(Toast(
+            title: "Duration updated",
+            detail: "Pilates · \(updated.durationMinutes) min · ~\(cal) cal",
+            accent: .win, symbol: "checkmark.seal.fill"
+        ), for: 2.4)
+        return true
+    }
+
     @ViewBuilder
     private var recentStrip: some View {
         let recent = Array(sessions.filter { Dates.isTodayOrYesterday($0.date) }.prefix(5))
@@ -172,6 +207,13 @@ struct PilatesCard: View {
                         Text("\(s.durationMinutes) min · ~\(Int(cal)) cal")
                             .font(.system(.caption, design: .monospaced))
                             .foregroundStyle(theme.accent2)
+                        Button { editing = s } label: {
+                            Image(systemName: "pencil")
+                                .font(.system(size: 12))
+                                .foregroundStyle(theme.accent2)
+                        }
+                        .tactile(.ghost)
+                        .accessibilityLabel("Edit this pilates session's duration")
                         Button(role: .destructive) { deleteSession(s) } label: {
                             Image(systemName: "trash")
                                 .font(.system(size: 12))

@@ -53,6 +53,9 @@ struct WorkoutsView: View {
         var todayHoldSec: Int = 0
         var yesterdayHoldSec: Int = 0
         var yesterdayCal: Double = 0
+        /// Rows logged today — shown next to the history icon so the icon reads
+        /// as "3 sets, tap to fix them" instead of an unlabelled clock.
+        var todaySets: Int = 0
     }
 
     private var statsByExercise: [String: ExerciseStats] {
@@ -72,6 +75,7 @@ struct WorkoutsView: View {
                 stats.todayReps += s.reps
                 stats.todayHoldSec += s.holdSeconds ?? 0
                 stats.todayCal += s.caloriesEst ?? 0
+                stats.todaySets += 1
             } else if inYesterday {
                 stats.yesterdayReps += s.reps
                 stats.yesterdayHoldSec += s.holdSeconds ?? 0
@@ -94,9 +98,12 @@ struct WorkoutsView: View {
 
                 LiveSessionCard(profile: profile)
 
-                workoutSuggestionButton
-
+                // Logging what's already on your list is the job you open this tab
+                // for, so it sits above the "what should I work on?" discovery
+                // prompt rather than below it.
                 exercisesSection
+
+                workoutSuggestionButton
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 18)
@@ -156,12 +163,19 @@ struct WorkoutsView: View {
             }
 
             if exercises.isEmpty {
-                Card {
+                // The card itself adds an exercise — a first-time user shouldn't
+                // have to find the small Add pill to get started.
+                PressableCard(action: { showAddSheet = true }) {
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("No exercises yet.")
-                            .font(.callout).foregroundStyle(theme.text)
-                        Text("Tap Add to build your list. Each entry tracks reps, calories, and muscle history.")
+                        HStack(spacing: 6) {
+                            Image(systemName: "plus.circle.fill")
+                                .foregroundStyle(theme.accent)
+                            Text("Add your first exercise")
+                                .font(.callout).foregroundStyle(theme.text)
+                        }
+                        Text("Each entry tracks reps, weight, calories, and muscle history. Not sure what to pick? Use “What do you want to work on?” below.")
                             .font(.caption).foregroundStyle(theme.dim)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                 }
             } else {
@@ -171,8 +185,10 @@ struct WorkoutsView: View {
                 }
             }
         } else {
-            Card { PilatesCard(profile: profile) }
+            // Movements first: a one-tap quick-log used several times a day,
+            // where Pilates is a handful of sessions a week.
             BabyExercisesCard(profile: profile)
+            Card { PilatesCard(profile: profile) }
         }
     }
 
@@ -226,11 +242,20 @@ struct WorkoutsView: View {
                     }
                     Spacer()
                     Button { activeHistory = ex } label: {
-                        Image(systemName: "clock.arrow.circlepath")
-                            .foregroundStyle(theme.dim)
+                        HStack(spacing: 3) {
+                            Image(systemName: "clock.arrow.circlepath")
+                                .foregroundStyle(theme.dim)
+                            if stats.todaySets > 0 {
+                                Text("\(stats.todaySets)")
+                                    .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                                    .foregroundStyle(theme.accent)
+                            }
+                        }
                     }
                     .tactile(.ghost)
-                    .accessibilityLabel("\(ex.name) logged sets")
+                    .accessibilityLabel(stats.todaySets > 0
+                                        ? "\(ex.name): \(stats.todaySets) sets today, edit or delete"
+                                        : "\(ex.name) logged sets")
                     Button { activeInfo = ex } label: {
                         Image(systemName: "info.circle")
                             .foregroundStyle(theme.dim)
@@ -495,12 +520,17 @@ struct AddExerciseSheet: View {
     }
 }
 
-// MARK: - Set history + delete sheet
+// MARK: - Set history + edit/delete sheet
 
-/// Lists every set logged against an exercise (newest first) with per-set delete,
-/// plus a destructive "delete exercise" action that cascade-removes its sets.
-/// Owns a profile+exercise-scoped @Query so the list refreshes as sets are removed.
-private struct SetHistorySheet: View {
+/// The ONE place a logged set is corrected or removed. Lists today's sets for an
+/// exercise (newest first); tap a row to edit it, trash to remove it, plus a
+/// destructive "delete exercise" action that cascade-removes its sets.
+/// Owns a profile+exercise-scoped @Query so the list refreshes as sets change.
+///
+/// Internal, not private: Circuit's movement quick-log
+/// (`Circuit/BabyExercisesCard.swift`) opens this same sheet from a row, so a
+/// mis-tapped +1 is fixable there too. Don't add a second set-editing surface.
+struct SetHistorySheet: View {
     let profile: ProfileDTO
     let exercise: ExerciseDTO
 
@@ -511,6 +541,7 @@ private struct SetHistorySheet: View {
 
     @Query private var setModels: [WorkoutSetModel]
     @State private var confirmDeleteExercise = false
+    @State private var editing: WorkoutSetDTO?
 
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
@@ -550,11 +581,15 @@ private struct SetHistorySheet: View {
                         VStack(alignment: .leading, spacing: 6) {
                             Text("No sets logged today.")
                                 .font(.callout).foregroundStyle(theme.text)
-                            Text("Tap the exercise to start counting. Past days live in Progress › Training history.")
+                            Text(profile.mode == .build
+                                 ? "Tap the exercise to start counting. Past days live in Progress › Training history."
+                                 : "Tap + on the movement to log it. Past days live in Progress › Training history.")
                                 .font(.caption).foregroundStyle(theme.dim)
                         }
                     }
                 } else {
+                    Text("Tap a set to fix it · trash to remove it")
+                        .font(.caption).foregroundStyle(theme.dim)
                     ForEach(sets) { setRow($0) }
                     Text("Showing today only. Earlier sessions are in Progress › Training history.")
                         .font(.caption2).foregroundStyle(theme.dim)
@@ -566,7 +601,7 @@ private struct SetHistorySheet: View {
                 } label: {
                     HStack {
                         Image(systemName: "trash")
-                        Text("Delete exercise")
+                        Text("Delete \(noun)")
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
@@ -578,13 +613,17 @@ private struct SetHistorySheet: View {
         }
         .presentationDetents([.medium, .large])
         .presentationBackground(theme.bg)
+        .sheet(item: $editing) { s in
+            EditSetSheet(profile: profile, exercise: exercise, loggedSet: s)
+                .themed(profile.mode)
+        }
         .confirmationDialog("Delete \(exercise.name)?",
                             isPresented: $confirmDeleteExercise,
                             titleVisibility: .visible) {
-            Button("Delete exercise and all its sets", role: .destructive) {
+            Button("Delete \(noun) and all its sets", role: .destructive) {
                 guard Repos.deleteExercise(ctx, id: exercise.id) else { return }
                 toasts.show(Toast(title: "\(exercise.name) deleted",
-                                  detail: "Exercise and its sets removed.",
+                                  detail: "\(noun.capitalized) and its sets removed.",
                                   accent: .warn, symbol: "trash.fill"))
                 dismiss()
             }
@@ -592,17 +631,32 @@ private struct SetHistorySheet: View {
         }
     }
 
+    /// Circuit calls these "movements" everywhere else; Build calls them exercises.
+    private var noun: String { profile.mode == .build ? "exercise" : "movement" }
+
     @ViewBuilder
     private func setRow(_ s: WorkoutSetDTO) -> some View {
         HStack {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(primaryLabel(s))
-                    .font(.system(size: 15, weight: .medium))
-                    .foregroundStyle(theme.text)
-                Text(secondaryLabel(s))
-                    .font(.caption).foregroundStyle(theme.dim)
+            Button { editing = s } label: {
+                HStack(spacing: 8) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(primaryLabel(s))
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundStyle(theme.text)
+                        Text(secondaryLabel(s))
+                            .font(.caption).foregroundStyle(theme.dim)
+                    }
+                    Spacer(minLength: 8)
+                    Image(systemName: "pencil")
+                        .font(.system(size: 13))
+                        .foregroundStyle(theme.accent)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .contentShape(Rectangle())
             }
-            Spacer()
+            .tactile(.ghost)
+            .accessibilityLabel("Edit set · \(primaryLabel(s))")
+
             Button(role: .destructive) {
                 guard Repos.deleteSet(ctx, id: s.id) else { return }
                 toasts.show(Toast(title: "Set removed",
@@ -622,9 +676,13 @@ private struct SetHistorySheet: View {
     }
 
     private func primaryLabel(_ s: WorkoutSetDTO) -> String {
-        if exercise.isIsometric {
-            let secs = s.holdSeconds ?? 0
-            return "\(secs)s hold"
+        // Hold first: a Build isometric is also `.duration` kind, and only a hold
+        // carries holdSeconds. A Circuit duration movement stores minutes in reps.
+        if let secs = s.holdSeconds, secs > 0 {
+            return "\(formattedHoldDuration(secs)) hold"
+        }
+        if exercise.kind == .duration {
+            return "\(s.reps) min"
         }
         var label = "\(s.reps) rep\(s.reps == 1 ? "" : "s")"
         if let w = s.weightLb, w > 0 {
@@ -639,6 +697,220 @@ private struct SetHistorySheet: View {
             parts.append("~\(Int(c)) cal")
         }
         return parts.joined(separator: " · ")
+    }
+}
+
+// MARK: - Edit a logged set
+
+/// Correct one already-logged set: reps (or minutes, or hold length) and the
+/// weight lifted. Opened by tapping a row in `SetHistorySheet` — the only set
+/// editor in the app.
+///
+/// The "≈ cal" readout comes from `Repos.setCaloriesEstimate`, the same function
+/// `Repos.updateSet` writes with, so the preview is exactly what gets stored —
+/// never a second copy of the MET math.
+private struct EditSetSheet: View {
+    let profile: ProfileDTO
+    let exercise: ExerciseDTO
+    let loggedSet: WorkoutSetDTO
+
+    @Environment(\.modelContext) private var ctx
+    @Environment(\.theme) private var theme
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var toasts: ToastCenter
+
+    @State private var reps: Int
+    @State private var holdSeconds: Int
+    @State private var weightStr: String = ""
+    @State private var prefilled = false
+    @FocusState private var weightFocused: Bool
+
+    @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
+
+    init(profile: ProfileDTO, exercise: ExerciseDTO, loggedSet: WorkoutSetDTO) {
+        self.profile = profile
+        self.exercise = exercise
+        self.loggedSet = loggedSet
+        _reps = State(initialValue: max(1, loggedSet.reps))
+        _holdSeconds = State(initialValue: max(5, loggedSet.holdSeconds ?? 60))
+    }
+
+    /// A hold row is the one that carries holdSeconds; reps there is the hold
+    /// count (1) and is left alone. A Circuit `.duration` movement stores minutes
+    /// in `reps`, so the same stepper edits it with a different unit word.
+    private var isHold: Bool { loggedSet.holdSeconds != nil }
+    private var isMinutes: Bool { !isHold && exercise.kind == .duration }
+    private var unitLabel: String { isMinutes ? "min" : (reps == 1 ? "rep" : "reps") }
+
+    private var showsWeight: Bool {
+        !isHold && (exercise.category == .compound || exercise.category == .isolation || loggedSet.weightLb != nil)
+    }
+
+    private var weightLb: Double? {
+        // Field is in the active unit; persist canonical lb.
+        guard !weightStr.isEmpty else { return nil }
+        return Units.parseWeightToLb(weightStr, system: unitSystem)
+    }
+
+    private var estimatedCal: Int {
+        Int(Repos.setCaloriesEstimate(
+            exercise: exercise, mode: profile.mode,
+            reps: isHold ? max(1, loggedSet.reps) : reps,
+            holdSeconds: isHold ? holdSeconds : nil,
+            bodyWeightLb: profile.weightLb
+        ).rounded())
+    }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 18) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Edit set".uppercased())
+                        .font(.system(size: 10, weight: .medium)).tracking(2)
+                        .foregroundStyle(theme.dim)
+                    Text(exercise.name)
+                        .font(.system(size: 32, weight: .regular))
+                        .foregroundStyle(theme.text)
+                    Text("Logged \(loggedSet.timestamp.formatted(date: .omitted, time: .shortened))")
+                        .font(.caption).foregroundStyle(theme.dim)
+                }
+
+                if isHold {
+                    holdEditor
+                } else {
+                    countEditor
+                    if showsWeight { weightField }
+                }
+
+                Text("≈ \(estimatedCal) cal")
+                    .font(.system(size: 18, weight: .semibold, design: .monospaced))
+                    .foregroundStyle(theme.accent)
+                    .contentTransition(.numericText())
+                    .frame(maxWidth: .infinity)
+
+                Text("The calorie estimate is recalculated from the new numbers when you save.")
+                    .font(.caption2).foregroundStyle(theme.dim)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                Button { save() } label: { Text("Save changes") }
+                    .tactile(.primary, fullWidth: true)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+        }
+        .presentationDetents([.medium, .large])
+        .presentationBackground(theme.bg)
+        .onAppear {
+            guard !prefilled else { return }
+            prefilled = true
+            if let w = loggedSet.weightLb, w > 0 {
+                weightStr = Units.formatWeight(lb: w, system: unitSystem, decimals: 0)
+            }
+        }
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") { weightFocused = false }
+            }
+        }
+    }
+
+    // MARK: - Editors
+
+    @ViewBuilder
+    private var countEditor: some View {
+        VStack(spacing: 10) {
+            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                AnimatedNumber(
+                    Double(reps),
+                    font: .system(size: 64, weight: .semibold),
+                    color: theme.accent
+                )
+                Text(unitLabel)
+                    .font(.system(size: 15, weight: .medium)).tracking(1)
+                    .textCase(.uppercase)
+                    .foregroundStyle(theme.dim)
+            }
+            .frame(maxWidth: .infinity)
+
+            HStack(spacing: 8) {
+                ForEach([-5, -1, 1, 5], id: \.self) { delta in
+                    Button {
+                        reps = max(1, reps + delta)
+                        Haptics.bump()
+                    } label: {
+                        Text(delta > 0 ? "+\(delta)" : "−\(abs(delta))")
+                    }
+                    .tactile(.bump)
+                    .disabled(delta < 0 && reps == 1)
+                }
+            }
+            .frame(maxWidth: .infinity)
+        }
+        .padding(14)
+        .background(theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+    }
+
+    @ViewBuilder
+    private var holdEditor: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Hold duration".uppercased())
+                .font(.system(size: 10, weight: .medium)).tracking(2)
+                .foregroundStyle(theme.dim)
+            // Same 5-second grid the isometric timer logs on, so an edited hold
+            // can only land on a value the timer could have produced.
+            Picker("Hold duration", selection: $holdSeconds) {
+                ForEach(Array(stride(from: 5, through: 300, by: 5)), id: \.self) { s in
+                    Text(formattedHoldDuration(s)).tag(s)
+                }
+            }
+            .pickerStyle(.wheel)
+            .frame(height: 150)
+            .clipped()
+        }
+    }
+
+    @ViewBuilder
+    private var weightField: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Weight lifted (\(Units.weightUnit(unitSystem)))")
+                .font(.system(size: 10, weight: .medium)).tracking(2)
+                .textCase(.uppercase)
+                .foregroundStyle(theme.dim)
+            TextField("—", text: $weightStr)
+                .keyboardType(.decimalPad)
+                .padding(10).background(theme.card)
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+                .foregroundStyle(theme.text)
+                .font(.system(.title3, design: .monospaced))
+                .focused($weightFocused)
+        }
+    }
+
+    private func save() {
+        let newReps = isHold ? max(1, loggedSet.reps) : reps
+        guard Repos.updateSet(
+            ctx, id: loggedSet.id,
+            reps: newReps,
+            weightLb: showsWeight ? weightLb : nil,
+            holdSeconds: isHold ? holdSeconds : nil,
+            bodyWeightLb: profile.weightLb,
+            mode: profile.mode
+        ) else { return }
+
+        var detail = isHold
+            ? "\(formattedHoldDuration(holdSeconds)) hold"
+            : "\(newReps) \(isMinutes ? "min" : (newReps == 1 ? "rep" : "reps"))"
+        if let w = weightLb, w > 0, showsWeight {
+            detail += " · \(Units.formatWeightWithUnit(lb: w, system: unitSystem, decimals: 0))"
+        }
+        detail += " · ~\(estimatedCal) cal"
+        toasts.show(Toast(title: "Set updated", detail: detail,
+                          accent: .win, symbol: "checkmark.seal.fill"), for: 2.4)
+        dismiss()
     }
 }
 

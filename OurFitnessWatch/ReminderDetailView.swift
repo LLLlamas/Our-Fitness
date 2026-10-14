@@ -99,9 +99,19 @@ struct ReminderDetailView: View {
                     Text("\(lastDoneLabel(kind)): \(lastDoneText(current))")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                    Text(due.label)
+                    // Through `status(for:)`, NEVER the raw `due.label` — see
+                    // WatchDueStatus.status for why. A medication carries a
+                    // placeholder `intervalDays`, so `due.label` rendered a dose
+                    // taken this morning as "23 days overdue" in red: exactly the
+                    // missed-dose claim the phone's RemindersView refuses to make
+                    // and that CLAUDE.md binds on EVERY surface, this one included.
+                    // The list row that opens this screen already went through
+                    // status(for:), so routing both through it is also the only way
+                    // the two can't word the same reminder differently.
+                    let status = due.status(for: kind)
+                    Text(status.text)
                         .font(.caption.bold())
-                        .foregroundStyle(due.isDue ? .red : .primary)
+                        .foregroundStyle(status.isAlarming ? .red : .primary)
                 }
 
                 if let species = species(current, kind: kind) {

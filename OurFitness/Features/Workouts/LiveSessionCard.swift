@@ -526,10 +526,38 @@ private struct RecentActivitySessions: View {
             }
             .id(refreshToken)
             .sheet(item: $editing) { session in
-                EditSessionDurationSheet(profile: profile, session: session)
-                    .themed(profile.mode)
+                EditDurationSheet(
+                    activityName: session.activityName,
+                    symbol: ActivityCatalog.activity(id: session.activityId)?.symbol ?? "figure.mixed.cardio",
+                    initialMinutes: session.durationMinutes,
+                    calories: { minutes in
+                        Int(CalorieEstimator.caloriesForActivity(
+                            met: session.met, minutes: Double(minutes), bodyWeightLb: profile.weightLb
+                        ).rounded())
+                    },
+                    onSave: { minutes in saveDuration(session, minutes: minutes) }
+                )
+                .themed(profile.mode)
             }
         }
+    }
+
+    /// Writes the corrected duration (which recomputes the stored estimate from
+    /// the session's MET) and reports success so the sheet only closes on a save
+    /// that actually landed.
+    private func saveDuration(_ s: ActivitySessionDTO, minutes: Int) -> Bool {
+        guard Repos.updateActivitySession(
+            ctx, id: s.id, durationMinutes: minutes, bodyWeightLb: profile.weightLb
+        ) else { return false }
+        let cal = Int(CalorieEstimator.caloriesForActivity(
+            met: s.met, minutes: Double(minutes), bodyWeightLb: profile.weightLb
+        ).rounded())
+        toasts.show(Toast(
+            title: "Duration updated",
+            detail: "\(s.activityName) · \(minutes) min · ~\(cal) cal",
+            accent: .win, symbol: "checkmark.seal.fill"
+        ), for: 2.4)
+        return true
     }
 
     @ViewBuilder
@@ -553,6 +581,13 @@ private struct RecentActivitySessions: View {
                     .font(.system(.footnote, design: .monospaced))
                     .foregroundStyle(theme.accent)
             }
+            // Visible, next to delete: correcting a duration used to be reachable
+            // only by long-pressing the row, which nothing on screen hinted at.
+            Button { editing = s } label: {
+                Image(systemName: "pencil").foregroundStyle(theme.accent)
+            }
+            .tactile(.ghost)
+            .accessibilityLabel("Edit \(s.activityName) duration")
             Button(role: .destructive) {
                 guard Repos.deleteActivitySession(ctx, id: s.id) else { return }
                 toasts.show(Toast(title: "Session removed", detail: s.activityName,
@@ -655,33 +690,33 @@ private struct SessionActivityHeader: View {
 
 // MARK: - Edit session duration
 
-/// Retroactively correct a logged session's duration. Recomputes calories from the
-/// session's original MET + the profile's current weight via `Repos.updateActivitySession`.
-private struct EditSessionDurationSheet: View {
-    let profile: ProfileDTO
-    let session: ActivitySessionDTO
+/// Retroactively correct a logged session's duration — the ONE duration editor,
+/// shared by live activity sessions (above) and Pilates
+/// (`Circuit/PilatesCard.swift`). Don't add a second one.
+///
+/// The caller owns the calorie preview and the write, because the two models
+/// differ: an activity session stores its own MET and needs its `caloriesEst`
+/// recomputed, while a Pilates session stores only the duration and derives the
+/// burn on read. `onSave` returns false when the write failed, which keeps the
+/// sheet open instead of pretending it saved.
+struct EditDurationSheet: View {
+    let activityName: String
+    let symbol: String
+    let calories: (Int) -> Int
+    let onSave: (Int) -> Bool
 
-    @Environment(\.modelContext) private var ctx
     @Environment(\.theme) private var theme
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var toasts: ToastCenter
 
     @State private var totalMinutes: Int
 
-    init(profile: ProfileDTO, session: ActivitySessionDTO) {
-        self.profile = profile
-        self.session = session
-        _totalMinutes = State(initialValue: max(1, session.durationMinutes))
-    }
-
-    private var symbol: String {
-        ActivityCatalog.activity(id: session.activityId)?.symbol ?? "figure.mixed.cardio"
-    }
-
-    private var estimatedCal: Int {
-        Int(CalorieEstimator.caloriesForActivity(
-            met: session.met, minutes: Double(totalMinutes), bodyWeightLb: profile.weightLb
-        ).rounded())
+    init(activityName: String, symbol: String, initialMinutes: Int,
+         calories: @escaping (Int) -> Int, onSave: @escaping (Int) -> Bool) {
+        self.activityName = activityName
+        self.symbol = symbol
+        self.calories = calories
+        self.onSave = onSave
+        _totalMinutes = State(initialValue: max(1, initialMinutes))
     }
 
     var body: some View {
@@ -691,18 +726,18 @@ private struct EditSessionDurationSheet: View {
                     .font(.system(size: 10, weight: .medium)).tracking(2)
                     .foregroundStyle(theme.dim)
 
-                SessionActivityHeader(activityName: session.activityName, symbol: symbol)
+                SessionActivityHeader(activityName: activityName, symbol: symbol)
 
                 DurationWheel(totalMinutes: $totalMinutes)
 
-                Text("≈ \(estimatedCal) cal")
+                Text("≈ \(calories(totalMinutes)) cal")
                     .font(.system(size: 18, weight: .semibold, design: .monospaced))
                     .foregroundStyle(theme.accent)
                     .contentTransition(.numericText())
                     .frame(maxWidth: .infinity)
 
                 Button {
-                    save()
+                    if onSave(totalMinutes) { dismiss() }
                 } label: {
                     Text("Save")
                 }
@@ -713,18 +748,6 @@ private struct EditSessionDurationSheet: View {
         }
         .presentationDetents([.medium])
         .presentationBackground(theme.bg)
-    }
-
-    private func save() {
-        guard Repos.updateActivitySession(
-            ctx, id: session.id, durationMinutes: totalMinutes, bodyWeightLb: profile.weightLb
-        ) else { return }
-        toasts.show(Toast(
-            title: "Duration updated",
-            detail: "\(session.activityName) · \(totalMinutes) min · ~\(estimatedCal) cal",
-            accent: .win, symbol: "checkmark.seal.fill"
-        ), for: 2.4)
-        dismiss()
     }
 }
 

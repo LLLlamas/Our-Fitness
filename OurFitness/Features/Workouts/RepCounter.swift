@@ -41,6 +41,7 @@ private struct RepCounterView: View {
     @State private var setsLogged: Int = 0
     @State private var showInfo = false
     @State private var lastProjection: String?
+    @State private var prefilledWeight = false
     @FocusState private var weightFocused: Bool
 
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
@@ -76,6 +77,7 @@ private struct RepCounterView: View {
             header
             counterDisplay
             tapButton
+            bumpRow
             if tracksWeight {
                 weightField
             }
@@ -90,6 +92,7 @@ private struct RepCounterView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .presentationDetents([.large])
         .presentationBackground(theme.bg)
+        .onAppear { prefillWeight() }
         .sheet(isPresented: $showInfo) {
             ExerciseInfoSheet(exercise: exercise, profile: profile)
                 .themed(theme.mode)
@@ -100,6 +103,18 @@ private struct RepCounterView: View {
                 Button("Done") { weightFocused = false }
             }
         }
+    }
+
+    /// Carry the last weight used for this lift into the field. Same weight
+    /// across sets is the common case, and re-typing it was the only typing left
+    /// in the logging flow. Fills once, and only an empty field, so it can never
+    /// overwrite what the user is typing. Scoped to this week's sets (the query
+    /// window) — an older lift opens blank rather than suggesting a stale number.
+    private func prefillWeight() {
+        guard tracksWeight, weightStr.isEmpty, !prefilledWeight else { return }
+        prefilledWeight = true
+        guard let last = weekSetModels.first(where: { ($0.weightLb ?? 0) > 0 })?.weightLb else { return }
+        weightStr = Units.formatWeight(lb: last, system: unitSystem, decimals: 0)
     }
 
     @ViewBuilder
@@ -146,6 +161,35 @@ private struct RepCounterView: View {
                 .frame(maxWidth: .infinity, minHeight: 88)
         }
         .tactile(.primary, fullWidth: true)
+    }
+
+    /// Coarse adjustments beside the +1 tap target. A 12-rep set was 12 taps plus
+    /// Save; with these it's two. −1 is what makes overshooting a +10 fixable
+    /// without Clear wiping the count.
+    @ViewBuilder
+    private var bumpRow: some View {
+        HStack(spacing: 8) {
+            Button {
+                reps = max(0, reps - 1)
+                Haptics.bump()
+            } label: { Text("−1") }
+            .tactile(.bump)
+            .disabled(reps == 0)
+            .opacity(reps == 0 ? 0.5 : 1)
+
+            Button {
+                reps += 5
+                Haptics.bump()
+            } label: { Text("+5") }
+            .tactile(.bump)
+
+            Button {
+                reps += 10
+                Haptics.bump()
+            } label: { Text("+10") }
+            .tactile(.bump)
+        }
+        .frame(maxWidth: .infinity)
     }
 
     @ViewBuilder
@@ -336,12 +380,28 @@ private struct IsometricTimerView: View {
         }
     }
 
+    /// The four holds people actually pick, one tap each. The wheel below stays
+    /// for everything else — same presets-plus-fine-control shape the live
+    /// session picker uses for expected time.
+    private let presets = [30, 45, 60, 90]
+
     @ViewBuilder
     private var pickerSection: some View {
         VStack(spacing: 8) {
             Text("Set hold duration".uppercased())
                 .font(.system(size: 10)).tracking(2)
                 .foregroundStyle(theme.dim)
+            HStack(spacing: 8) {
+                ForEach(presets, id: \.self) { secs in
+                    Button {
+                        pickedSeconds = secs
+                        Haptics.selection()
+                    } label: {
+                        Text(shortDurationLabel(secs))
+                    }
+                    .tactile(.pill, fill: pickedSeconds == secs ? theme.accent : nil)
+                }
+            }
             Picker("Duration", selection: $pickedSeconds) {
                 ForEach(Array(stride(from: 5, through: 300, by: 5)), id: \.self) { s in
                     Text(shortDurationLabel(s)).tag(s)
