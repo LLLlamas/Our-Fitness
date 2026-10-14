@@ -252,94 +252,47 @@ private struct WaterInfoSheet: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Water")
-                        .font(.system(size: 42, weight: .regular))
-                        .foregroundStyle(theme.text)
-                    Text("PERSONALIZED DAILY GOAL")
-                        .font(.system(size: 10, weight: .medium)).tracking(2)
-                        .foregroundStyle(theme.dim)
-                }
-
-                infoSection(title: "Your recommendation") {
-                    VStack(alignment: .leading, spacing: 8) {
-                        // Base rule is the ACSM 0.5 oz/lb heuristic. Imperial states it
-                        // literally; metric just names the body weight (the oz/lb
-                        // coefficient doesn't translate to a clean round metric number),
-                        // and the resulting daily totals render in the active unit.
-                        calcRow(label: unitSystem == .metric
+        InfoSheetScaffold(title: "Water", subtitle: "PERSONALIZED DAILY GOAL") {
+            InfoSection(title: "Your recommendation") {
+                VStack(alignment: .leading, spacing: 8) {
+                    // Base rule is the ACSM 0.5 oz/lb heuristic. Imperial states it
+                    // literally; metric just names the body weight (the oz/lb
+                    // coefficient doesn't translate to a clean round metric number),
+                    // and the resulting daily totals render in the active unit.
+                    InfoCalcRow(label: unitSystem == .metric
                                     ? "Base (body weight \(Units.formatWeightWithUnit(lb: profile.weightLb, system: unitSystem)))"
                                     : "Base (0.5 oz × \(Int(profile.weightLb)) lb)",
                                 detail: "\(Units.formatVolumeWithUnit(flOz: Double(baseOz), system: unitSystem)) / day")
-                        calcRow(label: "Activity bonus (\(profile.activity.label))",
+                    InfoCalcRow(label: "Activity bonus (\(profile.activity.label))",
                                 detail: "+\(Units.formatVolumeWithUnit(flOz: Double(activityBonus), system: unitSystem)) / day")
-                        calcRow(label: "Recommended total",
+                    InfoCalcRow(label: "Recommended total",
                                 detail: recommendedDetail)
-                        if Int(goalFlOz) < recommendedOz {
-                            Text("Your current goal (\(Units.formatVolumeWithUnit(flOz: goalFlOz, system: unitSystem))) is below the recommendation. Consider raising it with the +/− buttons.")
-                                .font(.caption)
-                                .foregroundStyle(theme.warn)
-                                .padding(.top, 4)
-                        } else {
-                            Text("Your current goal (\(Units.formatVolumeWithUnit(flOz: goalFlOz, system: unitSystem))) meets your recommendation.")
-                                .font(.caption)
-                                .foregroundStyle(theme.ok)
-                                .padding(.top, 4)
-                        }
+                    if Int(goalFlOz) < recommendedOz {
+                        Text("Your current goal (\(Units.formatVolumeWithUnit(flOz: goalFlOz, system: unitSystem))) is below the recommendation. Consider raising it with the +/− buttons.")
+                            .font(.caption)
+                            .foregroundStyle(theme.warn)
+                            .padding(.top, 4)
+                    } else {
+                        Text("Your current goal (\(Units.formatVolumeWithUnit(flOz: goalFlOz, system: unitSystem))) meets your recommendation.")
+                            .font(.caption)
+                            .foregroundStyle(theme.ok)
+                            .padding(.top, 4)
                     }
                 }
-
-                infoSection(title: "Why hydration matters") {
-                    VStack(alignment: .leading, spacing: 8) {
-                        bullet("Losing just 2% of your body weight in fluid can sap your endurance and mood, and may dull your focus.")
-                        bullet("Water helps your body absorb nutrients and recover after training.")
-                        bullet("Thirst is a good guide for most people — this goal is just a target to aim for, especially on hot or active days.")
-                        if profile.mode == .circuit {
-                            bullet("Staying topped up makes the higher step counts in Circuit feel easier.")
-                        }
-                    }
-                }
-
-                Text("This goal is a practical starting point (about half an ounce per pound, plus a little for activity). Official guidance (Institute of Medicine, 2005) is roughly 3.7 L for men and 2.7 L for women of total water per day — and that counts the water in your food, too. Individual needs vary.")
-                    .font(.caption2)
-                    .foregroundStyle(theme.dim)
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
-        }
-        .presentationDetents([.medium, .large])
-        .presentationBackground(theme.bg)
-    }
 
-    @ViewBuilder
-    private func infoSection<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title.uppercased()).font(.caption).tracking(2).foregroundStyle(theme.dim)
-            content()
-        }
-    }
+            InfoSection(title: "Why hydration matters") {
+                VStack(alignment: .leading, spacing: 8) {
+                    Bullet("Losing just 2% of your body weight in fluid can sap your endurance and mood, and may dull your focus.")
+                    Bullet("Water helps your body absorb nutrients and recover after training.")
+                    Bullet("Thirst is a good guide for most people — this goal is just a target to aim for, especially on hot or active days.")
+                    if profile.mode == .circuit {
+                        Bullet("Staying topped up makes the higher step counts in Circuit feel easier.")
+                    }
+                }
+            }
 
-    @ViewBuilder
-    private func calcRow(label: String, detail: String) -> some View {
-        HStack {
-            Text(label).font(.callout).foregroundStyle(theme.text)
-            Spacer()
-            Text(detail).font(.system(.callout, design: .monospaced)).foregroundStyle(theme.accent)
-        }
-        .padding(10)
-        .background(theme.card)
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-    }
-
-    @ViewBuilder
-    private func bullet(_ text: String) -> some View {
-        HStack(alignment: .top, spacing: 8) {
-            Text("·").foregroundStyle(theme.accent).font(.callout)
-            Text(text).font(.callout).foregroundStyle(theme.dim)
-                .fixedSize(horizontal: false, vertical: true)
+            InfoFootnote("This goal is a practical starting point (about half an ounce per pound, plus a little for activity). Official guidance (Institute of Medicine, 2005) is roughly 3.7 L for men and 2.7 L for women of total water per day — and that counts the water in your food, too. Individual needs vary.")
         }
     }
 }

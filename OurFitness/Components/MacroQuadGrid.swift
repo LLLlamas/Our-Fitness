@@ -152,53 +152,42 @@ private struct MacroInfoSheet: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("\(macro.label.lowercased()).")
-                        .font(.system(size: 42, weight: .regular))
-                        .foregroundStyle(theme.text)
-                    Text("YOUR DAILY TARGET · \(headline.uppercased())")
-                        .font(.system(size: 10, weight: .medium)).tracking(2)
-                        .foregroundStyle(theme.dim)
-                }
+        InfoSheetScaffold(
+            title: "\(macro.label.lowercased()).",
+            subtitle: "YOUR DAILY TARGET · \(headline.uppercased())",
+            dragIndicator: true
+        ) {
+            Text(TargetRationale.goalLine(for: profile.mode))
+                .font(.callout).foregroundStyle(theme.text)
+                .fixedSize(horizontal: false, vertical: true)
 
-                Text(TargetRationale.goalLine(for: profile.mode))
+            // Calories get a full from-the-ground-up breakdown of how the
+            // number was built (rest → maintenance → goal).
+            if macro == .calories { calorieBreakdown }
+
+            InfoSection(title: "Why this number") {
+                Text(why)
                     .font(.callout).foregroundStyle(theme.text)
                     .fixedSize(horizontal: false, vertical: true)
-
-                // Calories get a full from-the-ground-up breakdown of how the
-                // number was built (rest → maintenance → goal).
-                if macro == .calories { calorieBreakdown }
-
-                infoSection(title: "Why this number") {
-                    Text(why)
-                        .font(.callout).foregroundStyle(theme.text)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-
-                Text(footnote)
-                    .font(.caption2)
-                    .foregroundStyle(theme.dim)
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
+
+            InfoFootnote(footnote)
         }
-        .presentationDetents([.medium, .large])
-        .presentationDragIndicator(.visible)
-        .presentationBackground(theme.bg)
     }
 
     @ViewBuilder
     private var calorieBreakdown: some View {
         let c = TargetRationale.calories(for: profile)
-        infoSection(title: "How we got your number") {
+        InfoSection(title: "How we got your number") {
             VStack(alignment: .leading, spacing: 8) {
-                calcRow(label: "At complete rest (your body's baseline)", detail: "\(c.bmr) cal")
-                calcRow(label: "On a normal day · \(c.activityLabel)", detail: "\(c.tdee) cal")
-                calcRow(label: c.isSurplus ? "Surplus to build" : "Deficit to lose fat",
-                        detail: "\(c.isSurplus ? "+" : "−")\(abs(c.delta)) cal")
-                calcRow(label: "Your daily goal", detail: "\(c.target) cal")
+                InfoCalcRow(label: "At complete rest (your body's baseline)",
+                            detail: "\(c.bmr) cal", labelWraps: true)
+                InfoCalcRow(label: "On a normal day · \(c.activityLabel)",
+                            detail: "\(c.tdee) cal", labelWraps: true)
+                InfoCalcRow(label: c.isSurplus ? "Surplus to build" : "Deficit to lose fat",
+                            detail: "\(c.isSurplus ? "+" : "−")\(abs(c.delta)) cal", labelWraps: true)
+                InfoCalcRow(label: "Your daily goal",
+                            detail: "\(c.target) cal", labelWraps: true)
             }
         }
     }
@@ -214,27 +203,5 @@ private struct MacroInfoSheet: View {
         case .fat:
             return "Source: Whittaker & Wu, J Steroid Biochem Mol Biol, 2021 (dietary fat and testosterone)."
         }
-    }
-
-    @ViewBuilder
-    private func infoSection<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title.uppercased()).font(.caption).tracking(2).foregroundStyle(theme.dim)
-            content()
-        }
-    }
-
-    @ViewBuilder
-    private func calcRow(label: String, detail: String) -> some View {
-        HStack {
-            Text(label).font(.callout).foregroundStyle(theme.text)
-                .fixedSize(horizontal: false, vertical: true)
-            Spacer(minLength: 8)
-            Text(detail).font(.system(.callout, design: .monospaced)).foregroundStyle(theme.accent)
-        }
-        .padding(10)
-        .background(theme.card)
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
     }
 }

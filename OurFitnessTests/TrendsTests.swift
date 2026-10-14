@@ -72,4 +72,16 @@ final class TrendsTests: XCTestCase {
         ]
         XCTAssertGreaterThanOrEqual(Trends.weeksStalled(data, kind: .ldl), 8)
     }
+
+    /// The Progress tab reads "the current number" as `markerSeries(...).last`,
+    /// so the series must be newest-last regardless of input order.
+    func test_markerSeries_last_is_the_newest_reading() {
+        let data = [
+            marker("2026-05-01", .ldl, 120),
+            marker("2026-05-20", .ldl, 100),
+            marker("2026-04-01", .ldl, 150),
+        ]
+        XCTAssertEqual(Trends.markerSeries(data, kind: .ldl).last?.value, 100)
+        XCTAssertNil(Trends.markerSeries(data, kind: .hdl).last?.value)
+    }
 }

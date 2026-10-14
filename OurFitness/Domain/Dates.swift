@@ -70,6 +70,29 @@ public enum Dates {
         return out
     }
 
+    /// Monday-anchored (ISO 8601) start of the week containing `date`, at local
+    /// midnight. The app treats weeks as Monday→Sunday everywhere (Movement,
+    /// RepCounter, CardioLogCard); use this instead of `Calendar.current`, whose
+    /// weeks start on Sunday in the US locale.
+    ///
+    /// `weeksAgo` steps backwards whole ISO weeks from that anchor (1 = the
+    /// Monday before), so callers never do their own week arithmetic.
+    public static func startOfISOWeek(_ date: Date = Date(), weeksAgo: Int = 0) -> Date {
+        let anchor = isoCalendar.dateInterval(of: .weekOfYear, for: date)?.start
+            ?? isoCalendar.startOfDay(for: date)
+        guard weeksAgo != 0 else { return anchor }
+        return isoCalendar.date(byAdding: .weekOfYear, value: -weeksAgo, to: anchor) ?? anchor
+    }
+
+    /// Monday-first ISO calendar in the device timezone. Built once — constructing
+    /// a Calendar is not free and the week helpers run inside view bodies.
+    private static let isoCalendar: Calendar = {
+        var cal = Calendar(identifier: .iso8601)
+        cal.firstWeekday = 2  // Monday — ISO weeks
+        cal.timeZone = TimeZone.current
+        return cal
+    }()
+
     /// Local start of yesterday for the supplied clock time.
     public static func startOfYesterday(now: Date = Date()) -> Date {
         let cal = Calendar.current

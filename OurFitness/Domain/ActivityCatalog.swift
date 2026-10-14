@@ -39,6 +39,12 @@ public enum ActivityCatalog {
     /// orthogonal `ActivitySession` that the streak can't see.
     public static let pilatesId = "activity-pilates"
 
+    /// Walking overlaps with the step count, so `DailyBurn` excludes live
+    /// sessions with this id from the day's burn (mirrors the cardio `.walk`
+    /// exclusion). The id lives here rather than as a literal at each exclusion
+    /// site so the catalog and the exclusions can't drift apart.
+    public static let walkingId = "activity-walking"
+
     /// All offered activities. Ordered roughly most-common first. MET values are
     /// Ainsworth 2011 general-effort codes; see comments per entry.
     public static let all: [Activity] = [
@@ -54,7 +60,7 @@ public enum ActivityCatalog {
         Activity(id: "activity-rowing",              name: "Rowing machine",      met: 7.0,  symbol: "figure.rower"),            // 02050 vigorous, general
         Activity(id: "activity-jump-rope",           name: "Jump rope",           met: 11.8, symbol: "figure.jumprope"),         // 15551 general
         Activity(id: "activity-hiking",              name: "Hiking",              met: 6.0,  symbol: "figure.hiking",       tracksDistance: true), // 17080 cross-country
-        Activity(id: "activity-walking",             name: "Walking",             met: 3.5,  symbol: "figure.walk",         tracksDistance: true), // 17190 ~3 mph
+        Activity(id: walkingId,                      name: "Walking",             met: 3.5,  symbol: "figure.walk",         tracksDistance: true), // 17190 ~3 mph
         // Skating
         Activity(id: "activity-ice-skating",         name: "Ice skating",         met: 7.0,  symbol: "figure.skating"),          // 19130 general
         Activity(id: "activity-inline-skating",      name: "Inline skating",      met: 7.5,  symbol: "figure.skating"),          // 19252 general

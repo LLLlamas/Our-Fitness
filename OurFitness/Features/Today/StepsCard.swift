@@ -361,86 +361,58 @@ struct StepsCard: View {
 
     // MARK: - Goal picker sheet
 
-    // One sheet for both modes. The days/week picker only appears in Circuit,
-    // where the streak chip is the thing it drives.
-    @ViewBuilder
+    // One sheet for both modes, on the shared `GoalPickerSheet` chrome. The
+    // days/week wheel only appears in Circuit, where the streak chip is the
+    // thing it drives.
     private var goalPickerSheet: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(mode == .circuit ? "Steps Goals" : "Daily Steps Goal")
-                    .font(.system(size: 28, weight: .regular))
-                    .foregroundStyle(theme.text)
-                Text(mode == .circuit
-                     ? "Daily target + how many days/week to hit it."
-                     : "Mode default is \(defaultGoal.formatted()) steps.")
-                    .font(.caption)
-                    .foregroundStyle(theme.dim)
+        GoalPickerSheet(
+            title: mode == .circuit ? "Steps Goals" : "Daily Steps Goal",
+            subtitle: mode == .circuit
+                ? "Daily target + how many days/week to hit it."
+                : "Mode default is \(defaultGoal.formatted()) steps.",
+            wheels: goalWheels,
+            resetLabel: mode == .circuit ? "Reset to defaults" : "Reset to default",
+            detents: mode == .circuit ? [.large] : [.medium],
+            onReset: {
+                customGoalRaw = 0
+                weeklyDaysGoalRaw = StepsGoalPrefs.defaultWeeklyDays
+                showGoalPicker = false
+            },
+            onSave: {
+                customGoalRaw = pickerGoal
+                weeklyDaysGoalRaw = pickerDays
+                showGoalPicker = false
             }
-            .padding(.top, 28)
-            .padding(.horizontal, 20)
+        )
+    }
 
-            VStack(alignment: .leading, spacing: 4) {
-                if mode == .circuit {
-                    Text("DAILY GOAL")
-                        .font(.system(size: 10, weight: .medium)).tracking(2)
-                        .foregroundStyle(theme.dim)
-                        .padding(.horizontal, 20)
-                }
-                Picker("Daily goal", selection: $pickerGoal) {
-                    ForEach(Array(stride(from: 2000, through: 25000, by: 500)), id: \.self) { val in
-                        Text("\(val.formatted()) steps").tag(val)
-                    }
-                }
-                .pickerStyle(.wheel)
-                .frame(height: 130)
-                .background(theme.card2)
-                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                .padding(.horizontal, 20)
-                .padding(.vertical, 4)
-            }
-
-            if mode == .circuit {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("DAYS PER WEEK")
-                        .font(.system(size: 10, weight: .medium)).tracking(2)
-                        .foregroundStyle(theme.dim)
-                        .padding(.horizontal, 20)
-                    Picker("Days per week", selection: $pickerDays) {
-                        ForEach(1...7, id: \.self) { d in
-                            Text("\(d) day\(d == 1 ? "" : "s") / week").tag(d)
-                        }
-                    }
-                    .pickerStyle(.wheel)
-                    .frame(height: 130)
-                    .background(theme.card2)
-                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 4)
-                }
-            }
-
-            HStack(spacing: 12) {
-                Button(mode == .circuit ? "Reset to defaults" : "Reset to default") {
-                    customGoalRaw = 0
-                    weeklyDaysGoalRaw = StepsGoalPrefs.defaultWeeklyDays
-                    showGoalPicker = false
-                }
-                .tactile(.secondary, fullWidth: true)
-                Button("Save") {
-                    customGoalRaw = pickerGoal
-                    weeklyDaysGoalRaw = pickerDays
-                    showGoalPicker = false
-                    Haptics.success()
-                }
-                .tactile(.primary, fullWidth: true)
-            }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 28)
+    private var goalWheels: [GoalPickerSheet.Wheel] {
+        var wheels: [GoalPickerSheet.Wheel] = [
+            .init(
+                id: "daily",
+                // Build has a single wheel, so it needs no label to disambiguate.
+                label: mode == .circuit ? "DAILY GOAL" : nil,
+                pickerTitle: "Daily goal",
+                options: Array(stride(from: 2000, through: 25000, by: 500)),
+                optionLabel: { "\($0.formatted()) steps" },
+                selection: $pickerGoal,
+                height: 130
+            )
+        ]
+        if mode == .circuit {
+            wheels.append(
+                .init(
+                    id: "weeklyDays",
+                    label: "DAYS PER WEEK",
+                    pickerTitle: "Days per week",
+                    options: Array(1...7),
+                    optionLabel: { "\($0) day\($0 == 1 ? "" : "s") / week" },
+                    selection: $pickerDays,
+                    height: 130
+                )
+            )
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .presentationDetents(mode == .circuit ? [.large] : [.medium])
-        .presentationDragIndicator(.visible)
-        .presentationBackground(theme.bg)
+        return wheels
     }
 }
 
@@ -487,113 +459,64 @@ private struct StepsInfoSheet: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(mode == .circuit ? "Steps & cardio" : "Steps")
-                        .font(.system(size: 42, weight: .regular))
-                        .foregroundStyle(theme.text)
-                    Text("TODAY · \(steps.formatted()) STEPS")
-                        .font(.system(size: 10, weight: .medium)).tracking(2)
+        InfoSheetScaffold(
+            title: mode == .circuit ? "Steps & cardio" : "Steps",
+            subtitle: "TODAY · \(steps.formatted()) STEPS"
+        ) {
+            InfoSection(title: "Your numbers today") {
+                VStack(spacing: 8) {
+                    InfoRow(label: "Calories burned walking",
+                            detail: "≈\(stepsKcal) cal from \(steps.formatted()) steps",
+                            emphasis: .label)
+                    InfoRow(label: "Roughly how much was fat",
+                            detail: "~\(fatGrams)g — about half your walking calories come from fat at an easy pace",
+                            emphasis: .label)
+                }
+            }
+
+            InfoSection(title: "Your activity level") {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(stepCategory.label)
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(theme.accent)
+                    Text(stepCategory.description)
+                        .font(.callout)
                         .foregroundStyle(theme.dim)
-                }
-
-                infoSection(title: "Your numbers today") {
-                    VStack(spacing: 8) {
-                        infoRow(label: "Calories burned walking",
-                                detail: "≈\(stepsKcal) cal from \(steps.formatted()) steps")
-                        infoRow(label: "Roughly how much was fat",
-                                detail: "~\(fatGrams)g — about half your walking calories come from fat at an easy pace")
-                    }
-                }
-
-                infoSection(title: "Your activity level") {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(stepCategory.label)
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundStyle(theme.accent)
-                        Text(stepCategory.description)
-                            .font(.callout)
-                            .foregroundStyle(theme.dim)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                    .padding(12)
-                    .background(theme.card)
-                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                    .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-                }
-
-                infoSection(title: "Why your \(goal.formatted())-step goal") {
-                    Text(TargetRationale.stepsWhy(mode: mode, goal: goal))
-                        .font(.callout).foregroundStyle(theme.text)
                         .fixedSize(horizontal: false, vertical: true)
                 }
-
-                infoSection(title: "What walking does for you") {
-                    VStack(alignment: .leading, spacing: 8) {
-                        if mode == .circuit {
-                            researchRow("It's your most repeatable daily calorie burn — and the easiest to keep up while you're losing weight.")
-                        }
-                        researchRow("Every extra 1,000–2,000 steps a day lowers your risk of dying early — with most of the gain showing up by about 7,000–8,000 steps.")
-                        researchRow("Walking regularly brings blood pressure down a few points over a couple of months.")
-                        researchRow("A single walk improves how your body handles blood sugar for the next day or two.")
-                    }
-                }
-
-                if mode == .circuit {
-                    infoSection(title: "Add some cardio") {
-                        VStack(alignment: .leading, spacing: 8) {
-                            researchRow("Easy, steady cardio — a pace where you can still talk — nudges your 'good' cholesterol (HDL) up a couple of points and lowers the fat in your blood (triglycerides) by about 10–20% over a couple of months.")
-                            researchRow("Steps plus a little cardio together do more for your cholesterol and blood pressure than either alone — pair them with the food tips in Nutrition.")
-                        }
-                    }
-                }
-
-                Text(sources)
-                    .font(.caption2)
-                    .foregroundStyle(theme.dim)
+                .padding(12)
+                .background(theme.card)
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
-        }
-        .presentationDetents([.medium, .large])
-        .presentationBackground(theme.bg)
-    }
 
-    @ViewBuilder
-    private func infoSection<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title.uppercased())
-                .font(.caption).tracking(2)
-                .foregroundStyle(theme.dim)
-            content()
-        }
-    }
+            InfoSection(title: "Why your \(goal.formatted())-step goal") {
+                Text(TargetRationale.stepsWhy(mode: mode, goal: goal))
+                    .font(.callout).foregroundStyle(theme.text)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
 
-    @ViewBuilder
-    private func infoRow(label: String, detail: String) -> some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text(label)
-                .font(.system(.footnote, design: .monospaced))
-                .foregroundStyle(theme.accent)
-                .fixedSize(horizontal: false, vertical: true)
-            Text(detail)
-                .font(.system(size: 13, weight: .medium))
-                .foregroundStyle(theme.text)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(10)
-        .background(theme.card)
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-    }
+            InfoSection(title: "What walking does for you") {
+                VStack(alignment: .leading, spacing: 8) {
+                    if mode == .circuit {
+                        Bullet("It's your most repeatable daily calorie burn — and the easiest to keep up while you're losing weight.")
+                    }
+                    Bullet("Every extra 1,000–2,000 steps a day lowers your risk of dying early — with most of the gain showing up by about 7,000–8,000 steps.")
+                    Bullet("Walking regularly brings blood pressure down a few points over a couple of months.")
+                    Bullet("A single walk improves how your body handles blood sugar for the next day or two.")
+                }
+            }
 
-    @ViewBuilder
-    private func researchRow(_ text: String) -> some View {
-        HStack(alignment: .top, spacing: 8) {
-            Text("·").foregroundStyle(theme.accent).font(.callout)
-            Text(text).font(.callout).foregroundStyle(theme.dim)
-                .fixedSize(horizontal: false, vertical: true)
+            if mode == .circuit {
+                InfoSection(title: "Add some cardio") {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Bullet("Easy, steady cardio — a pace where you can still talk — nudges your 'good' cholesterol (HDL) up a couple of points and lowers the fat in your blood (triglycerides) by about 10–20% over a couple of months.")
+                        Bullet("Steps plus a little cardio together do more for your cholesterol and blood pressure than either alone — pair them with the food tips in Nutrition.")
+                    }
+                }
+            }
+
+            InfoFootnote(sources)
         }
     }
 }

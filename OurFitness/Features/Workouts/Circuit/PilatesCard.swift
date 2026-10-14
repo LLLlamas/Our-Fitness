@@ -187,50 +187,32 @@ struct PilatesCard: View {
 
     // MARK: - Goal picker sheet
 
-    @ViewBuilder
+    // Shared `GoalPickerSheet` chrome — one wheel, no section label, natural
+    // wheel height (this card never grew the fixed 130pt well the Steps sheets use).
     private var goalPickerSheet: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Weekly Pilates Goal")
-                    .font(.system(size: 28, weight: .regular))
-                    .foregroundStyle(theme.text)
-                Text("How many sessions per week to hit your streak.")
-                    .font(.caption)
-                    .foregroundStyle(theme.dim)
+        GoalPickerSheet(
+            title: "Weekly Pilates Goal",
+            subtitle: "How many sessions per week to hit your streak.",
+            wheels: [
+                .init(
+                    id: "weeklySessions",
+                    pickerTitle: "Goal",
+                    options: Array(1...14),
+                    optionLabel: { "\($0) session\($0 == 1 ? "" : "s") / week" },
+                    selection: $pickerGoal
+                )
+            ],
+            wheelVerticalPadding: 8,
+            resetLabel: "Reset to 3",
+            detents: [.medium],
+            onReset: {
+                weeklyGoalRaw = 3
+                showGoalPicker = false
+            },
+            onSave: {
+                weeklyGoalRaw = pickerGoal
+                showGoalPicker = false
             }
-            .padding(.top, 28)
-            .padding(.horizontal, 20)
-
-            Picker("Goal", selection: $pickerGoal) {
-                ForEach(1...14, id: \.self) { n in
-                    Text("\(n) session\(n == 1 ? "" : "s") / week").tag(n)
-                }
-            }
-            .pickerStyle(.wheel)
-            .background(theme.card2)
-            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-            .padding(.horizontal, 20)
-            .padding(.vertical, 8)
-
-            HStack(spacing: 12) {
-                Button("Reset to 3") {
-                    weeklyGoalRaw = 3
-                    showGoalPicker = false
-                }
-                .tactile(.secondary, fullWidth: true)
-                Button("Save") {
-                    weeklyGoalRaw = pickerGoal
-                    showGoalPicker = false
-                    Haptics.success()
-                }
-                .tactile(.primary, fullWidth: true)
-            }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 28)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .presentationDetents([.medium])
-        .presentationDragIndicator(.visible)
-        .presentationBackground(theme.bg)
+        )
     }
 }

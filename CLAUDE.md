@@ -61,7 +61,7 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | Rep counter | `Features/Workouts/RepCounter.swift` → `RepCounterView` |
 | Delete set / exercise | `Repos.deleteSet` / `Repos.deleteExercise` + `SetHistorySheet` in `Features/Workouts/WorkoutsView.swift` |
 | Log pilates | `Repos.logPilatesSession` + `Domain/Models.swift` (`PilatesSessionDTO`). ONE manual form: `LogPastSessionSheet` in `Features/Workouts/LiveSessionCard.swift` (focus-area chips + notes appear when the chosen activity is Pilates). `Features/Workouts/Circuit/PilatesCard.swift` (Train tab, Circuit) is ring/streak/history only and opens that sheet via `lockedActivityId: ActivityCatalog.pilatesId`; a live session with the Pilates activity writes the same DTO from `LiveSessionRunner.end()`. Never add a second Pilates form |
-| Log cardio | `Repos.logCardio` + `Domain/Models.swift` (`CardioSessionDTO`) |
+| Log cardio (run / bike / swim / row / hike) | `LogPastSessionSheet` in `Features/Workouts/LiveSessionCard.swift` — "Log session" on `LiveSessionCard` (Train tab, both modes). Saves an `ActivitySessionDTO` with the activity's Ainsworth MET from `Domain/ActivityCatalog.swift`. There is no separate cardio logger: `CardioSessionDTO` is legacy read-only (see Data model) — never add one back |
 | Circuit movements (quick-log) | `Features/Workouts/Circuit/BabyExercisesCard.swift` — Train tab (`WorkoutsView` Circuit branch); renders the auto-seeded parenting exercises as tap-to-+1 |
 | Live sessions (timer) | `Features/Workouts/LiveSessionCard.swift` + `Domain/LiveSessionState.swift` + `Services/LiveSessionService.swift`. `ActivityTile` / `IntensitySection` in that file are shared by `ActivityPicker` (start live) and `LogPastSessionSheet` (log after the fact) — single definitions, don't re-copy |
 | Live Activity (Lock Screen) | `OurFitnessWidgets/LiveSessionLiveActivity.swift` + `Services/LiveSessionActivityController.swift` — [docs/live-activity-setup.md](docs/live-activity-setup.md) |
@@ -71,7 +71,7 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | AI "what to work on?" suggestions | `Services/WorkoutSuggestionService.swift` + fallback `Domain/ExerciseGoalMatcher.swift` (goal→muscles→exercises, research reasons) — both take `mode:` for a Build (loadable lifts) / Circuit (higher-burn, joint-friendly) tilt → `WorkoutGoalSheet` in `WorkoutsView`. Tests: `ExerciseGoalMatcherTests` |
 | **Shared on-device-AI scaffolding** | `Services/OnDeviceModel.swift` — `isAvailable`, `generate(instructions:_:)` (session + do/catch, returns nil on any failure → caller falls back to its Domain matcher), `modeLine(_:build:circuit:)`, `Cache<Value>` (JSON in UserDefaults). All five AI services use it; prompts + `@Generable` shapes stay in each service |
 | Recent sessions rule | Today/Train surfaces show today + yesterday only (sets sheet is today-only); older strength, live, cardio, and Pilates sessions live in Progress → Training history |
-| Live-session activities | `Domain/ActivityCatalog.swift` |
+| Live-session activities | `Domain/ActivityCatalog.swift` — stable ids `otherId` / `pilatesId` / `walkingId` (walking is excluded from burn; use the constant, never the literal) |
 | **Nutrition** | |
 | Food parser (NL → macros) | `Domain/FoodParser.swift` → `matchFood` uses `CommonFoods.bestMatch` (first-token index, size-independent) then USDA `Domain/SQLiteFoodDatabase.swift`. Keystroke = curated only; submit = full USDA DB. Tests: `FoodParserTests` |
 | Add / update curated food | `Domain/CommonFoods.swift` (~1,200 foods; 16 category arrays + `expanded`) — aliases drive matching, curated shadows USDA. Append new foods to `expanded` (tie-break = `all` order; check Atwater + no alias collisions) |
@@ -92,22 +92,26 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | Calorie math | `Domain/Targets.swift` only |
 | Target rationale copy | `Domain/TargetRationale.swift` (spell out acronyms; "cal" not "kcal"); Circuit micro copy `fiberWhy`/`sodiumWhy`/`addedSugarWhy`/`saturatedFatWhy(for:)` (used by `HeartHealthCard` info sheet) |
 | **Today / Steps** | |
-| Move card (2×3 cols) | `Features/Today/MoveCard.swift` — row 1: Apple Total · Our Total Estimate · Training Only; row 2: Distance · Flights · Heart Rate. Single `metricColumn` helper (uniform 22pt value font, no differential shrink). `activityRow(kcal:)` takes `Int` |
-| Steps card (both modes, Today only) | `Features/Today/StepsCard.swift` — one mode-aware card: Build = hero count + `ProgressBar`; Circuit = `ProgressRing` + projection + pace-vs-yesterday + 7-day strip + week-to-date active cal / exercise min. One goal-picker sheet (days/week section is Circuit-only) + one info sheet. Goal keys live in `StepsGoalPrefs` in the same file. Never add a second steps card |
+| Move card (2×3 cols) | `Features/Today/MoveCard.swift` — row 1: Apple Total · Our Total Estimate · Training Only; row 2: Distance · Flights · Heart Rate. Single `metricColumn` helper (uniform 22pt value font, no differential shrink). `activityRow(kcal:)` takes `Int`. Burn figures come from `DailyBurn.breakdown` (never re-derive MET math or the walk exclusions here); unit conversions via `Units.kgPerLb` / `Units.kmPerMile`; the 7 column info sheets sit on `Components/InfoSheet.swift` |
+| Steps card (both modes, Today only) | `Features/Today/StepsCard.swift` — one mode-aware card: Build = hero count + `ProgressBar`; Circuit = `ProgressRing` + projection + pace-vs-yesterday + 7-day strip + week-to-date active cal / exercise min. One goal-picker sheet (shared `Components/GoalPickerSheet.swift`; days/week wheel is Circuit-only) + one info sheet (shared `Components/InfoSheet.swift`). Goal keys live in `StepsGoalPrefs` in the same file. Never add a second steps card |
 | Water tracker (presets + day-streak) | `Domain/Water.swift` (presets Sip 4 / S 8 / M 16 / L 32 oz; `total(_:on:)`, `streak(_:goalFlOz:end:)`) + `Features/Today/WaterCard.swift` (streak chip = shared `Components/StreakChip.swift`) |
 | Log water (shared path — use for ANY new water surface) | `Features/Today/WaterLogging.swift` → `WaterLog.add(_:for:on:context:lastFlOz:unitSystem:toasts:)` — one write + remembers the repeat-last amount + one copy of the toast; also owns the `waterGoalFlOz.\(profileId)` / `waterLastFlOz.\(profileId)` AppStorage keys. No explicit haptic (ToastCenter.show fires one) |
 | Water quick-log (app-wide FAB) | `Features/Today/WaterQuickLogButton.swift` — tap = repeat last, press-and-hold = dim screen + radial preset picker; logs via `WaterLog.add`. Overlaid in `App/RootView.swift` |
 | Step milestones / goals | `Domain/Movement.swift` (`defaultStepMilestones`). Per-profile override: `AppStorage "stepsGoal.\(profileId.uuidString)"` |
-| Today burn estimate | `Domain/DailyBurn.swift` → `metEstimate` |
+| Today burn estimate | `Domain/DailyBurn.swift` → `metEstimate` (day total) / `breakdown(...)` → `Breakdown` (per-source split: steps, sets, cardio, pilates, activities; `trainingKcal` excludes steps; `total` == `metEstimate`). Walk exclusions live here, keyed on `CardioType.walk` + `ActivityCatalog.walkingId`. Tests: `OurFitnessTests/DailyBurnTests.swift` |
 | Encouragement / milestones | `Domain/EncouragementEngine.swift` + `Domain/EncouragementMessage.swift` + `Components/ProjectionBar.swift` |
 | Meal/water nudges | `Domain/EncouragementEngine.swift` → `mealLoggingNudge` / `waterNudge`; wired in `Features/Today/TodayView.swift` |
 | **Progress** | |
 | Add health marker kind | `Domain/Models.swift` (`HealthMarkerKind`) + `Domain/HealthRanges.swift` (exhaustive switches) + `Features/Progress/ProgressView.swift` |
-| Show/hide trackers | `Features/Progress/EditTrackersSheet.swift` — `AppStorage "progressStats.\(profileId)"` |
-| Training volume | `Features/Progress/ProgressView.swift` → `StatKind.trainingVolume` |
+| Show/hide trackers | `Features/Progress/EditTrackersSheet.swift` — `AppStorage "progressStats.\(profileId)"`. Default set = `StatKind.isRelevant(for:)`, which is ONLY the trackers the app can fill in itself (weight / steps / training volume; + resting HR + BP in Circuit); everything needing calipers, a tape, a cuff, or a lab starts hidden. `ProgressTabView.enabledSet(body:markers:)` then re-adds any tracker that already `hasLoggedData`, so shrinking the default never hides a card someone was filling in. A stored CSV always wins. |
+| Stat detail sheet (chart + entries + log) | `Components/StatDetailSheet.swift` — ONE sheet for every tracker. Metric-specific bits come in as slots (`headline`, `chartOverride`, `logOverride`, `footer`) plus `validate` / `showsEntries` / `minChartPoints` / `detents`; `StatDetailRow` is the shared label/value row. Weight (wheel picker), Body fat, BMI, and Blood pressure in `ProgressView.swift` are all thin hosts over it — never write another bespoke detail sheet |
+| Training volume | `Domain/TrainingHistory.swift` → `setsInWeek(_:weeksAgo:now:)` / `weeklySetCounts(_:weeks:now:)` (Monday ISO weeks), surfaced via `StatKind.trainingVolume` in `Features/Progress/ProgressView.swift`. Tests: `TrainingHistoryTests` |
+| Weeks ("this week") | `Domain/Dates.startOfISOWeek(_:weeksAgo:)` — Monday-anchored, the app-wide definition. Never `Calendar.current` week components (Sunday-based in the US). `Domain/Movement.swift`, `Features/Workouts/RepCounter.swift`, and `Circuit/CardioLogCard.swift` still build their own Monday calendars — migrate them to this helper when touched. Tests: `DatesTests` |
 | Calorie intake vs activity burn | `Domain/EnergyBalance.swift` → `byDay(...)` / `averages(_:)` (intake = `DailyTotals`; burn = `DailyBurn.metEstimate`, walks excluded). Card `energyBalanceCard` (both modes) in `Features/Progress/ProgressView.swift` → detail `Features/Progress/EnergyBalanceDetailSheet.swift` (Charts: intake bars vs burn line + target rule). Tests: `OurFitnessTests/EnergyBalanceTests.swift` |
-| Training history (cross-day) | `Domain/TrainingHistory.swift` → strength grouping + `TrainingHistorySheet` in `Features/Progress/ProgressView.swift` for strength, live, cardio, and Pilates sessions. Tests: `OurFitnessTests/TrainingHistoryTests.swift` |
-| Tracker display order | alphabetical by `StatKind.title` at the two render sites (`visibleStats` + `EditTrackersSheet` ForEach); never reorder the enum (persisted CSV) |
+| Training history (cross-day) | `Domain/TrainingHistory.swift` → `sessions(sets:exercises:)` strength grouping + `TrainingHistorySheet` in `Features/Progress/ProgressView.swift` for strength, live, cardio, and Pilates sessions. Tests: `OurFitnessTests/TrainingHistoryTests.swift` |
+| Tracker display order | alphabetical by `StatKind.title` at the two render sites (`visibleStats(in:)` + `EditTrackersSheet` ForEach); never reorder the enum (persisted CSV) |
+| Latest value of a health marker | `Trends.markerSeries(_:kind:).last?.value` — via the single `latestMarkerValue` helper in `ProgressView.swift`. Don't re-filter/sort markers inline |
+| BMI / body-fat thresholds | `Domain/BodyComposition.swift` → `bmiCategory` / `bodyFatCategory` own every boundary. The Progress sheets read labels from them (`bmiIsHealthy`, the probe-value range tables); never restate 18.5 / 25 or a body-fat band in a view |
 | **Settings / Profile** | |
 | Edit vitals | `Repos.updateVitals` + `Features/Settings/SettingsView.swift` → `EditVitalsSheet` |
 | Switch mode | `Repos.updateMode` + `Features/Settings/SettingsView.swift` → `ModeSwitchSheet` |
@@ -121,6 +125,8 @@ project.yml     ← XcodeGen source of truth; .xcodeproj gitignored
 | **UI / Components** | |
 | Button variants (5 total) | `Components/TactileButtonStyle.swift` — never add a 6th |
 | Circular progress | `Components/ProgressRing.swift` — never inline `Circle().trim` |
+| ⓘ info-sheet chrome | `Components/InfoSheet.swift` → `InfoSheetScaffold(title:subtitle:titleSize:dragIndicator:)` + `InfoSection`, `InfoBody`, `InfoFootnote`, `InfoRow(label:detail:emphasis:)`, `InfoCalcRow(label:detail:labelWraps:)`, `InfoMetricRow`, `InfoHeroStat`, `Bullet(_:marker:)`. Carries chrome only — all copy/numbers/citations stay at the call site. Never re-roll a private `infoSection`/`calcRow`/`bullet` helper |
+| Goal-picker wheel sheet | `Components/GoalPickerSheet.swift` → `GoalPickerSheet(title:subtitle:wheels:wheelVerticalPadding:resetLabel:detents:onReset:onSave:)`; `[Wheel]` so Circuit steps can show a second days/week wheel. Fires the Save success haptic itself |
 | Progress-fill replay (sweep from 0 on appear) | `Components/VisibilityReveal.swift` → `.revealOnAppear($reveal)` — resets to 0 on scroll-out, springs to full on re-entry. Used by `ProgressBar` + `MacroQuadGrid` (`pct * reveal`) |
 | Haptics | `Services/Haptics.swift` |
 | Toast | `Services/ToastCenter.swift` + `Components/ToastView.swift` — `show(_:for:)` for a `Toast`, `show(_:accent:for:)` for an `EncouragementMessage` (every encouragement wrapper is a one-liner over it). `show` fires the outcome haptic itself: never call `Haptics.*` right before it |
@@ -142,7 +148,8 @@ Formula: `kcal = MET × bodyWeightKg × hours` (Ainsworth 2011).
 | Pilates | 3.0 |
 | Resistance | 4.0–8.0 (see `Domain/ExerciseInfo.swift`) |
 | Isometric hold | 3.8 default |
-| Cardio with load | 4.5 |
+| Loaded carry, by duration (`caloriesForDuration`, `loadLb != nil`) | 4.5 |
+| Logged cardio (run/bike/swim/…) | per-activity, `Domain/ActivityCatalog.swift` |
 | Live sessions | 2.8–11.8 (see `Domain/ActivityCatalog.swift`) |
 
 Never hardcode kcal/rep — always MET × weight × time.
@@ -159,7 +166,9 @@ SwiftUI (iOS 17+) · SwiftData · HealthKit · Swift Charts · XCTest · XcodeGe
 
 Append-only logs. Derived figures never stored. DTOs in `Domain/Models.swift`; `@Model` classes in `Data/PersistenceModels.swift` with `snapshot` adapters; CRUD in `Data/Repositories/Repositories.swift`.
 
-Key entities: `ProfileDTO`, `ExerciseDTO` (`isIsometric`), `WorkoutSetDTO` (`holdSeconds?`), `FoodLogEntryDTO` (`ingredients?`), `BodyMetricDTO`, `HealthMarkerDTO`, `StepCountDTO`, `PilatesSessionDTO`, `CardioSessionDTO`, `WaterEntryDTO`, `ActivitySessionDTO`, `SavedMealTemplateDTO`.
+Key entities: `ProfileDTO`, `ExerciseDTO` (`isIsometric`), `WorkoutSetDTO` (`holdSeconds?`), `FoodLogEntryDTO` (`ingredients?`), `BodyMetricDTO`, `HealthMarkerDTO`, `StepCountDTO`, `PilatesSessionDTO`, `WaterEntryDTO`, `ActivitySessionDTO`, `SavedMealTemplateDTO`.
+
+**`CardioSessionDTO` is legacy, read-only.** Nothing writes it any more (the card that did was unreachable and is gone); cardio is logged as an `ActivitySessionDTO` via `LogPastSessionSheet`. The read paths stay so installs that logged cardio in an older build still see and can delete those rows: `MoveCard` (burn + breakdown), `ProgressView` (Training history row + delete, energy balance), `DailyBurn.metEstimate`, `EnergyBalance.byDay`. Both paths exclude walks so steps aren't double-counted. `Repos.logCardio` / `Repos.listCardio` now have no callers.
 
 **HealthKit crash traps (caused SIGABRT in build 37):**
 - `requestAuthorization` raises uncatchable `NSException` — call ONLY from explicit user Connect flow. Never from `.task`/`.onAppear`.

@@ -90,17 +90,26 @@ struct ProgressTabView: View {
 
     /// The enabled tracker set: mode defaults until the user customizes, then
     /// whatever they chose (including the empty "none" state).
-    private var enabledSet: Set<String> {
+    ///
+    /// The default is deliberately small — only trackers the app can fill in
+    /// itself — plus any tracker that already holds data, so a profile that has
+    /// been logging waist or labs without ever opening Edit trackers keeps those
+    /// cards. Once the user customizes, the stored CSV wins outright.
+    private func enabledSet(body: [BodyMetricDTO], markers: [HealthMarkerDTO]) -> Set<String> {
         if enabledStatsRaw.isEmpty {
-            return Set(StatKind.allCases.filter { $0.isRelevant(for: profile.mode) }.map(\.rawValue))
+            var set = Set(StatKind.allCases.filter { $0.isRelevant(for: profile.mode) }.map(\.rawValue))
+            for kind in StatKind.allCases where !set.contains(kind.rawValue) {
+                if kind.hasLoggedData(body: body, markers: markers) { set.insert(kind.rawValue) }
+            }
+            return set
         }
         if enabledStatsRaw == "none" { return [] }
         return Set(enabledStatsRaw.split(separator: ",").map(String.init))
     }
 
-    private var visibleStats: [StatKind] {
+    private func visibleStats(in enabled: Set<String>) -> [StatKind] {
         StatKind.allCases
-            .filter { enabledSet.contains($0.rawValue) }
+            .filter { enabled.contains($0.rawValue) }
             .sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
     }
 
@@ -134,6 +143,8 @@ struct ProgressTabView: View {
             cardio: cardio, pilates: pilates, activities: activities,
             bodyWeightLb: profile.weightLb
         )
+        let enabled = enabledSet(body: body_, markers: markers)
+        let visibleStats = visibleStats(in: enabled)
         let trainingSessions = TrainingHistory.sessions(sets: sets, exercises: exerciseModels.map(\.snapshot))
         let trainingHistoryDayKeys = Set(
             trainingSessions.map(\.dayKey)
@@ -167,6 +178,17 @@ struct ProgressTabView: View {
                             statCard(for: kind, body: body_, markers: markers, steps: steps, sets: sets)
                         }
                     }
+                    // A hidden tracker's card is also the only place to log that
+                    // value, so keep one quiet line pointing at the rest.
+                    if visibleStats.count < StatKind.allCases.count {
+                        Button { showEditTrackers = true } label: {
+                            Text("Add a tracker — body fat, waist, blood pressure, labs")
+                                .font(.footnote)
+                                .foregroundStyle(theme.dim)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .tactile(.ghost)
+                    }
                 }
 
                 // Calorie intake vs activity burn — shown for both modes.
@@ -187,7 +209,7 @@ struct ProgressTabView: View {
                 .themed(profile.mode)
         }
         .sheet(isPresented: $showEditTrackers) {
-            EditTrackersSheet(enabled: enabledSet, mode: profile.mode) { newSet in
+            EditTrackersSheet(enabled: enabled, mode: profile.mode) { newSet in
                 persistEnabled(newSet)
             }
             .themed(profile.mode)
@@ -201,7 +223,6 @@ struct ProgressTabView: View {
         }
         .sheet(isPresented: $showTrainingHistory) {
             TrainingHistorySheet(profile: profile)
-                .environmentObject(toasts)
                 .themed(profile.mode)
         }
     }
@@ -328,8 +349,7 @@ struct ProgressTabView: View {
         case .bmi:
             guard let w = body_.compactMap(\.weightLb).last else { return nil }
             let bmi = BodyComposition.bmi(weightLb: w, heightIn: profile.heightIn)
-            if bmi < 18.5 || bmi >= 25 { return theme.warn }
-            return theme.ok
+            return bmiIsHealthy(bmi) ? theme.ok : theme.warn
         case .weight, .bodyFat, .waist, .stepsAvg, .trainingVolume:
             return nil
         }
@@ -341,12 +361,6 @@ struct ProgressTabView: View {
         }
     }
 
-    private func latestMarkerValue(_ kind: HealthMarkerKind, in markers: [HealthMarkerDTO]) -> Double? {
-        markers.filter { $0.kind == kind }
-            .sorted { $0.date < $1.date }
-            .last?.value
-    }
-
     // MARK: - Detail sheets
 
     @ViewBuilder
@@ -355,7 +369,7 @@ struct ProgressTabView: View {
         case .stepsAvg:
             stepsDetail
         case .bp:
-            bpDetail
+            BPDetailSheet(profile: profile, markers: markers, unitSystem: unitSystem)
         case .weight:
             WeightLogSheet(
                 profile: profile,
@@ -363,7 +377,6 @@ struct ProgressTabView: View {
                 unitSystem: unitSystem,
                 onSave: { value in save(kind: .weight, value: value) }
             )
-            .environmentObject(toasts)
         case .bodyFat:
             BodyFatDetailSheet(
                 profile: profile,
@@ -371,7 +384,6 @@ struct ProgressTabView: View {
                 unitSystem: unitSystem,
                 onSave: { value in save(kind: .bodyFat, value: value) }
             )
-            .environmentObject(toasts)
         case .bmi:
             BMIDetailSheet(profile: profile, metrics: body_)
         case .trainingVolume:
@@ -415,16 +427,8 @@ struct ProgressTabView: View {
                         valueLabel: s.steps.formatted()
                     )
                 },
-            placeholder: "",
-            canLog: false,
-            onSave: { _ in }
+            canLog: false
         )
-    }
-
-    @ViewBuilder
-    private var bpDetail: some View {
-        BPDetailSheet(profile: profile, markers: markers)
-            .environmentObject(toasts)
     }
 
     @ViewBuilder
@@ -432,11 +436,12 @@ struct ProgressTabView: View {
         StatDetailSheet(
             title: "Training",
             unit: "sets · weekly",
-            series: StatKind.trainingVolume.series(body: [], markers: [], steps: [], sets: sets),
-            entries: [],
-            placeholder: "",
+            series: TrainingHistory.weeklySetCounts(sets),
             canLog: false,
-            onSave: { _ in }
+            showsEntries: false,
+            minChartPoints: 2,
+            emptyChartText: "Not enough logged weeks yet.",
+            emptyChartDetail: "Log sets for two weeks to see the volume trend. Individual sessions live in Training history."
         )
     }
 
@@ -555,12 +560,47 @@ enum StatKind: String, CaseIterable, Identifiable {
         }
     }
 
+    /// Shown by default on a fresh profile. The bar is "can the app fill this in
+    /// on its own?" — anything needing calipers, a tape measure, a cuff, or a
+    /// blood draw starts hidden so first open isn't a wall of dashes. Every
+    /// tracker is still one tap away in Edit trackers.
     func isRelevant(for mode: Mode) -> Bool {
         switch self {
-        case .weight, .bodyFat, .waist, .bmi, .stepsAvg, .trainingVolume:
+        case .weight, .stepsAvg, .trainingVolume:
+            // Weight: in-app wheel + Health sync. Steps: Health. Sets: in-app.
             return true
-        case .restingHR, .bp, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
+        case .restingHR, .bp:
+            // Circuit is the cardiovascular mode: resting HR arrives from Health,
+            // and blood pressure is the one marker that's cheap to self-measure.
             return mode == .circuit
+        case .bmi:
+            // Derived from weight + profile height — the Weight card already
+            // shows that number and a more useful lb/week trend.
+            return false
+        case .bodyFat, .waist, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
+            // Equipment or a lab panel. Real metrics, but empty for most people.
+            return false
+        }
+    }
+
+    /// True when this tracker already has something to show. Used so the default
+    /// set keeps a card a profile has been filling in before the defaults shrank.
+    func hasLoggedData(body: [BodyMetricDTO], markers: [HealthMarkerDTO]) -> Bool {
+        switch self {
+        case .weight:
+            return body.contains { $0.weightLb != nil }
+        case .bodyFat:
+            return body.contains { $0.bodyFatPct != nil }
+        case .waist:
+            return body.contains { $0.waistIn != nil }
+        case .bp:
+            return markers.contains { $0.kind == .bpSystolic || $0.kind == .bpDiastolic }
+        case .restingHR, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
+            guard let k = markerKind else { return false }
+            return markers.contains { $0.kind == k }
+        case .bmi, .stepsAvg, .trainingVolume:
+            // Derived or always-on: nothing of their own is "logged".
+            return false
         }
     }
 
@@ -586,28 +626,28 @@ enum StatKind: String, CaseIterable, Identifiable {
             let bmi = BodyComposition.bmi(weightLb: w, heightIn: p.heightIn)
             return String(format: "%.1f", bmi)
         case .restingHR:
-            return latestMarker(.restingHR, in: markers).map { formattedValue($0) }
+            return latestMarkerValue(.restingHR, in: markers).map { formattedValue($0) }
         case .stepsAvg:
             let avg = Steps.average(steps, days: 7)
             return avg > 0 ? avg.formatted() : nil
         case .trainingVolume:
-            let thisWeekSets = setsThisWeek(sets)
+            let thisWeekSets = TrainingHistory.setsInWeek(sets)
             return thisWeekSets > 0 ? "\(thisWeekSets)" : nil
         case .bp:
-            let s = latestMarker(.bpSystolic, in: markers)
-            let d = latestMarker(.bpDiastolic, in: markers)
+            let s = latestMarkerValue(.bpSystolic, in: markers)
+            let d = latestMarkerValue(.bpDiastolic, in: markers)
             if let s, let d { return "\(Int(s))/\(Int(d))" }
             return nil
         case .ldl:
-            return latestMarker(.ldl, in: markers).map { formattedValue($0) }
+            return latestMarkerValue(.ldl, in: markers).map { formattedValue($0) }
         case .hdl:
-            return latestMarker(.hdl, in: markers).map { formattedValue($0) }
+            return latestMarkerValue(.hdl, in: markers).map { formattedValue($0) }
         case .totalCholesterol:
-            return latestMarker(.totalCholesterol, in: markers).map { formattedValue($0) }
+            return latestMarkerValue(.totalCholesterol, in: markers).map { formattedValue($0) }
         case .a1c:
-            return latestMarker(.a1c, in: markers).map { formattedValue($0) }
+            return latestMarkerValue(.a1c, in: markers).map { formattedValue($0) }
         case .fastingGlucose:
-            return latestMarker(.fastingGlucose, in: markers).map { formattedValue($0) }
+            return latestMarkerValue(.fastingGlucose, in: markers).map { formattedValue($0) }
         }
     }
 
@@ -643,8 +683,8 @@ enum StatKind: String, CaseIterable, Identifiable {
             let avg30 = Steps.average(steps, days: 30)
             return avg30 > 0 ? "30d \(avg30.formatted())" : nil
         case .trainingVolume:
-            let this = setsThisWeek(sets)
-            let last = setsLastWeek(sets)
+            let this = TrainingHistory.setsInWeek(sets)
+            let last = TrainingHistory.setsInWeek(sets, weeksAgo: 1)
             guard last > 0 || this > 0 else { return nil }
             let delta = this - last
             return String(format: "%@%d vs last wk", delta >= 0 ? "+" : "", delta)
@@ -680,7 +720,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .stepsAvg:
             return Steps.series(steps, days: 30)
         case .trainingVolume:
-            return trainingVolumeSeries(sets)
+            return TrainingHistory.weeklySetCounts(sets)
         case .bp:
             return Trends.markerSeries(markers, kind: .bpSystolic)
         case .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
@@ -751,11 +791,6 @@ enum StatKind: String, CaseIterable, Identifiable {
         }
     }
 
-    private func latestMarker(_ kind: HealthMarkerKind, in markers: [HealthMarkerDTO]) -> Double? {
-        markers.filter { $0.kind == kind }
-            .sorted { $0.date < $1.date }
-            .last?.value
-    }
 }
 
 private func formattedValue(_ v: Double) -> String {
@@ -763,49 +798,42 @@ private func formattedValue(_ v: Double) -> String {
         ? String(Int(v)) : String(format: "%.1f", v)
 }
 
-// MARK: - Training volume helpers
-
-private func setsThisWeek(_ sets: [WorkoutSetDTO]) -> Int {
-    let cal = Calendar.current
-    guard let weekStart = cal.date(from: cal.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date())) else { return 0 }
-    return sets.filter { $0.timestamp >= weekStart }.count
+/// Latest logged value for a marker kind, or nil. `Trends.markerSeries` already
+/// owns the filter-and-sort (and is unit-tested), so this is the one place the
+/// Progress tab turns a marker history into "the current number".
+private func latestMarkerValue(_ kind: HealthMarkerKind, in markers: [HealthMarkerDTO]) -> Double? {
+    Trends.markerSeries(markers, kind: kind).last?.value
 }
 
-private func setsLastWeek(_ sets: [WorkoutSetDTO]) -> Int {
-    let cal = Calendar.current
-    guard let thisWeekStart = cal.date(from: cal.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date())),
-          let lastWeekStart = cal.date(byAdding: .weekOfYear, value: -1, to: thisWeekStart) else { return 0 }
-    return sets.filter { $0.timestamp >= lastWeekStart && $0.timestamp < thisWeekStart }.count
-}
-
-private func trainingVolumeSeries(_ sets: [WorkoutSetDTO]) -> [Trends.Point] {
-    let cal = Calendar.current
-    guard let cutoff = cal.date(byAdding: .weekOfYear, value: -12, to: Date()) else { return [] }
-    let cutoffDay = cal.startOfDay(for: cutoff)
-    var weekCounts: [Date: Double] = [:]
-    for s in sets where s.timestamp >= cutoffDay {
-        let comps = cal.dateComponents([.yearForWeekOfYear, .weekOfYear], from: s.timestamp)
-        guard let weekStart = cal.date(from: comps) else { continue }
-        weekCounts[weekStart, default: 0] += 1
-    }
-    return weekCounts.map { Trends.Point(date: Dates.dayKey($0.key), value: $0.value) }
-        .sorted { $0.date < $1.date }
+/// Single reading of the BMI thresholds — `BodyComposition.bmiCategory` owns the
+/// 18.5 / 25 boundaries, so neither the card tint nor the sheet restates them.
+private func bmiIsHealthy(_ bmi: Double) -> Bool {
+    BodyComposition.bmiCategory(bmi).label == "Healthy"
 }
 
 // MARK: - BMI detail sheet
 
+/// BMI is derived (logged weight + profile height), so there is nothing to log —
+/// just the headline, the trend, and the reference table.
 private struct BMIDetailSheet: View {
     let profile: ProfileDTO
     let metrics: [BodyMetricDTO]
 
     @Environment(\.theme) private var theme
 
+    /// Printed bound + a probe value inside it. The *labels* come from
+    /// `BodyComposition.bmiCategory`, which owns these boundaries, so the table
+    /// can't drift from the category the headline shows.
+    private static let bands: [(String, Double)] = [
+        ("< 18.5", 17), ("18.5 – 24.9", 22), ("25.0 – 29.9", 27), ("≥ 30.0", 32),
+    ]
+
     private var bmiSeries: [Trends.Point] {
         guard profile.heightIn > 0 else { return [] }
         return metrics.compactMap { b -> Trends.Point? in
             guard let w = b.weightLb else { return nil }
-            let bmi = BodyComposition.bmi(weightLb: w, heightIn: profile.heightIn)
-            return Trends.Point(date: b.date, value: bmi)
+            return Trends.Point(date: b.date,
+                                value: BodyComposition.bmi(weightLb: w, heightIn: profile.heightIn))
         }
     }
 
@@ -815,81 +843,56 @@ private struct BMIDetailSheet: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("BMI")
-                        .font(.system(size: 42, weight: .regular))
-                        .foregroundStyle(theme.text)
-                    Text("BODY MASS INDEX · COMPUTED FROM LOGGED WEIGHTS")
-                        .font(.system(size: 10, weight: .medium)).tracking(2)
-                        .foregroundStyle(theme.dim)
-                }
-
-                if let bmi = currentBMI {
-                    let (label, detail) = BodyComposition.bmiCategory(bmi)
-                    HStack(alignment: .firstTextBaseline, spacing: 10) {
-                        Text(String(format: "%.1f", bmi))
-                            .font(.system(size: 48, weight: .semibold, design: .monospaced))
-                            .foregroundStyle(bmi < 18.5 || bmi >= 25 ? theme.warn : theme.ok)
-                        Text(label)
-                            .font(.system(size: 18, weight: .regular))
-                            .foregroundStyle(theme.text)
-                    }
-                    Text(detail)
-                        .font(.callout)
-                        .foregroundStyle(theme.dim)
-                }
-
-                if bmiSeries.count >= 2 {
-                    Chart(bmiSeries, id: \.date) { p in
-                        LineMark(x: .value("Day", p.date), y: .value("BMI", p.value))
-                            .foregroundStyle(theme.accent)
-                        PointMark(x: .value("Day", p.date), y: .value("BMI", p.value))
-                            .foregroundStyle(theme.accent)
-                    }
-                    .frame(height: 140)
-                }
-
-                // Reference ranges
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("Reference ranges")
-                        .font(.caption).tracking(2).textCase(.uppercase)
-                        .foregroundStyle(theme.dim)
-                    bmiRange(label: "Underweight", range: "< 18.5")
-                    bmiRange(label: "Healthy", range: "18.5 – 24.9")
-                    bmiRange(label: "Overweight", range: "25.0 – 29.9")
-                    bmiRange(label: "Obese", range: "≥ 30.0")
-                }
-
-                Text("BMI is a screening tool, not a diagnostic. It doesn't distinguish muscle from fat — a muscular person may score \"Overweight\" with excellent body composition. Use alongside Body Fat % and Waist for a fuller picture.")
-                    .font(.footnote)
-                    .foregroundStyle(theme.dim)
-
-                Text("Computed from your logged weights and the height you set in your profile. Log weight regularly to see the trend line.")
-                    .font(.footnote)
-                    .foregroundStyle(theme.dim)
-            }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
-        }
-        .presentationDetents([.large])
-        .presentationBackground(theme.bg)
+        StatDetailSheet(
+            title: "BMI",
+            unit: "body mass index · computed from logged weights",
+            series: bmiSeries,
+            canLog: false,
+            showsEntries: false,
+            minChartPoints: 2,
+            emptyChartText: "Not enough weigh-ins yet.",
+            emptyChartDetail: "Log weight twice and your BMI trend appears here.",
+            detents: [.large],
+            headline: { headline },
+            footer: { footer }
+        )
     }
 
     @ViewBuilder
-    private func bmiRange(label: String, range: String) -> some View {
-        HStack {
-            Text(label).foregroundStyle(theme.text).font(.callout)
-            Spacer()
-            Text(range)
-                .font(.system(.callout, design: .monospaced))
-                .foregroundStyle(theme.accent)
+    private var headline: some View {
+        if let bmi = currentBMI {
+            let category = BodyComposition.bmiCategory(bmi)
+            VStack(alignment: .leading, spacing: 6) {
+                HStack(alignment: .firstTextBaseline, spacing: 10) {
+                    Text(String(format: "%.1f", bmi))
+                        .font(.system(size: 48, weight: .semibold, design: .monospaced))
+                        .foregroundStyle(bmiIsHealthy(bmi) ? theme.ok : theme.warn)
+                    Text(category.label)
+                        .font(.system(size: 18, weight: .regular))
+                        .foregroundStyle(theme.text)
+                }
+                Text(category.detail)
+                    .font(.callout)
+                    .foregroundStyle(theme.dim)
+            }
         }
-        .padding(10)
-        .background(theme.card)
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+    }
+
+    @ViewBuilder
+    private var footer: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Reference ranges")
+                .font(.caption).tracking(2).textCase(.uppercase)
+                .foregroundStyle(theme.dim)
+            ForEach(Self.bands, id: \.0) { band in
+                StatDetailRow(label: BodyComposition.bmiCategory(band.1).label, value: band.0)
+            }
+        }
+
+        Text("BMI is a screening tool, not a diagnostic. It doesn't distinguish muscle from fat — a muscular person may score \"Overweight\" with excellent body composition. Use alongside Body Fat % and Waist for a fuller picture. Computed from your logged weights and the height you set in your profile.")
+            .font(.footnote)
+            .foregroundStyle(theme.dim)
+            .fixedSize(horizontal: false, vertical: true)
     }
 }
 
@@ -902,19 +905,10 @@ private struct BodyFatDetailSheet: View {
     let onSave: (Double) -> Void
 
     @Environment(\.theme) private var theme
-    @Environment(\.dismiss) private var dismiss
-    @State private var draft: String = ""
     @State private var showGuide = false
-    @FocusState private var draftFocused: Bool
 
     private var latestBF: Double? { metrics.compactMap(\.bodyFatPct).last }
     private var latestWeight: Double? { metrics.compactMap(\.weightLb).last }
-
-    private var bfSeries: [Trends.Point] {
-        metrics.compactMap { b in
-            b.bodyFatPct.map { Trends.Point(date: b.date, value: $0) }
-        }
-    }
 
     private var composition: (fat: Double, lean: Double)? {
         guard let w = latestWeight, let bf = latestBF else { return nil }
@@ -924,91 +918,58 @@ private struct BodyFatDetailSheet: View {
         )
     }
 
+    /// Printed bound + a probe value inside it, per sex. Labels come from
+    /// `BodyComposition.bodyFatCategory` so the table and the headline agree.
+    private var bands: [(String, Double)] {
+        profile.sex == .male
+            ? [("< 6%", 3), ("6–13%", 10), ("14–17%", 16), ("18–24%", 20), ("≥ 25%", 30)]
+            : [("< 14%", 10), ("14–20%", 17), ("21–24%", 22), ("25–31%", 28), ("≥ 32%", 35)]
+    }
+
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Body fat")
-                        .font(.system(size: 42, weight: .regular))
+        StatDetailSheet(
+            title: "Body fat",
+            unit: "% · fat mass · lean mass",
+            series: StatKind.bodyFat.series(body: metrics, markers: [], steps: [], system: unitSystem),
+            placeholder: "e.g. 18.5",
+            logTitle: "Log body fat %",
+            showsEntries: false,
+            minChartPoints: 2,
+            emptyChartText: "Not enough readings yet.",
+            emptyChartDetail: "Log body fat twice and the trend appears here.",
+            detents: [.large],
+            validate: { $0 > 0 && $0 < 70 },
+            onSave: onSave,
+            headline: { headline },
+            footer: { footer }
+        )
+    }
+
+    @ViewBuilder
+    private var headline: some View {
+        if let bf = latestBF {
+            let category = BodyComposition.bodyFatCategory(pct: bf, sex: profile.sex)
+            VStack(alignment: .leading, spacing: 6) {
+                HStack(alignment: .firstTextBaseline, spacing: 10) {
+                    Text(String(format: "%.1f%%", bf))
+                        .font(.system(size: 48, weight: .semibold, design: .monospaced))
                         .foregroundStyle(theme.text)
-                    Text("% · FAT MASS · LEAN MASS")
-                        .font(.system(size: 10, weight: .medium)).tracking(2)
-                        .foregroundStyle(theme.dim)
+                    Text(category.label)
+                        .font(.system(size: 18, weight: .regular))
+                        .foregroundStyle(theme.accent)
                 }
-
-                // Current value with real lbs breakdown
-                if let bf = latestBF {
-                    let (label, detail) = BodyComposition.bodyFatCategory(pct: bf, sex: profile.sex)
-                    VStack(alignment: .leading, spacing: 6) {
-                        HStack(alignment: .firstTextBaseline, spacing: 10) {
-                            Text(String(format: "%.1f%%", bf))
-                                .font(.system(size: 48, weight: .semibold, design: .monospaced))
-                                .foregroundStyle(theme.text)
-                            Text(label)
-                                .font(.system(size: 18, weight: .regular))
-                                .foregroundStyle(theme.accent)
-                        }
-                        Text(detail)
-                            .font(.callout)
-                            .foregroundStyle(theme.dim)
-                        if let c = composition {
-                            HStack(spacing: 16) {
-                                compCell(label: "Fat mass", value: Units.formatWeightWithUnit(lb: c.fat, system: unitSystem))
-                                compCell(label: "Lean mass", value: Units.formatWeightWithUnit(lb: c.lean, system: unitSystem))
-                            }
-                            .padding(.top, 4)
-                        }
+                Text(category.detail)
+                    .font(.callout)
+                    .foregroundStyle(theme.dim)
+                if let c = composition {
+                    HStack(spacing: 16) {
+                        compCell(label: "Fat mass", value: Units.formatWeightWithUnit(lb: c.fat, system: unitSystem))
+                        compCell(label: "Lean mass", value: Units.formatWeightWithUnit(lb: c.lean, system: unitSystem))
                     }
+                    .padding(.top, 4)
                 }
-
-                if bfSeries.count >= 2 {
-                    Chart(bfSeries, id: \.date) { p in
-                        LineMark(x: .value("Day", p.date), y: .value("BF%", p.value))
-                            .foregroundStyle(theme.accent)
-                        PointMark(x: .value("Day", p.date), y: .value("BF%", p.value))
-                            .foregroundStyle(theme.accent)
-                    }
-                    .frame(height: 140)
-                }
-
-                // Reference ranges by sex
-                referenceSection
-
-                // Log
-                logSection
-
-                // Measurement guide (expandable)
-                VStack(alignment: .leading, spacing: 8) {
-                    Button {
-                        showGuide.toggle()
-                    } label: {
-                        HStack {
-                            Text("How to measure body fat")
-                                .font(.callout)
-                                .foregroundStyle(theme.text)
-                            Spacer()
-                            Image(systemName: showGuide ? "chevron.up" : "chevron.down")
-                                .foregroundStyle(theme.dim)
-                        }
-                    }
-                    .tactile(.ghost)
-
-                    if showGuide {
-                        Text(BodyComposition.measurementGuide)
-                            .font(.callout)
-                            .foregroundStyle(theme.dim)
-                    }
-                }
-                .padding(12)
-                .background(theme.card)
-                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
         }
-        .presentationDetents([.large])
-        .presentationBackground(theme.bg)
     }
 
     @ViewBuilder
@@ -1028,62 +989,44 @@ private struct BodyFatDetailSheet: View {
     }
 
     @ViewBuilder
-    private var referenceSection: some View {
+    private var footer: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("Reference ranges (\(profile.sex == .male ? "men" : "women"))")
                 .font(.caption).tracking(2).textCase(.uppercase)
                 .foregroundStyle(theme.dim)
-            let ranges: [(String, String)] = profile.sex == .male
-                ? [("Essential", "< 6%"), ("Athletic", "6–13%"), ("Fitness", "14–17%"), ("Acceptable", "18–24%"), ("High", "≥ 25%")]
-                : [("Essential", "< 14%"), ("Athletic", "14–20%"), ("Fitness", "21–24%"), ("Acceptable", "25–31%"), ("High", "≥ 32%")]
-            ForEach(ranges, id: \.0) { pair in
-                HStack {
-                    Text(pair.0).foregroundStyle(theme.text).font(.callout)
-                    Spacer()
-                    Text(pair.1)
-                        .font(.system(.callout, design: .monospaced))
-                        .foregroundStyle(theme.accent)
-                }
-                .padding(10)
-                .background(theme.card)
-                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+            ForEach(bands, id: \.0) { band in
+                StatDetailRow(
+                    label: BodyComposition.bodyFatCategory(pct: band.1, sex: profile.sex).label,
+                    value: band.0
+                )
             }
         }
-    }
 
-    @ViewBuilder
-    private var logSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Log body fat %")
-                .font(.caption).tracking(2).textCase(.uppercase)
-                .foregroundStyle(theme.dim)
-            HStack(spacing: 8) {
-                TextField("e.g. 18.5", text: $draft)
-                    .keyboardType(.decimalPad)
-                    .focused($draftFocused)
-                    .padding(10)
-                    .background(theme.card)
-                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-                    .foregroundStyle(theme.text)
-                    .font(.system(.callout, design: .monospaced))
-                    .toolbar {
-                        ToolbarItemGroup(placement: .keyboard) {
-                            Spacer()
-                            Button("Done") { draftFocused = false }
-                        }
-                    }
-                Button {
-                    if let v = Double(draft), v > 0, v < 70 {
-                        onSave(v)
-                        draft = ""
-                        dismiss()
-                    }
-                } label: { Text("Log") }
-                    .tactile(.primary)
+            Button {
+                showGuide.toggle()
+            } label: {
+                HStack {
+                    Text("How to measure body fat")
+                        .font(.callout)
+                        .foregroundStyle(theme.text)
+                    Spacer()
+                    Image(systemName: showGuide ? "chevron.up" : "chevron.down")
+                        .foregroundStyle(theme.dim)
+                }
+            }
+            .tactile(.ghost)
+
+            if showGuide {
+                Text(BodyComposition.measurementGuide)
+                    .font(.callout)
+                    .foregroundStyle(theme.dim)
             }
         }
+        .padding(12)
+        .background(theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
     }
 }
 
@@ -1092,6 +1035,7 @@ private struct BodyFatDetailSheet: View {
 private struct BPDetailSheet: View {
     let profile: ProfileDTO
     let markers: [HealthMarkerDTO]
+    let unitSystem: UnitSystem
 
     @Environment(\.modelContext) private var ctx
     @Environment(\.theme) private var theme
@@ -1100,141 +1044,75 @@ private struct BPDetailSheet: View {
 
     @State private var systolicDraft: String = ""
     @State private var diastolicDraft: String = ""
+    @FocusState private var fieldFocused: Bool
 
-    private var systolicSeries: [Trends.Point] {
-        Trends.markerSeries(markers, kind: .bpSystolic)
-    }
-    private var diastolicSeries: [Trends.Point] {
-        Trends.markerSeries(markers, kind: .bpDiastolic)
-    }
-
-    private var recent: [HealthMarkerDTO] {
-        markers
-            .filter { $0.kind == .bpSystolic || $0.kind == .bpDiastolic }
-            .sorted { $0.date > $1.date }
-            .prefix(10)
-            .map { $0 }
-    }
-
-    private var latestSystolic: Double? {
-        markers.filter { $0.kind == .bpSystolic }.sorted { $0.date < $1.date }.last?.value
-    }
+    private var systolicSeries: [Trends.Point] { Trends.markerSeries(markers, kind: .bpSystolic) }
+    private var diastolicSeries: [Trends.Point] { Trends.markerSeries(markers, kind: .bpDiastolic) }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("BP")
-                        .font(.system(size: 42, weight: .regular))
-                        .foregroundStyle(theme.text)
-                    Text("MMHG · SYSTOLIC / DIASTOLIC")
-                        .font(.system(size: 10, weight: .medium)).tracking(2)
-                        .foregroundStyle(theme.dim)
-                    Text(HealthRanges.bpContext)
-                        .font(.footnote)
-                        .foregroundStyle(theme.dim)
-                        .padding(.top, 4)
-                }
+        StatDetailSheet(
+            title: "Blood pressure",
+            unit: "mmHg · systolic / diastolic",
+            // Readings are always saved as a systolic+diastolic pair, so the
+            // systolic series alone decides whether there is anything to chart.
+            series: systolicSeries,
+            entries: StatKind.bp.entries(body: [], markers: markers, system: unitSystem),
+            logTitle: "Log new reading",
+            rangeContext: HealthRanges.bpContext,
+            personalNote: latestMarkerValue(.bpSystolic, in: markers).map {
+                TargetRationale.markerMeaning(kind: .bpSystolic, value: $0, mode: profile.mode)
+            },
+            chartOverride: { dualChart },
+            logOverride: { logRow }
+        )
+    }
 
-                if let sys = latestSystolic {
-                    HStack(alignment: .top, spacing: 8) {
-                        Image(systemName: "person.fill")
-                            .font(.system(size: 11))
-                            .foregroundStyle(theme.accent)
-                            .padding(.top, 2)
-                        Text(TargetRationale.markerMeaning(kind: .bpSystolic, value: sys, mode: profile.mode))
-                            .font(.callout)
-                            .foregroundStyle(theme.text)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(12)
-                    .background(theme.card)
-                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                    .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-                }
-
-                if systolicSeries.isEmpty && diastolicSeries.isEmpty {
-                    Text("No data yet.")
-                        .font(.callout).foregroundStyle(theme.dim)
-                        .frame(maxWidth: .infinity, minHeight: 120)
-                        .background(theme.card)
-                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-                } else {
-                    Chart {
-                        ForEach(systolicSeries, id: \.date) { p in
-                            LineMark(x: .value("Day", p.date),
-                                     y: .value("Systolic", p.value),
-                                     series: .value("Series", "sys"))
-                                .foregroundStyle(theme.accent)
-                        }
-                        ForEach(diastolicSeries, id: \.date) { p in
-                            LineMark(x: .value("Day", p.date),
-                                     y: .value("Diastolic", p.value),
-                                     series: .value("Series", "dia"))
-                                .foregroundStyle(theme.accent2)
-                        }
-                    }
-                    .frame(height: 160)
-                }
-
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Recent entries")
-                        .font(.caption).tracking(2).textCase(.uppercase)
-                        .foregroundStyle(theme.dim)
-                    if recent.isEmpty {
-                        Text("Nothing logged yet.")
-                            .font(.callout).foregroundStyle(theme.dim)
-                    } else {
-                        ForEach(recent) { m in
-                            HStack {
-                                Text(m.date).foregroundStyle(theme.text)
-                                Spacer()
-                                Text("\(Int(m.value)) \(m.kind == .bpSystolic ? "sys" : "dia")")
-                                    .font(.system(.footnote, design: .monospaced))
-                                    .foregroundStyle(theme.accent)
-                            }
-                            .padding(10)
-                            .background(theme.card)
-                            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-                        }
-                    }
-                }
-
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Log new reading")
-                        .font(.caption).tracking(2).textCase(.uppercase)
-                        .foregroundStyle(theme.dim)
-                    HStack(spacing: 8) {
-                        TextField("systolic", text: $systolicDraft)
-                            .keyboardType(.decimalPad)
-                            .padding(10)
-                            .background(theme.card)
-                            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-                            .foregroundStyle(theme.text)
-                            .font(.system(.callout, design: .monospaced))
-                        Text("/").foregroundStyle(theme.dim)
-                        TextField("diastolic", text: $diastolicDraft)
-                            .keyboardType(.decimalPad)
-                            .padding(10)
-                            .background(theme.card)
-                            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-                            .foregroundStyle(theme.text)
-                            .font(.system(.callout, design: .monospaced))
-                        Button { save() } label: { Text("Log") }
-                            .tactile(.primary)
-                    }
-                }
+    private var dualChart: some View {
+        Chart {
+            ForEach(systolicSeries, id: \.date) { p in
+                LineMark(x: .value("Day", p.date),
+                         y: .value("Systolic", p.value),
+                         series: .value("Series", "sys"))
+                    .foregroundStyle(theme.accent)
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
+            ForEach(diastolicSeries, id: \.date) { p in
+                LineMark(x: .value("Day", p.date),
+                         y: .value("Diastolic", p.value),
+                         series: .value("Series", "dia"))
+                    .foregroundStyle(theme.accent2)
+            }
         }
-        .presentationDetents([.medium, .large])
-        .presentationBackground(theme.bg)
+        .frame(height: 160)
+    }
+
+    @ViewBuilder
+    private var logRow: some View {
+        HStack(spacing: 8) {
+            field("systolic", text: $systolicDraft)
+            Text("/").foregroundStyle(theme.dim)
+            field("diastolic", text: $diastolicDraft)
+            Button { save() } label: { Text("Log") }
+                .tactile(.primary)
+        }
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") { fieldFocused = false }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func field(_ placeholder: String, text: Binding<String>) -> some View {
+        TextField(placeholder, text: text)
+            .keyboardType(.decimalPad)
+            .focused($fieldFocused)
+            .padding(10)
+            .background(theme.card)
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+            .foregroundStyle(theme.text)
+            .font(.system(.callout, design: .monospaced))
     }
 
     private func save() {
@@ -1260,7 +1138,8 @@ private struct BPDetailSheet: View {
 
 // MARK: - Weight sheet (wheel picker)
 
-/// Dedicated weight-log sheet. Wheel picker (90–350 lb, 0.5 lb increments).
+/// Dedicated weight-log sheet. Wheel picker (90–350 lb, 0.5 lb increments) in
+/// place of the shared sheet's text field; everything else is the shared sheet.
 private struct WeightLogSheet: View {
     let profile: ProfileDTO
     let metrics: [BodyMetricDTO]
@@ -1276,28 +1155,7 @@ private struct WeightLogSheet: View {
     private let minHalfLb = 180   // 90.0 lb
     private let maxHalfLb = 700   // 350.0 lb
 
-    private var weightSeries: [Trends.Point] {
-        let pts = metrics.compactMap { b -> Trends.Point? in
-            guard let w = b.weightLb else { return nil }
-            return Trends.Point(date: b.date, value: Units.weightValue(lb: w, system: unitSystem))
-        }
-        return Trends.rollingAverage(pts, window: 7)
-    }
-
-    private var recentEntries: [StatDetailEntry] {
-        metrics.compactMap { b -> StatDetailEntry? in
-            guard let w = b.weightLb else { return nil }
-            return StatDetailEntry(id: b.id.uuidString, dateLabel: b.date,
-                                   valueLabel: Units.formatWeightWithUnit(lb: w, system: unitSystem))
-        }
-        .reversed()
-        .prefix(10)
-        .map { $0 }
-    }
-
-    private var draftLb: Double {
-        Double(draftHalfLb) * 0.5
-    }
+    private var draftLb: Double { Double(draftHalfLb) * 0.5 }
 
     /// The draft weight in the active unit, for the big readout + wheel rows.
     private func displayWeight(halfLb: Int) -> String {
@@ -1305,89 +1163,22 @@ private struct WeightLogSheet: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Weight")
-                        .font(.system(size: 42, weight: .regular))
-                        .foregroundStyle(theme.text)
-                    Text("\(Units.weightUnit(unitSystem).uppercased()) · 7-DAY AVERAGE")
-                        .font(.system(size: 10, weight: .medium)).tracking(2)
-                        .foregroundStyle(theme.dim)
-                }
-
-                chartSection
-                entriesSection
-                logSection
-            }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
-        }
-        .presentationDetents([.medium, .large])
-        .presentationBackground(theme.bg)
+        StatDetailSheet(
+            title: "Weight",
+            unit: "\(Units.weightUnit(unitSystem)) · 7-day average",
+            series: StatKind.weight.series(body: metrics, markers: [], steps: [], system: unitSystem),
+            entries: StatKind.weight.entries(body: metrics, markers: [], system: unitSystem),
+            logTitle: "Log new weight",
+            emptyChartText: "No weight logged yet.",
+            emptyChartDetail: "Spin the wheel below and tap Log to start your trend.",
+            logOverride: { wheelLog }
+        )
         .onAppear { seedDraft() }
     }
 
     @ViewBuilder
-    private var chartSection: some View {
-        if weightSeries.isEmpty {
-            VStack(spacing: 8) {
-                Text("No weight logged yet.")
-                    .font(.callout).foregroundStyle(theme.dim)
-                Text("Spin the wheel below and tap Log to start your trend.")
-                    .font(.footnote).foregroundStyle(theme.dim)
-                    .multilineTextAlignment(.center)
-            }
-            .frame(maxWidth: .infinity, minHeight: 120)
-            .padding(16)
-            .background(theme.card)
-            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-        } else {
-            Chart(weightSeries, id: \.date) { p in
-                LineMark(x: .value("Day", p.date), y: .value("Weight", p.value))
-                    .foregroundStyle(theme.accent)
-                PointMark(x: .value("Day", p.date), y: .value("Weight", p.value))
-                    .foregroundStyle(theme.accent)
-            }
-            .frame(height: 160)
-        }
-    }
-
-    @ViewBuilder
-    private var entriesSection: some View {
+    private var wheelLog: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Recent entries")
-                .font(.caption).tracking(2).textCase(.uppercase)
-                .foregroundStyle(theme.dim)
-            if recentEntries.isEmpty {
-                Text("Nothing logged yet.")
-                    .font(.callout).foregroundStyle(theme.dim)
-            } else {
-                ForEach(recentEntries) { e in
-                    HStack {
-                        Text(e.dateLabel).foregroundStyle(theme.text)
-                        Spacer()
-                        Text(e.valueLabel)
-                            .font(.system(.footnote, design: .monospaced))
-                            .foregroundStyle(theme.accent)
-                    }
-                    .padding(10)
-                    .background(theme.card)
-                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-                }
-            }
-        }
-    }
-
-    @ViewBuilder
-    private var logSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Log new weight")
-                .font(.caption).tracking(2).textCase(.uppercase)
-                .foregroundStyle(theme.dim)
-
             HStack {
                 Spacer()
                 Text(displayWeight(halfLb: draftHalfLb))
@@ -1413,7 +1204,7 @@ private struct WeightLogSheet: View {
             .frame(height: 140)
             .background(theme.card)
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+            .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
 
             Button {
                 onSave(draftLb)
@@ -1438,6 +1229,7 @@ private struct WeightLogSheet: View {
         draftHalfLb = max(minHalfLb, min(maxHalfLb, half))
     }
 }
+
 
 // MARK: - Training history sheet
 

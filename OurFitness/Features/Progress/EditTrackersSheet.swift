@@ -29,6 +29,11 @@ struct EditTrackersSheet: View {
                         .foregroundStyle(theme.dim)
                 }
 
+                Text("Progress starts with the metrics the app can fill in for you. Switch on anything you measure yourself — body fat, waist, blood pressure, lab results.")
+                    .font(.callout)
+                    .foregroundStyle(theme.dim)
+                    .fixedSize(horizontal: false, vertical: true)
+
                 ForEach(StatKind.allCases.sorted {
                     $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending
                 }) { kind in

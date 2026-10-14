@@ -66,41 +66,32 @@ struct MoveCard: View {
         Dictionary(uniqueKeysWithValues: exerciseModels.map { ($0.id, $0.name) })
     }
 
-    private var metEstimate: Int {
-        DailyBurn.metEstimate(
+    /// One source of truth for the day's burn: `DailyBurn` owns the MET math and
+    /// the walk-exclusion rules (logged walks and the Walking live activity are
+    /// already counted via steps). This card only rounds for display.
+    private var burn: DailyBurn.Breakdown {
+        DailyBurn.breakdown(
             steps: todaySteps, sets: todaySets, cardio: todayCardio, pilates: todayPilates,
             activities: todayActivities, bodyWeightLb: profile.weightLb
         )
     }
 
-    private var stepsKcal: Int {
-        Int(CalorieEstimator.caloriesForSteps(steps: todaySteps, bodyWeightLb: profile.weightLb).rounded())
-    }
-    private var setsKcal: Int {
-        Int(todaySets.reduce(0.0) { $0 + ($1.caloriesEst ?? 0) }.rounded())
-    }
-    private var cardioKcal: Int {
-        Int(todayCardio.reduce(0.0) { $0 + ($1.type == .walk ? 0 : ($1.caloriesEst ?? 0)) }.rounded())
-    }
-    private var pilatesKcal: Int {
-        Int(todayPilates.reduce(0.0) {
-            $0 + CalorieEstimator.caloriesForPilates(minutes: Double($1.durationMinutes), bodyWeightLb: profile.weightLb)
-        }.rounded())
-    }
-    private var activitiesKcal: Int {
-        Int(todayActivities.reduce(0.0) {
-            $0 + ($1.activityId == "activity-walking" ? 0 : ($1.caloriesEst ?? 0))
-        }.rounded())
-    }
+    private var stepsKcal: Int     { Int(burn.stepsKcal.rounded()) }
+    private var setsKcal: Int      { Int(burn.setsKcal.rounded()) }
+    private var cardioKcal: Int    { Int(burn.cardioKcal.rounded()) }
+    private var pilatesKcal: Int   { Int(burn.pilatesKcal.rounded()) }
+    private var activitiesKcal: Int { Int(burn.activitiesKcal.rounded()) }
+    /// Sum of the per-source rounded figures, so the Training column always
+    /// equals the rows the Training sheet lists underneath it.
     private var trainingMetEstimate: Int { setsKcal + cardioKcal + pilatesKcal + activitiesKcal }
 
-    private var metTotal: Int { metEstimate }
-    private var weightKg: Int { Int(profile.weightLb * 0.4536) }
+    private var metTotal: Int { burn.total }
+    private var weightKg: Int { Int(profile.weightLb * Units.kgPerLb) }
 
     private var distanceLabel: String {
         unitSystem == .imperial
             ? String(format: "%.1f", walkingDistanceMiles)
-            : String(format: "%.1f", walkingDistanceMiles * 1.60934)
+            : String(format: "%.1f", walkingDistanceMiles * Units.kmPerMile)
     }
 
     private var isEnergyStale: Bool {
@@ -303,79 +294,39 @@ private struct MoveInfoSheet: View {
     let stepsKcal: Int
 
     @Environment(\.theme) private var theme
-    private var weightKg: Int { Int(profile.weightLb * 0.4536) }
+    private var weightKg: Int { Int(profile.weightLb * Units.kgPerLb) }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Move")
-                        .font(.system(size: 42, weight: .regular))
-                        .foregroundStyle(theme.text)
-                    Text("MET × WEIGHT × TIME = CALORIES")
-                        .font(.system(size: 10, weight: .medium)).tracking(2)
-                        .foregroundStyle(theme.dim)
-                }
-
-                section(title: "Two sources, one picture") {
-                    Text("Apple Health measures what its sensors detect. Our Estimate calculates from what you log — steps + training. They'll rarely match perfectly, and that's fine.")
-                        .font(.callout).foregroundStyle(theme.dim)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-
-                section(title: "Apple Total") {
-                    VStack(alignment: .leading, spacing: 8) {
-                        columnNote(label: "Active energy", detail: "Steps and all movement Apple detects. Misses logged strength and sport sessions. Syncs from Watch every 15–60 min.")
-                        columnNote(label: "Distance & Flights", detail: "Foot distance from GPS and floors climbed from the barometer.")
-                        columnNote(label: "Heart Rate", detail: "Most recent spot reading — not a daily average.")
-                    }
-                }
-
-                section(title: "Our Estimate") {
-                    VStack(alignment: .leading, spacing: 8) {
-                        columnNote(label: "Activity total", detail: "Step burn (MET 4.3) + all logged training sessions.")
-                        columnNote(label: "Training", detail: "Only logged sessions — strength, cardio, pilates, live activities. The activity Apple's sensors miss.")
-                        breakdownRow(
-                            label: "Today's breakdown",
-                            detail: "Steps: ≈\(stepsKcal) cal\nTraining: ≈\(trainingMet) cal\nTotal: ≈\(metTotal) cal"
-                        )
-                    }
-                }
-
-                Text("Source: Ainsworth BE et al. 2011 Compendium of Physical Activities. Med Sci Sports Exerc.")
-                    .font(.caption2).foregroundStyle(theme.dim)
+        InfoSheetScaffold(title: "Move", subtitle: "MET × WEIGHT × TIME = CALORIES") {
+            InfoSection(title: "Two sources, one picture") {
+                InfoBody("Apple Health measures what its sensors detect. Our Estimate calculates from what you log — steps + training. They'll rarely match perfectly, and that's fine.")
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
+
+            InfoSection(title: "Apple Total") {
+                VStack(alignment: .leading, spacing: 8) {
+                    columnNote(label: "Active energy", detail: "Steps and all movement Apple detects. Misses logged strength and sport sessions. Syncs from Watch every 15–60 min.")
+                    columnNote(label: "Distance & Flights", detail: "Foot distance from GPS and floors climbed from the barometer.")
+                    columnNote(label: "Heart Rate", detail: "Most recent spot reading — not a daily average.")
+                }
+            }
+
+            InfoSection(title: "Our Estimate") {
+                VStack(alignment: .leading, spacing: 8) {
+                    columnNote(label: "Activity total", detail: "Step burn (MET 4.3) + all logged training sessions.")
+                    columnNote(label: "Training", detail: "Only logged sessions — strength, cardio, pilates, live activities. The activity Apple's sensors miss.")
+                    InfoRow(
+                        label: "Today's breakdown",
+                        detail: "Steps: ≈\(stepsKcal) cal\nTraining: ≈\(trainingMet) cal\nTotal: ≈\(metTotal) cal"
+                    )
+                }
+            }
+
+            InfoFootnote("Source: Ainsworth BE et al. 2011 Compendium of Physical Activities. Med Sci Sports Exerc.")
         }
-        .presentationDetents([.medium, .large])
-        .presentationBackground(theme.bg)
     }
 
-    @ViewBuilder
-    private func section<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title).font(.caption).tracking(2).textCase(.uppercase).foregroundStyle(theme.dim)
-            content()
-        }
-    }
-
-    @ViewBuilder
-    private func breakdownRow(label: String, detail: String) -> some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text(label).font(.system(size: 13, weight: .medium)).foregroundStyle(theme.text)
-            Text(detail)
-                .font(.system(.footnote, design: .monospaced))
-                .foregroundStyle(theme.accent)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(10)
-        .background(theme.card)
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-    }
-
+    // Unboxed label + detail pair. Only this sheet uses it, so it stays local
+    // rather than joining the shared info-sheet vocabulary.
     @ViewBuilder
     private func columnNote(label: String, detail: String) -> some View {
         VStack(alignment: .leading, spacing: 2) {
@@ -394,16 +345,16 @@ private struct AppleEnergyInfoSheet: View {
     let asOf: String?
 
     var body: some View {
-        ColumnInfoScaffold(title: "apple energy.", subtitle: "ACTIVE ENERGY · FROM YOUR IPHONE + WATCH") {
+        InfoSheetScaffold(title: "apple energy.", subtitle: "ACTIVE ENERGY · FROM YOUR IPHONE + WATCH") {
 
-            ColumnInfoSection(title: "Today") {
+            InfoSection(title: "Today") {
                 VStack(spacing: 6) {
                     if activeKcal == nil {
-                        ColumnBigNumberRow(icon: "bolt.fill", name: "No data yet",
+                        InfoMetricRow(icon: "bolt.fill", name: "No data yet",
                                            detail: "Watch syncs every 15–60 min. Carry your iPhone for iPhone-only tracking.",
                                            value: "-", unit: "cal")
                     } else {
-                        ColumnBigNumberRow(
+                        InfoMetricRow(
                             icon: "bolt.fill",
                             name: "Active energy",
                             detail: "Movement Apple detected today",
@@ -411,7 +362,7 @@ private struct AppleEnergyInfoSheet: View {
                             unit: "cal"
                         )
                         if let kcal = activeKcal {
-                            ColumnHeroStat(
+                            InfoHeroStat(
                                 label: "TODAY" + (asOf.map { " · \($0)" } ?? ""),
                                 value: "\(kcal) cal"
                             )
@@ -420,15 +371,15 @@ private struct AppleEnergyInfoSheet: View {
                 }
             }
 
-            ColumnInfoSection(title: "What's counted") {
+            InfoSection(title: "What's counted") {
                 VStack(alignment: .leading, spacing: 5) {
-                    ColumnInfoBody(text: "Every calorie burned beyond your resting baseline — walking, workouts, stairs, fidgeting. Measured directly by iPhone and Apple Watch sensors.")
-                    ColumnInfoBody(text: "✓  All steps and movement Apple can detect\n✗  Doesn't include manually logged training sessions (those are in Our Estimate)")
+                    InfoBody("Every calorie burned beyond your resting baseline — walking, workouts, stairs, fidgeting. Measured directly by iPhone and Apple Watch sensors.")
+                    InfoBody("✓  All steps and movement Apple can detect\n✗  Doesn't include manually logged training sessions (those are in Our Estimate)")
                 }
             }
 
-            ColumnInfoSection(title: "vs. Our Estimate") {
-                ColumnBreakdownRow(
+            InfoSection(title: "vs. Our Estimate") {
+                InfoRow(
                     label: "Apple active vs. Our Estimate",
                     detail: "Our Estimate = steps (MET formula) + logged training. Apple active energy = movement its sensors detect. Numbers won't match exactly — that's expected."
                 )
@@ -446,30 +397,30 @@ private struct MetTotalInfoSheet: View {
     let weightKg: Int
 
     var body: some View {
-        ColumnInfoScaffold(title: "our total estimate.", subtitle: "MET FORMULA · ACTIVITY CALORIES") {
+        InfoSheetScaffold(title: "our total estimate.", subtitle: "MET FORMULA · ACTIVITY CALORIES") {
 
-            ColumnInfoSection(title: "Today's breakdown") {
+            InfoSection(title: "Today's breakdown") {
                 VStack(spacing: 6) {
-                    ColumnBigNumberRow(
+                    InfoMetricRow(
                         icon: "figure.walk",
                         name: "Steps",
                         detail: "MET 4.3 × \(weightKg) kg × step count",
                         value: "~\(stepsKcal)",
                         unit: "cal"
                     )
-                    ColumnBigNumberRow(
+                    InfoMetricRow(
                         icon: "dumbbell.fill",
                         name: "Training",
                         detail: "Logged strength, cardio, pilates, live sessions",
                         value: "~\(trainingKcal)",
                         unit: "cal"
                     )
-                    ColumnHeroStat(label: "TOTAL TODAY", value: "~\(metTotal) cal")
+                    InfoHeroStat(label: "TOTAL TODAY", value: "~\(metTotal) cal")
                 }
             }
 
-            ColumnInfoSection(title: "vs. Apple Total") {
-                ColumnInfoBody(text: "Apple shows active energy from its sensors. Our Estimate uses the Ainsworth MET formula on what you log — step count + training sessions. Numbers won't match exactly; that's expected.")
+            InfoSection(title: "vs. Apple Total") {
+                InfoBody("Apple shows active energy from its sensors. Our Estimate uses the Ainsworth MET formula on what you log — step count + training sessions. Numbers won't match exactly; that's expected.")
             }
         }
     }
@@ -505,7 +456,7 @@ private struct ExercisesInfoSheet: View {
         !todaySets.isEmpty ||
         !todayCardio.filter({ $0.type != .walk }).isEmpty ||
         !todayPilates.isEmpty ||
-        !todayActivities.filter({ $0.activityId != "activity-walking" }).isEmpty
+        !todayActivities.filter({ $0.activityId != ActivityCatalog.walkingId }).isEmpty
     }
 
     // Grouped strength sets sorted by total calories descending
@@ -521,13 +472,13 @@ private struct ExercisesInfoSheet: View {
     }
 
     var body: some View {
-        ColumnInfoScaffold(title: "training only.", subtitle: "TODAY'S BURN FROM LOGGED SESSIONS") {
+        InfoSheetScaffold(title: "training only.", subtitle: "TODAY'S BURN FROM LOGGED SESSIONS") {
 
             // ── Today's activity ─────────────────────────────────────
-            ColumnInfoSection(title: "Today's activity") {
+            InfoSection(title: "Today's activity") {
                 VStack(spacing: 6) {
                     if !hasAnyTraining {
-                        ColumnInfoBody(text: "No training logged yet. Head to the Workouts tab to get started.")
+                        InfoBody("No training logged yet. Head to the Workouts tab to get started.")
                     }
 
                     // Strength sets grouped by exercise
@@ -562,7 +513,7 @@ private struct ExercisesInfoSheet: View {
                     }
 
                     // Live sessions (non-walking)
-                    ForEach(todayActivities.filter { $0.activityId != "activity-walking" }) { session in
+                    ForEach(todayActivities.filter { $0.activityId != ActivityCatalog.walkingId }) { session in
                         activityRow(
                             icon: "stopwatch.fill",
                             name: session.activityName,
@@ -582,18 +533,9 @@ private struct ExercisesInfoSheet: View {
 
                     // Training total + derived stats
                     if trainingMetEstimate > 0 {
-                        HStack {
-                            Spacer()
-                            VStack(alignment: .trailing, spacing: 2) {
-                                Text("TOTAL TRAINING BURN")
-                                    .font(.system(size: 9, weight: .semibold)).tracking(1.5)
-                                    .foregroundStyle(theme.dim)
-                                Text("~\(trainingMetEstimate) cal")
-                                    .font(.system(size: 24, weight: .bold, design: .monospaced))
-                                    .foregroundStyle(theme.accent)
-                            }
-                        }
-                        .padding(.top, 4)
+                        InfoHeroStat(label: "TOTAL TRAINING BURN",
+                                     value: "~\(trainingMetEstimate) cal",
+                                     valueSize: 24)
 
                         HStack(spacing: 16) {
                             statPill(label: "fat burned", value: "≈\(fatGrams) g")
@@ -609,24 +551,23 @@ private struct ExercisesInfoSheet: View {
             // ── Collapsible: what's counted ───────────────────────────
             collapsibleSection(title: "WHAT'S COUNTED", isExpanded: $showWhatCounts) {
                 VStack(alignment: .leading, spacing: 5) {
-                    bulletRow(check: true,  text: "Strength sets — MET 3.5–8.0 by exercise")
-                    bulletRow(check: true,  text: "Cardio sessions, non-walk — MET 4.5")
-                    bulletRow(check: true,  text: "Pilates sessions — MET 3.0")
-                    bulletRow(check: true,  text: "Live sessions (basketball, yoga, etc.) — MET 2.8–11.8")
-                    bulletRow(check: false, text: "Steps — counted in Our Estimate, not here")
+                    Bullet("Strength sets — MET 3.5–8.0 by exercise", marker: .check)
+                    Bullet("Cardio sessions, non-walk — MET 4.5", marker: .check)
+                    Bullet("Pilates sessions — MET 3.0", marker: .check)
+                    Bullet("Live sessions (basketball, yoga, etc.) — MET 2.8–11.8", marker: .check)
+                    Bullet("Steps — counted in Our Estimate, not here", marker: .cross)
                 }
             }
 
             // ── Collapsible: how it's calculated ─────────────────────
             collapsibleSection(title: "HOW IT'S CALCULATED", isExpanded: $showFormula) {
                 VStack(alignment: .leading, spacing: 8) {
-                    ColumnInfoBody(text: "Formula: MET × your weight (\(weightKg) kg) × hours = calories. MET scores how intense an activity is relative to sitting still (MET 1.0). Walking = 4.3, squats = 5.0, pull-ups = 8.0.")
-                    ColumnBreakdownRow(
+                    InfoBody("Formula: MET × your weight (\(weightKg) kg) × hours = calories. MET scores how intense an activity is relative to sitting still (MET 1.0). Walking = 4.3, squats = 5.0, pull-ups = 8.0.")
+                    InfoRow(
                         label: "Example",
                         detail: "60 min basketball (MET 8.0) × \(weightKg) kg × 1 hr = \(8 * weightKg) cal"
                     )
-                    Text("Source: Ainsworth BE et al. 2011 Compendium of Physical Activities. Med Sci Sports Exerc.")
-                        .font(.caption2).foregroundStyle(theme.dim)
+                    InfoFootnote("Source: Ainsworth BE et al. 2011 Compendium of Physical Activities. Med Sci Sports Exerc.")
                 }
             }
         }
@@ -679,18 +620,8 @@ private struct ExercisesInfoSheet: View {
         .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
     }
 
-    @ViewBuilder
-    private func bulletRow(check: Bool, text: String) -> some View {
-        HStack(alignment: .top, spacing: 6) {
-            Text(check ? "✓" : "✗")
-                .font(.system(size: 12, weight: .bold))
-                .foregroundStyle(check ? theme.ok : theme.dim)
-            Text(text)
-                .font(.callout).foregroundStyle(theme.dim)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-    }
-
+    // Only this sheet has collapsible sections, so the disclosure chrome stays
+    // local rather than joining the shared info-sheet vocabulary.
     @ViewBuilder
     private func collapsibleSection<Content: View>(
         title: String, isExpanded: Binding<Bool>,
@@ -742,10 +673,10 @@ private struct HeartRateInfoSheet: View {
     let asOf: String?
 
     var body: some View {
-        ColumnInfoScaffold(title: "heart rate.", subtitle: "APPLE HEALTH · MOST RECENT READING") {
-            ColumnInfoSection(title: "Today") {
+        InfoSheetScaffold(title: "heart rate.", subtitle: "APPLE HEALTH · MOST RECENT READING") {
+            InfoSection(title: "Today") {
                 VStack(spacing: 6) {
-                    ColumnBigNumberRow(
+                    InfoMetricRow(
                         icon: "heart.fill",
                         name: "Latest reading",
                         detail: asOf.map { "as of \($0)" } ?? "Wear your Apple Watch to get a reading.",
@@ -754,18 +685,18 @@ private struct HeartRateInfoSheet: View {
                     )
                 }
             }
-            ColumnInfoSection(title: "Ranges") {
+            InfoSection(title: "Ranges") {
                 VStack(spacing: 6) {
-                    ColumnBreakdownRow(label: "Resting",
-                                       detail: "60–100 bpm is normal. Athletes often sit at 50–70 bpm.")
-                    ColumnBreakdownRow(label: "Moderate exercise",
-                                       detail: "50–70% of your max (≈ 220 − your age)")
-                    ColumnBreakdownRow(label: "Vigorous exercise",
-                                       detail: "70–85% of your max")
+                    InfoRow(label: "Resting",
+                            detail: "60–100 bpm is normal. Athletes often sit at 50–70 bpm.")
+                    InfoRow(label: "Moderate exercise",
+                            detail: "50–70% of your max (≈ 220 − your age)")
+                    InfoRow(label: "Vigorous exercise",
+                            detail: "70–85% of your max")
                 }
             }
-            ColumnInfoSection(title: "Why it matters") {
-                ColumnInfoBody(text: "A falling resting heart rate over weeks is one of the clearest signs of improving cardiovascular fitness. Consistent steps and regular cardio are the fastest levers.")
+            InfoSection(title: "Why it matters") {
+                InfoBody("A falling resting heart rate over weeks is one of the clearest signs of improving cardiovascular fitness. Consistent steps and regular cardio are the fastest levers.")
             }
         }
     }
@@ -781,15 +712,15 @@ private struct DistanceInfoSheet: View {
     private var displayValue: String {
         unitSystem == .imperial
             ? String(format: "%.2f", miles)
-            : String(format: "%.2f", miles * 1.60934)
+            : String(format: "%.2f", miles * Units.kmPerMile)
     }
     private var unitLabel: String { unitSystem == .imperial ? "miles" : "km" }
 
     var body: some View {
-        ColumnInfoScaffold(title: "distance.", subtitle: "WALKING + RUNNING · FROM APPLE HEALTH") {
-            ColumnInfoSection(title: "Today") {
+        InfoSheetScaffold(title: "distance.", subtitle: "WALKING + RUNNING · FROM APPLE HEALTH") {
+            InfoSection(title: "Today") {
                 VStack(spacing: 6) {
-                    ColumnBigNumberRow(
+                    InfoMetricRow(
                         icon: "figure.walk",
                         name: "Walking + Running",
                         detail: miles > 0 ? "total foot distance today" : "Carry your iPhone or wear your Apple Watch.",
@@ -798,12 +729,12 @@ private struct DistanceInfoSheet: View {
                     )
                 }
             }
-            ColumnInfoSection(title: "Benchmarks") {
+            InfoSection(title: "Benchmarks") {
                 VStack(spacing: 6) {
-                    ColumnBreakdownRow(label: "2,000 steps ≈ 1 mile",
-                                       detail: "Exact distance depends on stride length.")
-                    ColumnBreakdownRow(label: "10,000 steps ≈ 4–5 miles",
-                                       detail: "The step count linked to cardiovascular benefits in major studies.")
+                    InfoRow(label: "2,000 steps ≈ 1 mile",
+                            detail: "Exact distance depends on stride length.")
+                    InfoRow(label: "10,000 steps ≈ 4–5 miles",
+                            detail: "The step count linked to cardiovascular benefits in major studies.")
                 }
             }
         }
@@ -817,10 +748,10 @@ private struct FlightsClimbedInfoSheet: View {
     @Environment(\.theme) private var theme
 
     var body: some View {
-        ColumnInfoScaffold(title: "flights climbed.", subtitle: "FLOORS · FROM APPLE HEALTH BAROMETER") {
-            ColumnInfoSection(title: "Today") {
+        InfoSheetScaffold(title: "flights climbed.", subtitle: "FLOORS · FROM APPLE HEALTH BAROMETER") {
+            InfoSection(title: "Today") {
                 VStack(spacing: 6) {
-                    ColumnBigNumberRow(
+                    InfoMetricRow(
                         icon: "arrow.up.circle.fill",
                         name: "Floors climbed",
                         detail: floors > 0
@@ -831,146 +762,9 @@ private struct FlightsClimbedInfoSheet: View {
                     )
                 }
             }
-            ColumnInfoSection(title: "Why it matters") {
-                ColumnInfoBody(text: "Stair climbing (MET 4.0–8.0) activates glutes and quads and spikes heart rate faster than flat walking. Studies link regular stair use to lower all-cause mortality. (Stamatakis et al., Brit J Sports Med 2021)")
+            InfoSection(title: "Why it matters") {
+                InfoBody("Stair climbing (MET 4.0–8.0) activates glutes and quads and spikes heart rate faster than flat walking. Studies link regular stair use to lower all-cause mortality. (Stamatakis et al., Brit J Sports Med 2021)")
             }
         }
-    }
-}
-
-// MARK: - Shared scaffold for per-column info sheets
-
-private struct ColumnInfoScaffold<Content: View>: View {
-    let title: String
-    let subtitle: String
-    @ViewBuilder let content: () -> Content
-
-    @Environment(\.theme) private var theme
-
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(title)
-                        .font(.system(size: 42, weight: .regular))
-                        .foregroundStyle(theme.text)
-                    Text(subtitle)
-                        .font(.system(size: 10, weight: .medium)).tracking(2)
-                        .foregroundStyle(theme.dim)
-                }
-                content()
-            }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
-        }
-        .presentationDetents([.medium, .large])
-        .presentationBackground(theme.bg)
-    }
-}
-
-private struct ColumnInfoSection<Content: View>: View {
-    let title: String
-    @ViewBuilder let content: () -> Content
-    @Environment(\.theme) private var theme
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title).font(.caption).tracking(2).textCase(.uppercase).foregroundStyle(theme.dim)
-            content()
-        }
-    }
-}
-
-private struct ColumnInfoBody: View {
-    let text: String
-    @Environment(\.theme) private var theme
-    var body: some View {
-        Text(text).font(.callout).foregroundStyle(theme.dim)
-            .fixedSize(horizontal: false, vertical: true)
-    }
-}
-
-// Row with a large number on the right — used across all info sheets for per-item stats.
-private struct ColumnBigNumberRow: View {
-    let icon: String
-    let name: String
-    var detail: String = ""
-    let value: String
-    var unit: String = "cal"
-    @Environment(\.theme) private var theme
-
-    var body: some View {
-        HStack(alignment: .center, spacing: 10) {
-            Image(systemName: icon)
-                .font(.system(size: 14, weight: .medium))
-                .foregroundStyle(theme.accent)
-                .frame(width: 22)
-            VStack(alignment: .leading, spacing: 1) {
-                Text(name)
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(theme.text)
-                if !detail.isEmpty {
-                    Text(detail)
-                        .font(.system(size: 11))
-                        .foregroundStyle(theme.dim)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-            }
-            Spacer()
-            VStack(alignment: .trailing, spacing: 1) {
-                Text(value)
-                    .font(.system(size: 20, weight: .bold, design: .monospaced))
-                    .foregroundStyle(theme.accent)
-                Text(unit)
-                    .font(.system(size: 10))
-                    .foregroundStyle(theme.dim)
-            }
-        }
-        .padding(.vertical, 10)
-        .padding(.horizontal, 12)
-        .background(theme.card2)
-        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-    }
-}
-
-// Full-width hero total — large accent number, right-aligned label + value stack.
-private struct ColumnHeroStat: View {
-    let label: String
-    let value: String
-    @Environment(\.theme) private var theme
-
-    var body: some View {
-        HStack {
-            Spacer()
-            VStack(alignment: .trailing, spacing: 2) {
-                Text(label)
-                    .font(.system(size: 9, weight: .semibold)).tracking(1.5)
-                    .foregroundStyle(theme.dim)
-                Text(value)
-                    .font(.system(size: 28, weight: .bold, design: .monospaced))
-                    .foregroundStyle(theme.accent)
-            }
-        }
-        .padding(.top, 4)
-    }
-}
-
-private struct ColumnBreakdownRow: View {
-    let label: String
-    let detail: String
-    @Environment(\.theme) private var theme
-    var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text(label).font(.system(size: 13, weight: .medium)).foregroundStyle(theme.text)
-            Text(detail)
-                .font(.system(.footnote, design: .monospaced))
-                .foregroundStyle(theme.accent)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(10)
-        .background(theme.card)
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
     }
 }

@@ -46,4 +46,31 @@ final class DatesTests: XCTestCase {
     func test_formatTimeAgo_hours() {
         XCTAssertEqual(Dates.formatTimeAgo(Date().addingTimeInterval(-3 * 3600)), "3h ago")
     }
+
+    // MARK: - ISO weeks
+
+    private func local(_ y: Int, _ m: Int, _ d: Int, _ h: Int = 12) -> Date {
+        Calendar(identifier: .gregorian).date(from: DateComponents(year: y, month: m, day: d, hour: h))!
+    }
+
+    func test_startOfISOWeek_anchors_on_monday_midnight() {
+        let start = Dates.startOfISOWeek(local(2026, 5, 27, 15))   // Wednesday
+        XCTAssertEqual(Dates.dayKey(start), "2026-05-25")
+        let comps = Calendar(identifier: .gregorian).dateComponents([.hour, .minute, .weekday], from: start)
+        XCTAssertEqual(comps.hour, 0)
+        XCTAssertEqual(comps.minute, 0)
+        XCTAssertEqual(comps.weekday, 2, "Monday — not Sunday, which Calendar.current would give in the US")
+    }
+
+    func test_startOfISOWeek_sunday_stays_in_the_week_that_began_monday() {
+        XCTAssertEqual(Dates.dayKey(Dates.startOfISOWeek(local(2026, 5, 31, 23))), "2026-05-25")
+        XCTAssertEqual(Dates.dayKey(Dates.startOfISOWeek(local(2026, 5, 25, 0))), "2026-05-25")
+    }
+
+    func test_startOfISOWeek_weeksAgo_steps_whole_weeks() {
+        let wed = local(2026, 5, 27)
+        XCTAssertEqual(Dates.dayKey(Dates.startOfISOWeek(wed, weeksAgo: 1)), "2026-05-18")
+        XCTAssertEqual(Dates.dayKey(Dates.startOfISOWeek(wed, weeksAgo: 3)), "2026-05-04")
+        XCTAssertEqual(Dates.dayKey(Dates.startOfISOWeek(wed, weeksAgo: -1)), "2026-06-01")
+    }
 }

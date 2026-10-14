@@ -81,6 +81,43 @@ public enum TrainingHistory {
             .sorted { $0.dayKey > $1.dayKey }
     }
 
+    // MARK: - Weekly volume
+
+    /// Sets logged inside one Monday-anchored ISO week. `weeksAgo: 0` is the
+    /// current week, `1` the week before, and so on.
+    ///
+    /// Weeks are ISO (Monday→Sunday) so the Progress tab's "this week" matches
+    /// Today/Train, which have always used `Movement`'s Monday weeks.
+    public static func setsInWeek(
+        _ sets: [WorkoutSetDTO],
+        weeksAgo: Int = 0,
+        now: Date = Date()
+    ) -> Int {
+        let start = Dates.startOfISOWeek(now, weeksAgo: weeksAgo)
+        let end = Dates.startOfISOWeek(now, weeksAgo: weeksAgo - 1)
+        return sets.filter { $0.timestamp >= start && $0.timestamp < end }.count
+    }
+
+    /// One point per ISO week that has at least one set, over the last `weeks`
+    /// weeks (including the current, partial one). Oldest first; the point's
+    /// `date` is the week's Monday as a dayKey. Weeks with no sets are omitted
+    /// rather than zero-filled — the chart plots what was actually logged.
+    public static func weeklySetCounts(
+        _ sets: [WorkoutSetDTO],
+        weeks: Int = 12,
+        now: Date = Date()
+    ) -> [Trends.Point] {
+        guard weeks > 0 else { return [] }
+        let cutoff = Dates.startOfISOWeek(now, weeksAgo: weeks - 1)
+        var counts: [String: Double] = [:]
+        for s in sets where s.timestamp >= cutoff {
+            counts[Dates.dayKey(Dates.startOfISOWeek(s.timestamp)), default: 0] += 1
+        }
+        return counts
+            .map { Trends.Point(date: $0.key, value: $0.value) }
+            .sorted { $0.date < $1.date }
+    }
+
     private struct Accumulator {
         var name: String = "Exercise"
         var isIsometric: Bool = false

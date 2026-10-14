@@ -49,10 +49,12 @@ final class ActivityCatalogTests: XCTestCase {
     }
 
     func test_walking_id_matches_dailyburn_exclusion() {
-        // DailyBurn / MoveCard exclude the walking activity from training burn by
-        // its literal id to avoid double-counting with steps. If this id ever
-        // changes, those exclusions must change too — this pins the contract.
-        XCTAssertNotNil(ActivityCatalog.activity(id: "activity-walking"))
+        // DailyBurn / MoveCard exclude the walking activity from training burn to
+        // avoid double-counting with steps, and reach for it via
+        // `ActivityCatalog.walkingId`. Pin both the constant's spelling and the
+        // fact that it still resolves to a real catalog entry.
+        XCTAssertEqual(ActivityCatalog.walkingId, "activity-walking")
+        XCTAssertNotNil(ActivityCatalog.activity(id: ActivityCatalog.walkingId))
     }
 
     func test_known_named_mets() {

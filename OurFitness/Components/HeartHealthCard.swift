@@ -82,42 +82,30 @@ private struct HeartHealthInfoSheet: View {
     @Environment(\.theme) private var theme
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Heart health")
-                        .font(.system(size: 38, weight: .regular))
-                        .foregroundStyle(theme.text)
-                    Text("YOUR CIRCUIT TARGETS")
-                        .font(.system(size: 10, weight: .medium)).tracking(2)
-                        .foregroundStyle(theme.dim)
-                }
+        InfoSheetScaffold(
+            title: "Heart health",
+            subtitle: "YOUR CIRCUIT TARGETS",
+            titleSize: 38,
+            dragIndicator: true
+        ) {
+            Text(TargetRationale.goalLine(for: profile.mode))
+                .font(.callout).foregroundStyle(theme.text)
+                .fixedSize(horizontal: false, vertical: true)
 
-                Text(TargetRationale.goalLine(for: profile.mode))
-                    .font(.callout).foregroundStyle(theme.text)
-                    .fixedSize(horizontal: false, vertical: true)
+            section("Fiber — reach the floor", TargetRationale.fiberWhy(for: profile))
+            section("Sodium — stay under", TargetRationale.sodiumWhy(for: profile))
+            section("Added sugar — stay under", TargetRationale.addedSugarWhy(for: profile))
+            section("Saturated fat — stay under", TargetRationale.saturatedFatWhy(for: profile))
 
-                section("Fiber — reach the floor", TargetRationale.fiberWhy(for: profile))
-                section("Sodium — stay under", TargetRationale.sodiumWhy(for: profile))
-                section("Added sugar — stay under", TargetRationale.addedSugarWhy(for: profile))
-                section("Saturated fat — stay under", TargetRationale.saturatedFatWhy(for: profile))
-
-                Text("These are practical starting targets aligned with DASH and American Heart Association guidance for blood pressure and cholesterol. Individual needs vary — your doctor's advice comes first.")
-                    .font(.caption2)
-                    .foregroundStyle(theme.dim)
-            }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
+            InfoFootnote("These are practical starting targets aligned with DASH and American Heart Association guidance for blood pressure and cholesterol. Individual needs vary — your doctor's advice comes first.")
         }
-        .presentationDetents([.medium, .large])
-        .presentationDragIndicator(.visible)
-        .presentationBackground(theme.bg)
     }
 
+    // Every section here is "heading + one paragraph", so this wraps the shared
+    // `InfoSection` rather than repeating its content closure four times.
     @ViewBuilder
     private func section(_ title: String, _ body: String) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title.uppercased()).font(.caption).tracking(2).foregroundStyle(theme.dim)
+        InfoSection(title: title) {
             Text(body)
                 .font(.callout).foregroundStyle(theme.text)
                 .fixedSize(horizontal: false, vertical: true)

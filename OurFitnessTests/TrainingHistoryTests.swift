@@ -70,4 +70,56 @@ final class TrainingHistoryTests: XCTestCase {
         XCTAssertEqual(sessions.count, 1)
         XCTAssertEqual(sessions[0].exercises.first?.name, "Exercise")
     }
+
+    // MARK: - Weekly volume (ISO / Monday weeks)
+
+    // Pinned clock: Wednesday 2026-05-27. The ISO week it belongs to starts
+    // Monday 2026-05-25 — a Sunday-anchored calendar would start it 05-24 and
+    // pull the previous Sunday into "this week", which is the bug these lock.
+    private let now = ISO8601DateFormatter().date(from: "2026-05-27T12:00:00Z")!
+
+    func test_setsInWeek_counts_only_the_current_iso_week() {
+        let sets = [
+            set("bench", reps: 5, at: "2026-05-27T12:00:00Z", cal: 10),  // Wed, this week
+            set("bench", reps: 5, at: "2026-05-26T12:00:00Z", cal: 10),  // Tue, this week
+            set("bench", reps: 5, at: "2026-05-23T12:00:00Z", cal: 10),  // Sat, last week
+        ]
+        XCTAssertEqual(TrainingHistory.setsInWeek(sets, now: now), 2)
+    }
+
+    func test_setsInWeek_weeksAgo_walks_back_one_week_at_a_time() {
+        let sets = [
+            set("bench", reps: 5, at: "2026-05-27T12:00:00Z", cal: 10),  // this week
+            set("bench", reps: 5, at: "2026-05-23T12:00:00Z", cal: 10),  // 1 week ago
+            set("bench", reps: 5, at: "2026-05-16T12:00:00Z", cal: 10),  // 2 weeks ago
+        ]
+        XCTAssertEqual(TrainingHistory.setsInWeek(sets, weeksAgo: 1, now: now), 1)
+        XCTAssertEqual(TrainingHistory.setsInWeek(sets, weeksAgo: 2, now: now), 1)
+        XCTAssertEqual(TrainingHistory.setsInWeek(sets, weeksAgo: 3, now: now), 0)
+    }
+
+    func test_weeklySetCounts_groups_by_monday_and_sorts_ascending() {
+        let sets = [
+            set("bench", reps: 5, at: "2026-05-27T12:00:00Z", cal: 10),
+            set("bench", reps: 5, at: "2026-05-26T12:00:00Z", cal: 10),
+            set("bench", reps: 5, at: "2026-05-23T12:00:00Z", cal: 10),
+        ]
+        let points = TrainingHistory.weeklySetCounts(sets, now: now)
+        XCTAssertEqual(points.map(\.date), ["2026-05-18", "2026-05-25"])
+        XCTAssertEqual(points.map(\.value), [1, 2])
+    }
+
+    func test_weeklySetCounts_drops_weeks_outside_the_window() {
+        let sets = [
+            set("bench", reps: 5, at: "2026-05-27T12:00:00Z", cal: 10),
+            set("bench", reps: 5, at: "2026-01-07T12:00:00Z", cal: 10),  // ~20 weeks back
+        ]
+        let points = TrainingHistory.weeklySetCounts(sets, weeks: 12, now: now)
+        XCTAssertEqual(points.count, 1)
+        XCTAssertEqual(points.first?.date, "2026-05-25")
+    }
+
+    func test_weeklySetCounts_empty_for_non_positive_window() {
+        XCTAssertTrue(TrainingHistory.weeklySetCounts([], weeks: 0, now: now).isEmpty)
+    }
 }
