@@ -46,10 +46,11 @@ final class EnergyBalanceTests: XCTestCase {
         XCTAssertNotNil(today)
         // intake = 500 + 300
         XCTAssertEqual(today?.intake, 800)
-        // burned = steps(10k @ 180lb ≈ 475) + logged sets (40 + 60)
-        // 4.3 × (180×0.453592) × (10000/7392) + 100 = 574.946… → 575
-        XCTAssertEqual(today?.burned, 575)
-        XCTAssertEqual(today?.net, 225)   // 800 − 575
+        // burned = ACTIVE calories: steps(10k @ 180lb ≈ 364) + logged sets (40 + 60).
+        // Step burn is net of the resting MET: (4.3 − 1) × (180 × 0.45359237) ×
+        // (10000/7392) = 364.4938… ; + 100 = 464.4938… → 464
+        XCTAssertEqual(today?.burned, 464)
+        XCTAssertEqual(today?.net, 336)   // 800 − 464
     }
 
     // MARK: Empty days are emitted as zero

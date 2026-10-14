@@ -466,7 +466,7 @@ private struct StepsInfoSheet: View {
             InfoSection(title: "Your numbers today") {
                 VStack(spacing: 8) {
                     InfoRow(label: "Calories burned walking",
-                            detail: "≈\(stepsKcal) cal from \(steps.formatted()) steps",
+                            detail: "≈\(stepsKcal) cal from \(steps.formatted()) steps — the energy on top of what you'd burn at rest",
                             emphasis: .label)
                     InfoRow(label: "Roughly how much was fat",
                             detail: "~\(fatGrams)g — about half your walking calories come from fat at an easy pace",

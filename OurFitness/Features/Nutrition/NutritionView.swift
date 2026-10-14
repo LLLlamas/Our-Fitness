@@ -136,7 +136,10 @@ struct NutritionView: View {
                 daySelector(allLogs: allLogs)
                 totalsCard(totals: totals, mealLoggingStreak: mealLoggingStreak)
                 if profile.mode == .circuit {
-                    HeartHealthCard(totals: totals, targets: profile.computedTargets, profile: profile)
+                    // `entries:` lets the card tell "no label data for these foods"
+                    // apart from "you ate almost no sodium" — see MacroBudget.capCoverage.
+                    HeartHealthCard(totals: totals, targets: profile.computedTargets,
+                                    profile: profile, entries: selectedDayLogs)
                 }
                 weeklyNutritionCard(allLogs: allLogs)
 
@@ -683,7 +686,8 @@ private struct LogRow: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(entry.customName ?? "Meal")
                         .foregroundStyle(theme.text)
-                    Text("\(entry.perServing.calories) cal · \(entry.perServing.proteinG)g protein · \(entry.perServing.carbsG)g carbs · \(entry.perServing.fatG)g fat")
+                    // Scaled by servings, so the row agrees with the day's totals.
+                    Text("\(entry.totalNutrition.calories) cal · \(entry.totalNutrition.proteinG)g protein · \(entry.totalNutrition.carbsG)g carbs · \(entry.totalNutrition.fatG)g fat")
                         .font(.system(.caption2, design: .monospaced))
                         .foregroundStyle(theme.dim)
                 }

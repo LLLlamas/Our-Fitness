@@ -25,17 +25,6 @@ public enum Steps {
         return Int((Double(sum) / Double(days)).rounded())
     }
 
-    /// % of the last N days that hit `goal`.
-    public static func hitRate(
-        _ steps: [StepCountDTO], goal: Int, days: Int = 14, end: Date = Date()
-    ) -> Double {
-        guard days > 0, goal > 0 else { return 0 }
-        let map = byDate(steps)
-        let window = Dates.lastNDays(days, end: end)
-        let hits = window.reduce(0) { $0 + ((map[$1] ?? 0) >= goal ? 1 : 0) }
-        return Double(hits) / Double(days)
-    }
-
     /// Series of {date, value} for plotting. Dense — fills missing days with 0.
     public static func series(_ steps: [StepCountDTO], days: Int, end: Date = Date()) -> [Trends.Point] {
         let map = byDate(steps)

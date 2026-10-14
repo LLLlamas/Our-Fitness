@@ -5,12 +5,12 @@ final class ActivityCatalogTests: XCTestCase {
     // MARK: - Calorie math (deterministic MET × kg × hours)
 
     func test_activity_exact_kcal() {
-        // 60 min basketball game (MET 8.0); 180 lb × 0.453592 = 81.64656 kg
-        // kcal = 8.0 × 81.64656 × (60/60) = 653.17248
+        // 60 min basketball game (MET 8.0 → net 7.0); 180 lb × 0.45359237 = 81.6466266 kg
+        // kcal = (8.0 − 1) × 81.6466266 × (60/60) = 571.5263862
         let kcal = CalorieEstimator.caloriesForActivity(
             met: 8.0, minutes: 60, bodyWeightLb: 180
         )
-        XCTAssertEqual(kcal, 653.17248, accuracy: 0.01)
+        XCTAssertEqual(kcal, 571.5263862, accuracy: 0.0001)
     }
 
     func test_activity_half_hour_pilates_matches_pilates_helper() {
@@ -55,6 +55,15 @@ final class ActivityCatalogTests: XCTestCase {
         // fact that it still resolves to a real catalog entry.
         XCTAssertEqual(ActivityCatalog.walkingId, "activity-walking")
         XCTAssertNotNil(ActivityCatalog.activity(id: ActivityCatalog.walkingId))
+    }
+
+    /// `tracksDistance` is a UI/semantics flag, NOT the step-overlap signal:
+    /// cycling tracks distance but registers no steps, so DailyBurn must keep
+    /// counting it. Pinned so nobody "simplifies" the exclusion to this flag.
+    func test_tracksDistance_is_not_the_step_overlap_signal() {
+        let cycling = ActivityCatalog.activity(id: "activity-cycling")
+        XCTAssertEqual(cycling?.tracksDistance, true)
+        XCTAssertFalse(DailyBurn.stepOverlappingActivityIds.contains("activity-cycling"))
     }
 
     func test_known_named_mets() {

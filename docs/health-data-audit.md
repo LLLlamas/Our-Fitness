@@ -24,6 +24,48 @@ be verified from the repository is listed as an open question rather than
 | Body-fat thresholds misattributed | Header cited Gallagher et al. (2000), whose thresholds are age-stratified; the code's buckets are not, so the citation did not describe the code | A real paper lent authority to numbers it did not contain. Citation removed, see open questions |
 | Wrong arithmetic in a validation comment | `CalorieEstimator` claimed "60 s plank at 150 lb → ~2.4 kcal" where the code produces 4.3 gross; the steps reconciliation ("~100 cal/mile × ~4 miles") also didn't match the model's ~84 cal/mile | The comments that existed to prove the math was right disproved it |
 
+### What a user will actually see change
+
+Burn figures drop, because they were overstated. At 180 lb:
+
+| | Before | After |
+|---|---|---|
+| 10,000 steps | 475 cal | **364** |
+| 45-min Pilates | 184 cal | **122** |
+| 30-min run, as a session | 367 cal | **327** on the session row, **0** added to the day |
+| A day of 10,000 steps + that run | 842 cal | **364** |
+
+That last row is the double-count: roughly 301 cal of the old step figure *was*
+the run's own steps, and the session added its 367 on top. The run is now
+credited only through its steps, valued at the walking MET — so it is slightly
+under-credited, which is the same under-count walking has always carried.
+Under-counting once is better than counting twice.
+
+Also lower: the Move card's estimate and training total, the steps card's
+"~N cal burned", Progress energy balance and training history, live-session and
+rep-counter calories, Circuit quick-log calories, and the step/rep projections.
+
+### Two consequences worth knowing
+
+1. **Historical calorie figures are now mixed.** Sets, cardio and live sessions
+   store their estimate at log time, so rows logged before this change still hold
+   the old gross value and will read high next to new ones. Fixing it means a
+   one-time recompute migration. Deliberately not done — it touches the schema,
+   and the artifact is bounded and explainable.
+2. **Glucose coverage regressed on purpose.** Samples with no meal-time metadata
+   — most CGM feeds and manual Health entries — are now dropped rather than
+   filed as fasting. A user who previously saw a glucose marker sync may now see
+   none. The complete fix is a separate non-fasting glucose marker kind.
+
+### Found while fixing: servings were never multiplied
+
+`DailyTotals.totals(from:)` summed `perServing` and ignored each entry's
+`servings` count, so a food logged at 2 servings counted once. Every macro read
+low, not just the micros. The label scanner is the only path that stores an
+unscaled figure plus a count (every other path pre-scales and leaves servings at
+1), so this only bit scanned foods — but it bit all of their macros. Fixed via
+`FoodLogEntryDTO.totalNutrition`, which the day totals and the log row now use.
+
 ## Verified correct — no action
 
 - **Mifflin-St Jeor** is implemented correctly (`10·kg + 6.25·cm − 5·age`, `+5` male / `−161` female) with the standard activity multipliers.

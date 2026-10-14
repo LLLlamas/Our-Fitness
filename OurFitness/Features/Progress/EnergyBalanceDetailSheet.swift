@@ -1,7 +1,8 @@
 // Energy-balance detail: calories IN (food logs) vs ACTIVITY BURN (steps +
 // logged training), charted over the recent window with the user's target
-// intake drawn as a reference line. Burn excludes resting metabolism — it's
-// the same active-calorie figure shown on the Today/Move card.
+// intake drawn as a reference line. Burn is activity-only — (MET − 1) × kg ×
+// hours, so the resting baseline every MET carries is subtracted out. It's the
+// same active-calorie figure shown on the Today/Move card.
 
 import SwiftUI
 import Charts
@@ -235,7 +236,7 @@ struct EnergyBalanceDetailSheet: View {
     // MARK: Footer note
 
     private var note: some View {
-        Text("Burn = active calories from steps + logged training (not resting metabolism). Target is your daily calorie goal. Net = calories in minus activity burn.")
+        Text("Burn = active calories from steps + logged training — the energy on top of what you'd burn at rest, so it's not a whole-day expenditure. Walks, runs and hikes you log are left out because their steps are already counted. Target is your daily calorie goal. Net = calories in minus activity burn.")
             .font(.footnote)
             .foregroundStyle(theme.dim)
             .fixedSize(horizontal: false, vertical: true)

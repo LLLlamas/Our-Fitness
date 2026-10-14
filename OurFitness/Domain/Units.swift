@@ -109,6 +109,9 @@ public enum Units {
         system == .metric ? displayValue / cmPerInch : displayValue
     }
 
+    /// No app caller yet (views bind through `lengthToInches`); kept as the
+    /// sibling of the live `parseWeightToLb` so every canonical quantity has a
+    /// string→canonical parse at the UI boundary. Covered by `UnitsTests`.
     public static func parseLengthToInches(_ text: String, system: UnitSystem) -> Double? {
         guard let v = Double(text.trimmingCharacters(in: .whitespaces)) else { return nil }
         return lengthToInches(v, system: system)
@@ -160,6 +163,12 @@ public enum Units {
     }
 
     // MARK: - Distance (canonical: miles)
+    //
+    // No app caller today — the only one was the deleted cardio logger. Kept
+    // because `CardioSessionDTO.distanceMiles` is still persisted (SchemaV1-V6)
+    // and the planned MET activity catalog carries `tracksDistance`
+    // (docs/activity-and-ai-expansion-research.md), which needs exactly this
+    // pair at the UI boundary. Covered by `UnitsTests`.
 
     public static func distanceUnit(_ system: UnitSystem) -> String {
         system == .metric ? "km" : "mi"

@@ -578,6 +578,27 @@ public struct FoodLogEntryDTO: Codable, Equatable, Sendable, Identifiable {
         self.timestamp = timestamp
         self.ingredients = ingredients
     }
+
+    /// What this entry actually contributed: `perServing` scaled by `servings`.
+    ///
+    /// Most logging paths pre-scale into `perServing` and leave `servings` at 1,
+    /// so this is a no-op for them. The label scanner is the one path that stores
+    /// an unscaled panel figure plus a serving count, and before this existed its
+    /// multi-serving entries were counted once — every macro read low.
+    public var totalNutrition: PerServing {
+        guard servings != 1 else { return perServing }
+        let s = servings
+        return PerServing(
+            calories: Int((Double(perServing.calories) * s).rounded()),
+            proteinG: Int((Double(perServing.proteinG) * s).rounded()),
+            carbsG: Int((Double(perServing.carbsG) * s).rounded()),
+            fatG: Int((Double(perServing.fatG) * s).rounded()),
+            fiberG: Int((Double(perServing.fiberG) * s).rounded()),
+            sodiumMg: Int((Double(perServing.sodiumMg) * s).rounded()),
+            addedSugarG: Int((Double(perServing.addedSugarG) * s).rounded()),
+            saturatedFatG: Int((Double(perServing.saturatedFatG) * s).rounded())
+        )
+    }
 }
 
 public struct BodyMetricDTO: Codable, Equatable, Sendable, Identifiable {
@@ -658,7 +679,9 @@ public struct DailyTotals: Equatable, Sendable {
 
     public static func totals(from entries: [FoodLogEntryDTO]) -> DailyTotals {
         entries.reduce(into: DailyTotals.zero) { acc, e in
-            let p = e.perServing
+            // `totalNutrition`, not `perServing` — an entry logged at 2 servings
+            // contributes twice. Paths that pre-scale leave servings at 1.
+            let p = e.totalNutrition
             acc.calories      += p.calories
             acc.proteinG      += p.proteinG
             acc.carbsG        += p.carbsG

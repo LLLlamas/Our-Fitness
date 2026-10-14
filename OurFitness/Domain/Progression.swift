@@ -1,5 +1,10 @@
 // Workout progression schemes. Pure.
 // To add a scheme: implement the case in `nextTarget` switch + new enum case.
+//
+// No UI consumes this yet (tests are the only callers), but it is the engine for
+// the persisted program feature: `ProgramModel.progressionRaw` / `ProgressionScheme`
+// ship in every schema version (SchemaV1-V6) and `ProgramDTO.schedule` stores the
+// `ProgramSetSpec`s this reads. Deleting it would orphan a persisted enum.
 
 import Foundation
 

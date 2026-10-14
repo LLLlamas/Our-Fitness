@@ -9,13 +9,6 @@ public enum Repos {
 
     // MARK: - Profiles
 
-    public static func listProfiles(_ ctx: ModelContext) -> [ProfileDTO] {
-        let desc = FetchDescriptor<ProfileModel>(
-            sortBy: [SortDescriptor(\.createdAt, order: .forward)]
-        )
-        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
-    }
-
     public static func setHealthGranted(_ ctx: ModelContext, profileId: UUID, granted: Bool) {
         let target = profileId
         let desc = FetchDescriptor<ProfileModel>(predicate: #Predicate { $0.id == target })
@@ -171,13 +164,6 @@ public enum Repos {
 
     // MARK: - Exercises
 
-    public static func listExercises(_ ctx: ModelContext) -> [ExerciseDTO] {
-        let desc = FetchDescriptor<ExerciseModel>(
-            sortBy: [SortDescriptor(\.name)]
-        )
-        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
-    }
-
     public static func exercises(_ ctx: ModelContext, forProfile profileId: UUID) -> [ExerciseDTO] {
         let desc = FetchDescriptor<ExerciseModel>(
             predicate: #Predicate { $0.profileId == profileId },
@@ -235,22 +221,6 @@ public enum Repos {
 
     // MARK: - Food log
 
-    public static func listFoodLog(_ ctx: ModelContext, userId: UUID, date: String? = nil) -> [FoodLogEntryDTO] {
-        var desc: FetchDescriptor<FoodLogEntryModel>
-        if let date {
-            desc = FetchDescriptor<FoodLogEntryModel>(
-                predicate: #Predicate { $0.userId == userId && $0.date == date },
-                sortBy: [SortDescriptor(\.timestamp, order: .forward)]
-            )
-        } else {
-            desc = FetchDescriptor<FoodLogEntryModel>(
-                predicate: #Predicate { $0.userId == userId },
-                sortBy: [SortDescriptor(\.timestamp, order: .reverse)]
-            )
-        }
-        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
-    }
-
     public static func addFoodLog(_ ctx: ModelContext, _ entry: FoodLogEntryDTO) {
         ctx.insert(FoodLogEntryModel(snapshot: entry))
         try? ctx.save()
@@ -283,14 +253,6 @@ public enum Repos {
     public static func addSavedTemplate(_ ctx: ModelContext, _ template: SavedMealTemplateDTO) {
         ctx.insert(SavedMealTemplateModel(snapshot: template))
         try? ctx.save()
-    }
-
-    public static func listSavedTemplates(_ ctx: ModelContext, userId: UUID) -> [SavedMealTemplateDTO] {
-        let descriptor = FetchDescriptor<SavedMealTemplateModel>(
-            predicate: #Predicate { $0.userId == userId },
-            sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
-        )
-        return (try? ctx.fetch(descriptor))?.map(\.snapshot) ?? []
     }
 
     public static func deleteSavedTemplate(_ ctx: ModelContext, id: UUID) {
@@ -332,16 +294,6 @@ public enum Repos {
             ctx.delete(target)
             try? ctx.save()
         }
-    }
-
-    /// Imperative fetch for non-`@Query` consumers (tests, future export/sync).
-    /// The WaterCard reads via `@Query` directly; don't duplicate that here.
-    public static func listWater(_ ctx: ModelContext, userId: UUID) -> [WaterEntryDTO] {
-        let desc = FetchDescriptor<WaterEntryModel>(
-            predicate: #Predicate { $0.userId == userId },
-            sortBy: [SortDescriptor(\.timestamp, order: .forward)]
-        )
-        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
     }
 
     // MARK: - Body + markers
@@ -396,32 +348,11 @@ public enum Repos {
         try? ctx.save()
     }
 
-    // MARK: - Steps
-
-    public static func listSteps(_ ctx: ModelContext, userId: UUID, limit: Int = 365) -> [StepCountDTO] {
-        var desc = FetchDescriptor<StepCountModel>(
-            predicate: #Predicate { $0.userId == userId },
-            sortBy: [SortDescriptor(\.date, order: .reverse)]
-        )
-        desc.fetchLimit = limit
-        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
-    }
-
     // MARK: - Pilates sessions
 
     public static func logPilatesSession(_ ctx: ModelContext, _ s: PilatesSessionDTO) {
         ctx.insert(PilatesSessionModel(snapshot: s))
         try? ctx.save()
-    }
-
-    public static func listPilatesSessions(
-        _ ctx: ModelContext, profileId: UUID
-    ) -> [PilatesSessionDTO] {
-        let desc = FetchDescriptor<PilatesSessionModel>(
-            predicate: #Predicate { $0.profileId == profileId },
-            sortBy: [SortDescriptor(\.date, order: .reverse)]
-        )
-        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
     }
 
     public static func deletePilatesSession(_ ctx: ModelContext, id: UUID) {
@@ -434,11 +365,6 @@ public enum Repos {
 
     // MARK: - Cardio sessions
 
-    public static func logCardio(_ ctx: ModelContext, _ s: CardioSessionDTO) {
-        ctx.insert(CardioSessionModel(snapshot: s))
-        try? ctx.save()
-    }
-
     public static func deleteCardioSession(_ ctx: ModelContext, id: UUID) {
         let desc = FetchDescriptor<CardioSessionModel>(predicate: #Predicate { $0.id == id })
         if let target = try? ctx.fetch(desc).first {
@@ -447,33 +373,11 @@ public enum Repos {
         }
     }
 
-    public static func listCardio(
-        _ ctx: ModelContext, profileId: UUID, limit: Int = 50
-    ) -> [CardioSessionDTO] {
-        var desc = FetchDescriptor<CardioSessionModel>(
-            predicate: #Predicate { $0.profileId == profileId },
-            sortBy: [SortDescriptor(\.date, order: .reverse)]
-        )
-        desc.fetchLimit = limit
-        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
-    }
-
     // MARK: - Live activity sessions
 
     public static func logActivitySession(_ ctx: ModelContext, _ s: ActivitySessionDTO) {
         ctx.insert(ActivitySessionModel(snapshot: s))
         try? ctx.save()
-    }
-
-    public static func listActivitySessions(
-        _ ctx: ModelContext, userId: UUID, limit: Int = 50
-    ) -> [ActivitySessionDTO] {
-        var desc = FetchDescriptor<ActivitySessionModel>(
-            predicate: #Predicate { $0.profileId == userId },
-            sortBy: [SortDescriptor(\.date, order: .reverse)]
-        )
-        desc.fetchLimit = limit
-        return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
     }
 
     public static func deleteActivitySession(_ ctx: ModelContext, id: UUID) {
@@ -501,6 +405,8 @@ public enum Repos {
         )
         try? ctx.save()
     }
+
+    // MARK: - Steps
 
     /// UPSERT by (userId, date). Used by both manual entry and HealthKit sync.
     public static func setSteps(_ ctx: ModelContext, userId: UUID, date: String, steps: Int, source: StepSource) {

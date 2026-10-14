@@ -135,8 +135,9 @@ public final class HealthKitService: ObservableObject {
         Int(await dailySum(.stepCount, unit: .count(), for: date))
     }
 
-    /// Daily step totals across the last `days` days, oldest first.
-    /// Missing days fall through to 0 in the returned dict (keyed by dayKey).
+    /// Daily step totals across the last `days` days, keyed by dayKey.
+    /// Days Health holds no step samples for are absent from the dict rather than
+    /// present as 0 — see `dailySums`.
     public func dailySteps(days: Int, end: Date = Date()) async -> [String: Int] {
         await dailySums(.stepCount, unit: .count(), days: days, end: end)
             .mapValues(Int.init)
@@ -291,7 +292,9 @@ public final class HealthKitService: ObservableObject {
         let unit = Self.mgPerDLUnit
         let preMealOnly = HKQuery.predicateForObjects(
             withMetadataKey: HKMetadataKeyBloodGlucoseMealTime,
-            allowedValues: [HKBloodGlucoseMealTime.preprandial.rawValue]
+            // HKMetadata.h documents the stored value as an NSNumber wrapping the
+            // enum — match that type exactly rather than relying on Int bridging.
+            allowedValues: [NSNumber(value: HKBloodGlucoseMealTime.preprandial.rawValue)]
         )
         let sort = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: false)
         return await withCheckedContinuation { cont in
@@ -331,13 +334,14 @@ public final class HealthKitService: ObservableObject {
     }
 
     /// Daily active-energy totals (kcal) across the last `days`, keyed by dayKey.
+    /// Days with no samples are absent from the dict, not 0 — see `dailySums`.
     public func dailyActiveEnergy(days: Int, end: Date = Date()) async -> [String: Double] {
         await dailySums(.activeEnergyBurned, unit: .kilocalorie(), days: days, end: end)
     }
 
     // MARK: - Week-to-date totals
 
-    /// Active energy burned (cal) from the start of `now`'s calendar week through
+    /// Active energy burned (cal) from the Monday-anchored (ISO) start of `now`'s week through
     /// `now`. nil when Health holds no active-energy samples in that window —
     /// callers hide the stat rather than showing a misleading 0.
     public func activeEnergyThisWeekCal(now: Date = Date()) async -> Int? {
@@ -347,8 +351,8 @@ public final class HealthKitService: ObservableObject {
         return Int(cal.rounded())
     }
 
-    /// Apple "exercise minutes" (appleExerciseTime) from the start of `now`'s
-    /// calendar week through `now`. nil when Health has nothing in the window.
+    /// Apple "exercise minutes" (appleExerciseTime) from the Monday-anchored (ISO)
+    /// start of `now`'s week through `now`. nil when Health has nothing in the window.
     public func exerciseMinutesThisWeek(now: Date = Date()) async -> Int? {
         let (start, end) = Self.weekToDateBounds(now)
         guard let minutes = await sumOrNil(.appleExerciseTime, unit: .minute(), start: start, end: end)
@@ -361,6 +365,10 @@ public final class HealthKitService: ObservableObject {
     /// Cumulative sum of a quantity type over a window, or nil when Health holds
     /// no samples for it there (HealthKit reports an absent total as a nil
     /// `sumQuantity`, which is different from a real 0).
+    ///
+    /// Absent-data policy: absent stays absent, so the UI can hide the stat rather
+    /// than show a misleading 0. `dailySums` below omits absent days for the same
+    /// reason; `dailySum` is the single deliberate exception.
     private func sumOrNil(_ id: HKQuantityTypeIdentifier, unit: HKUnit,
                           start: Date, end: Date) async -> Double? {
         guard let type = HKQuantityType.quantityType(forIdentifier: id) else { return nil }
@@ -380,7 +388,14 @@ public final class HealthKitService: ObservableObject {
     }
 
     /// Per-day cumulative sums across the last `days` days, keyed by dayKey.
-    /// Days Health has no samples for fall through to 0.
+    ///
+    /// Absent-data policy, shared with `sumOrNil` above: a day Health holds no
+    /// samples for is **omitted from the dictionary**, never emitted as 0 — "never
+    /// synced" and "genuinely zero" are different facts, and a chart or average fed
+    /// fabricated zeros reads as a real crash in activity. Callers decide what a
+    /// missing key means (`map[key] ?? 0` where a zero is the right default, or hide
+    /// the value). `dailySum(_:unit:for:)` is the one place that deliberately
+    /// collapses absent → 0, because its callers render a single day's total.
     private func dailySums(_ id: HKQuantityTypeIdentifier, unit: HKUnit,
                            days: Int, end: Date) async -> [String: Double] {
         guard let type = HKQuantityType.quantityType(forIdentifier: id), days > 0 else { return [:] }
@@ -403,7 +418,9 @@ public final class HealthKitService: ObservableObject {
             q.initialResultsHandler = { _, collection, _ in
                 var out: [String: Double] = [:]
                 collection?.enumerateStatistics(from: startDay, to: endExclusive) { stats, _ in
-                    out[Dates.dayKey(stats.startDate)] = stats.sumQuantity()?.doubleValue(for: unit) ?? 0
+                    // nil sumQuantity == no samples that day; leave the key out.
+                    guard let sum = stats.sumQuantity() else { return }
+                    out[Dates.dayKey(stats.startDate)] = sum.doubleValue(for: unit)
                 }
                 cont.resume(returning: out)
             }
@@ -499,11 +516,15 @@ public final class HealthKitService: ObservableObject {
         return (start, end)
     }
 
-    /// Start of `date`'s calendar week (user's locale first weekday) → `date`.
-    /// Week-to-date, not a full week: "this week so far" is what the UI shows.
+    /// Monday-anchored (ISO) start of `date`'s week → `date`. Week-to-date, not a
+    /// full week: "this week so far" is what the UI shows.
+    ///
+    /// Must stay on `Dates.startOfISOWeek` — the app defines a week as Monday→Sunday
+    /// everywhere (Movement, RepCounter, CardioLogCard, TrainingHistory), while
+    /// `Calendar.current` starts the week on Sunday in the US locale. Diverging here
+    /// made the "Active cal · week" / "Exercise min · week" cells in StepsCard cover
+    /// a different window from every other weekly figure in the app.
     private static func weekToDateBounds(_ date: Date) -> (Date, Date) {
-        let cal = Calendar.current
-        let start = cal.dateInterval(of: .weekOfYear, for: date)?.start ?? cal.startOfDay(for: date)
-        return (start, date)
+        (Dates.startOfISOWeek(date), date)
     }
 }

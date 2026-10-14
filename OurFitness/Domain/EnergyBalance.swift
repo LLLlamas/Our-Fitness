@@ -2,12 +2,14 @@
 // the intake-vs-burn detail sheet.
 //
 //   intake = calories logged from food (DailyTotals.totals)
-//   burned = ACTIVE calories out (steps + logged training), via DailyBurn —
-//            so the exclusions (logged walks, the Walking live-activity) match
-//            the Today/Move card exactly. Resting metabolism / BMR is NOT here.
+//   burned = ACTIVE calories out (steps + logged training), via DailyBurn — so
+//            the step-overlap exclusions (logged walks/runs, the walking,
+//            running and hiking live activities) match the Today/Move card
+//            exactly. Resting metabolism / BMR is NOT here.
 //
 // Pure Domain — all math through DailyTotals + DailyBurn (which route through
-// CalorieEstimator: MET × bodyWeightKg × hours). Never imports SwiftUI/SwiftData.
+// CalorieEstimator: (MET − 1) × bodyWeightKg × hours, the −1 stripping the
+// resting baseline every MET includes). Never imports SwiftUI/SwiftData.
 
 import Foundation
 
@@ -18,6 +20,7 @@ public enum EnergyBalance {
         public let day: String     // same yyyy-MM-dd key (kept named for readability)
         public let intake: Int     // calories in (food logs)
         public let burned: Int     // ACTIVE calories out (steps + training; excludes resting/BMR)
+                                   // — net METs, so comparable with Apple's active energy
 
         public var net: Int { intake - burned }
 

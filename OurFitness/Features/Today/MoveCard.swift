@@ -1,5 +1,8 @@
 // Apple Health "Move" glance: today's active energy + per-source MET breakdown.
-// Training burn is the hero number — accent-colored and large so it pops immediately.
+// Row 1 is Apple's active energy, our own estimate, and the training-only slice,
+// all three in the same weight so the comparison reads straight across. Every
+// burn figure here is activity-only — DailyBurn/CalorieEstimator subtract the
+// resting MET — which is what makes it comparable with Apple's active energy.
 
 import SwiftUI
 import SwiftData
@@ -67,8 +70,9 @@ struct MoveCard: View {
     }
 
     /// One source of truth for the day's burn: `DailyBurn` owns the MET math and
-    /// the walk-exclusion rules (logged walks and the Walking live activity are
-    /// already counted via steps). This card only rounds for display.
+    /// the step-overlap rules (logged walks/runs and the walking, running and
+    /// hiking live activities are already counted via steps). This card only
+    /// rounds for display.
     private var burn: DailyBurn.Breakdown {
         DailyBurn.breakdown(
             steps: todaySteps, sets: todaySets, cardio: todayCardio, pilates: todayPilates,
@@ -312,8 +316,8 @@ private struct MoveInfoSheet: View {
 
             InfoSection(title: "Our Estimate") {
                 VStack(alignment: .leading, spacing: 8) {
-                    columnNote(label: "Activity total", detail: "Step burn (MET 4.3) + all logged training sessions.")
-                    columnNote(label: "Training", detail: "Only logged sessions — strength, cardio, pilates, live activities. The activity Apple's sensors miss.")
+                    columnNote(label: "Activity total", detail: "Step burn (MET 4.3) + all logged training sessions. Activity-only — the resting calories inside every MET score are subtracted, same scope as Apple's active energy.")
+                    columnNote(label: "Training", detail: "Only logged sessions — strength, cardio, pilates, live activities. The activity Apple's sensors miss. Walks, runs and hikes sit out: their steps are already in the step burn.")
                     InfoRow(
                         label: "Today's breakdown",
                         detail: "Steps: ≈\(stepsKcal) cal\nTraining: ≈\(trainingMet) cal\nTotal: ≈\(metTotal) cal"
@@ -404,7 +408,7 @@ private struct MetTotalInfoSheet: View {
                     InfoMetricRow(
                         icon: "figure.walk",
                         name: "Steps",
-                        detail: "MET 4.3 × \(weightKg) kg × step count",
+                        detail: "(MET 4.3 − 1) × \(weightKg) kg × walking hours",
                         value: "~\(stepsKcal)",
                         unit: "cal"
                     )
@@ -420,7 +424,7 @@ private struct MetTotalInfoSheet: View {
             }
 
             InfoSection(title: "vs. Apple Total") {
-                InfoBody("Apple shows active energy from its sensors. Our Estimate uses the Ainsworth MET formula on what you log — step count + training sessions. Numbers won't match exactly; that's expected.")
+                InfoBody("Apple shows active energy from its sensors. Our Estimate uses the Ainsworth MET formula on what you log — step count + training sessions. Both figures are activity-only: neither counts the calories you'd burn at rest. Numbers still won't match exactly; that's expected.")
             }
         }
     }
@@ -449,14 +453,22 @@ private struct ExercisesInfoSheet: View {
     @State private var showWhatCounts = false
     @State private var showFormula = false
 
-    private var fatGrams: Int { max(0, Int((Double(trainingMetEstimate) * 0.50 / 9.0).rounded())) }
-    private var sweatOz: Double { Double(trainingMetEstimate) / 50.0 }
+    /// The sessions that actually contribute to the training total. `DailyBurn`
+    /// owns which ones overlap with the step count; this sheet must list exactly
+    /// what that total charged for, so it reads the same sets rather than
+    /// re-deriving them.
+    private var countedCardio: [CardioSessionDTO] {
+        todayCardio.filter { !DailyBurn.stepOverlappingCardio.contains($0.type) }
+    }
+    private var countedActivities: [ActivitySessionDTO] {
+        todayActivities.filter { !DailyBurn.stepOverlappingActivityIds.contains($0.activityId) }
+    }
 
     private var hasAnyTraining: Bool {
         !todaySets.isEmpty ||
-        !todayCardio.filter({ $0.type != .walk }).isEmpty ||
+        !countedCardio.isEmpty ||
         !todayPilates.isEmpty ||
-        !todayActivities.filter({ $0.activityId != ActivityCatalog.walkingId }).isEmpty
+        !countedActivities.isEmpty
     }
 
     // Grouped strength sets sorted by total calories descending
@@ -490,8 +502,8 @@ private struct ExercisesInfoSheet: View {
                         )
                     }
 
-                    // Cardio (non-walk)
-                    ForEach(todayCardio.filter { $0.type != .walk }) { session in
+                    // Cardio — walks/runs sit out (their steps are already counted)
+                    ForEach(countedCardio) { session in
                         activityRow(
                             icon: cardioIcon(session.type),
                             name: session.type.label,
@@ -512,8 +524,8 @@ private struct ExercisesInfoSheet: View {
                         )
                     }
 
-                    // Live sessions (non-walking)
-                    ForEach(todayActivities.filter { $0.activityId != ActivityCatalog.walkingId }) { session in
+                    // Live sessions — walking/running/hiking sit out (same reason)
+                    ForEach(countedActivities) { session in
                         activityRow(
                             icon: "stopwatch.fill",
                             name: session.activityName,
@@ -531,19 +543,11 @@ private struct ExercisesInfoSheet: View {
                         kcal: stepsKcal, dimmed: true
                     )
 
-                    // Training total + derived stats
+                    // Training total
                     if trainingMetEstimate > 0 {
                         InfoHeroStat(label: "TOTAL TRAINING BURN",
                                      value: "~\(trainingMetEstimate) cal",
                                      valueSize: 24)
-
-                        HStack(spacing: 16) {
-                            statPill(label: "fat burned", value: "≈\(fatGrams) g")
-                            if sweatOz > 0.5 {
-                                statPill(label: "sweat estimate", value: String(format: "≈%.1f oz", sweatOz))
-                            }
-                            Spacer()
-                        }
                     }
                 }
             }
@@ -552,9 +556,10 @@ private struct ExercisesInfoSheet: View {
             collapsibleSection(title: "WHAT'S COUNTED", isExpanded: $showWhatCounts) {
                 VStack(alignment: .leading, spacing: 5) {
                     Bullet("Strength sets — MET 3.5–8.0 by exercise", marker: .check)
-                    Bullet("Cardio sessions, non-walk — MET 4.5", marker: .check)
+                    Bullet("Cardio sessions — MET 4.5 (bike, swim, elliptical)", marker: .check)
                     Bullet("Pilates sessions — MET 3.0", marker: .check)
                     Bullet("Live sessions (basketball, yoga, etc.) — MET 2.8–11.8", marker: .check)
+                    Bullet("Walks, runs and hikes — their steps are already in Our Estimate, so the session isn't added again", marker: .cross)
                     Bullet("Steps — counted in Our Estimate, not here", marker: .cross)
                 }
             }
@@ -562,10 +567,10 @@ private struct ExercisesInfoSheet: View {
             // ── Collapsible: how it's calculated ─────────────────────
             collapsibleSection(title: "HOW IT'S CALCULATED", isExpanded: $showFormula) {
                 VStack(alignment: .leading, spacing: 8) {
-                    InfoBody("Formula: MET × your weight (\(weightKg) kg) × hours = calories. MET scores how intense an activity is relative to sitting still (MET 1.0). Walking = 4.3, squats = 5.0, pull-ups = 8.0.")
+                    InfoBody("Formula: (MET − 1) × your weight (\(weightKg) kg) × hours = calories. MET scores how intense an activity is relative to sitting still, and sitting still is MET 1.0 — so we subtract that one to leave only the calories the activity itself added. Walking = 4.3, squats = 5.0, pull-ups = 8.0.")
                     InfoRow(
                         label: "Example",
-                        detail: "60 min basketball (MET 8.0) × \(weightKg) kg × 1 hr = \(8 * weightKg) cal"
+                        detail: "60 min basketball (MET 8.0): (8.0 − 1) × \(weightKg) kg × 1 hr = \(7 * weightKg) cal"
                     )
                     InfoFootnote("Source: Ainsworth BE et al. 2011 Compendium of Physical Activities. Med Sci Sports Exerc.")
                 }
@@ -602,22 +607,6 @@ private struct ExercisesInfoSheet: View {
         .background(dimmed ? theme.card : theme.card2)
         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
         .overlay(dimmed ? RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(theme.line, lineWidth: 0.5) : nil)
-    }
-
-    @ViewBuilder
-    private func statPill(label: String, value: String) -> some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text(label)
-                .font(.system(size: 9, weight: .medium)).tracking(1)
-                .foregroundStyle(theme.dim)
-            Text(value)
-                .font(.system(size: 15, weight: .semibold, design: .monospaced))
-                .foregroundStyle(theme.text)
-        }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 6)
-        .background(theme.card)
-        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
     }
 
     // Only this sheet has collapsible sections, so the disclosure chrome stays

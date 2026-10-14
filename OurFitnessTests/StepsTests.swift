@@ -30,19 +30,6 @@ final class StepsTests: XCTestCase {
         XCTAssertEqual(Steps.average(data, days: 7, end: end), 4286)
     }
 
-    func test_hitRate_zero_with_no_data() {
-        XCTAssertEqual(Steps.hitRate([], goal: 10_000, days: 14, end: end), 0)
-    }
-
-    func test_hitRate_counts_window_hits() {
-        let data = [
-            rec("2026-05-24", 10_000),
-            rec("2026-05-23",  9_000),
-            rec("2026-05-22", 11_000),
-        ]
-        XCTAssertEqual(Steps.hitRate(data, goal: 10_000, days: 7, end: end), 2.0/7.0, accuracy: 0.01)
-    }
-
     func test_series_dense_oldest_first() {
         let s = Steps.series([rec("2026-05-24", 5000)], days: 3, end: end)
         XCTAssertEqual(s.count, 3)
