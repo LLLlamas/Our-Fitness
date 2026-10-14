@@ -6,7 +6,9 @@ Local development, Apple signing, TestFlight releases, backup CI workflows, and 
 
 ## Local development (primary workflow)
 
-Local Xcode is the primary loop. The GitHub Actions workflows stay in the repo as a backup path (see [Daily loop](#daily-loop) and the CI TestFlight section below).
+**As of 2026-08-08 development runs on a MacBook Pro (M5 Pro, macOS 26.6) with Xcode 26.6, Swift 6.3.3, and XcodeGen 2.46 installed locally.** The old Windows / Mac-less loop is retired — do not route a compile check through CI to find out whether Swift builds.
+
+Local Xcode is the primary loop. The GitHub Actions workflows stay in the repo as a backup path: `compile.yml` is a **safety net, not the feedback loop** (see [Daily loop](#daily-loop) and the CI TestFlight section below). Having a Mac also means most of the signing apparatus is now optional — see [Simplifying signing now that there's a Mac](#simplifying-signing-now-that-theres-a-mac).
 
 ### Prereqs
 
@@ -153,6 +155,7 @@ Add these signing and App Store secrets:
 | `MATCH_GIT_BASIC_AUTHORIZATION` | Step 5 base64 output | Base64 `github-user:token`; token needs access to the private signing repo |
 | `APPSTORE_PROFILE_BASE64` | Manual App Store provisioning profile for `com.ourfitness.app`, base64 encoded | Used by TestFlight export |
 | `APPSTORE_WIDGET_PROFILE_BASE64` | Manual App Store provisioning profile for `com.ourfitness.app.widgets`, base64 encoded | Used by widget/TestFlight export |
+| `APPSTORE_WATCH_PROFILE_BASE64` | Manual App Store provisioning profile for `com.ourfitness.app.watchkitapp`, base64 encoded | Must include watch HealthKit capability and the distribution certificate synced by match; see [watch setup](watch-app-setup.md) |
 
 Optional repository variables:
 
@@ -168,6 +171,8 @@ No manual `.p12` export is needed. The first signing refresh seeds the encrypted
 
 ## Daily loop
 
+Build and test locally first — CI is confirmation, not discovery.
+
 ```bash
 xcodegen generate                        # if project.yml changed (or a pull touched it)
 # build + test in Xcode (⌘R / ⌘U), or:
@@ -176,7 +181,7 @@ bash scripts/validate-ci-invariants.sh   # after xcodegen generate
 git add . && git commit -m "feat: add weekly planner skeleton" && git push origin main
 ```
 
-**`compile.yml`** still runs on every push as a backup gate (~3 min). If local and CI ever disagree, the run page shows the Swift errors with file + line.
+Push once it builds green locally. **`compile.yml`** still runs on every push as a backup gate (~3 min) and re-checks in a clean room. If local and CI ever disagree, the run page shows the Swift errors with file + line — but a failure there that passed locally usually means environment drift (stale DerivedData, an untracked file, a `.gitignore`d artifact the build needs), not a Swift error.
 
 ---
 
@@ -188,6 +193,7 @@ Prefer the local release above. When you want CI to do it, two ways:
 - GitHub → **Actions** → **TestFlight** workflow → **Run workflow**
 - Optional: fill in a changelog (visible to testers in the TestFlight app)
 - Leave **refresh_signing** unchecked for normal releases. Check it only when bootstrapping or intentionally rotating signing assets.
+- Verify the selected commit has a successful **Compile + Test** run before clicking **Run workflow**. Manual dispatch currently skips the TestFlight workflow’s unit-test step; a previous green run on a different commit is insufficient.
 - Click **Run workflow**
 
 ### Option B — Tag push
@@ -196,9 +202,9 @@ git tag v0.1.4
 git push --tags
 ```
 
-Either way, the workflow:
-1. Runs unit tests (fails the build if any test fails)
-2. Syncs the Apple Distribution certificate from encrypted fastlane match storage and installs the app/widget App Store provisioning profiles from the base64 secrets
+Both paths sync the Apple Distribution certificate from encrypted fastlane match storage and install the app, widget, and watch profiles from their base64 secrets. The workflow then:
+1. Runs unit tests **for tag releases only**; manual dispatch relies on the prior Compile + Test verification described above
+2. Uses manual signing for all three binaries
 3. Bumps `CFBundleVersion` to the GitHub run number
 4. Archives + exports IPA
 5. Uploads via fastlane `pilot`
@@ -259,7 +265,11 @@ The compile workflow generates a basic orange-on-black "OF" icon if none is pres
 ```
 Our-Fitness/
 ├── OurFitness/                  # Source (see CLAUDE.md for full map)
-├── OurFitnessTests/             # XCTest suites for the pure Domain layer
+├── OurFitnessWidgets/           # Live Activity widget extension (embedded in the app)
+├── OurFitnessWatch/             # watchOS companion app (embedded under OurFitness.app/Watch)
+├── Shared/                      # Contracts compiled into several targets (WatchSyncPayload, LiveSessionAttributes)
+├── OurFitnessTests/             # Hostless XCTest suites for the pure Domain layer
+├── OurFitnessPersistenceTests/  # Hostless SwiftData / repository regression suites
 ├── project.yml                  # XcodeGen — defines the Xcode project, generated locally and in CI
 ├── fastlane/
 │   ├── Fastfile                 # Lanes (local + CI): tests, compile, beta
@@ -273,3 +283,28 @@ Our-Fitness/
 ```
 
 The `.xcodeproj` is **deliberately gitignored** — regenerate it from `project.yml` with `xcodegen generate` locally (CI does the same on every run). Don't try to commit it.
+
+---
+
+## Simplifying signing now that there's a Mac
+
+The existing CI signing apparatus — match, temp keychains, three base64 `.mobileprovision` secrets — exists for exactly one reason: **no Mac.** Apple removed the App Store Connect API endpoint match used to attach capabilities to regenerated profiles (May 2025, ASC API v3.8.0), so profiles had to be hand-made in the portal, base64'd, and injected as secrets. Xcode does not have that limitation — it generates capability-bearing profiles directly.
+
+What the Mac unlocks (all verified present: Xcode 26.6, Swift 6.3.3, XcodeGen 2.46, `altool` and `notarytool` at `/Applications/Xcode.app/Contents/Developer/usr/bin/`):
+
+- **Live SwiftUI Previews** and simulator runs — no push cycle.
+- **Real HealthKit testing** on a tethered iPhone. The simulator returns no health data, so every HealthKit path has been untested until now. This is the single largest correctness gain.
+- **Local test runs** without burning a CI minute.
+- **Local archive → TestFlight**, via Xcode Organizer or `bundle exec fastlane beta`.
+
+**Recommended path (not yet applied — decide before changing `project.yml`):**
+
+1. Sign in at Xcode → Settings → Accounts with the team's Apple ID.
+2. Install the *existing* distribution certificate rather than minting a new one — Apple caps distribution certs at 3 per team, and a fresh one invalidates the profiles already in the match repo:
+   ```bash
+   bundle install
+   bundle exec fastlane match appstore --readonly
+   ```
+3. Only then consider flipping `project.yml` from `CODE_SIGN_STYLE: Manual` + `PROVISIONING_PROFILE_SPECIFIER` to `CODE_SIGN_STYLE: Automatic` for all three targets (app, widget, watch).
+
+**Trade-off, stated plainly:** automatic signing is simpler locally but *diverges from `testflight.yml`*, which assumes manual style and named profiles. Flipping `project.yml` breaks the CI TestFlight lane unless it is migrated at the same time. Pick one lane as canonical — running both is how signing drift starts. Full incident history for why this is delicate: [ci-history.md](ci-history.md).

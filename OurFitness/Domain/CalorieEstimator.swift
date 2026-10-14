@@ -15,6 +15,14 @@
 // independently (Mifflin-St Jeor BMR × activity multiplier) and consumes none of
 // these functions.
 //
+// DEPENDENCY-FREE ON PURPOSE. This file imports nothing but Foundation and
+// references no other Domain type, so it compiles directly into the watch target
+// (see project.yml → OurFitnessWatch sources) the way ReminderSchedule.swift does.
+// The one estimator that needs a named exercise — caloriesForReps(reps:exercise:) —
+// lives in ExerciseCalories.swift instead, because ExerciseDTO + ExerciseInfo would
+// drag ~1,800 lines of Domain onto the wrist for a function the watch never calls.
+// Keep it that way: anything added here must stay self-contained.
+//
 // Sources:
 //   Ainsworth BE et al. "2011 Compendium of Physical Activities." Med Sci Sports Exerc, 2011.
 //   Tudor-Locke C et al. "How many steps/day are enough?" Sports Med, 2004.
@@ -23,6 +31,17 @@
 import Foundation
 
 public enum CalorieEstimator {
+
+    // File-local on purpose. `Units.kgPerLb` is the app-wide canonical constant,
+    // but Units.swift is NOT one of the watch target's sources (project.yml →
+    // OurFitnessWatch), and this file is. Referencing Units here would break the
+    // watch build or drag Units onto the wrist. Value kept identical to
+    // `Units.kgPerLb` — the exact international-pound definition.
+    //
+    // Internal rather than private: ExerciseCalories.swift extends this enum from
+    // another file in the same module and needs it. Still not public — nothing
+    // outside Domain should be doing its own MET arithmetic.
+    static let kgPerLb: Double = 0.45359237
 
     /// Generic rep-based estimate using a flat MET.
     /// Use `caloriesForReps(reps:exercise:bodyWeightLb:)` for a named exercise —
@@ -37,18 +56,6 @@ public enum CalorieEstimator {
         let hours = (Double(reps) * secondsPerRep) / 3600.0
         let mets = loadLb != nil ? 4.0 : 3.5
         return activeKcal(mets: mets, bodyWeightLb: bodyWeightLb, hours: hours)
-    }
-
-    /// Exercise-specific rep estimate. Uses the named-exercise MET and tempo from
-    /// ExerciseInfo, falling back to category defaults when the name is unknown.
-    public static func caloriesForReps(
-        reps: Int,
-        exercise: ExerciseDTO,
-        bodyWeightLb: Double
-    ) -> Double {
-        let info = ExerciseInfo.meta(for: exercise)
-        let hours = (Double(reps) * info.secondsPerRep) / 3600.0
-        return activeKcal(mets: info.met, bodyWeightLb: bodyWeightLb, hours: hours)
     }
 
     /// Duration-based estimate (parenting lifts with a known load, pilates, cardio).
@@ -119,10 +126,18 @@ public enum CalorieEstimator {
         grossKcal(mets: max(0, mets - 1.0), bodyWeightLb: bodyWeightLb, hours: hours)
     }
 
+    /// Cross-file entry point for `ExerciseCalories.swift`, which extends this
+    /// enum from another file in the same module and so cannot see the private
+    /// helpers. Same activity-only semantics as every estimator above — resting
+    /// is already subtracted. Internal, never public.
+    static func kcal(mets: Double, bodyWeightLb: Double, hours: Double) -> Double {
+        activeKcal(mets: mets, bodyWeightLb: bodyWeightLb, hours: hours)
+    }
+
     /// Raw compendium product — GROSS expenditure, resting included. Private on
     /// purpose: every user-facing figure in the app is an active-energy figure.
     private static func grossKcal(mets: Double, bodyWeightLb: Double, hours: Double) -> Double {
-        let kg = bodyWeightLb * Units.kgPerLb
+        let kg = bodyWeightLb * kgPerLb
         return mets * kg * hours
     }
 }

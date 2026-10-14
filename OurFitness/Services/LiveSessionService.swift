@@ -29,11 +29,13 @@ public enum LiveSessionStore {
     public static func save(_ state: LiveSessionState) {
         if let data = try? JSONEncoder().encode(state) {
             UserDefaults.standard.set(data, forKey: key)
+            NotificationCenter.default.post(name: .liveSessionDidChange, object: nil)
         }
     }
 
     public static func clear() {
         UserDefaults.standard.removeObject(forKey: key)
+        NotificationCenter.default.post(name: .liveSessionDidChange, object: nil)
     }
 
     /// The active session for this profile, or nil if none / it belongs to another

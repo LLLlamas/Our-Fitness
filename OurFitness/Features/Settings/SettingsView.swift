@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import UserNotifications
 
 struct SettingsView: View {
     let profile: ProfileDTO
@@ -17,6 +18,17 @@ struct SettingsView: View {
     @AppStorage("nudge.meal.enabled") private var mealNudgeEnabled: Bool = true
     @AppStorage("nudge.water.enabled") private var waterNudgeEnabled: Bool = true
     @AppStorage("nudge.stall.enabled") private var stallNudgeEnabled: Bool = true
+    @AppStorage("reminders.enabled") private var remindersEnabled: Bool = true
+    @AppStorage private var reminderHour: Int
+
+    init(profile: ProfileDTO, health: HealthKitService) {
+        self.profile = profile
+        self.health = health
+        _reminderHour = AppStorage(
+            wrappedValue: ReminderNotificationService.defaultPreferredHour,
+            "reminderHour.\(profile.id.uuidString)"
+        )
+    }
 
     var body: some View {
         NavigationStack {
@@ -161,12 +173,70 @@ struct SettingsView: View {
                 label: "Keep-going nudge",
                 detail: "A once-a-day prompt if your steps, workouts, or a tracked number have gone quiet.",
                 isOn: $stallNudgeEnabled,
-                isFirst: false, isLast: true
+                isFirst: false, isLast: false
             )
+            nudgeToggleRow(
+                label: "Reminders (medication, plants & more)",
+                detail: "Notifications from your Reminders tab — medication, plant watering, and anything else you add. Turning this off silences all of them.",
+                isOn: $remindersEnabled,
+                isFirst: false, isLast: false
+            )
+            reminderHourRow
         }
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+        .onChange(of: remindersEnabled) { _, enabled in
+            if enabled {
+                Task { await ReminderNotificationService.reconcile(ctx, userId: profile.id) }
+            } else {
+                // reconcile() no-ops while globally disabled, so clear pending
+                // requests here. "reminder.<uuid>" mirrors the private identifier
+                // scheme in ReminderNotificationService — consolidate into a
+                // service API when that file is next touched.
+                Task {
+                    let center = UNUserNotificationCenter.current()
+                    let ids = await center.pendingNotificationRequests()
+                        .map(\.identifier)
+                        .filter { $0.hasPrefix("reminder.") }
+                    center.removePendingNotificationRequests(withIdentifiers: ids)
+                }
+            }
+        }
+        .onChange(of: reminderHour) { _, _ in
+            Task { await ReminderNotificationService.reconcile(ctx, userId: profile.id) }
+        }
     }
+
+    @ViewBuilder
+    private var reminderHourRow: some View {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Reminder time")
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(theme.text)
+                Text("What time of day reminders fire.")
+                    .font(.caption)
+                    .foregroundStyle(theme.dim)
+            }
+            Spacer()
+            Picker("", selection: $reminderHour) {
+                ForEach(6..<22, id: \.self) { hour in
+                    Text(Self.hourLabels[hour] ?? "").tag(hour)
+                }
+            }
+            .labelsHidden()
+            .tint(theme.accent)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .background(theme.card)
+    }
+
+    /// Built once — respects the user's 12/24-hour locale setting at first use.
+    private static let hourLabels: [Int: String] = Dictionary(uniqueKeysWithValues: (6..<22).map { hour in
+        let date = Calendar.current.date(from: DateComponents(hour: hour, minute: 0)) ?? Date()
+        return (hour, date.formatted(date: .omitted, time: .shortened))
+    })
 
     @ViewBuilder
     private func nudgeToggleRow(
@@ -234,7 +304,7 @@ struct SettingsView: View {
         Task {
             // Always re-request — HealthKit only prompts for types not yet authorized,
             // so this is a no-op when fully granted and picks up any new types added
-            // in app updates (e.g. flightsClimbed, distanceWalkingRunning, basalEnergyBurned).
+            // in app updates (e.g. flightsClimbed, distanceWalkingRunning).
             _ = await health.connectAndPersist(profileId: profile.id, ctx: ctx, toasts: toasts)
             // RootView's .task(id: StepObserverKey) re-fires on grant transition and arms the observer.
         }

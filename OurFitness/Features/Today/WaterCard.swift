@@ -54,7 +54,7 @@ struct WaterCard: View {
 
     private func undoLast() {
         guard let last = entries.filter({ $0.date == today }).max(by: { $0.timestamp < $1.timestamp }) else { return }
-        Repos.deleteWater(ctx, id: last.id)
+        guard Repos.deleteWater(ctx, id: last.id) else { return }
         toasts.show(Toast(title: "Removed", detail: "Last water entry",
                           accent: .warn, symbol: "arrow.uturn.backward"))
     }

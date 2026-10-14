@@ -195,7 +195,8 @@ struct NutritionView: View {
         }
         .sheet(isPresented: $showAddFood) {
             AddFoodSheet(profile: profile, targetDate: selectedDayKey) { dto in
-                Repos.addFoodLog(ctx, dto)
+                // Don't toast or prefetch off a write that didn't commit.
+                guard Repos.addFoodLog(ctx, dto) else { return }
                 toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
                 let foodName = dto.foodId ?? dto.customName ?? ""
                 if !foodName.isEmpty {
@@ -228,7 +229,7 @@ struct NutritionView: View {
         }
         .sheet(isPresented: $showCameraLog) {
             CameraFoodLogSheet(profile: profile, slot: .lunch) { dto in
-                Repos.addFoodLog(ctx, dto)
+                guard Repos.addFoodLog(ctx, dto) else { return }
                 toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
                 let foodName = dto.foodId ?? dto.customName ?? ""
                 if !foodName.isEmpty {
@@ -242,7 +243,7 @@ struct NutritionView: View {
                 profile: profile, totals: totals, targetDate: selectedDayKey,
                 recentLogs: allLogs, favoriteFoodIds: favoriteIds
             ) { dto in
-                Repos.addFoodLog(ctx, dto)
+                guard Repos.addFoodLog(ctx, dto) else { return }
                 toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
                 showMoodSheet = false
                 let foodName = dto.foodId ?? dto.customName ?? ""
@@ -441,7 +442,7 @@ struct NutritionView: View {
                                         fiberG: item.scaledFiberG
                                     )
                                 )
-                                Repos.addFoodLog(ctx, dto)
+                                guard Repos.addFoodLog(ctx, dto) else { return }
                                 toasts.logged(item.food.name, calories: item.scaledCalories)
                                 FoodAlternativeService.shared.prefetch(for: item.food.name, mode: profile.mode)
                             } label: {
@@ -514,15 +515,18 @@ struct NutritionView: View {
                         .font(.caption).tracking(2).textCase(.uppercase)
                         .foregroundStyle(theme.dim)
                     Spacer()
-                    if mealLoggingStreak >= 2 {
-                        Label("\(mealLoggingStreak)-day streak", systemImage: "flame.fill")
+                    // One walk, not three. `mealLoggingStreak` re-reads the
+                    // whole food-log history every time it is touched.
+                    let streak = mealLoggingStreak
+                    if streak >= 2 {
+                        Label("\(streak)-day streak", systemImage: "flame.fill")
                             .font(.system(size: 10, weight: .semibold))
                             .foregroundStyle(theme.accent)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 3)
                             .background(theme.accent.opacity(0.12))
                             .clipShape(Capsule())
-                            .accessibilityLabel("\(mealLoggingStreak) day logging streak")
+                            .accessibilityLabel("\(streak) day logging streak")
                     }
                 }
                 MacroQuadGrid(totals: totals, targets: profile.computedTargets, profile: profile)
@@ -573,13 +577,14 @@ struct NutritionView: View {
             Text(selectedDayKey == today ? "Today's log" : Dates.formatLong(selectedDayKey))
                 .font(.system(size: 22, weight: .regular))
                 .foregroundStyle(theme.text)
-            if selectedDayLogs.isEmpty {
+            let dayLogs = selectedDayLogs
+            if dayLogs.isEmpty {
                 emptyLogState
             } else {
-                ForEach(selectedDayLogs) { e in
+                ForEach(dayLogs) { e in
                     LogRow(entry: e, onTap: { entryToDetail = e },
                            canDelete: true) {
-                        Repos.deleteFoodLog(ctx, id: e.id)
+                        guard Repos.deleteFoodLog(ctx, id: e.id) else { return }
                         Haptics.warn()
                         toasts.show(Toast(title: "Removed", detail: e.customName ?? "Meal", accent: .warn, symbol: "minus.circle.fill"))
                     }

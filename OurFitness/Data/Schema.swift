@@ -184,6 +184,40 @@ public enum SchemaV6: VersionedSchema {
     }
 }
 
+/// V7 adds `ReminderGroupModel` / `ReminderModel` / `ReminderEventModel` (the
+/// Reminders tab — recurring plant-watering and, later, other reminders).
+/// Purely additive — three new entities, exactly like `WaterEntryModel` in V4.
+/// SwiftData applies them via automatic lightweight migration when the
+/// container opens V7 against an existing V6 store; we deliberately ship NO
+/// staged `MigrationPlan` (the `NSLightweightMigrationStage` path is what threw
+/// the uncatchable Obj-C exception in builds 26/27 — see ModelContainer+App.swift).
+public enum SchemaV7: VersionedSchema {
+    public static let versionIdentifier = Schema.Version(7, 0, 0)
+
+    public static var models: [any PersistentModel.Type] {
+        [
+            ProfileModel.self,
+            ExerciseModel.self,
+            ProgramModel.self,
+            WorkoutModel.self,
+            WorkoutSetModel.self,
+            FoodModel.self,
+            FoodLogEntryModel.self,
+            BodyMetricModel.self,
+            HealthMarkerModel.self,
+            StepCountModel.self,
+            PilatesSessionModel.self,
+            CardioSessionModel.self,
+            WaterEntryModel.self,
+            ActivitySessionModel.self,
+            SavedMealTemplateModel.self,
+            ReminderGroupModel.self,
+            ReminderModel.self,
+            ReminderEventModel.self,
+        ]
+    }
+}
+
 public enum AppSchema {
-    public static let current: any VersionedSchema.Type = SchemaV6.self
+    public static let current: any VersionedSchema.Type = SchemaV7.self
 }

@@ -41,7 +41,9 @@ public final class HealthKitService: ObservableObject {
         if let t = HKObjectType.quantityType(forIdentifier: .bloodGlucose)           { s.insert(t) }
         if let t = HKObjectType.quantityType(forIdentifier: .flightsClimbed)         { s.insert(t) }
         if let t = HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning)  { s.insert(t) }
-        if let t = HKObjectType.quantityType(forIdentifier: .basalEnergyBurned)       { s.insert(t) }
+        // MERGE: restored with `restingEnergy(for:)` below — the read is useless
+        // without it. A *quantity* type, so it's safe to authorize (see the note).
+        if let t = HKObjectType.quantityType(forIdentifier: .basalEnergyBurned)      { s.insert(t) }
         // NOTE: do NOT add the bloodPressure *correlation* type here. Authorizing
         // its component quantity types (systolic/diastolic, above) is sufficient to
         // run the correlation query in latestBloodPressure(); including the
@@ -88,15 +90,6 @@ public final class HealthKitService: ObservableObject {
             isAuthorized = false
             return .failed(reason: error.localizedDescription)
         }
-    }
-
-    /// Open iOS Settings → app entry. User adjusts per-metric Health toggles in Settings.app.
-    public func openSystemSettings() {
-        #if canImport(UIKit)
-        if let url = URL(string: UIApplication.openSettingsURLString) {
-            UIApplication.shared.open(url)
-        }
-        #endif
     }
 
     // MARK: - Background step observer
@@ -222,12 +215,6 @@ public final class HealthKitService: ObservableObject {
             }
             store.execute(q)
         }
-    }
-
-    /// Most recent (non-resting) heart-rate reading in bpm.
-    public func latestHeartRate() async -> Int? {
-        let bpm = await latestQuantity(.heartRate, unit: Self.bpmUnit)
-        return bpm.map { Int($0.value) }
     }
 
     /// Most recent heart-rate reading in bpm with its timestamp.

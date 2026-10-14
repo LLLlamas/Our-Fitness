@@ -56,6 +56,9 @@ struct LiveSessionCard: View {
             // "continue" after the app was backgrounded or killed.
             refreshToken = UUID()
         }
+        .onReceive(NotificationCenter.default.publisher(for: .liveSessionDidChange)) { _ in
+            refreshToken = UUID()
+        }
         .sheet(isPresented: $showPicker) {
             ActivityPicker(profile: profile) { state in
                 runner = RunnerSession(state: state)
@@ -340,6 +343,15 @@ private struct LiveSessionRunner: View {
                 .frame(maxWidth: .infinity)
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: .liveSessionDidChange)) { _ in
+            guard !ended else { return }
+            guard let active = LiveSessionStore.active(for: profile.id),
+                  abs(active.startDate.timeIntervalSince(state.startDate)) < 0.001 else {
+                dismiss()
+                return
+            }
+            state = active
+        }
         .presentationDetents([.large])
         .presentationBackground(theme.bg)
     }
@@ -417,6 +429,12 @@ private struct LiveSessionRunner: View {
     /// Adjust the planned time and reschedule the end notification relative to the
     /// original start anchor, so the ping lands at the new expected mark.
     private func adjustExpected(by delta: Int) {
+        guard let active = LiveSessionStore.active(for: profile.id),
+              abs(active.startDate.timeIntervalSince(state.startDate)) < 0.001 else {
+            dismiss()
+            return
+        }
+        state = active
         let newExpected = max(5, min(240, state.expectedMinutes + delta))
         guard newExpected != state.expectedMinutes else { return }
         state.expectedMinutes = newExpected
@@ -444,33 +462,18 @@ private struct LiveSessionRunner: View {
             met: state.met, minutes: Double(elapsedSeconds) / 60.0, bodyWeightLb: profile.weightLb
         )
 
-        // Pilates routes to its own model so it credits the pilates weekly streak +
-        // existing pilates surfaces (and is counted once, via DailyBurn's pilates path).
-        if state.activityId == ActivityCatalog.pilatesId {
-            Repos.logPilatesSession(ctx, PilatesSessionDTO(
-                profileId: profile.id,
-                date: state.startDate,
-                durationMinutes: actualMinutes,
-                focusAreas: []
-            ))
-        } else {
-            Repos.logActivitySession(ctx, ActivitySessionDTO(
-                profileId: profile.id,
-                date: state.startDate,
-                activityId: state.activityId,
-                activityName: state.activityName,
-                met: state.met,
-                durationMinutes: actualMinutes,
-                expectedMinutes: state.expectedMinutes,
-                caloriesEst: cal
-            ))
-        }
-
-        LiveSessionNotifier.cancel()
-        LiveSessionStore.clear()
-        // Dismiss the Lock Screen / Dynamic Island activity. No-op if none active.
-        if #available(iOS 16.2, *) {
-            LiveSessionActivityController.end()
+        switch LiveSessionCompletionService.finish(
+            ctx, profileId: profile.id, startDate: state.startDate,
+            elapsedSeconds: elapsedSeconds, bodyWeightLb: profile.weightLb
+        ) {
+        case .failed:
+            ended = false
+            return
+        case .stale:
+            dismiss()
+            return
+        case .saved:
+            break
         }
 
         toasts.show(Toast(
@@ -551,7 +554,7 @@ private struct RecentActivitySessions: View {
                     .foregroundStyle(theme.accent)
             }
             Button(role: .destructive) {
-                Repos.deleteActivitySession(ctx, id: s.id)
+                guard Repos.deleteActivitySession(ctx, id: s.id) else { return }
                 toasts.show(Toast(title: "Session removed", detail: s.activityName,
                                   accent: .warn, symbol: "trash.fill"))
             } label: {
@@ -571,7 +574,7 @@ private struct RecentActivitySessions: View {
                 Label("Edit duration", systemImage: "pencil")
             }
             Button(role: .destructive) {
-                Repos.deleteActivitySession(ctx, id: s.id)
+                guard Repos.deleteActivitySession(ctx, id: s.id) else { return }
                 toasts.show(Toast(title: "Session removed", detail: s.activityName,
                                   accent: .warn, symbol: "trash.fill"))
             } label: {
@@ -713,9 +716,9 @@ private struct EditSessionDurationSheet: View {
     }
 
     private func save() {
-        Repos.updateActivitySession(
+        guard Repos.updateActivitySession(
             ctx, id: session.id, durationMinutes: totalMinutes, bodyWeightLb: profile.weightLb
-        )
+        ) else { return }
         toasts.show(Toast(
             title: "Duration updated",
             detail: "\(session.activityName) · \(totalMinutes) min · ~\(estimatedCal) cal",
@@ -968,18 +971,18 @@ struct LogPastSessionSheet: View {
         // mirroring the live runner's end path. Focus areas keep the canonical
         // `allCases` order so the stored array is stable regardless of tap order.
         if activity.id == ActivityCatalog.pilatesId {
-            Repos.logPilatesSession(ctx, PilatesSessionDTO(
+            guard Repos.logPilatesSession(ctx, PilatesSessionDTO(
                 profileId: profile.id,
                 date: logDay.date,
                 durationMinutes: minutes,
                 focusAreas: PilatesFocusArea.allCases.filter { focusAreas.contains($0) },
                 notes: notes.isEmpty ? nil : notes
-            ))
+            )) else { return }
         } else {
             let cal = CalorieEstimator.caloriesForActivity(
                 met: met, minutes: Double(minutes), bodyWeightLb: profile.weightLb
             )
-            Repos.logActivitySession(ctx, ActivitySessionDTO(
+            guard Repos.logActivitySession(ctx, ActivitySessionDTO(
                 profileId: profile.id,
                 date: logDay.date,
                 activityId: activity.id,
@@ -988,7 +991,7 @@ struct LogPastSessionSheet: View {
                 durationMinutes: minutes,
                 expectedMinutes: minutes,
                 caloriesEst: cal
-            ))
+            )) else { return }
         }
         toasts.show(Toast(
             title: "\(activity.name) logged",

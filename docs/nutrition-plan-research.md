@@ -2,7 +2,7 @@
 
 **Purpose:** Handoff document for an agent building the nutrition module of a fitness tracking app. This consolidates the nutrition logic, data model, food library, design direction, and integration notes so the next agent can scaffold the feature without re-deriving any of it.
 
-**Status:** Research complete. Ready for implementation.
+**Status:** Historical research and original design spec. Nutrition logging, database-backed food matching, ingredient editing, templates, suggestions, and trends now exist. Goals/preferences, grocery generation, and other proposals below are not a current implementation checklist. Consult [CLAUDE.md](../CLAUDE.md) and the code for shipped behavior; preserve this document’s original reasoning.
 
 ---
 

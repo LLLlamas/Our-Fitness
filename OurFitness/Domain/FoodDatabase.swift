@@ -11,8 +11,10 @@
 //   2. `FoodDatabase` (in-memory struct + token index) — injected via
 //      `parse(text:database:)` / `resolve(items:database:)` in `OurFitnessTests`
 //      so the parser can be exercised without the bundled `.db` (the hostless
-//      test target ships no resources). `FoodDatabase.shared` still degrades
-//      gracefully to empty; no test or live path depends on it for matching.
+//      test target ships no resources). There is deliberately no bundle
+//      loader here: the only bundled food data is the SQLite `.db`, so a
+//      JSON-loading `shared` was permanently empty and read like a second,
+//      rival food database.
 //
 // Resolution authority: curated `CommonFoods` always wins; this DB is the
 // broader-coverage fallback (see `FoodParser`). Numbers are never invented —
@@ -123,21 +125,6 @@ public struct FoodDatabase: Sendable {
 
     // MARK: - Bundled resource
 
-    public static let resourceName = "usda-foods"
 
-    /// Lazily-loaded database backed by the bundled JSON. Empty when absent.
-    public static let shared: FoodDatabase = loadBundled()
 
-    /// Load `usda-foods.json` from `Bundle.main`. Returns an empty database if the
-    /// resource is missing or unreadable — callers must tolerate an empty DB.
-    public static func loadBundled(bundle: Bundle = .main) -> FoodDatabase {
-        guard
-            let url = bundle.url(forResource: resourceName, withExtension: "json"),
-            let data = try? Data(contentsOf: url),
-            let decoded = try? JSONDecoder().decode([FoodDatabaseEntry].self, from: data)
-        else {
-            return FoodDatabase(entries: [])
-        }
-        return FoodDatabase(entries: decoded)
-    }
 }

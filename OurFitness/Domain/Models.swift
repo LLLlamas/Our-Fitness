@@ -125,7 +125,11 @@ public struct MacroTargets: Codable, Equatable, Sendable {
     public var carbsG: Int
     public var fatG: Int
     public var stepsDaily: Int
-    // Legacy caps (formerly Circuit-only). Retained on the data model; UI no longer renders them.
+    // Circuit heart-health caps + fibre floor. LIVE: Components/HeartHealthCard.swift
+    // renders these (mounted in NutritionView), Domain/MacroBudget.swift computes
+    // headroom from them, and Domain/TargetRationale.swift writes the four …Why
+    // strings. Build leaves all four nil. They were briefly documented here as
+    // legacy; deleting them on that basis would take a shipped feature with them.
     public var sodiumMgMax: Int?
     public var addedSugarGMax: Int?
     public var saturatedFatGMax: Int?
@@ -707,6 +711,166 @@ public struct WaterEntryDTO: Codable, Equatable, Sendable, Identifiable {
         self.date = date
         self.flOz = flOz
         self.timestamp = timestamp
+    }
+}
+
+// MARK: - Reminders (V7)
+//
+// A generic recurring-reminder engine. Two built-in, fully-fleshed groups ship
+// with it: "Plants" (species catalog, seeded amount/interval, care sheets) and
+// "Medication" (dosage + a learned "you usually take this around now" nudge);
+// user-created groups hold basic reminders (name + photo + interval) until
+// they get their own customization later. See Domain/PlantCatalog.swift for
+// PlantLightLevel and the species catalog, Domain/ReminderSchedule.swift for
+// due-date math, and Domain/MedicationPattern.swift for the habit inference.
+
+public enum ReminderGroupKind: String, Codable, Sendable {
+    case medication
+    case plants
+    case custom
+
+    /// Fixed render order for reminder groups — medication, then plants, then
+    /// user-created groups. Explicit rather than alphabetical so a built-in
+    /// group can never be reordered by a rename, and so both the Reminders tab
+    /// and the add sheet sort the same way.
+    ///
+    /// Raw values are strings, so adding a case here (or reordering them) is
+    /// storage-safe — nothing persisted depends on declaration order.
+    public var sortRank: Int {
+        switch self {
+        case .medication: return 0
+        case .plants: return 1
+        case .custom: return 2
+        }
+    }
+}
+
+public struct ReminderGroupDTO: Codable, Equatable, Sendable, Identifiable {
+    public var id: UUID
+    public var userId: UUID
+    public var name: String
+    public var sfSymbol: String
+    public var kind: ReminderGroupKind
+    public var createdAt: Date
+
+    public init(id: UUID = UUID(), userId: UUID, name: String, sfSymbol: String,
+                kind: ReminderGroupKind, createdAt: Date = Date()) {
+        self.id = id
+        self.userId = userId
+        self.name = name
+        self.sfSymbol = sfSymbol
+        self.kind = kind
+        self.createdAt = createdAt
+    }
+}
+
+/// A single recurring reminder. The plant-specific fields (`speciesId` through
+/// `potDiameterInches`) are nil for reminders in a custom (non-plants) group,
+/// and the medication-specific fields (`dosage`, `patternReminderEnabled`) are
+/// likewise nil outside a medication group — one struct carries every group's
+/// extras, each set nil where it doesn't apply.
+/// `snoozedUntil` is schedule *state* (like `intervalDays`), not a derivable
+/// value, so it lives here rather than being reconstructed from the event log.
+public struct ReminderDTO: Codable, Equatable, Sendable, Identifiable {
+    public var id: UUID
+    public var userId: UUID
+    public var groupId: UUID
+    public var name: String
+    public var photoData: Data?
+    public var intervalDays: Int
+    public var amountFlOz: Double?
+    public var speciesId: String?
+    public var room: String?
+    public var light: PlantLightLevel?
+    public var potDiameterInches: Int?
+    public var notes: String?
+    public var createdAt: Date
+    public var snoozedUntil: Date?
+    /// Recommended dosage display text — "1 tablet", "10 mg", "5 mL". Free text
+    /// rather than a value + unit pair because prescriptions are written in
+    /// whatever unit the label uses, and we only ever show it back.
+    public var dosage: String?
+    /// Per-medication opt-in for the "you usually log this around now" nudge.
+    /// nil (older rows, and everything outside a medication group) reads as off.
+    public var patternReminderEnabled: Bool?
+    /// The dose times the user CONFIGURED, each as minutes from local midnight
+    /// (0..<1440), sorted. A medication taken morning and night holds two.
+    ///
+    /// Distinct from `MedicationPattern.typicalMinuteOfDay`, which infers a
+    /// single time from the completion log: these are stated, so they apply
+    /// from the first day with no history at all, and each becomes its own
+    /// daily alarm. Empty means "no set times" — the inferred pattern is then
+    /// the only timing the app has, exactly as before this field existed.
+    ///
+    /// Minutes rather than Dates because these are wall-clock times of day with
+    /// no calendar day attached; see `MedicationPattern.fireInstant` for why
+    /// fire instants are rebuilt from components rather than offsets.
+    public var scheduledMinutesOfDay: [Int]
+
+    public init(
+        id: UUID = UUID(), userId: UUID, groupId: UUID, name: String,
+        photoData: Data? = nil, intervalDays: Int, amountFlOz: Double? = nil,
+        speciesId: String? = nil, room: String? = nil, light: PlantLightLevel? = nil,
+        potDiameterInches: Int? = nil, notes: String? = nil,
+        createdAt: Date = Date(), snoozedUntil: Date? = nil,
+        dosage: String? = nil, patternReminderEnabled: Bool? = nil,
+        scheduledMinutesOfDay: [Int] = []
+    ) {
+        self.id = id
+        self.userId = userId
+        self.groupId = groupId
+        self.name = name
+        self.photoData = photoData
+        self.intervalDays = intervalDays
+        self.amountFlOz = amountFlOz
+        self.speciesId = speciesId
+        self.room = room
+        self.light = light
+        self.potDiameterInches = potDiameterInches
+        self.notes = notes
+        self.createdAt = createdAt
+        self.snoozedUntil = snoozedUntil
+        self.dosage = dosage
+        self.patternReminderEnabled = patternReminderEnabled
+        self.scheduledMinutesOfDay = MedicationPattern.normalizedTimes(scheduledMinutesOfDay)
+    }
+
+    /// The plant-specific fields are nil for reminders in a custom group (see
+    /// the doc comment above), so any of them being set is a reliable flag —
+    /// no group lookup needed at the call site. Computed, so it stays out of
+    /// the Codable representation. The medication fields deliberately stay out
+    /// of this check: a medication reminder sets `dosage`, never light/pot/
+    /// species, so it can't read as a plant.
+    public var isPlant: Bool {
+        light != nil || potDiameterInches != nil || speciesId != nil
+    }
+}
+
+/// Append-only completion log ("watered" / "done"). Mirrors WaterEntryDTO's
+/// dual date/timestamp shape.
+public struct ReminderEventDTO: Codable, Equatable, Sendable, Identifiable {
+    public var id: UUID
+    public var userId: UUID
+    public var reminderId: UUID
+    public var date: String      // YYYY-MM-DD local
+    public var amountFlOz: Double?
+    public var timestamp: Date
+    /// What the user says they actually took for THIS event. Deliberately
+    /// independent of the medication's recommended `ReminderDTO.dosage`:
+    /// logging half a tablet today records that fact on the event and must
+    /// never rewrite the recommendation.
+    public var dosageTaken: String?
+
+    public init(id: UUID = UUID(), userId: UUID, reminderId: UUID, date: String,
+                amountFlOz: Double? = nil, timestamp: Date = Date(),
+                dosageTaken: String? = nil) {
+        self.id = id
+        self.userId = userId
+        self.reminderId = reminderId
+        self.date = date
+        self.amountFlOz = amountFlOz
+        self.timestamp = timestamp
+        self.dosageTaken = dosageTaken
     }
 }
 

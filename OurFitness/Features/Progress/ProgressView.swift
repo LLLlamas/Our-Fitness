@@ -313,6 +313,11 @@ struct ProgressTabView: View {
 
     // MARK: - Cards
 
+    /// Takes the four snapshot arrays rather than reading the computed
+    /// properties, which each rebuild DTOs from the whole unbounded query. This
+    /// is called once per visible tracker and used to read them TWICE per call —
+    /// at 13 trackers that was ~104 full rebuilds of the user's entire body,
+    /// marker, step and set history for one pass of the grid.
     @ViewBuilder
     private func statCard(
         for kind: StatKind,
@@ -451,9 +456,9 @@ struct ProgressTabView: View {
         let today = Dates.dayKey()
         switch kind {
         case .weight:
-            Repos.addBody(ctx, BodyMetricDTO(
+            guard Repos.addBody(ctx, BodyMetricDTO(
                 userId: profile.id, date: today, weightLb: value
-            ))
+            )) else { return }
             // Re-point the profile (the source recommendations read) at this weight
             // and recompute targets so calorie/protein/water goals track current weight.
             Repos.syncCurrentWeight(ctx, profileId: profile.id)
@@ -462,25 +467,25 @@ struct ProgressTabView: View {
                               detail: Units.formatWeightWithUnit(lb: value, system: unitSystem),
                               accent: .ok, symbol: "scalemass.fill"))
         case .bodyFat:
-            Repos.addBody(ctx, BodyMetricDTO(
+            guard Repos.addBody(ctx, BodyMetricDTO(
                 userId: profile.id, date: today, bodyFatPct: value
-            ))
+            )) else { return }
             toasts.show(Toast(title: "Body fat logged",
                               detail: String(format: "%.1f %%", value),
                               accent: .ok, symbol: "scalemass.fill"))
         case .waist:
-            Repos.addBody(ctx, BodyMetricDTO(
+            guard Repos.addBody(ctx, BodyMetricDTO(
                 userId: profile.id, date: today, waistIn: value
-            ))
+            )) else { return }
             toasts.show(Toast(title: "Waist logged",
                               detail: Units.formatLengthWithUnit(inches: value, system: unitSystem),
                               accent: .ok, symbol: "ruler"))
         case .restingHR, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
             guard let markerKind = kind.markerKind else { return }
-            Repos.addMarker(ctx, HealthMarkerDTO(
+            guard Repos.addMarker(ctx, HealthMarkerDTO(
                 userId: profile.id, date: today,
                 kind: markerKind, value: value, source: "manual"
-            ))
+            )) else { return }
             toasts.show(Toast(title: "\(kind.title) logged",
                               detail: "\(formattedValue(value)) \(kind.unit(system: unitSystem))",
                               accent: .ok, symbol: "heart.text.square.fill"))
@@ -798,11 +803,15 @@ private func formattedValue(_ v: Double) -> String {
         ? String(Int(v)) : String(format: "%.1f", v)
 }
 
-/// Latest logged value for a marker kind, or nil. `Trends.markerSeries` already
-/// owns the filter-and-sort (and is unit-tested), so this is the one place the
+/// Latest logged value for a marker kind, or nil. This is the one place the
 /// Progress tab turns a marker history into "the current number".
+///
+/// Deliberately not `Trends.markerSeries(...).last`: that filters, maps and
+/// sorts the whole marker history, and this is called a dozen times per Progress
+/// pass — twice for blood pressure alone. Taking the max by date is the same
+/// answer in one pass, with no per-call re-sort of every marker ever logged.
 private func latestMarkerValue(_ kind: HealthMarkerKind, in markers: [HealthMarkerDTO]) -> Double? {
-    Trends.markerSeries(markers, kind: kind).last?.value
+    markers.lazy.filter { $0.kind == kind }.max { $0.date < $1.date }?.value
 }
 
 /// Single reading of the BMI thresholds — `BodyComposition.bmiCategory` owns the
@@ -1119,14 +1128,14 @@ private struct BPDetailSheet: View {
         guard let sys = Double(systolicDraft), sys > 0,
               let dia = Double(diastolicDraft), dia > 0 else { return }
         let today = Dates.dayKey()
-        Repos.addMarker(ctx, HealthMarkerDTO(
+        guard Repos.addMarker(ctx, HealthMarkerDTO(
             userId: profile.id, date: today,
             kind: .bpSystolic, value: sys, source: "manual"
-        ))
-        Repos.addMarker(ctx, HealthMarkerDTO(
+        )) else { return }
+        guard Repos.addMarker(ctx, HealthMarkerDTO(
             userId: profile.id, date: today,
             kind: .bpDiastolic, value: dia, source: "manual"
-        ))
+        )) else { return }
         toasts.show(Toast(title: "BP logged",
                           detail: "\(Int(sys))/\(Int(dia)) mmHg",
                           accent: .ok, symbol: "heart.text.square.fill"))
@@ -1285,7 +1294,9 @@ private struct TrainingHistorySheet: View {
             .union(activitiesByDay.keys)
             .sorted(by: >)
         ScrollView {
-            VStack(alignment: .leading, spacing: 18) {
+            // Lazy: this list is unbounded by design, and an eager VStack built
+            // every day section up front on open.
+            LazyVStack(alignment: .leading, spacing: 18) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Training history")
                         .font(.system(size: 38, weight: .regular))
@@ -1421,7 +1432,7 @@ private struct TrainingHistorySheet: View {
             calories: Int((session.caloriesEst ?? 0).rounded()),
             deleteLabel: "Delete \(session.type.label) session"
         ) {
-            Repos.deleteCardioSession(ctx, id: session.id)
+            guard Repos.deleteCardioSession(ctx, id: session.id) else { return }
         }
     }
 
@@ -1439,7 +1450,7 @@ private struct TrainingHistorySheet: View {
             calories: calories,
             deleteLabel: "Delete Pilates session"
         ) {
-            Repos.deletePilatesSession(ctx, id: session.id)
+            guard Repos.deletePilatesSession(ctx, id: session.id) else { return }
         }
     }
 
@@ -1453,7 +1464,7 @@ private struct TrainingHistorySheet: View {
             calories: Int((session.caloriesEst ?? 0).rounded()),
             deleteLabel: "Delete \(session.activityName) session"
         ) {
-            Repos.deleteActivitySession(ctx, id: session.id)
+            guard Repos.deleteActivitySession(ctx, id: session.id) else { return }
         }
     }
 
@@ -1494,7 +1505,8 @@ private struct TrainingHistorySheet: View {
 
     private func removeLastSet(_ line: TrainingHistory.ExerciseLine) {
         guard let id = line.setIds.first else { return }
-        Repos.deleteSet(ctx, id: id)
+        guard Repos.deleteSet(ctx, id: id) else { return }
+        Haptics.warn()
         toasts.show(Toast(title: "Set removed", detail: line.name, accent: .warn, symbol: "trash.fill"))
     }
 

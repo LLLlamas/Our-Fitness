@@ -89,13 +89,13 @@ struct BabyExercisesCard: View {
         }
         .sheet(isPresented: $showAddMovement) {
             AddExerciseSheet(mode: profile.mode) { draft in
-                Repos.createExercise(
+                guard Repos.createExercise(
                     ctx, profileId: profile.id, name: draft.name,
                     defaultRepsBottom: 1, defaultRepsTop: 20,
                     tracksWeight: draft.tracksWeight,
                     loadLb: draft.loadLb,
                     kind: draft.kind
-                )
+                ) != nil else { return }
                 toasts.show(Toast(title: draft.name, detail: "Movement added", accent: .win, symbol: "plus.circle.fill"))
             }
             .themed(theme.mode)
@@ -167,7 +167,7 @@ struct BabyExercisesCard: View {
             reps: amount,
             caloriesEst: cal
         )
-        Repos.addSet(ctx, dto)
+        guard Repos.addSet(ctx, dto) else { return }
         Task { @MainActor in
             ringGlow = true
             try? await Task.sleep(nanoseconds: 450_000_000)
@@ -190,13 +190,13 @@ struct BabyExercisesCard: View {
         let exId = exercise.id
         // Find the most recently logged set today for this exercise (query already scoped to profile)
         guard let latest = setModels.first(where: { $0.exerciseId == exId }) else { return }
-        Repos.deleteSet(ctx, id: latest.id)
+        guard Repos.deleteSet(ctx, id: latest.id) else { return }
         toasts.show(Toast(title: "Undone", detail: "\(exercise.name) · last rep removed",
                           accent: .warn, symbol: "arrow.uturn.backward"))
     }
 
     private func deleteExercise(_ exercise: ExerciseDTO) {
-        Repos.deleteExercise(ctx, id: exercise.id)
+        guard Repos.deleteExercise(ctx, id: exercise.id) else { return }
         toasts.show(Toast(title: "Removed", detail: "\(exercise.name) deleted",
                           accent: .warn, symbol: "trash"))
     }

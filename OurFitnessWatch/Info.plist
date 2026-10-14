@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Info.plist for the OurFitnessWatch companion app (single-target watchOS app,
+  no separate WatchKit extension). Hand-written and wired via the target's
+  INFOPLIST_FILE build setting in project.yml — NO `info:`/`entitlements:`
+  block, the same XcodeGen-clobber trap documented for the main app and the
+  widget extension.
+
+  WKApplication + WKCompanionAppBundleIdentifier are what make this a watch
+  app paired to com.ourfitness.app rather than a standalone watchOS app.
+-->
+<plist version="1.0">
+<dict>
+  <key>CFBundleDevelopmentRegion</key>
+  <string>$(DEVELOPMENT_LANGUAGE)</string>
+  <key>CFBundleDisplayName</key>
+  <string>Our-Fitness</string>
+  <key>CFBundleExecutable</key>
+  <string>$(EXECUTABLE_NAME)</string>
+  <key>CFBundleIdentifier</key>
+  <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+  <key>CFBundleInfoDictionaryVersion</key>
+  <string>6.0</string>
+  <key>CFBundleName</key>
+  <string>$(PRODUCT_NAME)</string>
+  <key>CFBundlePackageType</key>
+  <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+  <key>CFBundleShortVersionString</key>
+  <string>$(MARKETING_VERSION)</string>
+  <key>CFBundleVersion</key>
+  <string>$(CURRENT_PROJECT_VERSION)</string>
+  <key>WKApplication</key>
+  <true/>
+  <key>WKCompanionAppBundleIdentifier</key>
+  <string>com.ourfitness.app</string>
+  <key>UISupportedInterfaceOrientations</key>
+  <array>
+    <string>UIInterfaceOrientationPortrait</string>
+  </array>
+  <!--
+    HealthKit. Both usage strings are required: the watch READS heart rate and
+    active energy during a live session, and WRITES the finished HKWorkout so
+    the Activity rings get credit. A missing string is a launch-time crash the
+    moment the framework is touched, not a warning.
+  -->
+  <key>NSHealthShareUsageDescription</key>
+  <string>Our Fitness reads your heart rate and active energy during a workout so it can show live stats on your wrist.</string>
+  <key>NSHealthUpdateUsageDescription</key>
+  <string>Our Fitness saves your finished workouts to Health so they count toward your Activity rings.</string>
+  <!--
+    Without workout-processing the app is suspended the moment you drop your
+    wrist, which kills the HKWorkoutSession mid-session. This is the entire
+    reason a watch app can track a workout at all.
+  -->
+  <key>WKBackgroundModes</key>
+  <array>
+    <string>workout-processing</string>
+  </array>
+</dict>
+</plist>

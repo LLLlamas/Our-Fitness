@@ -14,6 +14,7 @@ struct TodayView: View {
     @Environment(\.modelContext) private var ctx
     @Environment(\.theme) private var theme
     @EnvironmentObject private var toasts: ToastCenter
+    @State private var healthRefreshGeneration = 0
 
     @Query private var logModels: [FoodLogEntryModel]
     @Query private var stepModels: [StepCountModel]
@@ -77,6 +78,10 @@ struct TodayView: View {
         self._health = ObservedObject(wrappedValue: health)
         let uid = profile.id
         let todayKey = Dates.dayKey()
+        // Bound to today. This tab renders one day — the day's macro totals,
+        // its food log, and the nudge counts — so loading the user's whole
+        // logging history to do it was pure cost, and cost that grew every day
+        // they used the app.
         _logModels = Query(
             filter: #Predicate<FoodLogEntryModel> { $0.userId == uid && $0.date == todayKey },
             sort: \.timestamp,
@@ -125,9 +130,8 @@ struct TodayView: View {
         Water.total(waterModels.map(\.snapshot), on: today)
     }
 
-    private var todaysLogs: [FoodLogEntryDTO] {
-        logModels.map(\.snapshot).filter { $0.date == today }
-    }
+    /// Already today-only by predicate — no client-side date filter needed.
+    private var todaysLogs: [FoodLogEntryDTO] { logModels.map(\.snapshot) }
     private var totals: DailyTotals { DailyTotals.totals(from: todaysLogs) }
 
     // Step data — used by both Build (linear bar) and Circuit (ring + strip)
@@ -163,11 +167,14 @@ struct TodayView: View {
                 MacroQuadGrid(totals: totals, targets: profile.computedTargets, profile: profile)
 
                 if profile.healthGranted {
-                    MoveCard(profile: profile, health: health)
+                    MoveCard(profile: profile, health: health, refreshGeneration: healthRefreshGeneration)
                 }
 
                 WaterCard(profile: profile)
 
+                // Mode-aware tail: one StepsCard serves both modes (Build =
+                // hero count + bar, Circuit = ring + weekly strip), followed by
+                // today's food log. Circuit adds the focus footer between them.
                 if profile.mode == .circuit {
                     circuitContent
                 } else {
@@ -192,6 +199,7 @@ struct TodayView: View {
             }
         }
         .refreshable {
+            healthRefreshGeneration += 1
             await refreshToday()
             if profile.healthGranted {
                 await health.syncFromHealth(profileId: profile.id, ctx: ctx)
