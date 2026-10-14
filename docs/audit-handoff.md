@@ -118,3 +118,25 @@ completed/incomplete edits, actual checks, active agents, next steps and pending
 choices. Finish or clearly mark an in-progress mutation before another begins.
 Never label unbuilt/untested changes complete. Do not rely on conversation history,
 agent memory, or /tmp scripts as the only handoff. Resume from this state.
+
+## Release checkpoint — 2026-09-14
+
+User authorized commit, push and TestFlight. Milestone commit:
+`d4f1b2b3e62ab3285f274c2598ead5012f595bda`, pushed to
+`LLLlamas/Our-Fitness` branch `feature/reminders-plants`.
+
+Compile + Test run: https://github.com/LLLlamas/Our-Fitness/actions/runs/34806882488
+Initial status queued. TestFlight has NOT yet been dispatched; wait for this exact
+commit's successful compile/test gate before manual workflow dispatch. Existing
+signing remains readonly; do not set refresh_signing=true. Next-scope plan is
+committed in docs/next-audit-scope.md. Update this checkpoint after dispatch/result.
+
+Automatic review initially rejected push as unverified egress. Read-only GitHub
+checks confirmed this is the existing public repo, current account has ADMIN,
+and remote branch matched the release commit's exact parent. Retry then succeeded.
+
+Compile + Test run 34806882488 completed SUCCESS for d4f1b2b.
+TestFlight dispatched: https://github.com/LLLlamas/Our-Fitness/actions/runs/34807177422
+Workflow run number / expected build number: 90. Verified head SHA is d4f1b2b.
+Readonly signing; changelog supplied. Initial state queued. Dispatch is not proof
+of upload or Apple processing success; inspect the run before reporting shipped.
