@@ -45,6 +45,12 @@ public enum ActivityCatalog {
     /// site so the catalog and the exclusions can't drift apart.
     public static let walkingId = "activity-walking"
 
+    /// Yoga and Stretching back the optional Train sections (`TrainSection`),
+    /// which query `ActivitySession`s by these ids. Use the constant, never the
+    /// literal — a renamed id would silently empty those sections.
+    public static let yogaId = "activity-yoga"
+    public static let stretchingId = "activity-stretching"
+
     /// All offered activities. Ordered roughly most-common first. MET values are
     /// Ainsworth 2011 general-effort codes; see comments per entry.
     public static let all: [Activity] = [
@@ -67,7 +73,8 @@ public enum ActivityCatalog {
         // Studio / low-impact
         Activity(id: "activity-dancing",             name: "Dancing",             met: 5.5,  symbol: "figure.dance"),            // 03025 general
         Activity(id: pilatesId,                      name: "Pilates",             met: 3.0,  symbol: "figure.pilates"),          // 06010 general
-        Activity(id: "activity-yoga",                name: "Yoga",                met: 2.8,  symbol: "figure.yoga"),             // 02105 hatha
+        Activity(id: yogaId,                         name: "Yoga",                met: 2.8,  symbol: "figure.yoga"),             // 02105 hatha
+        Activity(id: stretchingId,                   name: "Stretching",          met: 2.3,  symbol: "figure.flexibility"),      // 02101 stretching, mild
         // Catch-all
         Activity(id: otherId,                        name: "Other",               met: otherDefaultMET, symbol: "figure.mixed.cardio"),
     ]

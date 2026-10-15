@@ -138,7 +138,8 @@ final class WatchWorkoutSession: NSObject, ObservableObject {
         case "activity-hiking":      return .hiking
         case "activity-rowing":      return .rowing
         case "activity-elliptical":  return .elliptical
-        case "activity-yoga":        return .yoga
+        case ActivityCatalog.yogaId: return .yoga
+        case ActivityCatalog.stretchingId: return .flexibility
         case "activity-dancing":     return .cardioDance
         case "activity-climbing":    return .climbing
         case "activity-boxing":      return .boxing

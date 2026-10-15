@@ -1,5 +1,5 @@
-// Friction-free set counter for any exercise. Tap +1 per rep (or per minute for
-// a duration exercise), Save set commits a WorkoutSet. Shows a weight field only
+// Friction-free set counter for any exercise. Scroll a wheel to the set's reps
+// (or minutes for a duration exercise), Save set commits a WorkoutSet. Shows a weight field only
 // for a lift that tracks per-set weight. For isometric exercises, shows a
 // countdown timer instead. Calories go through `Repos.setCaloriesEstimate`, the
 // same function a set edit recomputes with.
@@ -39,12 +39,13 @@ private struct RepCounterView: View {
     // milestone count (approximated per-exercise; see workoutSetMessage call site).
     @Query private var weekSetModels: [WorkoutSetModel]
 
-    @State private var reps: Int = 0
+    @State private var reps: Int = 10
     @State private var weightStr: String = ""
     @State private var setsLogged: Int = 0
     @State private var showInfo = false
     @State private var lastProjection: String?
     @State private var prefilledWeight = false
+    @State private var prefilledCount = false
     @FocusState private var weightFocused: Bool
 
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
@@ -66,6 +67,8 @@ private struct RepCounterView: View {
     /// A duration exercise stores minutes in `reps`, so the counter counts minutes.
     private var isMinutes: Bool { exercise.kind == .duration }
     private func unitWord(_ n: Int) -> String { isMinutes ? "min" : (n == 1 ? "rep" : "reps") }
+    /// Wheel range: 1–100 reps, or 1–180 minutes for a duration exercise.
+    private var countRange: ClosedRange<Int> { isMinutes ? 1...180 : 1...100 }
 
     // Sets logged this ISO week for this exercise (Monday-anchored, matching
     // the WorkoutsView stats helper). Approximates per-muscle weekly volume.
@@ -81,9 +84,7 @@ private struct RepCounterView: View {
     var body: some View {
         VStack(spacing: 18) {
             header
-            counterDisplay
-            tapButton
-            bumpRow
+            countPicker
             if tracksWeight {
                 weightField
             }
@@ -96,9 +97,14 @@ private struct RepCounterView: View {
         .padding(.horizontal, 24)
         .padding(.vertical, 24)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .presentationDetents([.large])
+        // The wheel + Save fit a half sheet; .large stays available for the weight
+        // field with the keyboard up.
+        .presentationDetents([.medium, .large])
         .presentationBackground(theme.bg)
-        .onAppear { prefillWeight() }
+        .onAppear {
+            prefillCount()
+            prefillWeight()
+        }
         .sheet(isPresented: $showInfo) {
             ExerciseInfoSheet(exercise: exercise, profile: profile)
         }
@@ -120,6 +126,17 @@ private struct RepCounterView: View {
         prefilledWeight = true
         guard let last = weekSetModels.first(where: { ($0.weightLb ?? 0) > 0 })?.weightLb else { return }
         weightStr = Units.formatWeight(lb: last, system: unitSystem, decimals: 0)
+    }
+
+    /// Start the wheel on this week's last logged count for this exercise (same
+    /// query window as the weight pre-fill), else 10 reps / 5 min. Runs once, so
+    /// it never moves the wheel out from under the user.
+    private func prefillCount() {
+        guard !prefilledCount else { return }
+        prefilledCount = true
+        let last = weekSetModels.first(where: { $0.holdSeconds == nil && $0.reps > 0 })?.reps
+        let fallback = isMinutes ? 5 : 10
+        reps = min(max(last ?? fallback, countRange.lowerBound), countRange.upperBound)
     }
 
     @ViewBuilder
@@ -147,61 +164,22 @@ private struct RepCounterView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
+    /// Same wheel idiom as the isometric hold picker.
     @ViewBuilder
-    private var counterDisplay: some View {
-        VStack(spacing: 0) {
-            AnimatedNumber(
-                Double(reps),
-                font: .system(size: 120, weight: .semibold),
-                color: theme.accent
-            )
-            if isMinutes {
-                Text("minutes")
-                    .font(.caption).tracking(1)
-                    .foregroundStyle(theme.dim)
+    private var countPicker: some View {
+        VStack(spacing: 8) {
+            Text((isMinutes ? "Minutes this set" : "Reps this set").uppercased())
+                .font(.system(size: 10)).tracking(2)
+                .foregroundStyle(theme.dim)
+            Picker(isMinutes ? "Minutes" : "Reps", selection: $reps) {
+                ForEach(Array(countRange), id: \.self) { n in
+                    Text("\(n) \(unitWord(n))").tag(n)
+                }
             }
+            .pickerStyle(.wheel)
+            .frame(height: 150)
+            .clipped()
         }
-    }
-
-    @ViewBuilder
-    private var tapButton: some View {
-        Button {
-            reps += 1
-        } label: {
-            Text(isMinutes ? "+1 min" : "+1 rep")
-                .font(.system(size: 22, weight: .semibold))
-                .frame(maxWidth: .infinity, minHeight: 88)
-        }
-        .tactile(.primary, fullWidth: true)
-    }
-
-    /// Coarse adjustments beside the +1 tap target. A 12-rep set was 12 taps plus
-    /// Save; with these it's two. −1 is what makes overshooting a +10 fixable
-    /// without Clear wiping the count.
-    @ViewBuilder
-    private var bumpRow: some View {
-        HStack(spacing: 8) {
-            Button {
-                reps = max(0, reps - 1)
-                Haptics.bump()
-            } label: { Text("−1") }
-            .tactile(.bump)
-            .disabled(reps == 0)
-            .opacity(reps == 0 ? 0.5 : 1)
-
-            Button {
-                reps += 5
-                Haptics.bump()
-            } label: { Text("+5") }
-            .tactile(.bump)
-
-            Button {
-                reps += 10
-                Haptics.bump()
-            } label: { Text("+10") }
-            .tactile(.bump)
-        }
-        .frame(maxWidth: .infinity)
     }
 
     @ViewBuilder
@@ -224,21 +202,11 @@ private struct RepCounterView: View {
     private var actionRow: some View {
         HStack(spacing: 10) {
             Button {
-                reps = 0
-                Haptics.warn()
-            } label: {
-                Text("Clear")
-            }
-            .tactile(.secondary)
-
-            Button {
                 saveSet()
             } label: {
                 Text("Save set")
             }
             .tactile(.primary, fill: theme.ok)
-            .disabled(reps == 0)
-            .opacity(reps == 0 ? 0.5 : 1)
 
             Button {
                 dismiss()
@@ -300,7 +268,7 @@ private struct RepCounterView: View {
                 symbol: "checkmark.seal.fill"
             ))
         }
-        reps = 0
+        // The wheel keeps its value: the next set is usually the same count.
     }
 }
 

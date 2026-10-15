@@ -4,7 +4,8 @@ import SwiftData
 // MARK: - Train tab
 
 /// The Train tab root — the same tab for every profile: live sessions, the one
-/// exercise list (`ExercisesCard`), Pilates, then the "what should I work on?"
+/// exercise list (`ExercisesCard`), the optional activity sections the user has
+/// added (Pilates / Yoga / Stretching), then the "what should I work on?"
 /// discovery prompt. The fitness goal only tilts the suggestion ranking.
 struct WorkoutsView: View {
     let profile: ProfileDTO
@@ -15,12 +16,52 @@ struct WorkoutsView: View {
     // mark picks the user already has as "Added".
     @Query private var exerciseModels: [ExerciseModel]
 
+    // One-row existence probes: until the user adds or removes a section, the
+    // sections shown are the ones they already have sessions for.
+    @Query private var pilatesProbe: [PilatesSessionModel]
+    @Query private var yogaProbe: [ActivitySessionModel]
+    @Query private var stretchingProbe: [ActivitySessionModel]
+
+    /// CSV of `TrainSection` ids; "" = never set. See `TrainSections`.
+    @AppStorage private var sectionsRaw: String
+
     @State private var showGoalSheet = false
+    @State private var sectionPendingRemoval: TrainSection?
 
     init(profile: ProfileDTO) {
         self.profile = profile
         let uid = profile.id
         _exerciseModels = Query(filter: #Predicate<ExerciseModel> { $0.profileId == uid })
+        _sectionsRaw = AppStorage(wrappedValue: "", TrainSections.storageKey(profileId: uid))
+
+        var pilates = FetchDescriptor<PilatesSessionModel>(
+            predicate: #Predicate { $0.profileId == uid })
+        pilates.fetchLimit = 1
+        _pilatesProbe = Query(pilates)
+
+        let yogaId = TrainSection.yoga.activityId
+        var yoga = FetchDescriptor<ActivitySessionModel>(
+            predicate: #Predicate { $0.profileId == uid && $0.activityId == yogaId })
+        yoga.fetchLimit = 1
+        _yogaProbe = Query(yoga)
+
+        let stretchingId = TrainSection.stretching.activityId
+        var stretching = FetchDescriptor<ActivitySessionModel>(
+            predicate: #Predicate { $0.profileId == uid && $0.activityId == stretchingId })
+        stretching.fetchLimit = 1
+        _stretchingProbe = Query(stretching)
+    }
+
+    private var sectionsWithData: Set<TrainSection> {
+        var set: Set<TrainSection> = []
+        if !pilatesProbe.isEmpty { set.insert(.pilates) }
+        if !yogaProbe.isEmpty { set.insert(.yoga) }
+        if !stretchingProbe.isEmpty { set.insert(.stretching) }
+        return set
+    }
+
+    private var enabledSections: [TrainSection] {
+        TrainSections.enabled(raw: sectionsRaw, withData: sectionsWithData)
     }
 
     var body: some View {
@@ -29,7 +70,7 @@ struct WorkoutsView: View {
                 Text("Train")
                     .font(.system(size: 56, weight: .regular))
                     .foregroundStyle(theme.text)
-                Text("Live sessions, your exercises, and Pilates — log it, watch the numbers move.")
+                Text("Live sessions and your exercises — log it, watch the numbers move.")
                     .font(.callout).foregroundStyle(theme.dim)
 
                 LiveSessionCard(profile: profile)
@@ -38,7 +79,25 @@ struct WorkoutsView: View {
                 // for, so it sits above the "what should I work on?" discovery
                 // prompt rather than below it.
                 ExercisesCard(profile: profile)
-                Card { PilatesCard(profile: profile) }
+
+                ForEach(enabledSections) { section in
+                    Card { ActivitySectionCard(profile: profile, section: section) }
+                        // Press-and-hold to remove; the confirmation lives on the
+                        // ScrollView so one dialog serves every section.
+                        .contextMenu {
+                            Button(role: .destructive) {
+                                sectionPendingRemoval = section
+                            } label: {
+                                Label("Remove \(section.title) section", systemImage: "minus.circle")
+                            }
+                        }
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                }
+
+                let available = TrainSections.available(enabled: enabledSections)
+                if !available.isEmpty {
+                    addSectionRow(available)
+                }
 
                 workoutSuggestionButton
             }
@@ -50,6 +109,55 @@ struct WorkoutsView: View {
         .sheet(isPresented: $showGoalSheet) {
             WorkoutGoalSheet(profile: profile,
                              existingNames: Set(exerciseModels.map { $0.name.lowercased() }))
+        }
+        .confirmationDialog(
+            "Remove the \(sectionPendingRemoval?.title ?? "") section?",
+            isPresented: Binding(
+                get: { sectionPendingRemoval != nil },
+                set: { if !$0 { sectionPendingRemoval = nil } }
+            ),
+            titleVisibility: .visible,
+            presenting: sectionPendingRemoval
+        ) { section in
+            Button("Remove section", role: .destructive) { remove(section) }
+            Button("Cancel", role: .cancel) {}
+        } message: { _ in
+            Text("Your logged sessions are kept.")
+        }
+    }
+
+    // MARK: - Optional sections
+
+    /// Pills for the sections not on the tab yet. Adding one stores the CSV, so
+    /// from then on the user's choice — not their logged data — decides.
+    @ViewBuilder
+    private func addSectionRow(_ available: [TrainSection]) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Add a section")
+                .font(.caption).foregroundStyle(theme.dim)
+            HStack(spacing: 8) {
+                ForEach(available) { section in
+                    Button { add(section) } label: {
+                        Label(section.title, systemImage: "plus")
+                    }
+                    .tactile(.pill)
+                }
+                Spacer(minLength: 0)
+            }
+        }
+    }
+
+    private func add(_ section: TrainSection) {
+        Haptics.tap()
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+            sectionsRaw = TrainSections.encode(enabledSections + [section])
+        }
+    }
+
+    private func remove(_ section: TrainSection) {
+        Haptics.warn()
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+            sectionsRaw = TrainSections.encode(enabledSections.filter { $0 != section })
         }
     }
 

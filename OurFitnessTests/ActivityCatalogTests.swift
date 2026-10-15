@@ -71,7 +71,24 @@ final class ActivityCatalogTests: XCTestCase {
         XCTAssertEqual(ActivityCatalog.activity(id: "activity-soccer")?.met, 7.0)
         XCTAssertEqual(ActivityCatalog.activity(id: "activity-tennis")?.met, 7.3)
         XCTAssertEqual(ActivityCatalog.activity(id: "activity-jump-rope")?.met, 11.8)
-        XCTAssertEqual(ActivityCatalog.activity(id: "activity-yoga")?.met, 2.8)
+        XCTAssertEqual(ActivityCatalog.activity(id: ActivityCatalog.yogaId)?.met, 2.8)
+        // Ainsworth 2011, 02101 "stretching, mild".
+        XCTAssertEqual(ActivityCatalog.activity(id: ActivityCatalog.stretchingId)?.met, 2.3)
+    }
+
+    /// Yoga and Stretching back the optional Train sections, which query sessions
+    /// by these ids — and existing yoga rows on disk carry "activity-yoga".
+    func test_section_ids_are_stable_and_resolve() {
+        XCTAssertEqual(ActivityCatalog.yogaId, "activity-yoga")
+        XCTAssertEqual(ActivityCatalog.stretchingId, "activity-stretching")
+        XCTAssertNotNil(ActivityCatalog.activity(id: ActivityCatalog.yogaId))
+        XCTAssertNotNil(ActivityCatalog.activity(id: ActivityCatalog.stretchingId))
+    }
+
+    /// Yoga and stretching produce no steps, so the day's burn must keep them.
+    func test_yoga_and_stretching_are_not_step_overlapping() {
+        XCTAssertFalse(DailyBurn.stepOverlappingActivityIds.contains(ActivityCatalog.yogaId))
+        XCTAssertFalse(DailyBurn.stepOverlappingActivityIds.contains(ActivityCatalog.stretchingId))
     }
 
     // MARK: - LiveSessionState elapsed (timestamp-anchored, injectable now)

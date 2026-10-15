@@ -10,8 +10,11 @@
 //                             Undo removes only a set THIS +1 created (tracked
 //                             in view state) — never a rep-counter set; those
 //                             are edited/deleted via the clock → SetHistorySheet
-// Every row also carries the clock (→ SetHistorySheet, the one set editor and
-// the one confirmed delete-exercise path) and ⓘ (→ ExerciseInfoSheet).
+// Every row also carries the clock (→ SetHistorySheet, the one set editor) and
+// ⓘ (→ ExerciseInfoSheet). Press-and-hold on the row body asks to delete the
+// exercise (confirmed); SetHistorySheet's "Delete exercise" is the explicit path.
+// The hold rides on the row-body buttons only, so +1 / undo / clock / ⓘ keep
+// their plain taps.
 //
 // Calories shown here are the stored `caloriesEst` of the logged sets; every
 // write estimates through `Repos.setCaloriesEstimate`, so there is no second
@@ -40,6 +43,10 @@ struct ExercisesCard: View {
     /// Set ids the inline +1 wrote this session, per exercise, newest last —
     /// the only sets the row's undo may remove.
     @State private var quickLoggedSetIds: [String: [UUID]] = [:]
+    /// Set by a press-and-hold on a row; drives the delete confirmation. While
+    /// it's non-nil the row-body tap is ignored, so lifting the finger after
+    /// the hold doesn't also open the rep counter.
+    @State private var pendingDelete: ExerciseDTO?
 
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
@@ -176,6 +183,27 @@ struct ExercisesCard: View {
         .sheet(item: $activeHistory) { ex in
             SetHistorySheet(profile: profile, exercise: ex)
         }
+        .confirmationDialog(
+            "Delete \(pendingDelete?.name ?? "exercise")?",
+            isPresented: Binding(
+                get: { pendingDelete != nil },
+                set: { if !$0 { pendingDelete = nil } }
+            ),
+            titleVisibility: .visible,
+            presenting: pendingDelete
+        ) { ex in
+            Button("Delete exercise and all its sets", role: .destructive) { deleteExercise(ex) }
+            Button("Cancel", role: .cancel) {}
+        } message: { _ in
+            Text("This removes the exercise and every set logged for it.")
+        }
+    }
+
+    /// Press-and-hold on a row body: a light tick at the threshold (no toast
+    /// fires here), then the confirmation.
+    private func requestDelete(_ ex: ExerciseDTO) {
+        Haptics.tap()
+        pendingDelete = ex
     }
 
     // MARK: - Header
@@ -239,7 +267,7 @@ struct ExercisesCard: View {
             HStack(alignment: .top, spacing: 8) {
                 // Row body: always opens the counter that fits the shape —
                 // RepCounterSheet branches to the hold timer for an isometric.
-                Button { activeCounter = ex } label: {
+                Button { openCounter(ex) } label: {
                     VStack(alignment: .leading, spacing: 2) {
                         HStack(spacing: 6) {
                             Text(ex.name)
@@ -261,7 +289,9 @@ struct ExercisesCard: View {
                     .contentShape(Rectangle())
                 }
                 .tactile(.ghost)
+                .simultaneousGesture(deleteHold(ex))
                 .accessibilityLabel(ex.isIsometric ? "\(ex.name): start a hold" : "\(ex.name): count a set")
+                .accessibilityAction(named: "Delete \(ex.name)") { pendingDelete = ex }
 
                 Button { activeHistory = ex } label: {
                     HStack(spacing: 3) {
@@ -288,7 +318,7 @@ struct ExercisesCard: View {
             }
 
             HStack(alignment: .bottom, spacing: 0) {
-                Button { activeCounter = ex } label: {
+                Button { openCounter(ex) } label: {
                     HStack(spacing: 0) {
                         statCell(ex, label: "Today",
                                  reps: stats.todayReps, holdSec: stats.todayHoldSec, cal: stats.todayCal)
@@ -300,6 +330,7 @@ struct ExercisesCard: View {
                     .contentShape(Rectangle())
                 }
                 .tactile(.ghost)
+                .simultaneousGesture(deleteHold(ex))
                 .accessibilityHidden(true)
 
                 if ex.isOneTapLoggable {
@@ -308,6 +339,21 @@ struct ExercisesCard: View {
             }
         }
         .padding(.vertical, 4)
+    }
+
+    /// Row-body tap. Swallowed while a delete confirmation is up: the hold that
+    /// raised it ends in a finger-lift, which the Button still reports as a tap.
+    private func openCounter(_ ex: ExerciseDTO) {
+        guard pendingDelete == nil else { return }
+        activeCounter = ex
+    }
+
+    /// Press-and-hold → delete confirmation. Simultaneous with the Button's own
+    /// tap (a parent/exclusive gesture would starve it); LongPressGesture's
+    /// default 10pt max distance lets a scroll cancel it.
+    private func deleteHold(_ ex: ExerciseDTO) -> some Gesture {
+        LongPressGesture(minimumDuration: 0.5)
+            .onEnded { _ in requestDelete(ex) }
     }
 
     /// Fixed carried load, appended to the muscle line (" · 30 LB").
@@ -407,6 +453,17 @@ struct ExercisesCard: View {
             accent: .win,
             symbol: "checkmark.seal.fill"
         ))
+    }
+
+    private func deleteExercise(_ ex: ExerciseDTO) {
+        let deleted: Bool = withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+            Repos.deleteExercise(ctx, id: ex.id)
+        }
+        guard deleted else { return }
+        quickLoggedSetIds[ex.id] = nil
+        toasts.show(Toast(title: "\(ex.name) deleted",
+                          detail: "Exercise and its sets removed.",
+                          accent: .warn, symbol: "trash.fill"))
     }
 
     /// Newest +1 set for this exercise that still exists today. Sets deleted

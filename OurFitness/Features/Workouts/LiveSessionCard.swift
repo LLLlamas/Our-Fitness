@@ -488,7 +488,7 @@ private struct LiveSessionRunner: View {
 /// THE today/yesterday session list on Train — live/logged activity sessions AND
 /// Pilates sessions in one list, newest first. Pilates is stored as its own
 /// `PilatesSessionDTO` (no MET, burn derived on read), so each row carries its
-/// kind and the edit/delete write goes to the matching repo call. `PilatesCard`
+/// kind and the edit/delete write goes to the matching repo call. `ActivitySectionCard`
 /// keeps only its ring/streak/goal + "Log Pilates" entry; don't give it a list
 /// back. Older sessions live in Progress so Train stays focused on the current loop.
 private struct RecentActivitySessions: View {
@@ -502,6 +502,9 @@ private struct RecentActivitySessions: View {
     @Query private var models: [ActivitySessionModel]
     @Query private var pilatesModels: [PilatesSessionModel]
     @State private var editing: RecentSession?
+    /// The one delete confirmation, raised by both the trash button and a
+    /// press-and-hold on the row.
+    @State private var pendingDelete: RecentSession?
 
     /// One row of the merged list. A live Pilates session is written ONLY as a
     /// `PilatesSessionDTO` (`Repos.completeLiveSession`), never also as an
@@ -588,6 +591,20 @@ private struct RecentActivitySessions: View {
                     onSave: { minutes in saveDuration(session, minutes: minutes) }
                 )
             }
+            .confirmationDialog(
+                "Delete this \(pendingDelete?.activityName ?? "") session?",
+                isPresented: Binding(
+                    get: { pendingDelete != nil },
+                    set: { if !$0 { pendingDelete = nil } }
+                ),
+                titleVisibility: .visible,
+                presenting: pendingDelete
+            ) { session in
+                Button("Delete session", role: .destructive) { delete(session) }
+                Button("Cancel", role: .cancel) {}
+            } message: { session in
+                Text("\(session.durationMinutes) min · \(Dates.formatTimeAgo(session.date))")
+            }
         }
     }
 
@@ -635,10 +652,11 @@ private struct RecentActivitySessions: View {
     }
 
     private func delete(_ session: RecentSession) {
-        let deleted: Bool
-        switch session {
-        case .activity(let s): deleted = Repos.deleteActivitySession(ctx, id: s.id)
-        case .pilates(let s): deleted = Repos.deletePilatesSession(ctx, id: s.id)
+        let deleted: Bool = withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+            switch session {
+            case .activity(let s): return Repos.deleteActivitySession(ctx, id: s.id)
+            case .pilates(let s): return Repos.deletePilatesSession(ctx, id: s.id)
+            }
         }
         guard deleted else { return }
         toasts.show(Toast(title: "Session removed", detail: session.activityName,
@@ -669,31 +687,44 @@ private struct RecentActivitySessions: View {
     @ViewBuilder
     private func sessionRow(_ s: RecentSession) -> some View {
         HStack(spacing: 10) {
-            Image(systemName: s.symbol)
-                .font(.system(size: 16))
-                .foregroundStyle(theme.accent)
-                .frame(width: 24)
-            VStack(alignment: .leading, spacing: 2) {
-                Text(s.activityName)
-                    .font(.system(size: 15, weight: .medium))
-                    .foregroundStyle(theme.text)
-                Text(subtitle(s))
-                    .font(.caption).foregroundStyle(theme.dim)
-            }
-            Spacer()
-            if let c = displayCalories(s) {
-                Text("~\(c) cal")
-                    .font(.system(.footnote, design: .monospaced))
+            // Press-and-hold lives on the info part only — it has no tap of its
+            // own, so the hold can't collide with the pencil / trash buttons.
+            HStack(spacing: 10) {
+                Image(systemName: s.symbol)
+                    .font(.system(size: 16))
                     .foregroundStyle(theme.accent)
+                    .frame(width: 24)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(s.activityName)
+                        .font(.system(size: 15, weight: .medium))
+                        .foregroundStyle(theme.text)
+                    Text(subtitle(s))
+                        .font(.caption).foregroundStyle(theme.dim)
+                }
+                Spacer()
+                if let c = displayCalories(s) {
+                    Text("~\(c) cal")
+                        .font(.system(.footnote, design: .monospaced))
+                        .foregroundStyle(theme.accent)
+                }
             }
-            // Visible, next to delete: correcting a duration used to be reachable
-            // only by long-pressing the row, which nothing on screen hinted at.
+            .contentShape(Rectangle())
+            .simultaneousGesture(
+                LongPressGesture(minimumDuration: 0.5)
+                    .onEnded { _ in
+                        // Light tick at the threshold; no toast fires here.
+                        Haptics.tap()
+                        pendingDelete = s
+                    }
+            )
+            // Visible edit + delete: a hidden long-press menu was once the only
+            // way to correct a duration, which nothing on screen hinted at.
             Button { editing = s } label: {
                 Image(systemName: "pencil").foregroundStyle(theme.accent)
             }
             .tactile(.ghost)
             .accessibilityLabel("Edit \(s.activityName) duration")
-            Button(role: .destructive) { delete(s) } label: {
+            Button(role: .destructive) { pendingDelete = s } label: {
                 Image(systemName: "trash").foregroundStyle(theme.warn)
             }
             .tactile(.ghost)
@@ -703,16 +734,6 @@ private struct RecentActivitySessions: View {
         .background(theme.card)
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-        .contextMenu {
-            Button {
-                editing = s
-            } label: {
-                Label("Edit duration", systemImage: "pencil")
-            }
-            Button(role: .destructive) { delete(s) } label: {
-                Label("Delete session", systemImage: "trash")
-            }
-        }
     }
 }
 
@@ -856,7 +877,7 @@ struct EditDurationSheet: View {
 /// using the live timer.
 ///
 /// Pass `lockedActivityId` to open preselected to one activity and hide the grid —
-/// that is how `PilatesCard`'s "Log Pilates" button reaches here, so Pilates has a
+/// that is how `ActivitySectionCard`'s "Log <section>" button reaches here, so Pilates has a
 /// single form app-wide. When pilates is the chosen activity the sheet also collects
 /// focus areas + notes, the two `PilatesSessionDTO` fields the generic form has no
 /// use for.
