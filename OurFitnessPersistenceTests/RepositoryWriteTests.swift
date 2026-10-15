@@ -11,12 +11,12 @@ final class RepositoryWriteTests: XCTestCase {
             ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         ])
         let ctx = container.mainContext
-        let profile = try XCTUnwrap(Repos.createProfile(ctx, name: "Fixture", mode: .circuit,
+        let profile = try XCTUnwrap(Repos.createProfile(ctx, name: "Fixture", fitnessGoal: .lose,
             sex: .female, heightIn: 65, weightLb: 150, age: 30, activity: .moderate))
         XCTAssertEqual(Repos.exercises(ctx, forProfile: profile.id).count, 3)
         XCTAssertEqual(Set(Repos.listReminderGroups(ctx, userId: profile.id).map(\.kind)), [.plants, .medication])
-        XCTAssertNotNil(Repos.updateMode(ctx, profileId: profile.id, to: .build))
-        XCTAssertNotNil(Repos.updateMode(ctx, profileId: profile.id, to: .circuit))
+        XCTAssertNotNil(Repos.updateMode(ctx, profileId: profile.id, to: .gain))
+        XCTAssertNotNil(Repos.updateMode(ctx, profileId: profile.id, to: .lose))
         XCTAssertEqual(Repos.exercises(ctx, forProfile: profile.id).count, 3)
         XCTAssertEqual(Repos.listReminderGroups(ctx, userId: profile.id).count, 2)
     }

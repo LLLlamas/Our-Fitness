@@ -76,7 +76,7 @@ public final class MealIdeaService: @unchecked Sendable {
     /// unavailability or failure.
     public func ideas(
         forCraving craving: String,
-        mode: Mode,
+        fitnessGoal: FitnessGoal,
         recentFoodNames: [String] = [],
         limit: Int = 5
     ) async -> [MealIdea] {
@@ -87,7 +87,7 @@ public final class MealIdeaService: @unchecked Sendable {
         if #available(iOS 26.0, *) {
             guard let draft = await OnDeviceModel.generate(instructions: Self.instructions, { session in
                 try await session.respond(
-                    to: prompt(craving: trimmed, mode: mode, recentFoodNames: recentFoodNames),
+                    to: prompt(craving: trimmed, fitnessGoal: fitnessGoal, recentFoodNames: recentFoodNames),
                     generating: MealIdeaDraft.self
                 ).content
             }) else { return [] }
@@ -114,10 +114,10 @@ public final class MealIdeaService: @unchecked Sendable {
     only foods you are confident are real and common.
     """
 
-    private func prompt(craving: String, mode: Mode, recentFoodNames: [String]) -> String {
+    private func prompt(craving: String, fitnessGoal: FitnessGoal, recentFoodNames: [String]) -> String {
         var parts = ["What they're in the mood for: \"\(craving)\". This craving comes first — every suggestion must match it."]
         parts.append(OnDeviceModel.modeLine(
-            mode,
+            fitnessGoal,
             build: "All else equal, they are gaining lean muscle, so lean toward the higher-protein option among foods that still match the craving.",
             circuit: "All else equal, they are losing body fat and improving heart health, so lean toward the lighter / higher-fibre option among foods that still match the craving — but if they asked for something salty or indulgent, honour that."
         ))

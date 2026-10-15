@@ -72,10 +72,9 @@ struct PilatesCard: View {
         // day, focus areas + notes and writes the PilatesSessionDTO itself.
         .sheet(isPresented: $showLogSheet) {
             LogPastSessionSheet(profile: profile, lockedActivityId: ActivityCatalog.pilatesId)
-                .themed(theme.mode)
         }
         .sheet(isPresented: $showGoalPicker) {
-            goalPickerSheet.themed(theme.mode)
+            goalPickerSheet
         }
         // Shared duration editor (LiveSessionCard.swift) — one sheet for both
         // session kinds. A Pilates session stores no calorie figure, so the burn
@@ -92,7 +91,6 @@ struct PilatesCard: View {
                 },
                 onSave: { minutes in saveDuration(session, minutes: minutes) }
             )
-            .themed(theme.mode)
         }
     }
 

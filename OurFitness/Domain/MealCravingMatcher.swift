@@ -45,7 +45,7 @@ public enum MealCravingMatcher {
         limit: Int = 5,
         now: Date = Date()
     ) -> [CravingMatch] {
-        let pool = SuggestedMeals.suggestions(for: profile.mode)
+        let pool = SuggestedMeals.suggestions(for: profile.fitnessGoal)
             .filter { !hasRestrictedAllergen($0, restrictions: profile.restrictions) }
 
         let q = craving.lowercased()
@@ -77,7 +77,7 @@ public enum MealCravingMatcher {
             .map { meal -> (meal: SuggestedMeal, score: Double, flavorsHit: [Flavor]) in
                 let (s, hits) = score(meal, tokens: tokens, flavors: flavors,
                                       calorieGoal: calorieGoal, protein: protein,
-                                      loved: loved, constrained: constrained, mode: profile.mode)
+                                      loved: loved, constrained: constrained, fitnessGoal: profile.fitnessGoal)
                 return (meal, s, hits)
             }
             .filter { $0.score > 0 }
@@ -111,7 +111,7 @@ public enum MealCravingMatcher {
         protein: ProteinHint,
         loved: Set<String>,
         constrained: Bool,
-        mode: Mode
+        fitnessGoal: FitnessGoal
     ) -> (Double, [Flavor]) {
         let text = searchable(meal)
 
@@ -169,11 +169,11 @@ public enum MealCravingMatcher {
         // fibre + leaner picks. Small adds so the craving's flavour/keyword stays the
         // primary signal; only reached after the gate.
         let ps = meal.perServing
-        switch mode {
-        case .build:
+        switch fitnessGoal {
+        case .gain:
             s += min(1.5, Double(ps.proteinG) / 30.0)
             s += min(1.0, Double(ps.calories) / 700.0)
-        case .circuit:
+        case .lose:
             s += min(1.5, Double(ps.fiberG) / 8.0)
             s += ps.calories <= 450 ? 0.8 : 0
         }

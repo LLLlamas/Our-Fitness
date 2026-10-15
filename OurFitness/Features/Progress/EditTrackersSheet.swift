@@ -5,15 +5,15 @@
 import SwiftUI
 
 struct EditTrackersSheet: View {
-    let mode: Mode
+    let fitnessGoal: FitnessGoal
     let onChange: (Set<String>) -> Void
 
     @Environment(\.theme) private var theme
     @State private var enabled: Set<String>
 
-    init(enabled: Set<String>, mode: Mode, onChange: @escaping (Set<String>) -> Void) {
+    init(enabled: Set<String>, fitnessGoal: FitnessGoal, onChange: @escaping (Set<String>) -> Void) {
         self._enabled = State(initialValue: enabled)
-        self.mode = mode
+        self.fitnessGoal = fitnessGoal
         self.onChange = onChange
     }
 
@@ -60,8 +60,8 @@ struct EditTrackersSheet: View {
                     Text(kind.title)
                         .font(.system(size: 15, weight: .medium))
                         .foregroundStyle(theme.text)
-                    if kind.isRelevant(for: mode) {
-                        Text("Default for \(mode.displayName)")
+                    if kind.isRelevant(for: fitnessGoal) {
+                        Text("Default for \(fitnessGoal.displayName)")
                             .font(.caption2).foregroundStyle(theme.dim)
                     }
                 }

@@ -97,7 +97,7 @@ struct BabyExercisesCard: View {
             }
         }
         .sheet(isPresented: $showAddMovement) {
-            AddExerciseSheet(mode: profile.mode) { draft in
+            AddExerciseSheet(fitnessGoal: profile.fitnessGoal) { draft in
                 guard Repos.createExercise(
                     ctx, profileId: profile.id, name: draft.name,
                     defaultRepsBottom: 1, defaultRepsTop: 20,
@@ -107,7 +107,6 @@ struct BabyExercisesCard: View {
                 ) != nil else { return }
                 toasts.show(Toast(title: draft.name, detail: "Movement added", accent: .win, symbol: "plus.circle.fill"))
             }
-            .themed(theme.mode)
         }
     }
 
@@ -300,7 +299,6 @@ private struct ExerciseRow: View {
                     todayCount: todayCount,
                     todayKcal: todayKcal
                 )
-                .themed(theme.mode)
             }
 
             if exercise.kind == .duration {
@@ -321,7 +319,6 @@ private struct ExerciseRow: View {
         // out from under the user mid-edit.
         .sheet(isPresented: $showSets) {
             SetHistorySheet(profile: profile, exercise: exercise)
-                .themed(theme.mode)
         }
         // No .swipeActions here: these rows live in a Card's VStack, not a List,
         // where that modifier is a no-op — it looked like a delete affordance and

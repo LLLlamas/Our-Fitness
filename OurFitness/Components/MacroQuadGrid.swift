@@ -101,7 +101,6 @@ private struct MacroRingCell: View {
                 .tactile(.ghost)
                 .sheet(isPresented: $showInfo) {
                     MacroInfoSheet(macro: macro, profile: profile)
-                        .themed(theme.mode)
                 }
             }
 
@@ -157,7 +156,7 @@ private struct MacroInfoSheet: View {
             subtitle: "YOUR DAILY TARGET · \(headline.uppercased())",
             dragIndicator: true
         ) {
-            Text(TargetRationale.goalLine(for: profile.mode))
+            Text(TargetRationale.goalLine(for: profile.fitnessGoal))
                 .font(.callout).foregroundStyle(theme.text)
                 .fixedSize(horizontal: false, vertical: true)
 

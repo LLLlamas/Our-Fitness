@@ -158,16 +158,13 @@ struct RemindersView: View {
         .background(theme.bg.ignoresSafeArea())
         .sheet(isPresented: $showAddSheet) {
             AddReminderSheet(profile: profile)
-                .themed(profile.mode)
         }
         .sheet(isPresented: $showMedicationHistory) {
             MedicationHistorySheet(profile: profile, medications: medications)
-                .themed(profile.mode)
         }
         .sheet(isPresented: $showAddMedicationSheet) {
             if let group = medicationGroup {
                 AddReminderSheet(profile: profile, defaultGroupId: group.id)
-                    .themed(profile.mode)
             }
         }
         .sheet(item: $selectedReminder) { reminder in
@@ -178,11 +175,9 @@ struct RemindersView: View {
                 profile: profile, reminder: reminder,
                 groupKind: groupsById[reminder.groupId]?.kind ?? .custom
             )
-            .themed(profile.mode)
         }
         .sheet(item: $loggingMedication) { reminder in
             LogMedicationSheet(profile: profile, reminder: reminder)
-                .themed(profile.mode)
         }
         // Keyed on scenePhase, not bare: this view lives for the whole app
         // session inside the TabView, and authorization is requested AFTER a

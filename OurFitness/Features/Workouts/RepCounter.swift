@@ -95,7 +95,6 @@ private struct RepCounterView: View {
         .onAppear { prefillWeight() }
         .sheet(isPresented: $showInfo) {
             ExerciseInfoSheet(exercise: exercise, profile: profile)
-                .themed(theme.mode)
         }
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
@@ -275,7 +274,7 @@ private struct RepCounterView: View {
             exercise: exercise,
             repsJustLogged: reps,
             totalSetsThisWeekForMuscle: weekCountAfter,
-            mode: profile.mode
+            fitnessGoal: profile.fitnessGoal
         ) {
             toasts.workoutMilestone(milestone)
         } else {
@@ -336,7 +335,6 @@ private struct IsometricTimerView: View {
         .onReceive(ticker) { _ in tick() }
         .sheet(isPresented: $showInfo) {
             ExerciseInfoSheet(exercise: exercise, profile: profile)
-                .themed(theme.mode)
         }
     }
 

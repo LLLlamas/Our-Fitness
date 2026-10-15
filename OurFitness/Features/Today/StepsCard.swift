@@ -78,7 +78,7 @@ struct StepsCard: View {
         _firedRaw = AppStorage(wrappedValue: "", "milestonesFired.\(uid.uuidString).\(Dates.dayKey())")
     }
 
-    private var mode: Mode { profile.mode }
+    private var fitnessGoal: FitnessGoal { profile.fitnessGoal }
     private var defaultGoal: Int { profile.computedTargets.stepsDaily }
     private var goal: Int { StepsGoalPrefs.resolve(custom: customGoalRaw, modeDefault: defaultGoal) }
     private var weeklyDaysGoal: Int { weeklyDaysGoalRaw }
@@ -94,24 +94,23 @@ struct StepsCard: View {
 
     var body: some View {
         Card(padding: 16) {
-            if mode == .circuit {
+            if fitnessGoal == .lose {
                 circuitBody
             } else {
                 buildBody
             }
         }
         .onChange(of: steps) { _, newValue in
-            if mode == .circuit { checkMilestones(steps: newValue) }
+            if fitnessGoal == .lose { checkMilestones(steps: newValue) }
         }
         .onAppear {
-            if mode == .circuit { checkMilestones(steps: steps) }
+            if fitnessGoal == .lose { checkMilestones(steps: steps) }
         }
         .sheet(isPresented: $showGoalPicker) {
-            goalPickerSheet.themed(theme.mode)
+            goalPickerSheet
         }
         .sheet(isPresented: $showInfo) {
-            StepsInfoSheet(steps: steps, goal: goal, stepsKcal: stepsKcal, mode: mode)
-                .themed(mode)
+            StepsInfoSheet(steps: steps, goal: goal, stepsKcal: stepsKcal, fitnessGoal: fitnessGoal)
         }
     }
 
@@ -353,7 +352,7 @@ struct StepsCard: View {
         let fired = Movement.decode(firedSet: firedRaw)
         guard let milestone = Movement.shouldFireMilestone(steps: steps, firedSet: fired)
         else { return }
-        toasts.stepMilestone(milestone, mode: mode)
+        toasts.stepMilestone(milestone, fitnessGoal: fitnessGoal)
         var updated = fired
         updated.insert(milestone)
         firedRaw = Movement.encode(firedSet: updated)
@@ -366,13 +365,13 @@ struct StepsCard: View {
     // thing it drives.
     private var goalPickerSheet: some View {
         GoalPickerSheet(
-            title: mode == .circuit ? "Steps Goals" : "Daily Steps Goal",
-            subtitle: mode == .circuit
+            title: fitnessGoal == .lose ? "Steps Goals" : "Daily Steps Goal",
+            subtitle: fitnessGoal == .lose
                 ? "Daily target + how many days/week to hit it."
                 : "Mode default is \(defaultGoal.formatted()) steps.",
             wheels: goalWheels,
-            resetLabel: mode == .circuit ? "Reset to defaults" : "Reset to default",
-            detents: mode == .circuit ? [.large] : [.medium],
+            resetLabel: fitnessGoal == .lose ? "Reset to defaults" : "Reset to default",
+            detents: fitnessGoal == .lose ? [.large] : [.medium],
             onReset: {
                 customGoalRaw = 0
                 weeklyDaysGoalRaw = StepsGoalPrefs.defaultWeeklyDays
@@ -391,7 +390,7 @@ struct StepsCard: View {
             .init(
                 id: "daily",
                 // Build has a single wheel, so it needs no label to disambiguate.
-                label: mode == .circuit ? "DAILY GOAL" : nil,
+                label: fitnessGoal == .lose ? "DAILY GOAL" : nil,
                 pickerTitle: "Daily goal",
                 options: Array(stride(from: 2000, through: 25000, by: 500)),
                 optionLabel: { "\($0.formatted()) steps" },
@@ -399,7 +398,7 @@ struct StepsCard: View {
                 height: 130
             )
         ]
-        if mode == .circuit {
+        if fitnessGoal == .lose {
             wheels.append(
                 .init(
                     id: "weeklyDays",
@@ -424,7 +423,7 @@ private struct StepsInfoSheet: View {
     let steps: Int
     let goal: Int
     let stepsKcal: Int
-    let mode: Mode
+    let fitnessGoal: FitnessGoal
 
     @Environment(\.theme) private var theme
 
@@ -451,7 +450,7 @@ private struct StepsInfoSheet: View {
 
     private var sources: String {
         let base = "Sources: Tudor-Locke & Bassett, Sports Med, 2004; Saint-Maurice et al., JAMA, 2020; Hanson & Jones, Br J Sports Med, 2015; Ainsworth et al., 2011 Compendium."
-        guard mode == .circuit else { return base }
+        guard fitnessGoal == .lose else { return base }
         return base.replacingOccurrences(
             of: "Ainsworth et al., 2011 Compendium.",
             with: "Kodama et al., Arch Intern Med, 2007; Ainsworth et al., 2011 Compendium."
@@ -460,7 +459,7 @@ private struct StepsInfoSheet: View {
 
     var body: some View {
         InfoSheetScaffold(
-            title: mode == .circuit ? "Steps & cardio" : "Steps",
+            title: fitnessGoal == .lose ? "Steps & cardio" : "Steps",
             subtitle: "TODAY · \(steps.formatted()) STEPS"
         ) {
             InfoSection(title: "Your numbers today") {
@@ -491,14 +490,14 @@ private struct StepsInfoSheet: View {
             }
 
             InfoSection(title: "Why your \(goal.formatted())-step goal") {
-                Text(TargetRationale.stepsWhy(mode: mode, goal: goal))
+                Text(TargetRationale.stepsWhy(fitnessGoal: fitnessGoal, goal: goal))
                     .font(.callout).foregroundStyle(theme.text)
                     .fixedSize(horizontal: false, vertical: true)
             }
 
             InfoSection(title: "What walking does for you") {
                 VStack(alignment: .leading, spacing: 8) {
-                    if mode == .circuit {
+                    if fitnessGoal == .lose {
                         Bullet("It's your most repeatable daily calorie burn — and the easiest to keep up while you're losing weight.")
                     }
                     Bullet("Every extra 1,000–2,000 steps a day lowers your risk of dying early — with most of the gain showing up by about 7,000–8,000 steps.")
@@ -507,7 +506,7 @@ private struct StepsInfoSheet: View {
                 }
             }
 
-            if mode == .circuit {
+            if fitnessGoal == .lose {
                 InfoSection(title: "Add some cardio") {
                     VStack(alignment: .leading, spacing: 8) {
                         Bullet("Easy, steady cardio — a pace where you can still talk — nudges your 'good' cholesterol (HDL) up a couple of points and lowers the fat in your blood (triglycerides) by about 10–20% over a couple of months.")

@@ -5,9 +5,9 @@ final class MealCravingMatcherTests: XCTestCase {
     // Pinned "now" so the affinity history window is deterministic.
     private let now = ISO8601DateFormatter().date(from: "2026-05-24T12:00:00Z")!
 
-    private func profile(mode: Mode = .build, restrictions: [String] = []) -> ProfileDTO {
+    private func profile(fitnessGoal: FitnessGoal = .gain, restrictions: [String] = []) -> ProfileDTO {
         ProfileDTO(
-            name: "Test", mode: mode, sex: .male, heightIn: 70, weightLb: 180,
+            name: "Test", fitnessGoal: fitnessGoal, sex: .male, heightIn: 70, weightLb: 180,
             age: 30, activity: .moderate, restrictions: restrictions,
             computedTargets: MacroTargets(calories: 2800, proteinG: 180, carbsG: 300, fatG: 90, stepsDaily: 8000)
         )
@@ -60,9 +60,9 @@ final class MealCravingMatcherTests: XCTestCase {
     }
 
     func test_respects_mode_corpus() {
-        let buildIds = Set(SuggestedMeals.suggestions(for: .build).map(\.id))
+        let buildIds = Set(SuggestedMeals.suggestions(for: .gain).map(\.id))
         let out = MealCravingMatcher.matches(
-            for: profile(mode: .build), craving: "salty savory bowl",
+            for: profile(fitnessGoal: .gain), craving: "salty savory bowl",
             totals: .zero, now: now
         )
         XCTAssertTrue(out.allSatisfy { buildIds.contains($0.meal.id) })
@@ -98,12 +98,12 @@ final class MealCravingMatcherTests: XCTestCase {
     /// "Something salty" must not surface sweet/fruity items. Regression for the
     /// report: salty returned watermelon bowls and chocolate/protein shakes.
     func test_salty_excludes_sweet_and_fruity_items() {
-        for mode in [Mode.build, .circuit] {
+        for fitnessGoal in [FitnessGoal.gain, .lose] {
             let out = MealCravingMatcher.matches(
-                for: profile(mode: mode), craving: "something salty",
+                for: profile(fitnessGoal: fitnessGoal), craving: "something salty",
                 totals: .zero, now: now
             )
-            XCTAssertFalse(out.isEmpty, "salty should still match savory/salty meals in \(mode)")
+            XCTAssertFalse(out.isEmpty, "salty should still match savory/salty meals in \(fitnessGoal)")
             let names = out.map { $0.meal.name.lowercased() }
             XCTAssertFalse(names.contains { $0.contains("shake") },
                            "salty must not return a shake (\(names))")
@@ -121,14 +121,14 @@ final class MealCravingMatcherTests: XCTestCase {
     /// something salty — affinity must NOT drag the shakes to the top.
     func test_salty_with_loved_shakes_does_not_surface_shakes() {
         let loved: Set<String> = ["protein-shake", "banana"]
-        for mode in [Mode.build, .circuit] {
+        for fitnessGoal in [FitnessGoal.gain, .lose] {
             let out = MealCravingMatcher.matches(
-                for: profile(mode: mode), craving: "something salty",
+                for: profile(fitnessGoal: fitnessGoal), craving: "something salty",
                 totals: .zero, favoriteFoodIds: loved, now: now
             )
             XCTAssertFalse(out.isEmpty)
             XCTAssertFalse(out.contains { $0.meal.name.lowercased().contains("shake") },
-                           "loved shakes must not surface under a salty craving in \(mode)")
+                           "loved shakes must not surface under a salty craving in \(fitnessGoal)")
         }
     }
 

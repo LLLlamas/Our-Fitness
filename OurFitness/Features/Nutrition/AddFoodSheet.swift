@@ -195,7 +195,6 @@ struct AddFoodSheet: View {
                 targetDate: targetDate,
                 onDone: { mealToLog = nil }
             )
-            .themed(profile.mode)
         }
         .sheet(item: $templateToLog) { template in
             MealIngredientDetailSheet(
@@ -208,7 +207,6 @@ struct AddFoodSheet: View {
                     templateToLog = nil
                 }
             )
-            .themed(profile.mode)
         }
     }
 

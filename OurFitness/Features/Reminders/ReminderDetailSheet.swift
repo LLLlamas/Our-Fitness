@@ -163,19 +163,17 @@ struct ReminderDetailSheet: View {
         }
         .sheet(isPresented: $showCareSheet) {
             if let species {
-                PlantCareInfoSheet(species: species).themed(profile.mode)
+                PlantCareInfoSheet(species: species)
             }
         }
         .sheet(isPresented: $showLogSheet) {
             LogMedicationSheet(profile: profile, reminder: reminder)
-                .themed(profile.mode)
         }
         .sheet(isPresented: $showFullHistory) {
             // Scoped to this one medication: with a single entry in
             // `medications` the sheet's filter chips stay hidden and the join
             // narrows to it.
             MedicationHistorySheet(profile: profile, medications: [reminder])
-                .themed(profile.mode)
         }
         .confirmationDialog(
             "Delete \(reminder.name)?", isPresented: $showDeleteConfirm, titleVisibility: .visible

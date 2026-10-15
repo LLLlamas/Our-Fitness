@@ -144,7 +144,7 @@ public final class FoodAlternativeService: @unchecked Sendable {
     /// - Returns: Resolved `FoodAlternative` list (empty on unavailability or failure).
     public func alternatives(
         for foodName: String,
-        mode: Mode,
+        fitnessGoal: FitnessGoal,
         recentFoodNames: [String] = [],
         favoriteFoodNames: [String] = []
     ) async -> [FoodAlternative] {
@@ -155,7 +155,7 @@ public final class FoodAlternativeService: @unchecked Sendable {
         guard isAvailable else { return [] }
 
         // Check cache first — avoid re-running the model for the same query.
-        let key = cache.key(identity(for: cleanName, mode: mode))
+        let key = cache.key(identity(for: cleanName, fitnessGoal: fitnessGoal))
         if let cached = cache.value(forKey: key), !cached.isEmpty {
             return resolve(entries: cached)
         }
@@ -164,7 +164,7 @@ public final class FoodAlternativeService: @unchecked Sendable {
         if #available(iOS 26.0, *) {
             let userPrompt = buildPrompt(
                 foodName: cleanName,
-                mode: mode,
+                fitnessGoal: fitnessGoal,
                 recentFoodNames: recentFoodNames,
                 favoriteFoodNames: favoriteFoodNames
             )
@@ -185,10 +185,10 @@ public final class FoodAlternativeService: @unchecked Sendable {
 
     /// Background prefetch — call this when a food is logged so the cache is warm
     /// before the user navigates to Smarter Swaps. Fire-and-forget; silently drops errors.
-    public func prefetch(for foodName: String, mode: Mode) {
+    public func prefetch(for foodName: String, fitnessGoal: FitnessGoal) {
         Task.detached(priority: .background) { [weak self] in
             guard let self else { return }
-            _ = await self.alternatives(for: foodName, mode: mode)
+            _ = await self.alternatives(for: foodName, fitnessGoal: fitnessGoal)
         }
     }
 
@@ -212,7 +212,7 @@ public final class FoodAlternativeService: @unchecked Sendable {
 
     private func buildPrompt(
         foodName: String,
-        mode: Mode,
+        fitnessGoal: FitnessGoal,
         recentFoodNames: [String],
         favoriteFoodNames: [String]
     ) -> String {
@@ -221,7 +221,7 @@ public final class FoodAlternativeService: @unchecked Sendable {
         parts.append("Food to find alternatives for: \"\(foodName)\".")
 
         parts.append(OnDeviceModel.modeLine(
-            mode,
+            fitnessGoal,
             build: "Goal: Build mode (gaining lean muscle mass). Prioritise alternatives with similar or higher protein content. Whole-food protein sources are preferred.",
             circuit: "Goal: Circuit mode (losing body fat and improving heart-health markers). Prioritise alternatives that are lower in saturated fat and sodium, higher in fibre, and ideally rich in omega-3 fatty acids."
         ))
@@ -277,11 +277,11 @@ public final class FoodAlternativeService: @unchecked Sendable {
 
     // MARK: - Cache
 
-    private func identity(for foodName: String, mode: Mode) -> String {
+    private func identity(for foodName: String, fitnessGoal: FitnessGoal) -> String {
         let sanitised = foodName
             .lowercased()
             .components(separatedBy: .whitespacesAndNewlines)
             .joined(separator: "_")
-        return "\(sanitised).\(mode.rawValue)"
+        return "\(sanitised).\(fitnessGoal.rawValue)"
     }
 }

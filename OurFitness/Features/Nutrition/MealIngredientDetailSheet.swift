@@ -92,11 +92,9 @@ struct MealIngredientDetailSheet: View {
         .presentationBackground(theme.bg)
         .sheet(isPresented: $showFoodSearch) {
             IngredientFoodSearchSheet(ingredients: $ingredients)
-                .themed(theme.mode)
         }
         .sheet(isPresented: $showSaveTemplate) {
             SaveTemplateSheet(name: name, emoji: emoji, ingredients: ingredients, profile: profile)
-                .themed(theme.mode)
         }
     }
 
@@ -452,7 +450,6 @@ struct IngredientFoodSearchSheet: View {
         .onAppear { searchFocused = true }
         .sheet(isPresented: $showManual) {
             ManualIngredientSheet(ingredients: $ingredients)
-                .themed(theme.mode)
         }
     }
 }

@@ -23,7 +23,7 @@ final class TargetsTests: XCTestCase {
 
     func test_build_targets_surplus_and_no_caps() {
         let v = Targets.ProfileVitals(sex: .male, weightLb: 130, heightIn: 67, age: 30, activity: .active)
-        let t = Targets.compute(mode: .build, vitals: v)
+        let t = Targets.compute(fitnessGoal: .gain, vitals: v)
         XCTAssertEqual(t.proteinG, 130)
         XCTAssertGreaterThan(t.calories, 2800)
         XCTAssertNil(t.sodiumMgMax)
@@ -33,8 +33,8 @@ final class TargetsTests: XCTestCase {
 
     func test_reset_targets_deficit_and_caps() {
         let v = Targets.ProfileVitals(sex: .male, weightLb: 220, heightIn: 70, age: 45, activity: .light)
-        let resetT = Targets.compute(mode: .circuit, vitals: v)
-        let buildT = Targets.compute(mode: .build, vitals: v)
+        let resetT = Targets.compute(fitnessGoal: .lose, vitals: v)
+        let buildT = Targets.compute(fitnessGoal: .gain, vitals: v)
         XCTAssertLessThan(resetT.calories, buildT.calories)
         XCTAssertEqual(resetT.sodiumMgMax, 1_500)
         XCTAssertEqual(resetT.addedSugarGMax, 25)
@@ -45,13 +45,13 @@ final class TargetsTests: XCTestCase {
 
     func test_calorie_floor_1200() {
         let v = Targets.ProfileVitals(sex: .female, weightLb: 110, heightIn: 60, age: 65, activity: .sedentary)
-        let t = Targets.compute(mode: .circuit, vitals: v)
+        let t = Targets.compute(fitnessGoal: .lose, vitals: v)
         XCTAssertGreaterThanOrEqual(t.calories, 1200)
     }
 
     func test_macro_sum_internally_consistent() {
         let v = Targets.ProfileVitals(sex: .male, weightLb: 180, heightIn: 72, age: 28, activity: .moderate)
-        let t = Targets.compute(mode: .build, vitals: v)
+        let t = Targets.compute(fitnessGoal: .gain, vitals: v)
         let sum = t.proteinG * 4 + t.carbsG * 4 + t.fatG * 9
         XCTAssertLessThan(abs(sum - t.calories), 20)
     }
@@ -59,34 +59,34 @@ final class TargetsTests: XCTestCase {
     // MARK: - Adjustments
 
     func test_build_stalled_suggests_increase() {
-        let a = Targets.suggestAdjustment(mode: .build, weeklyDeltaLb: 0.1)
+        let a = Targets.suggestAdjustment(fitnessGoal: .gain, weeklyDeltaLb: 0.1)
         XCTAssertEqual(a?.direction, .increase)
         XCTAssertEqual(a?.amountCal, 200)
     }
 
     func test_build_gaining_too_fast_suggests_decrease() {
-        XCTAssertEqual(Targets.suggestAdjustment(mode: .build, weeklyDeltaLb: 1.0)?.direction, .decrease)
+        XCTAssertEqual(Targets.suggestAdjustment(fitnessGoal: .gain, weeklyDeltaLb: 1.0)?.direction, .decrease)
     }
 
     func test_build_on_track_returns_nil() {
-        XCTAssertNil(Targets.suggestAdjustment(mode: .build, weeklyDeltaLb: 0.4))
+        XCTAssertNil(Targets.suggestAdjustment(fitnessGoal: .gain, weeklyDeltaLb: 0.4))
     }
 
     func test_reset_stalled_suggests_cardio() {
-        XCTAssertEqual(Targets.suggestAdjustment(mode: .circuit, weeklyDeltaLb: 0)?.direction, .addCardio)
+        XCTAssertEqual(Targets.suggestAdjustment(fitnessGoal: .lose, weeklyDeltaLb: 0)?.direction, .addCardio)
     }
 
     func test_reset_losing_fast_suggests_increase() {
-        XCTAssertEqual(Targets.suggestAdjustment(mode: .circuit, weeklyDeltaLb: -2.0)?.direction, .increase)
+        XCTAssertEqual(Targets.suggestAdjustment(fitnessGoal: .lose, weeklyDeltaLb: -2.0)?.direction, .increase)
     }
 
     func test_reset_on_track_returns_nil() {
-        XCTAssertNil(Targets.suggestAdjustment(mode: .circuit, weeklyDeltaLb: -0.6))
+        XCTAssertNil(Targets.suggestAdjustment(fitnessGoal: .lose, weeklyDeltaLb: -0.6))
     }
 
     func test_reset_markers_stalled_8w_flags_doctor() {
         XCTAssertEqual(
-            Targets.suggestAdjustment(mode: .circuit, weeklyDeltaLb: -0.6, weeksStalledMarkers: 8)?.direction,
+            Targets.suggestAdjustment(fitnessGoal: .lose, weeklyDeltaLb: -0.6, weeksStalledMarkers: 8)?.direction,
             .flagDoctor
         )
     }

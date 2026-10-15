@@ -63,15 +63,12 @@ struct LiveSessionCard: View {
             ActivityPicker(profile: profile) { state in
                 runner = RunnerSession(state: state)
             }
-            .themed(profile.mode)
         }
         .sheet(item: $runner, onDismiss: { refreshToken = UUID() }) { wrapped in
             LiveSessionRunner(profile: profile, initial: wrapped.state)
-                .themed(profile.mode)
         }
         .sheet(isPresented: $showPastLog, onDismiss: { refreshToken = UUID() }) {
             LogPastSessionSheet(profile: profile)
-                .themed(profile.mode)
         }
     }
 
@@ -537,7 +534,6 @@ private struct RecentActivitySessions: View {
                     },
                     onSave: { minutes in saveDuration(session, minutes: minutes) }
                 )
-                .themed(profile.mode)
             }
         }
     }

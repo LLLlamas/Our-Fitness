@@ -91,7 +91,7 @@ struct WorkoutsView: View {
                 Text("Train")
                     .font(.system(size: 56, weight: .regular))
                     .foregroundStyle(theme.text)
-                Text(profile.mode == .build
+                Text(profile.fitnessGoal == .gain
                      ? "Hypertrophy bias. Add your lifts, count reps, watch the numbers climb."
                      : "Pilates, live sessions, and your movements — log it, keep the markers moving.")
                     .font(.callout).foregroundStyle(theme.dim)
@@ -111,7 +111,7 @@ struct WorkoutsView: View {
         }
         .background(theme.bg.ignoresSafeArea())
         .sheet(isPresented: $showAddSheet) {
-            AddExerciseSheet(mode: profile.mode) { draft in
+            AddExerciseSheet(fitnessGoal: profile.fitnessGoal) { draft in
                 guard Repos.createExercise(
                     ctx, profileId: profile.id, name: draft.name,
                     defaultRepsBottom: 8, defaultRepsTop: 12,
@@ -121,23 +121,18 @@ struct WorkoutsView: View {
                 ) != nil else { return }
                 toasts.show(Toast(title: draft.name, detail: "Exercise added", accent: .win, symbol: "plus.circle.fill"))
             }
-            .themed(profile.mode)
         }
         .sheet(item: $activeRepCounter) { ex in
             RepCounterSheet(profile: profile, exercise: ex)
-                .themed(profile.mode)
         }
         .sheet(item: $activeInfo) { ex in
             ExerciseInfoSheet(exercise: ex, profile: profile)
-                .themed(profile.mode)
         }
         .sheet(item: $activeHistory) { ex in
             SetHistorySheet(profile: profile, exercise: ex)
-                .themed(profile.mode)
         }
         .sheet(isPresented: $showGoalSheet) {
             WorkoutGoalSheet(profile: profile, existingNames: Set(myExercises.map { $0.name.lowercased() }))
-                .themed(profile.mode)
         }
     }
 
@@ -146,7 +141,7 @@ struct WorkoutsView: View {
     // same exercises with tap-to-log, so the Build list would only duplicate it).
     @ViewBuilder
     private var exercisesSection: some View {
-        if profile.mode == .build {
+        if profile.fitnessGoal == .gain {
             let exercises = myExercises
             HStack {
                 Text("Your exercises")
@@ -366,7 +361,7 @@ struct AddExerciseSheet: View {
         var loadLb: Double?
     }
 
-    let mode: Mode
+    let fitnessGoal: FitnessGoal
     let onSave: (Draft) -> Void
 
     @Environment(\.theme) private var theme
@@ -382,7 +377,7 @@ struct AddExerciseSheet: View {
 
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
-    private var isCircuit: Bool { mode == .circuit }
+    private var isCircuit: Bool { fitnessGoal == .lose }
 
     private var loadLb: Double? {
         // Field is in the active unit; persist canonical lb.
@@ -581,7 +576,7 @@ struct SetHistorySheet: View {
                         VStack(alignment: .leading, spacing: 6) {
                             Text("No sets logged today.")
                                 .font(.callout).foregroundStyle(theme.text)
-                            Text(profile.mode == .build
+                            Text(profile.fitnessGoal == .gain
                                  ? "Tap the exercise to start counting. Past days live in Progress › Training history."
                                  : "Tap + on the movement to log it. Past days live in Progress › Training history.")
                                 .font(.caption).foregroundStyle(theme.dim)
@@ -615,7 +610,6 @@ struct SetHistorySheet: View {
         .presentationBackground(theme.bg)
         .sheet(item: $editing) { s in
             EditSetSheet(profile: profile, exercise: exercise, loggedSet: s)
-                .themed(profile.mode)
         }
         .confirmationDialog("Delete \(exercise.name)?",
                             isPresented: $confirmDeleteExercise,
@@ -632,7 +626,7 @@ struct SetHistorySheet: View {
     }
 
     /// Circuit calls these "movements" everywhere else; Build calls them exercises.
-    private var noun: String { profile.mode == .build ? "exercise" : "movement" }
+    private var noun: String { profile.fitnessGoal == .gain ? "exercise" : "movement" }
 
     @ViewBuilder
     private func setRow(_ s: WorkoutSetDTO) -> some View {
@@ -754,7 +748,7 @@ private struct EditSetSheet: View {
 
     private var estimatedCal: Int {
         Int(Repos.setCaloriesEstimate(
-            exercise: exercise, mode: profile.mode,
+            exercise: exercise, fitnessGoal: profile.fitnessGoal,
             reps: isHold ? max(1, loggedSet.reps) : reps,
             holdSeconds: isHold ? holdSeconds : nil,
             bodyWeightLb: profile.weightLb
@@ -898,7 +892,7 @@ private struct EditSetSheet: View {
             weightLb: showsWeight ? weightLb : nil,
             holdSeconds: isHold ? holdSeconds : nil,
             bodyWeightLb: profile.weightLb,
-            mode: profile.mode
+            fitnessGoal: profile.fitnessGoal
         ) else { return }
 
         var detail = isHold
@@ -1017,7 +1011,7 @@ private struct WorkoutGoalSheet: View {
 
         if WorkoutSuggestionService.shared.isAvailable {
             loading = true
-            let picks = await WorkoutSuggestionService.shared.picks(forGoal: g, mode: profile.mode)
+            let picks = await WorkoutSuggestionService.shared.picks(forGoal: g, fitnessGoal: profile.fitnessGoal)
             loading = false
             let mapped = picks.compactMap { pick -> ExerciseGoalMatcher.GoalSuggestion? in
                 guard let entry = ExerciseInfo.catalogEntry(named: pick.exerciseName) else { return nil }
@@ -1033,7 +1027,7 @@ private struct WorkoutGoalSheet: View {
 
         // Deterministic fallback — always returns sensible picks.
         usedAI = false
-        results = ExerciseGoalMatcher.suggestions(for: g, mode: profile.mode)
+        results = ExerciseGoalMatcher.suggestions(for: g, fitnessGoal: profile.fitnessGoal)
         Haptics.selection()
     }
 

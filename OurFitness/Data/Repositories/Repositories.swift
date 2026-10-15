@@ -45,7 +45,7 @@ public enum Repos {
     public static func createProfile(
         _ ctx: ModelContext,
         name: String,
-        mode: Mode,
+        fitnessGoal: FitnessGoal,
         sex: Sex,
         heightIn: Double,
         weightLb: Double,
@@ -57,14 +57,14 @@ public enum Repos {
             sex: sex, weightLb: weightLb, heightIn: heightIn, age: age, activity: activity
         )
         let dto = ProfileDTO(
-            name: name, mode: mode, sex: sex,
+            name: name, fitnessGoal: fitnessGoal, sex: sex,
             heightIn: heightIn, weightLb: weightLb, age: age, activity: activity,
-            computedTargets: Targets.compute(mode: mode, vitals: vitals),
+            computedTargets: Targets.compute(fitnessGoal: fitnessGoal, vitals: vitals),
             healthGranted: healthGranted
         )
         let saved = RepositoryWrite.perform(ctx) {
             ctx.insert(ProfileModel(snapshot: dto))
-            if mode == .circuit { try seedCircuitExercises(ctx, profileId: dto.id) }
+            if fitnessGoal == .lose { try seedCircuitExercises(ctx, profileId: dto.id) }
             ctx.insert(ReminderGroupModel(snapshot: ReminderGroupDTO(
                 userId: dto.id, name: "Plants", sfSymbol: "leaf.fill", kind: .plants)))
             ctx.insert(ReminderGroupModel(snapshot: ReminderGroupDTO(
@@ -89,7 +89,7 @@ public enum Repos {
                 id: "ex-\(profileId.uuidString.prefix(8))-\(UUID().uuidString.prefix(8))",
                 name: s.name, category: .bodyweight, muscleGroups: s.muscles,
                 equipment: [.bodyweight], defaultRepRange: [8, 12],
-                availableForMode: [.build, .circuit], profileId: profileId,
+                availableForMode: [.gain, .lose], profileId: profileId,
                 loadLb: s.loadLb, kind: s.kind, isIsometric: false)
             ctx.insert(ExerciseModel(snapshot: dto))
         }
@@ -126,7 +126,7 @@ public enum Repos {
 
             let updated = model.snapshot
             model.targetsJSON = try JSONEncoder().encode(
-                Targets.compute(mode: updated.mode, vitals: updated.vitals)
+                Targets.compute(fitnessGoal: updated.fitnessGoal, vitals: updated.vitals)
             )
             model.updatedAt = Date()
             updatedProfile = model.snapshot
@@ -166,7 +166,7 @@ public enum Repos {
     /// switching to Circuit, seeds the parenting exercises (idempotent). Returns
     /// the updated DTO, or nil if the profile no longer exists.
     @discardableResult
-    public static func updateMode(_ ctx: ModelContext, profileId: UUID, to newMode: Mode) -> ProfileDTO? {
+    public static func updateMode(_ ctx: ModelContext, profileId: UUID, to newMode: FitnessGoal) -> ProfileDTO? {
         var updatedProfile: ProfileDTO?
         let saved = RepositoryWrite.perform(ctx) {
             let target = profileId
@@ -174,13 +174,13 @@ public enum Repos {
             guard let model = try ctx.fetch(desc).first else { throw RepositoryWriteError.missingRecord }
 
             let current = model.snapshot
-            guard current.mode != newMode else { updatedProfile = current; return }
+            guard current.fitnessGoal != newMode else { updatedProfile = current; return }
 
             model.modeRaw = newMode.rawValue
-            model.targetsJSON = try JSONEncoder().encode(Targets.compute(mode: newMode, vitals: current.vitals))
+            model.targetsJSON = try JSONEncoder().encode(Targets.compute(fitnessGoal: newMode, vitals: current.vitals))
             model.updatedAt = Date()
 
-            if newMode == .circuit {
+            if newMode == .lose {
                 try seedCircuitExercises(ctx, profileId: profileId)
             }
             updatedProfile = model.snapshot
@@ -218,7 +218,7 @@ public enum Repos {
             muscleGroups: muscleGroups,
             equipment: tracksWeight ? [.dumbbell] : [.bodyweight],
             defaultRepRange: [defaultRepsBottom, defaultRepsTop],
-            availableForMode: [.build, .circuit],
+            availableForMode: [.gain, .lose],
             profileId: profileId,
             loadLb: loadLb,
             kind: kind,
@@ -379,7 +379,7 @@ public enum Repos {
         weightLb: Double?,
         holdSeconds: Int? = nil,
         bodyWeightLb: Double,
-        mode: Mode
+        fitnessGoal: FitnessGoal
     ) -> Bool {
         RepositoryWrite.perform(ctx) {
             let desc = FetchDescriptor<WorkoutSetModel>(predicate: #Predicate { $0.id == id })
@@ -396,7 +396,7 @@ public enum Repos {
             target.weightLb = weightLb
             target.holdSeconds = newHold
             target.caloriesEst = setCaloriesEstimate(
-                exercise: exercise, mode: mode,
+                exercise: exercise, fitnessGoal: fitnessGoal,
                 reps: newReps, holdSeconds: newHold,
                 bodyWeightLb: bodyWeightLb
             )
@@ -424,7 +424,7 @@ public enum Repos {
     /// All four estimators are activity-only (MET − 1); never hand-roll the
     /// product here.
     public static func setCaloriesEstimate(
-        exercise: ExerciseDTO, mode: Mode, reps: Int, holdSeconds: Int?, bodyWeightLb: Double
+        exercise: ExerciseDTO, fitnessGoal: FitnessGoal, reps: Int, holdSeconds: Int?, bodyWeightLb: Double
     ) -> Double {
         if let seconds = holdSeconds {
             return CalorieEstimator.caloriesForIsometric(
@@ -433,7 +433,7 @@ public enum Repos {
                 bodyWeightLb: bodyWeightLb
             )
         }
-        guard mode == .circuit else {
+        guard fitnessGoal == .lose else {
             return CalorieEstimator.caloriesForReps(
                 reps: reps, exercise: exercise, bodyWeightLb: bodyWeightLb
             )

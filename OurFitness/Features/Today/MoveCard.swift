@@ -192,21 +192,18 @@ struct MoveCard: View {
                 trainingMet: trainingMetEstimate,
                 stepsKcal: stepsKcal
             )
-            .themed(profile.mode)
         }
         .sheet(isPresented: $showEnergyInfo) {
             AppleEnergyInfoSheet(
                 activeKcal: isEnergyStale ? nil : Int(appleEnergyKcal),
                 asOf: isEnergyStale ? nil : asOfText(appleEnergyDate)
             )
-            .themed(profile.mode)
         }
         .sheet(isPresented: $showMetTotalInfo) {
             MetTotalInfoSheet(
                 metTotal: metTotal,
                 stepsKcal: stepsKcal, trainingKcal: trainingMetEstimate, weightKg: weightKg
             )
-            .themed(profile.mode)
         }
         .sheet(isPresented: $showExercisesInfo) {
             ExercisesInfoSheet(
@@ -219,22 +216,18 @@ struct MoveCard: View {
                 todayPilates: todayPilates, todayActivities: todayActivities,
                 exerciseNames: exerciseNames
             )
-            .themed(profile.mode)
         }
         .sheet(isPresented: $showHeartRateInfo) {
             HeartRateInfoSheet(
                 bpm: (isBpmStale || bpm == nil) ? nil : bpm,
                 asOf: isBpmStale ? nil : asOfText(bpmDate)
             )
-            .themed(profile.mode)
         }
         .sheet(isPresented: $showDistanceInfo) {
             DistanceInfoSheet(miles: walkingDistanceMiles, unitSystem: unitSystem)
-                .themed(profile.mode)
         }
         .sheet(isPresented: $showFlightsInfo) {
             FlightsClimbedInfoSheet(floors: flightsClimbed)
-                .themed(profile.mode)
         }
     }
 

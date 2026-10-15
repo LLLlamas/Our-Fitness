@@ -30,89 +30,89 @@ final class StallDetectorTests: XCTestCase {
     // MARK: - No history / active → nil
 
     func test_no_history_is_not_a_stall() {
-        XCTAssertNil(StallDetector.detect(mode: .build, now: now))
-        XCTAssertNil(StallDetector.detect(mode: .circuit, now: now))
+        XCTAssertNil(StallDetector.detect(fitnessGoal: .gain, now: now))
+        XCTAssertNil(StallDetector.detect(fitnessGoal: .lose, now: now))
     }
 
     func test_active_user_is_not_stalled() {
         let out = StallDetector.detect(
-            mode: .build, steps: [step(0, 9000), step(1, 8000)], sets: [set(0)], now: now)
+            fitnessGoal: .gain, steps: [step(0, 9000), step(1, 8000)], sets: [set(0)], now: now)
         XCTAssertNil(out)
     }
 
     // MARK: - Steps gap
 
     func test_steps_gap_when_last_active_day_is_old() {
-        let out = StallDetector.detect(mode: .build, steps: [step(3, 8000), step(4, 7000)], now: now)
+        let out = StallDetector.detect(fitnessGoal: .gain, steps: [step(3, 8000), step(4, 7000)], now: now)
         XCTAssertEqual(out, .stepsGap(days: 3))
     }
 
     func test_recent_low_steps_do_not_count_as_active() {
         // Logged today but only 200 steps; last real activity 3 days ago.
-        let out = StallDetector.detect(mode: .build, steps: [step(0, 200), step(3, 8000)], now: now)
+        let out = StallDetector.detect(fitnessGoal: .gain, steps: [step(0, 200), step(3, 8000)], now: now)
         XCTAssertEqual(out, .stepsGap(days: 3))
     }
 
     func test_steps_yesterday_is_not_a_gap() {
-        XCTAssertNil(StallDetector.detect(mode: .build, steps: [step(1, 9000)], now: now))
+        XCTAssertNil(StallDetector.detect(fitnessGoal: .gain, steps: [step(1, 9000)], now: now))
     }
 
     // MARK: - Workout gap (mode-dependent threshold)
 
     func test_workout_gap_build_at_5_days() {
-        XCTAssertEqual(StallDetector.detect(mode: .build, sets: [set(5)], now: now), .workoutGap(days: 5))
+        XCTAssertEqual(StallDetector.detect(fitnessGoal: .gain, sets: [set(5)], now: now), .workoutGap(days: 5))
     }
 
     func test_workout_gap_circuit_needs_7_days() {
-        XCTAssertEqual(StallDetector.detect(mode: .build, sets: [set(6)], now: now), .workoutGap(days: 6))
-        XCTAssertNil(StallDetector.detect(mode: .circuit, sets: [set(6)], now: now))
-        XCTAssertEqual(StallDetector.detect(mode: .circuit, sets: [set(7)], now: now), .workoutGap(days: 7))
+        XCTAssertEqual(StallDetector.detect(fitnessGoal: .gain, sets: [set(6)], now: now), .workoutGap(days: 6))
+        XCTAssertNil(StallDetector.detect(fitnessGoal: .lose, sets: [set(6)], now: now))
+        XCTAssertEqual(StallDetector.detect(fitnessGoal: .lose, sets: [set(7)], now: now), .workoutGap(days: 7))
     }
 
     // MARK: - Pilates gap (Circuit only)
 
     func test_pilates_gap_circuit_only() {
-        XCTAssertEqual(StallDetector.detect(mode: .circuit, pilates: [pil(8)], now: now), .pilatesGap(days: 8))
-        XCTAssertNil(StallDetector.detect(mode: .build, pilates: [pil(30)], now: now))
+        XCTAssertEqual(StallDetector.detect(fitnessGoal: .lose, pilates: [pil(8)], now: now), .pilatesGap(days: 8))
+        XCTAssertNil(StallDetector.detect(fitnessGoal: .gain, pilates: [pil(30)], now: now))
     }
 
     // MARK: - Weight stall (Circuit only)
 
     func test_weight_stall_when_flat() {
-        let out = StallDetector.detect(mode: .circuit, weights: [weight(14, 180), weight(0, 179.9)], now: now)
+        let out = StallDetector.detect(fitnessGoal: .lose, weights: [weight(14, 180), weight(0, 179.9)], now: now)
         XCTAssertEqual(out, .weightStall(weeks: 2))
     }
 
     func test_no_weight_stall_when_losing() {
         // ~1 lb/week loss → on track.
-        XCTAssertNil(StallDetector.detect(mode: .circuit, weights: [weight(14, 182), weight(0, 180)], now: now))
+        XCTAssertNil(StallDetector.detect(fitnessGoal: .lose, weights: [weight(14, 182), weight(0, 180)], now: now))
     }
 
     func test_weight_stall_ignored_in_build() {
-        XCTAssertNil(StallDetector.detect(mode: .build, weights: [weight(14, 180), weight(0, 180)], now: now))
+        XCTAssertNil(StallDetector.detect(fitnessGoal: .gain, weights: [weight(14, 180), weight(0, 180)], now: now))
     }
 
     // MARK: - Marker stall
 
     func test_marker_stall_when_ldl_flat_6_weeks() {
-        let out = StallDetector.detect(mode: .circuit, markers: [marker(49, .ldl, 130), marker(0, .ldl, 129)], now: now)
+        let out = StallDetector.detect(fitnessGoal: .lose, markers: [marker(49, .ldl, 130), marker(0, .ldl, 129)], now: now)
         guard case .markerStall(.ldl, _) = out else { return XCTFail("expected LDL markerStall, got \(String(describing: out))") }
     }
 
     func test_marker_not_stalled_when_improving() {
         // LDL dropped ~15% → moving, not stalled.
-        XCTAssertNil(StallDetector.detect(mode: .circuit, markers: [marker(49, .ldl, 150), marker(0, .ldl, 127)], now: now))
+        XCTAssertNil(StallDetector.detect(fitnessGoal: .lose, markers: [marker(49, .ldl, 150), marker(0, .ldl, 127)], now: now))
     }
 
     func test_marker_not_stalled_without_old_enough_reading() {
         // Both readings inside the 6-week window → can't judge a 6-week stall.
-        XCTAssertNil(StallDetector.detect(mode: .circuit, markers: [marker(10, .ldl, 130), marker(0, .ldl, 129)], now: now))
+        XCTAssertNil(StallDetector.detect(fitnessGoal: .lose, markers: [marker(10, .ldl, 130), marker(0, .ldl, 129)], now: now))
     }
 
     // MARK: - Priority
 
     func test_priority_steps_over_workout() {
-        let out = StallDetector.detect(mode: .build, steps: [step(3, 8000)], sets: [set(10)], now: now)
+        let out = StallDetector.detect(fitnessGoal: .gain, steps: [step(3, 8000)], sets: [set(10)], now: now)
         XCTAssertEqual(out, .stepsGap(days: 3))
     }
 
@@ -124,8 +124,8 @@ final class StallDetectorTests: XCTestCase {
             .weightStall(weeks: 2), .markerStall(.ldl, weeks: 7),
         ]
         for s in stalls {
-            for mode in [Mode.build, .circuit] {
-                let m = EncouragementEngine.stallMessage(s, mode: mode)
+            for fitnessGoal in [FitnessGoal.gain, .lose] {
+                let m = EncouragementEngine.stallMessage(s, fitnessGoal: fitnessGoal)
                 XCTAssertFalse(m.headline.isEmpty)
                 XCTAssertFalse(m.detail.isEmpty)
                 XCTAssertEqual(m.tone, .nudge)

@@ -69,7 +69,7 @@ public enum ExerciseGoalMatcher {
     /// applied only to exercises the goal already makes relevant, so it never
     /// overrides the muscle match. Falls back to compound staples when no body part
     /// is recognised so the user always gets a sensible answer.
-    public static func suggestions(for goalText: String, mode: Mode, limit: Int = 5) -> [GoalSuggestion] {
+    public static func suggestions(for goalText: String, fitnessGoal: FitnessGoal, limit: Int = 5) -> [GoalSuggestion] {
         let lower = goalText.lowercased()
 
         // 1) Which muscle keywords does the goal imply?
@@ -88,7 +88,7 @@ public enum ExerciseGoalMatcher {
             .map { entry -> (entry: ExerciseInfo.CatalogExercise, score: Double) in
                 let base = score(entry, targets: targets, directlyNamed: directlyNamed)
                 // Mode tilt only nudges exercises that are already a match.
-                return (entry, base > 0 ? base + modeBias(entry, mode: mode) : 0)
+                return (entry, base > 0 ? base + modeBias(entry, fitnessGoal: fitnessGoal) : 0)
             }
             .filter { $0.score > 0 }
             .sorted { a, b in
@@ -143,12 +143,12 @@ public enum ExerciseGoalMatcher {
 
     /// A small mode tilt (≤2, well under a muscle match) that breaks ties toward the
     /// kind of training each mode is built around.
-    private static func modeBias(_ entry: ExerciseInfo.CatalogExercise, mode: Mode) -> Double {
-        switch mode {
-        case .build:
+    private static func modeBias(_ entry: ExerciseInfo.CatalogExercise, fitnessGoal: FitnessGoal) -> Double {
+        switch fitnessGoal {
+        case .gain:
             // Hypertrophy: favour loadable, progressable lifts.
             return entry.tracksWeight ? 1.0 : 0
-        case .circuit:
+        case .lose:
             // Fat-loss / cardiometabolic: favour higher calorie-burn + joint-friendly work.
             var b = 0.0
             if entry.meta.met >= 5.0 { b += 1.0 }

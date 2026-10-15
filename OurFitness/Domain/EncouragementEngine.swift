@@ -21,8 +21,8 @@ public enum EncouragementEngine {
     // MARK: - Steps
 
     /// Message for a crossed step milestone (3,000 / 5,000 / 8,000 / 10,000).
-    public static func stepMilestoneMessage(steps: Int, mode: Mode) -> EncouragementMessage {
-        let isBuild = mode == .build
+    public static func stepMilestoneMessage(steps: Int, fitnessGoal: FitnessGoal) -> EncouragementMessage {
+        let isBuild = fitnessGoal == .gain
         switch steps {
         case 3_000:
             return isBuild
@@ -79,8 +79,8 @@ public enum EncouragementEngine {
     }
 
     /// Message for approaching the daily step goal. Intended for use when ≥85% there.
-    public static func stepApproachingMessage(stepsRemaining: Int, mode: Mode) -> EncouragementMessage {
-        if mode == .build {
+    public static func stepApproachingMessage(stepsRemaining: Int, fitnessGoal: FitnessGoal) -> EncouragementMessage {
+        if fitnessGoal == .gain {
             return EncouragementMessage(
                 headline: "Almost there on steps.",
                 detail: "\(stepsRemaining) steps left to hit your daily goal.",
@@ -102,7 +102,7 @@ public enum EncouragementEngine {
         exercise: ExerciseDTO,
         repsJustLogged: Int,
         totalSetsThisWeekForMuscle: Int,
-        mode: Mode
+        fitnessGoal: FitnessGoal
     ) -> EncouragementMessage? {
         let muscle = exercise.muscleGroups.first ?? "this muscle group"
         switch totalSetsThisWeekForMuscle {
@@ -172,7 +172,7 @@ public enum EncouragementEngine {
     public static func pilatesSessionMessage(
         totalSessionsThisWeek: Int,
         weeklyGoal: Int,
-        mode: Mode
+        fitnessGoal: FitnessGoal
     ) -> EncouragementMessage? {
         if weeklyGoal > 0 && totalSessionsThisWeek >= weeklyGoal {
             return EncouragementMessage(
@@ -188,8 +188,8 @@ public enum EncouragementEngine {
 
     /// Weekly-streak milestone copy (1 / 5 / 10 / 26 / 52 weeks). Returns nil at
     /// any other week count.
-    public static func streakMilestoneMessage(weeks: Int, mode: Mode) -> EncouragementMessage? {
-        let isBuild = mode == .build
+    public static func streakMilestoneMessage(weeks: Int, fitnessGoal: FitnessGoal) -> EncouragementMessage? {
+        let isBuild = fitnessGoal == .gain
         switch weeks {
         case 1:
             return isBuild
@@ -244,8 +244,8 @@ public enum EncouragementEngine {
     /// Returns nil at any other day count so the toast layer never spams. This is
     /// the "you logged today, N days running" habit reward — distinct from the
     /// weekly movement streak (`streakMilestoneMessage`).
-    public static func mealStreakMessage(days: Int, mode: Mode) -> EncouragementMessage? {
-        let isBuild = mode == .build
+    public static func mealStreakMessage(days: Int, fitnessGoal: FitnessGoal) -> EncouragementMessage? {
+        let isBuild = fitnessGoal == .gain
         switch days {
         case 3:
             return EncouragementMessage(
@@ -288,8 +288,8 @@ public enum EncouragementEngine {
     // MARK: - Macros
 
     /// Copy for hitting a macro target (100% of goal).
-    public static func macroGoalHitMessage(macro: String, mode: Mode) -> EncouragementMessage {
-        let isBuild = mode == .build
+    public static func macroGoalHitMessage(macro: String, fitnessGoal: FitnessGoal) -> EncouragementMessage {
+        let isBuild = fitnessGoal == .gain
         switch macro.lowercased() {
         case "protein":
             return isBuild
@@ -334,9 +334,9 @@ public enum EncouragementEngine {
     public static func mealLoggingNudge(
         mealsLoggedToday: Int,
         hourOfDay: Int,
-        mode: Mode
+        fitnessGoal: FitnessGoal
     ) -> EncouragementMessage? {
-        let isBuild = mode == .build
+        let isBuild = fitnessGoal == .gain
 
         // Don't nag before 11 AM.
         guard hourOfDay >= 11 else { return nil }
@@ -420,8 +420,8 @@ public enum EncouragementEngine {
     }
 
     /// Copy for approaching a macro target. Intended for use when ≥85% there.
-    public static func macroApproachingMessage(macro: String, remaining: Int, unit: String, mode: Mode) -> EncouragementMessage {
-        let isBuild = mode == .build
+    public static func macroApproachingMessage(macro: String, remaining: Int, unit: String, fitnessGoal: FitnessGoal) -> EncouragementMessage {
+        let isBuild = fitnessGoal == .gain
         switch macro.lowercased() {
         case "protein":
             return isBuild
@@ -455,12 +455,12 @@ public enum EncouragementEngine {
 
     /// A gentle, science-anchored prompt when the user has stalled. Softened claims
     /// only — this never prescribes. Pairs with `StallDetector.detect`.
-    public static func stallMessage(_ stall: StallDetector.Stall, mode: Mode) -> EncouragementMessage {
+    public static func stallMessage(_ stall: StallDetector.Stall, fitnessGoal: FitnessGoal) -> EncouragementMessage {
         switch stall {
         case .stepsGap(let days):
             return EncouragementMessage(
                 headline: "\(days) days light on steps",
-                detail: mode == .circuit
+                detail: fitnessGoal == .lose
                     ? "Walking is your most repeatable lever for blood pressure and blood sugar. A short walk today restarts the habit."
                     : "A daily walk keeps recovery and appetite steady without cutting into your training. Even 10 minutes counts.",
                 scienceLine: "Each extra ~1,000 daily steps is linked to roughly 10–12% lower early-death risk (Paluch meta-analysis, 2022).",
@@ -468,7 +468,7 @@ public enum EncouragementEngine {
         case .workoutGap(let days):
             return EncouragementMessage(
                 headline: "\(days) days since your last set",
-                detail: mode == .circuit
+                detail: fitnessGoal == .lose
                     ? "A couple of short strength sessions a week protect muscle while you lean out. A quick one now keeps the habit alive."
                     : "Muscle responds to frequency — a short session now keeps your progress compounding.",
                 tone: .nudge, sfSymbol: "dumbbell")

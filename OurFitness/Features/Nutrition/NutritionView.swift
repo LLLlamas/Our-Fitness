@@ -130,7 +130,7 @@ struct NutritionView: View {
 
                 daySelector(allLogs: allLogs)
                 totalsCard(totals: totals, mealLoggingStreak: mealLoggingStreak)
-                if profile.mode == .circuit {
+                if profile.fitnessGoal == .lose {
                     // `entries:` lets the card tell "no label data for these foods"
                     // apart from "you ate almost no sodium" — see MacroBudget.capCoverage.
                     HeartHealthCard(totals: totals, targets: profile.computedTargets,
@@ -184,7 +184,7 @@ struct NutritionView: View {
             }
             let streak = mealLoggingStreak
             if streak > lastLoggingStreak {
-                toasts.mealStreak(days: streak, mode: profile.mode)
+                toasts.mealStreak(days: streak, fitnessGoal: profile.fitnessGoal)
             }
             lastLoggingStreak = streak
         }
@@ -195,16 +195,14 @@ struct NutritionView: View {
                 toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
                 let foodName = dto.foodId ?? dto.customName ?? ""
                 if !foodName.isEmpty {
-                    FoodAlternativeService.shared.prefetch(for: foodName, mode: profile.mode)
+                    FoodAlternativeService.shared.prefetch(for: foodName, fitnessGoal: profile.fitnessGoal)
                 }
             }
-            .themed(profile.mode)
         }
         .sheet(isPresented: $showMealHistory) {
             MealHistorySheet(logs: allLogs) { dayKey in
                 selectDay(dayKey)
             }
-            .themed(profile.mode)
         }
         .sheet(item: $entryToDetail) { entry in
             MealIngredientDetailSheet(
@@ -212,17 +210,14 @@ struct NutritionView: View {
                 profile: profile,
                 onDone: { entryToDetail = nil }
             )
-            .themed(profile.mode)
         }
         .sheet(isPresented: $showNutritionTrend) {
             NutritionTrendSheet(profile: profile, logs: allLogs) { dayKey in
                 selectDay(dayKey)
             }
-            .themed(profile.mode)
         }
         .sheet(isPresented: $showNutritionInsight) {
             NutritionInsightSheet(profile: profile, logs: allLogs)
-                .themed(profile.mode)
         }
         .sheet(isPresented: $showCameraLog) {
             CameraFoodLogSheet(profile: profile, slot: .lunch) { dto in
@@ -230,10 +225,9 @@ struct NutritionView: View {
                 toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
                 let foodName = dto.foodId ?? dto.customName ?? ""
                 if !foodName.isEmpty {
-                    FoodAlternativeService.shared.prefetch(for: foodName, mode: profile.mode)
+                    FoodAlternativeService.shared.prefetch(for: foodName, fitnessGoal: profile.fitnessGoal)
                 }
             }
-            .themed(profile.mode)
         }
         .sheet(isPresented: $showMoodSheet) {
             MoodMealSheet(
@@ -245,10 +239,9 @@ struct NutritionView: View {
                 showMoodSheet = false
                 let foodName = dto.foodId ?? dto.customName ?? ""
                 if !foodName.isEmpty {
-                    FoodAlternativeService.shared.prefetch(for: foodName, mode: profile.mode)
+                    FoodAlternativeService.shared.prefetch(for: foodName, fitnessGoal: profile.fitnessGoal)
                 }
             }
-            .themed(profile.mode)
         }
         // Key on profile.id + the id of the most recent today's log so the section
         // refreshes when the user logs a new food today (subject changes), but not
@@ -293,7 +286,7 @@ struct NutritionView: View {
         alternativesState = .loading
         let results = await FoodAlternativeService.shared.alternatives(
             for: targetFood,
-            mode: profile.mode,
+            fitnessGoal: profile.fitnessGoal,
             recentFoodNames: frequents,
             favoriteFoodNames: favNames
         )
@@ -381,7 +374,7 @@ struct NutritionView: View {
         // show them with the whyBetter educational line. When AI is unavailable,
         // show the variety nudges as the fallback content.
         let aiItems = aiAlternativeItems
-        let nudges = FoodVarietyNudges.nudges(from: allLogs, mode: profile.mode)
+        let nudges = FoodVarietyNudges.nudges(from: allLogs, fitnessGoal: profile.fitnessGoal)
 
         // Only render if there's something to show: AI results, nudges, or loading.
         let isLoading: Bool = {
@@ -444,7 +437,7 @@ struct NutritionView: View {
                                 )
                                 guard Repos.addFoodLog(ctx, dto) else { return }
                                 toasts.logged(item.food.name, calories: item.scaledCalories)
-                                FoodAlternativeService.shared.prefetch(for: item.food.name, mode: profile.mode)
+                                FoodAlternativeService.shared.prefetch(for: item.food.name, fitnessGoal: profile.fitnessGoal)
                             } label: {
                                 Image(systemName: "plus.circle")
                             }
@@ -547,7 +540,7 @@ struct NutritionView: View {
                 : "\(calLeft) cal to go · protein hit"
             return (t, "target")
         }
-        return (profile.mode == .build
+        return (profile.fitnessGoal == .gain
                 ? "Calorie goal reached — nice."
                 : "At your calorie target for the day.",
                 "checkmark.circle.fill")
@@ -1000,7 +993,6 @@ private struct MoodMealSheet: View {
                 ))
                 selectedMeal = nil
             }
-            .themed(profile.mode)
         }
     }
 
@@ -1013,7 +1005,7 @@ private struct MoodMealSheet: View {
         if MealIdeaService.shared.isAvailable {
             loading = true
             let recentNames = FoodAlternativeService.shared.learnedFrequents(from: recentLogs)
-            let ideas = await MealIdeaService.shared.ideas(forCraving: g, mode: profile.mode, recentFoodNames: recentNames)
+            let ideas = await MealIdeaService.shared.ideas(forCraving: g, fitnessGoal: profile.fitnessGoal, recentFoodNames: recentNames)
             loading = false
             if !ideas.isEmpty {
                 aiIdeas = ideas
@@ -1147,12 +1139,12 @@ private struct NutritionInsightSheet: View {
     private func calorieStatus(avg7: DailyTotals, logged7: Int, targets: MacroTargets) -> String {
         guard logged7 > 0 else { return "Log meals consistently to track your calorie pattern." }
         let pct = Int(Double(avg7.calories) / Double(targets.calories) * 100)
-        switch profile.mode {
-        case .build:
+        switch profile.fitnessGoal {
+        case .gain:
             if pct >= 95 { return "Calorie intake looks solid for muscle gain." }
             if pct >= 80 { return "Slightly under target — add a snack or larger portion to hit your surplus." }
             return "Calories are low for a building phase. Aim for the full \(targets.calories) cal daily."
-        case .circuit:
+        case .lose:
             if pct <= 95 && pct >= 70 { return "Nice deficit — you're in the right calorie range for fat loss." }
             if pct > 95 { return "You're near maintenance. A small additional reduction helps the deficit." }
             return "Calories look very low. Make sure you're still fueling activity and recovery."
@@ -1161,7 +1153,7 @@ private struct NutritionInsightSheet: View {
 
     private var modeBlurb: String {
         // Personalized to the user's own maintenance + surplus/deficit numbers.
-        TargetRationale.goalLine(for: profile.mode) + "\n\n" + TargetRationale.calorieWhy(for: profile)
+        TargetRationale.goalLine(for: profile.fitnessGoal) + "\n\n" + TargetRationale.calorieWhy(for: profile)
     }
 
     var body: some View {
@@ -1180,7 +1172,7 @@ private struct NutritionInsightSheet: View {
                           detents: [.large]) {
             infoBlock(icon: "target", title: "Your daily targets") {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("**\(targets.calories) calories** — \(profile.mode == .build ? "surplus" : "slight deficit") from your maintenance")
+                    Text("**\(targets.calories) calories** — \(profile.fitnessGoal == .gain ? "surplus" : "slight deficit") from your maintenance")
                         .font(.callout).foregroundStyle(theme.text)
                     Text(unitSystem == .metric
                          ? "**\(targets.proteinG)g protein** — \(String(format: "%.1f", Double(targets.proteinG) / (profile.weightLb * Units.kgPerLb)))g per kilogram of body weight"

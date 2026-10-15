@@ -89,7 +89,6 @@ public struct HeartHealthCard: View {
             }
             .sheet(isPresented: $showInfo) {
                 HeartHealthInfoSheet(profile: profile)
-                    .themed(profile.mode)
             }
         }
     }
@@ -172,7 +171,7 @@ private struct HeartHealthInfoSheet: View {
             titleSize: 38,
             dragIndicator: true
         ) {
-            Text(TargetRationale.goalLine(for: profile.mode))
+            Text(TargetRationale.goalLine(for: profile.fitnessGoal))
                 .font(.callout).foregroundStyle(theme.text)
                 .fixedSize(horizontal: false, vertical: true)
 

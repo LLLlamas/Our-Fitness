@@ -89,16 +89,13 @@ struct SettingsView: View {
                 }
             }
         }
-        .themed(profile.mode)
         .sheet(isPresented: $showModeSwitch) {
             // Themed to the destination mode so the sheet previews the palette
             // you're switching into.
             ModeSwitchSheet(profile: profile, onConfirm: switchMode)
-                .themed(profile.mode.toggled)
         }
         .sheet(isPresented: $showEditVitals) {
             EditVitalsSheet(profile: profile, unitSystem: unitSystem, onSave: saveVitals)
-                .themed(profile.mode)
         }
     }
 
@@ -107,10 +104,10 @@ struct SettingsView: View {
         PressableCard(action: { showModeSwitch = true }) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(profile.mode.displayName)
+                    Text(profile.fitnessGoal.displayName)
                         .font(.system(size: 15, weight: .medium))
                         .foregroundStyle(theme.text)
-                    Text("Tap to switch to \(profile.mode.toggled.displayName)")
+                    Text("Tap to switch to \(profile.fitnessGoal.toggled.displayName)")
                         .font(.caption).foregroundStyle(theme.dim)
                 }
                 Spacer()
@@ -292,7 +289,7 @@ struct SettingsView: View {
         showEditVitals = false
     }
 
-    private func switchMode(to newMode: Mode) {
+    private func switchMode(to newMode: FitnessGoal) {
         guard Repos.updateMode(ctx, profileId: profile.id, to: newMode) != nil else { return }
         toasts.show(Toast(title: "Switched to \(newMode.displayName)",
                           detail: "Targets recomputed. Your logs are kept.",
@@ -424,7 +421,7 @@ private struct EditVitalsSheet: View {
         Targets.ProfileVitals(sex: sex, weightLb: weightLb, heightIn: heightIn, age: age, activity: activity)
     }
     private var current: MacroTargets { profile.computedTargets }
-    private var next: MacroTargets { Targets.compute(mode: profile.mode, vitals: draftVitals) }
+    private var next: MacroTargets { Targets.compute(fitnessGoal: profile.fitnessGoal, vitals: draftVitals) }
 
     var body: some View {
         NavigationStack {
@@ -539,15 +536,15 @@ private struct EditVitalsSheet: View {
 /// the preview matches exactly what Repos.updateMode will persist.
 private struct ModeSwitchSheet: View {
     let profile: ProfileDTO
-    let onConfirm: (Mode) -> Void
+    let onConfirm: (FitnessGoal) -> Void
 
     @Environment(\.theme) private var theme
     @Environment(\.dismiss) private var dismiss
 
-    private var newMode: Mode { profile.mode.toggled }
+    private var newMode: FitnessGoal { profile.fitnessGoal.toggled }
 
-    private var current: MacroTargets { Targets.compute(mode: profile.mode, vitals: profile.vitals) }
-    private var next: MacroTargets { Targets.compute(mode: newMode, vitals: profile.vitals) }
+    private var current: MacroTargets { Targets.compute(fitnessGoal: profile.fitnessGoal, vitals: profile.vitals) }
+    private var next: MacroTargets { Targets.compute(fitnessGoal: newMode, vitals: profile.vitals) }
 
     var body: some View {
         ScrollView {
@@ -556,7 +553,7 @@ private struct ModeSwitchSheet: View {
                     Text("Switch mode")
                         .font(.system(size: 42, weight: .regular))
                         .foregroundStyle(theme.text)
-                    Text("\(profile.mode.displayName.uppercased()) → \(newMode.displayName.uppercased())")
+                    Text("\(profile.fitnessGoal.displayName.uppercased()) → \(newMode.displayName.uppercased())")
                         .font(.system(size: 10, weight: .medium)).tracking(2)
                         .foregroundStyle(theme.dim)
                 }
@@ -573,7 +570,7 @@ private struct ModeSwitchSheet: View {
                     TargetCompareRow(label: "Steps", from: current.stepsDaily.formatted(), to: next.stepsDaily.formatted(), unit: "/day")
                 }
 
-                Text(newMode == .circuit
+                Text(newMode == .lose
                      ? "Circuit retargets you for fat loss and heart-health markers, and adds the parenting movements (Lifted Baby, Stroller, Carried Baby) plus a daily steps, cardio, and Pilates loop on Today."
                      : "Build retargets you for gaining lean mass — a calorie surplus and higher protein to fuel your lifts.")
                     .font(.footnote).foregroundStyle(theme.dim)

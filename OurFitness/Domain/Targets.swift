@@ -19,8 +19,8 @@ public enum Targets {
     }
 
     /// Per-mode knobs. Edit here to retune either mode's personality.
-    public static let rules: [Mode: ModeRules] = [
-        .build: ModeRules(
+    public static let rules: [FitnessGoal: ModeRules] = [
+        .gain: ModeRules(
             calorieAdjust: 500,
             proteinPerLb: 1.0,
             fatPctOfCals: 0.27,
@@ -30,7 +30,7 @@ public enum Targets {
             saturatedFatPctMax: nil,
             fiberGMin: nil
         ),
-        .circuit: ModeRules(
+        .lose: ModeRules(
             calorieAdjust: -400,
             proteinPerLb: 1.1,
             fatPctOfCals: 0.28,
@@ -68,12 +68,12 @@ public enum Targets {
     }
 
     /// Compute macro + steps targets from profile. Idempotent.
-    public static func compute(mode: Mode, vitals v: ProfileVitals) -> MacroTargets {
+    public static func compute(fitnessGoal: FitnessGoal, vitals v: ProfileVitals) -> MacroTargets {
         // Exhaustive switch keeps this compile-time safe when new Mode cases are added.
         let r: ModeRules
-        switch mode {
-        case .build:   r = rules[.build]!
-        case .circuit: r = rules[.circuit]!
+        switch fitnessGoal {
+        case .gain:   r = rules[.gain]!
+        case .lose: r = rules[.lose]!
         }
         let calories = max(1200, tdee(v) + r.calorieAdjust)
         let proteinG = Int((v.weightLb * r.proteinPerLb).rounded())
@@ -84,7 +84,7 @@ public enum Targets {
             calories: calories, proteinG: proteinG, carbsG: carbsG, fatG: fatG,
             stepsDaily: r.stepsDaily
         )
-        if mode == .circuit {
+        if fitnessGoal == .lose {
             t.sodiumMgMax = r.sodiumMgMax
             t.addedSugarGMax = r.addedSugarGMax
             t.fiberGMin = r.fiberGMin
@@ -114,12 +114,12 @@ public enum Targets {
 
     /// Mode-aware suggested adjustment after 14-day weight trend. nil if on track.
     public static func suggestAdjustment(
-        mode: Mode,
+        fitnessGoal: FitnessGoal,
         weeklyDeltaLb: Double,
         weeksStalledMarkers: Int = 0
     ) -> TrendAdjustment? {
-        switch mode {
-        case .build:
+        switch fitnessGoal {
+        case .gain:
             if weeklyDeltaLb < 0.15 {
                 return TrendAdjustment(direction: .increase, amountCal: 200,
                                        reason: "Weight trending flat — bump calories.")
@@ -130,7 +130,7 @@ public enum Targets {
             }
             return nil
 
-        case .circuit:
+        case .lose:
             if weeksStalledMarkers >= 8 {
                 return TrendAdjustment(direction: .flagDoctor,
                                        reason: "Markers unchanged for 8 weeks — review with your doctor.")

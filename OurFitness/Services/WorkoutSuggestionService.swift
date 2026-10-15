@@ -75,7 +75,7 @@ public final class WorkoutSuggestionService: @unchecked Sendable {
     /// Ask the model to pick exercises from `ExerciseInfo.catalog` for a free-text
     /// goal. Returns picks whose names resolve back to the catalog (others are
     /// dropped), de-duplicated, capped at `limit`. Empty on unavailability/failure.
-    public func picks(forGoal goal: String, mode: Mode, limit: Int = 5) async -> [WorkoutAIPick] {
+    public func picks(forGoal goal: String, fitnessGoal: FitnessGoal, limit: Int = 5) async -> [WorkoutAIPick] {
         let trimmed = goal.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return [] }
 
@@ -83,7 +83,7 @@ public final class WorkoutSuggestionService: @unchecked Sendable {
         if #available(iOS 26.0, *) {
             guard let draft = await OnDeviceModel.generate(instructions: Self.instructions, { session in
                 try await session.respond(
-                    to: prompt(forGoal: trimmed, mode: mode),
+                    to: prompt(forGoal: trimmed, fitnessGoal: fitnessGoal),
                     generating: WorkoutSuggestionDraft.self
                 ).content
             }) else { return [] }
@@ -106,13 +106,13 @@ public final class WorkoutSuggestionService: @unchecked Sendable {
     names EXACTLY as written in the list.
     """
 
-    private func prompt(forGoal goal: String, mode: Mode) -> String {
+    private func prompt(forGoal goal: String, fitnessGoal: FitnessGoal) -> String {
         // Hand the model the curated catalog as ground truth: name + primary muscles.
         let menu = ExerciseInfo.catalog
             .map { "- \($0.name): \($0.muscleGroups.joined(separator: ", "))" }
             .joined(separator: "\n")
         let modeLine = OnDeviceModel.modeLine(
-            mode,
+            fitnessGoal,
             build: "They are gaining lean mass and training for hypertrophy — all else equal, lean toward weighted, progressable strength exercises (roughly 6–12 reps).",
             circuit: "They are losing body fat and improving heart-health markers — all else equal, lean toward higher-calorie-burn, conditioning, and joint-friendly options. The goal still comes first."
         )

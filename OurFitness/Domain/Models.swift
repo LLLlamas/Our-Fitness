@@ -8,31 +8,33 @@ import Foundation
 
 // MARK: - Enums
 
-public enum Mode: String, Codable, CaseIterable, Sendable {
-    case build
-    // Raw value pinned to "reset" so SwiftData rows persisted under the old "Reset"
-    // UI name keep decoding cleanly. The symbol and all UI copy are "Circuit"; bump a
-    // schema version before ever changing this raw value.
-    case circuit = "reset"
+public enum FitnessGoal: String, Codable, CaseIterable, Sendable {
+    // Raw values are persisted (ProfileModel.modeRaw) and pinned to the names of the
+    // retired Build / Circuit modes: "build" and "reset" (Circuit's earlier UI name).
+    // Bump a schema version before ever changing either raw value.
+    case gain = "build"
+    case lose = "reset"
 
     public var displayName: String {
         switch self {
-        case .build:   return "Build"
-        case .circuit: return "Circuit"
+        case .gain: return "Build muscle"
+        case .lose: return "Lose weight"
         }
     }
 
-    /// One-line personality blurb. Shared by onboarding and the mode-switch sheet.
+    /// One-line description. Shared by onboarding and the goal-switch sheet.
+    /// The goal only changes targets (calories, protein, default step goal) and
+    /// soft ranking tilts; every surface is the same for both goals.
     public var blurb: String {
         switch self {
-        case .build:   return "Gain lean mass, fuel hoops. Calorie surplus + hypertrophy."
-        case .circuit: return "Drop weight, fix the markers. Steps, cardio, Pilates."
+        case .gain: return "Add lean muscle. Calorie surplus, higher protein."
+        case .lose: return "Lose body fat and improve heart-health markers. Calorie deficit, more steps."
         }
     }
 
-    /// The opposite mode. With only two modes this is the single switch target.
-    public var toggled: Mode {
-        self == .build ? .circuit : .build
+    /// The other goal. With only two goals this is the single switch target.
+    public var toggled: FitnessGoal {
+        self == .gain ? .lose : .gain
     }
 }
 
@@ -155,7 +157,7 @@ public struct MacroTargets: Codable, Equatable, Sendable {
 public struct ProfileDTO: Codable, Equatable, Sendable, Identifiable {
     public var id: UUID
     public var name: String
-    public var mode: Mode
+    public var fitnessGoal: FitnessGoal
     public var sex: Sex
     public var heightIn: Double
     public var weightLb: Double
@@ -172,7 +174,7 @@ public struct ProfileDTO: Codable, Equatable, Sendable, Identifiable {
     public init(
         id: UUID = UUID(),
         name: String,
-        mode: Mode,
+        fitnessGoal: FitnessGoal,
         sex: Sex,
         heightIn: Double,
         weightLb: Double,
@@ -188,7 +190,7 @@ public struct ProfileDTO: Codable, Equatable, Sendable, Identifiable {
     ) {
         self.id = id
         self.name = name
-        self.mode = mode
+        self.fitnessGoal = fitnessGoal
         self.sex = sex
         self.heightIn = heightIn
         self.weightLb = weightLb
@@ -252,7 +254,7 @@ extension PerServing {
 public struct FoodDTO: Codable, Equatable, Sendable, Identifiable {
     public var id: String
     public var name: String
-    public var modeFit: [Mode]
+    public var modeFit: [FitnessGoal]
     public var category: FoodCategory
     public var recipe: String?
     public var servings: Double
@@ -266,7 +268,7 @@ public struct FoodDTO: Codable, Equatable, Sendable, Identifiable {
     public var appetiteFriendly: Bool
 
     public init(
-        id: String, name: String, modeFit: [Mode], category: FoodCategory,
+        id: String, name: String, modeFit: [FitnessGoal], category: FoodCategory,
         recipe: String? = nil, servings: Double = 1, perServing: PerServing,
         costUsd: Double, costTier: CostTier, prepMinutes: Int = 5,
         allergens: [String] = [], ingredients: [String] = [], tags: [String] = [],
@@ -299,7 +301,7 @@ public struct ExerciseDTO: Codable, Equatable, Sendable, Identifiable {
     /// Modes this exercise is offered in. Defaults to both modes when decoding
     /// legacy rows. Now that exercises are per-profile (V2), this field is
     /// effectively informational; rep counter sources from `profileId`.
-    public var availableForMode: [Mode]
+    public var availableForMode: [FitnessGoal]
     public var profileId: UUID?
     public var loadLb: Double?
     public var kind: ExerciseKind
@@ -309,7 +311,7 @@ public struct ExerciseDTO: Codable, Equatable, Sendable, Identifiable {
         id: String, name: String, category: ExerciseCategory,
         muscleGroups: [String], equipment: [Equipment],
         defaultRepRange: [Int]? = nil,
-        availableForMode: [Mode] = [.build, .circuit],
+        availableForMode: [FitnessGoal] = [.gain, .lose],
         profileId: UUID? = nil,
         loadLb: Double? = nil,
         kind: ExerciseKind = .reps,
@@ -341,8 +343,8 @@ public struct ExerciseDTO: Codable, Equatable, Sendable, Identifiable {
         self.muscleGroups = try c.decode([String].self, forKey: .muscleGroups)
         self.equipment = try c.decode([Equipment].self, forKey: .equipment)
         self.defaultRepRange = try c.decodeIfPresent([Int].self, forKey: .defaultRepRange)
-        self.availableForMode = try c.decodeIfPresent([Mode].self, forKey: .availableForMode)
-            ?? [.build, .circuit]
+        self.availableForMode = try c.decodeIfPresent([FitnessGoal].self, forKey: .availableForMode)
+            ?? [.gain, .lose]
         self.profileId = try c.decodeIfPresent(UUID.self, forKey: .profileId)
         self.loadLb = try c.decodeIfPresent(Double.self, forKey: .loadLb)
         self.kind = try c.decodeIfPresent(ExerciseKind.self, forKey: .kind) ?? .reps
@@ -417,11 +419,11 @@ public struct ProgramDayDTO: Codable, Equatable, Sendable {
 public struct ProgramDTO: Codable, Equatable, Sendable, Identifiable {
     public var id: String
     public var name: String
-    public var modeFit: [Mode]
+    public var modeFit: [FitnessGoal]
     public var schedule: [ProgramDayDTO]
     public var progression: ProgressionScheme
     public var notes: String?
-    public init(id: String, name: String, modeFit: [Mode],
+    public init(id: String, name: String, modeFit: [FitnessGoal],
                 schedule: [ProgramDayDTO], progression: ProgressionScheme, notes: String? = nil) {
         self.id = id
         self.name = name

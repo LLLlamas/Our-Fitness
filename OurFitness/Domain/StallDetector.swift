@@ -37,7 +37,7 @@ public enum StallDetector {
     /// The most relevant stall right now, or nil if the user is active / has no
     /// history. Priority: steps → workout → pilates → weight → marker.
     public static func detect(
-        mode: Mode,
+        fitnessGoal: FitnessGoal,
         steps: [StepCountDTO] = [],
         sets: [WorkoutSetDTO] = [],
         pilates: [PilatesSessionDTO] = [],
@@ -55,20 +55,20 @@ public enum StallDetector {
         }
 
         // 2) Workout — last logged set ≥ N days back (N depends on mode).
-        let workoutThreshold = mode == .build ? workoutGapBuildDays : workoutGapCircuitDays
+        let workoutThreshold = fitnessGoal == .gain ? workoutGapBuildDays : workoutGapCircuitDays
         if let lastSet = sets.map(\.timestamp).max() {
             let gap = daysAgo(lastSet, now: now)
             if gap >= workoutThreshold { return .workoutGap(days: gap) }
         }
 
         // 3) Pilates — Circuit only.
-        if mode == .circuit, let lastPilates = pilates.map(\.date).max() {
+        if fitnessGoal == .lose, let lastPilates = pilates.map(\.date).max() {
             let gap = daysAgo(lastPilates, now: now)
             if gap >= pilatesGapDays { return .pilatesGap(days: gap) }
         }
 
         // 4) Weight — Circuit only: the recent trend isn't losing fast enough.
-        if mode == .circuit, let weeks = weightStallWeeks(weights, now: now) {
+        if fitnessGoal == .lose, let weeks = weightStallWeeks(weights, now: now) {
             return .weightStall(weeks: weeks)
         }
 

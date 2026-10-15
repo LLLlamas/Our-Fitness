@@ -125,7 +125,7 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
         let envelope = WatchSnapshotEnvelope(
             profileId: userId,
             profileName: profile.name,
-            mode: profile.mode.rawValue,
+            mode: profile.fitnessGoal.rawValue,
             bodyWeightLb: profile.weightLb,
             reminders: snapshots,
             today: todaySnapshot(ctx, profile: profile, logs: allLogs, todayKey: todayKey),

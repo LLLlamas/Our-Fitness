@@ -2,94 +2,65 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-  <key>CFBundleDevelopmentRegion</key>
-  <string>$(DEVELOPMENT_LANGUAGE)</string>
-  <key>CFBundleDisplayName</key>
-  <string>Our-Fitness</string>
-  <key>CFBundleExecutable</key>
-  <string>$(EXECUTABLE_NAME)</string>
-  <key>CFBundleIdentifier</key>
-  <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-  <key>CFBundleInfoDictionaryVersion</key>
-  <string>6.0</string>
-  <key>CFBundleName</key>
-  <string>$(PRODUCT_NAME)</string>
-  <key>CFBundlePackageType</key>
-  <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
-  <key>CFBundleShortVersionString</key>
-  <string>$(MARKETING_VERSION)</string>
-  <key>CFBundleVersion</key>
-  <string>$(CURRENT_PROJECT_VERSION)</string>
-  <key>LSRequiresIPhoneOS</key>
-  <true/>
-
-  <!-- ActivityKit Live Activities (Live Sessions Lock Screen / Dynamic Island).
-       This is the ONLY thing the app needs to start a Live Activity: no special
-       entitlement, no user prompt. The widget UI lives in the OurFitnessWidgets
-       extension; LiveSessionActivityController drives it and fails soft if the
-       user has Live Activities turned off. -->
-  <key>NSSupportsLiveActivities</key>
-  <true/>
-
-  <!-- Camera usage (food label scanner) -->
-  <key>NSCameraUsageDescription</key>
-  <string>Scan food labels to log nutrition quickly.</string>
-
-  <!-- HealthKit usage descriptions (required for App Store) -->
-  <key>NSHealthShareUsageDescription</key>
-  <string>Our-Fitness reads your steps, weight, heart rate, resting heart rate, active energy, exercise time, body fat, waist, blood pressure, and blood glucose from Apple Health to show your daily progress and trends.</string>
-  <key>NSHealthUpdateUsageDescription</key>
-  <string>Our-Fitness can write workouts and body weight back to Apple Health so your data stays in one place.</string>
-
-  <key>UILaunchScreen</key>
-  <dict>
-    <key>UIColorName</key>
-    <string>LaunchBackground</string>
-  </dict>
-  <!-- UIRequiredDeviceCapabilities intentionally omitted.
-       - "healthkit" here triggered ITMS-90863 (Mac w/ Apple Silicon) and
-         ITMS-90984 (visionOS) on upload, because the App Store automatically
-         makes iPhone/iPad apps available on those platforms unless we
-         opt out via build settings (see SUPPORTS_*_DESIGNED_FOR_IPHONE_IPAD
-         in project.yml). The HealthKit framework is weakly linked; on
-         platforms without it, HKHealthStore.isHealthDataAvailable() returns
-         false and our code degrades gracefully.
-       - "armv7" was meaningless for an iOS 17+ deployment target (32-bit
-         armv7 hardware tops out at iOS 10). arm64 is implicit. -->
-
-  <!-- Export Compliance: we use only standard iOS encryption (HTTPS via
-       URLSession, system HealthKit). Setting this to false tells App Store
-       Connect we qualify for the standard exemption, so TestFlight stops
-       prompting for export-compliance answers on every new build. -->
-  <key>ITSAppUsesNonExemptEncryption</key>
-  <false/>
-  <key>UISupportedInterfaceOrientations</key>
-  <array>
-    <string>UIInterfaceOrientationPortrait</string>
-    <string>UIInterfaceOrientationPortraitUpsideDown</string>
-    <string>UIInterfaceOrientationLandscapeLeft</string>
-    <string>UIInterfaceOrientationLandscapeRight</string>
-  </array>
-  <key>UISupportedInterfaceOrientations~ipad</key>
-  <array>
-    <string>UIInterfaceOrientationPortrait</string>
-    <string>UIInterfaceOrientationPortraitUpsideDown</string>
-    <string>UIInterfaceOrientationLandscapeLeft</string>
-    <string>UIInterfaceOrientationLandscapeRight</string>
-  </array>
-  <!-- Background Modes: "fetch" is the correct value for HKObserverQuery +
-       enableBackgroundDelivery — it lets the OS wake the app when HealthKit
-       has new data (steps, weight, RHR, active energy). "processing" is for
-       BGProcessingTask (long CPU work) and requires BGTaskSchedulerPermittedIdentifiers;
-       we don't use BGTaskScheduler, so using "processing" caused altool error 90771. -->
-  <key>UIBackgroundModes</key>
-  <array>
-    <string>fetch</string>
-  </array>
-  <key>UIApplicationSceneManifest</key>
-  <dict>
-    <key>UIApplicationSupportsMultipleScenes</key>
-    <false/>
-  </dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>Our-Fitness</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Scan food labels to log nutrition quickly.</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Our-Fitness reads your steps, weight, heart rate, resting heart rate, active energy, exercise time, body fat, waist, blood pressure, and blood glucose from Apple Health to show your daily progress and trends.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Our-Fitness can write workouts and body weight back to Apple Health so your data stays in one place.</string>
+	<key>NSSupportsLiveActivities</key>
+	<true/>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+	</dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+	</array>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>LaunchBackground</string>
+	</dict>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UIUserInterfaceStyle</key>
+	<string>Light</string>
 </dict>
 </plist>

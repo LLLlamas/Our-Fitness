@@ -122,7 +122,6 @@ struct WaterCard: View {
         }
         .sheet(isPresented: $showInfo) {
             WaterInfoSheet(profile: profile, goalFlOz: goalFlOz, unitSystem: unitSystem)
-                .themed(profile.mode)
         }
     }
 
@@ -286,7 +285,7 @@ private struct WaterInfoSheet: View {
                     Bullet("Losing just 2% of your body weight in fluid can sap your endurance and mood, and may dull your focus.")
                     Bullet("Water helps your body absorb nutrients and recover after training.")
                     Bullet("Thirst is a good guide for most people — this goal is just a target to aim for, especially on hot or active days.")
-                    if profile.mode == .circuit {
+                    if profile.fitnessGoal == .lose {
                         Bullet("Staying topped up makes the higher step counts in Circuit feel easier.")
                     }
                 }

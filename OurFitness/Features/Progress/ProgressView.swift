@@ -91,7 +91,7 @@ struct ProgressTabView: View {
     /// cards. Once the user customizes, the stored CSV wins outright.
     private func enabledSet(body: [BodyMetricDTO], markers: [HealthMarkerDTO]) -> Set<String> {
         if enabledStatsRaw.isEmpty {
-            var set = Set(StatKind.allCases.filter { $0.isRelevant(for: profile.mode) }.map(\.rawValue))
+            var set = Set(StatKind.allCases.filter { $0.isRelevant(for: profile.fitnessGoal) }.map(\.rawValue))
             for kind in StatKind.allCases where !set.contains(kind.rawValue) {
                 if kind.hasLoggedData(body: body, markers: markers) { set.insert(kind.rawValue) }
             }
@@ -213,24 +213,20 @@ struct ProgressTabView: View {
         .background(theme.bg.ignoresSafeArea())
         .sheet(item: $activeStat) { kind in
             detailSheet(for: kind)
-                .themed(profile.mode)
         }
         .sheet(isPresented: $showEditTrackers) {
-            EditTrackersSheet(enabled: enabled, mode: profile.mode) { newSet in
+            EditTrackersSheet(enabled: enabled, fitnessGoal: profile.fitnessGoal) { newSet in
                 persistEnabled(newSet)
             }
-            .themed(profile.mode)
         }
         .sheet(isPresented: $showEnergyBalance) {
             EnergyBalanceDetailSheet(
                 rows: energyRows,
                 targetCalories: targetCalories
             )
-            .themed(profile.mode)
         }
         .sheet(isPresented: $showTrainingHistory) {
             TrainingHistorySheet(profile: profile)
-                .themed(profile.mode)
         }
     }
 
@@ -409,7 +405,7 @@ struct ProgressTabView: View {
                 canLog: kind.canLog,
                 rangeContext: kind.markerKind.map(HealthRanges.context(for:)),
                 personalNote: kind.markerKind.flatMap { mk in
-                    latestMarkerValue(mk, in: markers).map { TargetRationale.markerMeaning(kind: mk, value: $0, mode: profile.mode) }
+                    latestMarkerValue(mk, in: markers).map { TargetRationale.markerMeaning(kind: mk, value: $0, fitnessGoal: profile.fitnessGoal) }
                 },
                 onSave: { value in
                     // Waist is entered in the active unit; convert back to canonical inches.
@@ -575,7 +571,7 @@ enum StatKind: String, CaseIterable, Identifiable {
     /// on its own?" — anything needing calipers, a tape measure, a cuff, or a
     /// blood draw starts hidden so first open isn't a wall of dashes. Every
     /// tracker is still one tap away in Edit trackers.
-    func isRelevant(for mode: Mode) -> Bool {
+    func isRelevant(for fitnessGoal: FitnessGoal) -> Bool {
         switch self {
         case .weight, .stepsAvg, .trainingVolume:
             // Weight: in-app wheel + Health sync. Steps: Health. Sets: in-app.
@@ -583,7 +579,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .restingHR, .bp:
             // Circuit is the cardiovascular mode: resting HR arrives from Health,
             // and blood pressure is the one marker that's cheap to self-measure.
-            return mode == .circuit
+            return fitnessGoal == .lose
         case .bmi:
             // Derived from weight + profile height — the Weight card already
             // shows that number and a more useful lb/week trend.
@@ -1075,7 +1071,7 @@ private struct BPDetailSheet: View {
             logTitle: "Log new reading",
             rangeContext: HealthRanges.bpContext,
             personalNote: latestMarkerValue(.bpSystolic, in: markers).map {
-                TargetRationale.markerMeaning(kind: .bpSystolic, value: $0, mode: profile.mode)
+                TargetRationale.markerMeaning(kind: .bpSystolic, value: $0, fitnessGoal: profile.fitnessGoal)
             },
             chartOverride: { dualChart },
             logOverride: { logRow }

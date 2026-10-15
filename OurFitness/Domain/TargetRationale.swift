@@ -26,11 +26,11 @@ public enum TargetRationale {
     // MARK: - Goal framing (Mode → plain English)
 
     /// One-line plain-English goal for the mode. No acronyms.
-    public static func goalLine(for mode: Mode) -> String {
-        switch mode {
-        case .build:
+    public static func goalLine(for fitnessGoal: FitnessGoal) -> String {
+        switch fitnessGoal {
+        case .gain:
             return "You're in Build mode — the goal is to slowly add muscle and mass."
-        case .circuit:
+        case .lose:
             return "You're in Circuit mode — the goal is to lose weight and improve your heart-health numbers (cholesterol, blood pressure, blood sugar)."
         }
     }
@@ -67,10 +67,10 @@ public enum TargetRationale {
     public static func calorieWhy(for p: ProfileDTO) -> String {
         let c = calories(for: p)
         let mag = abs(c.delta)
-        switch p.mode {
-        case .build:
+        switch p.fitnessGoal {
+        case .gain:
             return "You burn about \(c.tdee) calories on a normal day (your maintenance). To slowly add muscle, your goal eats roughly \(mag) calories above that — a controlled surplus. Aim to gain about a quarter to half a pound a week; gaining faster mostly adds fat, not muscle."
-        case .circuit:
+        case .lose:
             return "You burn about \(c.tdee) calories on a normal day (your maintenance). To lose fat, your goal eats roughly \(mag) calories below that. That pace takes off about half a pound to a pound a week while protecting your muscle."
         }
     }
@@ -88,9 +88,9 @@ public enum TargetRationale {
         let g = p.computedTargets.proteinG
         let perLb = proteinPerLb(for: p)
         let role: String
-        switch p.mode {
-        case .build:   role = "gives your body the material to build new muscle"
-        case .circuit: role = "protects your muscle while you lose fat"
+        switch p.fitnessGoal {
+        case .gain:   role = "gives your body the material to build new muscle"
+        case .lose: role = "protects your muscle while you lose fat"
         }
         return String(
             format: "Your %dg protein target is about %.1fg for every pound you weigh — enough that it %@. Protein also keeps you full and costs the most energy to digest: your body burns 20–30%% of protein's calories just breaking it down.",
@@ -156,11 +156,11 @@ public enum TargetRationale {
     /// doesn't do on its own. Sources: Saint-Maurice (JAMA 2020) & Ding (Lancet
     /// Public Health 2025) for mortality; Hanson & Jones (BJSM 2015) for the
     /// blood-pressure effect and the weaker cholesterol/glucose response.
-    public static func stepsWhy(mode: Mode, goal: Int) -> String {
-        switch mode {
-        case .build:
+    public static func stepsWhy(fitnessGoal: FitnessGoal, goal: Int) -> String {
+        switch fitnessGoal {
+        case .gain:
             return "Your \(goal.formatted())-step goal keeps you active on top of lifting. Most of the health payoff from walking shows up by about 7,000–8,000 steps a day — every extra 1,000–2,000 steps lowers your risk of dying early, and the calories burned support your recovery without eating into your surplus."
-        case .circuit:
+        case .lose:
             return "Your \(goal.formatted())-step goal is the movement engine for Circuit. Walking reliably brings blood pressure down a few points and is your most repeatable daily calorie burn. Most of the benefit lands by about 7,000–8,000 steps — going higher keeps adding a little more. (Cholesterol and blood sugar respond best when you pair steps with cardio and the food tips.)"
         }
     }
@@ -175,7 +175,7 @@ public enum TargetRationale {
     /// (lipids); ADA 2024 (glucose/A1c). Diet effects: soluble fibre lowers LDL
     /// (Whitehead, AJCN 2014); DASH + lower sodium lowers blood pressure (Sacks,
     /// NEJM 2001).
-    public static func markerMeaning(kind: HealthMarkerKind, value: Double, mode: Mode) -> String {
+    public static func markerMeaning(kind: HealthMarkerKind, value: Double, fitnessGoal: FitnessGoal) -> String {
         let status = HealthRanges.status(for: kind, value: value)
         let v = Int(value.rounded())
         switch kind {

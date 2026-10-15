@@ -178,7 +178,7 @@ struct TodayView: View {
                 // Circuit adds its "why steps" focus footer between the two —
                 // the only difference, so there's one layout, not two.
                 stepsCard
-                if profile.mode == .circuit {
+                if profile.fitnessGoal == .lose {
                     focusFooter(.steps)
                 }
                 recentLogs
@@ -244,13 +244,13 @@ struct TodayView: View {
             if pct >= 1.0, !fired.contains("protein-goal") {
                 markFired("protein-goal"); markFired("protein-approaching")
                 proteinFiredThisPass = true
-                toasts.macroGoalHit(EncouragementEngine.macroGoalHitMessage(macro: "protein", mode: profile.mode))
+                toasts.macroGoalHit(EncouragementEngine.macroGoalHitMessage(macro: "protein", fitnessGoal: profile.fitnessGoal))
             } else if pct >= 0.85, !fired.contains("protein-approaching") {
                 markFired("protein-approaching")
                 proteinFiredThisPass = true
                 let remaining = max(0, targets.proteinG - totals.proteinG)
                 toasts.macroApproaching(EncouragementEngine.macroApproachingMessage(
-                    macro: "protein", remaining: remaining, unit: "g", mode: profile.mode))
+                    macro: "protein", remaining: remaining, unit: "g", fitnessGoal: profile.fitnessGoal))
             }
         }
 
@@ -260,12 +260,12 @@ struct TodayView: View {
             let pct = Double(totals.calories) / Double(targets.calories)
             if pct >= 1.0, !fired.contains("calorie-goal") {
                 markFired("calorie-goal"); markFired("calorie-approaching")
-                toasts.macroGoalHit(EncouragementEngine.macroGoalHitMessage(macro: "calories", mode: profile.mode))
+                toasts.macroGoalHit(EncouragementEngine.macroGoalHitMessage(macro: "calories", fitnessGoal: profile.fitnessGoal))
             } else if pct >= 0.90, !fired.contains("calorie-approaching") {
                 markFired("calorie-approaching")
                 let remaining = max(0, targets.calories - totals.calories)
                 toasts.macroApproaching(EncouragementEngine.macroApproachingMessage(
-                    macro: "calories", remaining: remaining, unit: " cal", mode: profile.mode))
+                    macro: "calories", remaining: remaining, unit: " cal", fitnessGoal: profile.fitnessGoal))
             }
         }
     }
@@ -295,9 +295,9 @@ struct TodayView: View {
            EncouragementEngine.mealLoggingNudge(
                mealsLoggedToday: mealCount,
                hourOfDay: hour,
-               mode: profile.mode
+               fitnessGoal: profile.fitnessGoal
            ) != nil {
-            toasts.mealNudge(mealsLoggedToday: mealCount, hourOfDay: hour, mode: profile.mode)
+            toasts.mealNudge(mealsLoggedToday: mealCount, hourOfDay: hour, fitnessGoal: profile.fitnessGoal)
             lastMealNudgeHour = hour
         }
 
@@ -321,14 +321,14 @@ struct TodayView: View {
         if stallNudgeEnabled, stallNudgeDayKey != dayKey {
             stallNudgeDayKey = dayKey
             if let stall = StallDetector.detect(
-                mode: profile.mode,
+                fitnessGoal: profile.fitnessGoal,
                 steps: allStepsForProfile,
                 sets: setModels.map(\.snapshot),
                 pilates: pilatesModels.map(\.snapshot),
                 weights: bodyModels.map(\.snapshot),
                 markers: markerModels.map(\.snapshot)
             ) {
-                toasts.stallNudge(EncouragementEngine.stallMessage(stall, mode: profile.mode))
+                toasts.stallNudge(EncouragementEngine.stallMessage(stall, fitnessGoal: profile.fitnessGoal))
             }
         }
     }
@@ -486,7 +486,7 @@ struct TodayView: View {
     /// Circuit variant of StepsCard, so only pay for those reads there. Reads
     /// only — no requestAuthorization on this path (see refreshToday()).
     private func refreshStepsCardExtras() async {
-        guard profile.mode == .circuit else { return }
+        guard profile.fitnessGoal == .lose else { return }
         intradayStepsToday = await health.hourlyCumulativeSteps()
         if let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) {
             intradayStepsYesterday = await health.hourlyCumulativeSteps(for: yesterday)
@@ -511,7 +511,7 @@ private struct FocusInfoButton: View {
         }
         .tactile(.ghost)
         .sheet(isPresented: $show) {
-            FocusInfoSheet(kind: kind).themed(theme.mode)
+            FocusInfoSheet(kind: kind)
         }
     }
 }

@@ -31,7 +31,7 @@ public final class ProfileModel {
     public init(snapshot s: ProfileDTO) {
         self.id = s.id
         self.name = s.name
-        self.modeRaw = s.mode.rawValue
+        self.modeRaw = s.fitnessGoal.rawValue
         self.sexRaw = s.sex.rawValue
         self.heightIn = s.heightIn
         self.weightLb = s.weightLb
@@ -49,7 +49,7 @@ public final class ProfileModel {
     public var snapshot: ProfileDTO {
         ProfileDTO(
             id: id, name: name,
-            mode: Mode(rawValue: modeRaw) ?? .build,
+            fitnessGoal: FitnessGoal(rawValue: modeRaw) ?? .gain,
             sex: Sex(rawValue: sexRaw) ?? .male,
             heightIn: heightIn, weightLb: weightLb, age: age,
             activity: ActivityLevel(rawValue: activityRaw) ?? .moderate,
@@ -65,7 +65,7 @@ public final class ProfileModel {
 
     public func apply(_ s: ProfileDTO) {
         self.name = s.name
-        self.modeRaw = s.mode.rawValue
+        self.modeRaw = s.fitnessGoal.rawValue
         self.sexRaw = s.sex.rawValue
         self.heightIn = s.heightIn
         self.weightLb = s.weightLb
@@ -92,7 +92,7 @@ public final class ExerciseModel {
     public var defaultRepRange: [Int]?
     /// Modes this exercise is offered in. Default covers existing rows so
     /// pre-gating data (mobility, cardio) keeps showing in both modes.
-    public var availableForModeRaw: [String] = [Mode.build.rawValue, Mode.circuit.rawValue]
+    public var availableForModeRaw: [String] = [FitnessGoal.gain.rawValue, FitnessGoal.lose.rawValue]
     /// Owning profile. Per-profile custom exercises landed in SchemaV2;
     /// legacy V1 rows decode with `nil` and surface to no profile.
     public var profileId: UUID?
@@ -125,7 +125,7 @@ public final class ExerciseModel {
             muscleGroups: muscleGroups,
             equipment: equipmentRaw.compactMap(Equipment.init(rawValue:)),
             defaultRepRange: defaultRepRange,
-            availableForMode: availableForModeRaw.compactMap(Mode.init(rawValue:)),
+            availableForMode: availableForModeRaw.compactMap(FitnessGoal.init(rawValue:)),
             profileId: profileId,
             loadLb: loadLb,
             kind: ExerciseKind(rawValue: kindRaw ?? ExerciseKind.reps.rawValue) ?? .reps,
@@ -158,7 +158,7 @@ public final class ProgramModel {
     public var snapshot: ProgramDTO {
         ProgramDTO(
             id: id, name: name,
-            modeFit: modeFitRaw.compactMap(Mode.init(rawValue:)),
+            modeFit: modeFitRaw.compactMap(FitnessGoal.init(rawValue:)),
             schedule: (try? JSONDecoder().decode([ProgramDayDTO].self, from: scheduleJSON)) ?? [],
             progression: ProgressionScheme(rawValue: progressionRaw) ?? .linear,
             notes: notes
@@ -265,7 +265,7 @@ public final class FoodModel {
     public var snapshot: FoodDTO {
         FoodDTO(
             id: id, name: name,
-            modeFit: modeFitRaw.compactMap(Mode.init(rawValue:)),
+            modeFit: modeFitRaw.compactMap(FitnessGoal.init(rawValue:)),
             category: FoodCategory(rawValue: categoryRaw) ?? .main,
             recipe: recipe, servings: servings,
             perServing: (try? JSONDecoder().decode(PerServing.self, from: perServingJSON)) ?? .zero,

@@ -1345,10 +1345,10 @@ public enum SuggestedMeals {
 
     // MARK: - Mode-filtered shortcut
 
-    public static func suggestions(for mode: Mode) -> [SuggestedMeal] {
-        switch mode {
-        case .build:   return build + shared
-        case .circuit: return circuit + shared
+    public static func suggestions(for fitnessGoal: FitnessGoal) -> [SuggestedMeal] {
+        switch fitnessGoal {
+        case .gain:   return build + shared
+        case .lose: return circuit + shared
         }
     }
 
@@ -1370,7 +1370,7 @@ public enum SuggestedMeals {
         favoriteFoodIds: Set<String> = [],
         limit: Int = 5
     ) -> [SuggestedMeal] {
-        let pool = suggestions(for: profile.mode).filter { meal in
+        let pool = suggestions(for: profile.fitnessGoal).filter { meal in
             !mealHasRestrictedAllergen(meal, restrictions: profile.restrictions)
         }
 

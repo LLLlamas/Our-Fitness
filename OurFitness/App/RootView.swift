@@ -65,10 +65,8 @@ struct RootView: View {
             if let active {
                 WaterQuickLogButton(profile: active)
                     .id(active.id)
-                    .themed(active.mode)
             }
             ToastHost()
-                .themed(active?.mode ?? .build)
         }
         .onReceive(NotificationCenter.default.publisher(for: .repositoryWriteFailed)) { _ in
             showSaveError = true
@@ -125,11 +123,10 @@ struct RootView: View {
                     .tag(Tab.progress)
                     .tabItem { Label(Tab.progress.label, systemImage: Tab.progress.icon) }
             }
-            .tint(Theme.for(profile.mode).accent)
+            .tint(Theme.standard.accent)
             .sensoryFeedback(.selection, trigger: tab)
         }
-        .background(Theme.for(profile.mode).bg.ignoresSafeArea())
-        .themed(profile.mode)
+        .background(Theme.standard.bg.ignoresSafeArea())
         .sheet(isPresented: $showSettings) {
             SettingsView(profile: profile, health: health)
         }
@@ -156,7 +153,7 @@ struct RootView: View {
 
     @ViewBuilder
     private func header(for profile: ProfileDTO) -> some View {
-        let theme = Theme.for(profile.mode)
+        let theme = Theme.standard
         HStack(spacing: 10) {
             ProfileAvatar(profile: profile, onTap: { showSettings = true })
             Text("Our Fitness")
@@ -170,6 +167,5 @@ struct RootView: View {
         .overlay(alignment: .bottom) {
             Rectangle().fill(theme.line).frame(height: 1)
         }
-        .themed(profile.mode)
     }
 }

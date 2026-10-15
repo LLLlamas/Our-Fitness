@@ -86,12 +86,12 @@ public enum FoodVarietyNudges {
 
     /// Returns up to 2 nudges based on the last 7 days of food logs.
     /// Returns empty when no category has reached its threshold.
-    public static func nudges(from logs: [FoodLogEntryDTO], mode: Mode) -> [FoodVarietyNudge] {
+    public static func nudges(from logs: [FoodLogEntryDTO], fitnessGoal: FitnessGoal) -> [FoodVarietyNudge] {
         let weekDays = Set(Dates.lastNDays(7))
         let weekLogs = logs.filter { weekDays.contains($0.date) }
 
         return Array(groups.compactMap { group -> FoodVarietyNudge? in
-            let threshold = mode == .circuit ? group.circuitThreshold : group.buildThreshold
+            let threshold = fitnessGoal == .lose ? group.circuitThreshold : group.buildThreshold
             let count = weekLogs.filter { log in
                 let name = (log.customName ?? "").lowercased()
                 return group.keywords.contains { name.contains($0) }
@@ -100,8 +100,8 @@ public enum FoodVarietyNudges {
             return FoodVarietyNudge(
                 emoji: group.emoji,
                 headline: group.headline(count),
-                reason: mode == .circuit ? group.circuitReason : group.reason,
-                alternative: mode == .circuit ? group.circuitAlternative : group.alternative
+                reason: fitnessGoal == .lose ? group.circuitReason : group.reason,
+                alternative: fitnessGoal == .lose ? group.circuitAlternative : group.alternative
             )
         }.prefix(2))
     }

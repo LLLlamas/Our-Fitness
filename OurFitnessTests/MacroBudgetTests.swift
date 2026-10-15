@@ -22,7 +22,7 @@ final class MacroBudgetTests: XCTestCase {
     func test_build_targets_have_no_micro_caps() {
         // Build mode never configures the cardiometabolic caps.
         let v = Targets.ProfileVitals(sex: .male, weightLb: 180, heightIn: 70, age: 30, activity: .moderate)
-        let targets = Targets.compute(mode: .build, vitals: v)
+        let targets = Targets.compute(fitnessGoal: .gain, vitals: v)
         let r = MacroBudget.remaining(totals: totals(cal: 0, p: 0, c: 0, f: 0), targets: targets)
         XCTAssertNil(r.sodiumMg)
         XCTAssertNil(r.addedSugarG)
@@ -32,7 +32,7 @@ final class MacroBudgetTests: XCTestCase {
 
     func test_circuit_caps_room_under_and_negative_when_over() {
         let v = Targets.ProfileVitals(sex: .female, weightLb: 160, heightIn: 65, age: 35, activity: .light)
-        let targets = Targets.compute(mode: .circuit, vitals: v)
+        let targets = Targets.compute(fitnessGoal: .lose, vitals: v)
         // Sodium 1500 cap; log 1700 -> 200 over -> remaining negative.
         let r = MacroBudget.remaining(
             totals: totals(cal: 0, p: 0, c: 0, f: 0, sodium: 1700), targets: targets
@@ -44,7 +44,7 @@ final class MacroBudgetTests: XCTestCase {
 
     func test_circuit_fiber_is_negative_until_floor_met() {
         let v = Targets.ProfileVitals(sex: .female, weightLb: 160, heightIn: 65, age: 35, activity: .light)
-        let targets = Targets.compute(mode: .circuit, vitals: v)
+        let targets = Targets.compute(fitnessGoal: .lose, vitals: v)
         let floor = targets.fiberGMin ?? 35
         // Below floor -> negative; at/above floor -> >= 0.
         let under = MacroBudget.remaining(totals: totals(cal: 0, p: 0, c: 0, f: 0, fiber: 10), targets: targets)
@@ -130,7 +130,7 @@ final class MacroBudgetTests: XCTestCase {
 
     func test_remaining_with_entries_hides_cap_headroom_when_nothing_measured_it() {
         let v = Targets.ProfileVitals(sex: .female, weightLb: 160, heightIn: 65, age: 35, activity: .light)
-        let targets = Targets.compute(mode: .circuit, vitals: v)
+        let targets = Targets.compute(fitnessGoal: .lose, vitals: v)
         let log = [curatedEntry(fiber: 9), curatedEntry(fiber: 9)]
         let t = totals(cal: 800, p: 40, c: 80, f: 20, fiber: 18)
 
@@ -146,7 +146,7 @@ final class MacroBudgetTests: XCTestCase {
 
     func test_remaining_with_entries_keeps_cap_headroom_once_something_measured_it() {
         let v = Targets.ProfileVitals(sex: .female, weightLb: 160, heightIn: 65, age: 35, activity: .light)
-        let targets = Targets.compute(mode: .circuit, vitals: v)
+        let targets = Targets.compute(fitnessGoal: .lose, vitals: v)
         let log = [curatedEntry(), labelEntry(sodium: 700)]
         let t = totals(cal: 600, p: 28, c: 65, f: 19, sodium: 700, sugar: 12, satFat: 4)
 
@@ -159,7 +159,7 @@ final class MacroBudgetTests: XCTestCase {
     func test_remaining_without_entries_is_unchanged() {
         // The original two-argument entry point keeps its old behaviour exactly.
         let v = Targets.ProfileVitals(sex: .female, weightLb: 160, heightIn: 65, age: 35, activity: .light)
-        let targets = Targets.compute(mode: .circuit, vitals: v)
+        let targets = Targets.compute(fitnessGoal: .lose, vitals: v)
         let t = totals(cal: 800, p: 40, c: 80, f: 20)
         let r = MacroBudget.remaining(totals: t, targets: targets)
         XCTAssertEqual(r.sodiumMg, targets.sodiumMgMax)

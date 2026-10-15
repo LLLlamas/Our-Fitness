@@ -94,8 +94,8 @@ public final class ToastCenter: ObservableObject {
     // themselves, gate on a nil message, or pick the accent from the message tone.
 
     // Step milestone — mode-aware copy from EncouragementEngine
-    public func stepMilestone(_ steps: Int, mode: Mode) {
-        show(EncouragementEngine.stepMilestoneMessage(steps: steps, mode: mode), accent: .win)
+    public func stepMilestone(_ steps: Int, fitnessGoal: FitnessGoal) {
+        show(EncouragementEngine.stepMilestoneMessage(steps: steps, fitnessGoal: fitnessGoal), accent: .win)
     }
 
     // Workout volume milestone — accent follows the message's tone
@@ -104,8 +104,8 @@ public final class ToastCenter: ObservableObject {
     }
 
     // Meal-logging streak milestone — self-gating: only shows at a milestone day.
-    public func mealStreak(days: Int, mode: Mode) {
-        guard let msg = EncouragementEngine.mealStreakMessage(days: days, mode: mode) else { return }
+    public func mealStreak(days: Int, fitnessGoal: FitnessGoal) {
+        guard let msg = EncouragementEngine.mealStreakMessage(days: days, fitnessGoal: fitnessGoal) else { return }
         show(msg, accent: .win, for: 3.0)
     }
 
@@ -123,11 +123,11 @@ public final class ToastCenter: ObservableObject {
     // Each method calls the engine and only shows a toast when the engine
     // returns a non-nil message (avoids spamming during quiet periods).
 
-    public func mealNudge(mealsLoggedToday: Int, hourOfDay: Int, mode: Mode) {
+    public func mealNudge(mealsLoggedToday: Int, hourOfDay: Int, fitnessGoal: FitnessGoal) {
         guard let msg = EncouragementEngine.mealLoggingNudge(
             mealsLoggedToday: mealsLoggedToday,
             hourOfDay: hourOfDay,
-            mode: mode
+            fitnessGoal: fitnessGoal
         ) else { return }
         show(msg, accent: .info)
     }

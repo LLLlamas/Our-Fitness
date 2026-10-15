@@ -74,7 +74,7 @@ struct ExerciseInfoSheet: View {
             )
             return "~\(Int(cal10)) cal per 10 min at your weight"
         }
-        let reps10 = profile.mode == .circuit
+        let reps10 = profile.fitnessGoal == .lose
             ? CalorieEstimator.caloriesForReps(reps: 10, loadLb: exercise.loadLb, bodyWeightLb: profile.weightLb)
             : CalorieEstimator.caloriesForReps(reps: 10, exercise: exercise, bodyWeightLb: profile.weightLb)
         return "~\(Int(reps10)) cal per 10 reps at your weight"

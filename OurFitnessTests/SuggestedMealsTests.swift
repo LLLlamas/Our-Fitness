@@ -2,12 +2,12 @@ import XCTest
 
 final class SuggestedMealsTests: XCTestCase {
 
-    private func profile(mode: Mode) -> ProfileDTO {
+    private func profile(fitnessGoal: FitnessGoal) -> ProfileDTO {
         let v = Targets.ProfileVitals(sex: .male, weightLb: 180, heightIn: 70, age: 30, activity: .moderate)
         return ProfileDTO(
-            name: "Test", mode: mode, sex: .male, heightIn: 70,
+            name: "Test", fitnessGoal: fitnessGoal, sex: .male, heightIn: 70,
             weightLb: 180, age: 30, activity: .moderate,
-            computedTargets: Targets.compute(mode: mode, vitals: v)
+            computedTargets: Targets.compute(fitnessGoal: fitnessGoal, vitals: v)
         )
     }
 
@@ -21,7 +21,7 @@ final class SuggestedMealsTests: XCTestCase {
     }
 
     func test_backward_compatible_when_no_personalisation() {
-        let p = profile(mode: .build)
+        let p = profile(fitnessGoal: .gain)
         let t = neutralTotals(p)
         let plain = SuggestedMeals.ranked(for: p, totals: t, limit: 10).map(\.id)
         let explicitEmpty = SuggestedMeals.ranked(
@@ -31,17 +31,17 @@ final class SuggestedMealsTests: XCTestCase {
     }
 
     func test_neutral_bias_top_is_highest_protein() {
-        let p = profile(mode: .build)
+        let p = profile(fitnessGoal: .gain)
         // Under neutral bias the score IS perServing protein, so the top result must
         // be the highest-protein meal in the build+shared pool (robust to corpus growth).
-        let pool = SuggestedMeals.suggestions(for: .build)
+        let pool = SuggestedMeals.suggestions(for: .gain)
         let maxProtein = pool.map(\.perServing.proteinG).max()!
         let ranked = SuggestedMeals.ranked(for: p, totals: neutralTotals(p), limit: 5)
         XCTAssertEqual(ranked.first?.perServing.proteinG, maxProtein)
     }
 
     func test_favorite_ingredient_boosts_meal_above_higher_protein_one() {
-        let p = profile(mode: .build)
+        let p = profile(fitnessGoal: .gain)
         let t = neutralTotals(p)
         // burrito-bowl (45g protein) contains avocado; favouriting avocado applies a
         // +15% boost → 45 * 1.15 = 51.75 > pasta-chicken's 48, so burrito-bowl must
@@ -57,7 +57,7 @@ final class SuggestedMealsTests: XCTestCase {
     }
 
     func test_isPersonalised_true_when_favorite_ingredient_present() {
-        let p = profile(mode: .build)
+        let p = profile(fitnessGoal: .gain)
         // burrito-bowl contains avocado, chicken-breast, rice-white, etc.
         XCTAssertTrue(SuggestedMeals.isPersonalised(
             burritoBowl(p), recentLogs: [], favoriteFoodIds: ["avocado"]
@@ -65,7 +65,7 @@ final class SuggestedMealsTests: XCTestCase {
     }
 
     func test_recentLogs_personalise_via_most_logged() {
-        let p = profile(mode: .build)
+        let p = profile(fitnessGoal: .gain)
         // A meal becomes personalised when one of its ingredients is among the
         // user's most-logged foods (chicken-breast is in burrito-bowl).
         let logs = (0..<6).map { _ in
@@ -80,7 +80,7 @@ final class SuggestedMealsTests: XCTestCase {
     }
 
     func test_isPersonalised_false_when_no_loved_ingredient() {
-        let p = profile(mode: .build)
+        let p = profile(fitnessGoal: .gain)
         XCTAssertFalse(SuggestedMeals.isPersonalised(
             eggsToast(p), recentLogs: [], favoriteFoodIds: ["avocado"]
         ))

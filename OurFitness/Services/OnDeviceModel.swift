@@ -85,10 +85,10 @@ public enum OnDeviceModel {
     /// The copy itself stays with the service — an exercise-selection tilt and a
     /// food-swap tilt are different sentences — this only collapses the repeated
     /// `switch mode` around them.
-    static func modeLine(_ mode: Mode, build: String, circuit: String) -> String {
-        switch mode {
-        case .build:   return build
-        case .circuit: return circuit
+    static func modeLine(_ fitnessGoal: FitnessGoal, build: String, circuit: String) -> String {
+        switch fitnessGoal {
+        case .gain:   return build
+        case .lose: return circuit
         }
     }
 

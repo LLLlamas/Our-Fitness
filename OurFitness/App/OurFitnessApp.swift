@@ -27,6 +27,7 @@ struct OurFitnessApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
+                .preferredColorScheme(.light)
                 .modelContainer(container)
                 .environmentObject(toasts)
                 .task { Haptics.prepare() }   // cut first-tap latency to ~0

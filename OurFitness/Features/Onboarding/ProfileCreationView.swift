@@ -15,7 +15,7 @@ struct ProfileCreationView: View {
 
     @State private var step: Step = .vitals
     @State private var name: String = ""
-    @State private var mode: Mode = .build
+    @State private var fitnessGoal: FitnessGoal = .gain
     @State private var sex: Sex = .male
     @State private var heightIn: Double = 67
     @State private var weightLb: Double = 150
@@ -66,7 +66,6 @@ struct ProfileCreationView: View {
             .padding(.vertical, 28)
         }
         .background(theme.bg.ignoresSafeArea())
-        .themed(mode)
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
@@ -90,10 +89,10 @@ struct ProfileCreationView: View {
         }
 
         Text("Mode").font(.caption).tracking(2).foregroundStyle(theme.dim)
-        ForEach(Mode.allCases, id: \.self) { m in
-            PressableCard(action: { mode = m }) {
+        ForEach(FitnessGoal.allCases, id: \.self) { m in
+            PressableCard(action: { fitnessGoal = m }) {
                 HStack(alignment: .top, spacing: 10) {
-                    Image(systemName: mode == m ? "largecircle.fill.circle" : "circle")
+                    Image(systemName: fitnessGoal == m ? "largecircle.fill.circle" : "circle")
                         .foregroundStyle(theme.accent)
                     VStack(alignment: .leading, spacing: 4) {
                         Text(m.displayName)
@@ -178,7 +177,7 @@ struct ProfileCreationView: View {
         guard let dto = Repos.createProfile(
             ctx,
             name: name.trimmingCharacters(in: .whitespaces),
-            mode: mode, sex: sex,
+            fitnessGoal: fitnessGoal, sex: sex,
             heightIn: heightIn, weightLb: weightLb, age: age,
             activity: activity
         ) else { return }
