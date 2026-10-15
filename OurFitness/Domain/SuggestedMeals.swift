@@ -1,6 +1,8 @@
 // Curated meal suggestions shown in the Meals tab.
-// Personalised at call time: filtered by mode + allergen restrictions, then
-// ranked by today's largest macro gap (protein-first vs calorie-dense first).
+// Personalised at call time: filtered by allergen restrictions, then ranked by
+// today's largest macro gap (protein-first vs calorie-dense first) with a small
+// tilt toward the user's goal. Every user draws from the same full pool —
+// the goal re-orders, it never hides a meal.
 //
 // TODO: bias toward the user's day-to-day cuisine patterns once enough log
 // history exists. The curated catalog below stays as the fallback corpus.
@@ -60,13 +62,16 @@ public struct SuggestedMeal: Sendable, Identifiable {
 
 public enum SuggestedMeals {
 
-    // MARK: - All suggestions (both modes)
+    // MARK: - All suggestions (one pool for every user)
+    //
+    // Meal ids are stable and never renamed — older ones carry a historic
+    // "circuit-" prefix, kept because ids may be persisted.
 
-    public static let all: [SuggestedMeal] = build + circuit + shared
+    public static let all: [SuggestedMeal] = calorieDense + fiberForward + everyday
 
-    // MARK: - Build-mode meals (higher calorie, liquid-friendly)
+    // MARK: - Calorie-dense meals (higher calorie, liquid-friendly)
 
-    private static let build: [SuggestedMeal] = [
+    private static let calorieDense: [SuggestedMeal] = [
         SuggestedMeal(
             id: "anchor-smoothie",
             name: "The Anchor Smoothie",
@@ -130,19 +135,6 @@ public enum SuggestedMeals {
             ingredientTemplates: [
                 MealIngredientTemplate(foodId: "greek-yogurt", quantity: 1.0),
                 MealIngredientTemplate(foodId: "berries", quantity: 1.0)
-            ]
-        ),
-        SuggestedMeal(
-            id: "oatmeal-pb-banana",
-            name: "Oatmeal, Peanut Butter & Banana",
-            emoji: "🌾",
-            description: "Oatmeal cooked in milk + 1 tbsp peanut butter + banana.",
-            perServing: PerServing(calories: 450, proteinG: 15, carbsG: 65, fatG: 14, fiberG: 8),
-            allergens: ["dairy", "peanut", "gluten"],
-            ingredientTemplates: [
-                MealIngredientTemplate(foodId: "oatmeal", quantity: 1.0),
-                MealIngredientTemplate(foodId: "peanut-butter", quantity: 0.5),
-                MealIngredientTemplate(foodId: "banana", quantity: 1.0)
             ]
         ),
         SuggestedMeal(
@@ -471,9 +463,9 @@ public enum SuggestedMeals {
 
     ]
 
-    // MARK: - Circuit-mode meals (fiber-forward, lower calorie)
+    // MARK: - Fiber-forward meals (lower calorie)
 
-    private static let circuit: [SuggestedMeal] = [
+    private static let fiberForward: [SuggestedMeal] = [
         SuggestedMeal(
             id: "salmon-sweet-potato",
             name: "Salmon & Sweet Potato",
@@ -765,21 +757,6 @@ public enum SuggestedMeals {
             ]
         ),
         SuggestedMeal(
-            id: "circuit-edamame-soba-bowl",
-            name: "Edamame Soba Noodle Bowl",
-            emoji: "🍜",
-            description: "Buckwheat soba with edamame, shredded carrots and a sesame-soy drizzle. Cold or warm, savory.",
-            perServing: PerServing(calories: 380, proteinG: 19, carbsG: 58, fatG: 8, fiberG: 8),
-            allergens: ["gluten", "soy", "sesame"],
-            ingredientTemplates: [
-                MealIngredientTemplate(foodId: "soba-noodles", quantity: 1.0),
-                MealIngredientTemplate(foodId: "edamame", quantity: 0.5),
-                MealIngredientTemplate(foodId: "carrots", quantity: 0.5),
-                MealIngredientTemplate(foodId: "soy-sauce", quantity: 0.5),
-                MealIngredientTemplate(foodId: "tahini", quantity: 0.5)
-            ]
-        ),
-        SuggestedMeal(
             id: "circuit-tuna-white-bean-salad",
             name: "Tuna & White Bean Salad",
             emoji: "🥗",
@@ -964,9 +941,9 @@ public enum SuggestedMeals {
 
     ]
 
-    // MARK: - Shared / neutral
+    // MARK: - Everyday / neutral
 
-    private static let shared: [SuggestedMeal] = [
+    private static let everyday: [SuggestedMeal] = [
         SuggestedMeal(
             id: "banana-protein-shake",
             name: "Banana Protein Shake",
@@ -979,18 +956,6 @@ public enum SuggestedMeals {
                 MealIngredientTemplate(foodId: "banana", quantity: 1.0),
                 MealIngredientTemplate(foodId: "milk-whole", quantity: 1.0),
                 MealIngredientTemplate(foodId: "oatmeal", quantity: 0.5)
-            ]
-        ),
-        SuggestedMeal(
-            id: "cottage-cheese-fruit",
-            name: "Cottage Cheese & Fruit",
-            emoji: "🍓",
-            description: "½ cup cottage cheese + berries or pineapple chunks.",
-            perServing: PerServing(calories: 170, proteinG: 14, carbsG: 20, fatG: 5, fiberG: 3),
-            allergens: ["dairy"],
-            ingredientTemplates: [
-                MealIngredientTemplate(foodId: "cottage-cheese", quantity: 1.0),
-                MealIngredientTemplate(foodId: "berries", quantity: 1.0)
             ]
         ),
         SuggestedMeal(
@@ -1343,21 +1308,16 @@ public enum SuggestedMeals {
         ],
     ]
 
-    // MARK: - Mode-filtered shortcut
-
-    public static func suggestions(for fitnessGoal: FitnessGoal) -> [SuggestedMeal] {
-        switch fitnessGoal {
-        case .gain:   return build + shared
-        case .lose: return circuit + shared
-        }
-    }
-
     // MARK: - Personalised ranking
 
-    /// Returns up to 5 suggestions, filtered by the profile's mode + allergen
-    /// restrictions and ranked against today's largest macro gap. When protein
-    /// is the most under-target macro, high-protein options surface first; when
-    /// calories are the biggest gap, calorie-dense options surface first.
+    /// Returns up to 5 suggestions from the full pool, filtered by the profile's
+    /// allergen restrictions and ranked against today's largest macro gap. When
+    /// protein is the most under-target macro, high-protein options surface first;
+    /// when calories are the biggest gap, calorie-dense options surface first.
+    ///
+    /// Goal tilt: `goalTilt` lifts a meal's score by at most 20% toward the
+    /// goal's macro priorities (gaining → protein + calorie density; losing →
+    /// fibre + leaner picks). It re-orders; it never removes a meal.
     ///
     /// Personalisation: pass `recentLogs` and/or `favoriteFoodIds` and meals built
     /// from foods the user already eats get a multiplicative boost — so the
@@ -1370,7 +1330,7 @@ public enum SuggestedMeals {
         favoriteFoodIds: Set<String> = [],
         limit: Int = 5
     ) -> [SuggestedMeal] {
-        let pool = suggestions(for: profile.fitnessGoal).filter { meal in
+        let pool = all.filter { meal in
             !mealHasRestrictedAllergen(meal, restrictions: profile.restrictions)
         }
 
@@ -1393,7 +1353,9 @@ public enum SuggestedMeals {
         let loved = lovedFoodIds(recentLogs: recentLogs, favoriteFoodIds: favoriteFoodIds)
         let scored = pool.map { meal in
             (meal: meal,
-             score: score(meal, bias: bias) * affinityMultiplier(meal, loved: loved),
+             score: score(meal, bias: bias)
+                 * goalTilt(meal, fitnessGoal: profile.fitnessGoal)
+                 * affinityMultiplier(meal, loved: loved),
              affinity: affinityCount(meal, loved: loved))
         }
         let sorted = scored.sorted { a, b in
@@ -1436,6 +1398,23 @@ public enum SuggestedMeals {
         1.0 + min(0.6, 0.15 * Double(affinityCount(meal, loved: loved)))
     }
 
+    /// Soft goal tilt, 1.0–1.2. Gaining favours protein + calorie density;
+    /// losing favours fibre + meals at or under 450 cal. Same macro priorities
+    /// as `MealCravingMatcher`'s tilt. Internal so tests can reproduce the score.
+    static func goalTilt(_ meal: SuggestedMeal, fitnessGoal: FitnessGoal) -> Double {
+        let ps = meal.perServing
+        switch fitnessGoal {
+        case .gain:
+            return 1.0
+                + 0.1 * min(1, Double(ps.proteinG) / 30.0)
+                + 0.1 * min(1, Double(ps.calories) / 700.0)
+        case .lose:
+            return 1.0
+                + 0.1 * min(1, Double(ps.fiberG) / 8.0)
+                + (ps.calories <= 450 ? 0.1 : 0)
+        }
+    }
+
     private enum RankBias { case protein, calorieDense, neutral }
 
     private static func score(_ meal: SuggestedMeal, bias: RankBias) -> Double {
@@ -1453,7 +1432,8 @@ public enum SuggestedMeals {
         }
     }
 
-    private static func mealHasRestrictedAllergen(
+    /// Shared with `MealCravingMatcher` so both rankers honour restrictions identically.
+    static func mealHasRestrictedAllergen(
         _ meal: SuggestedMeal, restrictions: [String]
     ) -> Bool {
         guard !restrictions.isEmpty, !meal.allergens.isEmpty else { return false }

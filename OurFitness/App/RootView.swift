@@ -1,7 +1,7 @@
 // Top-level shell. User-created profiles; first launch routes to creation.
-// Theme follows the active profile's mode. Overlays the toast host.
+// One light theme for everyone. Overlays the toast host.
 //
-// Tab layout (both modes): Today | Meals | Train | Reminders | Progress
+// Tab layout (same for every goal): Today | Meals | Train | Reminders | Progress
 
 import SwiftUI
 import SwiftData

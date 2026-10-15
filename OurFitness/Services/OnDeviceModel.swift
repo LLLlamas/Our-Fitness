@@ -9,7 +9,7 @@
 //   2. the `#if canImport(FoundationModels)` + `#available` + `LanguageModelSession`
 //      + do/catch envelope around a single `respond(to:generating:)` call,
 //   3. a JSON-in-UserDefaults result cache (two of them), and
-//   4. a Build/Circuit "mode line" appended to the prompt (three of them).
+//   4. a per-goal "goal line" appended to the prompt (three of them).
 //
 // This file owns all four exactly once. It deliberately owns NO prompt copy and
 // NO @Generable shapes — those stay in the service that uses them, because each
@@ -78,17 +78,19 @@ public enum OnDeviceModel {
     }
     #endif
 
-    // MARK: - Mode prompt line
+    // MARK: - Goal prompt line
 
-    /// Pick the Build / Circuit sentence to splice into a prompt.
+    /// Pick the gain / lose sentence to splice into a prompt. The goal is only a
+    /// soft tilt — each sentence should read "the user's goal is …", never name
+    /// an app mode.
     ///
     /// The copy itself stays with the service — an exercise-selection tilt and a
     /// food-swap tilt are different sentences — this only collapses the repeated
-    /// `switch mode` around them.
-    static func modeLine(_ fitnessGoal: FitnessGoal, build: String, circuit: String) -> String {
+    /// `switch fitnessGoal` around them.
+    static func goalLine(_ fitnessGoal: FitnessGoal, gain: String, lose: String) -> String {
         switch fitnessGoal {
-        case .gain:   return build
-        case .lose: return circuit
+        case .gain: return gain
+        case .lose: return lose
         }
     }
 

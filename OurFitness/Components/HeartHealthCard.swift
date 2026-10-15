@@ -1,5 +1,5 @@
-// Circuit-only cardiometabolic panel: the four heart-health targets that Targets
-// computes for Circuit — a fiber FLOOR to reach and sodium / added-sugar /
+// Cardiometabolic panel: the four heart-health targets that Targets computes
+// for every profile (same values whatever the goal) — a fiber FLOOR to reach and sodium / added-sugar /
 // saturated-fat CAPS to stay under.
 //
 // Fiber comes from every curated food, so that bar fills as you log and behaves
@@ -7,14 +7,14 @@
 // database or the USDA table behind it — only a scanned nutrition label supplies
 // them. A progress bar drawn off those totals therefore showed "0 / 1500 mg" and
 // coloured itself safely under the cap for someone who had eaten 3,000 mg, which
-// is the one reading this mode must never give.
+// is the one reading this card must never give.
 //
 // So the caps render off `MacroBudget.capCoverage`, not off the raw total:
 //   .none    → no bar, no number: an em-dash against the cap, "not tracked".
 //   .partial → a floor figure ("at least 480 / 1500mg"), still no bar — a bar
 //              would colour a verdict onto a number we know is incomplete.
 //   .full    → the real bar, every logged food measured.
-// Gated to Circuit by the caller; also no-ops if no caps exist.
+// Rendered for everyone by NutritionView; no-ops if the targets carry no caps.
 
 import SwiftUI
 
@@ -45,7 +45,7 @@ public struct HeartHealthCard: View {
     }
 
     public var body: some View {
-        // Only render when this profile actually has the Circuit caps configured.
+        // Only render when this profile actually has the heart-health caps configured.
         if targets.fiberGMin != nil || targets.sodiumMgMax != nil
             || targets.addedSugarGMax != nil || targets.saturatedFatGMax != nil {
             Card {
@@ -167,14 +167,10 @@ private struct HeartHealthInfoSheet: View {
     var body: some View {
         InfoSheetScaffold(
             title: "Heart health",
-            subtitle: "YOUR CIRCUIT TARGETS",
+            subtitle: "FIBER · SODIUM · SUGAR · SAT FAT",
             titleSize: 38,
             dragIndicator: true
         ) {
-            Text(TargetRationale.goalLine(for: profile.fitnessGoal))
-                .font(.callout).foregroundStyle(theme.text)
-                .fixedSize(horizontal: false, vertical: true)
-
             section("Fiber — reach the floor", TargetRationale.fiberWhy(for: profile))
             section("Sodium — stay under", TargetRationale.sodiumWhy(for: profile))
             section("Added sugar — stay under", TargetRationale.addedSugarWhy(for: profile))

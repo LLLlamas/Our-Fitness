@@ -1,9 +1,9 @@
 // Idempotent seeding on app launch.
 //
-// Post-Circuit refactor: foods, exercises, programs, and profiles are no
-// longer auto-seeded. Profiles are created via ProfileCreationView; exercises
-// are per-profile and added by the user; the food library and starter
-// programs were stashed pending a fresh take.
+// Foods, programs, and profiles are not auto-seeded. Profiles are created via
+// ProfileCreationView (which seeds the three starter movements through
+// Repos.createProfile); other exercises are per-profile and added by the user;
+// the food library and starter programs were stashed pending a fresh take.
 
 import Foundation
 import SwiftData
@@ -18,5 +18,8 @@ public enum Seeder {
             Repos.ensurePlantsGroup(ctx, userId: profile.id)
             Repos.ensureMedicationGroup(ctx, userId: profile.id)
         }
+        // Heart-health micros now apply to every goal; recompute stored targets
+        // that predate that (nil micros). Idempotent.
+        Repos.backfillHeartHealthTargets(ctx)
     }
 }

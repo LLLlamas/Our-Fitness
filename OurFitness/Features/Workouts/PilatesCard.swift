@@ -1,4 +1,4 @@
-// Circuit Train — Pilates card.
+// Train tab — Pilates card.
 //
 // - Progress ring: sessions this week / weekly goal (editable — tap "/" in ring)
 // - "Log Pilates" PressableCard → the shared `LogPastSessionSheet` preselected to

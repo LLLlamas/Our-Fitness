@@ -88,17 +88,19 @@ struct ProfileCreationView: View {
                 .foregroundStyle(theme.text)
         }
 
-        Text("Mode").font(.caption).tracking(2).foregroundStyle(theme.dim)
-        ForEach(FitnessGoal.allCases, id: \.self) { m in
-            PressableCard(action: { fitnessGoal = m }) {
+        // The goal only sets the numbers (targets, default step goal); every
+        // tab and card is the same whichever is picked.
+        Text("What's your goal?").font(.caption).tracking(2).foregroundStyle(theme.dim)
+        ForEach(FitnessGoal.allCases, id: \.self) { g in
+            PressableCard(action: { fitnessGoal = g }) {
                 HStack(alignment: .top, spacing: 10) {
-                    Image(systemName: fitnessGoal == m ? "largecircle.fill.circle" : "circle")
+                    Image(systemName: fitnessGoal == g ? "largecircle.fill.circle" : "circle")
                         .foregroundStyle(theme.accent)
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(m.displayName)
+                        Text(g.displayName)
                             .font(.system(size: 17, weight: .semibold))
                             .foregroundStyle(theme.text)
-                        Text(m.blurb)
+                        Text(g.blurb)
                             .font(.callout).foregroundStyle(theme.dim)
                     }
                     Spacer(minLength: 0)

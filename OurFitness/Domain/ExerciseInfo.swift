@@ -1,4 +1,4 @@
-// Research-backed exercise metadata for the Build mode exercise list.
+// Research-backed exercise metadata for the exercise list.
 // Muscle groups, physiological benefits, MET values, and rep tempo.
 //
 // Sources:

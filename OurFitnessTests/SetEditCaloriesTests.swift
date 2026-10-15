@@ -1,13 +1,13 @@
 import XCTest
 
-/// The calorie invariants `Repos.updateSet` depends on when it recomputes a
-/// corrected set's `caloriesEst` (see `Repos.setCaloriesEstimate`).
+/// Pins `CalorieEstimator.caloriesForSet` — the ONE per-set estimate that every
+/// logging surface and `Repos.updateSet` / `Repos.setCaloriesEstimate` use.
 ///
-/// Those branches live in Data/ and need a ModelContext, so they can't be
-/// exercised from this hostless target. What IS pure — and what would silently
-/// rot if someone collapsed the branching — is that the three logging surfaces
-/// use three genuinely different estimators, and that each scales with the
-/// number the user edits. That is what these pin.
+/// It dispatches on the exercise's SHAPE (hold → duration → fixed load →
+/// researched), never on the user's fitness goal, so a set logged and later
+/// corrected lands on the same figure whoever logged it. These tests pin each
+/// branch, the branch precedence, and that each scales with the number the user
+/// edits.
 ///
 /// 180 lb × 0.45359237 = 81.6466266 kg. Every figure is ACTIVE energy: (MET − 1)
 /// × kg × hours, matching CalorieEstimatorTests.
@@ -27,80 +27,121 @@ final class SetEditCaloriesTests: XCTestCase {
         )
     }
 
-    // MARK: - Build rep path (RepCounterView.saveSet)
+    private func set(_ ex: ExerciseDTO, reps: Int, hold: Int? = nil) -> Double {
+        CalorieEstimator.caloriesForSet(exercise: ex, reps: reps, holdSeconds: hold, bodyWeightLb: 180)
+    }
 
-    func test_build_rep_estimate_scales_with_corrected_rep_count() {
+    // MARK: - Researched path (no fixed load, counted in reps)
+
+    func test_researched_rep_estimate_scales_with_corrected_rep_count() {
         // Barbell squat: MET 5.0 → net 4.0, 3 s/rep.
         // 10 reps = 30 s → 4.0 × 81.6466266 × (30/3600) = 2.72155422
         let ex = exercise("Barbell Squat")
-        let ten = CalorieEstimator.caloriesForReps(reps: 10, exercise: ex, bodyWeightLb: 180)
-        let five = CalorieEstimator.caloriesForReps(reps: 5, exercise: ex, bodyWeightLb: 180)
-        XCTAssertEqual(ten, 2.72155422, accuracy: 0.0001)
-        // Fixing a double-tapped 10 back to 5 must halve the stored estimate,
-        // never leave the 10-rep figure behind.
-        XCTAssertEqual(five, ten / 2, accuracy: 0.0001)
+        XCTAssertEqual(set(ex, reps: 10), 2.72155422, accuracy: 0.0001)
+        XCTAssertEqual(set(ex, reps: 10),
+                       CalorieEstimator.caloriesForReps(reps: 10, exercise: ex, bodyWeightLb: 180),
+                       accuracy: 0.0000001)
+        // Fixing a double-tapped 10 back to 5 must halve the stored estimate.
+        XCTAssertEqual(set(ex, reps: 5), set(ex, reps: 10) / 2, accuracy: 0.0001)
     }
 
-    func test_build_and_circuit_rep_estimates_are_not_interchangeable() {
-        // Build uses the exercise's researched MET + tempo; Circuit uses the flat
-        // load-aware estimate. An edit must re-derive with the SAME one the log
-        // used, so these two must stay distinguishable.
-        let ex = exercise("Barbell Squat")
-        let build = CalorieEstimator.caloriesForReps(reps: 10, exercise: ex, bodyWeightLb: 180)
-        let circuit = CalorieEstimator.caloriesForReps(reps: 10, loadLb: 30, bodyWeightLb: 180)
-        XCTAssertEqual(build, 2.72155422, accuracy: 0.0001)
-        XCTAssertEqual(circuit, 2.041165665, accuracy: 0.0001)
-        XCTAssertNotEqual(build, circuit, accuracy: 0.01)
+    // MARK: - Fixed-load path (e.g. Lifted Baby)
+
+    func test_fixed_load_uses_flat_load_aware_estimate_not_researched() {
+        // A fixed `loadLb` routes to the flat 4.0 MET (net 3.0), 3 s/rep:
+        // 10 reps → 3.0 × 81.6466266 × (30/3600) = 2.041165665.
+        let baby = exercise("Lifted Baby", category: .bodyweight, loadLb: 30)
+        XCTAssertEqual(set(baby, reps: 10), 2.041165665, accuracy: 0.0001)
+        // Same name, no load → researched path; the two must stay distinguishable.
+        XCTAssertNotEqual(set(exercise("Barbell Squat"), reps: 10), set(baby, reps: 10), accuracy: 0.01)
     }
 
-    // MARK: - Isometric hold path (IsometricTimerView.completeHold)
+    // MARK: - Duration path (reps carries minutes)
+
+    func test_duration_movement_reads_its_count_as_minutes_not_reps() {
+        // A `.duration` movement stores MINUTES in `reps`: net 3.5 × 81.6466266 ×
+        // 20/60 = 95.2543977 — not the rep estimate (4.08233133 for 20 reps).
+        let carry = exercise("Carried Baby", category: .bodyweight, kind: .duration, loadLb: 30)
+        XCTAssertEqual(set(carry, reps: 20), 95.2543977, accuracy: 0.0001)
+        XCTAssertNotEqual(set(carry, reps: 20),
+                          CalorieEstimator.caloriesForReps(reps: 20, loadLb: 30, bodyWeightLb: 180),
+                          accuracy: 1)
+    }
+
+    // MARK: - Hold path (holdSeconds set)
 
     func test_hold_estimate_uses_the_exercise_met_not_the_default() {
         // Wall sit: MET 4.0 → net 3.0. 60 s → 3.0 × 81.6466266 × (60/3600) = 4.08233133
-        // The bare default (3.8 → net 2.8) would give 3.810175908, so this test
-        // fails if the edit path stops passing ExerciseInfo's MET through.
-        let met = ExerciseInfo.meta(for: exercise("Wall Sit", kind: .duration, isIsometric: true)).met
-        XCTAssertEqual(met, 4.0, accuracy: 0.0001)
-
-        let withMet = CalorieEstimator.caloriesForIsometric(seconds: 60, met: met, bodyWeightLb: 180)
-        let withDefault = CalorieEstimator.caloriesForIsometric(seconds: 60, bodyWeightLb: 180)
-        XCTAssertEqual(withMet, 4.08233133, accuracy: 0.0001)
-        XCTAssertEqual(withDefault, 3.810175908, accuracy: 0.0001)
+        // The bare default (3.8 → net 2.8) would give 3.810175908.
+        let wallSit = exercise("Wall Sit", kind: .duration, isIsometric: true)
+        XCTAssertEqual(ExerciseInfo.meta(for: wallSit).met, 4.0, accuracy: 0.0001)
+        XCTAssertEqual(set(wallSit, reps: 1, hold: 60), 4.08233133, accuracy: 0.0001)
     }
 
     func test_hold_estimate_scales_with_corrected_seconds() {
-        let met = ExerciseInfo.meta(for: exercise("Plank", kind: .duration, isIsometric: true)).met
-        let sixty = CalorieEstimator.caloriesForIsometric(seconds: 60, met: met, bodyWeightLb: 180)
-        let ninety = CalorieEstimator.caloriesForIsometric(seconds: 90, met: met, bodyWeightLb: 180)
-        XCTAssertEqual(ninety, sixty * 1.5, accuracy: 0.0001)
+        let plank = exercise("Plank", kind: .duration, isIsometric: true)
+        XCTAssertEqual(set(plank, reps: 1, hold: 90), set(plank, reps: 1, hold: 60) * 1.5, accuracy: 0.0001)
     }
 
-    // MARK: - Circuit duration path (BabyExercisesCard.logActivity)
+    func test_hold_takes_precedence_over_duration_and_load() {
+        // A hold row is {reps:1, holdSeconds:N}; it must never be read as 1 minute
+        // or 1 rep just because the exercise is `.duration` or carries a load.
+        let wallSit = exercise("Wall Sit", kind: .duration, loadLb: 25, isIsometric: true)
+        let met = ExerciseInfo.meta(for: wallSit).met
+        XCTAssertEqual(set(wallSit, reps: 1, hold: 60),
+                       CalorieEstimator.caloriesForIsometric(seconds: 60, met: met, bodyWeightLb: 180),
+                       accuracy: 0.0000001)
+    }
 
-    func test_duration_movement_reads_its_count_as_minutes_not_reps() {
-        // A Circuit `.duration` movement stores MINUTES in `reps`. Editing 20 has
-        // to run through caloriesForDuration (net 3.5 × 81.6466266 × 20/60), not
-        // the rep estimator — the two differ by more than an order of magnitude.
-        let asMinutes = CalorieEstimator.caloriesForDuration(minutes: 20, loadLb: 30, bodyWeightLb: 180)
-        let asReps = CalorieEstimator.caloriesForReps(reps: 20, loadLb: 30, bodyWeightLb: 180)
-        XCTAssertEqual(asMinutes, 95.2543977, accuracy: 0.0001)
-        XCTAssertEqual(asReps, 4.08233133, accuracy: 0.0001)
+    func test_duration_takes_precedence_over_fixed_load() {
+        let carry = exercise("Carried Baby", category: .bodyweight, kind: .duration, loadLb: 30)
+        XCTAssertEqual(set(carry, reps: 10),
+                       CalorieEstimator.caloriesForDuration(minutes: 10, loadLb: 30, bodyWeightLb: 180),
+                       accuracy: 0.0000001)
     }
 
     // MARK: - What an edit cannot change
 
-    func test_weight_lifted_is_not_an_input_to_the_build_rep_estimate() {
-        // Correcting a fat-fingered 1350 lb back to 135 lb changes the stored
-        // weight only: this estimate is MET × BODY weight × time, with no term
-        // for the load on the bar, so the recompute lands on the same number.
-        // Pinned so nobody "fixes" the recompute by folding the lifted load in —
-        // that would need a new researched estimator, not an edit to this path.
-        let light = exercise("Barbell Squat", loadLb: 135)
-        let absurd = exercise("Barbell Squat", loadLb: 1350)
-        XCTAssertEqual(
-            CalorieEstimator.caloriesForReps(reps: 8, exercise: light, bodyWeightLb: 180),
-            CalorieEstimator.caloriesForReps(reps: 8, exercise: absurd, bodyWeightLb: 180),
-            accuracy: 0.0000001
-        )
+    func test_weight_lifted_is_not_an_input_to_the_set_estimate() {
+        // Correcting a fat-fingered 1350 lb back to 135 lb changes the stored set
+        // weight only: `caloriesForSet` takes no set-weight argument — this is
+        // MET × BODY weight × time. Pinned so nobody "fixes" the recompute by
+        // folding the lifted load in; that would need a new researched estimator.
+        let lift = exercise("Barbell Squat")
+        XCTAssertTrue(lift.tracksPerSetWeight)
+        XCTAssertEqual(set(lift, reps: 8),
+                       CalorieEstimator.caloriesForReps(reps: 8, exercise: lift, bodyWeightLb: 180),
+                       accuracy: 0.0000001)
+    }
+
+    // MARK: - Exercise shape flags (C1 / C2)
+
+    func test_tracks_per_set_weight_and_one_tap_loggable() {
+        let lift = exercise("Barbell Squat")                                  // compound, no load
+        let curl = exercise("Dumbbell Curl", category: .isolation)
+        let baby = exercise("Lifted Baby", category: .bodyweight, loadLb: 30)
+        let carry = exercise("Carried Baby", category: .bodyweight, kind: .duration, loadLb: 30)
+        let pushup = exercise("Push-up", category: .bodyweight)
+        let loadedCompound = exercise("Sandbag Squat", loadLb: 40)
+        let plank = exercise("Plank", category: .bodyweight, kind: .duration, isIsometric: true)
+        let isoCompound = exercise("Iso Hold", isIsometric: true)
+
+        XCTAssertTrue(lift.tracksPerSetWeight)
+        XCTAssertTrue(curl.tracksPerSetWeight)
+        XCTAssertFalse(baby.tracksPerSetWeight)
+        XCTAssertFalse(carry.tracksPerSetWeight)
+        XCTAssertFalse(pushup.tracksPerSetWeight)
+        XCTAssertFalse(loadedCompound.tracksPerSetWeight)
+        XCTAssertFalse(plank.tracksPerSetWeight)
+        XCTAssertFalse(isoCompound.tracksPerSetWeight)
+
+        XCTAssertFalse(lift.isOneTapLoggable)
+        XCTAssertFalse(curl.isOneTapLoggable)
+        XCTAssertTrue(baby.isOneTapLoggable)
+        XCTAssertTrue(carry.isOneTapLoggable)
+        XCTAssertTrue(pushup.isOneTapLoggable)
+        XCTAssertTrue(loadedCompound.isOneTapLoggable)
+        XCTAssertFalse(plank.isOneTapLoggable)
+        XCTAssertFalse(isoCompound.isOneTapLoggable)
     }
 }

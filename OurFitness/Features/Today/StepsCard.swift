@@ -1,12 +1,9 @@
-// Steps card — the one steps surface, mode-aware. Renders on Today only.
+// Steps card — the one steps surface. Renders on Today only.
 //
-// Build:   label + hero count + ProgressBar against the daily goal.
-// Circuit: ProgressRing + projection + pace-vs-yesterday + 7-day strip +
-//          this-week active energy / exercise minutes, and milestone toasts.
-//
-// Both variants share one goal-picker sheet and one info sheet (one copy of the
-// fat-grams math and the walking research copy). Replaced the old split between
-// Features/Today/StepsCard.swift and Features/Workouts/Circuit/StepsCardioCard.swift.
+// ProgressRing + projection + pace-vs-yesterday + 7-day strip + this-week
+// active energy / exercise minutes, a weekly streak chip, and milestone toasts.
+// The goal changes only the default daily target (and copy tone); every user
+// sees the same card, the same two-wheel goal picker and the same info sheet.
 
 import SwiftUI
 
@@ -18,9 +15,9 @@ enum StepsGoalPrefs {
     static func weeklyDaysKey(_ profileId: UUID) -> String { "stepsWeeklyDays.\(profileId.uuidString)" }
     static let defaultWeeklyDays = 5
 
-    /// A stored 0 means "no override" — fall back to the mode default.
-    static func resolve(custom: Int, modeDefault: Int) -> Int {
-        custom > 0 ? custom : modeDefault
+    /// A stored 0 means "no override" — fall back to the goal's default.
+    static func resolve(custom: Int, goalDefault: Int) -> Int {
+        custom > 0 ? custom : goalDefault
     }
 }
 
@@ -36,7 +33,6 @@ struct StepsCard: View {
     /// nil = Health gave us nothing for the window; the stat hides rather than reading 0.
     let activeEnergyKcalThisWeek: Int?
     let exerciseMinutesThisWeek: Int?
-    let onConnectHealth: () -> Void
 
     @Environment(\.theme) private var theme
     @EnvironmentObject private var toasts: ToastCenter
@@ -58,8 +54,7 @@ struct StepsCard: View {
         intradayToday: [Int] = [],
         intradayYesterday: [Int] = [],
         activeEnergyKcalThisWeek: Int? = nil,
-        exerciseMinutesThisWeek: Int? = nil,
-        onConnectHealth: @escaping () -> Void
+        exerciseMinutesThisWeek: Int? = nil
     ) {
         self.profile = profile
         self.steps = steps
@@ -69,7 +64,6 @@ struct StepsCard: View {
         self.intradayYesterday = intradayYesterday
         self.activeEnergyKcalThisWeek = activeEnergyKcalThisWeek
         self.exerciseMinutesThisWeek = exerciseMinutesThisWeek
-        self.onConnectHealth = onConnectHealth
         let uid = profile.id
         _customGoalRaw = AppStorage(wrappedValue: 0, StepsGoalPrefs.dailyKey(uid))
         _weeklyDaysGoalRaw = AppStorage(
@@ -80,7 +74,7 @@ struct StepsCard: View {
 
     private var fitnessGoal: FitnessGoal { profile.fitnessGoal }
     private var defaultGoal: Int { profile.computedTargets.stepsDaily }
-    private var goal: Int { StepsGoalPrefs.resolve(custom: customGoalRaw, modeDefault: defaultGoal) }
+    private var goal: Int { StepsGoalPrefs.resolve(custom: customGoalRaw, goalDefault: defaultGoal) }
     private var weeklyDaysGoal: Int { weeklyDaysGoalRaw }
     private var stepsKcal: Int {
         Int(CalorieEstimator.caloriesForSteps(steps: steps, bodyWeightLb: profile.weightLb).rounded())
@@ -89,22 +83,45 @@ struct StepsCard: View {
         guard goal > 0 else { return 0 }
         return min(1, Double(steps) / Double(goal))
     }
-    private var ok: Bool { steps >= goal }
-    private var hasData: Bool { steps > 0 }
+    private var ok: Bool { goal > 0 && steps >= goal }
+    /// Nothing from Health for today — the count reads as a dash, not a 0.
+    private var hasData: Bool { profile.healthGranted && steps > 0 }
 
     var body: some View {
         Card(padding: 16) {
-            if fitnessGoal == .lose {
-                circuitBody
-            } else {
-                buildBody
+            VStack(alignment: .leading, spacing: 16) {
+                HStack(alignment: .firstTextBaseline) {
+                    Text("Steps & Cardio")
+                        .font(.system(size: 22, weight: .regular))
+                        .foregroundStyle(theme.text)
+                    infoButton
+                    Spacer()
+                    StreakChip(weeks: streakWeeks, tint: theme.accent)
+                }
+
+                ringRow
+
+                if hasData, let projection = EncouragementEngine.stepProjection(
+                    stepsToday: steps, goalSteps: goal, bodyWeightLb: profile.weightLb
+                ) {
+                    ProjectionBar(text: projection)
+                }
+
+                paceLine
+                weeklyStrip
+                secondaryStats
             }
         }
-        .onChange(of: steps) { _, newValue in
-            if fitnessGoal == .lose { checkMilestones(steps: newValue) }
+        .onChange(of: steps) { oldValue, newValue in
+            let toasted = checkMilestones(steps: newValue)
+            // The milestone toast already fires its own haptic — only add the
+            // goal-hit one when no toast went out on this change.
+            if !toasted && goal > 0 && oldValue < goal && newValue >= goal {
+                Haptics.success()
+            }
         }
         .onAppear {
-            if fitnessGoal == .lose { checkMilestones(steps: steps) }
+            checkMilestones(steps: steps)
         }
         .sheet(isPresented: $showGoalPicker) {
             goalPickerSheet
@@ -114,139 +131,59 @@ struct StepsCard: View {
         }
     }
 
-    // MARK: - Build variant
-
-    @ViewBuilder
-    private var buildBody: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("STEPS TODAY")
-                    .font(.system(size: 10, weight: .medium))
-                    .tracking(2)
-                    .foregroundStyle(theme.dim)
-                infoButton
-                Spacer()
-                // The bar below already prints the goal — this is just the affordance.
-                goalButton(label: "Edit goal")
-            }
-
-            HStack(alignment: .firstTextBaseline, spacing: 12) {
-                if profile.healthGranted && hasData {
-                    AnimatedNumber(
-                        Double(steps),
-                        font: .system(size: 44, weight: .regular),
-                        color: theme.text
-                    )
-                    .tweenStat(steps)
-                } else {
-                    Text("—")
-                        .font(.system(size: 44, weight: .regular))
-                        .foregroundStyle(theme.dim)
-                }
-                Spacer()
-            }
-
-            if hasData && stepsKcal > 0 {
-                Text("~\(stepsKcal) cal burned")
-                    .font(.system(size: 11, design: .monospaced))
-                    .foregroundStyle(theme.accent)
-            }
-
-            ProgressBar(value: Double(steps), target: Double(goal), label: "steps")
-
-            buildFooter
-        }
-    }
-
-    @ViewBuilder
-    private var buildFooter: some View {
-        if !profile.healthGranted {
-            Button(action: onConnectHealth) {
-                HStack(spacing: 6) {
-                    Image(systemName: "heart.text.square")
-                    Text("Connect Apple Health")
-                }
-            }
-            .tactile(.pill, fill: theme.accent)
-        } else if !hasData {
-            HStack(spacing: 6) {
-                Image(systemName: "heart.text.square")
-                    .foregroundStyle(theme.dim)
-                Text("No data from Health yet.")
-                    .font(.caption2)
-                    .foregroundStyle(theme.dim)
-            }
-        } else {
-            HStack(spacing: 6) {
-                Image(systemName: ok ? "checkmark.seal.fill" : "heart.text.square")
-                    .foregroundStyle(ok ? theme.ok : theme.dim)
-                    .contentTransition(.symbolEffect(.replace))
-                Text("Synced from Apple Health")
-                    .font(.caption2)
-                    .foregroundStyle(theme.dim)
-            }
-        }
-    }
-
-    // MARK: - Circuit variant
-
-    @ViewBuilder
-    private var circuitBody: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack(alignment: .firstTextBaseline) {
-                Text("Steps & Cardio")
-                    .font(.system(size: 22, weight: .regular))
-                    .foregroundStyle(theme.text)
-                infoButton
-                Spacer()
-                StreakChip(weeks: streakWeeks, tint: theme.accent)
-            }
-
-            ringRow
-
-            if let projection = EncouragementEngine.stepProjection(
-                stepsToday: steps, goalSteps: goal, bodyWeightLb: profile.weightLb
-            ) {
-                ProjectionBar(text: projection)
-            }
-
-            paceLine
-            weeklyStrip
-            secondaryStats
-        }
-    }
-
     @ViewBuilder
     private var ringRow: some View {
         HStack(spacing: 18) {
             ZStack {
-                ProgressRing(pct: pct, color: theme.accent, trackColor: theme.barBg, lineWidth: 12)
+                ProgressRing(pct: hasData ? pct : 0,
+                             color: ok ? theme.ok : theme.accent,
+                             trackColor: theme.barBg, lineWidth: 12)
                 VStack(spacing: 2) {
-                    AnimatedNumber(
-                        Double(steps),
-                        font: .system(size: 28, weight: .semibold),
-                        color: theme.text
-                    )
+                    if hasData {
+                        AnimatedNumber(
+                            Double(steps),
+                            font: .system(size: 28, weight: .semibold),
+                            color: theme.text
+                        )
+                    } else {
+                        Text("—")
+                            .font(.system(size: 28, weight: .semibold))
+                            .foregroundStyle(theme.dim)
+                    }
                     goalButton(label: "/ \(goal.formatted())")
                 }
             }
             .frame(width: 110, height: 110)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text("Today")
-                    .font(.caption).tracking(2).textCase(.uppercase)
-                    .foregroundStyle(theme.dim)
-                // Real numbers + percentage
-                Text("\(steps.formatted()) steps")
-                    .font(.system(.callout, design: .monospaced))
-                    .foregroundStyle(theme.text)
-                Text("\(Int(pct * 100))% of \(goal / 1000)k goal")
-                    .font(.system(size: 12, design: .monospaced))
-                    .foregroundStyle(theme.dim)
-                if stepsKcal > 0 {
-                    Text("~\(stepsKcal) cal")
-                        .font(.system(size: 11, design: .monospaced))
-                        .foregroundStyle(theme.accent)
+                HStack(spacing: 4) {
+                    Text("Today")
+                        .font(.caption).tracking(2).textCase(.uppercase)
+                        .foregroundStyle(theme.dim)
+                    if ok {
+                        Image(systemName: "checkmark.seal.fill")
+                            .font(.caption)
+                            .foregroundStyle(theme.ok)
+                            .contentTransition(.symbolEffect(.replace))
+                    }
+                }
+                if hasData {
+                    // Real numbers + percentage
+                    Text("\(steps.formatted()) steps")
+                        .font(.system(.callout, design: .monospaced))
+                        .foregroundStyle(theme.text)
+                    Text("\(Int(pct * 100))% of \(goal / 1000)k goal")
+                        .font(.system(size: 12, design: .monospaced))
+                        .foregroundStyle(ok ? theme.ok : theme.dim)
+                    if stepsKcal > 0 {
+                        Text("~\(stepsKcal) cal")
+                            .font(.system(size: 11, design: .monospaced))
+                            .foregroundStyle(theme.accent)
+                    }
+                } else {
+                    Text("No data from Health yet.")
+                        .font(.caption2)
+                        .foregroundStyle(theme.dim)
                 }
             }
             Spacer(minLength: 0)
@@ -319,7 +256,7 @@ struct StepsCard: View {
         }
     }
 
-    // MARK: - Shared controls
+    // MARK: - Controls
 
     private var infoButton: some View {
         Button { showInfo = true } label: {
@@ -346,32 +283,32 @@ struct StepsCard: View {
         .accessibilityLabel("Edit daily steps goal")
     }
 
-    // MARK: - Milestones (Circuit)
+    // MARK: - Milestones
 
-    private func checkMilestones(steps: Int) {
+    /// Returns true when a milestone toast went out (it carries its own haptic).
+    @discardableResult
+    private func checkMilestones(steps: Int) -> Bool {
         let fired = Movement.decode(firedSet: firedRaw)
         guard let milestone = Movement.shouldFireMilestone(steps: steps, firedSet: fired)
-        else { return }
-        toasts.stepMilestone(milestone, fitnessGoal: fitnessGoal)
+        else { return false }
+        toasts.stepMilestone(milestone)
         var updated = fired
         updated.insert(milestone)
         firedRaw = Movement.encode(firedSet: updated)
+        return true
     }
 
     // MARK: - Goal picker sheet
 
-    // One sheet for both modes, on the shared `GoalPickerSheet` chrome. The
-    // days/week wheel only appears in Circuit, where the streak chip is the
-    // thing it drives.
+    // One sheet on the shared `GoalPickerSheet` chrome: a daily-target wheel plus
+    // the days/week wheel that drives the streak chip.
     private var goalPickerSheet: some View {
         GoalPickerSheet(
-            title: fitnessGoal == .lose ? "Steps Goals" : "Daily Steps Goal",
-            subtitle: fitnessGoal == .lose
-                ? "Daily target + how many days/week to hit it."
-                : "Mode default is \(defaultGoal.formatted()) steps.",
+            title: "Steps Goals",
+            subtitle: "Daily target + how many days/week to hit it. Default is \(defaultGoal.formatted()) steps.",
             wheels: goalWheels,
-            resetLabel: fitnessGoal == .lose ? "Reset to defaults" : "Reset to default",
-            detents: fitnessGoal == .lose ? [.large] : [.medium],
+            resetLabel: "Reset to defaults",
+            detents: [.large],
             onReset: {
                 customGoalRaw = 0
                 weeklyDaysGoalRaw = StepsGoalPrefs.defaultWeeklyDays
@@ -386,39 +323,33 @@ struct StepsCard: View {
     }
 
     private var goalWheels: [GoalPickerSheet.Wheel] {
-        var wheels: [GoalPickerSheet.Wheel] = [
+        [
             .init(
                 id: "daily",
-                // Build has a single wheel, so it needs no label to disambiguate.
-                label: fitnessGoal == .lose ? "DAILY GOAL" : nil,
+                label: "DAILY GOAL",
                 pickerTitle: "Daily goal",
                 options: Array(stride(from: 2000, through: 25000, by: 500)),
                 optionLabel: { "\($0.formatted()) steps" },
                 selection: $pickerGoal,
                 height: 130
+            ),
+            .init(
+                id: "weeklyDays",
+                label: "DAYS PER WEEK",
+                pickerTitle: "Days per week",
+                options: Array(1...7),
+                optionLabel: { "\($0) day\($0 == 1 ? "" : "s") / week" },
+                selection: $pickerDays,
+                height: 130
             )
         ]
-        if fitnessGoal == .lose {
-            wheels.append(
-                .init(
-                    id: "weeklyDays",
-                    label: "DAYS PER WEEK",
-                    pickerTitle: "Days per week",
-                    options: Array(1...7),
-                    optionLabel: { "\($0) day\($0 == 1 ? "" : "s") / week" },
-                    selection: $pickerDays,
-                    height: 130
-                )
-            )
-        }
-        return wheels
     }
 }
 
 // MARK: - Steps info sheet
 
-// One copy of the fat-grams math, the Tudor-Locke activity categories, and the
-// walking research copy. Circuit adds the cardio-pairing section.
+// One copy of the fat-grams math, the Tudor-Locke activity categories, the
+// walking research copy, what walking works, and the cardio-pairing section.
 private struct StepsInfoSheet: View {
     let steps: Int
     let goal: Int
@@ -448,18 +379,11 @@ private struct StepsInfoSheet: View {
         }
     }
 
-    private var sources: String {
-        let base = "Sources: Tudor-Locke & Bassett, Sports Med, 2004; Saint-Maurice et al., JAMA, 2020; Hanson & Jones, Br J Sports Med, 2015; Ainsworth et al., 2011 Compendium."
-        guard fitnessGoal == .lose else { return base }
-        return base.replacingOccurrences(
-            of: "Ainsworth et al., 2011 Compendium.",
-            with: "Kodama et al., Arch Intern Med, 2007; Ainsworth et al., 2011 Compendium."
-        )
-    }
+    private let sources = "Sources: Tudor-Locke & Bassett, Sports Med, 2004; Saint-Maurice et al., JAMA, 2020; Ding et al., Lancet Public Health, 2025; Hanson & Jones, Br J Sports Med, 2015; Kodama et al., Arch Intern Med, 2007; Ainsworth et al., 2011 Compendium."
 
     var body: some View {
         InfoSheetScaffold(
-            title: fitnessGoal == .lose ? "Steps & cardio" : "Steps",
+            title: "Steps & cardio",
             subtitle: "TODAY · \(steps.formatted()) STEPS"
         ) {
             InfoSection(title: "Your numbers today") {
@@ -497,21 +421,21 @@ private struct StepsInfoSheet: View {
 
             InfoSection(title: "What walking does for you") {
                 VStack(alignment: .leading, spacing: 8) {
-                    if fitnessGoal == .lose {
-                        Bullet("It's your most repeatable daily calorie burn — and the easiest to keep up while you're losing weight.")
-                    }
+                    Bullet("It's your most repeatable daily calorie burn.")
                     Bullet("Every extra 1,000–2,000 steps a day lowers your risk of dying early — with most of the gain showing up by about 7,000–8,000 steps.")
                     Bullet("Walking regularly brings blood pressure down a few points over a couple of months.")
                     Bullet("A single walk improves how your body handles blood sugar for the next day or two.")
                 }
             }
 
-            if fitnessGoal == .lose {
-                InfoSection(title: "Add some cardio") {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Bullet("Easy, steady cardio — a pace where you can still talk — nudges your 'good' cholesterol (HDL) up a couple of points and lowers the fat in your blood (triglycerides) by about 10–20% over a couple of months.")
-                        Bullet("Steps plus a little cardio together do more for your cholesterol and blood pressure than either alone — pair them with the food tips in Nutrition.")
-                    }
+            InfoSection(title: "What it works") {
+                InfoBody("Calves, thighs (quads), glutes (your seat muscles), hip flexors, and the deep core muscles that keep you upright. Over time: your heart, your everyday calorie burn, and your bones.")
+            }
+
+            InfoSection(title: "Add some cardio") {
+                VStack(alignment: .leading, spacing: 8) {
+                    Bullet("Easy, steady cardio — a pace where you can still talk — nudges your 'good' cholesterol (HDL) up a couple of points and lowers the fat in your blood (triglycerides) by about 10–20% over a couple of months.")
+                    Bullet("Steps plus a little cardio together do more for your cholesterol and blood pressure than either alone — pair them with the food tips in Nutrition.")
                 }
             }
 

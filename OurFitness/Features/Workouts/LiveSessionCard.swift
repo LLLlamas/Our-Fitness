@@ -688,7 +688,7 @@ private struct SessionActivityHeader: View {
 
 /// Retroactively correct a logged session's duration — the ONE duration editor,
 /// shared by live activity sessions (above) and Pilates
-/// (`Circuit/PilatesCard.swift`). Don't add a second one.
+/// (`PilatesCard.swift`). Don't add a second one.
 ///
 /// The caller owns the calorie preview and the write, because the two models
 /// differ: an activity session stores its own MET and needs its `caloriesEst`

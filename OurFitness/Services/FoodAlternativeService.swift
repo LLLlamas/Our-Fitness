@@ -9,9 +9,9 @@
 // reason the alternative is healthier (1 sentence max, factual claim only, no
 // invented citations and no disease-treatment language).
 //
-// Mode-awareness:
-//   • Build  → alternatives with similar or higher protein content
-//   • Circuit → alternatives lower in saturated fat and sodium, higher in
+// Goal tilt (one prompt sentence, keyed on `FitnessGoal`):
+//   • gaining → alternatives with similar or higher protein content
+//   • losing  → alternatives lower in saturated fat and sodium, higher in
 //               fiber and omega-3 sources
 //
 // THE SAFETY RULE (mirrors MealParseService / ExerciseInsightService):
@@ -30,7 +30,7 @@
 // FoundationModels needs no entitlement; this lives in Services/ (Domain is
 // framework-free).
 //
-// Availability, the session/do-catch envelope, the Build/Circuit mode line and the
+// Availability, the session/do-catch envelope, the per-goal prompt line and the
 // result cache all come from Services/OnDeviceModel.swift, shared with the other
 // four AI services.
 
@@ -78,7 +78,8 @@ public final class FoodAlternativeService: @unchecked Sendable {
     public static let shared = FoodAlternativeService()
     private init() {}
 
-    /// Key shape preserved: `foodAlternatives.v2.<sanitised-name>.<mode>`.
+    /// Key shape preserved: `foodAlternatives.v2.<sanitised-name>.<fitnessGoal.rawValue>`
+    /// (raw values are still "build"/"reset", so existing caches stay warm).
     /// Entries are name+why pairs, not resolved items — the food DB may have
     /// changed, so we re-resolve on every cold read.
     private let cache = OnDeviceModel.Cache<[[String: String]]>(
@@ -136,7 +137,7 @@ public final class FoodAlternativeService: @unchecked Sendable {
     ///
     /// - Parameters:
     ///   - foodName: The food the user wants to swap (e.g. "white rice").
-    ///   - mode: `.build` = protein focus; `.circuit` = sat-fat/sodium/fiber focus.
+    ///   - fitnessGoal: `.gain` = protein focus; `.lose` = sat-fat/sodium/fiber focus.
     ///   - recentFoodNames: Foods the user already eats (optional context).
     ///     Use `learnedFrequents(from:)` to derive these from the log history.
     ///   - favoriteFoodNames: Additional foods the user has marked as favourites (optional).
@@ -220,10 +221,10 @@ public final class FoodAlternativeService: @unchecked Sendable {
 
         parts.append("Food to find alternatives for: \"\(foodName)\".")
 
-        parts.append(OnDeviceModel.modeLine(
+        parts.append(OnDeviceModel.goalLine(
             fitnessGoal,
-            build: "Goal: Build mode (gaining lean muscle mass). Prioritise alternatives with similar or higher protein content. Whole-food protein sources are preferred.",
-            circuit: "Goal: Circuit mode (losing body fat and improving heart-health markers). Prioritise alternatives that are lower in saturated fat and sodium, higher in fibre, and ideally rich in omega-3 fatty acids."
+            gain: "The user's goal is to gain lean muscle mass. Prioritise alternatives with similar or higher protein content. Whole-food protein sources are preferred.",
+            lose: "The user's goal is to lose body fat and improve heart-health markers. Prioritise alternatives that are lower in saturated fat and sodium, higher in fibre, and ideally rich in omega-3 fatty acids."
         ))
 
         let contextFoods = (recentFoodNames + favoriteFoodNames)

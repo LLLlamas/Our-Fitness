@@ -1,13 +1,14 @@
 // Quick-log rows for the watch's Train tab — the wrist mirror of the phone's
-// Features/Workouts/Circuit/BabyExercisesCard.swift.
+// Features/Workouts/ExercisesCard.swift.
 //
 // One row per movement the phone pushed: name, what's logged today, and a +1
-// (or +1 min for a duration movement, matching how BabyExercisesCard splits
+// (or +1 min for a duration movement, matching how ExercisesCard splits
 // reps from minutes). Swipe a row leading-edge to undo its last set.
 //
 // NO CALORIE MATH HERE, DELIBERATELY. The phone recomputes calories from the
 // real ExerciseDTO (its load, its kind, ExerciseInfo's MET) when it applies the
-// action — see BabyExercisesCard.logActivity. Estimating on the wrist from the
+// action — see WatchSyncService.apply (.logQuickSet →
+// CalorieEstimator.caloriesForSet). Estimating on the wrist from the
 // thin QuickLogExercise projection would produce a second, disagreeing number.
 // Please don't "helpfully" add CalorieEstimator here.
 //
@@ -53,7 +54,7 @@ private struct QuickLogRow: View {
     let exercise: QuickLogExercise
 
     /// Duration movements log a minute at a time, rep movements a rep at a time
-    /// — same unit split as BabyExercisesCard. Either way the wire amount is 1.
+    /// — same unit split as ExercisesCard. Either way the wire amount is 1.
     private var buttonTitle: String { exercise.isDuration ? "+1 min" : "+1" }
 
     private var countLabel: String {

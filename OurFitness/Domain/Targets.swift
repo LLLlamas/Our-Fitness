@@ -1,46 +1,44 @@
-// Mifflin-St Jeor BMR + activity multiplier + mode-specific adjustments.
+// Mifflin-St Jeor BMR + activity multiplier + goal-specific adjustments.
 // Pure. Tested.
 
 import Foundation
 
 public enum Targets {
 
-
-    public struct ModeRules: Sendable {
+    /// The knobs a fitness goal is allowed to change. Everything else about the
+    /// targets — including the heart-health micros below — is the same for everyone.
+    public struct GoalRules: Sendable {
         public let calorieAdjust: Int
         public let proteinPerLb: Double
         public let fatPctOfCals: Double
         public let stepsDaily: Int
-        // Circuit heart-health caps. LIVE — see MacroTargets in Models.swift.
-        public let sodiumMgMax: Int?
-        public let addedSugarGMax: Int?
-        public let saturatedFatPctMax: Double?
-        public let fiberGMin: Int?
     }
 
-    /// Per-mode knobs. Edit here to retune either mode's personality.
-    public static let rules: [FitnessGoal: ModeRules] = [
-        .gain: ModeRules(
+    /// Per-goal knobs. Edit here to retune either goal.
+    public static let rules: [FitnessGoal: GoalRules] = [
+        .gain: GoalRules(
             calorieAdjust: 500,
             proteinPerLb: 1.0,
             fatPctOfCals: 0.27,
-            stepsDaily: 8_000,
-            sodiumMgMax: nil,
-            addedSugarGMax: nil,
-            saturatedFatPctMax: nil,
-            fiberGMin: nil
+            stepsDaily: 8_000
         ),
-        .lose: ModeRules(
+        .lose: GoalRules(
             calorieAdjust: -400,
             proteinPerLb: 1.1,
             fatPctOfCals: 0.28,
-            stepsDaily: 10_000,
-            sodiumMgMax: 1_500,
-            addedSugarGMax: 25,
-            saturatedFatPctMax: 0.10,
-            fiberGMin: 35
+            stepsDaily: 10_000
         ),
     ]
+
+    /// Heart-health micros — fiber floor + sodium / added sugar / saturated fat
+    /// caps. ONE set for every profile regardless of goal (saturated-fat grams
+    /// still scale with each goal's calories). LIVE — see MacroTargets in Models.swift.
+    public enum HeartHealth {
+        public static let sodiumMgMax = 1_500
+        public static let addedSugarGMax = 25
+        public static let saturatedFatPctMax = 0.10
+        public static let fiberGMin = 35
+    }
 
     /// Mifflin-St Jeor BMR. Output rounded to int.
     public static func bmr(sex: Sex, weightLb: Double, heightIn: Double, age: Int) -> Int {
@@ -69,10 +67,10 @@ public enum Targets {
 
     /// Compute macro + steps targets from profile. Idempotent.
     public static func compute(fitnessGoal: FitnessGoal, vitals v: ProfileVitals) -> MacroTargets {
-        // Exhaustive switch keeps this compile-time safe when new Mode cases are added.
-        let r: ModeRules
+        // Exhaustive switch keeps this compile-time safe when new goal cases are added.
+        let r: GoalRules
         switch fitnessGoal {
-        case .gain:   r = rules[.gain]!
+        case .gain: r = rules[.gain]!
         case .lose: r = rules[.lose]!
         }
         let calories = max(1200, tdee(v) + r.calorieAdjust)
@@ -84,73 +82,17 @@ public enum Targets {
             calories: calories, proteinG: proteinG, carbsG: carbsG, fatG: fatG,
             stepsDaily: r.stepsDaily
         )
-        if fitnessGoal == .lose {
-            t.sodiumMgMax = r.sodiumMgMax
-            t.addedSugarGMax = r.addedSugarGMax
-            t.fiberGMin = r.fiberGMin
-            if let pct = r.saturatedFatPctMax {
-                t.saturatedFatGMax = Int((Double(calories) * pct / 9).rounded())
-            }
-        }
+        t.sodiumMgMax = HeartHealth.sodiumMgMax
+        t.addedSugarGMax = HeartHealth.addedSugarGMax
+        t.fiberGMin = HeartHealth.fiberGMin
+        t.saturatedFatGMax = Int((Double(calories) * HeartHealth.saturatedFatPctMax / 9).rounded())
         return t
-    }
-
-    // MARK: - Auto-adjust signals
-
-    public enum AdjustmentDirection: String, Sendable {
-        case increase, decrease, addCardio, flagDoctor
-    }
-
-    public struct TrendAdjustment: Equatable, Sendable {
-        public let direction: AdjustmentDirection
-        public let amountCal: Int?
-        public let reason: String
-        public init(direction: AdjustmentDirection, amountCal: Int? = nil, reason: String) {
-            self.direction = direction
-            self.amountCal = amountCal
-            self.reason = reason
-        }
-    }
-
-    /// Mode-aware suggested adjustment after 14-day weight trend. nil if on track.
-    public static func suggestAdjustment(
-        fitnessGoal: FitnessGoal,
-        weeklyDeltaLb: Double,
-        weeksStalledMarkers: Int = 0
-    ) -> TrendAdjustment? {
-        switch fitnessGoal {
-        case .gain:
-            if weeklyDeltaLb < 0.15 {
-                return TrendAdjustment(direction: .increase, amountCal: 200,
-                                       reason: "Weight trending flat — bump calories.")
-            }
-            if weeklyDeltaLb > 0.75 {
-                return TrendAdjustment(direction: .decrease, amountCal: 150,
-                                       reason: "Gaining too fast — drop a multiplier.")
-            }
-            return nil
-
-        case .lose:
-            if weeksStalledMarkers >= 8 {
-                return TrendAdjustment(direction: .flagDoctor,
-                                       reason: "Markers unchanged for 8 weeks — review with your doctor.")
-            }
-            if weeklyDeltaLb > -0.15 {
-                return TrendAdjustment(direction: .addCardio,
-                                       reason: "Weight stalled — add a zone-2 session or trim 150 cal.")
-            }
-            if weeklyDeltaLb < -1.5 {
-                return TrendAdjustment(direction: .increase, amountCal: 150,
-                                       reason: "Losing too fast — protect muscle, add calories.")
-            }
-            return nil
-        }
     }
 }
 
 public extension ProfileDTO {
     /// Vitals slice consumed by `Targets.compute`. Single source so target math
-    /// and the mode-switch preview build the same input from a profile.
+    /// and the goal-switch preview build the same input from a profile.
     var vitals: Targets.ProfileVitals {
         Targets.ProfileVitals(
             sex: sex, weightLb: weightLb, heightIn: heightIn, age: age, activity: activity

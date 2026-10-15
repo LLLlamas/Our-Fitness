@@ -4,9 +4,10 @@
 // render-ready EncouragementMessage (or nil when nothing meaningful happened, so
 // the view layer never spams the user).
 //
-// Mode shapes the framing: Build leans hypertrophy (muscle growth, strength,
-// surplus); Circuit leans cardiometabolic (blood pressure, steps, pilates,
-// markers). Calorie figures are derived from CalorieEstimator — never hardcoded.
+// One set of messages for everyone. The user's goal only swaps the framing where
+// the content genuinely differs: a calorie surplus vs a deficit, and how much
+// weight protein carries (muscle growth when gaining, muscle protection when
+// losing). Calorie figures are derived from CalorieEstimator — never hardcoded.
 //
 // Copy rule: spell out acronyms in every user-facing string — "blood pressure"
 // not "BP", "muscle protein synthesis" not "MPS", "minimum effective volume" not
@@ -21,53 +22,34 @@ public enum EncouragementEngine {
     // MARK: - Steps
 
     /// Message for a crossed step milestone (3,000 / 5,000 / 8,000 / 10,000).
-    public static func stepMilestoneMessage(steps: Int, fitnessGoal: FitnessGoal) -> EncouragementMessage {
-        let isBuild = fitnessGoal == .gain
+    /// Neutral wording: step goals differ per user, so no milestone may claim the
+    /// day's goal is complete — the goal ring says that.
+    public static func stepMilestoneMessage(steps: Int) -> EncouragementMessage {
         switch steps {
         case 3_000:
-            return isBuild
-                ? EncouragementMessage(
-                    headline: "3k steps.",
-                    detail: "Baseline movement. Your muscles are getting blood flow even when you're not in the gym.",
-                    tone: .celebrate, sfSymbol: "figure.walk")
-                : EncouragementMessage(
-                    headline: "3k steps.",
-                    detail: "Every thousand steps counts. Studies show each additional thousand steps reduces mortality risk by roughly 12%.",
-                    scienceLine: "Saint-Maurice et al., JAMA 2020.",
-                    tone: .celebrate, sfSymbol: "figure.walk")
+            return EncouragementMessage(
+                headline: "3k steps.",
+                detail: "Every thousand steps counts. Studies show each additional thousand steps reduces mortality risk by roughly 12%.",
+                scienceLine: "Saint-Maurice et al., JAMA 2020.",
+                tone: .celebrate, sfSymbol: "figure.walk")
         case 5_000:
-            return isBuild
-                ? EncouragementMessage(
-                    headline: "Halfway there.",
-                    detail: "5k steps done. Active recovery keeps muscles primed for tomorrow's training session.",
-                    tone: .celebrate, sfSymbol: "figure.walk")
-                : EncouragementMessage(
-                    headline: "Halfway to your daily goal.",
-                    detail: "5k steps already improves insulin sensitivity. A 10-minute walk after dinner drops blood glucose by about 23 mg/dL.",
-                    scienceLine: "Stair walking study, ScienceDirect 2021.",
-                    tone: .celebrate, sfSymbol: "figure.walk")
+            return EncouragementMessage(
+                headline: "5k steps.",
+                detail: "5k steps already improves insulin sensitivity. A 10-minute walk after dinner drops blood glucose by about 23 mg/dL.",
+                scienceLine: "Stair walking study, ScienceDirect 2021.",
+                tone: .celebrate, sfSymbol: "figure.walk")
         case 8_000:
-            return isBuild
-                ? EncouragementMessage(
-                    headline: "8k. Strong day.",
-                    detail: "Beyond active recovery — you're burning real calories on top of training. Keep it up.",
-                    tone: .celebrate, sfSymbol: "figure.walk")
-                : EncouragementMessage(
-                    headline: "8k steps. That's the research sweet spot.",
-                    detail: "People who consistently hit 8,000 steps show 51% lower all-cause mortality than those at 4,000. You're in that bracket.",
-                    scienceLine: "Saint-Maurice et al., JAMA 2020.",
-                    tone: .impressed, sfSymbol: "flame.fill")
+            return EncouragementMessage(
+                headline: "8k steps. That's the research sweet spot.",
+                detail: "People who consistently hit 8,000 steps show 51% lower all-cause mortality than those at 4,000. You're in that bracket.",
+                scienceLine: "Saint-Maurice et al., JAMA 2020.",
+                tone: .impressed, sfSymbol: "flame.fill")
         case 10_000:
-            return isBuild
-                ? EncouragementMessage(
-                    headline: "10k done.",
-                    detail: "Full step goal. Your cardiovascular system thanks you — this is on top of the gym work.",
-                    tone: .celebrate, sfSymbol: "checkmark.circle.fill")
-                : EncouragementMessage(
-                    headline: "10,000 steps. Daily goal complete.",
-                    detail: "That's your primary cardiometabolic lever, hit. Consistent step goals reduce blood pressure, improve blood sugar control, and cut cardiovascular risk.",
-                    scienceLine: "Paluch et al. meta-analysis, Lancet Public Health 2022.",
-                    tone: .celebrate, sfSymbol: "checkmark.circle.fill")
+            return EncouragementMessage(
+                headline: "10,000 steps.",
+                detail: "Consistent daily walking like this reduces blood pressure, improves blood sugar control, and cuts cardiovascular risk.",
+                scienceLine: "Paluch et al. meta-analysis, Lancet Public Health 2022.",
+                tone: .celebrate, sfSymbol: "figure.walk")
         default:
             // Not a defined milestone — fall back to a neutral celebrate beat.
             let kLabel = steps >= 1_000 ? "\(steps / 1_000)k steps." : "\(steps) steps."
@@ -78,21 +60,7 @@ public enum EncouragementEngine {
         }
     }
 
-    /// Message for approaching the daily step goal. Intended for use when ≥85% there.
-    public static func stepApproachingMessage(stepsRemaining: Int, fitnessGoal: FitnessGoal) -> EncouragementMessage {
-        if fitnessGoal == .gain {
-            return EncouragementMessage(
-                headline: "Almost there on steps.",
-                detail: "\(stepsRemaining) steps left to hit your daily goal.",
-                tone: .approaching, sfSymbol: "figure.walk")
-        }
-        return EncouragementMessage(
-            headline: "So close.",
-            detail: "\(stepsRemaining) more steps and your blood pressure and blood sugar goals for the day are complete.",
-            tone: .approaching, sfSymbol: "figure.walk")
-    }
-
-    // MARK: - Workout volume (Build)
+    // MARK: - Workout volume
 
     /// Volume-milestone copy after logging a set. Returns nil at non-milestone
     /// counts so the view layer never spams the user.
@@ -101,8 +69,7 @@ public enum EncouragementEngine {
     public static func workoutSetMessage(
         exercise: ExerciseDTO,
         repsJustLogged: Int,
-        totalSetsThisWeekForMuscle: Int,
-        fitnessGoal: FitnessGoal
+        totalSetsThisWeekForMuscle: Int
     ) -> EncouragementMessage? {
         let muscle = exercise.muscleGroups.first ?? "this muscle group"
         switch totalSetsThisWeekForMuscle {
@@ -136,7 +103,7 @@ public enum EncouragementEngine {
 
     // MARK: - Projections
 
-    /// Inline projection shown below an exercise card after a set (Build). Returns
+    /// Inline projection shown below an exercise card after a set. Returns
     /// nil for trivial estimates so the strip stays meaningful.
     public static func repProjection(
         exercise: ExerciseDTO,
@@ -165,92 +132,19 @@ public enum EncouragementEngine {
         return "\(stepsRemaining) more steps · ~\(Int(calsRemaining)) cal to goal"
     }
 
-    // MARK: - Pilates (Circuit)
-
-    /// Pilates weekly-goal copy. Returns nil until the goal is met (the first
-    /// session alone is not a milestone).
-    public static func pilatesSessionMessage(
-        totalSessionsThisWeek: Int,
-        weeklyGoal: Int,
-        fitnessGoal: FitnessGoal
-    ) -> EncouragementMessage? {
-        if weeklyGoal > 0 && totalSessionsThisWeek >= weeklyGoal {
-            return EncouragementMessage(
-                headline: "Weekly pilates goal hit.",
-                detail: "You've done \(totalSessionsThisWeek) sessions this week. Research shows consistent pilates reduces blood pressure by roughly 4–5 points systolic over 8 weeks.",
-                scienceLine: "Journal of Human Hypertension meta-analysis, 2024.",
-                tone: .celebrate, sfSymbol: "checkmark.circle.fill")
-        }
-        return nil
-    }
-
-    // MARK: - Streaks
-
-    /// Weekly-streak milestone copy (1 / 5 / 10 / 26 / 52 weeks). Returns nil at
-    /// any other week count.
-    public static func streakMilestoneMessage(weeks: Int, fitnessGoal: FitnessGoal) -> EncouragementMessage? {
-        let isBuild = fitnessGoal == .gain
-        switch weeks {
-        case 1:
-            return isBuild
-                ? EncouragementMessage(
-                    headline: "One full week.",
-                    detail: "Consistency is the whole game. One week of showing up is the hardest week — you've done it.",
-                    tone: .celebrate, sfSymbol: "flame.fill")
-                : EncouragementMessage(
-                    headline: "One full week.",
-                    detail: "One week of consistent movement. Small consistent steps compound into real cardiometabolic change.",
-                    tone: .celebrate, sfSymbol: "flame.fill")
-        case 5:
-            return isBuild
-                ? EncouragementMessage(
-                    headline: "5-week streak.",
-                    detail: "At this point neural adaptations are locked in and muscle hypertrophy is well underway. You've crossed the threshold where most people quit.",
-                    tone: .celebrate, sfSymbol: "flame.fill")
-                : EncouragementMessage(
-                    headline: "5-week streak.",
-                    detail: "Five weeks of consistent movement. Blood pressure adaptations typically begin at the 4-week mark — you're past it.",
-                    scienceLine: "Whelton et al., 2002 meta-analysis.",
-                    tone: .celebrate, sfSymbol: "flame.fill")
-        case 10:
-            return isBuild
-                ? EncouragementMessage(
-                    headline: "10-week streak.",
-                    detail: "Visible muscle changes are measurable at this point. The work is showing up in ways the mirror confirms.",
-                    scienceLine: "Hypertrophy timeline research: 8–12 weeks for visible adaptation.",
-                    tone: .impressed, sfSymbol: "flame.fill")
-                : EncouragementMessage(
-                    headline: "10-week streak.",
-                    detail: "Ten weeks of consistent movement delivers meaningful reductions in blood pressure, resting heart rate, and blood sugar. That's measurable progress.",
-                    tone: .impressed, sfSymbol: "flame.fill")
-        case 26:
-            return EncouragementMessage(
-                headline: "Six months.",
-                detail: "Half a year of consistent logging. That kind of commitment compounds into real, lasting physiological change.",
-                tone: .impressed, sfSymbol: "star.fill")
-        case 52:
-            return EncouragementMessage(
-                headline: "One year.",
-                detail: "A full year. Most people don't make it here. You've built a sustainable habit and the body changes to prove it.",
-                tone: .impressed, sfSymbol: "star.fill")
-        default:
-            return nil
-        }
-    }
-
     // MARK: - Meal-logging streak
 
     /// Meal-logging streak milestone copy (3 / 7 / 14 / 30 / 60 / 100 days).
     /// Returns nil at any other day count so the toast layer never spams. This is
-    /// the "you logged today, N days running" habit reward — distinct from the
-    /// weekly movement streak (`streakMilestoneMessage`).
+    /// the "you logged today, N days running" habit reward. Only the 3-day copy
+    /// varies by goal (surplus vs deficit).
     public static func mealStreakMessage(days: Int, fitnessGoal: FitnessGoal) -> EncouragementMessage? {
-        let isBuild = fitnessGoal == .gain
+        let isGaining = fitnessGoal == .gain
         switch days {
         case 3:
             return EncouragementMessage(
                 headline: "3-day logging streak.",
-                detail: isBuild
+                detail: isGaining
                     ? "Three days of tracking. Knowing what you eat is the first lever on hitting your protein and your surplus."
                     : "Three days of tracking. Seeing what you eat is the first step to a steady, sustainable deficit.",
                 tone: .celebrate, sfSymbol: "flame.fill")
@@ -289,10 +183,10 @@ public enum EncouragementEngine {
 
     /// Copy for hitting a macro target (100% of goal).
     public static func macroGoalHitMessage(macro: String, fitnessGoal: FitnessGoal) -> EncouragementMessage {
-        let isBuild = fitnessGoal == .gain
+        let isGaining = fitnessGoal == .gain
         switch macro.lowercased() {
         case "protein":
-            return isBuild
+            return isGaining
                 ? EncouragementMessage(
                     headline: "Protein goal hit.",
                     detail: "Every gram above your target has diminishing returns for muscle protein synthesis. Quality of remaining meals matters more than quantity now.",
@@ -303,7 +197,7 @@ public enum EncouragementEngine {
                     detail: "Protein target locked in. High protein in a calorie deficit protects muscle while you lose body fat.",
                     tone: .celebrate, sfSymbol: "checkmark.circle.fill")
         case "calories":
-            return isBuild
+            return isGaining
                 ? EncouragementMessage(
                     headline: "Calorie goal hit.",
                     detail: "Calorie surplus secured. You've given your body the fuel to build — pair it with sleep and the work pays off.",
@@ -330,13 +224,13 @@ public enum EncouragementEngine {
     /// - Returns nil if mealsLoggedToday > 1 (already on track; 1-meal case gets
     ///   a mid-day tip but not an evening one)
     /// - Returns nil before 11 AM (let people ease into the day)
-    /// - Mode shapes focus: Build → protein, Circuit → balanced nutrition
+    /// - The goal shapes focus: gaining → protein, losing → calories + protein
     public static func mealLoggingNudge(
         mealsLoggedToday: Int,
         hourOfDay: Int,
         fitnessGoal: FitnessGoal
     ) -> EncouragementMessage? {
-        let isBuild = fitnessGoal == .gain
+        let isGaining = fitnessGoal == .gain
 
         // Don't nag before 11 AM.
         guard hourOfDay >= 11 else { return nil }
@@ -344,18 +238,18 @@ public enum EncouragementEngine {
         if mealsLoggedToday == 0 {
             if hourOfDay >= 17 {
                 // Late in the day, still nothing logged.
-                return isBuild
+                return isGaining
                     ? EncouragementMessage(
                         headline: "Day almost done — no meals logged.",
                         detail: "Logging helps you hit your protein target. Even a quick entry keeps the data honest.",
                         tone: .nudge, sfSymbol: "fork.knife")
                     : EncouragementMessage(
                         headline: "Day almost done — no meals logged.",
-                        detail: "Balanced nutrition is the foundation of Circuit. A quick log — even an estimate — keeps you on track.",
+                        detail: "Seeing what you eat is what keeps a steady deficit on track. A quick log — even an estimate — counts.",
                         tone: .nudge, sfSymbol: "fork.knife")
             } else if hourOfDay >= 11 {
                 // Mid-day, nothing logged yet.
-                return isBuild
+                return isGaining
                     ? EncouragementMessage(
                         headline: "Haven't logged yet today.",
                         detail: "Protein timing matters for muscle growth — logging meals keeps you on track to hit your daily target.",
@@ -367,7 +261,7 @@ public enum EncouragementEngine {
             }
         } else if mealsLoggedToday == 1, hourOfDay >= 11, hourOfDay <= 13 {
             // One meal logged around midday — light encouragement to keep going.
-            return isBuild
+            return isGaining
                 ? EncouragementMessage(
                     headline: "Good start — keep logging.",
                     detail: "One meal in. Keep tracking to make sure your protein target is reachable by end of day.",
@@ -421,10 +315,10 @@ public enum EncouragementEngine {
 
     /// Copy for approaching a macro target. Intended for use when ≥85% there.
     public static func macroApproachingMessage(macro: String, remaining: Int, unit: String, fitnessGoal: FitnessGoal) -> EncouragementMessage {
-        let isBuild = fitnessGoal == .gain
+        let isGaining = fitnessGoal == .gain
         switch macro.lowercased() {
         case "protein":
-            return isBuild
+            return isGaining
                 ? EncouragementMessage(
                     headline: "\(remaining)g protein left.",
                     detail: "Close to your protein goal. A Greek yogurt adds ~17g, a chicken breast ~53g — small choices that lock in the muscle-building signal.",
@@ -434,10 +328,10 @@ public enum EncouragementEngine {
                     detail: "\(remaining) grams to hit your protein target for the day. Protein keeps you full and preserves muscle during your calorie deficit.",
                     tone: .approaching, sfSymbol: "figure.walk")
         case "calories":
-            return isBuild
+            return isGaining
                 ? EncouragementMessage(
                     headline: "\(remaining) cal to your surplus.",
-                    detail: "Don't leave your build target on the table — muscle growth requires the calorie surplus.",
+                    detail: "Don't leave your target on the table — muscle growth requires the calorie surplus.",
                     tone: .approaching, sfSymbol: "flame")
                 : EncouragementMessage(
                     headline: "\(remaining) cal to your target.",

@@ -68,7 +68,7 @@ public struct StatCard: View {
                         // "Tap to log" only where tapping CAN log. Steps,
                         // training volume and BMI are derived — their detail
                         // sheet has no log form, so the prompt was a dead end
-                        // on two of Build's three default trackers.
+                        // on two of the three app-filled default trackers.
                         Text(canLog ? "Tap to log" : "No data yet")
                             .font(.system(size: 11))
                             .foregroundStyle(theme.dim)

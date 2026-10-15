@@ -1,12 +1,12 @@
 // Remaining macro / micronutrient budget for a day = targets − today's totals.
-// Pure Domain. Powers the Circuit heart-health panel (fiber floor + sodium /
+// Pure Domain. Powers the heart-health panel (fiber floor + sodium /
 // added-sugar / saturated-fat caps) and "X to go" copy.
 //
 // Convention (matches RemainingMacros): for CAPS (sodium, added sugar, saturated
 // fat) the value is how much room is LEFT under the cap — negative once exceeded.
 // For the fiber FLOOR the value is signed distance to the floor — negative until
-// the floor is met, positive once cleared. The four micro fields are nil in Build
-// mode (no caps configured), so the UI can drive a Circuit-only panel off them.
+// the floor is met, positive once cleared. The four micro fields are nil only when
+// the targets carry no caps (targets stored before the micros became universal).
 
 import Foundation
 
@@ -29,7 +29,7 @@ public enum MacroBudget {
     /// actually account for that nutrient (`capCoverage(...) == .none`) — so a
     /// caller can never read "1500 mg of room left" off a day whose foods carry
     /// no sodium figure at all. nil therefore means "no number to show", whether
-    /// because the cap isn't configured (Build) or because nothing measured it.
+    /// because the cap isn't configured or because nothing measured it.
     /// Use `capCoverage` alongside if you need to tell those two apart.
     /// Fiber is untouched: it IS carried by every curated food.
     public static func remaining(totals: DailyTotals, targets: MacroTargets,

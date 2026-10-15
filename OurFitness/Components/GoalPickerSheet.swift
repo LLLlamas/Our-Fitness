@@ -1,8 +1,8 @@
 // The one goal-picker sheet: title + subtitle, one or two wheels in a card
 // well, then Reset / Save.
 //
-// Steps (Build + Circuit) and Pilates each had their own copy of this layout.
-// Circuit steps is the widest variant — two wheels (daily target + days/week),
+// Steps and Pilates each had their own copy of this layout.
+// Steps is the widest variant — two wheels (daily target + days/week),
 // per-wheel all-caps labels and a `.large` detent — so the API is "a list of
 // wheels" rather than a fixed one/two shape.
 //

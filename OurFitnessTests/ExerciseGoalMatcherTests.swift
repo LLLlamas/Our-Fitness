@@ -77,9 +77,9 @@ final class ExerciseGoalMatcherTests: XCTestCase {
         XCTAssertTrue(out.contains { grippy.contains($0.exerciseName) })
     }
 
-    // Mode is a tilt, not a filter: both modes still return goal-relevant picks, and
+    // The goal is a tilt, not a filter: both goals still return goal-relevant picks, and
     // the muscle match is never overridden.
-    func test_mode_tilt_keeps_goal_relevance_in_both_modes() {
+    func test_goal_tilt_keeps_relevance_for_both_goals() {
         for fitnessGoal in [FitnessGoal.gain, .lose] {
             let out = ExerciseGoalMatcher.suggestions(for: "stronger legs and glutes", fitnessGoal: fitnessGoal)
             XCTAssertFalse(out.isEmpty, "\(fitnessGoal) should still return picks")
@@ -89,7 +89,7 @@ final class ExerciseGoalMatcherTests: XCTestCase {
                               "\(s.exerciseName) should target lower body in \(fitnessGoal)")
             }
         }
-        // A directly-named lift still wins regardless of mode tilt.
+        // A directly-named lift still wins regardless of goal tilt.
         XCTAssertEqual(
             ExerciseGoalMatcher.suggestions(for: "I want to deadlift more", fitnessGoal: .lose).first?.exerciseName,
             "Deadlift")

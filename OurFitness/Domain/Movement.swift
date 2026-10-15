@@ -1,4 +1,4 @@
-// Pure helpers for the Circuit Train tab.
+// Pure helpers for step milestones, step pace, weekly streaks and movement hints.
 // Lives in Domain so it's unit-testable without standing up SwiftData/HealthKit.
 //
 //  - shouldFireMilestone: de-dupe step-count milestone toasts (3k / 5k / 8k / 10k)
@@ -11,7 +11,7 @@ public enum Movement {
 
     // MARK: - Step milestones
 
-    /// Default step-count milestones for Circuit. Ordered ascending.
+    /// Default step-count milestones. Ordered ascending.
     public static let defaultStepMilestones: [Int] = [3_000, 5_000, 8_000, 10_000]
 
     /// Which milestone (if any) should fire *now*, given current steps and the
@@ -155,25 +155,6 @@ public enum Movement {
         return streak
     }
 
-    // MARK: - Circuit copy
-
-    /// Short "why this matters" blurb shown under each Circuit card.
-    /// Cites the documented effect of the modality on cardiovascular markers.
-    public static func circuitFocusBlurb(for kind: CircuitFocusKind) -> String {
-        switch kind {
-        case .steps:
-            return "Daily steps are the #1 lever for BP, insulin sensitivity, and LDL."
-        case .pilates:
-            return "Pilates builds core strength and joint stability — supports BP regulation."
-        case .cardio:
-            return "Zone-2 cardio raises HDL, lowers triglycerides, and trains aerobic capacity."
-        }
-    }
-
-    public enum CircuitFocusKind: Sendable {
-        case steps, pilates, cardio
-    }
-
     // MARK: - Post-exercise nutrition hints + form safety
 
     /// What the body needs after a given movement, including evidence-based
@@ -269,7 +250,7 @@ public enum Movement {
     ]
 
     /// Whether this exercise has a hand-curated parenting-movement hint.
-    /// Custom / user-invented Circuit movements return `false` and are
+    /// Custom / user-invented movements return `false` and are
     /// candidates for on-device AI enrichment (Services/ExerciseInsightService).
     public static func hasNamedHint(for exercise: ExerciseDTO) -> Bool {
         namedParentingHint(exercise.name) != nil

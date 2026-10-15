@@ -5,20 +5,74 @@ import SwiftData
 final class RepositoryWriteTests: XCTestCase {
     enum Failure: Error { case diskFull }
 
-    func testCircuitCreationAndModeSwitchPreserveSeeds() throws {
+    private func profileContainer() throws -> ModelContainer {
         let schema = Schema([ProfileModel.self, ExerciseModel.self, ReminderGroupModel.self])
-        let container = try ModelContainer(for: schema, configurations: [
+        return try ModelContainer(for: schema, configurations: [
             ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         ])
+    }
+
+    func testEveryGoalSeedsStarterMovementsAndGoalSwitchPreservesThem() throws {
+        for goal in FitnessGoal.allCases {
+            let container = try profileContainer()
+            let ctx = container.mainContext
+            let profile = try XCTUnwrap(Repos.createProfile(ctx, name: "Fixture", fitnessGoal: goal,
+                sex: .female, heightIn: 65, weightLb: 150, age: 30, activity: .moderate))
+            XCTAssertEqual(Set(Repos.exercises(ctx, forProfile: profile.id).map(\.name)),
+                           ["Lifted Baby", "Lifted Stroller", "Carried Baby"], "\(goal)")
+            XCTAssertEqual(Set(Repos.listReminderGroups(ctx, userId: profile.id).map(\.kind)), [.plants, .medication])
+            let other: FitnessGoal = goal == .gain ? .lose : .gain
+            XCTAssertNotNil(Repos.updateGoal(ctx, profileId: profile.id, to: other))
+            XCTAssertNotNil(Repos.updateGoal(ctx, profileId: profile.id, to: goal))
+            XCTAssertEqual(Repos.exercises(ctx, forProfile: profile.id).count, 3)
+            XCTAssertEqual(Repos.listReminderGroups(ctx, userId: profile.id).count, 2)
+        }
+    }
+
+    func testGoalSwitchNeverSeeds() throws {
+        let container = try profileContainer()
         let ctx = container.mainContext
-        let profile = try XCTUnwrap(Repos.createProfile(ctx, name: "Fixture", fitnessGoal: .lose,
+        let profile = try XCTUnwrap(Repos.createProfile(ctx, name: "Fixture", fitnessGoal: .gain,
+            sex: .male, heightIn: 70, weightLb: 180, age: 35, activity: .light))
+        for ex in Repos.exercises(ctx, forProfile: profile.id) {
+            XCTAssertTrue(Repos.deleteExercise(ctx, id: ex.id))
+        }
+        let switched = try XCTUnwrap(Repos.updateGoal(ctx, profileId: profile.id, to: .lose))
+        XCTAssertEqual(switched.fitnessGoal, .lose)
+        XCTAssertEqual(switched.computedTargets,
+                       Targets.compute(fitnessGoal: .lose, vitals: profile.vitals))
+        XCTAssertTrue(Repos.exercises(ctx, forProfile: profile.id).isEmpty)
+    }
+
+    func testHeartHealthBackfillRecomputesOnlyStaleTargetsAndIsIdempotent() throws {
+        let container = try profileContainer()
+        let ctx = container.mainContext
+        let vitals = Targets.ProfileVitals(sex: .male, weightLb: 180, heightIn: 70, age: 35, activity: .moderate)
+        // A profile stored under the old rules: gain-goal targets with no micros.
+        var legacy = Targets.compute(fitnessGoal: .gain, vitals: vitals)
+        legacy.sodiumMgMax = nil; legacy.addedSugarGMax = nil
+        legacy.saturatedFatGMax = nil; legacy.fiberGMin = nil
+        let stale = ProfileDTO(name: "Old", fitnessGoal: .gain, sex: .male, heightIn: 70,
+                               weightLb: 180, age: 35, activity: .moderate, computedTargets: legacy)
+        let current = try XCTUnwrap(Repos.createProfile(ctx, name: "New", fitnessGoal: .lose,
             sex: .female, heightIn: 65, weightLb: 150, age: 30, activity: .moderate))
-        XCTAssertEqual(Repos.exercises(ctx, forProfile: profile.id).count, 3)
-        XCTAssertEqual(Set(Repos.listReminderGroups(ctx, userId: profile.id).map(\.kind)), [.plants, .medication])
-        XCTAssertNotNil(Repos.updateMode(ctx, profileId: profile.id, to: .gain))
-        XCTAssertNotNil(Repos.updateMode(ctx, profileId: profile.id, to: .lose))
-        XCTAssertEqual(Repos.exercises(ctx, forProfile: profile.id).count, 3)
-        XCTAssertEqual(Repos.listReminderGroups(ctx, userId: profile.id).count, 2)
+        ctx.insert(ProfileModel(snapshot: stale))
+        try ctx.save()
+        let currentStamp = try XCTUnwrap(Repos.listProfiles(ctx).first { $0.id == current.id }).updatedAt
+
+        XCTAssertTrue(Repos.backfillHeartHealthTargets(ctx))
+        let fixed = try XCTUnwrap(Repos.listProfiles(ctx).first { $0.id == stale.id })
+        XCTAssertEqual(fixed.computedTargets, Targets.compute(fitnessGoal: .gain, vitals: vitals))
+        XCTAssertEqual(fixed.computedTargets.fiberGMin, 35)
+        XCTAssertEqual(fixed.computedTargets.sodiumMgMax, 1_500)
+        // Up-to-date profile untouched.
+        XCTAssertEqual(try XCTUnwrap(Repos.listProfiles(ctx).first { $0.id == current.id }).updatedAt, currentStamp)
+
+        // Second run is a no-op.
+        let fixedStamp = fixed.updatedAt
+        XCTAssertTrue(Repos.backfillHeartHealthTargets(ctx))
+        XCTAssertFalse(ctx.hasChanges)
+        XCTAssertEqual(try XCTUnwrap(Repos.listProfiles(ctx).first { $0.id == stale.id }).updatedAt, fixedStamp)
     }
 
     private func container() throws -> ModelContainer {

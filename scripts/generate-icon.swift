@@ -21,10 +21,11 @@ let outPath: String = CommandLine.arguments.count > 1
     ? CommandLine.arguments[1]
     : "icon.png"
 
-// MARK: - Palette (matches Theme.build tokens)
+// MARK: - Palette (the shipped icon's orange palette — predates the single
+// Theme.standard sage/terracotta palette; recolouring the icon is a separate call)
 
 let bg          = CGColor(red: 0.078, green: 0.063, blue: 0.055, alpha: 1.0)   // warm near-black
-let accent      = CGColor(red: 1.000, green: 0.420, blue: 0.137, alpha: 1.0)   // build orange
+let accent      = CGColor(red: 1.000, green: 0.420, blue: 0.137, alpha: 1.0)   // icon orange
 let glow        = CGColor(red: 1.000, green: 0.420, blue: 0.137, alpha: 0.22)  // accent, soft
 let clearAccent = CGColor(red: 1.000, green: 0.420, blue: 0.137, alpha: 0.0)
 

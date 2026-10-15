@@ -1,19 +1,17 @@
-// Add/remove any progress tracker. Mode defaults are pre-checked, but every
-// StatKind is available to either mode — toggling persists per-profile
+// Add/remove any progress tracker. The defaults (one set for every goal) are
+// pre-checked, but every StatKind is available — toggling persists per-profile
 // (see ProgressTabView.enabledStatsRaw). Changes apply live as you toggle.
 
 import SwiftUI
 
 struct EditTrackersSheet: View {
-    let fitnessGoal: FitnessGoal
     let onChange: (Set<String>) -> Void
 
     @Environment(\.theme) private var theme
     @State private var enabled: Set<String>
 
-    init(enabled: Set<String>, fitnessGoal: FitnessGoal, onChange: @escaping (Set<String>) -> Void) {
+    init(enabled: Set<String>, onChange: @escaping (Set<String>) -> Void) {
         self._enabled = State(initialValue: enabled)
-        self.fitnessGoal = fitnessGoal
         self.onChange = onChange
     }
 
@@ -29,7 +27,7 @@ struct EditTrackersSheet: View {
                         .foregroundStyle(theme.dim)
                 }
 
-                Text("Progress starts with the metrics the app can fill in for you. Switch on anything you measure yourself — body fat, waist, blood pressure, lab results.")
+                Text("Progress starts with the metrics the app can fill in for you. Switch on anything you measure yourself — body fat, waist, lab results.")
                     .font(.callout)
                     .foregroundStyle(theme.dim)
                     .fixedSize(horizontal: false, vertical: true)
@@ -60,8 +58,8 @@ struct EditTrackersSheet: View {
                     Text(kind.title)
                         .font(.system(size: 15, weight: .medium))
                         .foregroundStyle(theme.text)
-                    if kind.isRelevant(for: fitnessGoal) {
-                        Text("Default for \(fitnessGoal.displayName)")
+                    if kind.isDefault {
+                        Text("Default")
                             .font(.caption2).foregroundStyle(theme.dim)
                     }
                 }

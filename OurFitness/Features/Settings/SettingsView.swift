@@ -11,7 +11,7 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var toasts: ToastCenter
 
-    @State private var showModeSwitch = false
+    @State private var showGoalSwitch = false
     @State private var showEditVitals = false
 
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
@@ -57,8 +57,8 @@ struct SettingsView: View {
                         }
                     }
 
-                    section("Mode") {
-                        modeRow
+                    section("Goal") {
+                        goalRow
                     }
 
                     section("Profile") {
@@ -89,10 +89,8 @@ struct SettingsView: View {
                 }
             }
         }
-        .sheet(isPresented: $showModeSwitch) {
-            // Themed to the destination mode so the sheet previews the palette
-            // you're switching into.
-            ModeSwitchSheet(profile: profile, onConfirm: switchMode)
+        .sheet(isPresented: $showGoalSwitch) {
+            GoalSwitchSheet(profile: profile, onConfirm: switchGoal)
         }
         .sheet(isPresented: $showEditVitals) {
             EditVitalsSheet(profile: profile, unitSystem: unitSystem, onSave: saveVitals)
@@ -100,8 +98,8 @@ struct SettingsView: View {
     }
 
     @ViewBuilder
-    private var modeRow: some View {
-        PressableCard(action: { showModeSwitch = true }) {
+    private var goalRow: some View {
+        PressableCard(action: { showGoalSwitch = true }) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(profile.fitnessGoal.displayName)
@@ -289,12 +287,12 @@ struct SettingsView: View {
         showEditVitals = false
     }
 
-    private func switchMode(to newMode: FitnessGoal) {
-        guard Repos.updateMode(ctx, profileId: profile.id, to: newMode) != nil else { return }
-        toasts.show(Toast(title: "Switched to \(newMode.displayName)",
+    private func switchGoal(to newGoal: FitnessGoal) {
+        guard Repos.updateGoal(ctx, profileId: profile.id, to: newGoal) != nil else { return }
+        toasts.show(Toast(title: "Goal: \(newGoal.displayName)",
                           detail: "Targets recomputed. Your logs are kept.",
                           accent: .win, symbol: "checkmark.circle.fill"))
-        showModeSwitch = false
+        showGoalSwitch = false
     }
 
     private func connectHealth() {
@@ -333,7 +331,7 @@ struct SettingsView: View {
 
 // MARK: - Shared target compare row
 
-/// `from → to` row used by the mode-switch and edit-vitals previews to show how a
+/// `from → to` row used by the goal-switch and edit-vitals previews to show how a
 /// change shifts a computed target. Reads the theme from the environment.
 private struct TargetCompareRow: View {
     let label: String
@@ -529,36 +527,37 @@ private struct EditVitalsSheet: View {
     }
 }
 
-// MARK: - Mode switch sheet
+// MARK: - Goal switch sheet
 
-/// Confirms an at-will Build↔Circuit switch, previewing how the recomputed
-/// targets shift before applying. Targets come straight from Targets.compute so
-/// the preview matches exactly what Repos.updateMode will persist.
-private struct ModeSwitchSheet: View {
+/// Confirms an at-will goal switch, previewing how the recomputed targets shift
+/// before applying. Targets come straight from Targets.compute so the preview
+/// matches exactly what Repos.updateGoal will persist. The goal changes numbers
+/// only — every tab, card and tracker stays the same.
+private struct GoalSwitchSheet: View {
     let profile: ProfileDTO
     let onConfirm: (FitnessGoal) -> Void
 
     @Environment(\.theme) private var theme
     @Environment(\.dismiss) private var dismiss
 
-    private var newMode: FitnessGoal { profile.fitnessGoal.toggled }
+    private var newGoal: FitnessGoal { profile.fitnessGoal.toggled }
 
     private var current: MacroTargets { Targets.compute(fitnessGoal: profile.fitnessGoal, vitals: profile.vitals) }
-    private var next: MacroTargets { Targets.compute(fitnessGoal: newMode, vitals: profile.vitals) }
+    private var next: MacroTargets { Targets.compute(fitnessGoal: newGoal, vitals: profile.vitals) }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Switch mode")
+                    Text("Change goal")
                         .font(.system(size: 42, weight: .regular))
                         .foregroundStyle(theme.text)
-                    Text("\(profile.fitnessGoal.displayName.uppercased()) → \(newMode.displayName.uppercased())")
+                    Text("\(profile.fitnessGoal.displayName.uppercased()) → \(newGoal.displayName.uppercased())")
                         .font(.system(size: 10, weight: .medium)).tracking(2)
                         .foregroundStyle(theme.dim)
                 }
 
-                Text(newMode.blurb)
+                Text(newGoal.blurb)
                     .font(.callout).foregroundStyle(theme.dim)
 
                 VStack(alignment: .leading, spacing: 8) {
@@ -570,18 +569,13 @@ private struct ModeSwitchSheet: View {
                     TargetCompareRow(label: "Steps", from: current.stepsDaily.formatted(), to: next.stepsDaily.formatted(), unit: "/day")
                 }
 
-                Text(newMode == .lose
-                     ? "Circuit retargets you for fat loss and heart-health markers, and adds the parenting movements (Lifted Baby, Stroller, Carried Baby) plus a daily steps, cardio, and Pilates loop on Today."
-                     : "Build retargets you for gaining lean mass — a calorie surplus and higher protein to fuel your lifts.")
-                    .font(.footnote).foregroundStyle(theme.dim)
-
-                Text("Your food, workout, and body logs are kept exactly as they are.")
+                Text("Only your targets change. Your food, workout, and body logs — and every tab and card — stay exactly as they are.")
                     .font(.footnote).foregroundStyle(theme.dim)
 
                 Button {
-                    onConfirm(newMode)
+                    onConfirm(newGoal)
                 } label: {
-                    Text("Switch to \(newMode.displayName)").frame(maxWidth: .infinity)
+                    Text("Switch to \(newGoal.displayName)").frame(maxWidth: .infinity)
                 }
                 .tactile(.primary, fullWidth: true)
 

@@ -13,7 +13,7 @@ import SwiftData
 public final class ProfileModel {
     @Attribute(.unique) public var id: UUID
     public var name: String
-    public var modeRaw: String
+    public var modeRaw: String   // legacy column name: stores FitnessGoal.rawValue ("build"/"reset")
     public var sexRaw: String
     public var heightIn: Double
     public var weightLb: Double
@@ -90,8 +90,7 @@ public final class ExerciseModel {
     public var muscleGroups: [String]
     public var equipmentRaw: [String]
     public var defaultRepRange: [Int]?
-    /// Modes this exercise is offered in. Default covers existing rows so
-    /// pre-gating data (mobility, cardio) keeps showing in both modes.
+    /// Legacy/unread: retired per-mode gating, persisted only — nothing filters by it.
     public var availableForModeRaw: [String] = [FitnessGoal.gain.rawValue, FitnessGoal.lose.rawValue]
     /// Owning profile. Per-profile custom exercises landed in SchemaV2;
     /// legacy V1 rows decode with `nil` and surface to no profile.
@@ -140,7 +139,7 @@ public final class ExerciseModel {
 public final class ProgramModel {
     @Attribute(.unique) public var id: String
     public var name: String
-    public var modeFitRaw: [String]
+    public var modeFitRaw: [String]   // legacy/unread — nothing filters by it
     public var progressionRaw: String
     public var notes: String?
     /// JSON-encoded [ProgramDayDTO] — kept flat to avoid a chatty nested-relationship graph.
@@ -232,7 +231,7 @@ public final class WorkoutSetModel {
 public final class FoodModel {
     @Attribute(.unique) public var id: String
     public var name: String
-    public var modeFitRaw: [String]
+    public var modeFitRaw: [String]   // legacy/unread — nothing filters by it
     public var categoryRaw: String
     public var recipe: String?
     public var servings: Double
@@ -438,7 +437,7 @@ public final class PilatesSessionModel {
     }
 }
 
-// MARK: - Cardio sessions (Circuit)
+// MARK: - Cardio sessions (legacy, read-only)
 
 @Model
 public final class CardioSessionModel {

@@ -83,9 +83,10 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
     func pushSnapshot(_ ctx: ModelContext, userId: UUID) {
         guard WCSession.isSupported(), WCSession.default.activationState == .activated,
               WCSession.default.isPaired, WCSession.default.isWatchAppInstalled else { return }
-        // The profile carries mode + body weight, which the watch needs for its
-        // theme and for DISPLAYING (never computing) calorie figures. Without it
-        // there is no envelope to build.
+        // The profile carries body weight, which the watch needs for DISPLAYING
+        // (never computing) calorie figures, plus the fitness goal that still
+        // rides the wire as `mode` for older watch builds (the current watch
+        // never reads it). Without a profile there is no envelope to build.
         guard let profile = Repos.listProfiles(ctx).first(where: { $0.id == userId }) else { return }
 
         let now = Date()
@@ -187,30 +188,30 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
         )
     }
 
-    /// The same movement list `BabyExercisesCard` renders — every exercise owned
-    /// by the profile, name-sorted — so the two devices show the same rows in the
-    /// same order. `loggedToday` is the SUM OF REPS (for a duration exercise the
+    /// The one-tap rows of the Train tab's `ExercisesCard` — every exercise owned
+    /// by the profile that `isOneTapLoggable`, name-sorted — so the two devices show
+    /// those rows in the same order. `loggedToday` is the SUM OF REPS (for a duration exercise the
     /// reps field carries minutes), matching the card's per-row count exactly.
     /// Only exercises a single tap can record CORRECTLY.
     ///
     /// `.logQuickSet` writes `weightLb: nil` and `reps: amount` — there is no
     /// weight input on the wrist and no hold timer. So:
-    ///   • compound/isolation lifts are excluded. They carry a per-set weight,
-    ///     and a wrist "+1" on a barbell press logged a weightless rep that then
-    ///     counted toward Build's training volume. Wrong data is worse than a
+    ///   • lifts that track a per-set weight (`ExerciseDTO.tracksPerSetWeight`:
+    ///     compound/isolation rep work with no fixed load) are excluded. A
+    ///     wrist "+1" on a barbell press logged a weightless rep that then
+    ///     counted toward training volume. Wrong data is worse than a
     ///     missing button.
     ///   • isometric exercises are excluded. A hold is `{reps: 1, holdSeconds: N}`
     ///     billed by `caloriesForIsometric`; one tap would log it as a rep.
-    /// Circuit's parenting movements and other bodyweight/duration work are
-    /// unaffected — they carry a fixed `loadLb` on the exercise, which the
-    /// calorie math already uses, so a tap records exactly what happened.
+    /// Both rules are `ExerciseDTO.isOneTapLoggable`. The parenting movements
+    /// and other bodyweight/duration work pass it — they carry a fixed `loadLb`
+    /// (or none) on the exercise, which the calorie math already uses, so a
+    /// tap records exactly what happened.
     ///
     /// Adding either back means a wire field plus a real input affordance, not
     /// just lifting this filter.
     private func quickLogExercises(_ ctx: ModelContext, userId: UUID, now: Date) -> [QuickLogExercise] {
-        let exercises = Repos.exercises(ctx, forProfile: userId).filter {
-            !$0.isIsometric && $0.category != .compound && $0.category != .isolation
-        }
+        let exercises = Repos.exercises(ctx, forProfile: userId).filter(\.isOneTapLoggable)
         guard !exercises.isEmpty else { return [] }
         let repsToday = todayRepsByExercise(ctx, userId: userId, now: now)
         return exercises.map {
@@ -403,14 +404,12 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
                   let exercise = Repos.exercises(ctx, forProfile: profile.id)
                     .first(where: { $0.id == exerciseId })
             else { return }
-            // Mirrors BabyExercisesCard.logActivity — duration exercises bill by
-            // the minute, rep exercises by the rep. Computed here from the stored
-            // exercise, never sent over the wire.
-            let cal: Double = exercise.kind == .duration
-                ? CalorieEstimator.caloriesForDuration(
-                    minutes: Double(amount), loadLb: exercise.loadLb, bodyWeightLb: profile.weightLb)
-                : CalorieEstimator.caloriesForReps(
-                    reps: amount, loadLb: exercise.loadLb, bodyWeightLb: profile.weightLb)
+            // The same shape dispatch every phone logging/edit surface uses
+            // (duration bills by the minute, rep exercises by the rep), so a
+            // wrist log and a later phone edit store the same figure. Computed
+            // here from the stored exercise, never sent over the wire.
+            let cal = CalorieEstimator.caloriesForSet(
+                exercise: exercise, reps: amount, holdSeconds: nil, bodyWeightLb: profile.weightLb)
             // `date` (not now) so an action queued offline lands on the day it
             // was taken — which is also the day the watch already counted it on.
             guard Repos.addSet(ctx, WorkoutSetDTO(

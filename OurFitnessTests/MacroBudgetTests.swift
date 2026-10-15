@@ -19,10 +19,10 @@ final class MacroBudgetTests: XCTestCase {
         XCTAssertEqual(r.fatG, 30)
     }
 
-    func test_build_targets_have_no_micro_caps() {
-        // Build mode never configures the cardiometabolic caps.
-        let v = Targets.ProfileVitals(sex: .male, weightLb: 180, heightIn: 70, age: 30, activity: .moderate)
-        let targets = Targets.compute(fitnessGoal: .gain, vitals: v)
+    func test_targets_without_micros_have_no_micro_headroom() {
+        // Targets stored before the heart-health micros became universal decode
+        // them as nil; the budget must stay nil rather than invent a cap.
+        let targets = MacroTargets(calories: 2000, proteinG: 150, carbsG: 200, fatG: 60, stepsDaily: 8000)
         let r = MacroBudget.remaining(totals: totals(cal: 0, p: 0, c: 0, f: 0), targets: targets)
         XCTAssertNil(r.sodiumMg)
         XCTAssertNil(r.addedSugarG)
@@ -30,7 +30,17 @@ final class MacroBudgetTests: XCTestCase {
         XCTAssertNil(r.fiberG)
     }
 
-    func test_circuit_caps_room_under_and_negative_when_over() {
+    func test_gain_goal_targets_carry_the_universal_micro_caps() {
+        let v = Targets.ProfileVitals(sex: .male, weightLb: 180, heightIn: 70, age: 30, activity: .moderate)
+        let targets = Targets.compute(fitnessGoal: .gain, vitals: v)
+        let r = MacroBudget.remaining(totals: totals(cal: 0, p: 0, c: 0, f: 0, fiber: 5, sodium: 500), targets: targets)
+        XCTAssertEqual(r.sodiumMg, 1_000)
+        XCTAssertEqual(r.addedSugarG, 25)
+        XCTAssertEqual(r.saturatedFatG, targets.saturatedFatGMax)
+        XCTAssertEqual(r.fiberG, 5 - 35)
+    }
+
+    func test_caps_room_under_and_negative_when_over() {
         let v = Targets.ProfileVitals(sex: .female, weightLb: 160, heightIn: 65, age: 35, activity: .light)
         let targets = Targets.compute(fitnessGoal: .lose, vitals: v)
         // Sodium 1500 cap; log 1700 -> 200 over -> remaining negative.
@@ -42,7 +52,7 @@ final class MacroBudgetTests: XCTestCase {
         XCTAssertLessThan(r.sodiumMg ?? 0, 0)
     }
 
-    func test_circuit_fiber_is_negative_until_floor_met() {
+    func test_fiber_is_negative_until_floor_met() {
         let v = Targets.ProfileVitals(sex: .female, weightLb: 160, heightIn: 65, age: 35, activity: .light)
         let targets = Targets.compute(fitnessGoal: .lose, vitals: v)
         let floor = targets.fiberGMin ?? 35

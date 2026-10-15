@@ -24,7 +24,7 @@ final class TargetRationaleTests: XCTestCase {
         XCTAssertEqual(c.delta, c.target - c.tdee)
     }
 
-    func test_build_is_surplus_circuit_is_deficit() {
+    func test_gain_is_surplus_lose_is_deficit() {
         XCTAssertTrue(TargetRationale.calories(for: profile(fitnessGoal: .gain)).isSurplus)
         XCTAssertFalse(TargetRationale.calories(for: profile(fitnessGoal: .lose)).isSurplus)
         XCTAssertLessThan(TargetRationale.calories(for: profile(fitnessGoal: .lose)).delta, 0)
@@ -52,29 +52,53 @@ final class TargetRationaleTests: XCTestCase {
 
     // MARK: - Fat
 
-    func test_fat_pct_is_reasonable_for_mode() {
-        // Build ~27%, Circuit ~28% of calories per Targets.rules.
+    func test_fat_pct_is_reasonable_for_goal() {
+        // Gain ~27%, lose ~28% of calories per Targets.rules.
         XCTAssertEqual(Double(TargetRationale.fatPctOfCalories(for: profile(fitnessGoal: .gain))), 27, accuracy: 3)
         XCTAssertEqual(Double(TargetRationale.fatPctOfCalories(for: profile(fitnessGoal: .lose))), 28, accuracy: 3)
     }
 
     // MARK: - Goal framing
 
-    func test_goal_line_is_mode_specific_and_plain() {
+    func test_goal_line_is_goal_specific_and_plain() {
         XCTAssertTrue(TargetRationale.goalLine(for: .gain).contains("muscle"))
         XCTAssertTrue(TargetRationale.goalLine(for: .lose).contains("lose weight"))
         // No bare acronyms in the goal line.
         XCTAssertFalse(TargetRationale.goalLine(for: .lose).contains("BP"))
     }
 
+    func test_copy_never_names_a_mode() {
+        let banned = ["Build", "Circuit", "mode"]
+        for goal in FitnessGoal.allCases {
+            let p = profile(fitnessGoal: goal)
+            let copy = [
+                TargetRationale.goalLine(for: goal),
+                TargetRationale.calorieWhy(for: p),
+                TargetRationale.proteinWhy(for: p),
+                TargetRationale.fiberWhy(for: p),
+                TargetRationale.sodiumWhy(for: p),
+                TargetRationale.addedSugarWhy(for: p),
+                TargetRationale.saturatedFatWhy(for: p),
+                TargetRationale.stepsWhy(fitnessGoal: goal, goal: 9_000),
+            ]
+            for line in copy {
+                for word in banned {
+                    // Whole-word match so "modest" / "moderate" don't trip "mode".
+                    XCTAssertNil(line.range(of: "\\b\(word)\\b", options: .regularExpression),
+                                 "\(goal): '\(word)' in \(line)")
+                }
+            }
+        }
+    }
+
     // MARK: - Steps
 
-    func test_steps_why_includes_goal_and_is_mode_specific() {
-        let circuit = TargetRationale.stepsWhy(fitnessGoal: .lose, goal: 10_000)
-        XCTAssertTrue(circuit.contains("10,000"))
-        let build = TargetRationale.stepsWhy(fitnessGoal: .gain, goal: 8_000)
-        XCTAssertTrue(build.contains("8,000"))
-        XCTAssertNotEqual(circuit, build)
+    func test_steps_why_includes_goal_and_is_goal_specific() {
+        let lose = TargetRationale.stepsWhy(fitnessGoal: .lose, goal: 10_000)
+        XCTAssertTrue(lose.contains("10,000"))
+        let gain = TargetRationale.stepsWhy(fitnessGoal: .gain, goal: 8_000)
+        XCTAssertTrue(gain.contains("8,000"))
+        XCTAssertNotEqual(lose, gain)
     }
 
     // MARK: - Marker meaning

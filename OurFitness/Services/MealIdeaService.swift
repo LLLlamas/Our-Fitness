@@ -19,7 +19,7 @@
 // `ideas(forCraving:...)` returns an empty array and callers fall back to the
 // deterministic `MealCravingMatcher` ("recommend according to previous meals").
 //
-// Availability + the session/do-catch envelope + the Build/Circuit mode line come
+// Availability + the session/do-catch envelope + the per-goal prompt line come
 // from Services/OnDeviceModel.swift, shared with the other four AI services.
 
 import Foundation
@@ -116,10 +116,10 @@ public final class MealIdeaService: @unchecked Sendable {
 
     private func prompt(craving: String, fitnessGoal: FitnessGoal, recentFoodNames: [String]) -> String {
         var parts = ["What they're in the mood for: \"\(craving)\". This craving comes first — every suggestion must match it."]
-        parts.append(OnDeviceModel.modeLine(
+        parts.append(OnDeviceModel.goalLine(
             fitnessGoal,
-            build: "All else equal, they are gaining lean muscle, so lean toward the higher-protein option among foods that still match the craving.",
-            circuit: "All else equal, they are losing body fat and improving heart health, so lean toward the lighter / higher-fibre option among foods that still match the craving — but if they asked for something salty or indulgent, honour that."
+            gain: "All else equal, the user's goal is to gain lean muscle, so lean toward the higher-protein option among foods that still match the craving.",
+            lose: "All else equal, the user's goal is to lose body fat and improve heart health, so lean toward the lighter / higher-fibre option among foods that still match the craving — but if they asked for something salty or indulgent, honour that."
         ))
         let context = recentFoodNames.map { $0.lowercased() }.filter { !$0.isEmpty }
         let unique = (NSOrderedSet(array: context).array as? [String] ?? context).prefix(10)

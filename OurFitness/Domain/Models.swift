@@ -127,11 +127,13 @@ public struct MacroTargets: Codable, Equatable, Sendable {
     public var carbsG: Int
     public var fatG: Int
     public var stepsDaily: Int
-    // Circuit heart-health caps + fibre floor. LIVE: Components/HeartHealthCard.swift
-    // renders these (mounted in NutritionView), Domain/MacroBudget.swift computes
-    // headroom from them, and Domain/TargetRationale.swift writes the four …Why
-    // strings. Build leaves all four nil. They were briefly documented here as
-    // legacy; deleting them on that basis would take a shipped feature with them.
+    // Heart-health caps + fibre floor, the same for every goal (Targets.HeartHealth).
+    // LIVE: Components/HeartHealthCard.swift renders these (mounted in NutritionView),
+    // Domain/MacroBudget.swift computes headroom from them, and
+    // Domain/TargetRationale.swift writes the four …Why strings. Optional only
+    // because targets stored before they became universal decode them as nil
+    // (Seeder recomputes those). They were briefly documented here as legacy;
+    // deleting them on that basis would take a shipped feature with them.
     public var sodiumMgMax: Int?
     public var addedSugarGMax: Int?
     public var saturatedFatGMax: Int?
@@ -254,7 +256,7 @@ extension PerServing {
 public struct FoodDTO: Codable, Equatable, Sendable, Identifiable {
     public var id: String
     public var name: String
-    public var modeFit: [FitnessGoal]
+    public var modeFit: [FitnessGoal]   // legacy/unread — persisted only; nothing filters by it
     public var category: FoodCategory
     public var recipe: String?
     public var servings: Double
@@ -298,9 +300,8 @@ public struct ExerciseDTO: Codable, Equatable, Sendable, Identifiable {
     public var muscleGroups: [String]
     public var equipment: [Equipment]
     public var defaultRepRange: [Int]?  // [bottom, top]
-    /// Modes this exercise is offered in. Defaults to both modes when decoding
-    /// legacy rows. Now that exercises are per-profile (V2), this field is
-    /// effectively informational; rep counter sources from `profileId`.
+    /// Legacy/unread: which retired mode the exercise was offered in. Kept for
+    /// persistence + payload compatibility only — nothing filters by it.
     public var availableForMode: [FitnessGoal]
     public var profileId: UUID?
     public var loadLb: Double?
@@ -349,6 +350,20 @@ public struct ExerciseDTO: Codable, Equatable, Sendable, Identifiable {
         self.loadLb = try c.decodeIfPresent(Double.self, forKey: .loadLb)
         self.kind = try c.decodeIfPresent(ExerciseKind.self, forKey: .kind) ?? .reps
         self.isIsometric = try c.decodeIfPresent(Bool.self, forKey: .isIsometric) ?? false
+    }
+
+    /// A loadable lift whose weight changes set to set (barbell press, curl…) —
+    /// no fixed `loadLb`, counted in reps, not a hold. Logging one needs a weight
+    /// field, so it gets the rep counter rather than a one-tap +1.
+    public var tracksPerSetWeight: Bool {
+        !isIsometric && kind == .reps && loadLb == nil
+            && (category == .compound || category == .isolation)
+    }
+
+    /// One tap records this correctly: no per-set weight to enter and not a
+    /// timed hold (a hold is `{reps:1, holdSeconds:N}`).
+    public var isOneTapLoggable: Bool {
+        !isIsometric && !tracksPerSetWeight
     }
 }
 
@@ -419,7 +434,7 @@ public struct ProgramDayDTO: Codable, Equatable, Sendable {
 public struct ProgramDTO: Codable, Equatable, Sendable, Identifiable {
     public var id: String
     public var name: String
-    public var modeFit: [FitnessGoal]
+    public var modeFit: [FitnessGoal]   // legacy/unread — persisted only; nothing filters by it
     public var schedule: [ProgramDayDTO]
     public var progression: ProgressionScheme
     public var notes: String?
@@ -900,7 +915,7 @@ public struct RemainingMacros: Equatable, Sendable {
     }
 }
 
-// MARK: - Cardio sessions (Circuit)
+// MARK: - Cardio sessions (legacy, read-only)
 
 public enum CardioType: String, Codable, CaseIterable, Sendable {
     case walk, run, bike, swim, elliptical, other

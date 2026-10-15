@@ -28,7 +28,7 @@ struct ProgressTabView: View {
 
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
-    /// Per-profile custom tracker visibility. Empty = use the mode defaults;
+    /// Per-profile custom tracker visibility. Empty = use the defaults;
     /// "none" = customized to show nothing; otherwise a CSV of StatKind raw values.
     /// IMPORTANT: never add a StatKind whose rawValue is "none" — it collides with the sentinel.
     @AppStorage private var enabledStatsRaw: String
@@ -82,7 +82,7 @@ struct ProgressTabView: View {
 
     private var targetCalories: Int { profile.computedTargets.calories }
 
-    /// The enabled tracker set: mode defaults until the user customizes, then
+    /// The enabled tracker set: the defaults until the user customizes, then
     /// whatever they chose (including the empty "none" state).
     ///
     /// The default is deliberately small — only trackers the app can fill in
@@ -91,7 +91,7 @@ struct ProgressTabView: View {
     /// cards. Once the user customizes, the stored CSV wins outright.
     private func enabledSet(body: [BodyMetricDTO], markers: [HealthMarkerDTO]) -> Set<String> {
         if enabledStatsRaw.isEmpty {
-            var set = Set(StatKind.allCases.filter { $0.isRelevant(for: profile.fitnessGoal) }.map(\.rawValue))
+            var set = Set(StatKind.allCases.filter(\.isDefault).map(\.rawValue))
             for kind in StatKind.allCases where !set.contains(kind.rawValue) {
                 if kind.hasLoggedData(body: body, markers: markers) { set.insert(kind.rawValue) }
             }
@@ -190,7 +190,7 @@ struct ProgressTabView: View {
                     }
                 }
 
-                // Calorie intake vs activity burn — shown for both modes, but
+                // Calorie intake vs activity burn — shown for every goal, but
                 // only once there is something to compare. Ungated, a fresh
                 // install saw "Calories in 0 / 2800 cal · BURNED 0", which
                 // reads as broken rather than empty. (Training history two
@@ -215,7 +215,7 @@ struct ProgressTabView: View {
             detailSheet(for: kind)
         }
         .sheet(isPresented: $showEditTrackers) {
-            EditTrackersSheet(enabled: enabled, fitnessGoal: profile.fitnessGoal) { newSet in
+            EditTrackersSheet(enabled: enabled) { newSet in
                 persistEnabled(newSet)
             }
         }
@@ -570,16 +570,16 @@ enum StatKind: String, CaseIterable, Identifiable {
     /// Shown by default on a fresh profile. The bar is "can the app fill this in
     /// on its own?" — anything needing calipers, a tape measure, a cuff, or a
     /// blood draw starts hidden so first open isn't a wall of dashes. Every
-    /// tracker is still one tap away in Edit trackers.
-    func isRelevant(for fitnessGoal: FitnessGoal) -> Bool {
+    /// tracker is still one tap away in Edit trackers. One set for every goal.
+    var isDefault: Bool {
         switch self {
         case .weight, .stepsAvg, .trainingVolume:
             // Weight: in-app wheel + Health sync. Steps: Health. Sets: in-app.
             return true
         case .restingHR, .bp:
-            // Circuit is the cardiovascular mode: resting HR arrives from Health,
-            // and blood pressure is the one marker that's cheap to self-measure.
-            return fitnessGoal == .lose
+            // Heart-health markers: resting HR arrives from Health, and blood
+            // pressure is the one marker that's cheap to self-measure.
+            return true
         case .bmi:
             // Derived from weight + profile height — the Weight card already
             // shows that number and a more useful lb/week trend.

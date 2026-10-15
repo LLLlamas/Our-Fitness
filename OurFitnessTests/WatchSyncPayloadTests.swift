@@ -43,7 +43,7 @@ final class WatchSyncPayloadTests: XCTestCase {
             schemaVersion: WatchSnapshotEnvelope.currentSchemaVersion,
             profileId: profileId,
             profileName: "Sam",
-            mode: "reset", // Circuit's raw value, per the back-compat note in CLAUDE.md
+            mode: "reset", // FitnessGoal.lose's persisted raw value (the old Circuit name); wire data, kept for back-compat
             bodyWeightLb: 163.4,
             reminders: [
                 ReminderSnapshot(

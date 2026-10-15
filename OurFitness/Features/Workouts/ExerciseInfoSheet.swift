@@ -1,9 +1,8 @@
-// The ⓘ sheet behind every exercise, in BOTH modes.
+// The ⓘ sheet behind every exercise — one sheet, the same for every profile.
 //
-// Build opens it from the lift list and the rep counter / isometric timer;
-// Circuit opens it from the movement quick-log row. It used to exist twice
-// (BuildExerciseInfoSheet + a private ExerciseInfoSheet in BabyExercisesCard)
-// with the same content in two layouts and two copies of the AI loader.
+// Opened from the Train tab's exercise rows (`ExercisesCard`) and from the rep
+// counter / isometric timer. It used to exist twice, with the same content in
+// two layouts and two copies of the AI loader.
 //
 // Content sources, in priority order and never invented:
 //   • Movement.postExerciseHint — researched recovery + spine-safety form cues
@@ -18,9 +17,9 @@ import SwiftUI
 struct ExerciseInfoSheet: View {
     let exercise: ExerciseDTO
     let profile: ProfileDTO
-    /// Circuit's quick-log knows today's tally for this movement and passes it
-    /// so the sheet can show it. Build's lift cards show their own stats and
-    /// leave this at zero, which hides the block.
+    /// Today's tally, passed by the exercise list: reps, minutes for a
+    /// duration exercise, or holds for an isometric. The rep counter and hold
+    /// timer leave this at zero, which hides the block.
     var todayCount: Int = 0
     var todayKcal: Double = 0
 
@@ -59,25 +58,25 @@ struct ExerciseInfoSheet: View {
         return info.benefits
     }
 
-    /// Sample burn at the user's body weight, computed the same way the mode
-    /// actually logs it — Circuit quick-log uses the flat load-aware estimate,
-    /// Build's rep counter uses the exercise's researched MET and tempo.
+    /// Sample burn at the user's body weight, through the same per-set
+    /// estimator every logging surface writes with — so the sample matches
+    /// what a logged set will actually store.
+    private func sampleCal(reps: Int, holdSeconds: Int? = nil) -> Int {
+        Int(CalorieEstimator.caloriesForSet(
+            exercise: exercise, reps: reps, holdSeconds: holdSeconds,
+            bodyWeightLb: profile.weightLb
+        ))
+    }
+
     private var sampleCalLabel: String {
         if exercise.isIsometric {
-            let cal30 = CalorieEstimator.caloriesForIsometric(seconds: 30, met: info.met, bodyWeightLb: profile.weightLb)
-            let cal60 = CalorieEstimator.caloriesForIsometric(seconds: 60, met: info.met, bodyWeightLb: profile.weightLb)
-            return "~\(Int(cal30)) cal / 30s · ~\(Int(cal60)) cal / 60s at your weight"
+            return "~\(sampleCal(reps: 1, holdSeconds: 30)) cal / 30s · ~\(sampleCal(reps: 1, holdSeconds: 60)) cal / 60s at your weight"
         }
         if exercise.kind == .duration {
-            let cal10 = CalorieEstimator.caloriesForDuration(
-                minutes: 10, loadLb: exercise.loadLb, bodyWeightLb: profile.weightLb
-            )
-            return "~\(Int(cal10)) cal per 10 min at your weight"
+            // A duration exercise's `reps` are minutes.
+            return "~\(sampleCal(reps: 10)) cal per 10 min at your weight"
         }
-        let reps10 = profile.fitnessGoal == .lose
-            ? CalorieEstimator.caloriesForReps(reps: 10, loadLb: exercise.loadLb, bodyWeightLb: profile.weightLb)
-            : CalorieEstimator.caloriesForReps(reps: 10, exercise: exercise, bodyWeightLb: profile.weightLb)
-        return "~\(Int(reps10)) cal per 10 reps at your weight"
+        return "~\(sampleCal(reps: 10)) cal per 10 reps at your weight"
     }
 
     var body: some View {
@@ -112,7 +111,7 @@ struct ExerciseInfoSheet: View {
         .task(id: exercise.id) { await loadAIIfNeeded() }
     }
 
-    /// The single AI loader both modes now share.
+    /// The single AI loader.
     private func loadAIIfNeeded() async {
         guard canUseAI, ai == nil else { return }
         if let cached = ExerciseInsightService.shared.cached(for: exercise) {
@@ -233,13 +232,18 @@ struct ExerciseInfoSheet: View {
                         .font(.caption).tracking(2).textCase(.uppercase)
                         .foregroundStyle(theme.dim)
                 }
-                Text(exercise.kind == .duration
-                     ? "\(todayCount) min · ~\(Int(todayKcal)) cal burned"
-                     : "\(todayCount) reps · ~\(Int(todayKcal)) cal burned")
+                Text("\(todayTallyLabel) · ~\(Int(todayKcal)) cal burned")
                     .font(.callout)
                     .foregroundStyle(theme.text)
             }
         }
+    }
+
+    /// Hold first: an isometric is also `.duration` kind.
+    private var todayTallyLabel: String {
+        if exercise.isIsometric { return "\(todayCount) hold\(todayCount == 1 ? "" : "s")" }
+        if exercise.kind == .duration { return "\(todayCount) min" }
+        return "\(todayCount) rep\(todayCount == 1 ? "" : "s")"
     }
 
     @ViewBuilder

@@ -11,8 +11,10 @@
 // with no cap), and we tint toward the "over time" accent.
 //
 // Styling note: a widget extension cannot read the app's Theme environment, so we
-// use a small static palette here (warm accents that read on both Lock Screen
-// backgrounds). Keep it legible and self-contained.
+// use a small static palette here. Both accents are mid-luminance and are used
+// only as foreground/tint colours over the dark activity background — never as a
+// fill behind text — so they stay legible on the Lock Screen and Dynamic Island.
+// Keep it legible and self-contained.
 
 #if canImport(ActivityKit)
 import ActivityKit
@@ -21,7 +23,10 @@ import WidgetKit
 
 @available(iOS 16.2, *)
 private enum LSPalette {
-    static let accent = Color(red: 0.96, green: 0.58, blue: 0.20)   // warm amber, on-brand
+    // Mirrors Theme.standard in OurFitness/Services/Theme.swift (accent / accent2).
+    // Copied, not imported: the widget target doesn't compile Theme.
+    static let accent = Color(red: 0.498, green: 0.631, blue: 0.447)   // sage — icons, keyline
+    static let accent2 = Color(red: 0.788, green: 0.482, blue: 0.353)  // terracotta — running timer
     static let text = Color.primary
     static let dim = Color.secondary
 }
@@ -55,7 +60,7 @@ struct LiveSessionLiveActivity: Widget {
                 DynamicIslandExpandedRegion(.center) {
                     Text(timerInterval: timerRange(context), countsDown: false)
                         .font(.system(size: 34, weight: .semibold, design: .monospaced))
-                        .foregroundStyle(LSPalette.accent)
+                        .foregroundStyle(LSPalette.accent2)
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity)
                 }
@@ -65,7 +70,7 @@ struct LiveSessionLiveActivity: Widget {
             } compactTrailing: {
                 Text(timerInterval: timerRange(context), countsDown: false)
                     .monospacedDigit()
-                    .foregroundStyle(LSPalette.accent)
+                    .foregroundStyle(LSPalette.accent2)
                     .frame(maxWidth: 54)
             } minimal: {
                 Image(systemName: context.attributes.symbol)
@@ -113,7 +118,7 @@ private struct LockScreenLiveSessionView: View {
 
             Text(timerInterval: range, countsDown: false)
                 .font(.system(size: 30, weight: .semibold, design: .monospaced))
-                .foregroundStyle(LSPalette.accent)
+                .foregroundStyle(LSPalette.accent2)
                 .frame(minWidth: 90, alignment: .trailing)
         }
     }

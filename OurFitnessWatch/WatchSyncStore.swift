@@ -277,7 +277,7 @@ final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
         case .logQuickSet(let exerciseId, let amount, _):
             guard let idx = env.quickLogExercises.firstIndex(where: { $0.id == exerciseId }) else { return }
             // loggedToday is a SUM of reps (or minutes), matching what the phone's
-            // BabyExercisesCard shows — not a count of sets.
+            // ExercisesCard shows — not a count of sets.
             env.quickLogExercises[idx].loggedToday += amount
             lastLoggedAmount[exerciseId] = amount
         case .undoQuickSet(let exerciseId, _):

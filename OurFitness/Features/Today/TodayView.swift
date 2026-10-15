@@ -1,7 +1,7 @@
 // Today tab — single-screen daily overview.
 //
-// Same shape in both modes: macro rings | move | water | steps | today's food log.
-// Strength, live sessions, Pilates, and Circuit's parenting movements live in the
+// One layout for everyone: macro rings | move | water | steps | today's food log.
+// Strength, live sessions, Pilates, and the parenting movements live in the
 // Train tab.
 //
 // Everything here is a READOUT. Steps live in exactly one card (`StepsCard`) —
@@ -30,7 +30,7 @@ struct TodayView: View {
     @Query private var bodyModels: [BodyMetricModel]
     @Query private var markerModels: [HealthMarkerModel]
 
-    // Real HealthKit figures for StepsCard's Circuit variant — loaded in
+    // Real HealthKit figures for StepsCard's pace line and week stats — loaded in
     // refreshToday(). nil / empty means "Health gave us nothing", and the card
     // hides those rows rather than showing zeros.
     @State private var intradayStepsToday: [Int] = []
@@ -49,7 +49,7 @@ struct TodayView: View {
 
     // Mirror the same AppStorage keys used by StepsCard's goal picker (via
     // StepsGoalPrefs) so the streak calculation here uses the user's configured
-    // goals, not the mode defaults.
+    // goals, not the goal's defaults.
     @AppStorage private var customStepsGoalRaw: Int
     @AppStorage private var customWeeklyDaysRaw: Int
 
@@ -135,7 +135,7 @@ struct TodayView: View {
     private var todaysLogs: [FoodLogEntryDTO] { logModels.map(\.snapshot) }
     private var totals: DailyTotals { DailyTotals.totals(from: todaysLogs) }
 
-    // Step data — used by both Build (linear bar) and Circuit (ring + strip)
+    // Step data — StepsCard's ring, weekly strip and streak
     private var allStepsForProfile: [StepCountDTO] {
         stepModels.map(\.snapshot)
     }
@@ -144,7 +144,7 @@ struct TodayView: View {
     }
     private var weeklySteps: [Trends.Point] { Steps.series(allStepsForProfile, days: 7) }
     private var effectiveStepsGoal: Int {
-        StepsGoalPrefs.resolve(custom: customStepsGoalRaw, modeDefault: profile.computedTargets.stepsDaily)
+        StepsGoalPrefs.resolve(custom: customStepsGoalRaw, goalDefault: profile.computedTargets.stepsDaily)
     }
     private var stepStreakWeeks: Int {
         Movement.stepWeeklyStreak(
@@ -173,14 +173,8 @@ struct TodayView: View {
 
                 WaterCard(profile: profile)
 
-                // Tail: one StepsCard serves both modes (Build = hero count +
-                // bar, Circuit = ring + weekly strip), then today's food log.
-                // Circuit adds its "why steps" focus footer between the two —
-                // the only difference, so there's one layout, not two.
+                // Tail: the one StepsCard, then today's food log.
                 stepsCard
-                if profile.fitnessGoal == .lose {
-                    focusFooter(.steps)
-                }
                 recentLogs
             }
             .padding(.horizontal, 20)
@@ -335,9 +329,8 @@ struct TodayView: View {
 
     // MARK: - Steps
 
-    // One mode-aware steps card for both modes (Build = hero count + bar,
-    // Circuit = ring + weekly strip + week-to-date Health stats). The only
-    // steps surface on Today — MoveCard shows none.
+    // The one steps card (ring + weekly strip + week-to-date Health stats).
+    // The only steps surface on Today — MoveCard shows none.
     @ViewBuilder
     private var stepsCard: some View {
         StepsCard(
@@ -348,20 +341,8 @@ struct TodayView: View {
             intradayToday: intradayStepsToday,
             intradayYesterday: intradayStepsYesterday,
             activeEnergyKcalThisWeek: activeEnergyCalThisWeek,
-            exerciseMinutesThisWeek: exerciseMinutesThisWeek,
-            onConnectHealth: connectHealth
+            exerciseMinutesThisWeek: exerciseMinutesThisWeek
         )
-    }
-
-    @ViewBuilder
-    private func focusFooter(_ kind: Movement.CircuitFocusKind) -> some View {
-        HStack(alignment: .top, spacing: 6) {
-            Text(Movement.circuitFocusBlurb(for: kind))
-                .font(.caption).italic()
-                .foregroundStyle(theme.dim)
-            FocusInfoButton(kind: kind)
-        }
-        .padding(.horizontal, 4)
     }
 
     /// Read-only. Adding, editing and deleting food all live on the Meals tab —
@@ -482,94 +463,14 @@ struct TodayView: View {
         await refreshStepsCardExtras()
     }
 
-    /// The pace-vs-yesterday line and the week-to-date stats only exist in the
-    /// Circuit variant of StepsCard, so only pay for those reads there. Reads
+    /// StepsCard's pace-vs-yesterday line and week-to-date stats. Reads
     /// only — no requestAuthorization on this path (see refreshToday()).
     private func refreshStepsCardExtras() async {
-        guard profile.fitnessGoal == .lose else { return }
         intradayStepsToday = await health.hourlyCumulativeSteps()
         if let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) {
             intradayStepsYesterday = await health.hourlyCumulativeSteps(for: yesterday)
         }
         activeEnergyCalThisWeek = await health.activeEnergyThisWeekCal()
         exerciseMinutesThisWeek = await health.exerciseMinutesThisWeek()
-    }
-}
-
-// MARK: - Focus info button (reused from Circuit context — now lives in TodayView)
-
-private struct FocusInfoButton: View {
-    let kind: Movement.CircuitFocusKind
-    @State private var show = false
-    @Environment(\.theme) private var theme
-
-    var body: some View {
-        Button { show = true } label: {
-            Image(systemName: "info.circle")
-                .font(.system(size: 11))
-                .foregroundStyle(theme.dim)
-        }
-        .tactile(.ghost)
-        .sheet(isPresented: $show) {
-            FocusInfoSheet(kind: kind)
-        }
-    }
-}
-
-private struct FocusInfoSheet: View {
-    let kind: Movement.CircuitFocusKind
-    @Environment(\.theme) private var theme
-
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 14) {
-                Text(kind.title.uppercased())
-                    .font(.caption).tracking(2).foregroundStyle(theme.dim)
-                Text(kind.infoDetail)
-                    .font(.callout).foregroundStyle(theme.text)
-                    .fixedSize(horizontal: false, vertical: true)
-                Divider().background(theme.line)
-                Text(kind.citation)
-                    .font(.caption2).foregroundStyle(theme.dim)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .padding(20)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .presentationDetents([.medium])
-        .presentationDragIndicator(.visible)
-        .presentationBackground(theme.bg)
-    }
-}
-
-private extension Movement.CircuitFocusKind {
-    var title: String {
-        switch self {
-        case .steps:   return "Why steps?"
-        case .pilates: return "Why pilates?"
-        case .cardio:  return "Why cardio?"
-        }
-    }
-
-    var infoDetail: String {
-        switch self {
-        case .steps:
-            return "Walking is the easiest health win there is, and more is better. Every extra 1,000–2,000 steps a day lowers your risk of dying early, with most of the payoff landing by about 7,000–8,000 steps. Walking reliably brings blood pressure down a few points; effects on cholesterol and blood sugar are smaller and show up best when you also do some cardio.\n\nWorks: calves, thighs (quads), glutes (your seat muscles), hip flexors, and the deep core muscles that keep you upright. Over time: your heart, your everyday calorie burn, and your bones."
-        case .pilates:
-            return "Pilates builds core and posture strength, helps your balance, and eases lower-back pain. Doing it consistently for two months or more lowers the top blood-pressure number by about 4–5 points on average.\n\nWorks: the deep stomach muscle that acts like a built-in belt (transverse abdominis), the side-of-waist muscles (obliques), the muscles running up your spine (erector spinae), your glutes, and hip flexors — which ones depend on the focus area."
-        case .cardio:
-            return "Easy, steady cardio — a pace where you can still hold a conversation — strengthens your heart, nudges your 'good' cholesterol (HDL) up a couple of points, and lowers the fat circulating in your blood (triglycerides). Hitting the recommended 150 minutes a week lowers heart-disease risk by roughly 15–20%, with bigger drops as you do more.\n\nWorks: your heart most of all, plus your lower body (thighs, hamstrings, calves) and core."
-        }
-    }
-
-    var citation: String {
-        switch self {
-        case .steps:
-            return "Sources: Saint-Maurice et al., JAMA, 2020; Ding et al., Lancet Public Health, 2025 (steps and mortality); Hanson & Jones, Br J Sports Med, 2015 (blood pressure)."
-        case .pilates:
-            return "Source: Pilates and blood pressure meta-analysis, J Hum Hypertens, 2024."
-        case .cardio:
-            return "Sources: Sattelmair et al., Circulation, 2011; U.S. Physical Activity Guidelines, 2nd ed., 2018."
-        }
     }
 }

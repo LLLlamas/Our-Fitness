@@ -1,11 +1,11 @@
 // Turns a profile (+ optional latest health markers) into personalized,
 // plain-language explanations of WHY each nutrition / movement target is what
-// it is — anchored to the user's OWN numbers and their Mode's goal.
+// it is — anchored to the user's OWN numbers and their fitness goal.
 //
-//   Build   = slowly add muscle & mass        (calorie surplus, high protein)
-//   Circuit = lose weight & improve the heart-health numbers
-//             (cholesterol, blood pressure, blood sugar) via a modest deficit,
-//             steps, and cardio.
+//   .gain = slowly add muscle & mass        (calorie surplus, high protein)
+//   .lose = lose weight via a modest deficit, steps, and cardio.
+//   Heart-health targets (fiber, sodium, added sugar, saturated fat) apply to
+//   everyone regardless of goal.
 //
 // Pure Swift. No SwiftUI / SwiftData. All numbers are derived from Targets /
 // CalorieEstimator so the copy can never drift from the math the app uses.
@@ -23,15 +23,15 @@ import Foundation
 
 public enum TargetRationale {
 
-    // MARK: - Goal framing (Mode → plain English)
+    // MARK: - Goal framing (FitnessGoal → plain English)
 
-    /// One-line plain-English goal for the mode. No acronyms.
+    /// One-line plain-English goal. No acronyms.
     public static func goalLine(for fitnessGoal: FitnessGoal) -> String {
         switch fitnessGoal {
         case .gain:
-            return "You're in Build mode — the goal is to slowly add muscle and mass."
+            return "Your goal is to build muscle — slowly adding muscle and mass."
         case .lose:
-            return "You're in Circuit mode — the goal is to lose weight and improve your heart-health numbers (cholesterol, blood pressure, blood sugar)."
+            return "Your goal is to lose weight — and improve your heart-health numbers (cholesterol, blood pressure, blood sugar) along the way."
         }
     }
 
@@ -118,10 +118,10 @@ public enum TargetRationale {
         "Fat is set to about \(fatPctOfCalories(for: p))% of your calories (\(p.computedTargets.fatG)g). Some fat is essential — your body needs it to make hormones and to absorb vitamins A, D, E, and K. Eating very low-fat can modestly lower testosterone, so this stays at a sensible floor."
     }
 
-    // MARK: - Circuit cardiometabolic targets (fiber floor + sodium / added-sugar / saturated-fat caps)
+    // MARK: - Heart-health targets (fiber floor + sodium / added-sugar / saturated-fat caps)
     //
-    // These four only apply in Circuit mode (the caps are nil in Build). Copy ties
-    // each to the heart-health numbers Circuit exists to improve. Sources: soluble
+    // These four apply to every profile regardless of goal. Copy ties each to the
+    // heart-health numbers (cholesterol, blood pressure, blood sugar). Sources: soluble
     // fibre lowers LDL (Whitehead, AJCN 2014); DASH + lower sodium lowers blood
     // pressure (Sacks, NEJM 2001); added sugar and triglycerides (Te Morenga, BMJ
     // 2012); saturated-fat swap lowers LDL (Hooper, Cochrane 2020).
@@ -161,14 +161,14 @@ public enum TargetRationale {
         case .gain:
             return "Your \(goal.formatted())-step goal keeps you active on top of lifting. Most of the health payoff from walking shows up by about 7,000–8,000 steps a day — every extra 1,000–2,000 steps lowers your risk of dying early, and the calories burned support your recovery without eating into your surplus."
         case .lose:
-            return "Your \(goal.formatted())-step goal is the movement engine for Circuit. Walking reliably brings blood pressure down a few points and is your most repeatable daily calorie burn. Most of the benefit lands by about 7,000–8,000 steps — going higher keeps adding a little more. (Cholesterol and blood sugar respond best when you pair steps with cardio and the food tips.)"
+            return "Your \(goal.formatted())-step goal is your daily movement engine. Walking reliably brings blood pressure down a few points and is your most repeatable daily calorie burn. Most of the benefit lands by about 7,000–8,000 steps — going higher keeps adding a little more. (Cholesterol and blood sugar respond best when you pair steps with cardio and the food tips.)"
         }
     }
 
     // MARK: - Health markers (Progress)
 
     /// Plain-English "what your number means + what moves it", personalized to
-    /// the user's latest value and tied to the mode goal. Returns nil for
+    /// the user's latest value. Goal-neutral copy. Returns nil for
     /// markers without a logged value (caller can fall back to the range line).
     ///
     /// Reference cut-points: ACC/AHA 2017 (blood pressure); NCEP ATP III labels

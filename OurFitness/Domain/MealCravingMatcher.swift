@@ -32,7 +32,7 @@ public enum MealCravingMatcher {
         public var id: String { meal.id }
     }
 
-    /// Rank the mode's curated meals against a free-text craving. Honours the
+    /// Rank the full curated meal pool against a free-text craving. Honours the
     /// profile's allergen restrictions, biases toward foods the user logs/favourites,
     /// and parses simple constraints (calorie target, protein hint, flavour) from
     /// the text. `now` is injectable so history windows are deterministic in tests.
@@ -45,8 +45,8 @@ public enum MealCravingMatcher {
         limit: Int = 5,
         now: Date = Date()
     ) -> [CravingMatch] {
-        let pool = SuggestedMeals.suggestions(for: profile.fitnessGoal)
-            .filter { !hasRestrictedAllergen($0, restrictions: profile.restrictions) }
+        let pool = SuggestedMeals.all
+            .filter { !SuggestedMeals.mealHasRestrictedAllergen($0, restrictions: profile.restrictions) }
 
         let q = craving.lowercased()
         let flavors = flavorClasses(triggeredBy: q)
@@ -164,8 +164,8 @@ public enum MealCravingMatcher {
             break
         }
 
-        // Mode tilt: nudge within the (already mode-filtered) pool toward each mode's
-        // macro priorities — Build favours protein + calorie density, Circuit favours
+        // Goal tilt: nudge within the shared pool toward the user's goal's macro
+        // priorities — gaining favours protein + calorie density, losing favours
         // fibre + leaner picks. Small adds so the craving's flavour/keyword stays the
         // primary signal; only reached after the gate.
         let ps = meal.perServing
@@ -430,18 +430,6 @@ public enum MealCravingMatcher {
 
     private static func flavorClasses(triggeredBy text: String) -> [Flavor] {
         flavors.filter { f in f.triggers.contains(where: { text.contains($0) }) }
-    }
-
-    // MARK: - Allergens (mirrors SuggestedMeals)
-
-    private static func hasRestrictedAllergen(
-        _ meal: SuggestedMeal, restrictions: [String]
-    ) -> Bool {
-        guard !restrictions.isEmpty, !meal.allergens.isEmpty else { return false }
-        let norm = restrictions.map { $0.lowercased() }
-        return meal.allergens.contains { tag in
-            norm.contains { $0.contains(tag) || tag.contains($0) }
-        }
     }
 }
 

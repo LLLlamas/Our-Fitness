@@ -16,16 +16,19 @@ public enum StallDetector {
     public enum Stall: Equatable, Sendable {
         case stepsGap(days: Int)
         case workoutGap(days: Int)
-        case pilatesGap(days: Int)              // Circuit only
-        case weightStall(weeks: Int)            // Circuit only
+        case pilatesGap(days: Int)              // only for a 7–30 day lapse
+        case weightStall(weeks: Int)            // .lose goal only
         case markerStall(HealthMarkerKind, weeks: Int)
     }
 
     // Thresholds (spec). Public so tests + callers read the same numbers.
     public static let stepsGapDays = 2
-    public static let workoutGapBuildDays = 5
-    public static let workoutGapCircuitDays = 7
+    public static let workoutGapGainDays = 5
+    public static let workoutGapLoseDays = 7
     public static let pilatesGapDays = 7
+    /// Past this, Pilates reads as something the user tried and moved on from —
+    /// not a habit that lapsed — so it no longer earns a nudge.
+    public static let pilatesGapMaxDays = 30
     public static let weightStallDays = 14
     public static let weightStallMinLossLbPerWeek = 0.1
     public static let markerStallWeeks = 6
@@ -54,20 +57,21 @@ public enum StallDetector {
             if gap >= stepsGapDays { return .stepsGap(days: gap) }
         }
 
-        // 2) Workout — last logged set ≥ N days back (N depends on mode).
-        let workoutThreshold = fitnessGoal == .gain ? workoutGapBuildDays : workoutGapCircuitDays
+        // 2) Workout — last logged set ≥ N days back (N depends on the goal).
+        let workoutThreshold = fitnessGoal == .gain ? workoutGapGainDays : workoutGapLoseDays
         if let lastSet = sets.map(\.timestamp).max() {
             let gap = daysAgo(lastSet, now: now)
             if gap >= workoutThreshold { return .workoutGap(days: gap) }
         }
 
-        // 3) Pilates — Circuit only.
-        if fitnessGoal == .lose, let lastPilates = pilates.map(\.date).max() {
+        // 3) Pilates — any goal, but only a recent lapse (7–30 days). Never done
+        //    Pilates → no nudge; last session over a month ago → let it go.
+        if let lastPilates = pilates.map(\.date).max() {
             let gap = daysAgo(lastPilates, now: now)
-            if gap >= pilatesGapDays { return .pilatesGap(days: gap) }
+            if gap >= pilatesGapDays && gap <= pilatesGapMaxDays { return .pilatesGap(days: gap) }
         }
 
-        // 4) Weight — Circuit only: the recent trend isn't losing fast enough.
+        // 4) Weight — .lose goal only: the recent trend isn't losing fast enough.
         if fitnessGoal == .lose, let weeks = weightStallWeeks(weights, now: now) {
             return .weightStall(weeks: weeks)
         }

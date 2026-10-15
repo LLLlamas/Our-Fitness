@@ -64,7 +64,7 @@ public enum Repos {
         )
         let saved = RepositoryWrite.perform(ctx) {
             ctx.insert(ProfileModel(snapshot: dto))
-            if fitnessGoal == .lose { try seedCircuitExercises(ctx, profileId: dto.id) }
+            try seedStarterMovements(ctx, profileId: dto.id)
             ctx.insert(ReminderGroupModel(snapshot: ReminderGroupDTO(
                 userId: dto.id, name: "Plants", sfSymbol: "leaf.fill", kind: .plants)))
             ctx.insert(ReminderGroupModel(snapshot: ReminderGroupDTO(
@@ -73,10 +73,11 @@ public enum Repos {
         return saved ? dto : nil
     }
 
-    /// Seeds the three parenting-flavored exercises Circuit mode is built
-    /// around. Idempotent: skips any exercise already present for the profile
-    /// with a matching name.
-    private static func seedCircuitExercises(_ ctx: ModelContext, profileId: UUID) throws {
+    /// Seeds the three parenting movements every new profile starts with,
+    /// whatever its goal. Idempotent: skips any exercise already present for the
+    /// profile with a matching name. Called only from `createProfile` — changing
+    /// goal never seeds, and existing profiles are not backfilled.
+    private static func seedStarterMovements(_ ctx: ModelContext, profileId: UUID) throws {
         let descriptor = FetchDescriptor<ExerciseModel>(predicate: #Predicate { $0.profileId == profileId })
         let existing = Set(try ctx.fetch(descriptor).map(\.name))
         let seeds: [(name: String, loadLb: Double, kind: ExerciseKind, muscles: [String])] = [
@@ -124,11 +125,7 @@ public enum Repos {
             if let v = sex      { model.sexRaw = v.rawValue }
             if let v = activity { model.activityRaw = v.rawValue }
 
-            let updated = model.snapshot
-            model.targetsJSON = try JSONEncoder().encode(
-                Targets.compute(fitnessGoal: updated.fitnessGoal, vitals: updated.vitals)
-            )
-            model.updatedAt = Date()
+            try recomputeTargets(model)
             updatedProfile = model.snapshot
         }
         return saved ? updatedProfile : nil
@@ -161,12 +158,12 @@ public enum Repos {
         return updateVitals(ctx, profileId: profileId, weightLb: latest)
     }
 
-    /// Switch a profile's mode at will. Recomputes macro/step targets from the
-    /// profile's existing vitals (logs are mode-agnostic and untouched) and, when
-    /// switching to Circuit, seeds the parenting exercises (idempotent). Returns
-    /// the updated DTO, or nil if the profile no longer exists.
+    /// Switch a profile's fitness goal at will. Recomputes macro/step targets
+    /// from the profile's existing vitals (logs are goal-agnostic and untouched).
+    /// Never seeds anything. Returns the updated DTO, or nil if the profile no
+    /// longer exists or the save failed.
     @discardableResult
-    public static func updateMode(_ ctx: ModelContext, profileId: UUID, to newMode: FitnessGoal) -> ProfileDTO? {
+    public static func updateGoal(_ ctx: ModelContext, profileId: UUID, to newGoal: FitnessGoal) -> ProfileDTO? {
         var updatedProfile: ProfileDTO?
         let saved = RepositoryWrite.perform(ctx) {
             let target = profileId
@@ -174,18 +171,42 @@ public enum Repos {
             guard let model = try ctx.fetch(desc).first else { throw RepositoryWriteError.missingRecord }
 
             let current = model.snapshot
-            guard current.fitnessGoal != newMode else { updatedProfile = current; return }
+            guard current.fitnessGoal != newGoal else { updatedProfile = current; return }
 
-            model.modeRaw = newMode.rawValue
-            model.targetsJSON = try JSONEncoder().encode(Targets.compute(fitnessGoal: newMode, vitals: current.vitals))
-            model.updatedAt = Date()
-
-            if newMode == .lose {
-                try seedCircuitExercises(ctx, profileId: profileId)
-            }
+            model.modeRaw = newGoal.rawValue   // legacy column name; stores the goal
+            try recomputeTargets(model)
             updatedProfile = model.snapshot
         }
         return saved ? updatedProfile : nil
+    }
+
+    /// The one target-recompute path: re-derives `targetsJSON` from the model's
+    /// current goal + vitals and stamps `updatedAt`. Shared by `updateVitals`,
+    /// `updateGoal` and `Seeder`'s heart-health backstop. Call inside a
+    /// `RepositoryWrite.perform` block — it does not save.
+    static func recomputeTargets(_ model: ProfileModel) throws {
+        let profile = model.snapshot
+        model.targetsJSON = try JSONEncoder().encode(
+            Targets.compute(fitnessGoal: profile.fitnessGoal, vitals: profile.vitals)
+        )
+        model.updatedAt = Date()
+    }
+
+    /// Launch backstop (called by `Seeder.seedAll`): heart-health micros became
+    /// universal, but targets are stored, so a profile last computed under the
+    /// old gain-goal rules still has nil fiber/sodium/added-sugar/sat-fat on disk.
+    /// Recomputes exactly those profiles through `recomputeTargets`; idempotent —
+    /// once recomputed, the micros are present and the profile is skipped.
+    @discardableResult
+    static func backfillHeartHealthTargets(_ ctx: ModelContext) -> Bool {
+        RepositoryWrite.perform(ctx) {
+            for model in try ctx.fetch(FetchDescriptor<ProfileModel>()) {
+                let t = model.snapshot.computedTargets
+                guard t.fiberGMin == nil || t.sodiumMgMax == nil
+                        || t.addedSugarGMax == nil || t.saturatedFatGMax == nil else { continue }
+                try recomputeTargets(model)
+            }
+        }
     }
 
     // MARK: - Exercises
@@ -364,7 +385,7 @@ public enum Repos {
     /// time, so leaving it alone after a reps/weight/hold change would leave a
     /// number the set no longer supports — the same reason
     /// `updateActivitySession` recomputes from its stored MET. A set row stores
-    /// no MET, so the estimate is re-derived by `recomputedSetCalories` below.
+    /// no MET, so the estimate is re-derived by `setCaloriesEstimate` below.
     ///
     /// Callers pass the complete new shape (reps, weight, hold); `reps` is
     /// clamped to at least 1, and for an isometric row it stays the hold count
@@ -378,8 +399,7 @@ public enum Repos {
         reps: Int,
         weightLb: Double?,
         holdSeconds: Int? = nil,
-        bodyWeightLb: Double,
-        fitnessGoal: FitnessGoal
+        bodyWeightLb: Double
     ) -> Bool {
         RepositoryWrite.perform(ctx) {
             let desc = FetchDescriptor<WorkoutSetModel>(predicate: #Predicate { $0.id == id })
@@ -396,7 +416,7 @@ public enum Repos {
             target.weightLb = weightLb
             target.holdSeconds = newHold
             target.caloriesEst = setCaloriesEstimate(
-                exercise: exercise, fitnessGoal: fitnessGoal,
+                exercise: exercise,
                 reps: newReps, holdSeconds: newHold,
                 bodyWeightLb: bodyWeightLb
             )
@@ -406,45 +426,15 @@ public enum Repos {
     /// The log-time calorie math, re-derived for an edited set.
     ///
     /// Public so the edit sheet can preview the exact figure the save will store
-    /// instead of keeping a second copy of the branching below — one definition,
-    /// no drift between what the user is shown and what is written.
-    ///
-    /// A set row stores no MET, so which estimator produced its `caloriesEst`
-    /// has to be inferred from the same facts the three logging surfaces branch
-    /// on. Keep these branches in step with them — an edit must land on the
-    /// number the original log would have produced:
-    ///   • `holdSeconds` set → isometric hold, exercise MET
-    ///     (`RepCounter.swift` → `IsometricTimerView.completeHold`)
-    ///   • Circuit → the flat, load-aware quick-log estimate; `reps` carries
-    ///     minutes for a `.duration` movement and reps otherwise
-    ///     (`Circuit/BabyExercisesCard.swift` → `logActivity`)
-    ///   • Build → the exercise's researched MET and tempo
-    ///     (`RepCounter.swift` → `RepCounterView.saveSet`)
-    ///
-    /// All four estimators are activity-only (MET − 1); never hand-roll the
-    /// product here.
+    /// instead of keeping a second copy of the math — one definition, no drift
+    /// between what the user is shown and what is written. Delegates to
+    /// `CalorieEstimator.caloriesForSet`, which every logging surface also uses,
+    /// so an edit lands on the number the original log would have produced.
     public static func setCaloriesEstimate(
-        exercise: ExerciseDTO, fitnessGoal: FitnessGoal, reps: Int, holdSeconds: Int?, bodyWeightLb: Double
+        exercise: ExerciseDTO, reps: Int, holdSeconds: Int?, bodyWeightLb: Double
     ) -> Double {
-        if let seconds = holdSeconds {
-            return CalorieEstimator.caloriesForIsometric(
-                seconds: Double(seconds),
-                met: ExerciseInfo.meta(for: exercise).met,
-                bodyWeightLb: bodyWeightLb
-            )
-        }
-        guard fitnessGoal == .lose else {
-            return CalorieEstimator.caloriesForReps(
-                reps: reps, exercise: exercise, bodyWeightLb: bodyWeightLb
-            )
-        }
-        if exercise.kind == .duration {
-            return CalorieEstimator.caloriesForDuration(
-                minutes: Double(reps), loadLb: exercise.loadLb, bodyWeightLb: bodyWeightLb
-            )
-        }
-        return CalorieEstimator.caloriesForReps(
-            reps: reps, loadLb: exercise.loadLb, bodyWeightLb: bodyWeightLb
+        CalorieEstimator.caloriesForSet(
+            exercise: exercise, reps: reps, holdSeconds: holdSeconds, bodyWeightLb: bodyWeightLb
         )
     }
 
@@ -569,14 +559,7 @@ public enum Repos {
         }
     }
 
-    // MARK: - Cardio sessions
-
-    @discardableResult
-    public static func logCardio(_ ctx: ModelContext, _ s: CardioSessionDTO) -> Bool {
-        RepositoryWrite.perform(ctx) {
-            ctx.insert(CardioSessionModel(snapshot: s))
-        }
-    }
+    // MARK: - Cardio sessions (legacy, read-only — delete is the only write)
 
     @discardableResult
     public static func deleteCardioSession(_ ctx: ModelContext, id: UUID) -> Bool {

@@ -82,20 +82,13 @@ public final class ToastCenter: ObservableObject {
                    accent: .ok, symbol: "checkmark"))
     }
 
-    // MERGE: kept from feature/reminders-plants — PilatesCard (Circuit) calls this.
-    public func pilatesLogged(minutes: Int) {
-        show(Toast(title: "Pilates logged",
-                   detail: "\(minutes) min · locked in.",
-                   accent: .ok, symbol: "checkmark"))
-    }
-
     // Encouragement-engine driven toasts (Phase 1). All of these are thin wrappers
     // over `show(_:accent:for:)` — they exist because they either call the engine
     // themselves, gate on a nil message, or pick the accent from the message tone.
 
-    // Step milestone — mode-aware copy from EncouragementEngine
-    public func stepMilestone(_ steps: Int, fitnessGoal: FitnessGoal) {
-        show(EncouragementEngine.stepMilestoneMessage(steps: steps, fitnessGoal: fitnessGoal), accent: .win)
+    // Step milestone — one neutral copy set for every goal.
+    public func stepMilestone(_ steps: Int) {
+        show(EncouragementEngine.stepMilestoneMessage(steps: steps), accent: .win)
     }
 
     // Workout volume milestone — accent follows the message's tone

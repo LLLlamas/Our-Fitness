@@ -57,26 +57,46 @@ final class StallDetectorTests: XCTestCase {
         XCTAssertNil(StallDetector.detect(fitnessGoal: .gain, steps: [step(1, 9000)], now: now))
     }
 
-    // MARK: - Workout gap (mode-dependent threshold)
+    // MARK: - Workout gap (goal-dependent threshold)
 
-    func test_workout_gap_build_at_5_days() {
+    func test_workout_gap_gain_at_5_days() {
         XCTAssertEqual(StallDetector.detect(fitnessGoal: .gain, sets: [set(5)], now: now), .workoutGap(days: 5))
     }
 
-    func test_workout_gap_circuit_needs_7_days() {
+    func test_workout_gap_lose_needs_7_days() {
         XCTAssertEqual(StallDetector.detect(fitnessGoal: .gain, sets: [set(6)], now: now), .workoutGap(days: 6))
         XCTAssertNil(StallDetector.detect(fitnessGoal: .lose, sets: [set(6)], now: now))
         XCTAssertEqual(StallDetector.detect(fitnessGoal: .lose, sets: [set(7)], now: now), .workoutGap(days: 7))
     }
 
-    // MARK: - Pilates gap (Circuit only)
+    // MARK: - Pilates gap (every goal, 7–30 days only)
 
-    func test_pilates_gap_circuit_only() {
-        XCTAssertEqual(StallDetector.detect(fitnessGoal: .lose, pilates: [pil(8)], now: now), .pilatesGap(days: 8))
-        XCTAssertNil(StallDetector.detect(fitnessGoal: .gain, pilates: [pil(30)], now: now))
+    func test_pilates_gap_applies_to_every_goal() {
+        for goal in FitnessGoal.allCases {
+            XCTAssertEqual(StallDetector.detect(fitnessGoal: goal, pilates: [pil(8)], now: now), .pilatesGap(days: 8))
+        }
     }
 
-    // MARK: - Weight stall (Circuit only)
+    func test_pilates_gap_lower_edge_is_7_days() {
+        for goal in FitnessGoal.allCases {
+            XCTAssertNil(StallDetector.detect(fitnessGoal: goal, pilates: [pil(6)], now: now))
+            XCTAssertEqual(StallDetector.detect(fitnessGoal: goal, pilates: [pil(7)], now: now), .pilatesGap(days: 7))
+        }
+    }
+
+    func test_pilates_gap_upper_edge_is_30_days() {
+        for goal in FitnessGoal.allCases {
+            XCTAssertEqual(StallDetector.detect(fitnessGoal: goal, pilates: [pil(30)], now: now), .pilatesGap(days: 30))
+            XCTAssertNil(StallDetector.detect(fitnessGoal: goal, pilates: [pil(31)], now: now))
+        }
+    }
+
+    func test_pilates_gap_uses_most_recent_session() {
+        // An old session doesn't matter once a recent one exists.
+        XCTAssertNil(StallDetector.detect(fitnessGoal: .gain, pilates: [pil(60), pil(2)], now: now))
+    }
+
+    // MARK: - Weight stall (.lose only)
 
     func test_weight_stall_when_flat() {
         let out = StallDetector.detect(fitnessGoal: .lose, weights: [weight(14, 180), weight(0, 179.9)], now: now)
@@ -88,7 +108,7 @@ final class StallDetectorTests: XCTestCase {
         XCTAssertNil(StallDetector.detect(fitnessGoal: .lose, weights: [weight(14, 182), weight(0, 180)], now: now))
     }
 
-    func test_weight_stall_ignored_in_build() {
+    func test_weight_stall_ignored_for_gain_goal() {
         XCTAssertNil(StallDetector.detect(fitnessGoal: .gain, weights: [weight(14, 180), weight(0, 180)], now: now))
     }
 

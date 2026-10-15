@@ -1,6 +1,6 @@
 // Shared streak chip — the one streak pill in the app.
 //
-// Used by the Circuit Train cards (Steps & Cardio, Pilates) for weekly streaks
+// Used by the Steps and Pilates cards for weekly streaks
 // and by the Water card for a daily streak; `unit` picks the wording. Renders
 // nothing when `count <= 0` so callers can drop it in unconditionally (callers
 // with a higher bar, e.g. "only brag from 2 days", still gate themselves).

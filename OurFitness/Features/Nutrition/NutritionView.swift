@@ -130,12 +130,10 @@ struct NutritionView: View {
 
                 daySelector(allLogs: allLogs)
                 totalsCard(totals: totals, mealLoggingStreak: mealLoggingStreak)
-                if profile.fitnessGoal == .lose {
-                    // `entries:` lets the card tell "no label data for these foods"
-                    // apart from "you ate almost no sodium" — see MacroBudget.capCoverage.
-                    HeartHealthCard(totals: totals, targets: profile.computedTargets,
-                                    profile: profile, entries: selectedDayLogs)
-                }
+                // `entries:` lets the card tell "no label data for these foods"
+                // apart from "you ate almost no sodium" — see MacroBudget.capCoverage.
+                HeartHealthCard(totals: totals, targets: profile.computedTargets,
+                                profile: profile, entries: selectedDayLogs)
                 weeklyNutritionCard(allLogs: allLogs)
 
                 moodMealButton
@@ -530,7 +528,7 @@ struct NutritionView: View {
 
     /// Plain (non-ViewBuilder) copy + symbol for the "what's left today" line.
     private func toGoSummary(totals: DailyTotals) -> (text: String, symbol: String) {
-        // What's left toward today's targets (and room under the Circuit caps).
+        // What's left toward today's targets (and room under the heart-health caps).
         let remaining = MacroBudget.remaining(totals: totals, targets: profile.computedTargets)
         let calLeft = remaining.calories
         let proteinLeft = remaining.proteinG
@@ -1151,7 +1149,7 @@ private struct NutritionInsightSheet: View {
         }
     }
 
-    private var modeBlurb: String {
+    private var goalBlurb: String {
         // Personalized to the user's own maintenance + surplus/deficit numbers.
         TargetRationale.goalLine(for: profile.fitnessGoal) + "\n\n" + TargetRationale.calorieWhy(for: profile)
     }
@@ -1186,7 +1184,7 @@ private struct NutritionInsightSheet: View {
             }
 
             infoBlock(icon: "flame.fill", title: "What this means for you") {
-                Text(modeBlurb)
+                Text(goalBlurb)
                     .font(.callout).foregroundStyle(theme.text)
             }
 
@@ -1227,7 +1225,7 @@ private struct NutritionInsightSheet: View {
 
             // Kept boxed at .caption rather than swapped for `InfoFootnote`:
             // this one is a card in the stack, not small print at the foot.
-            Text("Targets are estimated from your height, weight, age, activity level, and mode. Log consistently for the most accurate picture.")
+            Text("Targets are estimated from your height, weight, age, activity level, and goal. Log consistently for the most accurate picture.")
                 .font(.caption).foregroundStyle(theme.dim)
                 .padding(10)
                 .background(theme.card)

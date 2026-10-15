@@ -1,5 +1,8 @@
-// Friction-free rep counter (Build mode). Tap +1 per rep, Save set commits a WorkoutSet.
-// For isometric exercises, shows a countdown timer instead.
+// Friction-free set counter for any exercise. Tap +1 per rep (or per minute for
+// a duration exercise), Save set commits a WorkoutSet. Shows a weight field only
+// for a lift that tracks per-set weight. For isometric exercises, shows a
+// countdown timer instead. Calories go through `Repos.setCaloriesEstimate`, the
+// same function a set edit recomputes with.
 
 import SwiftUI
 import SwiftData
@@ -58,8 +61,11 @@ private struct RepCounterView: View {
         )
     }
 
-    private var tracksWeight: Bool { exercise.category == .compound || exercise.category == .isolation }
+    private var tracksWeight: Bool { exercise.tracksPerSetWeight }
     private var info: ExerciseInfo.Meta { ExerciseInfo.meta(for: exercise) }
+    /// A duration exercise stores minutes in `reps`, so the counter counts minutes.
+    private var isMinutes: Bool { exercise.kind == .duration }
+    private func unitWord(_ n: Int) -> String { isMinutes ? "min" : (n == 1 ? "rep" : "reps") }
 
     // Sets logged this ISO week for this exercise (Monday-anchored, matching
     // the WorkoutsView stats helper). Approximates per-muscle weekly volume.
@@ -143,11 +149,18 @@ private struct RepCounterView: View {
 
     @ViewBuilder
     private var counterDisplay: some View {
-        AnimatedNumber(
-            Double(reps),
-            font: .system(size: 120, weight: .semibold),
-            color: theme.accent
-        )
+        VStack(spacing: 0) {
+            AnimatedNumber(
+                Double(reps),
+                font: .system(size: 120, weight: .semibold),
+                color: theme.accent
+            )
+            if isMinutes {
+                Text("minutes")
+                    .font(.caption).tracking(1)
+                    .foregroundStyle(theme.dim)
+            }
+        }
     }
 
     @ViewBuilder
@@ -155,7 +168,7 @@ private struct RepCounterView: View {
         Button {
             reps += 1
         } label: {
-            Text("+1 rep")
+            Text(isMinutes ? "+1 min" : "+1 rep")
                 .font(.system(size: 22, weight: .semibold))
                 .frame(maxWidth: .infinity, minHeight: 88)
         }
@@ -239,9 +252,10 @@ private struct RepCounterView: View {
     private func saveSet() {
         // Field shows the active unit; persist canonical lb.
         let weight = Units.parseWeightToLb(weightStr, system: unitSystem)
-        let kcal = CalorieEstimator.caloriesForReps(
-            reps: reps,
+        let kcal = Repos.setCaloriesEstimate(
             exercise: exercise,
+            reps: reps,
+            holdSeconds: nil,
             bodyWeightLb: profile.weightLb
         )
 
@@ -262,7 +276,8 @@ private struct RepCounterView: View {
         guard Repos.addSet(ctx, dto) else { return }
         setsLogged += 1
 
-        lastProjection = EncouragementEngine.repProjection(
+        // The projection's math is per-rep, so it only speaks for rep sets.
+        lastProjection = isMinutes ? nil : EncouragementEngine.repProjection(
             exercise: exercise,
             repsLogged: reps,
             totalCaloriesToday: caloriesTodayBefore,
@@ -273,14 +288,13 @@ private struct RepCounterView: View {
         if let milestone = EncouragementEngine.workoutSetMessage(
             exercise: exercise,
             repsJustLogged: reps,
-            totalSetsThisWeekForMuscle: weekCountAfter,
-            fitnessGoal: profile.fitnessGoal
+            totalSetsThisWeekForMuscle: weekCountAfter
         ) {
             toasts.workoutMilestone(milestone)
         } else {
             toasts.show(Toast(
                 title: "Set saved",
-                detail: weight.map { "\(Units.formatWeightWithUnit(lb: $0, system: unitSystem, decimals: 0)) × \(reps)" } ?? "\(reps) reps · ~\(Int(kcal)) cal",
+                detail: (tracksWeight ? weight : nil).map { "\(Units.formatWeightWithUnit(lb: $0, system: unitSystem, decimals: 0)) × \(reps)" } ?? "\(reps) \(unitWord(reps)) · ~\(Int(kcal)) cal",
                 accent: .win,
                 symbol: "checkmark.seal.fill"
             ))
@@ -480,9 +494,10 @@ private struct IsometricTimerView: View {
         secondsRemaining = nil
         holdsThisSession += 1
         totalSecSession += secs
-        let kcal = CalorieEstimator.caloriesForIsometric(
-            seconds: Double(secs),
-            met: info.met,
+        let kcal = Repos.setCaloriesEstimate(
+            exercise: exercise,
+            reps: 1,
+            holdSeconds: secs,
             bodyWeightLb: profile.weightLb
         )
         let dto = WorkoutSetDTO(

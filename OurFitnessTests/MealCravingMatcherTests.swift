@@ -59,13 +59,16 @@ final class MealCravingMatcherTests: XCTestCase {
         XCTAssertFalse(out.isEmpty)
     }
 
-    func test_respects_mode_corpus() {
-        let buildIds = Set(SuggestedMeals.suggestions(for: .gain).map(\.id))
-        let out = MealCravingMatcher.matches(
-            for: profile(fitnessGoal: .gain), craving: "salty savory bowl",
-            totals: .zero, now: now
-        )
-        XCTAssertTrue(out.allSatisfy { buildIds.contains($0.meal.id) })
+    func test_draws_from_the_shared_corpus() {
+        let allIds = Set(SuggestedMeals.all.map(\.id))
+        for goal in [FitnessGoal.gain, .lose] {
+            let out = MealCravingMatcher.matches(
+                for: profile(fitnessGoal: goal), craving: "salty savory bowl",
+                totals: .zero, now: now
+            )
+            XCTAssertFalse(out.isEmpty)
+            XCTAssertTrue(out.allSatisfy { allIds.contains($0.meal.id) })
+        }
     }
 
     func test_respects_limit() {

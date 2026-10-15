@@ -20,7 +20,7 @@
 // deterministic `ExerciseGoalMatcher`. FoundationModels needs no entitlement;
 // this lives in Services/ (Domain stays framework-free).
 //
-// Availability + the session/do-catch envelope + the Build/Circuit mode line come
+// Availability + the session/do-catch envelope + the per-goal prompt line come
 // from Services/OnDeviceModel.swift, shared with the other four AI services.
 
 import Foundation
@@ -111,14 +111,14 @@ public final class WorkoutSuggestionService: @unchecked Sendable {
         let menu = ExerciseInfo.catalog
             .map { "- \($0.name): \($0.muscleGroups.joined(separator: ", "))" }
             .joined(separator: "\n")
-        let modeLine = OnDeviceModel.modeLine(
+        let goalLine = OnDeviceModel.goalLine(
             fitnessGoal,
-            build: "They are gaining lean mass and training for hypertrophy — all else equal, lean toward weighted, progressable strength exercises (roughly 6–12 reps).",
-            circuit: "They are losing body fat and improving heart-health markers — all else equal, lean toward higher-calorie-burn, conditioning, and joint-friendly options. The goal still comes first."
+            gain: "The user's goal is to gain lean mass, training for hypertrophy — all else equal, lean toward weighted, progressable strength exercises (roughly 6–12 reps).",
+            lose: "The user's goal is to lose body fat and improve heart-health markers — all else equal, lean toward higher-calorie-burn, conditioning, and joint-friendly options. What they asked to work on still comes first."
         )
         return """
         Goal: "\(goal)".
-        \(modeLine)
+        \(goalLine)
 
         Choose 3 to 5 exercises from this list (use the names exactly):
         \(menu)

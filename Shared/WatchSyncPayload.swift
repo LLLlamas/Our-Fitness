@@ -160,8 +160,8 @@ public struct TodaySnapshot: Codable, Equatable, Sendable {
 
 // MARK: - Quick log
 
-/// One tap-to-+1 movement (the Circuit parenting exercises, plus any the user
-/// added). `kind` is the raw string of `ExerciseKind` ("reps"/"duration") —
+/// One tap-to-+1 movement (the seeded parenting exercises, plus any the user
+/// added that pass `ExerciseDTO.isOneTapLoggable`). `kind` is the raw string of `ExerciseKind` ("reps"/"duration") —
 /// like `ReminderSnapshot.groupKind`, kept as a String so this file stays free
 /// of Domain enums.
 public struct QuickLogExercise: Codable, Equatable, Sendable, Identifiable {
@@ -243,8 +243,10 @@ public struct WatchSnapshotEnvelope: Codable, Equatable, Sendable {
     public var schemaVersion: Int
     public var profileId: UUID
     public var profileName: String?
-    /// Raw value of `Mode` — note this is "reset" for Circuit, per the
-    /// back-compat note in CLAUDE.md.
+    /// Raw value of the profile's `FitnessGoal` ("build" = gain, "reset" =
+    /// lose — the old mode names, kept as persisted/wire values). The current
+    /// watch never reads it; the key stays on the wire so older watch builds
+    /// keep decoding.
     public var mode: String
     public var bodyWeightLb: Double
     public var reminders: [ReminderSnapshot]

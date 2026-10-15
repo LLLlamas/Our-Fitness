@@ -64,8 +64,8 @@ public enum ExerciseGoalMatcher {
     }
 
     /// Rank the catalog against a free-text goal. Returns up to `limit` suggestions,
-    /// most relevant first. `mode` gives a light tilt — Build toward loadable,
-    /// progressable lifts; Circuit toward higher calorie-burn, joint-friendly work —
+    /// most relevant first. `fitnessGoal` gives a light tilt — gaining toward loadable,
+    /// progressable lifts; losing toward higher calorie-burn, joint-friendly work —
     /// applied only to exercises the goal already makes relevant, so it never
     /// overrides the muscle match. Falls back to compound staples when no body part
     /// is recognised so the user always gets a sensible answer.
@@ -87,8 +87,8 @@ public enum ExerciseGoalMatcher {
         let ranked = pool
             .map { entry -> (entry: ExerciseInfo.CatalogExercise, score: Double) in
                 let base = score(entry, targets: targets, directlyNamed: directlyNamed)
-                // Mode tilt only nudges exercises that are already a match.
-                return (entry, base > 0 ? base + modeBias(entry, fitnessGoal: fitnessGoal) : 0)
+                // Goal tilt only nudges exercises that are already a match.
+                return (entry, base > 0 ? base + goalBias(entry, fitnessGoal: fitnessGoal) : 0)
             }
             .filter { $0.score > 0 }
             .sorted { a, b in
@@ -141,9 +141,9 @@ public enum ExerciseGoalMatcher {
         return s
     }
 
-    /// A small mode tilt (≤2, well under a muscle match) that breaks ties toward the
-    /// kind of training each mode is built around.
-    private static func modeBias(_ entry: ExerciseInfo.CatalogExercise, fitnessGoal: FitnessGoal) -> Double {
+    /// A small goal tilt (≤2, well under a muscle match) that breaks ties toward the
+    /// kind of training that serves each goal.
+    private static func goalBias(_ entry: ExerciseInfo.CatalogExercise, fitnessGoal: FitnessGoal) -> Double {
         switch fitnessGoal {
         case .gain:
             // Hypertrophy: favour loadable, progressable lifts.
