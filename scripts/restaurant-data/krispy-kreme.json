@@ -1,0 +1,800 @@
+{
+  "chain": "Krispy Kreme",
+  "slug": "krispy-kreme",
+  "aliases": [
+    "krispy kreme",
+    "krispy kreme doughnuts",
+    "krispy cream",
+    "krispie kreme",
+    "kk",
+    "krispykreme",
+    "krispy kreme donuts"
+  ],
+  "kind": "dessert",
+  "source_url": "https://www.krispykreme.com/menu",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Per-item official nutrition PDFs linked from each product on krispykreme.com (URLs from the site's own content API, 9tlw6prn.apicdn.sanity.io); only items on the current menu tree were used. Skipped drink PDFs whose size columns could not be read unambiguously (multiple nutrition tables or out-of-order size columns): Pumpkin Spice Latte, Iced Pumpkin Spice Latte, Apple Crisp Latte, Iced Apple Crisp Latte, Cookie Blast Latte, Classic Brewed Coffee, Classic Decaf Brewed Coffee, Caramel Mocha Specialty Latte, Espresso, Iced Cookie Blast Latte, Iced Caramel Coffee, Iced Caramel Mocha Coffee, Iced Original Glazed® Latte, Iced Caramel Latte, Iced Caramel Mocha Specialty Latte, Frozen Cookie Blast Latte, Frozen Caramel Specialty Latte, Frozen Mocha Specialty Latte, Watermelon Infused Lemonade Chiller, Mango Infused Lemonade Chiller, Strawberry Chiller, Lemonade Chiller. Coffee boxes, K-Cups and ground coffee excluded. Atwater outliers (kept as published): Cinnamon Apple Filled Doughnut [1 doughnut] (270 cal vs Atwater 186).",
+  "items": [
+    {
+      "name": "Latte",
+      "category": "Coffee & Drinks - Hot Coffee & Espresso",
+      "serving": "12 fl oz",
+      "calories": 140,
+      "protein_g": 10,
+      "carbs_g": 14,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Latte",
+      "category": "Coffee & Drinks - Hot Coffee & Espresso",
+      "serving": "16 fl oz",
+      "calories": 180,
+      "protein_g": 12,
+      "carbs_g": 17,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Latte",
+      "category": "Coffee & Drinks - Hot Coffee & Espresso",
+      "serving": "20 fl oz",
+      "calories": 230,
+      "protein_g": 16,
+      "carbs_g": 22,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Latte",
+      "category": "Coffee & Drinks - Hot Coffee & Espresso",
+      "serving": "12 fl oz",
+      "calories": 220,
+      "protein_g": 10,
+      "carbs_g": 32,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Latte",
+      "category": "Coffee & Drinks - Hot Coffee & Espresso",
+      "serving": "16 fl oz",
+      "calories": 290,
+      "protein_g": 12,
+      "carbs_g": 44,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Latte",
+      "category": "Coffee & Drinks - Hot Coffee & Espresso",
+      "serving": "20 fl oz",
+      "calories": 380,
+      "protein_g": 16,
+      "carbs_g": 59,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Specialty Latte",
+      "category": "Coffee & Drinks - Hot Coffee & Espresso",
+      "serving": "12 fl oz",
+      "calories": 330,
+      "protein_g": 10,
+      "carbs_g": 46,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Specialty Latte",
+      "category": "Coffee & Drinks - Hot Coffee & Espresso",
+      "serving": "16 fl oz",
+      "calories": 400,
+      "protein_g": 12,
+      "carbs_g": 62,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Specialty Latte",
+      "category": "Coffee & Drinks - Hot Coffee & Espresso",
+      "serving": "20 fl oz",
+      "calories": 520,
+      "protein_g": 16,
+      "carbs_g": 82,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mocha Specialty Latte",
+      "category": "Coffee & Drinks - Hot Coffee & Espresso",
+      "serving": "12 fl oz",
+      "calories": 320,
+      "protein_g": 11,
+      "carbs_g": 46,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Specialty Latte",
+      "category": "Coffee & Drinks - Hot Coffee & Espresso",
+      "serving": "16 fl oz",
+      "calories": 390,
+      "protein_g": 13,
+      "carbs_g": 61,
+      "fat_g": 13,
+      "fiber_g": 3
+    },
+    {
+      "name": "Mocha Specialty Latte",
+      "category": "Coffee & Drinks - Hot Coffee & Espresso",
+      "serving": "20 fl oz",
+      "calories": 500,
+      "protein_g": 17,
+      "carbs_g": 80,
+      "fat_g": 15,
+      "fiber_g": 4
+    },
+    {
+      "name": "Cappuccino",
+      "category": "Coffee & Drinks - Hot Coffee & Espresso",
+      "serving": "12 fl oz",
+      "calories": 110,
+      "protein_g": 8,
+      "carbs_g": 10,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino",
+      "category": "Coffee & Drinks - Hot Coffee & Espresso",
+      "serving": "16 fl oz",
+      "calories": 130,
+      "protein_g": 9,
+      "carbs_g": 13,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino",
+      "category": "Coffee & Drinks - Hot Coffee & Espresso",
+      "serving": "20 fl oz",
+      "calories": 160,
+      "protein_g": 11,
+      "carbs_g": 15,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Americano",
+      "category": "Coffee & Drinks - Hot Coffee & Espresso",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Americano",
+      "category": "Coffee & Drinks - Hot Coffee & Espresso",
+      "serving": "16 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Americano",
+      "category": "Coffee & Drinks - Hot Coffee & Espresso",
+      "serving": "20 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee",
+      "category": "Coffee & Drinks - Iced Coffee & Espresso",
+      "serving": "12 fl oz",
+      "calories": 20,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee",
+      "category": "Coffee & Drinks - Iced Coffee & Espresso",
+      "serving": "16 fl oz",
+      "calories": 25,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee",
+      "category": "Coffee & Drinks - Iced Coffee & Espresso",
+      "serving": "20 fl oz",
+      "calories": 35,
+      "protein_g": 3,
+      "carbs_g": 3,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee",
+      "category": "Coffee & Drinks - Iced Coffee & Espresso",
+      "serving": "32 fl oz",
+      "calories": 60,
+      "protein_g": 4,
+      "carbs_g": 5,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Vanilla Coffee",
+      "category": "Coffee & Drinks - Iced Coffee & Espresso",
+      "serving": "12 fl oz",
+      "calories": 90,
+      "protein_g": 2,
+      "carbs_g": 19,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Vanilla Coffee",
+      "category": "Coffee & Drinks - Iced Coffee & Espresso",
+      "serving": "16 fl oz",
+      "calories": 130,
+      "protein_g": 2,
+      "carbs_g": 29,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Vanilla Coffee",
+      "category": "Coffee & Drinks - Iced Coffee & Espresso",
+      "serving": "20 fl oz",
+      "calories": 180,
+      "protein_g": 3,
+      "carbs_g": 38,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Vanilla Coffee",
+      "category": "Coffee & Drinks - Iced Coffee & Espresso",
+      "serving": "32 fl oz",
+      "calories": 270,
+      "protein_g": 4,
+      "carbs_g": 59,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Original Glazed® Coffee",
+      "category": "Coffee & Drinks - Iced Coffee & Espresso",
+      "serving": "12 fl oz",
+      "calories": 80,
+      "protein_g": 2,
+      "carbs_g": 15,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Original Glazed® Coffee",
+      "category": "Coffee & Drinks - Iced Coffee & Espresso",
+      "serving": "16 fl oz",
+      "calories": 110,
+      "protein_g": 2,
+      "carbs_g": 21,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Original Glazed® Coffee",
+      "category": "Coffee & Drinks - Iced Coffee & Espresso",
+      "serving": "20 fl oz",
+      "calories": 140,
+      "protein_g": 3,
+      "carbs_g": 28,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Original Glazed® Coffee",
+      "category": "Coffee & Drinks - Iced Coffee & Espresso",
+      "serving": "32 fl oz",
+      "calories": 220,
+      "protein_g": 5,
+      "carbs_g": 44,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Latte",
+      "category": "Coffee & Drinks - Iced Coffee & Espresso",
+      "serving": "12 fl oz",
+      "calories": 80,
+      "protein_g": 6,
+      "carbs_g": 8,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Latte",
+      "category": "Coffee & Drinks - Iced Coffee & Espresso",
+      "serving": "16 fl oz",
+      "calories": 90,
+      "protein_g": 7,
+      "carbs_g": 9,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Latte",
+      "category": "Coffee & Drinks - Iced Coffee & Espresso",
+      "serving": "20 fl oz",
+      "calories": 110,
+      "protein_g": 8,
+      "carbs_g": 11,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Vanilla Latte",
+      "category": "Coffee & Drinks - Iced Coffee & Espresso",
+      "serving": "12 fl oz",
+      "calories": 160,
+      "protein_g": 6,
+      "carbs_g": 26,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Vanilla Latte",
+      "category": "Coffee & Drinks - Iced Coffee & Espresso",
+      "serving": "16 fl oz",
+      "calories": 200,
+      "protein_g": 7,
+      "carbs_g": 36,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Vanilla Latte",
+      "category": "Coffee & Drinks - Iced Coffee & Espresso",
+      "serving": "20 fl oz",
+      "calories": 260,
+      "protein_g": 8,
+      "carbs_g": 47,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Mocha Specialty Latte",
+      "category": "Coffee & Drinks - Iced Coffee & Espresso",
+      "serving": "12 fl oz",
+      "calories": 250,
+      "protein_g": 6,
+      "carbs_g": 39,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Iced Mocha Specialty Latte",
+      "category": "Coffee & Drinks - Iced Coffee & Espresso",
+      "serving": "16 fl oz",
+      "calories": 310,
+      "protein_g": 7,
+      "carbs_g": 53,
+      "fat_g": 10,
+      "fiber_g": 3
+    },
+    {
+      "name": "Iced Mocha Specialty Latte",
+      "category": "Coffee & Drinks - Iced Coffee & Espresso",
+      "serving": "20 fl oz",
+      "calories": 380,
+      "protein_g": 9,
+      "carbs_g": 68,
+      "fat_g": 11,
+      "fiber_g": 4
+    },
+    {
+      "name": "Frozen Specialty Latte",
+      "category": "Coffee & Drinks - Frozen Lattes",
+      "serving": "12 fl oz",
+      "calories": 410,
+      "protein_g": 5,
+      "carbs_g": 52,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Frozen Specialty Latte",
+      "category": "Coffee & Drinks - Frozen Lattes",
+      "serving": "16 fl oz",
+      "calories": 460,
+      "protein_g": 6,
+      "carbs_g": 58,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Frozen Specialty Latte",
+      "category": "Coffee & Drinks - Frozen Lattes",
+      "serving": "20 fl oz",
+      "calories": 620,
+      "protein_g": 8,
+      "carbs_g": 81,
+      "fat_g": 29,
+      "fiber_g": 0
+    },
+    {
+      "name": "Frozen Vanilla Specialty Latte",
+      "category": "Coffee & Drinks - Frozen Lattes",
+      "serving": "12 fl oz",
+      "calories": 490,
+      "protein_g": 5,
+      "carbs_g": 70,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Frozen Vanilla Specialty Latte",
+      "category": "Coffee & Drinks - Frozen Lattes",
+      "serving": "16 fl oz",
+      "calories": 570,
+      "protein_g": 6,
+      "carbs_g": 86,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Frozen Vanilla Specialty Latte",
+      "category": "Coffee & Drinks - Frozen Lattes",
+      "serving": "20 fl oz",
+      "calories": 770,
+      "protein_g": 8,
+      "carbs_g": 118,
+      "fat_g": 29,
+      "fiber_g": 0
+    },
+    {
+      "name": "Frozen Original Glazed® Specialty Latte",
+      "category": "Coffee & Drinks - Frozen Lattes",
+      "serving": "12 fl oz",
+      "calories": 490,
+      "protein_g": 5,
+      "carbs_g": 70,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Frozen Original Glazed® Specialty Latte",
+      "category": "Coffee & Drinks - Frozen Lattes",
+      "serving": "16 fl oz",
+      "calories": 570,
+      "protein_g": 6,
+      "carbs_g": 85,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Frozen Original Glazed® Specialty Latte",
+      "category": "Coffee & Drinks - Frozen Lattes",
+      "serving": "20 fl oz",
+      "calories": 760,
+      "protein_g": 8,
+      "carbs_g": 117,
+      "fat_g": 29,
+      "fiber_g": 0
+    },
+    {
+      "name": "Frozen Caramel Mocha Specialty Latte",
+      "category": "Coffee & Drinks - Frozen Lattes",
+      "serving": "12 fl oz",
+      "calories": 500,
+      "protein_g": 5,
+      "carbs_g": 71,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Frozen Caramel Mocha Specialty Latte",
+      "category": "Coffee & Drinks - Frozen Lattes",
+      "serving": "16 fl oz",
+      "calories": 580,
+      "protein_g": 6,
+      "carbs_g": 86,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Frozen Caramel Mocha Specialty Latte",
+      "category": "Coffee & Drinks - Frozen Lattes",
+      "serving": "20 fl oz",
+      "calories": 770,
+      "protein_g": 8,
+      "carbs_g": 117,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ghirardelli® Hot Chocolate",
+      "category": "Coffee & Drinks - Hot Chocolate",
+      "serving": "12 fl oz",
+      "calories": 410,
+      "protein_g": 15,
+      "carbs_g": 63,
+      "fat_g": 12,
+      "fiber_g": 3
+    },
+    {
+      "name": "Ghirardelli® Hot Chocolate",
+      "category": "Coffee & Drinks - Hot Chocolate",
+      "serving": "16 fl oz",
+      "calories": 490,
+      "protein_g": 18,
+      "carbs_g": 76,
+      "fat_g": 14,
+      "fiber_g": 4
+    },
+    {
+      "name": "Ghirardelli® Hot Chocolate",
+      "category": "Coffee & Drinks - Hot Chocolate",
+      "serving": "20 fl oz",
+      "calories": 610,
+      "protein_g": 22,
+      "carbs_g": 99,
+      "fat_g": 17,
+      "fiber_g": 5
+    },
+    {
+      "name": "Original Glazed Doughnut",
+      "category": "Doughnuts - Glazed",
+      "serving": "1 doughnut",
+      "calories": 190,
+      "protein_g": 3,
+      "carbs_g": 22,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Original Glazed® Kreme™ Filled Doughnut",
+      "category": "Doughnuts - Glazed",
+      "serving": "1 doughnut",
+      "calories": 340,
+      "protein_g": 4,
+      "carbs_g": 40,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Original Glazed® Cake Doughnut",
+      "category": "Doughnuts - Glazed",
+      "serving": "1 doughnut",
+      "calories": 300,
+      "protein_g": 2,
+      "carbs_g": 40,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Iced Doughnut with Sprinkles",
+      "category": "Doughnuts - Glazed",
+      "serving": "1 doughnut",
+      "calories": 250,
+      "protein_g": 3,
+      "carbs_g": 34,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Iced Doughnut",
+      "category": "Doughnuts - Glazed",
+      "serving": "1 doughnut",
+      "calories": 240,
+      "protein_g": 3,
+      "carbs_g": 33,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Original Glazed® Raspberry Filled Doughnut",
+      "category": "Doughnuts - Glazed",
+      "serving": "1 doughnut",
+      "calories": 300,
+      "protein_g": 4,
+      "carbs_g": 38,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Original Glazed® Cinnamon Roll",
+      "category": "Doughnuts - Glazed",
+      "serving": "1 doughnut",
+      "calories": 270,
+      "protein_g": 4,
+      "carbs_g": 29,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Original Glazed® Doughnut Dots - 10ct",
+      "category": "Doughnuts - Glazed",
+      "serving": "24 doughnut dots",
+      "calories": 1030,
+      "protein_g": 13,
+      "carbs_g": 122,
+      "fat_g": 54,
+      "fiber_g": 3
+    },
+    {
+      "name": "Original Glazed® Doughnut Dots - 10ct",
+      "category": "Doughnuts - Glazed",
+      "serving": "10 doughnut dots",
+      "calories": 430,
+      "protein_g": 5,
+      "carbs_g": 51,
+      "fat_g": 23,
+      "fiber_g": 1
+    },
+    {
+      "name": "Original Glazed® Doughnut Dots - 10ct",
+      "category": "Doughnuts - Glazed",
+      "serving": "1 doughnut dot",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Assorted Doughnut Dots - 10ct",
+      "category": "Doughnuts - Glazed",
+      "serving": "10 doughnut dots",
+      "calories": 470,
+      "protein_g": 6,
+      "carbs_g": 60,
+      "fat_g": 23,
+      "fiber_g": 1
+    },
+    {
+      "name": "24 Count Original Glazed® Doughnut Dots",
+      "category": "Doughnuts - Glazed",
+      "serving": "24 doughnut dots",
+      "calories": 1030,
+      "protein_g": 13,
+      "carbs_g": 122,
+      "fat_g": 54,
+      "fiber_g": 3
+    },
+    {
+      "name": "24 Count Original Glazed® Doughnut Dots",
+      "category": "Doughnuts - Glazed",
+      "serving": "10 doughnut dots",
+      "calories": 430,
+      "protein_g": 5,
+      "carbs_g": 51,
+      "fat_g": 23,
+      "fiber_g": 1
+    },
+    {
+      "name": "24 Count Original Glazed® Doughnut Dots",
+      "category": "Doughnuts - Glazed",
+      "serving": "1 doughnut dot",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "24 Count Assorted Doughnut Dots",
+      "category": "Doughnuts - Glazed",
+      "serving": "24 doughnut dots",
+      "calories": 1110,
+      "protein_g": 13,
+      "carbs_g": 140,
+      "fat_g": 56,
+      "fiber_g": 3
+    },
+    {
+      "name": "Mini Original Glazed® Doughnut",
+      "category": "Doughnuts - Glazed",
+      "serving": "16 doughnuts",
+      "calories": 1410,
+      "protein_g": 21,
+      "carbs_g": 169,
+      "fat_g": 73,
+      "fiber_g": 5
+    },
+    {
+      "name": "Mini Chocolate Iced Doughnut",
+      "category": "Doughnuts - Glazed",
+      "serving": "1 doughnut",
+      "calories": 110,
+      "protein_g": 1,
+      "carbs_g": 16,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mini Chocolate Iced Doughnut with Sprinkles",
+      "category": "Doughnuts - Glazed",
+      "serving": "1 doughnut",
+      "calories": 120,
+      "protein_g": 1,
+      "carbs_g": 17,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mini Strawberry Iced Doughnut with Sprinkles",
+      "category": "Doughnuts - Glazed",
+      "serving": "2 doughnuts",
+      "calories": 230,
+      "protein_g": 3,
+      "carbs_g": 34,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "OREO® Cookies & Kreme™ Filled Doughnut",
+      "category": "Doughnuts - Iced",
+      "serving": "1 doughnut",
+      "calories": 390,
+      "protein_g": 4,
+      "carbs_g": 49,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "New York Cheesecake Filled Doughnut",
+      "category": "Doughnuts - Iced",
+      "serving": "1 doughnut",
+      "calories": 350,
+      "protein_g": 5,
+      "carbs_g": 42,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Iced Custard Filled Doughnut",
+      "category": "Doughnuts - Iced",
+      "serving": "1 doughnut",
+      "calories": 300,
+      "protein_g": 4,
+      "carbs_g": 37,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Iced Kreme™ Filled Doughnut",
+      "category": "Doughnuts - Iced",
+      "serving": "1 doughnut",
+      "calories": 350,
+      "protein_g": 4,
+      "carbs_g": 41,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cinnamon Apple Filled Doughnut",
+      "category": "Doughnuts - Filled",
+      "serving": "1 doughnut",
+      "calories": 270,
+      "protein_g": 4,
+      "carbs_g": 11,
+      "fat_g": 14,
+      "fiber_g": 1
+    }
+  ]
+}

@@ -1,0 +1,2510 @@
+{
+  "chain": "Einstein Bros. Bagels",
+  "slug": "einstein-bros",
+  "aliases": [
+    "einstein bros",
+    "einstein bros bagels",
+    "einstein brothers",
+    "einstein bagels",
+    "einsteins",
+    "einstein's",
+    "einstein"
+  ],
+  "kind": "breakfast",
+  "source_url": "https://www.einsteinbros.com/wp-content/uploads/2026/08/EBB-Nutrition-Guide-Master-2026-2.pdf",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Official Einstein Bros. Nutrition Information guide (Aug 2026 edition) linked from einsteinbros.com. Coffee drinks are with 2% milk as published. Omitted: the 96 fl oz box coffee rows, the Hot Chocolate 20 fl oz row (a value missing in the source), and the second 'Caramel Macchiato, Iced' block (positioned where Vanilla Latte Iced would be; label in source is ambiguous). Doggie bagels excluded. '(licensed locations)' = airport/hospital/campus variants. Atwater outliers (kept as published): Cold Foam Topping [1 oz (28 g)] (80 cal vs Atwater 20); Turkey, Lunch [3.0 oz (85 g)] (90 cal vs Atwater 114); Cinnamon Bliss Roll [6.5 oz (185 g)] (610 cal vs Atwater 787).",
+  "items": [
+    {
+      "name": "Ancient Grain Bagel",
+      "category": "Classic Bagels",
+      "serving": "1 Bagel (106 g)",
+      "calories": 290,
+      "protein_g": 13,
+      "carbs_g": 50,
+      "fat_g": 5,
+      "fiber_g": 7
+    },
+    {
+      "name": "Cinnamon Raisin Bagel",
+      "category": "Classic Bagels",
+      "serving": "1 Bagel (105 g)",
+      "calories": 280,
+      "protein_g": 10,
+      "carbs_g": 59,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cranberry Bagel",
+      "category": "Classic Bagels",
+      "serving": "1 Bagel (105 g)",
+      "calories": 310,
+      "protein_g": 9,
+      "carbs_g": 59,
+      "fat_g": 4,
+      "fiber_g": 2
+    },
+    {
+      "name": "Everything Bagel",
+      "category": "Classic Bagels",
+      "serving": "1 Bagel (104 g)",
+      "calories": 280,
+      "protein_g": 11,
+      "carbs_g": 57,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Garlic Bagel",
+      "category": "Classic Bagels",
+      "serving": "1 Bagel (104 g)",
+      "calories": 280,
+      "protein_g": 11,
+      "carbs_g": 57,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Honey Whole Wheat Bagel",
+      "category": "Classic Bagels",
+      "serving": "1 Bagel (101 g)",
+      "calories": 280,
+      "protein_g": 12,
+      "carbs_g": 51,
+      "fat_g": 3,
+      "fiber_g": 6
+    },
+    {
+      "name": "Onion Bagel",
+      "category": "Classic Bagels",
+      "serving": "1 Bagel (104 g)",
+      "calories": 280,
+      "protein_g": 10,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Plain Bagel",
+      "category": "Classic Bagels",
+      "serving": "1 Bagel (101 g)",
+      "calories": 270,
+      "protein_g": 10,
+      "carbs_g": 56,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Poppy Seed Bagel",
+      "category": "Classic Bagels",
+      "serving": "1 Bagel (104 g)",
+      "calories": 280,
+      "protein_g": 11,
+      "carbs_g": 56,
+      "fat_g": 2,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pumpernickel Bagel",
+      "category": "Classic Bagels",
+      "serving": "1 Bagel (101 g)",
+      "calories": 270,
+      "protein_g": 10,
+      "carbs_g": 55,
+      "fat_g": 1,
+      "fiber_g": 3
+    },
+    {
+      "name": "Sesame Seed Bagel",
+      "category": "Classic Bagels",
+      "serving": "1 Bagel (104 g)",
+      "calories": 290,
+      "protein_g": 11,
+      "carbs_g": 56,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cinnamon Raisin Bagel (licensed locations)",
+      "category": "Classic Bagels",
+      "serving": "1 Bagel (105 g)",
+      "calories": 290,
+      "protein_g": 10,
+      "carbs_g": 61,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cranberry Bagel (licensed locations)",
+      "category": "Classic Bagels",
+      "serving": "1 Bagel (105 g)",
+      "calories": 310,
+      "protein_g": 10,
+      "carbs_g": 60,
+      "fat_g": 4,
+      "fiber_g": 3
+    },
+    {
+      "name": "Everything Bagel (licensed locations)",
+      "category": "Classic Bagels",
+      "serving": "1 Bagel (105 g)",
+      "calories": 280,
+      "protein_g": 10,
+      "carbs_g": 58,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Honey Whole Wheat Bagel (licensed locations)",
+      "category": "Classic Bagels",
+      "serving": "1 Bagel (105 g)",
+      "calories": 290,
+      "protein_g": 12,
+      "carbs_g": 52,
+      "fat_g": 4,
+      "fiber_g": 6
+    },
+    {
+      "name": "Plain Bagel (licensed locations)",
+      "category": "Classic Bagels",
+      "serving": "1 Bagel (105 g)",
+      "calories": 280,
+      "protein_g": 10,
+      "carbs_g": 58,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sesame Seed Bagel (licensed locations)",
+      "category": "Classic Bagels",
+      "serving": "1 Bagel (105 g)",
+      "calories": 280,
+      "protein_g": 11,
+      "carbs_g": 56,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Asiago Cheese Bagel",
+      "category": "Signature Bagels",
+      "serving": "1 Bagel (109 g)",
+      "calories": 300,
+      "protein_g": 13,
+      "carbs_g": 54,
+      "fat_g": 4,
+      "fiber_g": 2
+    },
+    {
+      "name": "Blueberry Bagel",
+      "category": "Signature Bagels",
+      "serving": "1 Bagel (106 g)",
+      "calories": 280,
+      "protein_g": 9,
+      "carbs_g": 60,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chocolate Chip Bagel",
+      "category": "Signature Bagels",
+      "serving": "1 Bagel (103 g)",
+      "calories": 280,
+      "protein_g": 10,
+      "carbs_g": 56,
+      "fat_g": 3,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cinnamon Sugar Bagel",
+      "category": "Signature Bagels",
+      "serving": "1 Bagel (108 g)",
+      "calories": 300,
+      "protein_g": 10,
+      "carbs_g": 61,
+      "fat_g": 2,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pretzel Bagel",
+      "category": "Signature Bagels",
+      "serving": "1 Bagel (100 g)",
+      "calories": 260,
+      "protein_g": 10,
+      "carbs_g": 54,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Asiago Cheese Bagel (licensed locations)",
+      "category": "Signature Bagels",
+      "serving": "1 Bagel (110 g)",
+      "calories": 310,
+      "protein_g": 13,
+      "carbs_g": 57,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Blueberry Bagel (licensed locations)",
+      "category": "Signature Bagels",
+      "serving": "1 Bagel (105 g)",
+      "calories": 280,
+      "protein_g": 10,
+      "carbs_g": 59,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chocolate Chip Bagel (licensed locations)",
+      "category": "Signature Bagels",
+      "serving": "1 Bagel (105 g)",
+      "calories": 290,
+      "protein_g": 10,
+      "carbs_g": 58,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "French Toast Bagel (licensed locations)",
+      "category": "Signature Bagels",
+      "serving": "1 Bagel (105 g)",
+      "calories": 320,
+      "protein_g": 10,
+      "carbs_g": 60,
+      "fat_g": 4,
+      "fiber_g": 2
+    },
+    {
+      "name": "Ancient Grain Thin",
+      "category": "Thintastic Bagels",
+      "serving": "1 Thin (74 g)",
+      "calories": 190,
+      "protein_g": 9,
+      "carbs_g": 35,
+      "fat_g": 2,
+      "fiber_g": 4
+    },
+    {
+      "name": "Everything Thin",
+      "category": "Thintastic Bagels",
+      "serving": "1 Thin (74 g)",
+      "calories": 200,
+      "protein_g": 8,
+      "carbs_g": 41,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Honey Whole Wheat Thin",
+      "category": "Thintastic Bagels",
+      "serving": "1 Thin (74 g)",
+      "calories": 200,
+      "protein_g": 9,
+      "carbs_g": 37,
+      "fat_g": 2,
+      "fiber_g": 5
+    },
+    {
+      "name": "Plain Thin",
+      "category": "Thintastic Bagels",
+      "serving": "1 Thin (74 g)",
+      "calories": 200,
+      "protein_g": 7,
+      "carbs_g": 41,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Apple Cinnamon",
+      "category": "Gourmet Bagels",
+      "serving": "1 Bagel (149 g)",
+      "calories": 420,
+      "protein_g": 9,
+      "carbs_g": 78,
+      "fat_g": 7,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cheddar Jalapeno",
+      "category": "Gourmet Bagels",
+      "serving": "1 Bagel (127 g)",
+      "calories": 330,
+      "protein_g": 13,
+      "carbs_g": 51,
+      "fat_g": 8,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cheesy Hash Brown Bagel",
+      "category": "Gourmet Bagels",
+      "serving": "1 Bagel (127 g)",
+      "calories": 390,
+      "protein_g": 13,
+      "carbs_g": 59,
+      "fat_g": 11,
+      "fiber_g": 3
+    },
+    {
+      "name": "Green Chile",
+      "category": "Gourmet Bagels",
+      "serving": "1 Bagel (156 g)",
+      "calories": 390,
+      "protein_g": 18,
+      "carbs_g": 55,
+      "fat_g": 11,
+      "fiber_g": 3
+    },
+    {
+      "name": "Maple French Toast Gourmet Bagel",
+      "category": "Gourmet Bagels",
+      "serving": "1 Bagel (115 g)",
+      "calories": 360,
+      "protein_g": 10,
+      "carbs_g": 71,
+      "fat_g": 4,
+      "fiber_g": 4
+    },
+    {
+      "name": "Six-Cheese",
+      "category": "Gourmet Bagels",
+      "serving": "1 Bagel (126 g)",
+      "calories": 360,
+      "protein_g": 16,
+      "carbs_g": 51,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Spinach Florentine",
+      "category": "Gourmet Bagels",
+      "serving": "1 Bagel (142 g)",
+      "calories": 370,
+      "protein_g": 14,
+      "carbs_g": 52,
+      "fat_g": 11,
+      "fiber_g": 3
+    },
+    {
+      "name": "Bagel Roll",
+      "category": "Specialty Breads",
+      "serving": "1 Roll (100 g)",
+      "calories": 270,
+      "protein_g": 9,
+      "carbs_g": 50,
+      "fat_g": 4,
+      "fiber_g": 2
+    },
+    {
+      "name": "Ciabatta Roll (licensed locations)",
+      "category": "Specialty Breads",
+      "serving": "1 Ciabatta (90 g)",
+      "calories": 230,
+      "protein_g": 8,
+      "carbs_g": 44,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Flour Tortilla",
+      "category": "Specialty Breads",
+      "serving": "1 Tortilla (104 g)",
+      "calories": 310,
+      "protein_g": 8,
+      "carbs_g": 52,
+      "fat_g": 7,
+      "fiber_g": 2
+    },
+    {
+      "name": "Garden Veggie Reduced Fat Shmear",
+      "category": "Whipped Cream Cheese Shmear",
+      "serving": "1.2 oz (35 g)",
+      "calories": 100,
+      "protein_g": 2,
+      "carbs_g": 5,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Garlic and Herb Shmear",
+      "category": "Whipped Cream Cheese Shmear",
+      "serving": "1.2 oz (35 g)",
+      "calories": 110,
+      "protein_g": 2,
+      "carbs_g": 5,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey Almond Reduced Fat Shmear",
+      "category": "Whipped Cream Cheese Shmear",
+      "serving": "1.2 oz (35 g)",
+      "calories": 120,
+      "protein_g": 2,
+      "carbs_g": 10,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jalapeno Salsa Reduced Fat Shmear",
+      "category": "Whipped Cream Cheese Shmear",
+      "serving": "1.2 oz (35 g)",
+      "calories": 100,
+      "protein_g": 2,
+      "carbs_g": 5,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Onion and Chive Shmear",
+      "category": "Whipped Cream Cheese Shmear",
+      "serving": "1.2 oz (35 g)",
+      "calories": 110,
+      "protein_g": 2,
+      "carbs_g": 4,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Plain Shmear",
+      "category": "Whipped Cream Cheese Shmear",
+      "serving": "1.2 oz (35 g)",
+      "calories": 120,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Reduced Fat Shmear",
+      "category": "Whipped Cream Cheese Shmear",
+      "serving": "1.2 oz (35 g)",
+      "calories": 120,
+      "protein_g": 1,
+      "carbs_g": 9,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Country Pepper Shmear",
+      "category": "Whipped Cream Cheese Shmear",
+      "serving": "0.7 oz (19 g)",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Add Syrup",
+      "category": "Spreads",
+      "serving": "0.5 oz (14 g)",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 13,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Blend",
+      "category": "Spreads",
+      "serving": "0.5 oz (14 g)",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey",
+      "category": "Spreads",
+      "serving": "1.0 oz (28 g)",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 23,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Natural Peanut Butter",
+      "category": "Spreads",
+      "serving": "1.5 oz (43 g)",
+      "calories": 240,
+      "protein_g": 9,
+      "carbs_g": 10,
+      "fat_g": 21,
+      "fiber_g": 4
+    },
+    {
+      "name": "Natural Strawberry Jam",
+      "category": "Spreads",
+      "serving": "1.0 oz (28 g)",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 16,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peanut Butter and Jam (licensed locations)",
+      "category": "Spreads",
+      "serving": "2.5 oz (71 g)",
+      "calories": 300,
+      "protein_g": 9,
+      "carbs_g": 26,
+      "fat_g": 21,
+      "fiber_g": 4
+    },
+    {
+      "name": "1 Cage Free Egg",
+      "category": "Eggs",
+      "serving": "1 Egg (46 g)",
+      "calories": 80,
+      "protein_g": 6,
+      "carbs_g": 1,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "2 Cage Free Eggs",
+      "category": "Eggs",
+      "serving": "2 Egg (102 g)",
+      "calories": 160,
+      "protein_g": 13,
+      "carbs_g": 2,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "1 Egg White",
+      "category": "Eggs",
+      "serving": "1 Egg (58 g)",
+      "calories": 35,
+      "protein_g": 6,
+      "carbs_g": 1,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "2 Egg White",
+      "category": "Eggs",
+      "serving": "2 Egg (116 g)",
+      "calories": 70,
+      "protein_g": 12,
+      "carbs_g": 1,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fried Egg Patty (licensed locations)",
+      "category": "Eggs",
+      "serving": "1 Egg (43 g)",
+      "calories": 90,
+      "protein_g": 5,
+      "carbs_g": 1,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "American 1 Slice",
+      "category": "Cheese",
+      "serving": "0.5 oz (14 g)",
+      "calories": 50,
+      "protein_g": 2,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheddar 1 Slice",
+      "category": "Cheese",
+      "serving": "0.5 oz (14 g)",
+      "calories": 60,
+      "protein_g": 3,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Swiss 1 Slice",
+      "category": "Cheese",
+      "serving": "0.5 oz (14 g)",
+      "calories": 60,
+      "protein_g": 4,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon",
+      "category": "Meat",
+      "serving": "4 Pieces (14 g)",
+      "calories": 70,
+      "protein_g": 5,
+      "carbs_g": 1,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brisket",
+      "category": "Meat",
+      "serving": "2 oz (57 g)",
+      "calories": 110,
+      "protein_g": 8,
+      "carbs_g": 1,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken Breast (licensed locations)",
+      "category": "Meat",
+      "serving": "3 oz (85 g)",
+      "calories": 90,
+      "protein_g": 20,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chorizo Sausage Patty",
+      "category": "Meat",
+      "serving": "1 Patty (43 g)",
+      "calories": 160,
+      "protein_g": 5,
+      "carbs_g": 1,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ham, Breakfast",
+      "category": "Meat",
+      "serving": "1.5 oz (43 g)",
+      "calories": 45,
+      "protein_g": 6,
+      "carbs_g": 2,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ham, Lunch",
+      "category": "Meat",
+      "serving": "3.0 oz (85 g)",
+      "calories": 90,
+      "protein_g": 12,
+      "carbs_g": 4,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lox, Cold Smoked Salmon",
+      "category": "Meat",
+      "serving": "2.0 oz (57 g)",
+      "calories": 100,
+      "protein_g": 12,
+      "carbs_g": 0,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepperoni Slices",
+      "category": "Meat",
+      "serving": "10 Pieces (19 g)",
+      "calories": 90,
+      "protein_g": 3,
+      "carbs_g": 1,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pork Sausage Patty",
+      "category": "Meat",
+      "serving": "1 Patty (43 g)",
+      "calories": 180,
+      "protein_g": 6,
+      "carbs_g": 0,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Turkey, Lunch",
+      "category": "Meat",
+      "serving": "3.0 oz (85 g)",
+      "calories": 90,
+      "protein_g": 15,
+      "carbs_g": 9,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Turkey Sausage Patty",
+      "category": "Meat",
+      "serving": "1 Patty (43 g)",
+      "calories": 90,
+      "protein_g": 7,
+      "carbs_g": 0,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chipotle Salsa",
+      "category": "Sauces",
+      "serving": "0.5 oz (14 g)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chipotle Mayo",
+      "category": "Sauces",
+      "serving": "0.5 oz (14 g)",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Egg Mayo",
+      "category": "Sauces",
+      "serving": "0.5 oz (14 g)",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Roasted Tomato Spread",
+      "category": "Sauces",
+      "serving": "0.5 oz (14 g)",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spicy Brown Mustard",
+      "category": "Sauces",
+      "serving": "0.5 oz (14 g)",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Avocado",
+      "category": "Produce",
+      "serving": "1.0 oz (28 g)",
+      "calories": 50,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 4,
+      "fiber_g": 2
+    },
+    {
+      "name": "Capers",
+      "category": "Produce",
+      "serving": "0.1 oz (3 g)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cucumber",
+      "category": "Produce",
+      "serving": "3 Slices (28 g)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Leaf Lettuce",
+      "category": "Produce",
+      "serving": "0.5 oz (14 g)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pickle Spear",
+      "category": "Produce",
+      "serving": "1.0 oz (28 g)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Red Onion",
+      "category": "Produce",
+      "serving": "3 Slices (9 g)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spinach",
+      "category": "Produce",
+      "serving": "0.5 oz (14 g)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tomato",
+      "category": "Produce",
+      "serving": "2 Slices (43 g)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon & Cheddar (Classic 1 Egg Sandwich)",
+      "category": "Company: Classic 1 Egg Sandwiches",
+      "serving": "6.2 oz (175 g)",
+      "calories": 450,
+      "protein_g": 25,
+      "carbs_g": 58,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cheddar Cheese (Classic 1 Egg Sandwich)",
+      "category": "Company: Classic 1 Egg Sandwiches",
+      "serving": "5.7 oz (161 g)",
+      "calories": 400,
+      "protein_g": 20,
+      "carbs_g": 57,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Ham & Swiss (Classic 1 Egg Sandwich)",
+      "category": "Company: Classic 1 Egg Sandwiches",
+      "serving": "7.2 oz (204 g)",
+      "calories": 450,
+      "protein_g": 26,
+      "carbs_g": 59,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pork Sausage & Cheddar (Classic 1 Egg Sandwich)",
+      "category": "Company: Classic 1 Egg Sandwiches",
+      "serving": "7.2 oz (204 g)",
+      "calories": 580,
+      "protein_g": 26,
+      "carbs_g": 57,
+      "fat_g": 28,
+      "fiber_g": 2
+    },
+    {
+      "name": "Turkey Sausage & Cheddar (Classic 1 Egg Sandwich)",
+      "category": "Company: Classic 1 Egg Sandwiches",
+      "serving": "7.2 oz (204 g)",
+      "calories": 490,
+      "protein_g": 27,
+      "carbs_g": 57,
+      "fat_g": 18,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bacon & Cheddar (Classic 2 Egg Sandwich)",
+      "category": "Company: Classic 2 Egg Sandwiches",
+      "serving": "8.2 oz (232 g)",
+      "calories": 550,
+      "protein_g": 31,
+      "carbs_g": 58,
+      "fat_g": 21,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cheddar Cheese (Classic 2 Egg Sandwich)",
+      "category": "Company: Classic 2 Egg Sandwiches",
+      "serving": "7.7 oz (218 g)",
+      "calories": 480,
+      "protein_g": 26,
+      "carbs_g": 57,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Ham & Swiss (Classic 2 Egg Sandwich)",
+      "category": "Company: Classic 2 Egg Sandwiches",
+      "serving": "9.2 oz (260 g)",
+      "calories": 530,
+      "protein_g": 33,
+      "carbs_g": 59,
+      "fat_g": 17,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pork Sausage & Cheddar (Classic 2 Egg Sandwich)",
+      "category": "Company: Classic 2 Egg Sandwiches",
+      "serving": "9.2 oz (260 g)",
+      "calories": 660,
+      "protein_g": 32,
+      "carbs_g": 57,
+      "fat_g": 33,
+      "fiber_g": 2
+    },
+    {
+      "name": "Turkey Sausage & Cheddar (Classic 2 Egg Sandwich)",
+      "category": "Company: Classic 2 Egg Sandwiches",
+      "serving": "9.2 oz (261 g)",
+      "calories": 570,
+      "protein_g": 33,
+      "carbs_g": 57,
+      "fat_g": 23,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bacon & Cheddar (Classic Egg White Sandwich)",
+      "category": "Company: Classic Egg White Sandwiches",
+      "serving": "6.6 oz (187 g)",
+      "calories": 430,
+      "protein_g": 25,
+      "carbs_g": 57,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cheddar Cheese (Classic Egg White Sandwich)",
+      "category": "Company: Classic Egg White Sandwiches",
+      "serving": "6.1 oz (173 g)",
+      "calories": 360,
+      "protein_g": 20,
+      "carbs_g": 56,
+      "fat_g": 6,
+      "fiber_g": 2
+    },
+    {
+      "name": "Ham & Swiss (Classic Egg White Sandwich)",
+      "category": "Company: Classic Egg White Sandwiches",
+      "serving": "7.6 oz (216 g)",
+      "calories": 400,
+      "protein_g": 26,
+      "carbs_g": 58,
+      "fat_g": 7,
+      "fiber_g": 2
+    },
+    {
+      "name": "Turkey Sausage & Cheddar (Classic Egg White Sandwich)",
+      "category": "Company: Classic Egg White Sandwiches",
+      "serving": "7.6 oz (216 g)",
+      "calories": 450,
+      "protein_g": 27,
+      "carbs_g": 56,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chorizo Sunrise on Green Chile (1 Egg Sandwich)",
+      "category": "Company Chef's Creations: 1 Egg Sandwiches",
+      "serving": "10.7 oz (305 g)",
+      "calories": 790,
+      "protein_g": 34,
+      "carbs_g": 64,
+      "fat_g": 46,
+      "fiber_g": 5
+    },
+    {
+      "name": "Farmhouse On Cheesy Hash Brown (1 Egg Sandwich)",
+      "category": "Company Chef's Creations: 1 Egg Sandwiches",
+      "serving": "9.2 oz (262 g)",
+      "calories": 690,
+      "protein_g": 35,
+      "carbs_g": 65,
+      "fat_g": 32,
+      "fiber_g": 3
+    },
+    {
+      "name": "Garden Avocado on Everything (1 Egg Sandwich)",
+      "category": "Company Chef's Creations: 1 Egg Sandwiches",
+      "serving": "8.8 oz (249 g)",
+      "calories": 500,
+      "protein_g": 18,
+      "carbs_g": 64,
+      "fat_g": 19,
+      "fiber_g": 5
+    },
+    {
+      "name": "Maplehouse Egg Sandwich 1 Egg",
+      "category": "Company Chef's Creations: 1 Egg Sandwiches",
+      "serving": "9.3 oz (264 g)",
+      "calories": 860,
+      "protein_g": 31,
+      "carbs_g": 92,
+      "fat_g": 41,
+      "fiber_g": 4
+    },
+    {
+      "name": "Santa Fe Sandwich on Asiago (1 Egg Sandwich)",
+      "category": "Company Chef's Creations: 1 Egg Sandwiches",
+      "serving": "8.6 oz (244 g)",
+      "calories": 580,
+      "protein_g": 31,
+      "carbs_g": 59,
+      "fat_g": 25,
+      "fiber_g": 2
+    },
+    {
+      "name": "Texas Brisket on Cheddar Jalapeno (1 Egg Sandwich)",
+      "category": "Company Chef's Creations: 1 Egg Sandwiches",
+      "serving": "9.6 oz (273 g)",
+      "calories": 760,
+      "protein_g": 30,
+      "carbs_g": 56,
+      "fat_g": 48,
+      "fiber_g": 3
+    },
+    {
+      "name": "All-Nighter on Cheesy Hash Brown (2 Egg Sandwich)",
+      "category": "Company Chef's Creations: 2 Egg Sandwiches",
+      "serving": "10.6 oz (300 g)",
+      "calories": 900,
+      "protein_g": 35,
+      "carbs_g": 65,
+      "fat_g": 56,
+      "fiber_g": 3
+    },
+    {
+      "name": "Chorizo Sunrise on Green Chile (2 Egg Sandwich)",
+      "category": "Company Chef's Creations: 2 Egg Sandwiches",
+      "serving": "12.7 oz (361 g)",
+      "calories": 870,
+      "protein_g": 40,
+      "carbs_g": 64,
+      "fat_g": 51,
+      "fiber_g": 5
+    },
+    {
+      "name": "Farmhouse On Cheesy Hash Brown (2 Egg Sandwich)",
+      "category": "Company Chef's Creations: 2 Egg Sandwiches",
+      "serving": "11.2 oz (318 g)",
+      "calories": 770,
+      "protein_g": 41,
+      "carbs_g": 66,
+      "fat_g": 38,
+      "fiber_g": 3
+    },
+    {
+      "name": "Garden Avocado on Everything (2 Egg Sandwich)",
+      "category": "Company Chef's Creations: 2 Egg Sandwiches",
+      "serving": "10.8 oz (306 g)",
+      "calories": 580,
+      "protein_g": 24,
+      "carbs_g": 65,
+      "fat_g": 25,
+      "fiber_g": 5
+    },
+    {
+      "name": "Maplehouse Egg Sandwich 2 Eggs",
+      "category": "Company Chef's Creations: 2 Egg Sandwiches",
+      "serving": "11.3 oz (321 g)",
+      "calories": 940,
+      "protein_g": 38,
+      "carbs_g": 93,
+      "fat_g": 47,
+      "fiber_g": 4
+    },
+    {
+      "name": "Santa Fe Sandwich on Asiago (2 Egg Sandwich)",
+      "category": "Company Chef's Creations: 2 Egg Sandwiches",
+      "serving": "10.6 oz (301 g)",
+      "calories": 660,
+      "protein_g": 37,
+      "carbs_g": 60,
+      "fat_g": 31,
+      "fiber_g": 2
+    },
+    {
+      "name": "Texas Brisket on Cheddar Jalapeno (2 Egg Sandwich)",
+      "category": "Company Chef's Creations: 2 Egg Sandwiches",
+      "serving": "11.2 oz (319 g)",
+      "calories": 840,
+      "protein_g": 36,
+      "carbs_g": 56,
+      "fat_g": 53,
+      "fiber_g": 3
+    },
+    {
+      "name": "Bacon Avocado Tomato Thin on Plain (1 Egg White Sandwich)",
+      "category": "Company Chef's Creations: 1 Egg White Sandwiches",
+      "serving": "8.1 oz (231 g)",
+      "calories": 440,
+      "protein_g": 19,
+      "carbs_g": 47,
+      "fat_g": 19,
+      "fiber_g": 4
+    },
+    {
+      "name": "Chorizo Sunrise on Green Chile (1 Egg White Sandwich)",
+      "category": "Company Chef's Creations: 1 Egg White Sandwiches",
+      "serving": "11.2 oz (317 g)",
+      "calories": 750,
+      "protein_g": 34,
+      "carbs_g": 63,
+      "fat_g": 41,
+      "fiber_g": 5
+    },
+    {
+      "name": "Farmhouse On Cheesy Hash Brown (1 Egg White Sandwich)",
+      "category": "Company Chef's Creations: 1 Egg White Sandwiches",
+      "serving": "9.7 oz (274 g)",
+      "calories": 650,
+      "protein_g": 34,
+      "carbs_g": 65,
+      "fat_g": 27,
+      "fiber_g": 3
+    },
+    {
+      "name": "Garden Avocado on Everything (1 Egg White Sandwich)",
+      "category": "Company Chef's Creations: 1 Egg White Sandwiches",
+      "serving": "9.2 oz (261 g)",
+      "calories": 450,
+      "protein_g": 18,
+      "carbs_g": 63,
+      "fat_g": 14,
+      "fiber_g": 5
+    },
+    {
+      "name": "Santa Fe Sandwich on Asiago (1 Egg White Sandwich)",
+      "category": "Company Chef's Creations: 1 Egg White Sandwiches",
+      "serving": "9.0 oz (256 g)",
+      "calories": 540,
+      "protein_g": 31,
+      "carbs_g": 59,
+      "fat_g": 20,
+      "fiber_g": 2
+    },
+    {
+      "name": "Texas Brisket on Cheddar Jalapeno (1 Egg White Sandwich)",
+      "category": "Company Chef's Creations: 1 Egg White Sandwiches",
+      "serving": "10.0 oz (284 g)",
+      "calories": 720,
+      "protein_g": 30,
+      "carbs_g": 55,
+      "fat_g": 43,
+      "fiber_g": 3
+    },
+    {
+      "name": "Big Breakfast Burrito (licensed locations)",
+      "category": "Company Burrito",
+      "serving": "14.0 oz (398 g)",
+      "calories": 1050,
+      "protein_g": 50,
+      "carbs_g": 76,
+      "fat_g": 60,
+      "fiber_g": 4
+    },
+    {
+      "name": "Chorizo Breakfast Burrito",
+      "category": "Company Burrito",
+      "serving": "14.0 oz (398 g)",
+      "calories": 1120,
+      "protein_g": 49,
+      "carbs_g": 77,
+      "fat_g": 68,
+      "fiber_g": 4
+    },
+    {
+      "name": "Applewood Bacon & Cheddar (Classic Egg Sandwich) (licensed locations)",
+      "category": "License: Classic Egg Sandwiches",
+      "serving": "6.1 oz (173 g)",
+      "calories": 500,
+      "protein_g": 23,
+      "carbs_g": 61,
+      "fat_g": 18,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cheddar Cheese (Classic Egg Sandwich) (licensed locations)",
+      "category": "License: Classic Egg Sandwiches",
+      "serving": "5.7 oz (163 g)",
+      "calories": 430,
+      "protein_g": 18,
+      "carbs_g": 60,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Ham & Swiss (Classic Egg Sandwich) (licensed locations)",
+      "category": "License: Classic Egg Sandwiches",
+      "serving": "7.2 oz (205 g)",
+      "calories": 470,
+      "protein_g": 25,
+      "carbs_g": 61,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Turkey Sausage & Cheddar (Classic Egg Sandwich) (licensed locations)",
+      "category": "License: Classic Egg Sandwiches",
+      "serving": "7.2 oz (205 g)",
+      "calories": 520,
+      "protein_g": 25,
+      "carbs_g": 60,
+      "fat_g": 20,
+      "fiber_g": 2
+    },
+    {
+      "name": "All-Nighter on Cheesy Hash Brown (Signature Egg Sandwich) (licensed locations)",
+      "category": "License: Signature Egg Sandwiches",
+      "serving": "9.8 oz (278 g)",
+      "calories": 930,
+      "protein_g": 33,
+      "carbs_g": 66,
+      "fat_g": 60,
+      "fiber_g": 3
+    },
+    {
+      "name": "Bacon Avocado Tomato Thin on Plain (Signature Egg Sandwich) (licensed locations)",
+      "category": "License: Signature Egg Sandwiches",
+      "serving": "8.1 oz (230 g)",
+      "calories": 430,
+      "protein_g": 19,
+      "carbs_g": 48,
+      "fat_g": 18,
+      "fiber_g": 4
+    },
+    {
+      "name": "Farmhouse On Cheesy Hash Brown (Signature Egg Sandwich) (licensed locations)",
+      "category": "License: Signature Egg Sandwiches",
+      "serving": "9.1 oz (258 g)",
+      "calories": 710,
+      "protein_g": 33,
+      "carbs_g": 65,
+      "fat_g": 35,
+      "fiber_g": 3
+    },
+    {
+      "name": "Garden Avocado on Everything (Signature Egg Sandwich)",
+      "category": "License: Signature Egg Sandwiches",
+      "serving": "8.7 oz (248 g)",
+      "calories": 510,
+      "protein_g": 16,
+      "carbs_g": 65,
+      "fat_g": 21,
+      "fiber_g": 5
+    },
+    {
+      "name": "Santa Fe on Asiago Thin (Signature Egg Sandwich) (licensed locations)",
+      "category": "License: Signature Egg Sandwiches",
+      "serving": "7.8 oz (220 g)",
+      "calories": 440,
+      "protein_g": 26,
+      "carbs_g": 43,
+      "fat_g": 18,
+      "fiber_g": 2
+    },
+    {
+      "name": "Big Bro's Burrito (licensed locations)",
+      "category": "License: Burrito",
+      "serving": "15.3 oz (433 g)",
+      "calories": 1250,
+      "protein_g": 48,
+      "carbs_g": 94,
+      "fat_g": 76,
+      "fiber_g": 7
+    },
+    {
+      "name": "Avocado Veg Out on Sesame",
+      "category": "Company: Signature Lunch Sandwiches",
+      "serving": "9.1 oz (259 g)",
+      "calories": 410,
+      "protein_g": 14,
+      "carbs_g": 66,
+      "fat_g": 11,
+      "fiber_g": 6
+    },
+    {
+      "name": "Ham & Swiss on Plain Bagel",
+      "category": "Company: Signature Lunch Sandwiches",
+      "serving": "10.4 oz (295 g)",
+      "calories": 540,
+      "protein_g": 27,
+      "carbs_g": 63,
+      "fat_g": 20,
+      "fiber_g": 3
+    },
+    {
+      "name": "Nova Lox on Plain Bagel",
+      "category": "Company: Signature Lunch Sandwiches",
+      "serving": "8.7 oz (248 g)",
+      "calories": 500,
+      "protein_g": 24,
+      "carbs_g": 60,
+      "fat_g": 18,
+      "fiber_g": 3
+    },
+    {
+      "name": "Tasty Turkey on Asiago Bagel",
+      "category": "Company: Signature Lunch Sandwiches",
+      "serving": "11.6 oz (329 g)",
+      "calories": 520,
+      "protein_g": 32,
+      "carbs_g": 71,
+      "fat_g": 16,
+      "fiber_g": 3
+    },
+    {
+      "name": "Turkey & Cheddar on Plain Bagel",
+      "category": "Company: Signature Lunch Sandwiches",
+      "serving": "10.4 oz (295 g)",
+      "calories": 540,
+      "protein_g": 29,
+      "carbs_g": 68,
+      "fat_g": 20,
+      "fiber_g": 3
+    },
+    {
+      "name": "Turkey, Bacon & Avocado on Plain Bagel",
+      "category": "Company: Signature Lunch Sandwiches",
+      "serving": "11.0 oz (313 g)",
+      "calories": 640,
+      "protein_g": 31,
+      "carbs_g": 73,
+      "fat_g": 28,
+      "fiber_g": 4
+    },
+    {
+      "name": "Pizza Bagel, Cheese on Plain",
+      "category": "Company: Hot and Toasty Lunch Sandwiches",
+      "serving": "6.4 oz (183 g)",
+      "calories": 460,
+      "protein_g": 25,
+      "carbs_g": 61,
+      "fat_g": 13,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pizza Bagel, Pepperoni on Plain",
+      "category": "Company: Hot and Toasty Lunch Sandwiches",
+      "serving": "7.1 oz (202 g)",
+      "calories": 560,
+      "protein_g": 28,
+      "carbs_g": 61,
+      "fat_g": 22,
+      "fiber_g": 3
+    },
+    {
+      "name": "Avocado Veg Out on Sesame (licensed locations)",
+      "category": "License: Signature Lunch Sandwiches",
+      "serving": "9.2 oz (260 g)",
+      "calories": 400,
+      "protein_g": 14,
+      "carbs_g": 66,
+      "fat_g": 11,
+      "fiber_g": 5
+    },
+    {
+      "name": "Ham & Swiss on Plain Bagel (licensed locations)",
+      "category": "License: Signature Lunch Sandwiches",
+      "serving": "10.5 oz (299 g)",
+      "calories": 550,
+      "protein_g": 26,
+      "carbs_g": 65,
+      "fat_g": 20,
+      "fiber_g": 3
+    },
+    {
+      "name": "California Turkey Wrap (licensed locations)",
+      "category": "License: Signature Lunch Sandwiches",
+      "serving": "12.6 oz (358 g)",
+      "calories": 670,
+      "protein_g": 31,
+      "carbs_g": 72,
+      "fat_g": 32,
+      "fiber_g": 5
+    },
+    {
+      "name": "Chicken Salad on Plain Bagel (licensed locations)",
+      "category": "License: Signature Lunch Sandwiches",
+      "serving": "9.7 oz (275 g)",
+      "calories": 490,
+      "protein_g": 29,
+      "carbs_g": 61,
+      "fat_g": 16,
+      "fiber_g": 3
+    },
+    {
+      "name": "Nova Lox on Plain Bagel (licensed locations)",
+      "category": "License: Signature Lunch Sandwiches",
+      "serving": "8.8 oz (250 g)",
+      "calories": 510,
+      "protein_g": 24,
+      "carbs_g": 63,
+      "fat_g": 19,
+      "fiber_g": 3
+    },
+    {
+      "name": "Tasty Turkey on Asiago Bagel (licensed locations)",
+      "category": "License: Signature Lunch Sandwiches",
+      "serving": "11.6 oz (330 g)",
+      "calories": 530,
+      "protein_g": 31,
+      "carbs_g": 75,
+      "fat_g": 15,
+      "fiber_g": 3
+    },
+    {
+      "name": "Turkey & Cheddar on Plain Bagel (licensed locations)",
+      "category": "License: Signature Lunch Sandwiches",
+      "serving": "10.5 oz (299 g)",
+      "calories": 560,
+      "protein_g": 29,
+      "carbs_g": 70,
+      "fat_g": 20,
+      "fiber_g": 3
+    },
+    {
+      "name": "Turkey, Bacon & Avocado on Ciabatta (licensed locations)",
+      "category": "License: Signature Lunch Sandwiches",
+      "serving": "10.6 oz (302 g)",
+      "calories": 600,
+      "protein_g": 29,
+      "carbs_g": 61,
+      "fat_g": 30,
+      "fiber_g": 4
+    },
+    {
+      "name": "Albuquerque Turkey on Six Cheese (licensed locations)",
+      "category": "License: Hot Sandwiches",
+      "serving": "12.2 oz (345 g)",
+      "calories": 710,
+      "protein_g": 44,
+      "carbs_g": 68,
+      "fat_g": 33,
+      "fiber_g": 3
+    },
+    {
+      "name": "Cheesy Veggie Melt on Ciabatta (licensed locations)",
+      "category": "License: Hot Sandwiches",
+      "serving": "8.2 oz (232 g)",
+      "calories": 620,
+      "protein_g": 23,
+      "carbs_g": 50,
+      "fat_g": 37,
+      "fiber_g": 3
+    },
+    {
+      "name": "Chicken and Pepperoni on Ciabatta (licensed locations)",
+      "category": "License: Hot Sandwiches",
+      "serving": "8.8 oz (250 g)",
+      "calories": 650,
+      "protein_g": 43,
+      "carbs_g": 47,
+      "fat_g": 33,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pizza Bagel Cheese on Plain (licensed locations)",
+      "category": "License: Hot Sandwiches",
+      "serving": "6.6 oz (187 g)",
+      "calories": 480,
+      "protein_g": 25,
+      "carbs_g": 63,
+      "fat_g": 14,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pizza Bagel Pepperoni on Plain (licensed locations)",
+      "category": "License: Hot Sandwiches",
+      "serving": "7.2 oz (205 g)",
+      "calories": 570,
+      "protein_g": 28,
+      "carbs_g": 64,
+      "fat_g": 22,
+      "fiber_g": 3
+    },
+    {
+      "name": "Spicy Chicken on Ciabatta (licensed locations)",
+      "category": "License: Hot Sandwiches",
+      "serving": "9.7 oz (276 g)",
+      "calories": 610,
+      "protein_g": 41,
+      "carbs_g": 53,
+      "fat_g": 26,
+      "fiber_g": 3
+    },
+    {
+      "name": "Sea Salt Potato Chips",
+      "category": "Sides",
+      "serving": "1.0 oz (28 g)",
+      "calories": 150,
+      "protein_g": 2,
+      "carbs_g": 17,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Twice Baked Hash Brown",
+      "category": "Sides",
+      "serving": "3.0 oz (85 g)",
+      "calories": 170,
+      "protein_g": 7,
+      "carbs_g": 11,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Avocado Toast",
+      "category": "Avocado Toast",
+      "serving": "5.6 oz (160 g)",
+      "calories": 380,
+      "protein_g": 11,
+      "carbs_g": 63,
+      "fat_g": 9,
+      "fiber_g": 6
+    },
+    {
+      "name": "Avocado Toast (licensed locations)",
+      "category": "Avocado Toast",
+      "serving": "5.7 oz (162 g)",
+      "calories": 380,
+      "protein_g": 11,
+      "carbs_g": 64,
+      "fat_g": 9,
+      "fiber_g": 5
+    },
+    {
+      "name": "Cinnamon Bliss Roll",
+      "category": "Sweets",
+      "serving": "6.5 oz (185 g)",
+      "calories": 610,
+      "protein_g": 11,
+      "carbs_g": 98,
+      "fat_g": 39,
+      "fiber_g": 3
+    },
+    {
+      "name": "Cookie, Heavenly Chocolate Chip",
+      "category": "Sweets",
+      "serving": "3.5 oz (99 g)",
+      "calories": 470,
+      "protein_g": 5,
+      "carbs_g": 62,
+      "fat_g": 23,
+      "fiber_g": 2
+    },
+    {
+      "name": "Fruity Cereal Pop",
+      "category": "Sweets",
+      "serving": "1.4 oz (39 g)",
+      "calories": 150,
+      "protein_g": 1,
+      "carbs_g": 29,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Muffin, Blueberry",
+      "category": "Sweets",
+      "serving": "4.2 oz (120 g)",
+      "calories": 440,
+      "protein_g": 5,
+      "carbs_g": 48,
+      "fat_g": 25,
+      "fiber_g": 1
+    },
+    {
+      "name": "Muffin, Chocolate Chip",
+      "category": "Sweets",
+      "serving": "4.2 oz (120 g)",
+      "calories": 530,
+      "protein_g": 6,
+      "carbs_g": 56,
+      "fat_g": 30,
+      "fiber_g": 1
+    },
+    {
+      "name": "Muffin, Cinnamon Chip",
+      "category": "Sweets",
+      "serving": "4.2 oz (120 g)",
+      "calories": 510,
+      "protein_g": 6,
+      "carbs_g": 64,
+      "fat_g": 27,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pastry, Apple Pie",
+      "category": "Sweets",
+      "serving": "3.0 oz (85 g)",
+      "calories": 250,
+      "protein_g": 3,
+      "carbs_g": 38,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pastry, Strawberry and Cream Strudel",
+      "category": "Sweets",
+      "serving": "3.8 oz (109 g)",
+      "calories": 340,
+      "protein_g": 4,
+      "carbs_g": 42,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Americano, Hot",
+      "category": "Classic Coffee Drinks (with 2% milk)",
+      "serving": "12 fl oz",
+      "calories": 5,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Americano, Hot",
+      "category": "Classic Coffee Drinks (with 2% milk)",
+      "serving": "16 fl oz",
+      "calories": 5,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Americano, Hot",
+      "category": "Classic Coffee Drinks (with 2% milk)",
+      "serving": "20 fl oz",
+      "calories": 10,
+      "protein_g": 3,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino, Hot",
+      "category": "Classic Coffee Drinks (with 2% milk)",
+      "serving": "12 fl oz",
+      "calories": 110,
+      "protein_g": 9,
+      "carbs_g": 10,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino, Hot",
+      "category": "Classic Coffee Drinks (with 2% milk)",
+      "serving": "16 fl oz",
+      "calories": 140,
+      "protein_g": 11,
+      "carbs_g": 13,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino, Hot",
+      "category": "Classic Coffee Drinks (with 2% milk)",
+      "serving": "20 fl oz",
+      "calories": 170,
+      "protein_g": 14,
+      "carbs_g": 15,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chai Tea Latte, Hot",
+      "category": "Classic Coffee Drinks (with 2% milk)",
+      "serving": "12 fl oz",
+      "calories": 170,
+      "protein_g": 7,
+      "carbs_g": 26,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chai Tea Latte, Hot",
+      "category": "Classic Coffee Drinks (with 2% milk)",
+      "serving": "16 fl oz",
+      "calories": 230,
+      "protein_g": 9,
+      "carbs_g": 35,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chai Tea Latte, Hot",
+      "category": "Classic Coffee Drinks (with 2% milk)",
+      "serving": "20 fl oz",
+      "calories": 280,
+      "protein_g": 11,
+      "carbs_g": 43,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chai Tea Latte, Iced",
+      "category": "Classic Coffee Drinks (with 2% milk)",
+      "serving": "16 fl oz",
+      "calories": 140,
+      "protein_g": 5,
+      "carbs_g": 23,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chai Tea Latte, Iced",
+      "category": "Classic Coffee Drinks (with 2% milk)",
+      "serving": "24 fl oz",
+      "calories": 250,
+      "protein_g": 9,
+      "carbs_g": 41,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Latte, Hot",
+      "category": "Classic Coffee Drinks (with 2% milk)",
+      "serving": "12 fl oz",
+      "calories": 110,
+      "protein_g": 9,
+      "carbs_g": 10,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Latte, Hot",
+      "category": "Classic Coffee Drinks (with 2% milk)",
+      "serving": "16 fl oz",
+      "calories": 140,
+      "protein_g": 11,
+      "carbs_g": 13,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Latte, Hot",
+      "category": "Classic Coffee Drinks (with 2% milk)",
+      "serving": "20 fl oz",
+      "calories": 170,
+      "protein_g": 14,
+      "carbs_g": 15,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Latte, Iced",
+      "category": "Classic Coffee Drinks (with 2% milk)",
+      "serving": "16 fl oz",
+      "calories": 80,
+      "protein_g": 7,
+      "carbs_g": 7,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Latte, Iced",
+      "category": "Classic Coffee Drinks (with 2% milk)",
+      "serving": "24 fl oz",
+      "calories": 140,
+      "protein_g": 12,
+      "carbs_g": 13,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mocha, Hot",
+      "category": "Classic Coffee Drinks (with 2% milk)",
+      "serving": "12 fl oz",
+      "calories": 270,
+      "protein_g": 10,
+      "carbs_g": 46,
+      "fat_g": 6,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha, Hot",
+      "category": "Classic Coffee Drinks (with 2% milk)",
+      "serving": "16 fl oz",
+      "calories": 350,
+      "protein_g": 13,
+      "carbs_g": 61,
+      "fat_g": 8,
+      "fiber_g": 3
+    },
+    {
+      "name": "Mocha, Hot",
+      "category": "Classic Coffee Drinks (with 2% milk)",
+      "serving": "20 fl oz",
+      "calories": 420,
+      "protein_g": 16,
+      "carbs_g": 75,
+      "fat_g": 9,
+      "fiber_g": 3
+    },
+    {
+      "name": "Mocha, Iced",
+      "category": "Classic Coffee Drinks (with 2% milk)",
+      "serving": "16 fl oz",
+      "calories": 240,
+      "protein_g": 8,
+      "carbs_g": 44,
+      "fat_g": 5,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha, Iced",
+      "category": "Classic Coffee Drinks (with 2% milk)",
+      "serving": "24 fl oz",
+      "calories": 390,
+      "protein_g": 14,
+      "carbs_g": 72,
+      "fat_g": 8,
+      "fiber_g": 3
+    },
+    {
+      "name": "Caramel Macchiato, Hot",
+      "category": "Signature Coffee Drinks (with 2% milk)",
+      "serving": "12 fl oz",
+      "calories": 290,
+      "protein_g": 11,
+      "carbs_g": 49,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Macchiato, Hot",
+      "category": "Signature Coffee Drinks (with 2% milk)",
+      "serving": "16 fl oz",
+      "calories": 370,
+      "protein_g": 14,
+      "carbs_g": 64,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Macchiato, Hot",
+      "category": "Signature Coffee Drinks (with 2% milk)",
+      "serving": "20 fl oz",
+      "calories": 450,
+      "protein_g": 17,
+      "carbs_g": 79,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Macchiato, Iced",
+      "category": "Signature Coffee Drinks (with 2% milk)",
+      "serving": "16 fl oz",
+      "calories": 260,
+      "protein_g": 10,
+      "carbs_g": 46,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Macchiato, Iced",
+      "category": "Signature Coffee Drinks (with 2% milk)",
+      "serving": "24 fl oz",
+      "calories": 420,
+      "protein_g": 15,
+      "carbs_g": 76,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Latte, Hot",
+      "category": "Signature Coffee Drinks (with 2% milk)",
+      "serving": "12 fl oz",
+      "calories": 220,
+      "protein_g": 8,
+      "carbs_g": 36,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Latte, Hot",
+      "category": "Signature Coffee Drinks (with 2% milk)",
+      "serving": "16 fl oz",
+      "calories": 290,
+      "protein_g": 10,
+      "carbs_g": 49,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Latte, Hot",
+      "category": "Signature Coffee Drinks (with 2% milk)",
+      "serving": "20 fl oz",
+      "calories": 350,
+      "protein_g": 12,
+      "carbs_g": 58,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Classic Iced Coffee",
+      "category": "Iced Coffee",
+      "serving": "16 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Classic Iced Coffee",
+      "category": "Iced Coffee",
+      "serving": "24 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Iced Coffee",
+      "category": "Iced Coffee",
+      "serving": "16 fl oz",
+      "calories": 140,
+      "protein_g": 2,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Iced Coffee",
+      "category": "Iced Coffee",
+      "serving": "24 fl oz",
+      "calories": 250,
+      "protein_g": 3,
+      "carbs_g": 59,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Iced Coffee",
+      "category": "Iced Coffee",
+      "serving": "16 fl oz",
+      "calories": 130,
+      "protein_g": 1,
+      "carbs_g": 32,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chocolate Iced Coffee",
+      "category": "Iced Coffee",
+      "serving": "24 fl oz",
+      "calories": 220,
+      "protein_g": 2,
+      "carbs_g": 55,
+      "fat_g": 2,
+      "fiber_g": 3
+    },
+    {
+      "name": "Vanilla Iced Beverage",
+      "category": "Iced Coffee",
+      "serving": "16 fl oz",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 27,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Iced Beverage",
+      "category": "Iced Coffee",
+      "serving": "24 fl oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Classic Cold Brew",
+      "category": "Cold Brew",
+      "serving": "16 fl oz",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Classic Cold Brew",
+      "category": "Cold Brew",
+      "serving": "24 fl oz",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Cold Brew",
+      "category": "Cold Brew",
+      "serving": "16 fl oz",
+      "calories": 150,
+      "protein_g": 3,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Cold Brew",
+      "category": "Cold Brew",
+      "serving": "24 fl oz",
+      "calories": 250,
+      "protein_g": 4,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Cold Brew",
+      "category": "Cold Brew",
+      "serving": "16 fl oz",
+      "calories": 140,
+      "protein_g": 2,
+      "carbs_g": 33,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chocolate Cold Brew",
+      "category": "Cold Brew",
+      "serving": "24 fl oz",
+      "calories": 220,
+      "protein_g": 3,
+      "carbs_g": 55,
+      "fat_g": 2,
+      "fiber_g": 3
+    },
+    {
+      "name": "Vanilla Cold Brew",
+      "category": "Cold Brew",
+      "serving": "16 fl oz",
+      "calories": 120,
+      "protein_g": 1,
+      "carbs_g": 29,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Cold Brew",
+      "category": "Cold Brew",
+      "serving": "24 fl oz",
+      "calories": 200,
+      "protein_g": 1,
+      "carbs_g": 47,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Cold Brew Shake",
+      "category": "Cold Brew Frozen Shakes",
+      "serving": "16 fl oz",
+      "calories": 410,
+      "protein_g": 8,
+      "carbs_g": 80,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Cold Brew Shake",
+      "category": "Cold Brew Frozen Shakes",
+      "serving": "24 fl oz",
+      "calories": 640,
+      "protein_g": 13,
+      "carbs_g": 125,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Cold Brew Shake",
+      "category": "Cold Brew Frozen Shakes",
+      "serving": "16 fl oz",
+      "calories": 400,
+      "protein_g": 7,
+      "carbs_g": 77,
+      "fat_g": 7,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chocolate Cold Brew Shake",
+      "category": "Cold Brew Frozen Shakes",
+      "serving": "24 fl oz",
+      "calories": 620,
+      "protein_g": 11,
+      "carbs_g": 121,
+      "fat_g": 11,
+      "fiber_g": 4
+    },
+    {
+      "name": "Classic Cold Brew Shake",
+      "category": "Cold Brew Frozen Shakes",
+      "serving": "16 fl oz",
+      "calories": 300,
+      "protein_g": 7,
+      "carbs_g": 49,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Classic Cold Brew Shake",
+      "category": "Cold Brew Frozen Shakes",
+      "serving": "24 fl oz",
+      "calories": 470,
+      "protein_g": 11,
+      "carbs_g": 79,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Cold Brew Shake",
+      "category": "Cold Brew Frozen Shakes",
+      "serving": "16 fl oz",
+      "calories": 370,
+      "protein_g": 6,
+      "carbs_g": 68,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Cold Brew Shake",
+      "category": "Cold Brew Frozen Shakes",
+      "serving": "24 fl oz",
+      "calories": 570,
+      "protein_g": 9,
+      "carbs_g": 109,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bro's Bay Breeze, Iced",
+      "category": "Refreshers",
+      "serving": "16 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bro's Bay Breeze, Iced",
+      "category": "Refreshers",
+      "serving": "24 fl oz",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 70,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dragon Fruit Lemon Drop, Iced",
+      "category": "Refreshers",
+      "serving": "16 fl oz",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 41,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dragon Fruit Lemon Drop, Iced",
+      "category": "Refreshers",
+      "serving": "24 fl oz",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 63,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Sunrise, Iced",
+      "category": "Refreshers",
+      "serving": "16 fl oz",
+      "calories": 170,
+      "protein_g": 1,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Sunrise, Iced",
+      "category": "Refreshers",
+      "serving": "24 fl oz",
+      "calories": 270,
+      "protein_g": 1,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Energy Spritz, Iced",
+      "category": "Refreshers",
+      "serving": "16 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Energy Spritz, Iced",
+      "category": "Refreshers",
+      "serving": "24 fl oz",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 70,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Chocolate",
+      "category": "Hot Chocolate (with 2% milk)",
+      "serving": "12 fl oz",
+      "calories": 300,
+      "protein_g": 11,
+      "carbs_g": 50,
+      "fat_g": 8,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hot Chocolate",
+      "category": "Hot Chocolate (with 2% milk)",
+      "serving": "16 fl oz",
+      "calories": 400,
+      "protein_g": 15,
+      "carbs_g": 67,
+      "fat_g": 10,
+      "fiber_g": 3
+    },
+    {
+      "name": "Breakfast Blend Medium Roast Drip Coffee",
+      "category": "Drip Coffee",
+      "serving": "12 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Breakfast Blend Medium Roast Drip Coffee",
+      "category": "Drip Coffee",
+      "serving": "16 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Breakfast Blend Medium Roast Drip Coffee",
+      "category": "Drip Coffee",
+      "serving": "20 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dark Roast Drip Coffee",
+      "category": "Drip Coffee",
+      "serving": "12 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dark Roast Drip Coffee",
+      "category": "Drip Coffee",
+      "serving": "16 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dark Roast Drip Coffee",
+      "category": "Drip Coffee",
+      "serving": "20 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Decaf Drip Coffee",
+      "category": "Drip Coffee",
+      "serving": "12 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Decaf Drip Coffee",
+      "category": "Drip Coffee",
+      "serving": "16 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Decaf Drip Coffee",
+      "category": "Drip Coffee",
+      "serving": "20 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Hazelnut Drip Coffee",
+      "category": "Drip Coffee",
+      "serving": "12 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Hazelnut Drip Coffee",
+      "category": "Drip Coffee",
+      "serving": "16 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Hazelnut Drip Coffee",
+      "category": "Drip Coffee",
+      "serving": "20 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Tea",
+      "category": "Tea and Lemonade",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Tea",
+      "category": "Tea and Lemonade",
+      "serving": "16 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Tea",
+      "category": "Tea and Lemonade",
+      "serving": "20 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea",
+      "category": "Tea and Lemonade",
+      "serving": "16 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea",
+      "category": "Tea and Lemonade",
+      "serving": "24 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade, Iced",
+      "category": "Tea and Lemonade",
+      "serving": "16 fl oz",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade, Iced",
+      "category": "Tea and Lemonade",
+      "serving": "24 fl oz",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 32,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Banana Smoothie",
+      "category": "Smoothies",
+      "serving": "16 fl oz",
+      "calories": 280,
+      "protein_g": 1,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 4
+    },
+    {
+      "name": "Strawberry Banana Smoothie",
+      "category": "Smoothies",
+      "serving": "24 fl oz",
+      "calories": 370,
+      "protein_g": 2,
+      "carbs_g": 89,
+      "fat_g": 0,
+      "fiber_g": 5
+    }
+  ]
+}

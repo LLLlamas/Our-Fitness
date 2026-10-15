@@ -45,6 +45,10 @@ USAGE
   # Skip the (large) Branded download — Foundation + SR Legacy only:
   python3 scripts/build-food-db.py --no-branded
 
+  # Re-merge ONLY the restaurant menus (scripts/restaurant-data/*.json) into an
+  # existing database — no USDA download, idempotent, takes seconds:
+  python3 scripts/build-food-db.py --merge-restaurants-into OurFitness/Resources/usda-foods.db
+
   # Point at already-downloaded dataset zips instead of fetching:
   python3 scripts/build-food-db.py \
       --foundation /path/FoodData_Central_foundation_food_json_*.zip \
@@ -65,6 +69,22 @@ NOTES
     (see select_branded) so it doesn't flood the bundle with UPC duplicates.
   * A failed Branded download is non-fatal: Foundation + SR Legacy still write.
   * Output is sorted + pretty-printed so diffs are reviewable.
+
+RESTAURANT MENUS (scripts/restaurant-data/<slug>.json)
+  One JSON file per chain: {"chain","slug","aliases","kind","source_url",
+  "source_kind","retrieved","notes","items":[{"name","category","serving",
+  "calories","protein_g","carbs_g","fat_g","fiber_g"}]}. Values come from the
+  chain's published nutrition info (see source_url) — never invented. Only the
+  five nutrients the `foods` table already has are read: sodium / sugar / sat-fat
+  stay label-scan-only (MacroBudget.capCoverage relies on that).
+  Each item lands in TWO places:
+    * `foods` (+ `foods_fts`) as id `rest:<slug>:<item-slug>`, name
+      "<Chain> <Item>", aliases incl. every chain alias — so ordinary food search
+      and the parser find "shake shack fries" with no special casing;
+    * `restaurant_items` (chain, category, source order, the same numbers) +
+      `restaurant_chains` (slug, name, aliases, kind, item count), read once into
+      memory by Domain/RestaurantCatalog.swift for the chain row + menu screen.
+  The merge is idempotent: it drops every `rest:` row and both tables first.
 """
 
 from __future__ import annotations
@@ -82,6 +102,8 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_JSON = REPO_ROOT / "OurFitness" / "Resources" / "usda-foods.json"
 OUTPUT_DB = REPO_ROOT / "OurFitness" / "Resources" / "usda-foods.db"
+RESTAURANT_DIR = REPO_ROOT / "scripts" / "restaurant-data"
+REST_ID_PREFIX = "rest:"
 
 # USDA nutrient numbers (stable across datasets):
 # Energy: prefer classic Energy (kcal, #208); Foundation Foods frequently report
@@ -161,13 +183,15 @@ def iter_foods(zf: zipfile.ZipFile):
     with zf.open(name) as fh:
         doc = json.load(fh)
     # Foundation/SR legacy bundles key the array under a dataset-specific name.
+    # The 2026-04-30 Foundation release has `null` holes in its array — skip
+    # anything that isn't a food object rather than crash on `.get`.
     for key in ("FoundationFoods", "SRLegacyFoods", "foods"):
-        if key in doc:
-            yield from doc[key]
+        if isinstance(doc, dict) and key in doc:
+            yield from (f for f in doc[key] if isinstance(f, dict))
             return
     # Some exports are a bare top-level list.
     if isinstance(doc, list):
-        yield from doc
+        yield from (f for f in doc if isinstance(f, dict))
 
 
 def nutrient_value(food: dict, number: str) -> float | None:
@@ -244,7 +268,7 @@ def build_entry(food: dict) -> dict | None:
     fdc_id = food.get("fdcId", slugify(display))
 
     def g(v: float | None) -> int:
-        return int(round((v or 0.0) * scale))
+        return max(0, int(round((v or 0.0) * scale)))
 
     return {
         "id": f"usda-{fdc_id}",
@@ -361,7 +385,7 @@ def build_branded_entry(food: dict) -> tuple[dict, str, str] | None:
     fdc_id = food.get("fdcId", slugify(name))
 
     def g(v: float | None) -> int:
-        return int(round(v or 0.0))
+        return max(0, int(round(v or 0.0)))
 
     entry = {
         "id": f"usda-{fdc_id}",
@@ -401,7 +425,8 @@ def iter_branded(zf: zipfile.ZipFile):
                 produced = False
                 for item in ijson.items(fh, f"{key}.item"):
                     produced = True
-                    yield item
+                    if isinstance(item, dict):  # skip null holes (see iter_foods)
+                        yield item
                 if produced:
                     return
             except Exception as exc:  # noqa: BLE001 — log and try the next key
@@ -463,6 +488,236 @@ def select_branded(zf: zipfile.ZipFile, cap: int, max_per_brand: int) -> list[di
 MIN_FOODS = 100
 
 
+# ---------------------------------------------------------------------------
+# Restaurant menus (scripts/restaurant-data/*.json)
+# ---------------------------------------------------------------------------
+
+def _num(v) -> float | None:
+    if isinstance(v, bool):
+        return None
+    if isinstance(v, (int, float)):
+        return float(v)
+    return None
+
+
+_LIMITED_TIME = re.compile(r"limited time", re.I)
+# Alcohol carries calories that protein/carbs/fat don't account for, so it is
+# exempt from the Atwater check below.
+_ALCOHOL = re.compile(
+    r"beer|wine|cocktail|margarita|sangria|alcohol|spirits|lager|\bale\b|seltzer|mimosa|cantina|old fashioned",
+    re.I,
+)
+
+
+def _broken_row(name: str, category: str, cal: float, pro: float, carb: float, fat: float) -> bool:
+    """A row whose own numbers contradict each other (4P + 4C + 9F off from the
+    stated calories by ~50% or more, e.g. a source listing bacon at 60 cal with
+    38 g fat). These are source typos; logging one would wreck the day's totals,
+    and we can't know which column is right — so the row is dropped, not fixed."""
+    if _ALCOHOL.search(f"{name} {category}"):
+        return False
+    atwater = 4 * pro + 4 * carb + 9 * fat
+    if max(atwater, cal) < 50:
+        return False
+    return atwater > 1.5 * cal + 20 or atwater < 0.5 * cal - 20
+
+
+def load_restaurants(directory: Path) -> list[dict]:
+    """Read every chain file in `directory` (sorted by filename). A malformed
+    file or item is skipped with a log line — it never aborts the build. Items
+    need real calories/protein/carbs/fat; a missing fiber reads as 0 (same as a
+    USDA row without nutrient #291)."""
+    chains: list[dict] = []
+    if not directory.is_dir():
+        log(f"no restaurant directory at {directory} — no restaurant menus merged.")
+        return chains
+    seen_slugs: set[str] = set()
+    for path in sorted(directory.glob("*.json")):
+        try:
+            doc = json.loads(path.read_text(encoding="utf-8"))
+        except Exception as exc:  # noqa: BLE001 — one bad file must not sink the rest
+            log(f"  skipping {path.name}: unreadable JSON ({exc})")
+            continue
+        chain = (doc.get("chain") or "").strip()
+        slug = slugify(doc.get("slug") or chain)
+        if not chain or not slug:
+            log(f"  skipping {path.name}: missing chain/slug")
+            continue
+        if slug in seen_slugs:
+            log(f"  skipping {path.name}: duplicate slug '{slug}'")
+            continue
+        aliases: list[str] = []
+        for a in [chain] + list(doc.get("aliases") or []):
+            key = str(a).strip().lower()
+            if key and key not in aliases:
+                aliases.append(key)
+
+        items: list[dict] = []
+        used_ids: set[str] = set()
+        seen_rows: set[tuple] = set()
+        skipped = 0
+        for raw in doc.get("items") or []:
+            name = str(raw.get("name") or "").strip()
+            cal, pro, carb, fat = (_num(raw.get(k)) for k in ("calories", "protein_g", "carbs_g", "fat_g"))
+            fiber = _num(raw.get("fiber_g"))
+            if not name or None in (cal, pro, carb, fat) or cal < 0:
+                skipped += 1
+                continue
+            category = str(raw.get("category") or "")
+            if _LIMITED_TIME.search(f"{name} {category}") or _broken_row(name, category, cal, pro, carb, fat):
+                skipped += 1
+                continue
+            # Same item printed twice in a source table (identical name, serving and
+            # numbers) — keep one.
+            dup_key = (name.lower(), str(raw.get("serving") or ""), cal, pro, carb, fat)
+            if dup_key in seen_rows:
+                skipped += 1
+                continue
+            seen_rows.add(dup_key)
+            base = f"{REST_ID_PREFIX}{slug}:{slugify(name) or 'item'}"
+            item_id, n = base, 2
+            while item_id in used_ids:
+                item_id, n = f"{base}-{n}", n + 1
+            used_ids.add(item_id)
+            # "Shake Shack ShackBurger" — unless the item already names the chain.
+            display = name if name.lower().startswith(chain.lower()) else f"{chain} {name}"
+            # Item name once + each chain alias once. Repeating the item words per
+            # alias ("shake shack fries", "shakeshack fries", …) inflated FTS5's
+            # term frequency so a bare "fries" ranked restaurant rows above
+            # everything else; chain words only need to be present, not repeated.
+            item_aliases: list[str] = [name.lower()]
+            for a in aliases:
+                if a not in item_aliases:
+                    item_aliases.append(a)
+            items.append({
+                "id": item_id,
+                "chain_slug": slug,
+                "category": str(raw.get("category") or "Menu").strip() or "Menu",
+                "sort_order": len(items),
+                "item_name": name,
+                "name": display,
+                "aliases": item_aliases,
+                "servingLabel": str(raw.get("serving") or "").strip() or "1 serving",
+                "calories": int(round(cal)),
+                "proteinG": int(round(pro)),
+                "carbsG": int(round(carb)),
+                "fatG": int(round(fat)),
+                "fiberG": int(round(fiber or 0.0)),
+            })
+        if not items:
+            log(f"  skipping {path.name}: no usable items")
+            continue
+        seen_slugs.add(slug)
+        chains.append({
+            "slug": slug,
+            "name": chain,
+            "aliases": aliases,
+            "kind": str(doc.get("kind") or "").strip(),
+            "source_url": str(doc.get("source_url") or "").strip(),
+            "source_kind": str(doc.get("source_kind") or "").strip(),
+            "retrieved": str(doc.get("retrieved") or "").strip(),
+            "items": items,
+        })
+        log(f"  restaurant {chain}: {len(items)} items" + (f" ({skipped} skipped)" if skipped else ""))
+    return chains
+
+
+def merge_restaurants(conn: sqlite3.Connection, chains: list[dict]) -> int:
+    """Idempotently replace every restaurant row: drop `rest:` foods + both
+    restaurant tables, then insert `chains`. The caller rebuilds `foods_fts`
+    afterwards (external-content FTS5 — a 'rebuild' re-reads `foods`, so the
+    deleted rows' stale index entries go with it). Returns the item count."""
+    cur = conn.cursor()
+    cur.execute("DELETE FROM foods WHERE id LIKE ?", (REST_ID_PREFIX + "%",))
+    cur.execute("DROP TABLE IF EXISTS restaurant_items;")
+    cur.execute("DROP TABLE IF EXISTS restaurant_chains;")
+    cur.execute(
+        """
+        CREATE TABLE restaurant_chains (
+            slug TEXT PRIMARY KEY,
+            name TEXT NOT NULL,
+            aliases TEXT NOT NULL,
+            kind TEXT NOT NULL,
+            item_count INTEGER NOT NULL,
+            source_url TEXT NOT NULL,
+            source_kind TEXT NOT NULL,
+            retrieved TEXT NOT NULL
+        );
+        """
+    )
+    cur.execute(
+        """
+        CREATE TABLE restaurant_items (
+            id TEXT PRIMARY KEY,
+            chain_slug TEXT NOT NULL,
+            category TEXT NOT NULL,
+            sort_order INTEGER NOT NULL,
+            item_name TEXT NOT NULL,
+            name TEXT NOT NULL,
+            serving_label TEXT NOT NULL,
+            calories INTEGER NOT NULL,
+            protein_g INTEGER NOT NULL,
+            carbs_g INTEGER NOT NULL,
+            fat_g INTEGER NOT NULL,
+            fiber_g INTEGER NOT NULL
+        );
+        """
+    )
+    total = 0
+    for c in chains:
+        cur.execute(
+            "INSERT INTO restaurant_chains VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            (c["slug"], c["name"], "|".join(c["aliases"]), c["kind"], len(c["items"]),
+             c["source_url"], c["source_kind"], c["retrieved"]),
+        )
+        for it in c["items"]:
+            cur.execute(
+                "INSERT INTO restaurant_items VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (it["id"], it["chain_slug"], it["category"], it["sort_order"], it["item_name"],
+                 it["name"], it["servingLabel"], it["calories"], it["proteinG"],
+                 it["carbsG"], it["fatG"], it["fiberG"]),
+            )
+            cur.execute(
+                """
+                INSERT INTO foods
+                    (id, name, aliases, serving_label,
+                     calories, protein_g, carbs_g, fat_g, fiber_g)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (it["id"], it["name"], "|".join(it["aliases"]), it["servingLabel"],
+                 it["calories"], it["proteinG"], it["carbsG"], it["fatG"], it["fiberG"]),
+            )
+            total += 1
+    return total
+
+
+def merge_restaurants_into(db_path: Path, directory: Path) -> int:
+    """`--merge-restaurants-into`: refresh just the restaurant rows of an existing
+    database (no USDA download), then rebuild the FTS index and compact."""
+    if not db_path.exists():
+        log(f"ERROR: {db_path} does not exist.")
+        return 1
+    chains = load_restaurants(directory)
+    conn = sqlite3.connect(db_path)
+    try:
+        has_foods = conn.execute(
+            "SELECT count(*) FROM sqlite_master WHERE name IN ('foods', 'foods_fts')"
+        ).fetchone()[0] == 2
+        if not has_foods:
+            log(f"ERROR: {db_path} has no foods/foods_fts tables — not a food database.")
+            return 1
+        n = merge_restaurants(conn, chains)
+        conn.execute("INSERT INTO foods_fts(foods_fts) VALUES('rebuild');")
+        conn.commit()
+        conn.execute("VACUUM;")
+        conn.commit()
+        rows = conn.execute("SELECT count(*) FROM foods").fetchone()[0]
+    finally:
+        conn.close()
+    log(f"merged {len(chains)} chains / {n} restaurant items → {db_path} ({rows} foods total)")
+    return 0
+
+
 def write_json(entries: list[dict]) -> None:
     OUTPUT_JSON.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT_JSON.write_text(
@@ -471,7 +726,7 @@ def write_json(entries: list[dict]) -> None:
     log(f"wrote {len(entries)} foods → {OUTPUT_JSON.relative_to(REPO_ROOT)}")
 
 
-def write_sqlite(entries: list[dict]) -> None:
+def write_sqlite(entries: list[dict], restaurants: list[dict] | None = None) -> None:
     """Emit the SQLite/FTS5 database the app queries on disk. Schema mirrors
     Domain/SQLiteFoodDatabase.swift: a `foods` content table + an external-content
     `foods_fts` FTS5 index (no text duplication → ~30% smaller). Aliases are stored
@@ -533,6 +788,8 @@ def write_sqlite(entries: list[dict]) -> None:
                 for e in entries
             ],
         )
+        # Restaurant menus ride along in the same file (see merge_restaurants).
+        rest_count = merge_restaurants(conn, restaurants or [])
         # Build the FTS5 index from the content table, then compact the file.
         cur.execute("INSERT INTO foods_fts(foods_fts) VALUES('rebuild');")
         conn.commit()
@@ -540,7 +797,8 @@ def write_sqlite(entries: list[dict]) -> None:
         conn.commit()
     finally:
         conn.close()
-    log(f"wrote {len(entries)} foods → {OUTPUT_DB.relative_to(REPO_ROOT)}")
+    log(f"wrote {len(entries)} foods + {rest_count} restaurant items → "
+        f"{OUTPUT_DB.relative_to(REPO_ROOT)}")
 
 
 def main() -> int:
@@ -555,7 +813,7 @@ def main() -> int:
     # and pass it via --foundation-url / --sr-legacy-url.
     ap.add_argument(
         "--foundation-url",
-        default="https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_foundation_food_json_2024-10-31.zip",
+        default="https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_foundation_food_json_2026-04-30.zip",
         help="Override Foundation download URL (update the date as USDA reissues it).",
     )
     ap.add_argument(
@@ -563,13 +821,14 @@ def main() -> int:
         default="https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_sr_legacy_food_json_2018-04.zip",
         help="Override SR Legacy download URL.",
     )
-    # Branded Foods is reissued ~monthly under a new date — UPDATE this when the
-    # default 404s (grab the current link from the download-datasets page). The
-    # date below is a best-effort current value and MUST be verified on the first
-    # real run; a 404 here is non-fatal (Foundation + SR still write).
+    # Branded Foods is reissued under a new date (lately twice a year, alongside
+    # Foundation) — UPDATE this when the default 404s (grab the current link from
+    # the download-datasets page). Verified against that page on 2026-10-14: the
+    # latest Foundation and Branded releases are both 2026-04-30. A 404 here is
+    # non-fatal (Foundation + SR still write).
     ap.add_argument(
         "--branded-url",
-        default="https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_branded_food_json_2026-04.zip",
+        default="https://fdc.nal.usda.gov/fdc-datasets/FoodData_Central_branded_food_json_2026-04-30.zip",
         help="Override Branded Foods download URL (update the date — reissued ~monthly).",
     )
     ap.add_argument("--branded", help="Path to a Branded Foods JSON zip (skips download).")
@@ -590,7 +849,15 @@ def main() -> int:
                     help="Parse + dedup + report counts, but DO NOT write the resource. "
                          "Use with --branded-cap 0 --max-per-brand 0 --max 0 to measure the "
                          "true unique deduped food count.")
+    ap.add_argument("--restaurant-dir", default=str(RESTAURANT_DIR),
+                    help="Directory of per-chain restaurant menu JSON files.")
+    ap.add_argument("--merge-restaurants-into", metavar="DB",
+                    help="Only (re)merge the restaurant menus into this existing database — "
+                         "no USDA download. Idempotent.")
     args = ap.parse_args()
+
+    if args.merge_restaurants_into:
+        return merge_restaurants_into(Path(args.merge_restaurants_into), Path(args.restaurant_dir))
 
     # Foundation + SR Legacy (per-100 g foodNutrients). These are required.
     base_zips: list[zipfile.ZipFile] = []
@@ -678,7 +945,7 @@ def main() -> int:
     entries = all_entries[: args.max] if args.max > 0 else all_entries
 
     if args.format in ("sqlite", "both"):
-        write_sqlite(entries)
+        write_sqlite(entries, load_restaurants(Path(args.restaurant_dir)))
     if args.format in ("json", "both"):
         write_json(entries)
     log("done. Commit the regenerated resource and rebuild via XcodeGen/CI.")

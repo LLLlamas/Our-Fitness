@@ -1,0 +1,181 @@
+{
+  "chain": "Optimum Nutrition",
+  "slug": "optimum-nutrition",
+  "aliases": [
+    "optimum nutrition",
+    "optimum",
+    "on",
+    "on whey",
+    "gold standard",
+    "gold standard whey",
+    "serious mass",
+    "pro gainer"
+  ],
+  "kind": "supplement",
+  "source_url": "https://www.optimumnutrition.com/en-us/products/gold-standard-100-whey-protein-powder",
+  "source_kind": "official",
+  "retrieved": "2026-10-15",
+  "notes": "Read from the Nutrition/Supplement Facts panel images on optimumnutrition.com/en-us product pages: gold-standard-100-whey-protein-powder, gold-standard-100-casein-protein-powder, gold-standard-100-plant-based-protein-powder, serious-mass-weight-gainer-protein-powder, gold-standard-pro-gainer-protein-powder, gold-standard-ready-to-drink-protein-shake, 30g-ultra-filtered-milk-protein-shake-fiber-12-pack. Fiber 0 where the label lists '<1g' (GS Whey Double Rich Chocolate, Extreme Milk Chocolate) or omits/declares it not significant (GS Whey Vanilla Ice Cream, Cookies & Cream; Plant Creamy Vanilla; Serious Mass Vanilla). ON protein bars are not sold on the US site, so none are included; the 40G Protein Shake page had no readable panel.",
+  "items": [
+    {
+      "name": "Gold Standard 100% Whey, Double Rich Chocolate",
+      "category": "Whey Protein",
+      "serving": "1 scoop (31 g)",
+      "calories": 120,
+      "protein_g": 24,
+      "carbs_g": 3,
+      "fat_g": 1.5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gold Standard 100% Whey, Vanilla Ice Cream",
+      "category": "Whey Protein",
+      "serving": "1 scoop (31 g)",
+      "calories": 120,
+      "protein_g": 24,
+      "carbs_g": 4,
+      "fat_g": 1.5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gold Standard 100% Whey, Extreme Milk Chocolate",
+      "category": "Whey Protein",
+      "serving": "1 scoop (32 g)",
+      "calories": 120,
+      "protein_g": 24,
+      "carbs_g": 3,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gold Standard 100% Whey, Cookies & Cream",
+      "category": "Whey Protein",
+      "serving": "1 scoop (31 g)",
+      "calories": 120,
+      "protein_g": 24,
+      "carbs_g": 3,
+      "fat_g": 1.5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gold Standard 100% Casein, Chocolate Supreme",
+      "category": "Casein",
+      "serving": "1 scoop (34 g)",
+      "calories": 120,
+      "protein_g": 24,
+      "carbs_g": 4,
+      "fat_g": 1,
+      "fiber_g": 1
+    },
+    {
+      "name": "Gold Standard 100% Casein, Creamy Vanilla",
+      "category": "Casein",
+      "serving": "1 scoop (33 g)",
+      "calories": 120,
+      "protein_g": 24,
+      "carbs_g": 3,
+      "fat_g": 0.5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Gold Standard 100% Plant-Based Protein, Rich Chocolate Fudge",
+      "category": "Plant Protein",
+      "serving": "1 scoop (40 g)",
+      "calories": 150,
+      "protein_g": 24,
+      "carbs_g": 6,
+      "fat_g": 3.5,
+      "fiber_g": 2
+    },
+    {
+      "name": "Gold Standard 100% Plant-Based Protein, Creamy Vanilla",
+      "category": "Plant Protein",
+      "serving": "1 scoop (37 g)",
+      "calories": 150,
+      "protein_g": 24,
+      "carbs_g": 5,
+      "fat_g": 3.5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Serious Mass, Chocolate",
+      "category": "Mass Gainer",
+      "serving": "2 scoops (340 g)",
+      "calories": 1260,
+      "protein_g": 50,
+      "carbs_g": 251,
+      "fat_g": 6,
+      "fiber_g": 4
+    },
+    {
+      "name": "Serious Mass, Vanilla",
+      "category": "Mass Gainer",
+      "serving": "2 scoops (340 g)",
+      "calories": 1260,
+      "protein_g": 50,
+      "carbs_g": 253,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gold Standard Pro Gainer, Double Chocolate",
+      "category": "Mass Gainer",
+      "serving": "1 scoop (165 g)",
+      "calories": 650,
+      "protein_g": 60,
+      "carbs_g": 81,
+      "fat_g": 9,
+      "fiber_g": 5
+    },
+    {
+      "name": "Gold Standard Pro Gainer, Vanilla Custard",
+      "category": "Mass Gainer",
+      "serving": "1 scoop (165 g)",
+      "calories": 650,
+      "protein_g": 60,
+      "carbs_g": 82,
+      "fat_g": 9,
+      "fiber_g": 3
+    },
+    {
+      "name": "Gold Standard Ready to Drink Protein Shake, Chocolate",
+      "category": "Ready-to-Drink",
+      "serving": "1 carton (325 mL)",
+      "calories": 140,
+      "protein_g": 24,
+      "carbs_g": 4,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Gold Standard Ready to Drink Protein Shake, Vanilla",
+      "category": "Ready-to-Drink",
+      "serving": "1 carton (325 mL)",
+      "calories": 130,
+      "protein_g": 24,
+      "carbs_g": 3,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "30g Ultra-Filtered Milk Protein Shake + Fiber, Chocolate",
+      "category": "Ready-to-Drink",
+      "serving": "1 carton (325 mL)",
+      "calories": 190,
+      "protein_g": 30,
+      "carbs_g": 14,
+      "fat_g": 2,
+      "fiber_g": 8
+    },
+    {
+      "name": "30g Ultra-Filtered Milk Protein Shake + Fiber, Vanilla",
+      "category": "Ready-to-Drink",
+      "serving": "1 carton (325 mL)",
+      "calories": 190,
+      "protein_g": 30,
+      "carbs_g": 12,
+      "fat_g": 2,
+      "fiber_g": 8
+    }
+  ]
+}

@@ -144,10 +144,16 @@ struct RootView: View {
         .onChange(of: scenePhase) { _, newPhase in
             guard newPhase == .active else { return }
             Task { await ReminderNotificationService.reconcile(ctx, userId: profile.id) }
+            // Rolls the meal-nudge window forward a day and catches permission
+            // changes made in iOS Settings.
+            Task { await MealReminderService.replan(ctx, userId: profile.id) }
             WatchSyncService.shared.pushSnapshot(ctx, userId: profile.id)
         }
         .onReceive(NotificationCenter.default.publisher(for: .openRemindersTab)) { _ in
             tab = .reminders
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .openMealsTab)) { _ in
+            tab = .meals
         }
     }
 

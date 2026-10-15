@@ -1,0 +1,2687 @@
+{
+  "chain": "Olive Garden",
+  "slug": "olive-garden",
+  "aliases": [
+    "olive garden",
+    "olivegarden",
+    "olive gardens",
+    "og"
+  ],
+  "kind": "casual-dining",
+  "source_url": "https://media.olivegarden.com/en_us/pdf/olive_garden_nutrition.pdf",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "U.S. nutrition PDF (doc US_083126). Values listed as \"less than 1 g\" recorded as 0. Add-on rows (sauces/toppings) listed once under Add-ons. Atwater outliers (>20%, left as published): Marinara dipping sauce (1 serving): 70 cal vs 85 Atwater; OG's Old Fashioned (1 serving): 150 cal vs 44 Atwater; Pineapple Coconut Margarita (1 serving): 300 cal vs 191 Atwater; Frozen Strawberry-Mango Margarita (1 serving): 330 cal vs 248 Atwater; Frozen Green Apple Margarita (where available) (1 serving): 390 cal vs 284 Atwater; Strawberry Frose (where available) (1 serving): 260 cal vs 176 Atwater; Italian Margarita (1 serving): 380 cal vs 232 Atwater; Strawberry Limoncello Margarita (1 serving): 280 cal vs 172 Atwater; Blue Capri (1 serving): 290 cal vs 196 Atwater; Italian Rum Punch (1 serving): 320 cal vs 192 Atwater; Sicilian Sunset (1 serving): 230 cal vs 140 Atwater; Spiked Strawberry Lemonade (1 serving): 160 cal vs 84 Atwater; Green Apple Moscato Sangria (Glass) (1 serving): 200 cal vs 156 Atwater; Green Apple Moscato Sangria (Pitcher) (1 serving): 830 cal vs 652 Atwater; Berry Sangria (Glass) (1 serving): 210 cal vs 120 Atwater; ...",
+  "items": [
+    {
+      "name": "Calamari",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 670,
+      "protein_g": 24,
+      "carbs_g": 48,
+      "fat_g": 42,
+      "fiber_g": 2
+    },
+    {
+      "name": "Add marinara",
+      "category": "Add-ons",
+      "serving": "1 serving",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Add spicy ranch",
+      "category": "Add-ons",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 26,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fried Mozzarella",
+      "category": "Appetizers",
+      "serving": "1 serving (Appetizers)",
+      "calories": 800,
+      "protein_g": 33,
+      "carbs_g": 57,
+      "fat_g": 49,
+      "fiber_g": 4
+    },
+    {
+      "name": "Lasagna Fritta",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 1130,
+      "protein_g": 39,
+      "carbs_g": 75,
+      "fat_g": 76,
+      "fiber_g": 5
+    },
+    {
+      "name": "Meatballs Parmigiana",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 1040,
+      "protein_g": 51,
+      "carbs_g": 27,
+      "fat_g": 83,
+      "fiber_g": 6
+    },
+    {
+      "name": "Shrimp Fritto Misto",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 1280,
+      "protein_g": 41,
+      "carbs_g": 101,
+      "fat_g": 79,
+      "fiber_g": 9
+    },
+    {
+      "name": "Spinach-Artichoke Dip with flatbread crisps",
+      "category": "Appetizers",
+      "serving": "1 serving (Appetizers)",
+      "calories": 1160,
+      "protein_g": 33,
+      "carbs_g": 75,
+      "fat_g": 81,
+      "fiber_g": 7
+    },
+    {
+      "name": "Stuffed Ziti Fritta",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 500,
+      "protein_g": 27,
+      "carbs_g": 40,
+      "fat_g": 26,
+      "fiber_g": 3
+    },
+    {
+      "name": "Add alfredo",
+      "category": "Add-ons",
+      "serving": "1 serving",
+      "calories": 220,
+      "protein_g": 4,
+      "carbs_g": 3,
+      "fat_g": 22,
+      "fiber_g": 0
+    },
+    {
+      "name": "Toasted Ravioli",
+      "category": "Appetizers",
+      "serving": "1 serving (Appetizers)",
+      "calories": 650,
+      "protein_g": 25,
+      "carbs_g": 69,
+      "fat_g": 31,
+      "fiber_g": 4
+    },
+    {
+      "name": "Spicy Alfredo dipping sauce",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 490,
+      "protein_g": 9,
+      "carbs_g": 7,
+      "fat_g": 48,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spicy Alfredo dipping sauce (Large)",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 980,
+      "protein_g": 18,
+      "carbs_g": 15,
+      "fat_g": 97,
+      "fiber_g": 0
+    },
+    {
+      "name": "Alfredo dipping sauce",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 440,
+      "protein_g": 8,
+      "carbs_g": 5,
+      "fat_g": 43,
+      "fiber_g": 0
+    },
+    {
+      "name": "Alfredo dipping sauce (Large)",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 870,
+      "protein_g": 15,
+      "carbs_g": 11,
+      "fat_g": 87,
+      "fiber_g": 0
+    },
+    {
+      "name": "Five Cheese Marinara dipping sauce",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 5,
+      "carbs_g": 9,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Five Cheese Marinara dipping sauce (Large)",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 400,
+      "protein_g": 11,
+      "carbs_g": 17,
+      "fat_g": 33,
+      "fiber_g": 3
+    },
+    {
+      "name": "Marinara dipping sauce",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 70,
+      "protein_g": 2,
+      "carbs_g": 8,
+      "fat_g": 5,
+      "fiber_g": 2
+    },
+    {
+      "name": "Marinara sipping sauce (Large)",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 150,
+      "protein_g": 4,
+      "carbs_g": 17,
+      "fat_g": 9,
+      "fiber_g": 4
+    },
+    {
+      "name": "Breadstick with garlic topping (1 ea.)",
+      "category": "Soups, Salad & Breadsticks",
+      "serving": "1 serving",
+      "calories": 140,
+      "protein_g": 4,
+      "carbs_g": 25,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Breadstick, plain (no garlic topping, 1 ea.)",
+      "category": "Soups, Salad & Breadsticks",
+      "serving": "1 serving",
+      "calories": 130,
+      "protein_g": 4,
+      "carbs_g": 25,
+      "fat_g": 1,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chicken & Gnocchi Soup",
+      "category": "Soups, Salad & Breadsticks",
+      "serving": "1 serving",
+      "calories": 230,
+      "protein_g": 11,
+      "carbs_g": 22,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Minestrone Soup",
+      "category": "Soups, Salad & Breadsticks",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 5,
+      "carbs_g": 17,
+      "fat_g": 1,
+      "fiber_g": 4
+    },
+    {
+      "name": "Pasta Fagioli Soup",
+      "category": "Soups, Salad & Breadsticks",
+      "serving": "1 serving",
+      "calories": 150,
+      "protein_g": 8,
+      "carbs_g": 16,
+      "fat_g": 5,
+      "fiber_g": 3
+    },
+    {
+      "name": "Zuppa Toscana Soup",
+      "category": "Soups, Salad & Breadsticks",
+      "serving": "1 serving",
+      "calories": 220,
+      "protein_g": 7,
+      "carbs_g": 15,
+      "fat_g": 15,
+      "fiber_g": 2
+    },
+    {
+      "name": "Stellini Soup (Regional)",
+      "category": "Soups, Salad & Breadsticks",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 9,
+      "carbs_g": 22,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Salad with Signature Italian Dressing",
+      "category": "Soups, Salad & Breadsticks",
+      "serving": "1 serving",
+      "calories": 150,
+      "protein_g": 3,
+      "carbs_g": 13,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Salad without Dressing",
+      "category": "Soups, Salad & Breadsticks",
+      "serving": "1 serving",
+      "calories": 70,
+      "protein_g": 2,
+      "carbs_g": 11,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Italian Dressing (1 fl oz)",
+      "category": "Soups, Salad & Breadsticks",
+      "serving": "1 serving",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Low-Fat Italian Dressing (1 fl oz)",
+      "category": "Soups, Salad & Breadsticks",
+      "serving": "1 serving",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fettuccine",
+      "category": "Create Your Own Pasta",
+      "serving": "1 serving (Create Your Own Pasta)",
+      "calories": 350,
+      "protein_g": 12,
+      "carbs_g": 67,
+      "fat_g": 3,
+      "fiber_g": 3
+    },
+    {
+      "name": "Angel Hair",
+      "category": "Create Your Own Pasta",
+      "serving": "1 serving",
+      "calories": 350,
+      "protein_g": 12,
+      "carbs_g": 67,
+      "fat_g": 3,
+      "fiber_g": 3
+    },
+    {
+      "name": "Bucatini",
+      "category": "Create Your Own Pasta",
+      "serving": "1 serving",
+      "calories": 410,
+      "protein_g": 15,
+      "carbs_g": 81,
+      "fat_g": 3,
+      "fiber_g": 3
+    },
+    {
+      "name": "Gluten-Free Rotini",
+      "category": "Create Your Own Pasta",
+      "serving": "1 serving",
+      "calories": 380,
+      "protein_g": 9,
+      "carbs_g": 77,
+      "fat_g": 4,
+      "fiber_g": 5
+    },
+    {
+      "name": "Rigatoni",
+      "category": "Create Your Own Pasta",
+      "serving": "1 serving",
+      "calories": 440,
+      "protein_g": 14,
+      "carbs_g": 83,
+      "fat_g": 6,
+      "fiber_g": 3
+    },
+    {
+      "name": "Spaghetti",
+      "category": "Create Your Own Pasta",
+      "serving": "1 serving (Create Your Own Pasta)",
+      "calories": 340,
+      "protein_g": 12,
+      "carbs_g": 67,
+      "fat_g": 4,
+      "fiber_g": 3
+    },
+    {
+      "name": "Spicy Alfredo Sauce",
+      "category": "Create Your Own Pasta",
+      "serving": "1 serving",
+      "calories": 980,
+      "protein_g": 18,
+      "carbs_g": 15,
+      "fat_g": 97,
+      "fiber_g": 0
+    },
+    {
+      "name": "Alfredo Sauce",
+      "category": "Create Your Own Pasta",
+      "serving": "1 serving (Create Your Own Pasta)",
+      "calories": 870,
+      "protein_g": 15,
+      "carbs_g": 11,
+      "fat_g": 87,
+      "fiber_g": 0
+    },
+    {
+      "name": "Creamy Mushroom Sauce",
+      "category": "Create Your Own Pasta",
+      "serving": "1 serving",
+      "calories": 860,
+      "protein_g": 10,
+      "carbs_g": 13,
+      "fat_g": 87,
+      "fiber_g": 0
+    },
+    {
+      "name": "Five Cheese Marinara",
+      "category": "Create Your Own Pasta",
+      "serving": "1 serving",
+      "calories": 400,
+      "protein_g": 11,
+      "carbs_g": 17,
+      "fat_g": 33,
+      "fiber_g": 3
+    },
+    {
+      "name": "Marinara",
+      "category": "Create Your Own Pasta",
+      "serving": "1 serving",
+      "calories": 150,
+      "protein_g": 4,
+      "carbs_g": 17,
+      "fat_g": 9,
+      "fiber_g": 4
+    },
+    {
+      "name": "Meat Sauce",
+      "category": "Create Your Own Pasta",
+      "serving": "1 serving (Create Your Own Pasta)",
+      "calories": 300,
+      "protein_g": 14,
+      "carbs_g": 19,
+      "fat_g": 19,
+      "fiber_g": 2
+    },
+    {
+      "name": "Crispy Shrimp Fritta",
+      "category": "Create Your Own Pasta",
+      "serving": "1 serving",
+      "calories": 220,
+      "protein_g": 11,
+      "carbs_g": 17,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Crispy Chicken Fritta",
+      "category": "Create Your Own Pasta",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 20,
+      "carbs_g": 14,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Grilled Chicken",
+      "category": "Create Your Own Pasta",
+      "serving": "1 serving (Create Your Own Pasta)",
+      "calories": 130,
+      "protein_g": 26,
+      "carbs_g": 0,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Italian Sausage (2 Links)",
+      "category": "Create Your Own Pasta",
+      "serving": "1 serving",
+      "calories": 470,
+      "protein_g": 27,
+      "carbs_g": 2,
+      "fat_g": 39,
+      "fiber_g": 0
+    },
+    {
+      "name": "Meatballs (3)",
+      "category": "Create Your Own Pasta",
+      "serving": "1 serving (Create Your Own Pasta)",
+      "calories": 480,
+      "protein_g": 23,
+      "carbs_g": 7,
+      "fat_g": 40,
+      "fiber_g": 3
+    },
+    {
+      "name": "Sauteed Shrimp",
+      "category": "Create Your Own Pasta",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 33,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Broccoli",
+      "category": "Create Your Own Pasta",
+      "serving": "1 serving",
+      "calories": 150,
+      "protein_g": 4,
+      "carbs_g": 8,
+      "fat_g": 13,
+      "fiber_g": 3
+    },
+    {
+      "name": "Spicy Alfredo Fettuccine",
+      "category": "Lunch",
+      "serving": "1 serving (Lunch)",
+      "calories": 1000,
+      "protein_g": 22,
+      "carbs_g": 62,
+      "fat_g": 74,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cheese Ravioli with Marinara Sauce",
+      "category": "Lunch",
+      "serving": "1 serving (Lunch)",
+      "calories": 440,
+      "protein_g": 25,
+      "carbs_g": 38,
+      "fat_g": 22,
+      "fiber_g": 3
+    },
+    {
+      "name": "Cheese Ravioli with Meat Sauce",
+      "category": "Lunch",
+      "serving": "1 serving (Lunch)",
+      "calories": 500,
+      "protein_g": 29,
+      "carbs_g": 39,
+      "fat_g": 26,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chicken Parmigiana",
+      "category": "Lunch",
+      "serving": "1 serving (Lunch)",
+      "calories": 630,
+      "protein_g": 36,
+      "carbs_g": 61,
+      "fat_g": 29,
+      "fiber_g": 5
+    },
+    {
+      "name": "Eggplant Parmigiana",
+      "category": "Lunch",
+      "serving": "1 serving (Lunch)",
+      "calories": 660,
+      "protein_g": 21,
+      "carbs_g": 75,
+      "fat_g": 32,
+      "fiber_g": 7
+    },
+    {
+      "name": "Fettuccine Alfredo",
+      "category": "Lunch",
+      "serving": "1 serving (Lunch)",
+      "calories": 920,
+      "protein_g": 20,
+      "carbs_g": 58,
+      "fat_g": 67,
+      "fiber_g": 2
+    },
+    {
+      "name": "Add broccoli",
+      "category": "Add-ons",
+      "serving": "1 serving",
+      "calories": 130,
+      "protein_g": 2,
+      "carbs_g": 4,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Five Cheese Ziti al Forno",
+      "category": "Lunch",
+      "serving": "1 serving (Lunch)",
+      "calories": 630,
+      "protein_g": 24,
+      "carbs_g": 57,
+      "fat_g": 35,
+      "fiber_g": 4
+    },
+    {
+      "name": "Lasagna Classico",
+      "category": "Lunch",
+      "serving": "1 serving (Lunch)",
+      "calories": 500,
+      "protein_g": 29,
+      "carbs_g": 33,
+      "fat_g": 30,
+      "fiber_g": 3
+    },
+    {
+      "name": "Shrimp Scampi",
+      "category": "Lunch",
+      "serving": "1 serving (Lunch)",
+      "calories": 460,
+      "protein_g": 20,
+      "carbs_g": 52,
+      "fat_g": 18,
+      "fiber_g": 4
+    },
+    {
+      "name": "Spaghetti with Marinara",
+      "category": "Lunch",
+      "serving": "1 serving (Lunch)",
+      "calories": 370,
+      "protein_g": 11,
+      "carbs_g": 63,
+      "fat_g": 9,
+      "fiber_g": 5
+    },
+    {
+      "name": "Spaghetti with Meat Sauce",
+      "category": "Lunch",
+      "serving": "1 serving (Lunch)",
+      "calories": 480,
+      "protein_g": 19,
+      "carbs_g": 64,
+      "fat_g": 17,
+      "fiber_g": 3
+    },
+    {
+      "name": "Spaghetti & Meatballs with Meat Sauce",
+      "category": "Lunch",
+      "serving": "1 serving",
+      "calories": 800,
+      "protein_g": 35,
+      "carbs_g": 69,
+      "fat_g": 43,
+      "fiber_g": 5
+    },
+    {
+      "name": "Spaghetti & Meatballs with Marinara",
+      "category": "Lunch",
+      "serving": "1 serving",
+      "calories": 690,
+      "protein_g": 27,
+      "carbs_g": 67,
+      "fat_g": 36,
+      "fiber_g": 6
+    },
+    {
+      "name": "Spaghetti with Meat Sauce & Italian Sausage",
+      "category": "Lunch",
+      "serving": "1 serving (Lunch)",
+      "calories": 720,
+      "protein_g": 33,
+      "carbs_g": 65,
+      "fat_g": 36,
+      "fiber_g": 4
+    },
+    {
+      "name": "Spicy Alfredo Fettuccine",
+      "category": "Dinner",
+      "serving": "1 serving (Dinner)",
+      "calories": 1330,
+      "protein_g": 30,
+      "carbs_g": 82,
+      "fat_g": 99,
+      "fiber_g": 3
+    },
+    {
+      "name": "Calabrian Steak & Shrimp Bucatini",
+      "category": "Dinner",
+      "serving": "1 serving",
+      "calories": 1220,
+      "protein_g": 78,
+      "carbs_g": 82,
+      "fat_g": 65,
+      "fiber_g": 6
+    },
+    {
+      "name": "Calabrian Steak Bucatini",
+      "category": "Dinner",
+      "serving": "1 serving",
+      "calories": 1130,
+      "protein_g": 59,
+      "carbs_g": 81,
+      "fat_g": 65,
+      "fiber_g": 6
+    },
+    {
+      "name": "Calabrian Shrimp Bucatini",
+      "category": "Dinner",
+      "serving": "1 serving",
+      "calories": 1040,
+      "protein_g": 51,
+      "carbs_g": 81,
+      "fat_g": 58,
+      "fiber_g": 6
+    },
+    {
+      "name": "Creamy Mushroom Ravioli",
+      "category": "Dinner",
+      "serving": "1 serving (Dinner)",
+      "calories": 980,
+      "protein_g": 24,
+      "carbs_g": 59,
+      "fat_g": 76,
+      "fiber_g": 6
+    },
+    {
+      "name": "Cheese Ravioli with Marinara Sauce",
+      "category": "Dinner",
+      "serving": "1 serving (Dinner)",
+      "calories": 750,
+      "protein_g": 41,
+      "carbs_g": 63,
+      "fat_g": 38,
+      "fiber_g": 5
+    },
+    {
+      "name": "Cheese Ravioli with Meat Sauce",
+      "category": "Dinner",
+      "serving": "1 serving (Dinner)",
+      "calories": 860,
+      "protein_g": 50,
+      "carbs_g": 65,
+      "fat_g": 46,
+      "fiber_g": 4
+    },
+    {
+      "name": "Chicken & Shrimp Carbonara",
+      "category": "Dinner",
+      "serving": "1 serving",
+      "calories": 1370,
+      "protein_g": 64,
+      "carbs_g": 75,
+      "fat_g": 91,
+      "fiber_g": 3
+    },
+    {
+      "name": "Chicken Alfredo (with crispy chicken fritta)",
+      "category": "Dinner",
+      "serving": "1 serving",
+      "calories": 1710,
+      "protein_g": 67,
+      "carbs_g": 106,
+      "fat_g": 113,
+      "fiber_g": 5
+    },
+    {
+      "name": "Chicken Alfredo (with grilled chicken)",
+      "category": "Dinner",
+      "serving": "1 serving",
+      "calories": 1480,
+      "protein_g": 79,
+      "carbs_g": 79,
+      "fat_g": 95,
+      "fiber_g": 4
+    },
+    {
+      "name": "Chicken Parmigiana",
+      "category": "Dinner",
+      "serving": "1 serving (Dinner)",
+      "calories": 1020,
+      "protein_g": 64,
+      "carbs_g": 80,
+      "fat_g": 51,
+      "fiber_g": 7
+    },
+    {
+      "name": "Chicken Scampi",
+      "category": "Dinner",
+      "serving": "1 serving (Dinner)",
+      "calories": 1050,
+      "protein_g": 49,
+      "carbs_g": 106,
+      "fat_g": 45,
+      "fiber_g": 5
+    },
+    {
+      "name": "Chicken Tortelloni Alfredo",
+      "category": "Dinner",
+      "serving": "1 serving (Dinner)",
+      "calories": 1980,
+      "protein_g": 112,
+      "carbs_g": 95,
+      "fat_g": 131,
+      "fiber_g": 5
+    },
+    {
+      "name": "Eggplant Parmigiana",
+      "category": "Dinner",
+      "serving": "1 serving (Dinner)",
+      "calories": 1070,
+      "protein_g": 35,
+      "carbs_g": 108,
+      "fat_g": 58,
+      "fiber_g": 11
+    },
+    {
+      "name": "Fettuccine Alfredo",
+      "category": "Dinner",
+      "serving": "1 serving (Dinner)",
+      "calories": 1220,
+      "protein_g": 27,
+      "carbs_g": 78,
+      "fat_g": 89,
+      "fiber_g": 3
+    },
+    {
+      "name": "Five Cheese Ziti al Forno",
+      "category": "Dinner",
+      "serving": "1 serving (Dinner)",
+      "calories": 1170,
+      "protein_g": 46,
+      "carbs_g": 98,
+      "fat_g": 69,
+      "fiber_g": 6
+    },
+    {
+      "name": "Grilled Chicken Margherita",
+      "category": "Dinner",
+      "serving": "1 serving",
+      "calories": 650,
+      "protein_g": 65,
+      "carbs_g": 15,
+      "fat_g": 39,
+      "fiber_g": 5
+    },
+    {
+      "name": "Herb-Grilled Salmon",
+      "category": "Dinner",
+      "serving": "1 serving",
+      "calories": 610,
+      "protein_g": 45,
+      "carbs_g": 9,
+      "fat_g": 45,
+      "fiber_g": 4
+    },
+    {
+      "name": "Herb-Grilled Salmon Coho (Regional)",
+      "category": "Dinner",
+      "serving": "1 serving",
+      "calories": 510,
+      "protein_g": 50,
+      "carbs_g": 9,
+      "fat_g": 31,
+      "fiber_g": 4
+    },
+    {
+      "name": "Lasagna Classico",
+      "category": "Dinner",
+      "serving": "1 serving (Dinner)",
+      "calories": 940,
+      "protein_g": 54,
+      "carbs_g": 61,
+      "fat_g": 55,
+      "fiber_g": 6
+    },
+    {
+      "name": "Ravioli Carbonara",
+      "category": "Dinner",
+      "serving": "1 serving",
+      "calories": 1390,
+      "protein_g": 53,
+      "carbs_g": 63,
+      "fat_g": 104,
+      "fiber_g": 3
+    },
+    {
+      "name": "Seafood Alfredo",
+      "category": "Dinner",
+      "serving": "1 serving",
+      "calories": 1370,
+      "protein_g": 53,
+      "carbs_g": 81,
+      "fat_g": 93,
+      "fiber_g": 3
+    },
+    {
+      "name": "Shrimp Alfredo",
+      "category": "Dinner",
+      "serving": "1 serving (Dinner)",
+      "calories": 1390,
+      "protein_g": 60,
+      "carbs_g": 79,
+      "fat_g": 93,
+      "fiber_g": 4
+    },
+    {
+      "name": "Shrimp Carbonara",
+      "category": "Dinner",
+      "serving": "1 serving",
+      "calories": 1200,
+      "protein_g": 58,
+      "carbs_g": 63,
+      "fat_g": 81,
+      "fiber_g": 4
+    },
+    {
+      "name": "Shrimp Scampi",
+      "category": "Dinner",
+      "serving": "1 serving (Dinner)",
+      "calories": 490,
+      "protein_g": 29,
+      "carbs_g": 52,
+      "fat_g": 18,
+      "fiber_g": 4
+    },
+    {
+      "name": "Spaghetti with Marinara",
+      "category": "Dinner",
+      "serving": "1 serving (Dinner)",
+      "calories": 490,
+      "protein_g": 15,
+      "carbs_g": 83,
+      "fat_g": 12,
+      "fiber_g": 6
+    },
+    {
+      "name": "Spaghetti with Meat Sauce",
+      "category": "Dinner",
+      "serving": "1 serving (Dinner)",
+      "calories": 640,
+      "protein_g": 26,
+      "carbs_g": 85,
+      "fat_g": 22,
+      "fiber_g": 4
+    },
+    {
+      "name": "Spaghetti with Meat Sauce & Meatballs (3)",
+      "category": "Dinner",
+      "serving": "1 serving",
+      "calories": 1120,
+      "protein_g": 49,
+      "carbs_g": 92,
+      "fat_g": 62,
+      "fiber_g": 7
+    },
+    {
+      "name": "Spaghetti with Meat Sauce & Sausage (2)",
+      "category": "Dinner",
+      "serving": "1 serving",
+      "calories": 1110,
+      "protein_g": 52,
+      "carbs_g": 87,
+      "fat_g": 62,
+      "fiber_g": 5
+    },
+    {
+      "name": "Steak Gorgonzola Alfredo",
+      "category": "Dinner",
+      "serving": "1 serving",
+      "calories": 1580,
+      "protein_g": 74,
+      "carbs_g": 85,
+      "fat_g": 105,
+      "fiber_g": 5
+    },
+    {
+      "name": "Stuffed Chicken Marsala",
+      "category": "Dinner",
+      "serving": "1 serving",
+      "calories": 1170,
+      "protein_g": 70,
+      "carbs_g": 94,
+      "fat_g": 58,
+      "fiber_g": 8
+    },
+    {
+      "name": "Tour of Italy",
+      "category": "Dinner",
+      "serving": "1 serving",
+      "calories": 1550,
+      "protein_g": 72,
+      "carbs_g": 99,
+      "fat_g": 97,
+      "fiber_g": 7
+    },
+    {
+      "name": "6 oz. Sirloin",
+      "category": "Dinner",
+      "serving": "1 serving",
+      "calories": 980,
+      "protein_g": 57,
+      "carbs_g": 49,
+      "fat_g": 62,
+      "fiber_g": 2
+    },
+    {
+      "name": "Italian Sausage (2)",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 510,
+      "protein_g": 27,
+      "carbs_g": 6,
+      "fat_g": 42,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mashed Potatoes",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 4,
+      "carbs_g": 27,
+      "fat_g": 8,
+      "fiber_g": 3
+    },
+    {
+      "name": "Meatballs (3)",
+      "category": "Sides",
+      "serving": "1 serving (Sides)",
+      "calories": 520,
+      "protein_g": 24,
+      "carbs_g": 11,
+      "fat_g": 42,
+      "fiber_g": 4
+    },
+    {
+      "name": "Parmesan Garlic Broccoli",
+      "category": "Sides",
+      "serving": "1 serving (Sides)",
+      "calories": 150,
+      "protein_g": 5,
+      "carbs_g": 8,
+      "fat_g": 13,
+      "fiber_g": 3
+    },
+    {
+      "name": "Black Tie Mousse Cake",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 750,
+      "protein_g": 9,
+      "carbs_g": 76,
+      "fat_g": 50,
+      "fiber_g": 4
+    },
+    {
+      "name": "Chocolate Lasagna",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 980,
+      "protein_g": 13,
+      "carbs_g": 116,
+      "fat_g": 58,
+      "fiber_g": 6
+    },
+    {
+      "name": "Sicilian Cheesecake with Strawberry Topping",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 730,
+      "protein_g": 12,
+      "carbs_g": 78,
+      "fat_g": 42,
+      "fiber_g": 2
+    },
+    {
+      "name": "Strawberry Cream Cake",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 540,
+      "protein_g": 9,
+      "carbs_g": 69,
+      "fat_g": 26,
+      "fiber_g": 2
+    },
+    {
+      "name": "Tiramisu",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 470,
+      "protein_g": 6,
+      "carbs_g": 54,
+      "fat_g": 27,
+      "fiber_g": 0
+    },
+    {
+      "name": "Warm Italian Doughnuts",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 810,
+      "protein_g": 20,
+      "carbs_g": 119,
+      "fat_g": 28,
+      "fiber_g": 6
+    },
+    {
+      "name": "Add chocolate sauce",
+      "category": "Add-ons",
+      "serving": "1 serving",
+      "calories": 220,
+      "protein_g": 2,
+      "carbs_g": 48,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Add raspberry sauce",
+      "category": "Add-ons",
+      "serving": "1 serving",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 51,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mint candy (1 ea.)",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fettuccine",
+      "category": "Kids Menu",
+      "serving": "1 serving (Kids Menu)",
+      "calories": 220,
+      "protein_g": 7,
+      "carbs_g": 42,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Small Shells",
+      "category": "Kids Menu",
+      "serving": "1 serving",
+      "calories": 210,
+      "protein_g": 7,
+      "carbs_g": 42,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Spaghetti",
+      "category": "Kids Menu",
+      "serving": "1 serving (Kids Menu)",
+      "calories": 170,
+      "protein_g": 6,
+      "carbs_g": 33,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Alfredo Sauce",
+      "category": "Kids Menu",
+      "serving": "1 serving (Kids Menu)",
+      "calories": 440,
+      "protein_g": 8,
+      "carbs_g": 5,
+      "fat_g": 43,
+      "fiber_g": 0
+    },
+    {
+      "name": "Meat Sauce",
+      "category": "Kids Menu",
+      "serving": "1 serving (Kids Menu)",
+      "calories": 110,
+      "protein_g": 5,
+      "carbs_g": 7,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tomato Sauce",
+      "category": "Kids Menu",
+      "serving": "1 serving",
+      "calories": 80,
+      "protein_g": 1,
+      "carbs_g": 8,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Meatball",
+      "category": "Kids Menu",
+      "serving": "1 serving",
+      "calories": 160,
+      "protein_g": 8,
+      "carbs_g": 2,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shrimp",
+      "category": "Kids Menu",
+      "serving": "1 serving",
+      "calories": 45,
+      "protein_g": 10,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheese Ravioli",
+      "category": "Kids Menu",
+      "serving": "1 serving",
+      "calories": 340,
+      "protein_g": 17,
+      "carbs_g": 33,
+      "fat_g": 16,
+      "fiber_g": 3
+    },
+    {
+      "name": "Cheese Pizza",
+      "category": "Kids Menu",
+      "serving": "1 serving",
+      "calories": 400,
+      "protein_g": 17,
+      "carbs_g": 54,
+      "fat_g": 13,
+      "fiber_g": 3
+    },
+    {
+      "name": "Add pepperoni",
+      "category": "Add-ons",
+      "serving": "1 serving",
+      "calories": 60,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken Fingers",
+      "category": "Kids Menu",
+      "serving": "1 serving (Kids Menu)",
+      "calories": 300,
+      "protein_g": 25,
+      "carbs_g": 15,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Macaroni & Cheese",
+      "category": "Kids Menu",
+      "serving": "1 serving",
+      "calories": 360,
+      "protein_g": 16,
+      "carbs_g": 45,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Grapes",
+      "category": "Kids Menu",
+      "serving": "1 serving",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Fries",
+      "category": "Kids Menu",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 5,
+      "carbs_g": 37,
+      "fat_g": 14,
+      "fiber_g": 5
+    },
+    {
+      "name": "Add ketchup",
+      "category": "Add-ons",
+      "serving": "1 serving",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spaghetti with Tomato Sauce",
+      "category": "Kids Menu",
+      "serving": "1 serving",
+      "calories": 180,
+      "protein_g": 5,
+      "carbs_g": 30,
+      "fat_g": 5,
+      "fiber_g": 2
+    },
+    {
+      "name": "Milk, 1%",
+      "category": "Kids Menu",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 8,
+      "carbs_g": 12,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Milk, 1%",
+      "category": "Kids Menu",
+      "serving": "1 serving",
+      "calories": 180,
+      "protein_g": 8,
+      "carbs_g": 31,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Whole Chocolate Milk",
+      "category": "Kids Menu",
+      "serving": "1 serving",
+      "calories": 210,
+      "protein_g": 8,
+      "carbs_g": 26,
+      "fat_g": 8,
+      "fiber_g": 2
+    },
+    {
+      "name": "Raspberry Lemonade",
+      "category": "Kids Menu",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 30,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Juice, Apple",
+      "category": "Kids Menu",
+      "serving": "1 serving (Kids Menu)",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Juice, Cranberry",
+      "category": "Kids Menu",
+      "serving": "1 serving (Kids Menu)",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Juice, Orange",
+      "category": "Kids Menu",
+      "serving": "1 serving (Kids Menu)",
+      "calories": 180,
+      "protein_g": 3,
+      "carbs_g": 40,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Juice, Pineapple",
+      "category": "Kids Menu",
+      "serving": "1 serving (Kids Menu)",
+      "calories": 200,
+      "protein_g": 1,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Smoothie, Strawberry",
+      "category": "Kids Menu",
+      "serving": "1 serving",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 60,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Smoothie, Peach",
+      "category": "Kids Menu",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 61,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salad without Croutons",
+      "category": "Gluten Sensitive Menu",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 2,
+      "carbs_g": 7,
+      "fat_g": 8,
+      "fiber_g": 2
+    },
+    {
+      "name": "6 oz. Tuscan Sirloin",
+      "category": "Gluten Sensitive Menu",
+      "serving": "1 serving",
+      "calories": 480,
+      "protein_g": 46,
+      "carbs_g": 9,
+      "fat_g": 30,
+      "fiber_g": 4
+    },
+    {
+      "name": "Grilled Chicken Parmigiana",
+      "category": "Gluten Sensitive Menu",
+      "serving": "1 serving",
+      "calories": 810,
+      "protein_g": 75,
+      "carbs_g": 59,
+      "fat_g": 33,
+      "fiber_g": 7
+    },
+    {
+      "name": "Rotini Pasta with Marinara",
+      "category": "Gluten Sensitive Menu",
+      "serving": "1 serving",
+      "calories": 530,
+      "protein_g": 13,
+      "carbs_g": 94,
+      "fat_g": 12,
+      "fiber_g": 8
+    },
+    {
+      "name": "Rotini Pasta with Meat Sauce",
+      "category": "Gluten Sensitive Menu",
+      "serving": "1 serving",
+      "calories": 680,
+      "protein_g": 23,
+      "carbs_g": 96,
+      "fat_g": 22,
+      "fiber_g": 6
+    },
+    {
+      "name": "Kids Grilled Chicken with Rotini Pasta & Marinara",
+      "category": "Gluten Sensitive Menu",
+      "serving": "1 serving",
+      "calories": 430,
+      "protein_g": 33,
+      "carbs_g": 58,
+      "fat_g": 9,
+      "fiber_g": 5
+    },
+    {
+      "name": "Kids Rotini Pasta with Marinara",
+      "category": "Gluten Sensitive Menu",
+      "serving": "1 serving",
+      "calories": 260,
+      "protein_g": 6,
+      "carbs_g": 47,
+      "fat_g": 6,
+      "fiber_g": 4
+    },
+    {
+      "name": "Kids Rotini Pasta with Meat Sauce",
+      "category": "Gluten Sensitive Menu",
+      "serving": "1 serving",
+      "calories": 340,
+      "protein_g": 12,
+      "carbs_g": 48,
+      "fat_g": 11,
+      "fiber_g": 3
+    },
+    {
+      "name": "OG's Old Fashioned",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pineapple Coconut Margarita",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 41,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Frozen Strawberry-Mango Margarita",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 330,
+      "protein_g": 0,
+      "carbs_g": 62,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Frozen Green Apple Margarita (where available)",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 390,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Strawberry Frose (where available)",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Italian Margarita",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 380,
+      "protein_g": 0,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 4
+    },
+    {
+      "name": "Strawberry Limoncello Margarita",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Blue Capri",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Italian Rum Punch",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 320,
+      "protein_g": 0,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Sicilian Sunset",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spiked Strawberry Lemonade",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Green Apple Moscato Sangria (Glass)",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Green Apple Moscato Sangria (Pitcher)",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 830,
+      "protein_g": 2,
+      "carbs_g": 161,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Berry Sangria (Glass)",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 30,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Berry Sangria (Pitcher)",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 870,
+      "protein_g": 1,
+      "carbs_g": 126,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Watermelon Moscato Sangria (Glass)",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Watermelon Moscato Sangria (Pitcher)",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 720,
+      "protein_g": 0,
+      "carbs_g": 138,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Wine - Whites and Rosé - Glass",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wine - Whites and Rosé - Grande Pour",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wine - Whites and Rosé - Bottle",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 630,
+      "protein_g": 0,
+      "carbs_g": 16,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wine - Reds - Glass",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wine - Reds - Grande Pour",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 8,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wine - Reds - Bottle",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 660,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wine - Sparkling Prosecco - Glass",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wine - Sparkling Prosecco - Bottle",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 660,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beer - Light Draft (16 oz)",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 140,
+      "protein_g": 1,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beer - Light Draft (22 oz)",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 190,
+      "protein_g": 2,
+      "carbs_g": 8,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beer - Regular Draft (16 oz)",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 230,
+      "protein_g": 3,
+      "carbs_g": 16,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beer - Regular Draft (22 oz)",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 310,
+      "protein_g": 4,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beer - Bottle, Light",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beer - Bottle, Regular",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 150,
+      "protein_g": 1,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beer - Bottle, Angry Orchard Hard Cider",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 31,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beer - Bottle, Non-Alcoholic",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 13,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tea",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving",
+      "calories": 150,
+      "protein_g": 9,
+      "carbs_g": 13,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee - Caramel",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving",
+      "calories": 250,
+      "protein_g": 7,
+      "carbs_g": 40,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee - Traditional",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving",
+      "calories": 210,
+      "protein_g": 7,
+      "carbs_g": 29,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee - Vanilla",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 7,
+      "carbs_g": 38,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lavazza Espresso",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving",
+      "calories": 60,
+      "protein_g": 5,
+      "carbs_g": 6,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "NAB Half Tea + Half Lemonade",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea, Bellini Peach-Raspberry",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 18,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea, Mango-Passion Fruit",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Italian Bottled Water",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade, Classic",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade, Raspberry",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Limonata, Sweet Pear",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 60,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Limonata, Strawberry-Passion Fruit",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coke",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coke Zero",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr. Pepper",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 41,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Lemonade",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 38,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Juice, Apple",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving (Non-Alcoholic Drinks)",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 53,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Juice, Cranberry",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving (Non-Alcoholic Drinks)",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 56,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Juice, Grapefruit",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving",
+      "calories": 190,
+      "protein_g": 4,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Juice, Orange",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving (Non-Alcoholic Drinks)",
+      "calories": 230,
+      "protein_g": 4,
+      "carbs_g": 51,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Juice, Pineapple",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving (Non-Alcoholic Drinks)",
+      "calories": 250,
+      "protein_g": 2,
+      "carbs_g": 60,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Juice, Tomato",
+      "category": "Non-Alcoholic Drinks",
+      "serving": "1 serving",
+      "calories": 90,
+      "protein_g": 4,
+      "carbs_g": 19,
+      "fat_g": 0,
+      "fiber_g": 4
+    },
+    {
+      "name": "Famous House Salad To Go",
+      "category": "To Go Soups & Salad",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 8,
+      "carbs_g": 30,
+      "fat_g": 17,
+      "fiber_g": 6
+    },
+    {
+      "name": "Chicken & Gnocchi (Per One Serving, Serves Two)",
+      "category": "To Go Soups & Salad",
+      "serving": "1 serving",
+      "calories": 230,
+      "protein_g": 11,
+      "carbs_g": 22,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Minestrone (Per One Serving, Serves Two)",
+      "category": "To Go Soups & Salad",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 5,
+      "carbs_g": 17,
+      "fat_g": 1,
+      "fiber_g": 4
+    },
+    {
+      "name": "Pasta Fagioli (Per One Serving, Serves Two)",
+      "category": "To Go Soups & Salad",
+      "serving": "1 serving",
+      "calories": 150,
+      "protein_g": 8,
+      "carbs_g": 16,
+      "fat_g": 5,
+      "fiber_g": 3
+    },
+    {
+      "name": "Zuppa Toscana (Per One Serving, Serves Two)",
+      "category": "To Go Soups & Salad",
+      "serving": "1 serving",
+      "calories": 220,
+      "protein_g": 7,
+      "carbs_g": 15,
+      "fat_g": 15,
+      "fiber_g": 2
+    },
+    {
+      "name": "Stellini Soup (Per One Serving, Serves Two)",
+      "category": "To Go Soups & Salad",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 9,
+      "carbs_g": 22,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Jumbo Famous House Salad (Serves 6)",
+      "category": "Catering Soups & Salad",
+      "serving": "1 serving",
+      "calories": 1650,
+      "protein_g": 30,
+      "carbs_g": 134,
+      "fat_g": 114,
+      "fiber_g": 17
+    },
+    {
+      "name": "Chicken & Gnocchi, half-gallon",
+      "category": "Catering Soups & Salad",
+      "serving": "1 serving",
+      "calories": 1870,
+      "protein_g": 88,
+      "carbs_g": 177,
+      "fat_g": 93,
+      "fiber_g": 10
+    },
+    {
+      "name": "Minestrone, half-gallon",
+      "category": "Catering Soups & Salad",
+      "serving": "1 serving",
+      "calories": 850,
+      "protein_g": 40,
+      "carbs_g": 140,
+      "fat_g": 9,
+      "fiber_g": 31
+    },
+    {
+      "name": "Pasta Fagioli, half-gallon",
+      "category": "Catering Soups & Salad",
+      "serving": "1 serving",
+      "calories": 1170,
+      "protein_g": 62,
+      "carbs_g": 131,
+      "fat_g": 44,
+      "fiber_g": 24
+    },
+    {
+      "name": "Zuppa Toscana, half-gallon",
+      "category": "Catering Soups & Salad",
+      "serving": "1 serving",
+      "calories": 1760,
+      "protein_g": 59,
+      "carbs_g": 123,
+      "fat_g": 117,
+      "fiber_g": 15
+    },
+    {
+      "name": "Stellini Soup Catering (Regional), half-gallon",
+      "category": "Catering Soups & Salad",
+      "serving": "1 serving",
+      "calories": 1570,
+      "protein_g": 73,
+      "carbs_g": 180,
+      "fat_g": 59,
+      "fiber_g": 11
+    },
+    {
+      "name": "Chicken & Gnocchi, one-gallon",
+      "category": "Catering Soups & Salad",
+      "serving": "1 serving",
+      "calories": 3750,
+      "protein_g": 175,
+      "carbs_g": 353,
+      "fat_g": 186,
+      "fiber_g": 20
+    },
+    {
+      "name": "Minestrone, one-gallon",
+      "category": "Catering Soups & Salad",
+      "serving": "1 serving",
+      "calories": 1700,
+      "protein_g": 81,
+      "carbs_g": 279,
+      "fat_g": 18,
+      "fiber_g": 63
+    },
+    {
+      "name": "Pasta Fagioli, one-gallon",
+      "category": "Catering Soups & Salad",
+      "serving": "1 serving",
+      "calories": 2350,
+      "protein_g": 124,
+      "carbs_g": 261,
+      "fat_g": 87,
+      "fiber_g": 47
+    },
+    {
+      "name": "Zuppa Toscana, one-gallon",
+      "category": "Catering Soups & Salad",
+      "serving": "1 serving",
+      "calories": 3520,
+      "protein_g": 118,
+      "carbs_g": 246,
+      "fat_g": 234,
+      "fiber_g": 29
+    },
+    {
+      "name": "Stellini Soup Catering (Regional), one-gallon",
+      "category": "Catering Soups & Salad",
+      "serving": "1 serving",
+      "calories": 3130,
+      "protein_g": 145,
+      "carbs_g": 359,
+      "fat_g": 118,
+      "fiber_g": 22
+    },
+    {
+      "name": "Creamy Mushroom Ravioli",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving (Catering Pans (Serves 4 - 6))",
+      "calories": 3930,
+      "protein_g": 94,
+      "carbs_g": 236,
+      "fat_g": 303,
+      "fiber_g": 23
+    },
+    {
+      "name": "Cheese Ravioli with Marinara",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 2990,
+      "protein_g": 166,
+      "carbs_g": 254,
+      "fat_g": 153,
+      "fiber_g": 21
+    },
+    {
+      "name": "Cheese Ravioli with Meat sauce",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 3510,
+      "protein_g": 195,
+      "carbs_g": 246,
+      "fat_g": 198,
+      "fiber_g": 16
+    },
+    {
+      "name": "Chicken and Shrimp Carbonara",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 5460,
+      "protein_g": 255,
+      "carbs_g": 300,
+      "fat_g": 365,
+      "fiber_g": 14
+    },
+    {
+      "name": "Chicken Parmigiana",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving (Catering Pans (Serves 4 - 6))",
+      "calories": 4790,
+      "protein_g": 266,
+      "carbs_g": 529,
+      "fat_g": 188,
+      "fiber_g": 40
+    },
+    {
+      "name": "Chicken Scampi",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving (Catering Pans (Serves 4 - 6))",
+      "calories": 4190,
+      "protein_g": 196,
+      "carbs_g": 424,
+      "fat_g": 178,
+      "fiber_g": 21
+    },
+    {
+      "name": "Chicken Tortelloni Alfredo",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving (Catering Pans (Serves 4 - 6))",
+      "calories": 7930,
+      "protein_g": 446,
+      "carbs_g": 380,
+      "fat_g": 523,
+      "fiber_g": 20
+    },
+    {
+      "name": "Fettuccine Alfredo",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving (Catering Pans (Serves 4 - 6))",
+      "calories": 5010,
+      "protein_g": 116,
+      "carbs_g": 376,
+      "fat_g": 339,
+      "fiber_g": 15
+    },
+    {
+      "name": "Fettuccine Alfredo with Broccoli",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 5620,
+      "protein_g": 134,
+      "carbs_g": 409,
+      "fat_g": 389,
+      "fiber_g": 29
+    },
+    {
+      "name": "Five Cheese Ziti al Forno",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving (Catering Pans (Serves 4 - 6))",
+      "calories": 4680,
+      "protein_g": 183,
+      "carbs_g": 391,
+      "fat_g": 276,
+      "fiber_g": 26
+    },
+    {
+      "name": "Grilled Chicken Alfredo",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 6050,
+      "protein_g": 322,
+      "carbs_g": 381,
+      "fat_g": 360,
+      "fiber_g": 19
+    },
+    {
+      "name": "Grilled Chicken Alfredo with Broccoli",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 6660,
+      "protein_g": 340,
+      "carbs_g": 414,
+      "fat_g": 410,
+      "fiber_g": 32
+    },
+    {
+      "name": "Lasagna Classico (Serves up to 12)",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 6470,
+      "protein_g": 370,
+      "carbs_g": 448,
+      "fat_g": 364,
+      "fiber_g": 36
+    },
+    {
+      "name": "Lasagna Classico (Serves up to 6)",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 3420,
+      "protein_g": 196,
+      "carbs_g": 230,
+      "fat_g": 196,
+      "fiber_g": 19
+    },
+    {
+      "name": "Shrimp Alfredo",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving (Catering Pans (Serves 4 - 6))",
+      "calories": 5680,
+      "protein_g": 248,
+      "carbs_g": 382,
+      "fat_g": 352,
+      "fiber_g": 18
+    },
+    {
+      "name": "Shrimp Scampi",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving (Catering Pans (Serves 4 - 6))",
+      "calories": 1980,
+      "protein_g": 114,
+      "carbs_g": 208,
+      "fat_g": 72,
+      "fiber_g": 16
+    },
+    {
+      "name": "Spaghetti with Marinara Sauce",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 2270,
+      "protein_g": 72,
+      "carbs_g": 396,
+      "fat_g": 49,
+      "fiber_g": 27
+    },
+    {
+      "name": "Spaghetti with Marinara & Italian Sausage",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 4260,
+      "protein_g": 181,
+      "carbs_g": 417,
+      "fat_g": 214,
+      "fiber_g": 33
+    },
+    {
+      "name": "Spaghetti with Marinara Sauce & Meatballs",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 3980,
+      "protein_g": 153,
+      "carbs_g": 433,
+      "fat_g": 190,
+      "fiber_g": 39
+    },
+    {
+      "name": "Spaghetti with Meat Sauce",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving (Catering Pans (Serves 4 - 6))",
+      "calories": 2840,
+      "protein_g": 112,
+      "carbs_g": 403,
+      "fat_g": 88,
+      "fiber_g": 20
+    },
+    {
+      "name": "Spaghetti with Meat Sauce & Italian Sausage",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving (Catering Pans (Serves 4 - 6))",
+      "calories": 4830,
+      "protein_g": 221,
+      "carbs_g": 424,
+      "fat_g": 252,
+      "fiber_g": 25
+    },
+    {
+      "name": "Spaghetti with Meat Sauce & Meatballs",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 4550,
+      "protein_g": 193,
+      "carbs_g": 440,
+      "fat_g": 228,
+      "fiber_g": 31
+    },
+    {
+      "name": "Catering - Create Your Own Pasta Station (Serves 10)",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 17280,
+      "protein_g": 702,
+      "carbs_g": 1531,
+      "fat_g": 944,
+      "fiber_g": 103
+    },
+    {
+      "name": "Fried Mozzarella",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving (Catering Pans (Serves 4 - 6))",
+      "calories": 3450,
+      "protein_g": 141,
+      "carbs_g": 243,
+      "fat_g": 212,
+      "fiber_g": 18
+    },
+    {
+      "name": "Toasted Ravioli",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving (Catering Pans (Serves 4 - 6))",
+      "calories": 2590,
+      "protein_g": 98,
+      "carbs_g": 274,
+      "fat_g": 123,
+      "fiber_g": 17
+    },
+    {
+      "name": "Spinach-Artichoke Dip with flatbread crisps",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving (Catering Pans (Serves 4 - 6))",
+      "calories": 2310,
+      "protein_g": 66,
+      "carbs_g": 151,
+      "fat_g": 161,
+      "fiber_g": 14
+    },
+    {
+      "name": "Alfredo, one pint",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 1750,
+      "protein_g": 30,
+      "carbs_g": 21,
+      "fat_g": 173,
+      "fiber_g": 0
+    },
+    {
+      "name": "Five Cheese Marinara, one pint",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 800,
+      "protein_g": 21,
+      "carbs_g": 35,
+      "fat_g": 67,
+      "fiber_g": 5
+    },
+    {
+      "name": "Marinara, one pint",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 7,
+      "carbs_g": 33,
+      "fat_g": 17,
+      "fiber_g": 7
+    },
+    {
+      "name": "Meat sauce, one pint",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 600,
+      "protein_g": 28,
+      "carbs_g": 37,
+      "fat_g": 38,
+      "fiber_g": 3
+    },
+    {
+      "name": "Parmesan Garlic Broccoli",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving (Catering Pans (Serves 4 - 6))",
+      "calories": 610,
+      "protein_g": 18,
+      "carbs_g": 33,
+      "fat_g": 51,
+      "fiber_g": 14
+    },
+    {
+      "name": "Chicken Fingers",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving (Catering Pans (Serves 4 - 6))",
+      "calories": 1340,
+      "protein_g": 112,
+      "carbs_g": 69,
+      "fat_g": 69,
+      "fiber_g": 0
+    },
+    {
+      "name": "Grilled Chicken",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving (Catering Pans (Serves 4 - 6))",
+      "calories": 810,
+      "protein_g": 156,
+      "carbs_g": 7,
+      "fat_g": 17,
+      "fiber_g": 3
+    },
+    {
+      "name": "Italian Meatballs",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 1710,
+      "protein_g": 81,
+      "carbs_g": 37,
+      "fat_g": 140,
+      "fiber_g": 11
+    },
+    {
+      "name": "Italian Sausage",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 1990,
+      "protein_g": 109,
+      "carbs_g": 21,
+      "fat_g": 164,
+      "fiber_g": 6
+    },
+    {
+      "name": "Iced Tea, Bellini Peach-Raspberry, 1 Gallon",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 800,
+      "protein_g": 0,
+      "carbs_g": 191,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Half Tea + Half Lemonade, 1 Gallon",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 900,
+      "protein_g": 0,
+      "carbs_g": 237,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea, Mango-Passion Fruit, 1 Gallon",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 1140,
+      "protein_g": 0,
+      "carbs_g": 283,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea, Raspberry, 1 Gallon",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 830,
+      "protein_g": 0,
+      "carbs_g": 210,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea, Fresh Brewed, Unsweetened, 1 Gallon",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade, Classic, 1 Gallon",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 1770,
+      "protein_g": 0,
+      "carbs_g": 463,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade, Raspberry, 1 Gallon",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 1760,
+      "protein_g": 0,
+      "carbs_g": 475,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coke, 2 Liter",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 790,
+      "protein_g": 0,
+      "carbs_g": 220,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke, 2 Liter",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite, 2 Liter",
+      "category": "Catering Pans (Serves 4 - 6)",
+      "serving": "1 serving",
+      "calories": 790,
+      "protein_g": 0,
+      "carbs_g": 214,
+      "fat_g": 0,
+      "fiber_g": 0
+    }
+  ]
+}

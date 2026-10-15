@@ -1,0 +1,728 @@
+{
+  "chain": "Five Guys",
+  "slug": "five-guys",
+  "aliases": [
+    "five guys",
+    "5 guys",
+    "fiveguys",
+    "5guys",
+    "five guy's"
+  ],
+  "kind": "fast-casual",
+  "source_url": "https://www.fiveguys.com/wp-content/uploads/2026/09/Five-Guys-US-Nutrition-Allergen-Guide-English-September-2026.pdf",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Five Guys publishes nutrition by COMPONENT, not by finished burger: a burger = bun + patties + chosen toppings (e.g. Hamburger = Hamburger Bun + 2 Hamburger Patties; Little Hamburger = 1 patty); a shake = Vanilla Shake Base + mix-ins. Where the PDF lists two suppliers for the same component, the first listed is kept. Values printed as '<1' are stored as 0. A second 'Mini Five Guys Style' fries row (likely mislabelled) was skipped. Atwater outliers (>20% off 4P+4C+9F, left as published): Mini Patty (163 cal vs 117 Atwater); Hamburger Patty (302 cal vs 217 Atwater).",
+  "items": [
+    {
+      "name": "Bacon (2 pieces)",
+      "category": "Meat",
+      "serving": "14 g",
+      "calories": 70,
+      "protein_g": 5,
+      "carbs_g": 0,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon (1 piece)",
+      "category": "Meat",
+      "serving": "7 g",
+      "calories": 36,
+      "protein_g": 3,
+      "carbs_g": 0,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mini Patty",
+      "category": "Meat",
+      "serving": "35 g",
+      "calories": 163,
+      "protein_g": 9,
+      "carbs_g": 0,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hamburger Patty",
+      "category": "Meat",
+      "serving": "65 g",
+      "calories": 302,
+      "protein_g": 16,
+      "carbs_g": 0,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Dog",
+      "category": "Meat",
+      "serving": "90 g",
+      "calories": 280,
+      "protein_g": 11,
+      "carbs_g": 1,
+      "fat_g": 26,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mini Bun",
+      "category": "Buns",
+      "serving": "37 g",
+      "calories": 120,
+      "protein_g": 3,
+      "carbs_g": 20,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hamburger Bun",
+      "category": "Buns",
+      "serving": "77 g",
+      "calories": 240,
+      "protein_g": 7,
+      "carbs_g": 35,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hot Dog Buns",
+      "category": "Buns",
+      "serving": "71 g",
+      "calories": 220,
+      "protein_g": 6,
+      "carbs_g": 33,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mini Five Guys Style Fries",
+      "category": "Fries",
+      "serving": "175 g",
+      "calories": 405,
+      "protein_g": 6,
+      "carbs_g": 55,
+      "fat_g": 17,
+      "fiber_g": 6
+    },
+    {
+      "name": "Little Five Guys Style Fries",
+      "category": "Fries",
+      "serving": "227 g",
+      "calories": 526,
+      "protein_g": 8,
+      "carbs_g": 72,
+      "fat_g": 23,
+      "fiber_g": 8
+    },
+    {
+      "name": "Regular Five Guys Style Fries",
+      "category": "Fries",
+      "serving": "411 g",
+      "calories": 953,
+      "protein_g": 15,
+      "carbs_g": 131,
+      "fat_g": 41,
+      "fiber_g": 15
+    },
+    {
+      "name": "Large Five Guys Style Fries",
+      "category": "Fries",
+      "serving": "567 g",
+      "calories": 1314,
+      "protein_g": 20,
+      "carbs_g": 181,
+      "fat_g": 57,
+      "fiber_g": 21
+    },
+    {
+      "name": "Little Cajun Style Fries",
+      "category": "Fries",
+      "serving": "232 g",
+      "calories": 540,
+      "protein_g": 8,
+      "carbs_g": 75,
+      "fat_g": 28,
+      "fiber_g": 8
+    },
+    {
+      "name": "Regular Cajun Style Fries",
+      "category": "Fries",
+      "serving": "416 g",
+      "calories": 967,
+      "protein_g": 15,
+      "carbs_g": 134,
+      "fat_g": 41,
+      "fiber_g": 15
+    },
+    {
+      "name": "Large Cajun Style Fries",
+      "category": "Fries",
+      "serving": "572 g",
+      "calories": 1328,
+      "protein_g": 20,
+      "carbs_g": 184,
+      "fat_g": 57,
+      "fiber_g": 21
+    },
+    {
+      "name": "A.1.® Sauce",
+      "category": "Toppings",
+      "serving": "17 g",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "BBQ Sauce",
+      "category": "Toppings",
+      "serving": "28 g",
+      "calories": 49,
+      "protein_g": 0,
+      "carbs_g": 15,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheese (1 slice)",
+      "category": "Toppings",
+      "serving": "19 g",
+      "calories": 70,
+      "protein_g": 4,
+      "carbs_g": 0,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheese (1/2 slice)",
+      "category": "Toppings",
+      "serving": "9 g",
+      "calories": 35,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Green Peppers",
+      "category": "Toppings",
+      "serving": "25 g",
+      "calories": 3,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Grilled Mushrooms",
+      "category": "Toppings",
+      "serving": "21 g",
+      "calories": 6,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Sauce",
+      "category": "Toppings",
+      "serving": "5 g",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jalapeño Peppers",
+      "category": "Toppings",
+      "serving": "11 g",
+      "calories": 3,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ketchup",
+      "category": "Toppings",
+      "serving": "17 g",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lettuce",
+      "category": "Toppings",
+      "serving": "30 g",
+      "calories": 3,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mayonnaise",
+      "category": "Toppings",
+      "serving": "14 g",
+      "calories": 111,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mustard",
+      "category": "Toppings",
+      "serving": "5 g",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Onions / Grilled Onions",
+      "category": "Toppings",
+      "serving": "26 g",
+      "calories": 11,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pickles",
+      "category": "Toppings",
+      "serving": "28 g",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Relish",
+      "category": "Toppings",
+      "serving": "15 g",
+      "calories": 16,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tomatoes",
+      "category": "Toppings",
+      "serving": "52 g",
+      "calories": 8,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake Base",
+      "category": "Milkshakes",
+      "serving": "315 g",
+      "calories": 524,
+      "protein_g": 10,
+      "carbs_g": 65,
+      "fat_g": 25,
+      "fiber_g": 0
+    },
+    {
+      "name": "Whipped Cream",
+      "category": "Milkshakes",
+      "serving": "7 g",
+      "calories": 7,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blackberry Sauce",
+      "category": "Shake Mix-ins",
+      "serving": "60 g",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Banana Marinade",
+      "category": "Shake Mix-ins",
+      "serving": "120 g",
+      "calories": 174,
+      "protein_g": 0,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chocolate",
+      "category": "Shake Mix-ins",
+      "serving": "50 g",
+      "calories": 133,
+      "protein_g": 2,
+      "carbs_g": 30,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Coffee",
+      "category": "Shake Mix-ins",
+      "serving": "17 g",
+      "calories": 27,
+      "protein_g": 0,
+      "carbs_g": 7,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Oreo® Crème",
+      "category": "Shake Mix-ins",
+      "serving": "50 g",
+      "calories": 320,
+      "protein_g": 0,
+      "carbs_g": 23,
+      "fat_g": 25,
+      "fiber_g": 0
+    },
+    {
+      "name": "Oreo® Cookie Pieces",
+      "category": "Shake Mix-ins",
+      "serving": "25 g",
+      "calories": 120,
+      "protein_g": 1,
+      "carbs_g": 18,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peanut Butter",
+      "category": "Shake Mix-ins",
+      "serving": "50 g",
+      "calories": 322,
+      "protein_g": 9,
+      "carbs_g": 9,
+      "fat_g": 29,
+      "fiber_g": 3
+    },
+    {
+      "name": "Reese’s® Peanut Butter Cup",
+      "category": "Shake Mix-ins",
+      "serving": "28 g",
+      "calories": 150,
+      "protein_g": 3,
+      "carbs_g": 15,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Salted Caramel",
+      "category": "Shake Mix-ins",
+      "serving": "50 g",
+      "calories": 155,
+      "protein_g": 0,
+      "carbs_g": 37,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry",
+      "category": "Shake Mix-ins",
+      "serving": "80 g",
+      "calories": 107,
+      "protein_g": 0,
+      "carbs_g": 28,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mini Vanilla Shake Base",
+      "category": "Mini Milkshakes",
+      "serving": "155 g",
+      "calories": 250,
+      "protein_g": 5,
+      "carbs_g": 33,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Whipped Cream",
+      "category": "Mini Milkshakes",
+      "serving": "4 g",
+      "calories": 4,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blackberry Sauce",
+      "category": "Mini Shake Mix-ins",
+      "serving": "30 g",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon (2 pieces)",
+      "category": "Mini Shake Mix-ins",
+      "serving": "7 g",
+      "calories": 35,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Banana Marinade",
+      "category": "Mini Shake Mix-ins",
+      "serving": "60 g",
+      "calories": 87,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate",
+      "category": "Mini Shake Mix-ins",
+      "serving": "25 g",
+      "calories": 66,
+      "protein_g": 1,
+      "carbs_g": 15,
+      "fat_g": 1,
+      "fiber_g": 1
+    },
+    {
+      "name": "Coffee",
+      "category": "Mini Shake Mix-ins",
+      "serving": "8 g",
+      "calories": 13,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Oreo® Crème",
+      "category": "Mini Shake Mix-ins",
+      "serving": "25 g",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 11,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Oreo® Cookie Pieces",
+      "category": "Mini Shake Mix-ins",
+      "serving": "12 g",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peanut Butter",
+      "category": "Mini Shake Mix-ins",
+      "serving": "25 g",
+      "calories": 161,
+      "protein_g": 4,
+      "carbs_g": 4,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Reese’s® Peanut Butter Cup",
+      "category": "Mini Shake Mix-ins",
+      "serving": "14 g",
+      "calories": 75,
+      "protein_g": 1,
+      "carbs_g": 7,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salted Caramel",
+      "category": "Mini Shake Mix-ins",
+      "serving": "25 g",
+      "calories": 77,
+      "protein_g": 0,
+      "carbs_g": 18,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry",
+      "category": "Mini Shake Mix-ins",
+      "serving": "40 g",
+      "calories": 53,
+      "protein_g": 0,
+      "carbs_g": 14,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Milk",
+      "category": "Drinks",
+      "serving": "245 g",
+      "calories": 150,
+      "protein_g": 8,
+      "carbs_g": 23,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Low Fat Milk",
+      "category": "Drinks",
+      "serving": "213 g",
+      "calories": 90,
+      "protein_g": 7,
+      "carbs_g": 10,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Apple Juice",
+      "category": "Drinks",
+      "serving": "177 g",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Orange Juice Blend",
+      "category": "Drinks",
+      "serving": "300 g",
+      "calories": 140,
+      "protein_g": 1,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheese Sauce",
+      "category": "Sauces",
+      "serving": "90 g",
+      "calories": 92,
+      "protein_g": 4,
+      "carbs_g": 7,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Five Guys Sauce",
+      "category": "Sauces",
+      "serving": "35 g",
+      "calories": 169,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bulk Peanuts (1oz.)",
+      "category": "Peanuts",
+      "serving": "30 g",
+      "calories": 170,
+      "protein_g": 7,
+      "carbs_g": 5,
+      "fat_g": 14,
+      "fiber_g": 3
+    },
+    {
+      "name": "Cajun Peanuts",
+      "category": "Peanuts",
+      "serving": "30 g",
+      "calories": 170,
+      "protein_g": 7,
+      "carbs_g": 5,
+      "fat_g": 14,
+      "fiber_g": 3
+    },
+    {
+      "name": "Fry Sauce Bulk",
+      "category": "Other Items",
+      "serving": "28 g",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fry Sauce PC",
+      "category": "Other Items",
+      "serving": "35 g",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Malt Vinegar (1tbs)",
+      "category": "Other Items",
+      "serving": "15 g",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Eggs (2)",
+      "category": "Other Items",
+      "serving": "105 g",
+      "calories": 160,
+      "protein_g": 13,
+      "carbs_g": 1,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Liquid Butter Flavored Oil",
+      "category": "Other Items",
+      "serving": "14 g",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chives Seasoning",
+      "category": "Other Items",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemons (1 slice)",
+      "category": "Other Items",
+      "serving": "10 g",
+      "calories": 3,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    }
+  ]
+}

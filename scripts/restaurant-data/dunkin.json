@@ -1,0 +1,7440 @@
+{
+  "chain": "Dunkin'",
+  "slug": "dunkin",
+  "aliases": [
+    "dunkin",
+    "dunkin donuts",
+    "dunkin' donuts",
+    "dunkins",
+    "dd",
+    "dunkn",
+    "dunkin doughnuts"
+  ],
+  "kind": "coffee",
+  "source_url": "https://assets.ctfassets.net/ubkcphxhphh0/3qEP8wMU2IFmLsLyEeWLuc/7bdae361f785d1611d25c4d859f8c721/DD_W7_nutrition_guide.pdf",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Official Dunkin' Nutrition Guide (last updated 09-21-2026), linked from dunkindonuts.com/nutrition. Sizes are as Dunkin' labels them (small/medium/large/extra large); fluid ounces are not stated in the guide. Hot/packaged tea rows (listed with no nutritional values) are not included. Atwater outliers (kept as published): Shakin' Espresso with Sugar Free Vanilla and Almondmilk [medium] (70 cal vs Atwater 90); Shakin' Espresso with Sugar Free Vanilla and Almondmilk [small] (50 cal vs Atwater 70).",
+  "items": [
+    {
+      "name": "Chocolate Frosted with Chocolate Sprinkles Donut",
+      "category": "Donuts (regional)",
+      "serving": "1 Donut",
+      "calories": 270,
+      "protein_g": 5,
+      "carbs_g": 36,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Brown Sugar Shakin' Espresso",
+      "category": "Iced Espresso",
+      "serving": "large",
+      "calories": 230,
+      "protein_g": 2,
+      "carbs_g": 51,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Brown Sugar Shakin' Espresso",
+      "category": "Iced Espresso",
+      "serving": "medium",
+      "calories": 180,
+      "protein_g": 1,
+      "carbs_g": 40,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Brown Sugar Shakin' Espresso",
+      "category": "Iced Espresso",
+      "serving": "small",
+      "calories": 120,
+      "protein_g": 1,
+      "carbs_g": 26,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Shakin' Espresso",
+      "category": "Iced Espresso",
+      "serving": "large",
+      "calories": 120,
+      "protein_g": 6,
+      "carbs_g": 11,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shakin' Espresso",
+      "category": "Iced Espresso",
+      "serving": "medium",
+      "calories": 90,
+      "protein_g": 4,
+      "carbs_g": 8,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shakin' Espresso",
+      "category": "Iced Espresso",
+      "serving": "small",
+      "calories": 60,
+      "protein_g": 3,
+      "carbs_g": 6,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Avocado Spread",
+      "category": "Avocado Toast",
+      "serving": "1 Unit",
+      "calories": 80,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 7,
+      "fiber_g": 3
+    },
+    {
+      "name": "Avocado Toast",
+      "category": "Avocado Toast",
+      "serving": "1 Piece",
+      "calories": 240,
+      "protein_g": 6,
+      "carbs_g": 34,
+      "fat_g": 11,
+      "fiber_g": 6
+    },
+    {
+      "name": "Bacon Topped Avocado Toast",
+      "category": "Avocado Toast",
+      "serving": "1 Piece",
+      "calories": 290,
+      "protein_g": 10,
+      "carbs_g": 32,
+      "fat_g": 14,
+      "fiber_g": 5
+    },
+    {
+      "name": "Cinnamon Raisin Bagel",
+      "category": "Bagels",
+      "serving": "1 Bagel",
+      "calories": 320,
+      "protein_g": 11,
+      "carbs_g": 67,
+      "fat_g": 1,
+      "fiber_g": 4
+    },
+    {
+      "name": "Everything Bagel",
+      "category": "Bagels",
+      "serving": "1 Bagel",
+      "calories": 340,
+      "protein_g": 12,
+      "carbs_g": 67,
+      "fat_g": 3,
+      "fiber_g": 5
+    },
+    {
+      "name": "Multigrain Bagel",
+      "category": "Bagels",
+      "serving": "1 Bagel",
+      "calories": 380,
+      "protein_g": 15,
+      "carbs_g": 63,
+      "fat_g": 8,
+      "fiber_g": 8
+    },
+    {
+      "name": "Plain Bagel",
+      "category": "Bagels",
+      "serving": "1 Bagel",
+      "calories": 300,
+      "protein_g": 11,
+      "carbs_g": 64,
+      "fat_g": 1,
+      "fiber_g": 4
+    },
+    {
+      "name": "Sesame Seed Bagel",
+      "category": "Bagels",
+      "serving": "1 Bagel",
+      "calories": 350,
+      "protein_g": 12,
+      "carbs_g": 64,
+      "fat_g": 5,
+      "fiber_g": 5
+    },
+    {
+      "name": "White Cheddar Bagel Twist",
+      "category": "Bagels",
+      "serving": "1 Bagel Twist",
+      "calories": 390,
+      "protein_g": 16,
+      "carbs_g": 64,
+      "fat_g": 8,
+      "fiber_g": 4
+    },
+    {
+      "name": "Butter Pecan Swirl Coffee Chiller with Cream",
+      "category": "Coffee Chiller",
+      "serving": "large",
+      "calories": 940,
+      "protein_g": 9,
+      "carbs_g": 145,
+      "fat_g": 35,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Coffee Chiller with Cream",
+      "category": "Coffee Chiller",
+      "serving": "medium",
+      "calories": 700,
+      "protein_g": 7,
+      "carbs_g": 109,
+      "fat_g": 26,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Coffee Chiller with Cream",
+      "category": "Coffee Chiller",
+      "serving": "small",
+      "calories": 470,
+      "protein_g": 5,
+      "carbs_g": 73,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Coffee Chiller with Skim Milk",
+      "category": "Coffee Chiller",
+      "serving": "large",
+      "calories": 650,
+      "protein_g": 10,
+      "carbs_g": 149,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Coffee Chiller with Skim Milk",
+      "category": "Coffee Chiller",
+      "serving": "medium",
+      "calories": 490,
+      "protein_g": 8,
+      "carbs_g": 112,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Coffee Chiller with Skim Milk",
+      "category": "Coffee Chiller",
+      "serving": "small",
+      "calories": 330,
+      "protein_g": 5,
+      "carbs_g": 75,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Coffee Chiller with Whole Milk",
+      "category": "Coffee Chiller",
+      "serving": "large",
+      "calories": 700,
+      "protein_g": 10,
+      "carbs_g": 149,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Coffee Chiller with Whole Milk",
+      "category": "Coffee Chiller",
+      "serving": "medium",
+      "calories": 530,
+      "protein_g": 7,
+      "carbs_g": 112,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Coffee Chiller with Whole Milk",
+      "category": "Coffee Chiller",
+      "serving": "small",
+      "calories": 350,
+      "protein_g": 5,
+      "carbs_g": 75,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Creme Coffee Chiller",
+      "category": "Coffee Chiller",
+      "serving": "large",
+      "calories": 1020,
+      "protein_g": 10,
+      "carbs_g": 155,
+      "fat_g": 39,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Creme Coffee Chiller",
+      "category": "Coffee Chiller",
+      "serving": "medium",
+      "calories": 770,
+      "protein_g": 7,
+      "carbs_g": 117,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Creme Coffee Chiller",
+      "category": "Coffee Chiller",
+      "serving": "small",
+      "calories": 540,
+      "protein_g": 5,
+      "carbs_g": 80,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee Chiller",
+      "category": "Coffee Chiller",
+      "serving": "large",
+      "calories": 720,
+      "protein_g": 6,
+      "carbs_g": 95,
+      "fat_g": 35,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee Chiller",
+      "category": "Coffee Chiller",
+      "serving": "medium",
+      "calories": 540,
+      "protein_g": 5,
+      "carbs_g": 71,
+      "fat_g": 26,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee Chiller",
+      "category": "Coffee Chiller",
+      "serving": "small",
+      "calories": 360,
+      "protein_g": 3,
+      "carbs_g": 48,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee Chiller with Almondmilk",
+      "category": "Coffee Chiller",
+      "serving": "large",
+      "calories": 430,
+      "protein_g": 2,
+      "carbs_g": 99,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee Chiller with Almondmilk",
+      "category": "Coffee Chiller",
+      "serving": "medium",
+      "calories": 330,
+      "protein_g": 1,
+      "carbs_g": 74,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee Chiller with Almondmilk",
+      "category": "Coffee Chiller",
+      "serving": "small",
+      "calories": 220,
+      "protein_g": 1,
+      "carbs_g": 50,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee Chiller with Cream",
+      "category": "Coffee Chiller",
+      "serving": "large",
+      "calories": 720,
+      "protein_g": 6,
+      "carbs_g": 95,
+      "fat_g": 35,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee Chiller with Cream",
+      "category": "Coffee Chiller",
+      "serving": "medium",
+      "calories": 540,
+      "protein_g": 5,
+      "carbs_g": 71,
+      "fat_g": 26,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee Chiller with Cream",
+      "category": "Coffee Chiller",
+      "serving": "small",
+      "calories": 390,
+      "protein_g": 3,
+      "carbs_g": 57,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee Chiller with Skim Milk",
+      "category": "Coffee Chiller",
+      "serving": "large",
+      "calories": 500,
+      "protein_g": 8,
+      "carbs_g": 117,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee Chiller with Skim Milk",
+      "category": "Coffee Chiller",
+      "serving": "medium",
+      "calories": 370,
+      "protein_g": 6,
+      "carbs_g": 88,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee Chiller with Skim Milk",
+      "category": "Coffee Chiller",
+      "serving": "small",
+      "calories": 250,
+      "protein_g": 4,
+      "carbs_g": 59,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee Chiller with Whole Milk",
+      "category": "Coffee Chiller",
+      "serving": "large",
+      "calories": 550,
+      "protein_g": 7,
+      "carbs_g": 117,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee Chiller with Whole Milk",
+      "category": "Coffee Chiller",
+      "serving": "medium",
+      "calories": 410,
+      "protein_g": 5,
+      "carbs_g": 88,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee Chiller with Whole Milk",
+      "category": "Coffee Chiller",
+      "serving": "small",
+      "calories": 270,
+      "protein_g": 4,
+      "carbs_g": 58,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Coffee Chiller with Cream",
+      "category": "Coffee Chiller",
+      "serving": "large",
+      "calories": 1000,
+      "protein_g": 9,
+      "carbs_g": 163,
+      "fat_g": 35,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Coffee Chiller with Cream",
+      "category": "Coffee Chiller",
+      "serving": "medium",
+      "calories": 750,
+      "protein_g": 7,
+      "carbs_g": 123,
+      "fat_g": 26,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Coffee Chiller with Cream",
+      "category": "Coffee Chiller",
+      "serving": "small",
+      "calories": 500,
+      "protein_g": 5,
+      "carbs_g": 82,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Coffee Chiller with Skim Milk",
+      "category": "Coffee Chiller",
+      "serving": "large",
+      "calories": 710,
+      "protein_g": 10,
+      "carbs_g": 167,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Coffee Chiller with Skim Milk",
+      "category": "Coffee Chiller",
+      "serving": "medium",
+      "calories": 540,
+      "protein_g": 8,
+      "carbs_g": 126,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Coffee Chiller with Skim Milk",
+      "category": "Coffee Chiller",
+      "serving": "small",
+      "calories": 360,
+      "protein_g": 5,
+      "carbs_g": 84,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Coffee Chiller with Whole Milk",
+      "category": "Coffee Chiller",
+      "serving": "large",
+      "calories": 760,
+      "protein_g": 10,
+      "carbs_g": 167,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Coffee Chiller with Whole Milk",
+      "category": "Coffee Chiller",
+      "serving": "medium",
+      "calories": 570,
+      "protein_g": 7,
+      "carbs_g": 125,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Coffee Chiller with Whole Milk",
+      "category": "Coffee Chiller",
+      "serving": "small",
+      "calories": 380,
+      "protein_g": 5,
+      "carbs_g": 84,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mocha Swirl Coffee Chiller with Cream",
+      "category": "Coffee Chiller",
+      "serving": "large",
+      "calories": 990,
+      "protein_g": 8,
+      "carbs_g": 163,
+      "fat_g": 35,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Coffee Chiller with Cream",
+      "category": "Coffee Chiller",
+      "serving": "medium",
+      "calories": 740,
+      "protein_g": 6,
+      "carbs_g": 122,
+      "fat_g": 27,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Coffee Chiller with Cream",
+      "category": "Coffee Chiller",
+      "serving": "small",
+      "calories": 490,
+      "protein_g": 4,
+      "carbs_g": 81,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mocha Swirl Coffee Chiller with Skim Milk",
+      "category": "Coffee Chiller",
+      "serving": "large",
+      "calories": 700,
+      "protein_g": 9,
+      "carbs_g": 167,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Coffee Chiller with Skim Milk",
+      "category": "Coffee Chiller",
+      "serving": "medium",
+      "calories": 530,
+      "protein_g": 7,
+      "carbs_g": 125,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Coffee Chiller with Skim Milk",
+      "category": "Coffee Chiller",
+      "serving": "small",
+      "calories": 350,
+      "protein_g": 5,
+      "carbs_g": 83,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mocha Swirl Coffee Chiller with Whole Milk",
+      "category": "Coffee Chiller",
+      "serving": "large",
+      "calories": 750,
+      "protein_g": 9,
+      "carbs_g": 167,
+      "fat_g": 7,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Coffee Chiller with Whole Milk",
+      "category": "Coffee Chiller",
+      "serving": "medium",
+      "calories": 570,
+      "protein_g": 6,
+      "carbs_g": 125,
+      "fat_g": 5,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Coffee Chiller with Whole Milk",
+      "category": "Coffee Chiller",
+      "serving": "small",
+      "calories": 380,
+      "protein_g": 4,
+      "carbs_g": 83,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Triple Mocha Coffee Chiller",
+      "category": "Coffee Chiller",
+      "serving": "large",
+      "calories": 1000,
+      "protein_g": 8,
+      "carbs_g": 153,
+      "fat_g": 40,
+      "fiber_g": 2
+    },
+    {
+      "name": "Triple Mocha Coffee Chiller",
+      "category": "Coffee Chiller",
+      "serving": "medium",
+      "calories": 770,
+      "protein_g": 6,
+      "carbs_g": 116,
+      "fat_g": 31,
+      "fiber_g": 2
+    },
+    {
+      "name": "Triple Mocha Coffee Chiller",
+      "category": "Coffee Chiller",
+      "serving": "small",
+      "calories": 530,
+      "protein_g": 5,
+      "carbs_g": 80,
+      "fat_g": 22,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramel Cold Brew with Dunkin' Cold Foam",
+      "category": "Cold Brew Coffee",
+      "serving": "large",
+      "calories": 350,
+      "protein_g": 4,
+      "carbs_g": 70,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Cold Brew with Dunkin' Cold Foam",
+      "category": "Cold Brew Coffee",
+      "serving": "medium",
+      "calories": 250,
+      "protein_g": 3,
+      "carbs_g": 51,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Cold Brew with Dunkin' Cold Foam",
+      "category": "Cold Brew Coffee",
+      "serving": "small",
+      "calories": 200,
+      "protein_g": 2,
+      "carbs_g": 38,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew Coffee",
+      "category": "Cold Brew Coffee",
+      "serving": "large",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew Coffee",
+      "category": "Cold Brew Coffee",
+      "serving": "medium",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew Coffee",
+      "category": "Cold Brew Coffee",
+      "serving": "small",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew Coffee with Cream",
+      "category": "Cold Brew Coffee",
+      "serving": "large",
+      "calories": 120,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew Coffee with Cream",
+      "category": "Cold Brew Coffee",
+      "serving": "medium",
+      "calories": 90,
+      "protein_g": 2,
+      "carbs_g": 1,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew Coffee with Cream",
+      "category": "Cold Brew Coffee",
+      "serving": "small",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew Coffee with Cream and Sugar",
+      "category": "Cold Brew Coffee",
+      "serving": "large",
+      "calories": 260,
+      "protein_g": 2,
+      "carbs_g": 37,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew Coffee with Cream and Sugar",
+      "category": "Cold Brew Coffee",
+      "serving": "medium",
+      "calories": 190,
+      "protein_g": 2,
+      "carbs_g": 27,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew Coffee with Cream and Sugar",
+      "category": "Cold Brew Coffee",
+      "serving": "small",
+      "calories": 130,
+      "protein_g": 1,
+      "carbs_g": 18,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew Coffee with Oatmilk",
+      "category": "Cold Brew Coffee",
+      "serving": "large",
+      "calories": 50,
+      "protein_g": 1,
+      "carbs_g": 8,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cold Brew Coffee with Oatmilk",
+      "category": "Cold Brew Coffee",
+      "serving": "medium",
+      "calories": 30,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 1,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cold Brew Coffee with Oatmilk",
+      "category": "Cold Brew Coffee",
+      "serving": "small",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew with Dunkin' Cold Foam and Cream",
+      "category": "Cold Brew Coffee",
+      "serving": "large",
+      "calories": 240,
+      "protein_g": 4,
+      "carbs_g": 20,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew with Dunkin' Cold Foam and Cream",
+      "category": "Cold Brew Coffee",
+      "serving": "medium",
+      "calories": 170,
+      "protein_g": 3,
+      "carbs_g": 14,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew with Dunkin' Cold Foam and Cream",
+      "category": "Cold Brew Coffee",
+      "serving": "small",
+      "calories": 140,
+      "protein_g": 2,
+      "carbs_g": 13,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew with Dunkin' Cold Foam, Black",
+      "category": "Cold Brew Coffee",
+      "serving": "large",
+      "calories": 130,
+      "protein_g": 2,
+      "carbs_g": 18,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew with Dunkin' Cold Foam, Black",
+      "category": "Cold Brew Coffee",
+      "serving": "medium",
+      "calories": 90,
+      "protein_g": 2,
+      "carbs_g": 13,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew with Dunkin' Cold Foam, Black",
+      "category": "Cold Brew Coffee",
+      "serving": "small",
+      "calories": 90,
+      "protein_g": 2,
+      "carbs_g": 13,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Nitro Cold Brew Coffee",
+      "category": "Cold Brew Coffee",
+      "serving": "small",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Nitro Cold Brew with Dunkin' Cold Foam",
+      "category": "Cold Brew Coffee",
+      "serving": "small",
+      "calories": 90,
+      "protein_g": 2,
+      "carbs_g": 13,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "The Caramel Cold Foam",
+      "category": "Cold Brew Coffee",
+      "serving": "large",
+      "calories": 340,
+      "protein_g": 4,
+      "carbs_g": 70,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "The Caramel Cold Foam",
+      "category": "Cold Brew Coffee",
+      "serving": "medium",
+      "calories": 250,
+      "protein_g": 3,
+      "carbs_g": 52,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "The Caramel Cold Foam",
+      "category": "Cold Brew Coffee",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 2,
+      "carbs_g": 39,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Cream Cold Brew",
+      "category": "Cold Brew Coffee",
+      "serving": "large",
+      "calories": 130,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Cream Cold Brew",
+      "category": "Cold Brew Coffee",
+      "serving": "medium",
+      "calories": 100,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Cream Cold Brew",
+      "category": "Cold Brew Coffee",
+      "serving": "small",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Packet",
+      "category": "Condiments",
+      "serving": "1 Packet",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Spread with Canola Oil",
+      "category": "Condiments",
+      "serving": "1 Portion",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blue Raspberry Coolatta®",
+      "category": "Coolatta®",
+      "serving": "large",
+      "calories": 460,
+      "protein_g": 0,
+      "carbs_g": 112,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blue Raspberry Coolatta®",
+      "category": "Coolatta®",
+      "serving": "medium",
+      "calories": 350,
+      "protein_g": 0,
+      "carbs_g": 84,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blue Raspberry Coolatta®",
+      "category": "Coolatta®",
+      "serving": "small",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 56,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Coolatta®",
+      "category": "Coolatta®",
+      "serving": "large",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 115,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Strawberry Coolatta®",
+      "category": "Coolatta®",
+      "serving": "medium",
+      "calories": 350,
+      "protein_g": 0,
+      "carbs_g": 86,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Strawberry Coolatta®",
+      "category": "Coolatta®",
+      "serving": "small",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 57,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Bean Coolatta®",
+      "category": "Coolatta®",
+      "serving": "large",
+      "calories": 790,
+      "protein_g": 10,
+      "carbs_g": 172,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Bean Coolatta®",
+      "category": "Coolatta®",
+      "serving": "medium",
+      "calories": 590,
+      "protein_g": 7,
+      "carbs_g": 129,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Bean Coolatta®",
+      "category": "Coolatta®",
+      "serving": "small",
+      "calories": 390,
+      "protein_g": 5,
+      "carbs_g": 86,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Classic Plain Cream Cheese Spread",
+      "category": "Cream Cheese Spread",
+      "serving": "1 Unit",
+      "calories": 120,
+      "protein_g": 2,
+      "carbs_g": 3,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Garden Veggie Cream Cheese Spread",
+      "category": "Cream Cheese Spread",
+      "serving": "1 Unit",
+      "calories": 100,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Cream Cheese Spread",
+      "category": "Cream Cheese Spread",
+      "serving": "1 Unit",
+      "calories": 130,
+      "protein_g": 2,
+      "carbs_g": 9,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Apple 'n Spice Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 230,
+      "protein_g": 4,
+      "carbs_g": 31,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Apple Crumb Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 290,
+      "protein_g": 5,
+      "carbs_g": 44,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Apple Fritter",
+      "category": "Donuts",
+      "serving": "1 Fritter",
+      "calories": 470,
+      "protein_g": 6,
+      "carbs_g": 47,
+      "fat_g": 28,
+      "fiber_g": 2
+    },
+    {
+      "name": "Apple Stick",
+      "category": "Donuts",
+      "serving": "1 Stick",
+      "calories": 470,
+      "protein_g": 4,
+      "carbs_g": 50,
+      "fat_g": 30,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bavarian Kreme Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 240,
+      "protein_g": 4,
+      "carbs_g": 31,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bismark",
+      "category": "Donuts",
+      "serving": "1 Bismark",
+      "calories": 480,
+      "protein_g": 6,
+      "carbs_g": 63,
+      "fat_g": 22,
+      "fiber_g": 1
+    },
+    {
+      "name": "Boston Kreme Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 270,
+      "protein_g": 5,
+      "carbs_g": 39,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Butternut Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 430,
+      "protein_g": 4,
+      "carbs_g": 57,
+      "fat_g": 21,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Butternut Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 450,
+      "protein_g": 4,
+      "carbs_g": 57,
+      "fat_g": 24,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Crème Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 290,
+      "protein_g": 5,
+      "carbs_g": 36,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Dipped French Cruller",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 280,
+      "protein_g": 3,
+      "carbs_g": 33,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Frosted Cake Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 360,
+      "protein_g": 4,
+      "carbs_g": 41,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Frosted Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 260,
+      "protein_g": 4,
+      "carbs_g": 34,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Frosted with Sprinkles Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 270,
+      "protein_g": 4,
+      "carbs_g": 36,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Headlight Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 310,
+      "protein_g": 5,
+      "carbs_g": 41,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Long John",
+      "category": "Donuts",
+      "serving": "1 Long John",
+      "calories": 320,
+      "protein_g": 6,
+      "carbs_g": 41,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cinnamon Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 330,
+      "protein_g": 4,
+      "carbs_g": 34,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cinnamon Stick",
+      "category": "Donuts",
+      "serving": "1 Stick",
+      "calories": 430,
+      "protein_g": 4,
+      "carbs_g": 39,
+      "fat_g": 30,
+      "fiber_g": 1
+    },
+    {
+      "name": "Coconut Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 410,
+      "protein_g": 4,
+      "carbs_g": 50,
+      "fat_g": 21,
+      "fiber_g": 1
+    },
+    {
+      "name": "Coffee Roll",
+      "category": "Donuts",
+      "serving": "1 Coffee Roll",
+      "calories": 390,
+      "protein_g": 7,
+      "carbs_g": 48,
+      "fat_g": 19,
+      "fiber_g": 2
+    },
+    {
+      "name": "Double Chocolate Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 380,
+      "protein_g": 4,
+      "carbs_g": 41,
+      "fat_g": 23,
+      "fiber_g": 1
+    },
+    {
+      "name": "French Cruller",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 230,
+      "protein_g": 3,
+      "carbs_g": 21,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Frosted Vanilla Crème Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 330,
+      "protein_g": 5,
+      "carbs_g": 44,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Glazed Blueberry Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 350,
+      "protein_g": 4,
+      "carbs_g": 44,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Glazed Chocolate Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 370,
+      "protein_g": 4,
+      "carbs_g": 41,
+      "fat_g": 23,
+      "fiber_g": 1
+    },
+    {
+      "name": "Glazed Chocolate Stick",
+      "category": "Donuts",
+      "serving": "1 Stick",
+      "calories": 410,
+      "protein_g": 4,
+      "carbs_g": 42,
+      "fat_g": 25,
+      "fiber_g": 2
+    },
+    {
+      "name": "Glazed Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 240,
+      "protein_g": 4,
+      "carbs_g": 33,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Glazed Jelly Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 280,
+      "protein_g": 4,
+      "carbs_g": 44,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Glazed Jelly Stick",
+      "category": "Donuts",
+      "serving": "1 Stick",
+      "calories": 540,
+      "protein_g": 4,
+      "carbs_g": 66,
+      "fat_g": 30,
+      "fiber_g": 1
+    },
+    {
+      "name": "Glazed Stick",
+      "category": "Donuts",
+      "serving": "1 Stick",
+      "calories": 470,
+      "protein_g": 4,
+      "carbs_g": 48,
+      "fat_g": 30,
+      "fiber_g": 1
+    },
+    {
+      "name": "Glazed Strawberry Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 280,
+      "protein_g": 4,
+      "carbs_g": 44,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Jelly Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 250,
+      "protein_g": 4,
+      "carbs_g": 36,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Jelly Stick",
+      "category": "Donuts",
+      "serving": "1 Stick",
+      "calories": 500,
+      "protein_g": 4,
+      "carbs_g": 57,
+      "fat_g": 30,
+      "fiber_g": 1
+    },
+    {
+      "name": "Lemon Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 230,
+      "protein_g": 4,
+      "carbs_g": 31,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Lemon Stick",
+      "category": "Donuts",
+      "serving": "1 Stick",
+      "calories": 480,
+      "protein_g": 4,
+      "carbs_g": 50,
+      "fat_g": 30,
+      "fiber_g": 1
+    },
+    {
+      "name": "Maple Crème Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 290,
+      "protein_g": 4,
+      "carbs_g": 38,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Maple Crème Stick",
+      "category": "Donuts",
+      "serving": "1 Stick",
+      "calories": 460,
+      "protein_g": 5,
+      "carbs_g": 59,
+      "fat_g": 22,
+      "fiber_g": 1
+    },
+    {
+      "name": "Maple Frosted Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 260,
+      "protein_g": 4,
+      "carbs_g": 35,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Maple Vanilla Crème Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 330,
+      "protein_g": 4,
+      "carbs_g": 45,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Old Fashioned Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 310,
+      "protein_g": 4,
+      "carbs_g": 30,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "Peanut Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 470,
+      "protein_g": 8,
+      "carbs_g": 50,
+      "fat_g": 27,
+      "fiber_g": 2
+    },
+    {
+      "name": "Plain Stick",
+      "category": "Donuts",
+      "serving": "1 Stick",
+      "calories": 420,
+      "protein_g": 4,
+      "carbs_g": 36,
+      "fat_g": 30,
+      "fiber_g": 1
+    },
+    {
+      "name": "Powdered Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 330,
+      "protein_g": 4,
+      "carbs_g": 34,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Powdered Stick",
+      "category": "Donuts",
+      "serving": "1 Stick",
+      "calories": 440,
+      "protein_g": 4,
+      "carbs_g": 42,
+      "fat_g": 30,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sour Cream Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 360,
+      "protein_g": 4,
+      "carbs_g": 49,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Strawberry Frosted Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 260,
+      "protein_g": 4,
+      "carbs_g": 35,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Strawberry Frosted with Sprinkles Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 270,
+      "protein_g": 4,
+      "carbs_g": 37,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sugared Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 210,
+      "protein_g": 4,
+      "carbs_g": 24,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sugared Stick",
+      "category": "Donuts",
+      "serving": "1 Stick",
+      "calories": 430,
+      "protein_g": 4,
+      "carbs_g": 39,
+      "fat_g": 30,
+      "fiber_g": 1
+    },
+    {
+      "name": "Taillight Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 320,
+      "protein_g": 4,
+      "carbs_g": 41,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Toasted Coconut Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 430,
+      "protein_g": 5,
+      "carbs_g": 52,
+      "fat_g": 22,
+      "fiber_g": 3
+    },
+    {
+      "name": "Vanilla Crème Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 300,
+      "protein_g": 4,
+      "carbs_g": 37,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Frosted Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 260,
+      "protein_g": 4,
+      "carbs_g": 34,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Frosted Sprinkles Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 270,
+      "protein_g": 4,
+      "carbs_g": 37,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Headlight Donut",
+      "category": "Donuts",
+      "serving": "1 Donut",
+      "calories": 310,
+      "protein_g": 4,
+      "carbs_g": 41,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Long John",
+      "category": "Donuts",
+      "serving": "1 Long John",
+      "calories": 320,
+      "protein_g": 5,
+      "carbs_g": 42,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Éclair",
+      "category": "Donuts",
+      "serving": "1 Éclair",
+      "calories": 360,
+      "protein_g": 6,
+      "carbs_g": 50,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Apple Streusel Donut",
+      "category": "Donuts (regional)",
+      "serving": "1 Donut",
+      "calories": 310,
+      "protein_g": 5,
+      "carbs_g": 46,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Coconut Donut",
+      "category": "Donuts (regional)",
+      "serving": "1 Donut",
+      "calories": 430,
+      "protein_g": 4,
+      "carbs_g": 50,
+      "fat_g": 25,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Crème Stick",
+      "category": "Donuts (regional)",
+      "serving": "1 Stick",
+      "calories": 460,
+      "protein_g": 6,
+      "carbs_g": 58,
+      "fat_g": 23,
+      "fiber_g": 2
+    },
+    {
+      "name": "Crème Delight Donut",
+      "category": "Donuts (regional)",
+      "serving": "1 Donut",
+      "calories": 330,
+      "protein_g": 5,
+      "carbs_g": 44,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "French Apple Donut",
+      "category": "Donuts (regional)",
+      "serving": "1 Donut",
+      "calories": 270,
+      "protein_g": 4,
+      "carbs_g": 40,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Glazed Lemon Donut",
+      "category": "Donuts (regional)",
+      "serving": "1 Donut",
+      "calories": 270,
+      "protein_g": 4,
+      "carbs_g": 40,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Indy Crème Donut",
+      "category": "Donuts (regional)",
+      "serving": "1 Donut",
+      "calories": 330,
+      "protein_g": 5,
+      "carbs_g": 44,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Maple Long John Donut",
+      "category": "Donuts (regional)",
+      "serving": "1 Donut",
+      "calories": 320,
+      "protein_g": 5,
+      "carbs_g": 42,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Marble Frosted Donut",
+      "category": "Donuts (regional)",
+      "serving": "1 Donut",
+      "calories": 270,
+      "protein_g": 4,
+      "carbs_g": 37,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "New Yorker Donut",
+      "category": "Donuts (regional)",
+      "serving": "1 Donut",
+      "calories": 330,
+      "protein_g": 5,
+      "carbs_g": 44,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Pineapple Dunkin' Lemonade Refresher",
+      "category": "Dunkin' Lemonade Refreshers",
+      "serving": "large",
+      "calories": 320,
+      "protein_g": 0,
+      "carbs_g": 80,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango Pineapple Dunkin' Lemonade Refresher",
+      "category": "Dunkin' Lemonade Refreshers",
+      "serving": "medium",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 60,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango Pineapple Dunkin' Lemonade Refresher",
+      "category": "Dunkin' Lemonade Refreshers",
+      "serving": "small",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 40,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Dragonfruit Dunkin' Lemonade Refresher",
+      "category": "Dunkin' Lemonade Refreshers",
+      "serving": "large",
+      "calories": 310,
+      "protein_g": 0,
+      "carbs_g": 75,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Dragonfruit Dunkin' Lemonade Refresher",
+      "category": "Dunkin' Lemonade Refreshers",
+      "serving": "medium",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 56,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Dragonfruit Dunkin' Lemonade Refresher",
+      "category": "Dunkin' Lemonade Refreshers",
+      "serving": "small",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 37,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango Pineapple Dunkin' Refresher",
+      "category": "Dunkin' Refreshers",
+      "serving": "large",
+      "calories": 170,
+      "protein_g": 1,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango Pineapple Dunkin' Refresher",
+      "category": "Dunkin' Refreshers",
+      "serving": "medium",
+      "calories": 130,
+      "protein_g": 1,
+      "carbs_g": 32,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango Pineapple Dunkin' Refresher",
+      "category": "Dunkin' Refreshers",
+      "serving": "small",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Dragonfruit Dunkin' Refresher",
+      "category": "Dunkin' Refreshers",
+      "serving": "large",
+      "calories": 170,
+      "protein_g": 1,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Dragonfruit Dunkin' Refresher",
+      "category": "Dunkin' Refreshers",
+      "serving": "medium",
+      "calories": 130,
+      "protein_g": 1,
+      "carbs_g": 29,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Dragonfruit Dunkin' Refresher",
+      "category": "Dunkin' Refreshers",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 19,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Frozen Chocolate",
+      "category": "Frozen Chocolate",
+      "serving": "large",
+      "calories": 900,
+      "protein_g": 12,
+      "carbs_g": 175,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Butter Pecan Swirl Frozen Chocolate",
+      "category": "Frozen Chocolate",
+      "serving": "medium",
+      "calories": 700,
+      "protein_g": 9,
+      "carbs_g": 134,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Butter Pecan Swirl Frozen Chocolate",
+      "category": "Frozen Chocolate",
+      "serving": "small",
+      "calories": 500,
+      "protein_g": 6,
+      "carbs_g": 95,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramel Swirl Frozen Chocolate",
+      "category": "Frozen Chocolate",
+      "serving": "large",
+      "calories": 900,
+      "protein_g": 11,
+      "carbs_g": 176,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramel Swirl Frozen Chocolate",
+      "category": "Frozen Chocolate",
+      "serving": "medium",
+      "calories": 700,
+      "protein_g": 9,
+      "carbs_g": 135,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramel Swirl Frozen Chocolate",
+      "category": "Frozen Chocolate",
+      "serving": "small",
+      "calories": 500,
+      "protein_g": 6,
+      "carbs_g": 95,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "French Vanilla Swirl Frozen Chocolate",
+      "category": "Frozen Chocolate",
+      "serving": "large",
+      "calories": 900,
+      "protein_g": 11,
+      "carbs_g": 175,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "French Vanilla Swirl Frozen Chocolate",
+      "category": "Frozen Chocolate",
+      "serving": "medium",
+      "calories": 700,
+      "protein_g": 9,
+      "carbs_g": 135,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "French Vanilla Swirl Frozen Chocolate",
+      "category": "Frozen Chocolate",
+      "serving": "small",
+      "calories": 500,
+      "protein_g": 6,
+      "carbs_g": 95,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Frozen Chocolate",
+      "category": "Frozen Chocolate",
+      "serving": "large",
+      "calories": 890,
+      "protein_g": 10,
+      "carbs_g": 175,
+      "fat_g": 18,
+      "fiber_g": 4
+    },
+    {
+      "name": "Frozen Chocolate",
+      "category": "Frozen Chocolate",
+      "serving": "medium",
+      "calories": 690,
+      "protein_g": 7,
+      "carbs_g": 134,
+      "fat_g": 15,
+      "fiber_g": 3
+    },
+    {
+      "name": "Frozen Chocolate",
+      "category": "Frozen Chocolate",
+      "serving": "small",
+      "calories": 490,
+      "protein_g": 5,
+      "carbs_g": 94,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Frozen Chai Latte",
+      "category": "Frozen Specialty",
+      "serving": "large",
+      "calories": 690,
+      "protein_g": 12,
+      "carbs_g": 132,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Frozen Chai Latte",
+      "category": "Frozen Specialty",
+      "serving": "medium",
+      "calories": 520,
+      "protein_g": 9,
+      "carbs_g": 99,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Frozen Chai Latte",
+      "category": "Frozen Specialty",
+      "serving": "small",
+      "calories": 350,
+      "protein_g": 6,
+      "carbs_g": 66,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Frozen Matcha Latte with Almondmilk",
+      "category": "Frozen Specialty",
+      "serving": "large",
+      "calories": 470,
+      "protein_g": 3,
+      "carbs_g": 111,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Frozen Matcha Latte with Almondmilk",
+      "category": "Frozen Specialty",
+      "serving": "medium",
+      "calories": 350,
+      "protein_g": 2,
+      "carbs_g": 84,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Frozen Matcha Latte with Almondmilk",
+      "category": "Frozen Specialty",
+      "serving": "small",
+      "calories": 240,
+      "protein_g": 1,
+      "carbs_g": 56,
+      "fat_g": 1,
+      "fiber_g": 1
+    },
+    {
+      "name": "Frozen Matcha Latte with Whole Milk",
+      "category": "Frozen Specialty",
+      "serving": "large",
+      "calories": 530,
+      "protein_g": 8,
+      "carbs_g": 110,
+      "fat_g": 6,
+      "fiber_g": 2
+    },
+    {
+      "name": "Frozen Matcha Latte with Whole Milk",
+      "category": "Frozen Specialty",
+      "serving": "medium",
+      "calories": 390,
+      "protein_g": 6,
+      "carbs_g": 83,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Frozen Matcha Latte with Whole Milk",
+      "category": "Frozen Specialty",
+      "serving": "small",
+      "calories": 260,
+      "protein_g": 4,
+      "carbs_g": 55,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hash Browns",
+      "category": "Hash Browns",
+      "serving": "6 Pieces",
+      "calories": 110,
+      "protein_g": 1,
+      "carbs_g": 13,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Americano",
+      "category": "Hot Americano",
+      "serving": "large",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Americano",
+      "category": "Hot Americano",
+      "serving": "medium",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Americano",
+      "category": "Hot Americano",
+      "serving": "small",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Cappuccino with Skim Milk",
+      "category": "Hot Cappuccino",
+      "serving": "large",
+      "calories": 310,
+      "protein_g": 11,
+      "carbs_g": 64,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Cappuccino with Skim Milk",
+      "category": "Hot Cappuccino",
+      "serving": "medium",
+      "calories": 230,
+      "protein_g": 9,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Cappuccino with Skim Milk",
+      "category": "Hot Cappuccino",
+      "serving": "small",
+      "calories": 150,
+      "protein_g": 6,
+      "carbs_g": 32,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Cappuccino with Whole Milk",
+      "category": "Hot Cappuccino",
+      "serving": "large",
+      "calories": 370,
+      "protein_g": 11,
+      "carbs_g": 63,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Cappuccino with Whole Milk",
+      "category": "Hot Cappuccino",
+      "serving": "medium",
+      "calories": 280,
+      "protein_g": 8,
+      "carbs_g": 47,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Cappuccino with Whole Milk",
+      "category": "Hot Cappuccino",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 5,
+      "carbs_g": 32,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino with Skim Milk",
+      "category": "Hot Cappuccino",
+      "serving": "large",
+      "calories": 90,
+      "protein_g": 8,
+      "carbs_g": 13,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino with Skim Milk",
+      "category": "Hot Cappuccino",
+      "serving": "medium",
+      "calories": 70,
+      "protein_g": 6,
+      "carbs_g": 10,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino with Skim Milk",
+      "category": "Hot Cappuccino",
+      "serving": "small",
+      "calories": 45,
+      "protein_g": 4,
+      "carbs_g": 7,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino with Skim Milk and Sugar",
+      "category": "Hot Cappuccino",
+      "serving": "large",
+      "calories": 230,
+      "protein_g": 8,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino with Skim Milk and Sugar",
+      "category": "Hot Cappuccino",
+      "serving": "medium",
+      "calories": 170,
+      "protein_g": 6,
+      "carbs_g": 36,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino with Skim Milk and Sugar",
+      "category": "Hot Cappuccino",
+      "serving": "small",
+      "calories": 110,
+      "protein_g": 4,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino with Whole Milk",
+      "category": "Hot Cappuccino",
+      "serving": "large",
+      "calories": 160,
+      "protein_g": 8,
+      "carbs_g": 13,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino with Whole Milk",
+      "category": "Hot Cappuccino",
+      "serving": "medium",
+      "calories": 120,
+      "protein_g": 6,
+      "carbs_g": 10,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino with Whole Milk",
+      "category": "Hot Cappuccino",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 4,
+      "carbs_g": 7,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino with Whole Milk and Sugar",
+      "category": "Hot Cappuccino",
+      "serving": "large",
+      "calories": 290,
+      "protein_g": 8,
+      "carbs_g": 48,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino with Whole Milk and Sugar",
+      "category": "Hot Cappuccino",
+      "serving": "medium",
+      "calories": 220,
+      "protein_g": 6,
+      "carbs_g": 36,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino with Whole Milk and Sugar",
+      "category": "Hot Cappuccino",
+      "serving": "small",
+      "calories": 150,
+      "protein_g": 4,
+      "carbs_g": 24,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Cappuccino with Skim Milk",
+      "category": "Hot Cappuccino",
+      "serving": "large",
+      "calories": 310,
+      "protein_g": 11,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Cappuccino with Skim Milk",
+      "category": "Hot Cappuccino",
+      "serving": "medium",
+      "calories": 230,
+      "protein_g": 8,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Cappuccino with Skim Milk",
+      "category": "Hot Cappuccino",
+      "serving": "small",
+      "calories": 160,
+      "protein_g": 6,
+      "carbs_g": 33,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Cappuccino with Whole Milk",
+      "category": "Hot Cappuccino",
+      "serving": "large",
+      "calories": 380,
+      "protein_g": 11,
+      "carbs_g": 65,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Cappuccino with Whole Milk",
+      "category": "Hot Cappuccino",
+      "serving": "medium",
+      "calories": 280,
+      "protein_g": 8,
+      "carbs_g": 48,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Cappuccino with Whole Milk",
+      "category": "Hot Cappuccino",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 5,
+      "carbs_g": 32,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Cappuccino with Skim Milk",
+      "category": "Hot Cappuccino",
+      "serving": "large",
+      "calories": 310,
+      "protein_g": 11,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Cappuccino with Skim Milk",
+      "category": "Hot Cappuccino",
+      "serving": "medium",
+      "calories": 230,
+      "protein_g": 8,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Cappuccino with Skim Milk",
+      "category": "Hot Cappuccino",
+      "serving": "small",
+      "calories": 150,
+      "protein_g": 5,
+      "carbs_g": 32,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Cappuccino with Whole Milk",
+      "category": "Hot Cappuccino",
+      "serving": "large",
+      "calories": 370,
+      "protein_g": 10,
+      "carbs_g": 64,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Cappuccino with Whole Milk",
+      "category": "Hot Cappuccino",
+      "serving": "medium",
+      "calories": 280,
+      "protein_g": 8,
+      "carbs_g": 48,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Cappuccino with Whole Milk",
+      "category": "Hot Cappuccino",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 5,
+      "carbs_g": 32,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mocha Swirl Hot Cappuccino with Skim Milk",
+      "category": "Hot Cappuccino",
+      "serving": "large",
+      "calories": 300,
+      "protein_g": 10,
+      "carbs_g": 64,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Hot Cappuccino with Skim Milk",
+      "category": "Hot Cappuccino",
+      "serving": "medium",
+      "calories": 220,
+      "protein_g": 7,
+      "carbs_g": 48,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Hot Cappuccino with Skim Milk",
+      "category": "Hot Cappuccino",
+      "serving": "small",
+      "calories": 150,
+      "protein_g": 5,
+      "carbs_g": 32,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mocha Swirl Hot Cappuccino with Whole Milk",
+      "category": "Hot Cappuccino",
+      "serving": "large",
+      "calories": 360,
+      "protein_g": 9,
+      "carbs_g": 63,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Hot Cappuccino with Whole Milk",
+      "category": "Hot Cappuccino",
+      "serving": "medium",
+      "calories": 270,
+      "protein_g": 7,
+      "carbs_g": 48,
+      "fat_g": 7,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Hot Cappuccino with Whole Milk",
+      "category": "Hot Cappuccino",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 5,
+      "carbs_g": 32,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Box 'O Joe(R) Hot Chocolate",
+      "category": "Hot Chocolate",
+      "serving": "1 Small Cup",
+      "calories": 220,
+      "protein_g": 2,
+      "carbs_g": 40,
+      "fat_g": 7,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hot Chocolate with Espresso Shot",
+      "category": "Hot Chocolate",
+      "serving": "large",
+      "calories": 400,
+      "protein_g": 3,
+      "carbs_g": 71,
+      "fat_g": 12,
+      "fiber_g": 3
+    },
+    {
+      "name": "Hot Chocolate with Espresso Shot",
+      "category": "Hot Chocolate",
+      "serving": "medium",
+      "calories": 280,
+      "protein_g": 2,
+      "carbs_g": 51,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hot Chocolate with Espresso Shot",
+      "category": "Hot Chocolate",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 2,
+      "carbs_g": 35,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Original Hot Chocolate",
+      "category": "Hot Chocolate",
+      "serving": "extra large",
+      "calories": 500,
+      "protein_g": 4,
+      "carbs_g": 89,
+      "fat_g": 15,
+      "fiber_g": 3
+    },
+    {
+      "name": "Original Hot Chocolate",
+      "category": "Hot Chocolate",
+      "serving": "large",
+      "calories": 460,
+      "protein_g": 4,
+      "carbs_g": 82,
+      "fat_g": 14,
+      "fiber_g": 3
+    },
+    {
+      "name": "Original Hot Chocolate",
+      "category": "Hot Chocolate",
+      "serving": "medium",
+      "calories": 330,
+      "protein_g": 3,
+      "carbs_g": 59,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Original Hot Chocolate",
+      "category": "Hot Chocolate",
+      "serving": "small",
+      "calories": 220,
+      "protein_g": 2,
+      "carbs_g": 40,
+      "fat_g": 7,
+      "fiber_g": 2
+    },
+    {
+      "name": "Box 'O Joe®",
+      "category": "Hot Coffee",
+      "serving": "1 Small Cup",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Coffee with Black",
+      "category": "Hot Coffee",
+      "serving": "extra large",
+      "calories": 270,
+      "protein_g": 5,
+      "carbs_g": 63,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Coffee with Black",
+      "category": "Hot Coffee",
+      "serving": "large",
+      "calories": 220,
+      "protein_g": 4,
+      "carbs_g": 50,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Coffee with Black",
+      "category": "Hot Coffee",
+      "serving": "medium",
+      "calories": 170,
+      "protein_g": 3,
+      "carbs_g": 38,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Coffee with Black",
+      "category": "Hot Coffee",
+      "serving": "small",
+      "calories": 110,
+      "protein_g": 2,
+      "carbs_g": 25,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Coffee with Cream",
+      "category": "Hot Coffee",
+      "serving": "extra large",
+      "calories": 420,
+      "protein_g": 7,
+      "carbs_g": 65,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Coffee with Cream",
+      "category": "Hot Coffee",
+      "serving": "large",
+      "calories": 330,
+      "protein_g": 5,
+      "carbs_g": 52,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Coffee with Cream",
+      "category": "Hot Coffee",
+      "serving": "medium",
+      "calories": 250,
+      "protein_g": 4,
+      "carbs_g": 39,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Coffee with Cream",
+      "category": "Hot Coffee",
+      "serving": "small",
+      "calories": 170,
+      "protein_g": 3,
+      "carbs_g": 26,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Coffee with Black",
+      "category": "Hot Coffee",
+      "serving": "extra large",
+      "calories": 280,
+      "protein_g": 4,
+      "carbs_g": 64,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Coffee with Black",
+      "category": "Hot Coffee",
+      "serving": "large",
+      "calories": 230,
+      "protein_g": 3,
+      "carbs_g": 52,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Coffee with Black",
+      "category": "Hot Coffee",
+      "serving": "medium",
+      "calories": 170,
+      "protein_g": 3,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Coffee with Black",
+      "category": "Hot Coffee",
+      "serving": "small",
+      "calories": 110,
+      "protein_g": 2,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Coffee with Cream",
+      "category": "Hot Coffee",
+      "serving": "extra large",
+      "calories": 420,
+      "protein_g": 6,
+      "carbs_g": 67,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Coffee with Cream",
+      "category": "Hot Coffee",
+      "serving": "large",
+      "calories": 340,
+      "protein_g": 5,
+      "carbs_g": 53,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Coffee with Cream",
+      "category": "Hot Coffee",
+      "serving": "medium",
+      "calories": 260,
+      "protein_g": 4,
+      "carbs_g": 40,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Coffee with Cream",
+      "category": "Hot Coffee",
+      "serving": "small",
+      "calories": 170,
+      "protein_g": 3,
+      "carbs_g": 27,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Coffee",
+      "category": "Hot Coffee",
+      "serving": "extra large",
+      "calories": 280,
+      "protein_g": 4,
+      "carbs_g": 64,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Coffee",
+      "category": "Hot Coffee",
+      "serving": "large",
+      "calories": 220,
+      "protein_g": 3,
+      "carbs_g": 51,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Coffee",
+      "category": "Hot Coffee",
+      "serving": "medium",
+      "calories": 170,
+      "protein_g": 2,
+      "carbs_g": 38,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Coffee",
+      "category": "Hot Coffee",
+      "serving": "small",
+      "calories": 110,
+      "protein_g": 2,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Coffee with Cream",
+      "category": "Hot Coffee",
+      "serving": "extra large",
+      "calories": 420,
+      "protein_g": 6,
+      "carbs_g": 66,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Coffee with Cream",
+      "category": "Hot Coffee",
+      "serving": "large",
+      "calories": 340,
+      "protein_g": 5,
+      "carbs_g": 53,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Coffee with Cream",
+      "category": "Hot Coffee",
+      "serving": "medium",
+      "calories": 250,
+      "protein_g": 4,
+      "carbs_g": 40,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Coffee with Cream",
+      "category": "Hot Coffee",
+      "serving": "small",
+      "calories": 170,
+      "protein_g": 2,
+      "carbs_g": 26,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee",
+      "category": "Hot Coffee",
+      "serving": "extra large",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee",
+      "category": "Hot Coffee",
+      "serving": "large",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee",
+      "category": "Hot Coffee",
+      "serving": "medium",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee",
+      "category": "Hot Coffee",
+      "serving": "small",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with AlmondMilk",
+      "category": "Hot Coffee",
+      "serving": "extra large",
+      "calories": 45,
+      "protein_g": 1,
+      "carbs_g": 7,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with AlmondMilk",
+      "category": "Hot Coffee",
+      "serving": "large",
+      "calories": 35,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with AlmondMilk",
+      "category": "Hot Coffee",
+      "serving": "medium",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with AlmondMilk",
+      "category": "Hot Coffee",
+      "serving": "small",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Cream",
+      "category": "Hot Coffee",
+      "serving": "extra large",
+      "calories": 150,
+      "protein_g": 3,
+      "carbs_g": 2,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Cream",
+      "category": "Hot Coffee",
+      "serving": "large",
+      "calories": 120,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Cream",
+      "category": "Hot Coffee",
+      "serving": "medium",
+      "calories": 90,
+      "protein_g": 2,
+      "carbs_g": 1,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Cream",
+      "category": "Hot Coffee",
+      "serving": "small",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Cream and Sugar",
+      "category": "Hot Coffee",
+      "serving": "extra large",
+      "calories": 320,
+      "protein_g": 3,
+      "carbs_g": 46,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Cream and Sugar",
+      "category": "Hot Coffee",
+      "serving": "large",
+      "calories": 260,
+      "protein_g": 2,
+      "carbs_g": 37,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Cream and Sugar",
+      "category": "Hot Coffee",
+      "serving": "medium",
+      "calories": 190,
+      "protein_g": 2,
+      "carbs_g": 27,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Cream and Sugar",
+      "category": "Hot Coffee",
+      "serving": "small",
+      "calories": 130,
+      "protein_g": 1,
+      "carbs_g": 18,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Oatmilk",
+      "category": "Hot Coffee",
+      "serving": "extra large",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 10,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hot Coffee with Oatmilk",
+      "category": "Hot Coffee",
+      "serving": "large",
+      "calories": 45,
+      "protein_g": 1,
+      "carbs_g": 8,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hot Coffee with Oatmilk",
+      "category": "Hot Coffee",
+      "serving": "medium",
+      "calories": 30,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 1,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hot Coffee with Oatmilk",
+      "category": "Hot Coffee",
+      "serving": "small",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Skim Milk",
+      "category": "Hot Coffee",
+      "serving": "extra large",
+      "calories": 30,
+      "protein_g": 3,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Skim Milk",
+      "category": "Hot Coffee",
+      "serving": "large",
+      "calories": 25,
+      "protein_g": 3,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Skim Milk",
+      "category": "Hot Coffee",
+      "serving": "medium",
+      "calories": 20,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Skim Milk",
+      "category": "Hot Coffee",
+      "serving": "small",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Skim Milk and Sugar",
+      "category": "Hot Coffee",
+      "serving": "extra large",
+      "calories": 200,
+      "protein_g": 3,
+      "carbs_g": 47,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Skim Milk and Sugar",
+      "category": "Hot Coffee",
+      "serving": "large",
+      "calories": 160,
+      "protein_g": 3,
+      "carbs_g": 38,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Skim Milk and Sugar",
+      "category": "Hot Coffee",
+      "serving": "medium",
+      "calories": 120,
+      "protein_g": 2,
+      "carbs_g": 28,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Skim Milk and Sugar",
+      "category": "Hot Coffee",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 1,
+      "carbs_g": 19,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Sugar",
+      "category": "Hot Coffee",
+      "serving": "extra large",
+      "calories": 170,
+      "protein_g": 1,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Sugar",
+      "category": "Hot Coffee",
+      "serving": "large",
+      "calories": 140,
+      "protein_g": 1,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Sugar",
+      "category": "Hot Coffee",
+      "serving": "medium",
+      "calories": 110,
+      "protein_g": 1,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Sugar",
+      "category": "Hot Coffee",
+      "serving": "small",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 17,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Whole Milk",
+      "category": "Hot Coffee",
+      "serving": "extra large",
+      "calories": 50,
+      "protein_g": 3,
+      "carbs_g": 4,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Whole Milk",
+      "category": "Hot Coffee",
+      "serving": "large",
+      "calories": 40,
+      "protein_g": 2,
+      "carbs_g": 3,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Whole Milk",
+      "category": "Hot Coffee",
+      "serving": "medium",
+      "calories": 30,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Whole Milk",
+      "category": "Hot Coffee",
+      "serving": "small",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Whole Milk and Sugar",
+      "category": "Hot Coffee",
+      "serving": "extra large",
+      "calories": 220,
+      "protein_g": 3,
+      "carbs_g": 47,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Whole Milk and Sugar",
+      "category": "Hot Coffee",
+      "serving": "large",
+      "calories": 190,
+      "protein_g": 2,
+      "carbs_g": 42,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Whole Milk and Sugar",
+      "category": "Hot Coffee",
+      "serving": "medium",
+      "calories": 130,
+      "protein_g": 2,
+      "carbs_g": 28,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Whole Milk and Sugar",
+      "category": "Hot Coffee",
+      "serving": "small",
+      "calories": 90,
+      "protein_g": 1,
+      "carbs_g": 19,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mocha Swirl Hot Coffee",
+      "category": "Hot Coffee",
+      "serving": "extra large",
+      "calories": 260,
+      "protein_g": 3,
+      "carbs_g": 63,
+      "fat_g": 1,
+      "fiber_g": 3
+    },
+    {
+      "name": "Mocha Swirl Hot Coffee",
+      "category": "Hot Coffee",
+      "serving": "large",
+      "calories": 210,
+      "protein_g": 2,
+      "carbs_g": 50,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Hot Coffee",
+      "category": "Hot Coffee",
+      "serving": "medium",
+      "calories": 160,
+      "protein_g": 2,
+      "carbs_g": 38,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Hot Coffee",
+      "category": "Hot Coffee",
+      "serving": "small",
+      "calories": 110,
+      "protein_g": 1,
+      "carbs_g": 25,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mocha Swirl Hot Coffee with Cream",
+      "category": "Hot Coffee",
+      "serving": "extra large",
+      "calories": 410,
+      "protein_g": 5,
+      "carbs_g": 65,
+      "fat_g": 15,
+      "fiber_g": 3
+    },
+    {
+      "name": "Mocha Swirl Hot Coffee with Cream",
+      "category": "Hot Coffee",
+      "serving": "large",
+      "calories": 330,
+      "protein_g": 4,
+      "carbs_g": 52,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Hot Coffee with Cream",
+      "category": "Hot Coffee",
+      "serving": "medium",
+      "calories": 240,
+      "protein_g": 3,
+      "carbs_g": 39,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Hot Coffee with Cream",
+      "category": "Hot Coffee",
+      "serving": "small",
+      "calories": 160,
+      "protein_g": 2,
+      "carbs_g": 26,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Café con Leche",
+      "category": "Hot Espresso",
+      "serving": "large",
+      "calories": 340,
+      "protein_g": 12,
+      "carbs_g": 47,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Café con Leche",
+      "category": "Hot Espresso",
+      "serving": "medium",
+      "calories": 250,
+      "protein_g": 9,
+      "carbs_g": 35,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Café con Leche",
+      "category": "Hot Espresso",
+      "serving": "small",
+      "calories": 170,
+      "protein_g": 6,
+      "carbs_g": 23,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Espresso with Sugar",
+      "category": "Hot Espresso",
+      "serving": "single shot",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 15,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Espresso",
+      "category": "Hot Espresso",
+      "serving": "single shot",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "large",
+      "calories": 350,
+      "protein_g": 16,
+      "carbs_g": 70,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "medium",
+      "calories": 260,
+      "protein_g": 12,
+      "carbs_g": 52,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "small",
+      "calories": 170,
+      "protein_g": 8,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "large",
+      "calories": 450,
+      "protein_g": 15,
+      "carbs_g": 69,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "medium",
+      "calories": 330,
+      "protein_g": 11,
+      "carbs_g": 52,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "small",
+      "calories": 220,
+      "protein_g": 7,
+      "carbs_g": 35,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Craze Signature Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "large",
+      "calories": 440,
+      "protein_g": 16,
+      "carbs_g": 80,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Craze Signature Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "medium",
+      "calories": 340,
+      "protein_g": 12,
+      "carbs_g": 61,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Craze Signature Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "small",
+      "calories": 250,
+      "protein_g": 8,
+      "carbs_g": 43,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Craze Signature Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "large",
+      "calories": 530,
+      "protein_g": 15,
+      "carbs_g": 79,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Craze Signature Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "medium",
+      "calories": 410,
+      "protein_g": 11,
+      "carbs_g": 61,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Craze Signature Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "small",
+      "calories": 300,
+      "protein_g": 8,
+      "carbs_g": 43,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "large",
+      "calories": 350,
+      "protein_g": 15,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "medium",
+      "calories": 260,
+      "protein_g": 11,
+      "carbs_g": 53,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 8,
+      "carbs_g": 36,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "large",
+      "calories": 450,
+      "protein_g": 14,
+      "carbs_g": 70,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "medium",
+      "calories": 340,
+      "protein_g": 11,
+      "carbs_g": 53,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "small",
+      "calories": 230,
+      "protein_g": 7,
+      "carbs_g": 35,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chai Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "large",
+      "calories": 290,
+      "protein_g": 13,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chai Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "medium",
+      "calories": 220,
+      "protein_g": 10,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chai Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "small",
+      "calories": 150,
+      "protein_g": 7,
+      "carbs_g": 29,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chai Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "large",
+      "calories": 390,
+      "protein_g": 12,
+      "carbs_g": 57,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chai Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "medium",
+      "calories": 290,
+      "protein_g": 9,
+      "carbs_g": 43,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chai Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "small",
+      "calories": 200,
+      "protein_g": 6,
+      "carbs_g": 29,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cocoa Mocha Signature Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "large",
+      "calories": 420,
+      "protein_g": 15,
+      "carbs_g": 79,
+      "fat_g": 6,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cocoa Mocha Signature Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "medium",
+      "calories": 330,
+      "protein_g": 11,
+      "carbs_g": 61,
+      "fat_g": 6,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cocoa Mocha Signature Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "small",
+      "calories": 250,
+      "protein_g": 8,
+      "carbs_g": 43,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cocoa Mocha Signature Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "large",
+      "calories": 520,
+      "protein_g": 14,
+      "carbs_g": 78,
+      "fat_g": 18,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cocoa Mocha Signature Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "medium",
+      "calories": 400,
+      "protein_g": 10,
+      "carbs_g": 60,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cocoa Mocha Signature Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "small",
+      "calories": 300,
+      "protein_g": 7,
+      "carbs_g": 43,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "French Vanilla Swirl Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "large",
+      "calories": 350,
+      "protein_g": 15,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "medium",
+      "calories": 260,
+      "protein_g": 11,
+      "carbs_g": 53,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "small",
+      "calories": 170,
+      "protein_g": 7,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "large",
+      "calories": 450,
+      "protein_g": 14,
+      "carbs_g": 70,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "medium",
+      "calories": 330,
+      "protein_g": 11,
+      "carbs_g": 52,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "small",
+      "calories": 220,
+      "protein_g": 7,
+      "carbs_g": 35,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Latte with AlmondMilk",
+      "category": "Hot Latte",
+      "serving": "large",
+      "calories": 130,
+      "protein_g": 2,
+      "carbs_g": 23,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hot Latte with AlmondMilk",
+      "category": "Hot Latte",
+      "serving": "medium",
+      "calories": 100,
+      "protein_g": 1,
+      "carbs_g": 17,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hot Latte with AlmondMilk",
+      "category": "Hot Latte",
+      "serving": "small",
+      "calories": 70,
+      "protein_g": 1,
+      "carbs_g": 11,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Latte with Oatmilk",
+      "category": "Hot Latte",
+      "serving": "large",
+      "calories": 180,
+      "protein_g": 3,
+      "carbs_g": 32,
+      "fat_g": 5,
+      "fiber_g": 4
+    },
+    {
+      "name": "Hot Latte with Oatmilk",
+      "category": "Hot Latte",
+      "serving": "medium",
+      "calories": 130,
+      "protein_g": 2,
+      "carbs_g": 24,
+      "fat_g": 4,
+      "fiber_g": 3
+    },
+    {
+      "name": "Hot Latte with Oatmilk",
+      "category": "Hot Latte",
+      "serving": "small",
+      "calories": 90,
+      "protein_g": 1,
+      "carbs_g": 16,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "large",
+      "calories": 130,
+      "protein_g": 12,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "medium",
+      "calories": 100,
+      "protein_g": 9,
+      "carbs_g": 15,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "small",
+      "calories": 70,
+      "protein_g": 6,
+      "carbs_g": 10,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Latte with Skim Milk and Sugar",
+      "category": "Hot Latte",
+      "serving": "large",
+      "calories": 270,
+      "protein_g": 12,
+      "carbs_g": 54,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Latte with Skim Milk and Sugar",
+      "category": "Hot Latte",
+      "serving": "medium",
+      "calories": 200,
+      "protein_g": 9,
+      "carbs_g": 41,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Latte with Skim Milk and Sugar",
+      "category": "Hot Latte",
+      "serving": "small",
+      "calories": 130,
+      "protein_g": 6,
+      "carbs_g": 27,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "large",
+      "calories": 230,
+      "protein_g": 12,
+      "carbs_g": 19,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "medium",
+      "calories": 170,
+      "protein_g": 9,
+      "carbs_g": 14,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "small",
+      "calories": 120,
+      "protein_g": 6,
+      "carbs_g": 9,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Latte with Whole Milk and Sugar",
+      "category": "Hot Latte",
+      "serving": "large",
+      "calories": 370,
+      "protein_g": 12,
+      "carbs_g": 54,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Latte with Whole Milk and Sugar",
+      "category": "Hot Latte",
+      "serving": "medium",
+      "calories": 270,
+      "protein_g": 9,
+      "carbs_g": 40,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Latte with Whole Milk and Sugar",
+      "category": "Hot Latte",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 6,
+      "carbs_g": 27,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Matcha Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "large",
+      "calories": 240,
+      "protein_g": 14,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Matcha Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "medium",
+      "calories": 180,
+      "protein_g": 11,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Matcha Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "small",
+      "calories": 120,
+      "protein_g": 7,
+      "carbs_g": 23,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Matcha Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "large",
+      "calories": 340,
+      "protein_g": 13,
+      "carbs_g": 44,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Matcha Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "medium",
+      "calories": 250,
+      "protein_g": 10,
+      "carbs_g": 33,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Matcha Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "small",
+      "calories": 170,
+      "protein_g": 7,
+      "carbs_g": 22,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mocha Swirl Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "large",
+      "calories": 340,
+      "protein_g": 14,
+      "carbs_g": 70,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "medium",
+      "calories": 250,
+      "protein_g": 10,
+      "carbs_g": 52,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Hot Latte with Skim Milk",
+      "category": "Hot Latte",
+      "serving": "small",
+      "calories": 170,
+      "protein_g": 7,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mocha Swirl Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "large",
+      "calories": 440,
+      "protein_g": 13,
+      "carbs_g": 69,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "medium",
+      "calories": 330,
+      "protein_g": 10,
+      "carbs_g": 52,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Hot Latte with Whole Milk",
+      "category": "Hot Latte",
+      "serving": "small",
+      "calories": 220,
+      "protein_g": 7,
+      "carbs_g": 35,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Macchiato with Skim Milk",
+      "category": "Hot Macchiato",
+      "serving": "large",
+      "calories": 310,
+      "protein_g": 12,
+      "carbs_g": 64,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Macchiato with Skim Milk",
+      "category": "Hot Macchiato",
+      "serving": "medium",
+      "calories": 230,
+      "protein_g": 9,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Macchiato with Skim Milk",
+      "category": "Hot Macchiato",
+      "serving": "small",
+      "calories": 160,
+      "protein_g": 6,
+      "carbs_g": 33,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Macchiato with Whole Milk",
+      "category": "Hot Macchiato",
+      "serving": "large",
+      "calories": 380,
+      "protein_g": 11,
+      "carbs_g": 64,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Macchiato with Whole Milk",
+      "category": "Hot Macchiato",
+      "serving": "medium",
+      "calories": 280,
+      "protein_g": 8,
+      "carbs_g": 48,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Hot Macchiato with Whole Milk",
+      "category": "Hot Macchiato",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 6,
+      "carbs_g": 32,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Macchiato with Skim Milk",
+      "category": "Hot Macchiato",
+      "serving": "large",
+      "calories": 310,
+      "protein_g": 11,
+      "carbs_g": 66,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Macchiato with Skim Milk",
+      "category": "Hot Macchiato",
+      "serving": "medium",
+      "calories": 240,
+      "protein_g": 8,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Macchiato with Skim Milk",
+      "category": "Hot Macchiato",
+      "serving": "small",
+      "calories": 160,
+      "protein_g": 6,
+      "carbs_g": 33,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Macchiato with Whole Milk",
+      "category": "Hot Macchiato",
+      "serving": "large",
+      "calories": 380,
+      "protein_g": 11,
+      "carbs_g": 65,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Macchiato with Whole Milk",
+      "category": "Hot Macchiato",
+      "serving": "medium",
+      "calories": 290,
+      "protein_g": 8,
+      "carbs_g": 49,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Hot Macchiato with Whole Milk",
+      "category": "Hot Macchiato",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 5,
+      "carbs_g": 33,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Macchiato with Skim Milk",
+      "category": "Hot Macchiato",
+      "serving": "large",
+      "calories": 310,
+      "protein_g": 11,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Macchiato with Skim Milk",
+      "category": "Hot Macchiato",
+      "serving": "medium",
+      "calories": 230,
+      "protein_g": 8,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Macchiato with Skim Milk",
+      "category": "Hot Macchiato",
+      "serving": "small",
+      "calories": 160,
+      "protein_g": 5,
+      "carbs_g": 33,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Macchiato with Whole Milk",
+      "category": "Hot Macchiato",
+      "serving": "large",
+      "calories": 380,
+      "protein_g": 10,
+      "carbs_g": 65,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Macchiato with Whole Milk",
+      "category": "Hot Macchiato",
+      "serving": "medium",
+      "calories": 280,
+      "protein_g": 8,
+      "carbs_g": 49,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Hot Macchiato with Whole Milk",
+      "category": "Hot Macchiato",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 5,
+      "carbs_g": 33,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Macchiato with Oatmilk",
+      "category": "Hot Macchiato",
+      "serving": "large",
+      "calories": 120,
+      "protein_g": 2,
+      "carbs_g": 23,
+      "fat_g": 4,
+      "fiber_g": 3
+    },
+    {
+      "name": "Hot Macchiato with Oatmilk",
+      "category": "Hot Macchiato",
+      "serving": "medium",
+      "calories": 90,
+      "protein_g": 2,
+      "carbs_g": 17,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hot Macchiato with Oatmilk",
+      "category": "Hot Macchiato",
+      "serving": "small",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 12,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hot Macchiato with Skim Milk",
+      "category": "Hot Macchiato",
+      "serving": "large",
+      "calories": 90,
+      "protein_g": 8,
+      "carbs_g": 14,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Macchiato with Skim Milk",
+      "category": "Hot Macchiato",
+      "serving": "medium",
+      "calories": 70,
+      "protein_g": 6,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Macchiato with Skim Milk",
+      "category": "Hot Macchiato",
+      "serving": "small",
+      "calories": 50,
+      "protein_g": 4,
+      "carbs_g": 7,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Macchiato with Skim Milk and Sugar",
+      "category": "Hot Macchiato",
+      "serving": "large",
+      "calories": 230,
+      "protein_g": 8,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Macchiato with Skim Milk and Sugar",
+      "category": "Hot Macchiato",
+      "serving": "medium",
+      "calories": 170,
+      "protein_g": 6,
+      "carbs_g": 37,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Macchiato with Skim Milk and Sugar",
+      "category": "Hot Macchiato",
+      "serving": "small",
+      "calories": 120,
+      "protein_g": 4,
+      "carbs_g": 25,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Macchiato with Whole Milk",
+      "category": "Hot Macchiato",
+      "serving": "large",
+      "calories": 160,
+      "protein_g": 8,
+      "carbs_g": 14,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Macchiato with Whole Milk",
+      "category": "Hot Macchiato",
+      "serving": "medium",
+      "calories": 120,
+      "protein_g": 6,
+      "carbs_g": 10,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Macchiato with Whole Milk",
+      "category": "Hot Macchiato",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 4,
+      "carbs_g": 7,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Macchiato with Whole Milk and Sugar",
+      "category": "Hot Macchiato",
+      "serving": "large",
+      "calories": 290,
+      "protein_g": 8,
+      "carbs_g": 49,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Macchiato with Whole Milk and Sugar",
+      "category": "Hot Macchiato",
+      "serving": "medium",
+      "calories": 220,
+      "protein_g": 6,
+      "carbs_g": 37,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Macchiato with Whole Milk and Sugar",
+      "category": "Hot Macchiato",
+      "serving": "small",
+      "calories": 150,
+      "protein_g": 4,
+      "carbs_g": 25,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mocha Swirl Hot Macchiato with Skim Milk",
+      "category": "Hot Macchiato",
+      "serving": "large",
+      "calories": 300,
+      "protein_g": 10,
+      "carbs_g": 65,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Hot Macchiato with Skim Milk",
+      "category": "Hot Macchiato",
+      "serving": "medium",
+      "calories": 230,
+      "protein_g": 7,
+      "carbs_g": 49,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Hot Macchiato with Skim Milk",
+      "category": "Hot Macchiato",
+      "serving": "small",
+      "calories": 150,
+      "protein_g": 5,
+      "carbs_g": 33,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mocha Swirl Hot Macchiato with Whole Milk",
+      "category": "Hot Macchiato",
+      "serving": "large",
+      "calories": 370,
+      "protein_g": 9,
+      "carbs_g": 64,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Hot Macchiato with Whole Milk",
+      "category": "Hot Macchiato",
+      "serving": "medium",
+      "calories": 280,
+      "protein_g": 7,
+      "carbs_g": 48,
+      "fat_g": 7,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Hot Macchiato with Whole Milk",
+      "category": "Hot Macchiato",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 5,
+      "carbs_g": 32,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Americano",
+      "category": "Iced Americano",
+      "serving": "large",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Americano",
+      "category": "Iced Americano",
+      "serving": "medium",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Americano",
+      "category": "Iced Americano",
+      "serving": "small",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Cappuccino with Skim Milk",
+      "category": "Iced Cappuccino",
+      "serving": "large",
+      "calories": 310,
+      "protein_g": 11,
+      "carbs_g": 64,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Cappuccino with Skim Milk",
+      "category": "Iced Cappuccino",
+      "serving": "medium",
+      "calories": 230,
+      "protein_g": 9,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Cappuccino with Skim Milk",
+      "category": "Iced Cappuccino",
+      "serving": "small",
+      "calories": 150,
+      "protein_g": 6,
+      "carbs_g": 32,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Cappuccino with Whole Milk",
+      "category": "Iced Cappuccino",
+      "serving": "large",
+      "calories": 370,
+      "protein_g": 11,
+      "carbs_g": 63,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Cappuccino with Whole Milk",
+      "category": "Iced Cappuccino",
+      "serving": "medium",
+      "calories": 280,
+      "protein_g": 8,
+      "carbs_g": 47,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Cappuccino with Whole Milk",
+      "category": "Iced Cappuccino",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 5,
+      "carbs_g": 32,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Cappuccino with Skim Milk",
+      "category": "Iced Cappuccino",
+      "serving": "large",
+      "calories": 310,
+      "protein_g": 11,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Cappuccino with Skim Milk",
+      "category": "Iced Cappuccino",
+      "serving": "medium",
+      "calories": 230,
+      "protein_g": 8,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Cappuccino with Skim Milk",
+      "category": "Iced Cappuccino",
+      "serving": "small",
+      "calories": 160,
+      "protein_g": 6,
+      "carbs_g": 33,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Cappuccino with Whole Milk",
+      "category": "Iced Cappuccino",
+      "serving": "large",
+      "calories": 380,
+      "protein_g": 11,
+      "carbs_g": 65,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Cappuccino with Whole Milk",
+      "category": "Iced Cappuccino",
+      "serving": "medium",
+      "calories": 280,
+      "protein_g": 8,
+      "carbs_g": 48,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Cappuccino with Whole Milk",
+      "category": "Iced Cappuccino",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 5,
+      "carbs_g": 32,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Iced Cappuccino with Skim Milk",
+      "category": "Iced Cappuccino",
+      "serving": "large",
+      "calories": 310,
+      "protein_g": 11,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Iced Cappuccino with Skim Milk",
+      "category": "Iced Cappuccino",
+      "serving": "medium",
+      "calories": 230,
+      "protein_g": 8,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Iced Cappuccino with Skim Milk",
+      "category": "Iced Cappuccino",
+      "serving": "small",
+      "calories": 150,
+      "protein_g": 5,
+      "carbs_g": 32,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Iced Cappuccino with Whole Milk",
+      "category": "Iced Cappuccino",
+      "serving": "large",
+      "calories": 370,
+      "protein_g": 10,
+      "carbs_g": 64,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Iced Cappuccino with Whole Milk",
+      "category": "Iced Cappuccino",
+      "serving": "medium",
+      "calories": 280,
+      "protein_g": 8,
+      "carbs_g": 48,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Iced Cappuccino with Whole Milk",
+      "category": "Iced Cappuccino",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 5,
+      "carbs_g": 32,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Cappuccino with Almondmilk",
+      "category": "Iced Cappuccino",
+      "serving": "large",
+      "calories": 90,
+      "protein_g": 1,
+      "carbs_g": 15,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Cappuccino with Almondmilk",
+      "category": "Iced Cappuccino",
+      "serving": "medium",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 11,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Cappuccino with Almondmilk",
+      "category": "Iced Cappuccino",
+      "serving": "small",
+      "calories": 45,
+      "protein_g": 1,
+      "carbs_g": 8,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Cappuccino with Skim Milk",
+      "category": "Iced Cappuccino",
+      "serving": "large",
+      "calories": 90,
+      "protein_g": 8,
+      "carbs_g": 13,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Cappuccino with Skim Milk",
+      "category": "Iced Cappuccino",
+      "serving": "medium",
+      "calories": 70,
+      "protein_g": 6,
+      "carbs_g": 10,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Cappuccino with Skim Milk",
+      "category": "Iced Cappuccino",
+      "serving": "small",
+      "calories": 45,
+      "protein_g": 4,
+      "carbs_g": 7,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Cappuccino with Skim Milk and Sugar",
+      "category": "Iced Cappuccino",
+      "serving": "large",
+      "calories": 230,
+      "protein_g": 8,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Cappuccino with Skim Milk and Sugar",
+      "category": "Iced Cappuccino",
+      "serving": "medium",
+      "calories": 170,
+      "protein_g": 6,
+      "carbs_g": 36,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Cappuccino with Skim Milk and Sugar",
+      "category": "Iced Cappuccino",
+      "serving": "small",
+      "calories": 110,
+      "protein_g": 4,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Cappuccino with Whole Milk",
+      "category": "Iced Cappuccino",
+      "serving": "large",
+      "calories": 160,
+      "protein_g": 8,
+      "carbs_g": 13,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Cappuccino with Whole Milk",
+      "category": "Iced Cappuccino",
+      "serving": "medium",
+      "calories": 120,
+      "protein_g": 6,
+      "carbs_g": 10,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Cappuccino with Whole Milk",
+      "category": "Iced Cappuccino",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 4,
+      "carbs_g": 7,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Cappuccino with Whole Milk and Sugar",
+      "category": "Iced Cappuccino",
+      "serving": "large",
+      "calories": 290,
+      "protein_g": 8,
+      "carbs_g": 48,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Cappuccino with Whole Milk and Sugar",
+      "category": "Iced Cappuccino",
+      "serving": "medium",
+      "calories": 220,
+      "protein_g": 6,
+      "carbs_g": 36,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Cappuccino with Whole Milk and Sugar",
+      "category": "Iced Cappuccino",
+      "serving": "small",
+      "calories": 150,
+      "protein_g": 4,
+      "carbs_g": 24,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mocha Swirl Iced Cappuccino with Skim Milk",
+      "category": "Iced Cappuccino",
+      "serving": "large",
+      "calories": 300,
+      "protein_g": 10,
+      "carbs_g": 64,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Iced Cappuccino with Skim Milk",
+      "category": "Iced Cappuccino",
+      "serving": "medium",
+      "calories": 220,
+      "protein_g": 7,
+      "carbs_g": 48,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Iced Cappuccino with Skim Milk",
+      "category": "Iced Cappuccino",
+      "serving": "small",
+      "calories": 150,
+      "protein_g": 5,
+      "carbs_g": 32,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mocha Swirl Iced Cappuccino with Whole Milk",
+      "category": "Iced Cappuccino",
+      "serving": "large",
+      "calories": 360,
+      "protein_g": 9,
+      "carbs_g": 63,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Iced Cappuccino with Whole Milk",
+      "category": "Iced Cappuccino",
+      "serving": "medium",
+      "calories": 270,
+      "protein_g": 7,
+      "carbs_g": 48,
+      "fat_g": 7,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Iced Cappuccino with Whole Milk",
+      "category": "Iced Cappuccino",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 5,
+      "carbs_g": 32,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Coffee with Black",
+      "category": "Iced Coffee",
+      "serving": "large",
+      "calories": 220,
+      "protein_g": 4,
+      "carbs_g": 50,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Coffee with Black",
+      "category": "Iced Coffee",
+      "serving": "medium",
+      "calories": 170,
+      "protein_g": 3,
+      "carbs_g": 38,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Coffee with Black",
+      "category": "Iced Coffee",
+      "serving": "small",
+      "calories": 110,
+      "protein_g": 2,
+      "carbs_g": 25,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Coffee with Cream",
+      "category": "Iced Coffee",
+      "serving": "large",
+      "calories": 340,
+      "protein_g": 5,
+      "carbs_g": 52,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Coffee with Cream",
+      "category": "Iced Coffee",
+      "serving": "medium",
+      "calories": 250,
+      "protein_g": 4,
+      "carbs_g": 39,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Coffee with Cream",
+      "category": "Iced Coffee",
+      "serving": "small",
+      "calories": 170,
+      "protein_g": 3,
+      "carbs_g": 26,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Coffee",
+      "category": "Iced Coffee",
+      "serving": "large",
+      "calories": 230,
+      "protein_g": 3,
+      "carbs_g": 52,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Coffee",
+      "category": "Iced Coffee",
+      "serving": "medium",
+      "calories": 170,
+      "protein_g": 3,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Coffee",
+      "category": "Iced Coffee",
+      "serving": "small",
+      "calories": 110,
+      "protein_g": 2,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Coffee with Cream",
+      "category": "Iced Coffee",
+      "serving": "large",
+      "calories": 340,
+      "protein_g": 5,
+      "carbs_g": 53,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Coffee with Cream",
+      "category": "Iced Coffee",
+      "serving": "medium",
+      "calories": 260,
+      "protein_g": 4,
+      "carbs_g": 40,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Coffee with Cream",
+      "category": "Iced Coffee",
+      "serving": "small",
+      "calories": 170,
+      "protein_g": 3,
+      "carbs_g": 27,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Iced Coffee",
+      "category": "Iced Coffee",
+      "serving": "large",
+      "calories": 220,
+      "protein_g": 3,
+      "carbs_g": 51,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Iced Coffee",
+      "category": "Iced Coffee",
+      "serving": "medium",
+      "calories": 170,
+      "protein_g": 2,
+      "carbs_g": 38,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Iced Coffee",
+      "category": "Iced Coffee",
+      "serving": "small",
+      "calories": 110,
+      "protein_g": 2,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Iced Coffee with Cream",
+      "category": "Iced Coffee",
+      "serving": "large",
+      "calories": 340,
+      "protein_g": 5,
+      "carbs_g": 53,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Iced Coffee with Cream",
+      "category": "Iced Coffee",
+      "serving": "medium",
+      "calories": 250,
+      "protein_g": 4,
+      "carbs_g": 40,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Iced Coffee with Cream",
+      "category": "Iced Coffee",
+      "serving": "small",
+      "calories": 170,
+      "protein_g": 2,
+      "carbs_g": 26,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Café Au Lait with Skim Milk",
+      "category": "Iced Coffee",
+      "serving": "large",
+      "calories": 90,
+      "protein_g": 9,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Café Au Lait with Skim Milk",
+      "category": "Iced Coffee",
+      "serving": "medium",
+      "calories": 60,
+      "protein_g": 6,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Café Au Lait with Skim Milk",
+      "category": "Iced Coffee",
+      "serving": "small",
+      "calories": 45,
+      "protein_g": 4,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Café Au Lait with Whole Milk",
+      "category": "Iced Coffee",
+      "serving": "large",
+      "calories": 150,
+      "protein_g": 8,
+      "carbs_g": 12,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Café Au Lait with Whole Milk",
+      "category": "Iced Coffee",
+      "serving": "medium",
+      "calories": 110,
+      "protein_g": 6,
+      "carbs_g": 9,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Café Au Lait with Whole Milk",
+      "category": "Iced Coffee",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 4,
+      "carbs_g": 6,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee",
+      "category": "Iced Coffee",
+      "serving": "large",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee",
+      "category": "Iced Coffee",
+      "serving": "medium",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee",
+      "category": "Iced Coffee",
+      "serving": "small",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with AlmondMilk",
+      "category": "Iced Coffee",
+      "serving": "large",
+      "calories": 35,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with AlmondMilk",
+      "category": "Iced Coffee",
+      "serving": "medium",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with AlmondMilk",
+      "category": "Iced Coffee",
+      "serving": "small",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with Cream",
+      "category": "Iced Coffee",
+      "serving": "large",
+      "calories": 120,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with Cream",
+      "category": "Iced Coffee",
+      "serving": "medium",
+      "calories": 90,
+      "protein_g": 2,
+      "carbs_g": 1,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with Cream",
+      "category": "Iced Coffee",
+      "serving": "small",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with Cream and Sugar",
+      "category": "Iced Coffee",
+      "serving": "large",
+      "calories": 260,
+      "protein_g": 2,
+      "carbs_g": 37,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with Cream and Sugar",
+      "category": "Iced Coffee",
+      "serving": "medium",
+      "calories": 190,
+      "protein_g": 2,
+      "carbs_g": 27,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with Cream and Sugar",
+      "category": "Iced Coffee",
+      "serving": "small",
+      "calories": 130,
+      "protein_g": 1,
+      "carbs_g": 18,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with Oatmilk",
+      "category": "Iced Coffee",
+      "serving": "large",
+      "calories": 45,
+      "protein_g": 1,
+      "carbs_g": 8,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Coffee with Oatmilk",
+      "category": "Iced Coffee",
+      "serving": "medium",
+      "calories": 30,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 1,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Coffee with Oatmilk",
+      "category": "Iced Coffee",
+      "serving": "small",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with Skim Milk",
+      "category": "Iced Coffee",
+      "serving": "large",
+      "calories": 25,
+      "protein_g": 3,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with Skim Milk",
+      "category": "Iced Coffee",
+      "serving": "medium",
+      "calories": 20,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with Skim Milk",
+      "category": "Iced Coffee",
+      "serving": "small",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with Skim Milk and Sugar",
+      "category": "Iced Coffee",
+      "serving": "large",
+      "calories": 160,
+      "protein_g": 3,
+      "carbs_g": 38,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with Skim Milk and Sugar",
+      "category": "Iced Coffee",
+      "serving": "medium",
+      "calories": 120,
+      "protein_g": 2,
+      "carbs_g": 28,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with Skim Milk and Sugar",
+      "category": "Iced Coffee",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 1,
+      "carbs_g": 19,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with Sugar",
+      "category": "Iced Coffee",
+      "serving": "large",
+      "calories": 140,
+      "protein_g": 1,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with Sugar",
+      "category": "Iced Coffee",
+      "serving": "medium",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with Sugar",
+      "category": "Iced Coffee",
+      "serving": "small",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 17,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with Whole Milk",
+      "category": "Iced Coffee",
+      "serving": "large",
+      "calories": 40,
+      "protein_g": 3,
+      "carbs_g": 3,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with Whole Milk",
+      "category": "Iced Coffee",
+      "serving": "medium",
+      "calories": 30,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with Whole Milk",
+      "category": "Iced Coffee",
+      "serving": "small",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with Whole Milk and Sugar",
+      "category": "Iced Coffee",
+      "serving": "large",
+      "calories": 180,
+      "protein_g": 3,
+      "carbs_g": 38,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with Whole Milk and Sugar",
+      "category": "Iced Coffee",
+      "serving": "medium",
+      "calories": 130,
+      "protein_g": 2,
+      "carbs_g": 28,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with Whole Milk and Sugar",
+      "category": "Iced Coffee",
+      "serving": "small",
+      "calories": 90,
+      "protein_g": 1,
+      "carbs_g": 19,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mocha Swirl Iced Coffee Large",
+      "category": "Iced Coffee",
+      "serving": "large",
+      "calories": 210,
+      "protein_g": 2,
+      "carbs_g": 50,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Iced Coffee Medium",
+      "category": "Iced Coffee",
+      "serving": "medium",
+      "calories": 160,
+      "protein_g": 2,
+      "carbs_g": 38,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Iced Coffee Small",
+      "category": "Iced Coffee",
+      "serving": "small",
+      "calories": 110,
+      "protein_g": 1,
+      "carbs_g": 25,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mocha Swirl Iced Coffee with Cream",
+      "category": "Iced Coffee",
+      "serving": "large",
+      "calories": 330,
+      "protein_g": 4,
+      "carbs_g": 52,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Iced Coffee with Cream",
+      "category": "Iced Coffee",
+      "serving": "medium",
+      "calories": 240,
+      "protein_g": 3,
+      "carbs_g": 39,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Iced Coffee with Cream",
+      "category": "Iced Coffee",
+      "serving": "small",
+      "calories": 160,
+      "protein_g": 2,
+      "carbs_g": 26,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Almondmilk Iced Matcha Latte",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 230,
+      "protein_g": 3,
+      "carbs_g": 48,
+      "fat_g": 4,
+      "fiber_g": 3
+    },
+    {
+      "name": "Almondmilk Iced Matcha Latte",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 180,
+      "protein_g": 3,
+      "carbs_g": 36,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Almondmilk Iced Matcha Latte",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 120,
+      "protein_g": 2,
+      "carbs_g": 24,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 350,
+      "protein_g": 16,
+      "carbs_g": 70,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 260,
+      "protein_g": 12,
+      "carbs_g": 52,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 170,
+      "protein_g": 8,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 450,
+      "protein_g": 15,
+      "carbs_g": 69,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 330,
+      "protein_g": 11,
+      "carbs_g": 52,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 220,
+      "protein_g": 7,
+      "carbs_g": 35,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Craze Signature Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 430,
+      "protein_g": 16,
+      "carbs_g": 79,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Craze Signature Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 340,
+      "protein_g": 12,
+      "carbs_g": 61,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Craze Signature Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 250,
+      "protein_g": 8,
+      "carbs_g": 43,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Craze Signature Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 530,
+      "protein_g": 15,
+      "carbs_g": 79,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Craze Signature Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 410,
+      "protein_g": 11,
+      "carbs_g": 61,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Craze Signature Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 300,
+      "protein_g": 8,
+      "carbs_g": 43,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 350,
+      "protein_g": 15,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 260,
+      "protein_g": 11,
+      "carbs_g": 53,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 8,
+      "carbs_g": 36,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 450,
+      "protein_g": 14,
+      "carbs_g": 70,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 340,
+      "protein_g": 11,
+      "carbs_g": 53,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 230,
+      "protein_g": 7,
+      "carbs_g": 35,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chai Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 290,
+      "protein_g": 13,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chai Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 220,
+      "protein_g": 10,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chai Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 150,
+      "protein_g": 7,
+      "carbs_g": 29,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chai Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 390,
+      "protein_g": 12,
+      "carbs_g": 57,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chai Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 290,
+      "protein_g": 9,
+      "carbs_g": 43,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chai Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 200,
+      "protein_g": 6,
+      "carbs_g": 29,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cocoa Mocha Signature Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 420,
+      "protein_g": 15,
+      "carbs_g": 78,
+      "fat_g": 6,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cocoa Mocha Signature Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 330,
+      "protein_g": 11,
+      "carbs_g": 60,
+      "fat_g": 6,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cocoa Mocha Signature Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 250,
+      "protein_g": 8,
+      "carbs_g": 43,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cocoa Mocha Signature Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 520,
+      "protein_g": 14,
+      "carbs_g": 77,
+      "fat_g": 18,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cocoa Mocha Signature Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 400,
+      "protein_g": 10,
+      "carbs_g": 60,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cocoa Mocha Signature Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 300,
+      "protein_g": 7,
+      "carbs_g": 42,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "French Vanilla Swirl Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 350,
+      "protein_g": 15,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 260,
+      "protein_g": 11,
+      "carbs_g": 53,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 170,
+      "protein_g": 7,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 450,
+      "protein_g": 14,
+      "carbs_g": 70,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 330,
+      "protein_g": 11,
+      "carbs_g": 52,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 220,
+      "protein_g": 7,
+      "carbs_g": 35,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Latte with AlmondMilk",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 130,
+      "protein_g": 2,
+      "carbs_g": 23,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Latte with AlmondMilk",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 100,
+      "protein_g": 1,
+      "carbs_g": 17,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Latte with AlmondMilk",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 70,
+      "protein_g": 1,
+      "carbs_g": 11,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Latte with Oatmilk",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 180,
+      "protein_g": 3,
+      "carbs_g": 32,
+      "fat_g": 5,
+      "fiber_g": 4
+    },
+    {
+      "name": "Iced Latte with Oatmilk",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 130,
+      "protein_g": 2,
+      "carbs_g": 24,
+      "fat_g": 4,
+      "fiber_g": 3
+    },
+    {
+      "name": "Iced Latte with Oatmilk",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 90,
+      "protein_g": 1,
+      "carbs_g": 16,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 130,
+      "protein_g": 12,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 100,
+      "protein_g": 9,
+      "carbs_g": 15,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 70,
+      "protein_g": 6,
+      "carbs_g": 10,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Latte with Skim Milk and Sugar",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 270,
+      "protein_g": 12,
+      "carbs_g": 54,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Latte with Skim Milk and Sugar",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 200,
+      "protein_g": 9,
+      "carbs_g": 41,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Latte with Skim Milk and Sugar",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 130,
+      "protein_g": 6,
+      "carbs_g": 27,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 230,
+      "protein_g": 12,
+      "carbs_g": 19,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 170,
+      "protein_g": 9,
+      "carbs_g": 14,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 120,
+      "protein_g": 6,
+      "carbs_g": 9,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Latte with Whole Milk and Sugar",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 370,
+      "protein_g": 12,
+      "carbs_g": 54,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Latte with Whole Milk and Sugar",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 270,
+      "protein_g": 9,
+      "carbs_g": 40,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Latte with Whole Milk and Sugar",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 6,
+      "carbs_g": 27,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Vanilla Chai Latte with Sweet Cold Foam",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 520,
+      "protein_g": 14,
+      "carbs_g": 77,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Iced Vanilla Chai Latte with Sweet Cold Foam",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 380,
+      "protein_g": 10,
+      "carbs_g": 56,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Iced Vanilla Chai Latte with Sweet Cold Foam",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 280,
+      "protein_g": 7,
+      "carbs_g": 41,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Vanilla Matcha with Sweet Cold Foam",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 460,
+      "protein_g": 14,
+      "carbs_g": 63,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Iced Vanilla Matcha with Sweet Cold Foam",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 340,
+      "protein_g": 11,
+      "carbs_g": 46,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Iced Vanilla Matcha with Sweet Cold Foam",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 250,
+      "protein_g": 7,
+      "carbs_g": 35,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Matcha Iced Latte with Skim +H567+H563",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 180,
+      "protein_g": 11,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Matcha Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 240,
+      "protein_g": 14,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Matcha Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 120,
+      "protein_g": 7,
+      "carbs_g": 23,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Matcha Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 340,
+      "protein_g": 13,
+      "carbs_g": 44,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Matcha Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 250,
+      "protein_g": 10,
+      "carbs_g": 33,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Matcha Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 170,
+      "protein_g": 7,
+      "carbs_g": 22,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mocha Swirl Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 340,
+      "protein_g": 14,
+      "carbs_g": 70,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 250,
+      "protein_g": 10,
+      "carbs_g": 52,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Iced Latte with Skim Milk",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 170,
+      "protein_g": 7,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mocha Swirl Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "large",
+      "calories": 440,
+      "protein_g": 13,
+      "carbs_g": 69,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "medium",
+      "calories": 330,
+      "protein_g": 10,
+      "carbs_g": 52,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Iced Latte with Whole Milk",
+      "category": "Iced Latte",
+      "serving": "small",
+      "calories": 220,
+      "protein_g": 7,
+      "carbs_g": 35,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Macchiato with Skim Milk",
+      "category": "Iced Macchiato",
+      "serving": "large",
+      "calories": 310,
+      "protein_g": 12,
+      "carbs_g": 64,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Macchiato with Skim Milk",
+      "category": "Iced Macchiato",
+      "serving": "medium",
+      "calories": 230,
+      "protein_g": 9,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Macchiato with Skim Milk",
+      "category": "Iced Macchiato",
+      "serving": "small",
+      "calories": 160,
+      "protein_g": 6,
+      "carbs_g": 33,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Macchiato with Whole Milk",
+      "category": "Iced Macchiato",
+      "serving": "large",
+      "calories": 380,
+      "protein_g": 11,
+      "carbs_g": 64,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Macchiato with Whole Milk",
+      "category": "Iced Macchiato",
+      "serving": "medium",
+      "calories": 280,
+      "protein_g": 8,
+      "carbs_g": 48,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Pecan Swirl Iced Macchiato with Whole Milk",
+      "category": "Iced Macchiato",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 6,
+      "carbs_g": 32,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Macchiato with Skim Milk",
+      "category": "Iced Macchiato",
+      "serving": "large",
+      "calories": 310,
+      "protein_g": 11,
+      "carbs_g": 66,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Macchiato with Skim Milk",
+      "category": "Iced Macchiato",
+      "serving": "medium",
+      "calories": 240,
+      "protein_g": 8,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Macchiato with Skim Milk",
+      "category": "Iced Macchiato",
+      "serving": "small",
+      "calories": 160,
+      "protein_g": 6,
+      "carbs_g": 33,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Macchiato with Whole Milk",
+      "category": "Iced Macchiato",
+      "serving": "large",
+      "calories": 380,
+      "protein_g": 11,
+      "carbs_g": 65,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Macchiato with Whole Milk",
+      "category": "Iced Macchiato",
+      "serving": "medium",
+      "calories": 290,
+      "protein_g": 8,
+      "carbs_g": 49,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Swirl Iced Macchiato with Whole Milk",
+      "category": "Iced Macchiato",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 5,
+      "carbs_g": 33,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Iced Macchiato with Skim Milk",
+      "category": "Iced Macchiato",
+      "serving": "large",
+      "calories": 310,
+      "protein_g": 11,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Iced Macchiato with Skim Milk",
+      "category": "Iced Macchiato",
+      "serving": "medium",
+      "calories": 230,
+      "protein_g": 8,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Iced Macchiato with Skim Milk",
+      "category": "Iced Macchiato",
+      "serving": "small",
+      "calories": 160,
+      "protein_g": 5,
+      "carbs_g": 33,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Iced Macchiato with Whole Milk",
+      "category": "Iced Macchiato",
+      "serving": "large",
+      "calories": 380,
+      "protein_g": 10,
+      "carbs_g": 65,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Iced Macchiato with Whole Milk",
+      "category": "Iced Macchiato",
+      "serving": "medium",
+      "calories": 280,
+      "protein_g": 8,
+      "carbs_g": 49,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Swirl Iced Macchiato with Whole Milk",
+      "category": "Iced Macchiato",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 5,
+      "carbs_g": 33,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Macchiato with Oatmilk",
+      "category": "Iced Macchiato",
+      "serving": "large",
+      "calories": 120,
+      "protein_g": 2,
+      "carbs_g": 23,
+      "fat_g": 4,
+      "fiber_g": 3
+    },
+    {
+      "name": "Iced Macchiato with Oatmilk",
+      "category": "Iced Macchiato",
+      "serving": "medium",
+      "calories": 90,
+      "protein_g": 2,
+      "carbs_g": 17,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Iced Macchiato with Oatmilk",
+      "category": "Iced Macchiato",
+      "serving": "small",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 12,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Macchiato with Skim Milk",
+      "category": "Iced Macchiato",
+      "serving": "large",
+      "calories": 90,
+      "protein_g": 8,
+      "carbs_g": 14,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Macchiato with Skim Milk",
+      "category": "Iced Macchiato",
+      "serving": "medium",
+      "calories": 70,
+      "protein_g": 6,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Macchiato with Skim Milk",
+      "category": "Iced Macchiato",
+      "serving": "small",
+      "calories": 50,
+      "protein_g": 4,
+      "carbs_g": 7,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Macchiato with Skim Milk and Sugar",
+      "category": "Iced Macchiato",
+      "serving": "large",
+      "calories": 230,
+      "protein_g": 8,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Macchiato with Skim Milk and Sugar",
+      "category": "Iced Macchiato",
+      "serving": "medium",
+      "calories": 170,
+      "protein_g": 6,
+      "carbs_g": 37,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Macchiato with Skim Milk and Sugar",
+      "category": "Iced Macchiato",
+      "serving": "small",
+      "calories": 120,
+      "protein_g": 4,
+      "carbs_g": 25,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Macchiato with Whole Milk",
+      "category": "Iced Macchiato",
+      "serving": "large",
+      "calories": 160,
+      "protein_g": 8,
+      "carbs_g": 14,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Macchiato with Whole Milk",
+      "category": "Iced Macchiato",
+      "serving": "medium",
+      "calories": 120,
+      "protein_g": 6,
+      "carbs_g": 10,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Macchiato with Whole Milk",
+      "category": "Iced Macchiato",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 4,
+      "carbs_g": 7,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Macchiato with Whole Milk and Sugar",
+      "category": "Iced Macchiato",
+      "serving": "large",
+      "calories": 290,
+      "protein_g": 8,
+      "carbs_g": 49,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Macchiato with Whole Milk and Sugar",
+      "category": "Iced Macchiato",
+      "serving": "small",
+      "calories": 150,
+      "protein_g": 4,
+      "carbs_g": 25,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Macchiato with Whole Milk and Sugar",
+      "category": "Iced Macchiato",
+      "serving": "medium",
+      "calories": 220,
+      "protein_g": 6,
+      "carbs_g": 37,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mocha Swirl Iced Macchiato with Skim Milk",
+      "category": "Iced Macchiato",
+      "serving": "large",
+      "calories": 300,
+      "protein_g": 10,
+      "carbs_g": 65,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Iced Macchiato with Skim Milk",
+      "category": "Iced Macchiato",
+      "serving": "medium",
+      "calories": 230,
+      "protein_g": 7,
+      "carbs_g": 49,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Iced Macchiato with Skim Milk",
+      "category": "Iced Macchiato",
+      "serving": "small",
+      "calories": 150,
+      "protein_g": 5,
+      "carbs_g": 33,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mocha Swirl Iced Macchiato with Whole Milk",
+      "category": "Iced Macchiato",
+      "serving": "large",
+      "calories": 370,
+      "protein_g": 9,
+      "carbs_g": 64,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Iced Macchiato with Whole Milk",
+      "category": "Iced Macchiato",
+      "serving": "medium",
+      "calories": 280,
+      "protein_g": 7,
+      "carbs_g": 48,
+      "fat_g": 7,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Swirl Iced Macchiato with Whole Milk",
+      "category": "Iced Macchiato",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 5,
+      "carbs_g": 32,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Green Tea Sweetened",
+      "category": "Iced Tea",
+      "serving": "large",
+      "calories": 140,
+      "protein_g": 1,
+      "carbs_g": 33,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Green Tea Sweetened",
+      "category": "Iced Tea",
+      "serving": "medium",
+      "calories": 100,
+      "protein_g": 1,
+      "carbs_g": 25,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Green Tea Sweetened",
+      "category": "Iced Tea",
+      "serving": "small",
+      "calories": 70,
+      "protein_g": 1,
+      "carbs_g": 16,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Green Tea Unsweetened",
+      "category": "Iced Tea",
+      "serving": "large",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Green Tea Unsweetened",
+      "category": "Iced Tea",
+      "serving": "medium",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Green Tea Unsweetened",
+      "category": "Iced Tea",
+      "serving": "small",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea Sweetened",
+      "category": "Iced Tea",
+      "serving": "large",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea Sweetened",
+      "category": "Iced Tea",
+      "serving": "medium",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea Sweetened",
+      "category": "Iced Tea",
+      "serving": "small",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 17,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea Sweetened Blueberry Flavored",
+      "category": "Iced Tea",
+      "serving": "medium",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 27,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea Sweetened Blueberry Flavored",
+      "category": "Iced Tea",
+      "serving": "large",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea Sweetened Blueberry Flavored",
+      "category": "Iced Tea",
+      "serving": "small",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 18,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea Sweetened Raspberry Flavored",
+      "category": "Iced Tea",
+      "serving": "large",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 38,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea Sweetened Raspberry Flavored",
+      "category": "Iced Tea",
+      "serving": "medium",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 29,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea Sweetened Raspberry Flavored",
+      "category": "Iced Tea",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 19,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea Unsweetened",
+      "category": "Iced Tea",
+      "serving": "large",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea Unsweetened",
+      "category": "Iced Tea",
+      "serving": "medium",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea Unsweetened",
+      "category": "Iced Tea",
+      "serving": "small",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea Unsweetened Blueberry Flavored",
+      "category": "Iced Tea",
+      "serving": "large",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea Unsweetened Blueberry Flavored",
+      "category": "Iced Tea",
+      "serving": "medium",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea Unsweetened Blueberry Flavored",
+      "category": "Iced Tea",
+      "serving": "small",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea Unsweetened Raspberry Flavored",
+      "category": "Iced Tea",
+      "serving": "large",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea Unsweetened Raspberry Flavored",
+      "category": "Iced Tea",
+      "serving": "medium",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea Unsweetened Raspberry Flavored",
+      "category": "Iced Tea",
+      "serving": "small",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea",
+      "category": "Iced Tea",
+      "serving": "large",
+      "calories": 310,
+      "protein_g": 0,
+      "carbs_g": 79,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea",
+      "category": "Iced Tea",
+      "serving": "medium",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 60,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea",
+      "category": "Iced Tea",
+      "serving": "small",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 40,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea Blueberry Flavored",
+      "category": "Iced Tea",
+      "serving": "large",
+      "calories": 330,
+      "protein_g": 0,
+      "carbs_g": 86,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea Blueberry Flavored",
+      "category": "Iced Tea",
+      "serving": "medium",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 64,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea Blueberry Flavored",
+      "category": "Iced Tea",
+      "serving": "small",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea Raspberry Flavored",
+      "category": "Iced Tea",
+      "serving": "large",
+      "calories": 330,
+      "protein_g": 0,
+      "carbs_g": 86,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea Raspberry Flavored",
+      "category": "Iced Tea",
+      "serving": "medium",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea Raspberry Flavored",
+      "category": "Iced Tea",
+      "serving": "small",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kolache",
+      "category": "Kolache (regional)",
+      "serving": "1 Kolache",
+      "calories": 390,
+      "protein_g": 15,
+      "carbs_g": 31,
+      "fat_g": 23,
+      "fiber_g": 1
+    },
+    {
+      "name": "Kosher Dunkin' Double Veggie Sausage Sandwich",
+      "category": "Kosher Sandwiches and Wraps",
+      "serving": "1 Sandwich",
+      "calories": 600,
+      "protein_g": 37,
+      "carbs_g": 74,
+      "fat_g": 18,
+      "fiber_g": 6
+    },
+    {
+      "name": "Kosher Egg and Cheese Wake Up Wrap",
+      "category": "Kosher Sandwiches and Wraps",
+      "serving": "1 Wrap",
+      "calories": 170,
+      "protein_g": 7,
+      "carbs_g": 14,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kosher Egg and Cheese on an English Muffin",
+      "category": "Kosher Sandwiches and Wraps",
+      "serving": "1 Sandwich",
+      "calories": 340,
+      "protein_g": 14,
+      "carbs_g": 38,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Kosher Sourdough Breakfast Sandwich",
+      "category": "Kosher Sandwiches and Wraps",
+      "serving": "1 Sandwich",
+      "calories": 660,
+      "protein_g": 29,
+      "carbs_g": 61,
+      "fat_g": 34,
+      "fiber_g": 3
+    },
+    {
+      "name": "Kosher Tuna Melt on a Croissant",
+      "category": "Kosher Sandwiches and Wraps",
+      "serving": "1 Sandwich",
+      "calories": 570,
+      "protein_g": 24,
+      "carbs_g": 32,
+      "fat_g": 38,
+      "fiber_g": 1
+    },
+    {
+      "name": "Kosher Tuna Salad on a Plain Bagel",
+      "category": "Kosher Sandwiches and Wraps",
+      "serving": "1 Sandwich",
+      "calories": 510,
+      "protein_g": 24,
+      "carbs_g": 64,
+      "fat_g": 17,
+      "fiber_g": 4
+    },
+    {
+      "name": "Kosher Veggie Bacon Egg and Cheese on a Plain Bagel",
+      "category": "Kosher Sandwiches and Wraps",
+      "serving": "1 Sandwich",
+      "calories": 510,
+      "protein_g": 21,
+      "carbs_g": 68,
+      "fat_g": 17,
+      "fiber_g": 4
+    },
+    {
+      "name": "Kosher Veggie Bacon Wake-Up Wrap",
+      "category": "Kosher Sandwiches and Wraps",
+      "serving": "1 Wrap",
+      "calories": 200,
+      "protein_g": 8,
+      "carbs_g": 15,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kosher Veggie Sausage Egg and Cheese on a Croissant",
+      "category": "Kosher Sandwiches and Wraps",
+      "serving": "1 Sandwich",
+      "calories": 500,
+      "protein_g": 23,
+      "carbs_g": 37,
+      "fat_g": 30,
+      "fiber_g": 2
+    },
+    {
+      "name": "Kosher Veggie Sausage Wake-Up Wrap",
+      "category": "Kosher Sandwiches and Wraps",
+      "serving": "1 Wrap",
+      "calories": 210,
+      "protein_g": 11,
+      "carbs_g": 16,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Kosher Grilled Cheese",
+      "category": "Kosher Sandwiches and Wraps (regional)",
+      "serving": "1 Sandwich",
+      "calories": 420,
+      "protein_g": 17,
+      "carbs_g": 36,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kosher Grilled Cheese with Veggie Bacon",
+      "category": "Kosher Sandwiches and Wraps (regional)",
+      "serving": "1 Sandwich",
+      "calories": 480,
+      "protein_g": 19,
+      "carbs_g": 38,
+      "fat_g": 27,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade",
+      "category": "Lemonade",
+      "serving": "large",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 60,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade",
+      "category": "Lemonade",
+      "serving": "medium",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade",
+      "category": "Lemonade",
+      "serving": "small",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 30,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Matcha Lemonade",
+      "category": "Lemonade",
+      "serving": "large",
+      "calories": 340,
+      "protein_g": 1,
+      "carbs_g": 83,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Matcha Lemonade",
+      "category": "Lemonade",
+      "serving": "medium",
+      "calories": 270,
+      "protein_g": 1,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Matcha Lemonade",
+      "category": "Lemonade",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 1,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Blueberry Muffin",
+      "category": "Muffins",
+      "serving": "1 Muffin",
+      "calories": 460,
+      "protein_g": 6,
+      "carbs_g": 77,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Chip Muffin",
+      "category": "Muffins",
+      "serving": "1 Muffin",
+      "calories": 550,
+      "protein_g": 7,
+      "carbs_g": 85,
+      "fat_g": 21,
+      "fiber_g": 2
+    },
+    {
+      "name": "Coffee Cake Muffin",
+      "category": "Muffins",
+      "serving": "1 Muffin",
+      "calories": 590,
+      "protein_g": 7,
+      "carbs_g": 88,
+      "fat_g": 24,
+      "fiber_g": 2
+    },
+    {
+      "name": "Corn Muffin",
+      "category": "Muffins",
+      "serving": "1 Muffin",
+      "calories": 460,
+      "protein_g": 7,
+      "carbs_g": 73,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cinnamon Munchkins",
+      "category": "Munchkins",
+      "serving": "1 Donut Hole",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 6,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Glazed Blueberry Munchkins",
+      "category": "Munchkins",
+      "serving": "1 Donut Hole",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 9,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Glazed Chocolate Munchkins",
+      "category": "Munchkins",
+      "serving": "1 Donut Hole",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 8,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Glazed Munchkins",
+      "category": "Munchkins",
+      "serving": "1 Donut Hole",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 7,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Glazed Old Fashioned Munchkins",
+      "category": "Munchkins",
+      "serving": "1 Donut Hole",
+      "calories": 70,
+      "protein_g": 1,
+      "carbs_g": 8,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jelly Munchkins",
+      "category": "Munchkins",
+      "serving": "1 Donut Hole",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 8,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Old Fashioned Munchkins",
+      "category": "Munchkins",
+      "serving": "1 Donut Hole",
+      "calories": 50,
+      "protein_g": 1,
+      "carbs_g": 6,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Powdered Munchkins",
+      "category": "Munchkins",
+      "serving": "1 Donut Hole",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 7,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "English Muffin",
+      "category": "Other Bakery",
+      "serving": "1 Muffin",
+      "calories": 190,
+      "protein_g": 6,
+      "carbs_g": 35,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Plain Butter Croissant",
+      "category": "Other Bakery",
+      "serving": "1 Croissant",
+      "calories": 280,
+      "protein_g": 6,
+      "carbs_g": 31,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Biscuit",
+      "category": "Other Bakery (regional)",
+      "serving": "1 Biscuit",
+      "calories": 270,
+      "protein_g": 5,
+      "carbs_g": 32,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bacon, Egg and Cheese Wake-Up Wrap",
+      "category": "Sandwiches",
+      "serving": "1 Wrap",
+      "calories": 220,
+      "protein_g": 10,
+      "carbs_g": 15,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon, Egg and Cheese on Croissant",
+      "category": "Sandwiches",
+      "serving": "1 Sandwich",
+      "calories": 520,
+      "protein_g": 19,
+      "carbs_g": 34,
+      "fat_g": 34,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bacon, Egg and Cheese on English Muffin",
+      "category": "Sandwiches",
+      "serving": "1 Sandwich",
+      "calories": 420,
+      "protein_g": 19,
+      "carbs_g": 39,
+      "fat_g": 21,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bacon, Egg and Cheese on a Plain Bagel",
+      "category": "Sandwiches",
+      "serving": "1 Sandwich",
+      "calories": 540,
+      "protein_g": 24,
+      "carbs_g": 67,
+      "fat_g": 19,
+      "fiber_g": 4
+    },
+    {
+      "name": "Double Sausage Breakfast Sandwich",
+      "category": "Sandwiches",
+      "serving": "1 Sandwich",
+      "calories": 900,
+      "protein_g": 33,
+      "carbs_g": 70,
+      "fat_g": 54,
+      "fiber_g": 5
+    },
+    {
+      "name": "Egg and Cheese Wake-Up Wrap",
+      "category": "Sandwiches",
+      "serving": "1 Wrap",
+      "calories": 180,
+      "protein_g": 7,
+      "carbs_g": 14,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Egg and Cheese on Croissant",
+      "category": "Sandwiches",
+      "serving": "1 Sandwich",
+      "calories": 440,
+      "protein_g": 14,
+      "carbs_g": 33,
+      "fat_g": 28,
+      "fiber_g": 1
+    },
+    {
+      "name": "Egg and Cheese on English Muffin",
+      "category": "Sandwiches",
+      "serving": "1 Sandwich",
+      "calories": 340,
+      "protein_g": 14,
+      "carbs_g": 38,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Egg and Cheese on a Plain Bagel",
+      "category": "Sandwiches",
+      "serving": "1 Sandwich",
+      "calories": 460,
+      "protein_g": 19,
+      "carbs_g": 66,
+      "fat_g": 13,
+      "fiber_g": 4
+    },
+    {
+      "name": "Grilled Cheese",
+      "category": "Sandwiches",
+      "serving": "1 Sandwich",
+      "calories": 480,
+      "protein_g": 21,
+      "carbs_g": 54,
+      "fat_g": 20,
+      "fiber_g": 3
+    },
+    {
+      "name": "Sausage, Egg and Cheese Wake-Up Wrap",
+      "category": "Sandwiches",
+      "serving": "1 Wrap",
+      "calories": 280,
+      "protein_g": 10,
+      "carbs_g": 15,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sausage, Egg and Cheese on English Muffin",
+      "category": "Sandwiches",
+      "serving": "1 Sandwich",
+      "calories": 560,
+      "protein_g": 21,
+      "carbs_g": 40,
+      "fat_g": 35,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sausage, Egg and Cheese on a Plain Bagel",
+      "category": "Sandwiches",
+      "serving": "1 Sandwich",
+      "calories": 680,
+      "protein_g": 26,
+      "carbs_g": 68,
+      "fat_g": 34,
+      "fiber_g": 5
+    },
+    {
+      "name": "Sourdough Breakfast Sandwich",
+      "category": "Sandwiches",
+      "serving": "1 Sandwich",
+      "calories": 630,
+      "protein_g": 30,
+      "carbs_g": 58,
+      "fat_g": 31,
+      "fiber_g": 3
+    },
+    {
+      "name": "Spam Breakfast Sandwich",
+      "category": "Sandwiches",
+      "serving": "1 Sandwich",
+      "calories": 630,
+      "protein_g": 20,
+      "carbs_g": 41,
+      "fat_g": 42,
+      "fiber_g": 1
+    },
+    {
+      "name": "Turkey Sausage Sandwich on English Muffin",
+      "category": "Sandwiches",
+      "serving": "1 Sandwich",
+      "calories": 460,
+      "protein_g": 22,
+      "carbs_g": 39,
+      "fat_g": 24,
+      "fiber_g": 1
+    },
+    {
+      "name": "Turkey Sausage Wake Up Wrap",
+      "category": "Sandwiches",
+      "serving": "1 Wrap",
+      "calories": 230,
+      "protein_g": 11,
+      "carbs_g": 15,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Biscuit, Bacon, Egg and Cheese",
+      "category": "Sandwiches (regional)",
+      "serving": "1 Sandwich",
+      "calories": 490,
+      "protein_g": 17,
+      "carbs_g": 35,
+      "fat_g": 31,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chicken Biscuit",
+      "category": "Sandwiches (regional)",
+      "serving": "1 Sandwich",
+      "calories": 460,
+      "protein_g": 21,
+      "carbs_g": 46,
+      "fat_g": 22,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chicken Croissant Sandwich",
+      "category": "Sandwiches (regional)",
+      "serving": "1 Sandwich",
+      "calories": 590,
+      "protein_g": 28,
+      "carbs_g": 47,
+      "fat_g": 33,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sausage Biscuit",
+      "category": "Sandwiches (regional)",
+      "serving": "1 Sandwich",
+      "calories": 470,
+      "protein_g": 11,
+      "carbs_g": 33,
+      "fat_g": 33,
+      "fiber_g": 1
+    }
+  ]
+}

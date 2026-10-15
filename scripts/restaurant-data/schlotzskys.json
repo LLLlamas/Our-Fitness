@@ -1,0 +1,1849 @@
+{
+  "chain": "Schlotzsky's",
+  "slug": "schlotzskys",
+  "aliases": [
+    "schlotzskys",
+    "schlotzsky",
+    "schlotzky's",
+    "schlotzkys",
+    "schlotskys",
+    "schlotz"
+  ],
+  "kind": "deli",
+  "source_url": "https://assets.ctfassets.net/zqt8tllj2cy0/3wkZtcobeRUvoOcOWjhR44/a2b753f659f5e4f470076c541e2df7f4/SCH_1899730_Nutritional_and_allergen_chart_2.26_v3.Digital_Upload.pdf",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Official Schlotzsky's Nutritional and Allergen Chart (2.26 edition), linked from schlotzskys.com. Catering rows, fountain soda (range only) and the Thousand Island dressing row (a value missing in the source) omitted.",
+  "items": [
+    {
+      "name": "Sandwich, Original Deluxe, Small",
+      "category": "Sandwiches",
+      "serving": "1 small",
+      "calories": 650,
+      "protein_g": 39,
+      "carbs_g": 49,
+      "fat_g": 34,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Original Deluxe, Medium",
+      "category": "Sandwiches",
+      "serving": "1 medium",
+      "calories": 840,
+      "protein_g": 57,
+      "carbs_g": 74,
+      "fat_g": 35,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sandwich, Original Deluxe, 1/2 Medium",
+      "category": "Sandwiches",
+      "serving": "1 1/2 medium",
+      "calories": 420,
+      "protein_g": 29,
+      "carbs_g": 37,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Original Deluxe, Giant",
+      "category": "Sandwiches",
+      "serving": "1 giant",
+      "calories": 1820,
+      "protein_g": 112,
+      "carbs_g": 147,
+      "fat_g": 87,
+      "fiber_g": 4
+    },
+    {
+      "name": "Sandwich, Turkey Bacon Club, Small",
+      "category": "Sandwiches",
+      "serving": "1 small",
+      "calories": 520,
+      "protein_g": 33,
+      "carbs_g": 50,
+      "fat_g": 22,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Turkey Bacon Club, Medium",
+      "category": "Sandwiches",
+      "serving": "1 medium",
+      "calories": 890,
+      "protein_g": 61,
+      "carbs_g": 77,
+      "fat_g": 39,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sandwich, Turkey Bacon Club, 1/2 Medium",
+      "category": "Sandwiches",
+      "serving": "1 1/2 medium",
+      "calories": 440,
+      "protein_g": 30,
+      "carbs_g": 39,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Turkey Bacon Club, Giant",
+      "category": "Sandwiches",
+      "serving": "1 giant",
+      "calories": 1670,
+      "protein_g": 110,
+      "carbs_g": 150,
+      "fat_g": 73,
+      "fiber_g": 4
+    },
+    {
+      "name": "Sandwich, Fiesta Chicken, Small",
+      "category": "Sandwiches",
+      "serving": "1 small",
+      "calories": 520,
+      "protein_g": 29,
+      "carbs_g": 45,
+      "fat_g": 25,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sandwich, Fiesta Chicken, Medium",
+      "category": "Sandwiches",
+      "serving": "1 medium",
+      "calories": 860,
+      "protein_g": 55,
+      "carbs_g": 68,
+      "fat_g": 42,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sandwich, Fiesta Chicken, 1/2 Medium",
+      "category": "Sandwiches",
+      "serving": "1 1/2 medium",
+      "calories": 430,
+      "protein_g": 27,
+      "carbs_g": 34,
+      "fat_g": 21,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Fiesta Chicken, Giant",
+      "category": "Sandwiches",
+      "serving": "1 giant",
+      "calories": 1610,
+      "protein_g": 93,
+      "carbs_g": 134,
+      "fat_g": 77,
+      "fiber_g": 5
+    },
+    {
+      "name": "Sandwich, Turkey Original, Small",
+      "category": "Sandwiches",
+      "serving": "1 small",
+      "calories": 550,
+      "protein_g": 30,
+      "carbs_g": 51,
+      "fat_g": 25,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Turkey Original, Medium",
+      "category": "Sandwiches",
+      "serving": "1 medium",
+      "calories": 850,
+      "protein_g": 52,
+      "carbs_g": 78,
+      "fat_g": 37,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sandwich, Turkey Original, Giant",
+      "category": "Sandwiches",
+      "serving": "1 giant",
+      "calories": 1590,
+      "protein_g": 92,
+      "carbs_g": 152,
+      "fat_g": 70,
+      "fiber_g": 4
+    },
+    {
+      "name": "Sandwich, Smoked Turkey & Avocado, Small",
+      "category": "Sandwiches",
+      "serving": "1 small",
+      "calories": 350,
+      "protein_g": 19,
+      "carbs_g": 51,
+      "fat_g": 9,
+      "fiber_g": 4
+    },
+    {
+      "name": "Sandwich, Smoked Turkey & Avocado, Medium",
+      "category": "Sandwiches",
+      "serving": "1 medium",
+      "calories": 560,
+      "protein_g": 34,
+      "carbs_g": 79,
+      "fat_g": 14,
+      "fiber_g": 6
+    },
+    {
+      "name": "Sandwich, Smoked Turkey & Avocado, 1/2 Medium",
+      "category": "Sandwiches",
+      "serving": "1 1/2 medium",
+      "calories": 280,
+      "protein_g": 17,
+      "carbs_g": 39,
+      "fat_g": 7,
+      "fiber_g": 3
+    },
+    {
+      "name": "Sandwich, Smoked Turkey & Avocado, Giant",
+      "category": "Sandwiches",
+      "serving": "1 giant",
+      "calories": 1040,
+      "protein_g": 56,
+      "carbs_g": 154,
+      "fat_g": 25,
+      "fiber_g": 11
+    },
+    {
+      "name": "Sandwich, Roast Beef & Cheese, Small",
+      "category": "Sandwiches",
+      "serving": "1 small",
+      "calories": 470,
+      "protein_g": 30,
+      "carbs_g": 48,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Roast Beef & Cheese, Medium",
+      "category": "Sandwiches",
+      "serving": "1 medium",
+      "calories": 810,
+      "protein_g": 56,
+      "carbs_g": 74,
+      "fat_g": 34,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sandwich, Roast Beef & Cheese, 1/2 Medium",
+      "category": "Sandwiches",
+      "serving": "1 1/2 medium",
+      "calories": 410,
+      "protein_g": 28,
+      "carbs_g": 37,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Roast Beef & Cheese, Giant",
+      "category": "Sandwiches",
+      "serving": "1 giant",
+      "calories": 1470,
+      "protein_g": 95,
+      "carbs_g": 145,
+      "fat_g": 59,
+      "fiber_g": 4
+    },
+    {
+      "name": "Sandwich, Smoked Turkey, Small",
+      "category": "Sandwiches",
+      "serving": "1 small",
+      "calories": 310,
+      "protein_g": 18,
+      "carbs_g": 49,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Smoked Turkey, Medium",
+      "category": "Sandwiches",
+      "serving": "1 medium",
+      "calories": 510,
+      "protein_g": 33,
+      "carbs_g": 75,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sandwich, Smoked Turkey, 1/2 Medium",
+      "category": "Sandwiches",
+      "serving": "1 1/2 medium",
+      "calories": 250,
+      "protein_g": 16,
+      "carbs_g": 38,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Smoked Turkey, Giant",
+      "category": "Sandwiches",
+      "serving": "1 giant",
+      "calories": 920,
+      "protein_g": 54,
+      "carbs_g": 146,
+      "fat_g": 15,
+      "fiber_g": 4
+    },
+    {
+      "name": "Sandwich, Ham Original, Small",
+      "category": "Sandwiches",
+      "serving": "1 small",
+      "calories": 410,
+      "protein_g": 27,
+      "carbs_g": 48,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Ham Original, Medium",
+      "category": "Sandwiches",
+      "serving": "1 medium",
+      "calories": 710,
+      "protein_g": 51,
+      "carbs_g": 74,
+      "fat_g": 24,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sandwich, Ham Original, 1/2 Medium",
+      "category": "Sandwiches",
+      "serving": "1 1/2 medium",
+      "calories": 360,
+      "protein_g": 26,
+      "carbs_g": 37,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Ham Original, Giant",
+      "category": "Sandwiches",
+      "serving": "1 giant",
+      "calories": 1330,
+      "protein_g": 88,
+      "carbs_g": 145,
+      "fat_g": 45,
+      "fiber_g": 4
+    },
+    {
+      "name": "Sandwich, Fresh Veggie, Small",
+      "category": "Sandwiches",
+      "serving": "1 small",
+      "calories": 330,
+      "protein_g": 9,
+      "carbs_g": 46,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Fresh Veggie, Medium",
+      "category": "Sandwiches",
+      "serving": "1 medium",
+      "calories": 520,
+      "protein_g": 16,
+      "carbs_g": 69,
+      "fat_g": 20,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sandwich, Fresh Veggie, 1/2 Medium",
+      "category": "Sandwiches",
+      "serving": "1 1/2 medium",
+      "calories": 260,
+      "protein_g": 8,
+      "carbs_g": 34,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Fresh Veggie, Giant",
+      "category": "Sandwiches",
+      "serving": "1 giant",
+      "calories": 1000,
+      "protein_g": 31,
+      "carbs_g": 137,
+      "fat_g": 35,
+      "fiber_g": 5
+    },
+    {
+      "name": "Sandwich, Smokecheesy (Ham), Small",
+      "category": "Sandwiches",
+      "serving": "1 small",
+      "calories": 710,
+      "protein_g": 43,
+      "carbs_g": 46,
+      "fat_g": 40,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Smokecheesy (Ham), Medium",
+      "category": "Sandwiches",
+      "serving": "1 medium",
+      "calories": 1080,
+      "protein_g": 71,
+      "carbs_g": 69,
+      "fat_g": 58,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Smokecheesy (Ham), 1/2 Medium",
+      "category": "Sandwiches",
+      "serving": "1 1/2 medium",
+      "calories": 540,
+      "protein_g": 36,
+      "carbs_g": 35,
+      "fat_g": 29,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Smokecheesy (Ham), Giant",
+      "category": "Sandwiches",
+      "serving": "1 giant",
+      "calories": 2030,
+      "protein_g": 128,
+      "carbs_g": 136,
+      "fat_g": 110,
+      "fiber_g": 3
+    },
+    {
+      "name": "Sandwich, Smokecheesy (Roast Beef), Small",
+      "category": "Sandwiches",
+      "serving": "1 small",
+      "calories": 760,
+      "protein_g": 45,
+      "carbs_g": 46,
+      "fat_g": 44,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Smokecheesy (Roast Beef), Medium",
+      "category": "Sandwiches",
+      "serving": "1 medium",
+      "calories": 1170,
+      "protein_g": 76,
+      "carbs_g": 69,
+      "fat_g": 66,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Smokecheesy (Roast Beef), 1/2 Medium",
+      "category": "Sandwiches",
+      "serving": "1 1/2 medium",
+      "calories": 580,
+      "protein_g": 38,
+      "carbs_g": 35,
+      "fat_g": 33,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Smokecheesy (Roast Beef), Giant",
+      "category": "Sandwiches",
+      "serving": "1 giant",
+      "calories": 2170,
+      "protein_g": 135,
+      "carbs_g": 136,
+      "fat_g": 122,
+      "fiber_g": 3
+    },
+    {
+      "name": "Sandwich, Original, Small",
+      "category": "Sandwiches",
+      "serving": "1 small",
+      "calories": 490,
+      "protein_g": 26,
+      "carbs_g": 47,
+      "fat_g": 22,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Original, Medium",
+      "category": "Sandwiches",
+      "serving": "1 medium",
+      "calories": 750,
+      "protein_g": 43,
+      "carbs_g": 72,
+      "fat_g": 32,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sandwich, Original, 1/2 Medium",
+      "category": "Sandwiches",
+      "serving": "1 1/2 medium",
+      "calories": 370,
+      "protein_g": 21,
+      "carbs_g": 36,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Original, Giant",
+      "category": "Sandwiches",
+      "serving": "1 giant",
+      "calories": 1450,
+      "protein_g": 78,
+      "carbs_g": 143,
+      "fat_g": 63,
+      "fiber_g": 4
+    },
+    {
+      "name": "Sandwich, French Dip, Small 4 fl oz Au Jus",
+      "category": "Sandwiches",
+      "serving": "1 small",
+      "calories": 520,
+      "protein_g": 34,
+      "carbs_g": 51,
+      "fat_g": 21,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sandwich, French Dip, Medium 4 fl oz Au Jus",
+      "category": "Sandwiches",
+      "serving": "1 medium",
+      "calories": 930,
+      "protein_g": 65,
+      "carbs_g": 81,
+      "fat_g": 40,
+      "fiber_g": 3
+    },
+    {
+      "name": "Sandwich, French Dip, 1/2 Medium with 2 fl oz Au Jus",
+      "category": "Sandwiches",
+      "serving": "1 1/2 medium",
+      "calories": 470,
+      "protein_g": 33,
+      "carbs_g": 40,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, French Dip, Giant 4 fl oz Au Jus",
+      "category": "Sandwiches",
+      "serving": "1 giant",
+      "calories": 1730,
+      "protein_g": 113,
+      "carbs_g": 160,
+      "fat_g": 75,
+      "fiber_g": 6
+    },
+    {
+      "name": "Sandwich, Pastrami Reuben, Small",
+      "category": "Sandwiches",
+      "serving": "1 small",
+      "calories": 570,
+      "protein_g": 35,
+      "carbs_g": 52,
+      "fat_g": 27,
+      "fiber_g": 4
+    },
+    {
+      "name": "Sandwich, Pastrami Reuben on Rye, Small",
+      "category": "Sandwiches",
+      "serving": "1 small",
+      "calories": 570,
+      "protein_g": 35,
+      "carbs_g": 52,
+      "fat_g": 27,
+      "fiber_g": 5
+    },
+    {
+      "name": "Sandwich, Pastrami Reuben, Medium",
+      "category": "Sandwiches",
+      "serving": "1 medium",
+      "calories": 910,
+      "protein_g": 60,
+      "carbs_g": 79,
+      "fat_g": 43,
+      "fiber_g": 6
+    },
+    {
+      "name": "Sandwich, Pastrami Reuben on Rye, Medium",
+      "category": "Sandwiches",
+      "serving": "1 medium",
+      "calories": 900,
+      "protein_g": 60,
+      "carbs_g": 79,
+      "fat_g": 43,
+      "fiber_g": 8
+    },
+    {
+      "name": "Sandwich, Pastrami Reuben, 1/2 Medium",
+      "category": "Sandwiches",
+      "serving": "1 1/2 medium",
+      "calories": 460,
+      "protein_g": 30,
+      "carbs_g": 40,
+      "fat_g": 22,
+      "fiber_g": 3
+    },
+    {
+      "name": "Sandwich, Pastrami Reuben on Rye, 1/2 Medium",
+      "category": "Sandwiches",
+      "serving": "1 1/2 medium",
+      "calories": 450,
+      "protein_g": 30,
+      "carbs_g": 40,
+      "fat_g": 21,
+      "fiber_g": 4
+    },
+    {
+      "name": "Sandwich, Pastrami Reuben, Giant",
+      "category": "Sandwiches",
+      "serving": "1 giant",
+      "calories": 1680,
+      "protein_g": 106,
+      "carbs_g": 154,
+      "fat_g": 78,
+      "fiber_g": 11
+    },
+    {
+      "name": "Sandwich, Pastrami Reuben on Rye, Giant",
+      "category": "Sandwiches",
+      "serving": "1 giant",
+      "calories": 1660,
+      "protein_g": 106,
+      "carbs_g": 154,
+      "fat_g": 78,
+      "fiber_g": 15
+    },
+    {
+      "name": "Sandwich, Pastrami & Swiss, Small",
+      "category": "Sandwiches",
+      "serving": "1 small",
+      "calories": 540,
+      "protein_g": 35,
+      "carbs_g": 51,
+      "fat_g": 24,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sandwich, Pastrami & Swiss on Rye, Small",
+      "category": "Sandwiches",
+      "serving": "1 small",
+      "calories": 530,
+      "protein_g": 35,
+      "carbs_g": 51,
+      "fat_g": 24,
+      "fiber_g": 3
+    },
+    {
+      "name": "Sandwich, Pastrami & Swiss, Medium",
+      "category": "Sandwiches",
+      "serving": "1 medium",
+      "calories": 870,
+      "protein_g": 60,
+      "carbs_g": 78,
+      "fat_g": 39,
+      "fiber_g": 3
+    },
+    {
+      "name": "Sandwich, Pastrami & Swiss on Rye, Medium",
+      "category": "Sandwiches",
+      "serving": "1 medium",
+      "calories": 860,
+      "protein_g": 60,
+      "carbs_g": 78,
+      "fat_g": 39,
+      "fiber_g": 5
+    },
+    {
+      "name": "Sandwich, Pastrami & Swiss, 1/2 Medium",
+      "category": "Sandwiches",
+      "serving": "1 1/2 medium",
+      "calories": 440,
+      "protein_g": 30,
+      "carbs_g": 39,
+      "fat_g": 20,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sandwich, Pastrami & Swiss on Rye, 1/2 Medium",
+      "category": "Sandwiches",
+      "serving": "1 1/2 medium",
+      "calories": 430,
+      "protein_g": 30,
+      "carbs_g": 39,
+      "fat_g": 20,
+      "fiber_g": 3
+    },
+    {
+      "name": "Sandwich, Pastrami & Swiss, Giant",
+      "category": "Sandwiches",
+      "serving": "1 giant",
+      "calories": 1620,
+      "protein_g": 106,
+      "carbs_g": 151,
+      "fat_g": 72,
+      "fiber_g": 6
+    },
+    {
+      "name": "Sandwich, Pastrami & Swiss on Rye, Giant",
+      "category": "Sandwiches",
+      "serving": "1 giant",
+      "calories": 1600,
+      "protein_g": 106,
+      "carbs_g": 152,
+      "fat_g": 71,
+      "fiber_g": 9
+    },
+    {
+      "name": "Sandwich, Albuquerque Turkey, Small",
+      "category": "Sandwiches",
+      "serving": "1 small",
+      "calories": 580,
+      "protein_g": 35,
+      "carbs_g": 53,
+      "fat_g": 26,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sandwich, Albuquerque Turkey, Medium",
+      "category": "Sandwiches",
+      "serving": "1 medium",
+      "calories": 970,
+      "protein_g": 63,
+      "carbs_g": 81,
+      "fat_g": 45,
+      "fiber_g": 3
+    },
+    {
+      "name": "Sandwich, Albuquerque Turkey, 1/2 Medium",
+      "category": "Sandwiches",
+      "serving": "1 1/2 medium",
+      "calories": 480,
+      "protein_g": 32,
+      "carbs_g": 41,
+      "fat_g": 22,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Albuquerque Turkey, Giant",
+      "category": "Sandwiches",
+      "serving": "1 giant",
+      "calories": 1830,
+      "protein_g": 114,
+      "carbs_g": 158,
+      "fat_g": 85,
+      "fiber_g": 6
+    },
+    {
+      "name": "Sandwich, Texas, Small",
+      "category": "Sandwiches",
+      "serving": "1 small",
+      "calories": 440,
+      "protein_g": 28,
+      "carbs_g": 45,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sandwich, Texas, Medium",
+      "category": "Sandwiches",
+      "serving": "1 medium",
+      "calories": 750,
+      "protein_g": 52,
+      "carbs_g": 68,
+      "fat_g": 30,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sandwich, Texas, Large",
+      "category": "Sandwiches",
+      "serving": "1 large",
+      "calories": 1380,
+      "protein_g": 86,
+      "carbs_g": 140,
+      "fat_g": 52,
+      "fiber_g": 4
+    },
+    {
+      "name": "Salad, Chicken Caesar w/4 fl oz Caesar Dressing & Breadsticks",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 1100,
+      "protein_g": 36,
+      "carbs_g": 39,
+      "fat_g": 90,
+      "fiber_g": 4
+    },
+    {
+      "name": "Salad, Chicken Caesar w/Croutons, No Dressing/No Breadsticks",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 360,
+      "protein_g": 29,
+      "carbs_g": 9,
+      "fat_g": 23,
+      "fiber_g": 3
+    },
+    {
+      "name": "Salad, Mix & Match, Chicken Caesar w/2 fl oz Caesar Dressing & Breadstick",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 550,
+      "protein_g": 18,
+      "carbs_g": 20,
+      "fat_g": 45,
+      "fiber_g": 2
+    },
+    {
+      "name": "Salad, Mix & Match, Chicken Caesar w/Croutons, No Dressing/No Breadstick",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 180,
+      "protein_g": 14,
+      "carbs_g": 5,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Salad, Garden Salad, No Breadsticks/No Dressing",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 4,
+      "carbs_g": 10,
+      "fat_g": 21,
+      "fiber_g": 4
+    },
+    {
+      "name": "Salad, Mix & Match, Garden Salad, No Breadstick/No Dressing",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 120,
+      "protein_g": 2,
+      "carbs_g": 5,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Salad, Strawberry Salad w/ Chicken, No Dressing",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 340,
+      "protein_g": 28,
+      "carbs_g": 27,
+      "fat_g": 14,
+      "fiber_g": 5
+    },
+    {
+      "name": "Salad, Mix & Match, Strawberry Salad w/ Chicken, No Dressing",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 14,
+      "carbs_g": 13,
+      "fat_g": 7,
+      "fiber_g": 3
+    },
+    {
+      "name": "Salad, Chicken Avocado Cobb w/4 fl oz Bleu Cheese Dressing & Breadsticks",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 1230,
+      "protein_g": 43,
+      "carbs_g": 44,
+      "fat_g": 100,
+      "fiber_g": 6
+    },
+    {
+      "name": "Salad, Chicken Avocado Cobb, No Dressing/No Breadsticks",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 490,
+      "protein_g": 36,
+      "carbs_g": 14,
+      "fat_g": 33,
+      "fiber_g": 5
+    },
+    {
+      "name": "Salad, Mix & Match, Chicken Avocado Cobb w/2 fl oz Bleu Cheese Dressing",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 620,
+      "protein_g": 22,
+      "carbs_g": 22,
+      "fat_g": 50,
+      "fiber_g": 3
+    },
+    {
+      "name": "Salad, Mix & Match, Chicken Avocado Cobb, No Dressing/No Breadstick",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 18,
+      "carbs_g": 7,
+      "fat_g": 16,
+      "fiber_g": 3
+    },
+    {
+      "name": "Salad, Greek Salad with Chicken, No Dressing",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 220,
+      "protein_g": 28,
+      "carbs_g": 10,
+      "fat_g": 7,
+      "fiber_g": 4
+    },
+    {
+      "name": "Salad, Mix & Match, Greek with Chicken, No Dressing",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 14,
+      "carbs_g": 5,
+      "fat_g": 4,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pizza, Veggie",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 900,
+      "protein_g": 36,
+      "carbs_g": 129,
+      "fat_g": 25,
+      "fiber_g": 6
+    },
+    {
+      "name": "Pizza, Mix & Match, Veggie",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 450,
+      "protein_g": 18,
+      "carbs_g": 65,
+      "fat_g": 12,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pizza, Double Cheese",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 910,
+      "protein_g": 41,
+      "carbs_g": 124,
+      "fat_g": 25,
+      "fiber_g": 4
+    },
+    {
+      "name": "Pizza, Mix & Match, Double Cheese",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 450,
+      "protein_g": 20,
+      "carbs_g": 62,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pizza, Pepperoni & Double Cheese",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 1070,
+      "protein_g": 50,
+      "carbs_g": 125,
+      "fat_g": 38,
+      "fiber_g": 4
+    },
+    {
+      "name": "Pizza, Mix & Match, Pepperoni & Double Cheese",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 540,
+      "protein_g": 25,
+      "carbs_g": 63,
+      "fat_g": 19,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pizza, BBQ Chicken & Jalapeno",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 1030,
+      "protein_g": 54,
+      "carbs_g": 163,
+      "fat_g": 22,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pizza, Mix & Match, BBQ Chicken & Jalapeno",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 510,
+      "protein_g": 27,
+      "carbs_g": 82,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pizza, Meaty",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 1180,
+      "protein_g": 54,
+      "carbs_g": 127,
+      "fat_g": 48,
+      "fiber_g": 4
+    },
+    {
+      "name": "Pizza, Mix & Match, Meaty",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 590,
+      "protein_g": 27,
+      "carbs_g": 63,
+      "fat_g": 24,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pizza, Supreme Pizza",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 1210,
+      "protein_g": 53,
+      "carbs_g": 131,
+      "fat_g": 51,
+      "fiber_g": 6
+    },
+    {
+      "name": "Pizza, Mix & Match, Supreme",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 610,
+      "protein_g": 26,
+      "carbs_g": 65,
+      "fat_g": 25,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pizza, California Chicken & Avocado",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 1110,
+      "protein_g": 50,
+      "carbs_g": 124,
+      "fat_g": 47,
+      "fiber_g": 5
+    },
+    {
+      "name": "Pizza, Mix & Match, California Chicken & Avocado",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 560,
+      "protein_g": 25,
+      "carbs_g": 62,
+      "fat_g": 24,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pizza, Chicken Club",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 1090,
+      "protein_g": 57,
+      "carbs_g": 127,
+      "fat_g": 39,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pizza, Mix & Match, Chicken Club",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 550,
+      "protein_g": 28,
+      "carbs_g": 63,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Flatbread, Veggie",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 620,
+      "protein_g": 28,
+      "carbs_g": 55,
+      "fat_g": 30,
+      "fiber_g": 4
+    },
+    {
+      "name": "Flatbread, Mix & Match, Veggie",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 310,
+      "protein_g": 14,
+      "carbs_g": 27,
+      "fat_g": 15,
+      "fiber_g": 2
+    },
+    {
+      "name": "Flatbread, Double Cheese",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 630,
+      "protein_g": 33,
+      "carbs_g": 50,
+      "fat_g": 30,
+      "fiber_g": 2
+    },
+    {
+      "name": "Flatbread, Mix & Match, Double Cheese",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 320,
+      "protein_g": 16,
+      "carbs_g": 25,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Flatbread, Pepperoni & Double Cheese",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 790,
+      "protein_g": 42,
+      "carbs_g": 51,
+      "fat_g": 43,
+      "fiber_g": 2
+    },
+    {
+      "name": "Flatbread, Mix & Match, Pepperoni & Double Cheese",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 400,
+      "protein_g": 21,
+      "carbs_g": 25,
+      "fat_g": 22,
+      "fiber_g": 1
+    },
+    {
+      "name": "Flatbread, BBQ Chicken & Jalapeno",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 700,
+      "protein_g": 46,
+      "carbs_g": 70,
+      "fat_g": 27,
+      "fiber_g": 1
+    },
+    {
+      "name": "Flatbread, Mix & Match, BBQ Chicken & Jalapeno",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 350,
+      "protein_g": 23,
+      "carbs_g": 35,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Flatbread, Meaty",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 900,
+      "protein_g": 46,
+      "carbs_g": 52,
+      "fat_g": 54,
+      "fiber_g": 2
+    },
+    {
+      "name": "Flatbread, Mix & Match, Meaty",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 450,
+      "protein_g": 23,
+      "carbs_g": 26,
+      "fat_g": 27,
+      "fiber_g": 1
+    },
+    {
+      "name": "Flatbread, Supreme",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 930,
+      "protein_g": 45,
+      "carbs_g": 56,
+      "fat_g": 56,
+      "fiber_g": 3
+    },
+    {
+      "name": "Flatbread, Mix & Match, Supreme",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 470,
+      "protein_g": 22,
+      "carbs_g": 28,
+      "fat_g": 28,
+      "fiber_g": 2
+    },
+    {
+      "name": "Flatbread, California Chicken & Avocado",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 790,
+      "protein_g": 42,
+      "carbs_g": 52,
+      "fat_g": 46,
+      "fiber_g": 4
+    },
+    {
+      "name": "Flatbread, Mix & Match, California Chicken & Avocado",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 390,
+      "protein_g": 21,
+      "carbs_g": 26,
+      "fat_g": 23,
+      "fiber_g": 2
+    },
+    {
+      "name": "Flatbread, Chicken Club",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 700,
+      "protein_g": 42,
+      "carbs_g": 53,
+      "fat_g": 35,
+      "fiber_g": 1
+    },
+    {
+      "name": "Flatbread, Mix & Match, Chicken Club",
+      "category": "Pizza and Flatbread",
+      "serving": "1 serving",
+      "calories": 350,
+      "protein_g": 21,
+      "carbs_g": 27,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Soup, Chicken Noodle",
+      "category": "Soups with Toppings",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 8,
+      "carbs_g": 16,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Soup, Roasted Poblano & Cheddar",
+      "category": "Soups with Toppings",
+      "serving": "1 serving",
+      "calories": 420,
+      "protein_g": 12,
+      "carbs_g": 18,
+      "fat_g": 34,
+      "fiber_g": 1
+    },
+    {
+      "name": "Soup, Broccoli Cheese",
+      "category": "Soups with Toppings",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 8,
+      "carbs_g": 11,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Soup, Chicken Tortilla",
+      "category": "Soups with Toppings",
+      "serving": "1 serving",
+      "calories": 160,
+      "protein_g": 6,
+      "carbs_g": 22,
+      "fat_g": 6,
+      "fiber_g": 5
+    },
+    {
+      "name": "Soup, Loaded Baked Potato",
+      "category": "Soups with Toppings",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 8,
+      "carbs_g": 26,
+      "fat_g": 17,
+      "fiber_g": 3
+    },
+    {
+      "name": "Soup, Timberline Chili",
+      "category": "Soups with Toppings",
+      "serving": "1 serving",
+      "calories": 270,
+      "protein_g": 17,
+      "carbs_g": 22,
+      "fat_g": 12,
+      "fiber_g": 5
+    },
+    {
+      "name": "Soup, Tomato Basil Bisque",
+      "category": "Soups with Toppings",
+      "serving": "1 serving",
+      "calories": 370,
+      "protein_g": 6,
+      "carbs_g": 28,
+      "fat_g": 26,
+      "fiber_g": 5
+    },
+    {
+      "name": "Brownie, Chocolate Chip",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 500,
+      "protein_g": 6,
+      "carbs_g": 62,
+      "fat_g": 28,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cookie, Chocolate Chunk",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 370,
+      "protein_g": 4,
+      "carbs_g": 52,
+      "fat_g": 18,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cookie, Chocolate Chunk Frosted",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 460,
+      "protein_g": 5,
+      "carbs_g": 62,
+      "fat_g": 23,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cookie, Chocolate Chunk Sandwich",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 840,
+      "protein_g": 9,
+      "carbs_g": 114,
+      "fat_g": 41,
+      "fiber_g": 4
+    },
+    {
+      "name": "Cookie, Macadamia Nut White Chocolate Chip",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 400,
+      "protein_g": 5,
+      "carbs_g": 47,
+      "fat_g": 22,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cookie, Oatmeal Raisin",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 350,
+      "protein_g": 5,
+      "carbs_g": 52,
+      "fat_g": 15,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cookie, Sugar",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 420,
+      "protein_g": 3,
+      "carbs_g": 59,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "Classic Cinnamon Roll, 1 ea.",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 880,
+      "protein_g": 18,
+      "carbs_g": 121,
+      "fat_g": 38,
+      "fiber_g": 5
+    },
+    {
+      "name": "Pecan Bon Classic Roll, 1 ea.",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 1080,
+      "protein_g": 20,
+      "carbs_g": 141,
+      "fat_g": 52,
+      "fiber_g": 6
+    },
+    {
+      "name": "Pecan Bon Center of the Roll, 1 ea.",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 730,
+      "protein_g": 15,
+      "carbs_g": 97,
+      "fat_g": 33,
+      "fiber_g": 4
+    },
+    {
+      "name": "Mini Bon Cinnamon Roll, 1 ea.",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 310,
+      "protein_g": 7,
+      "carbs_g": 44,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bacon Topped Classic Cinnamon Roll, 1 ea.",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 990,
+      "protein_g": 22,
+      "carbs_g": 131,
+      "fat_g": 45,
+      "fiber_g": 5
+    },
+    {
+      "name": "Beverage, Lemonade, Kids 12 fl oz",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beverage, Lemonade, Large 44 fl oz",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 630,
+      "protein_g": 0,
+      "carbs_g": 167,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beverage, Lemonade, Medium 32 fl oz",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 460,
+      "protein_g": 0,
+      "carbs_g": 122,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beverage, Lemonade, Small 22 fl oz",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 320,
+      "protein_g": 0,
+      "carbs_g": 84,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beverage, Strawberry Lemonade, Kids 12 fl oz",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beverage, Strawberry Lemonade, Large 44 fl oz",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 660,
+      "protein_g": 0,
+      "carbs_g": 170,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Beverage, Strawberry Lemonade, Medium 32 fl oz",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 480,
+      "protein_g": 0,
+      "carbs_g": 124,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beverage, Strawberry Lemonade, Small 22 fl oz",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 330,
+      "protein_g": 0,
+      "carbs_g": 85,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kids'Grilled Cheese Sandwich",
+      "category": "Kids' Menu",
+      "serving": "1 kids",
+      "calories": 310,
+      "protein_g": 12,
+      "carbs_g": 44,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Kids' Ham and Cheese Sub",
+      "category": "Kids' Menu",
+      "serving": "1 kids",
+      "calories": 240,
+      "protein_g": 15,
+      "carbs_g": 29,
+      "fat_g": 7,
+      "fiber_g": 2
+    },
+    {
+      "name": "Kids' Turkey and Cheese Sub",
+      "category": "Kids' Menu",
+      "serving": "1 kids",
+      "calories": 240,
+      "protein_g": 14,
+      "carbs_g": 30,
+      "fat_g": 7,
+      "fiber_g": 2
+    },
+    {
+      "name": "Kids' Pizza, Cheese",
+      "category": "Kids' Menu",
+      "serving": "1 kids",
+      "calories": 450,
+      "protein_g": 17,
+      "carbs_g": 74,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Kids' Pizza, Pepperoni",
+      "category": "Kids' Menu",
+      "serving": "1 kids",
+      "calories": 510,
+      "protein_g": 19,
+      "carbs_g": 74,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Apple Slices, 4 ea.",
+      "category": "Kids' Menu",
+      "serving": "1 serving",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 13,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Dressing, Balsamic Vinegar and Olive Oil, 4 fl oz",
+      "category": "Dressings",
+      "serving": "1 serving",
+      "calories": 530,
+      "protein_g": 0,
+      "carbs_g": 11,
+      "fat_g": 54,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dressing, Blue Cheese, 4 fl oz",
+      "category": "Dressings",
+      "serving": "1 serving",
+      "calories": 600,
+      "protein_g": 4,
+      "carbs_g": 4,
+      "fat_g": 64,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dressing, Creamy Caesar, 3 fl oz",
+      "category": "Dressings",
+      "serving": "1 serving",
+      "calories": 450,
+      "protein_g": 3,
+      "carbs_g": 3,
+      "fat_g": 48,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dressing, Fat Free Raspberry Vinaigrette, 4 fl oz",
+      "category": "Dressings",
+      "serving": "1 serving",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 32,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dressing, Italian, 4 fl oz",
+      "category": "Dressings",
+      "serving": "1 serving",
+      "calories": 540,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 58,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dressing, Ranch, 4 fl oz",
+      "category": "Dressings",
+      "serving": "1 serving",
+      "calories": 440,
+      "protein_g": 4,
+      "carbs_g": 4,
+      "fat_g": 44,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dressing, Red Wine Vinaigrette, 4 fl oz",
+      "category": "Dressings",
+      "serving": "1 serving",
+      "calories": 600,
+      "protein_g": 0,
+      "carbs_g": 12,
+      "fat_g": 60,
+      "fiber_g": 0
+    },
+    {
+      "name": "Calzone, Italian Calzone",
+      "category": "Calzones",
+      "serving": "1 serving",
+      "calories": 1190,
+      "protein_g": 61,
+      "carbs_g": 128,
+      "fat_g": 51,
+      "fiber_g": 4
+    },
+    {
+      "name": "Calzone, BBQ Chicken Calzone",
+      "category": "Calzones",
+      "serving": "1 serving",
+      "calories": 1140,
+      "protein_g": 69,
+      "carbs_g": 147,
+      "fat_g": 36,
+      "fiber_g": 2
+    },
+    {
+      "name": "Calzone, Sausage and Pepper",
+      "category": "Calzones",
+      "serving": "1 serving",
+      "calories": 1370,
+      "protein_g": 58,
+      "carbs_g": 127,
+      "fat_g": 70,
+      "fiber_g": 3
+    },
+    {
+      "name": "Mac & Cheese, 6 oz Cup, Small",
+      "category": "Sides",
+      "serving": "1 small",
+      "calories": 140,
+      "protein_g": 7,
+      "carbs_g": 5,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mac & Cheese, 8 oz Cup, Large",
+      "category": "Sides",
+      "serving": "1 large",
+      "calories": 250,
+      "protein_g": 13,
+      "carbs_g": 11,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fruit Cup 3oz",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 45,
+      "protein_g": 1,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Breakfast Catering, Sandwich, Bacon and Egg on sliced bread",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 390,
+      "protein_g": 20,
+      "carbs_g": 38,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Catering, Sandwich, Bacon and Egg on sliced bread, half size",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 610,
+      "protein_g": 36,
+      "carbs_g": 43,
+      "fat_g": 32,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Catering, Sandwich, Ham and Egg on sliced bread",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 680,
+      "protein_g": 41,
+      "carbs_g": 78,
+      "fat_g": 22,
+      "fiber_g": 2
+    },
+    {
+      "name": "Breakfast Catering, Sandwich, Ham and Egg on sliced bread, half size",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 340,
+      "protein_g": 20,
+      "carbs_g": 39,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Catering, Sandwich, Ham and Egg on small bun",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 520,
+      "protein_g": 36,
+      "carbs_g": 44,
+      "fat_g": 21,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Catering, Sandwich, Sausage and Egg on sliced bread",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 760,
+      "protein_g": 39,
+      "carbs_g": 78,
+      "fat_g": 31,
+      "fiber_g": 2
+    },
+    {
+      "name": "Breakfast Catering, Sandwich, Sausage and Egg on sliced bread, half size",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 380,
+      "protein_g": 20,
+      "carbs_g": 39,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Catering, Sandwich, Sausage and Egg on small bun",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 590,
+      "protein_g": 35,
+      "carbs_g": 44,
+      "fat_g": 30,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Catering, Sandwich, Veggie and Egg on sliced bread",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 610,
+      "protein_g": 26,
+      "carbs_g": 79,
+      "fat_g": 20,
+      "fiber_g": 2
+    },
+    {
+      "name": "Breakfast Catering, Sandwich, Veggie and Egg on sliced bread, half size",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 300,
+      "protein_g": 13,
+      "carbs_g": 40,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Catering, Sandwich, Veggie and Egg on small bun",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 440,
+      "protein_g": 22,
+      "carbs_g": 45,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "Catering, Hashbrown 1 each",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 120,
+      "protein_g": 1,
+      "carbs_g": 15,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bread, Medium Sourdough Bun, 1 each",
+      "category": "Buns Tortillas",
+      "serving": "1 medium",
+      "calories": 310,
+      "protein_g": 8,
+      "carbs_g": 64,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bread, Medium Jalapeno Cheese Bun, 1 each",
+      "category": "Buns Tortillas",
+      "serving": "1 medium",
+      "calories": 320,
+      "protein_g": 10,
+      "carbs_g": 61,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bread, Rye Sourdough Bun, 1 Medium",
+      "category": "Buns Tortillas",
+      "serving": "1 medium",
+      "calories": 300,
+      "protein_g": 8,
+      "carbs_g": 64,
+      "fat_g": 2,
+      "fiber_g": 3
+    },
+    {
+      "name": "Hearty Grain Tortilla Wrap",
+      "category": "Buns Tortillas",
+      "serving": "1 serving",
+      "calories": 180,
+      "protein_g": 5,
+      "carbs_g": 29,
+      "fat_g": 4,
+      "fiber_g": 3
+    },
+    {
+      "name": "Gluten Free Bun",
+      "category": "Buns Tortillas",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 5,
+      "carbs_g": 41,
+      "fat_g": 7,
+      "fiber_g": 5
+    }
+  ]
+}

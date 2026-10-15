@@ -1,0 +1,209 @@
+{
+  "chain": "Dymatize",
+  "slug": "dymatize",
+  "aliases": [
+    "dymatize",
+    "dymatize iso100",
+    "iso100",
+    "iso 100",
+    "elite whey",
+    "super mass gainer"
+  ],
+  "kind": "supplement",
+  "source_url": "https://dymatize.com/iso100",
+  "source_kind": "official",
+  "retrieved": "2026-10-15",
+  "notes": "Text Nutrition Facts tables on each dymatize.com/products/<flavor> page (e.g. iso100-gourmet-chocolate, elite-100-whey-rich-chocolate, elite-casein-rich-chocolate, super-mass-gainer-rich-chocolate, performance-protein-shake-cocoa-pebbles). Fiber 0 where the label says '<1g' (ISO100 Gourmet Chocolate, Fudge Brownie, Cocoa Pebbles; Elite Whey Rich Chocolate; Elite Casein Rich Chocolate). Elite Casein Cookies & Cream: page prints protein as '25mg', read as 25 g (the 130 cal total and the 25 g on the other casein flavors confirm the unit typo). Super Mass Gainer serving is dry powder (mixed with 24 oz water). Elite 100% Whey Cookies & Cream page had no readable panel, so it is omitted.",
+  "items": [
+    {
+      "name": "ISO100 Hydrolyzed Whey Isolate, Gourmet Chocolate",
+      "category": "Whey Protein",
+      "serving": "1 scoop (32 g)",
+      "calories": 120,
+      "protein_g": 25,
+      "carbs_g": 2,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "ISO100 Hydrolyzed Whey Isolate, Gourmet Vanilla",
+      "category": "Whey Protein",
+      "serving": "1 scoop (30 g)",
+      "calories": 110,
+      "protein_g": 25,
+      "carbs_g": 2,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "ISO100 Hydrolyzed Whey Isolate, Fudge Brownie",
+      "category": "Whey Protein",
+      "serving": "1 scoop (33 g)",
+      "calories": 120,
+      "protein_g": 25,
+      "carbs_g": 3,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "ISO100 Hydrolyzed Whey Isolate, Cookies & Cream",
+      "category": "Whey Protein",
+      "serving": "1 scoop (30 g)",
+      "calories": 120,
+      "protein_g": 25,
+      "carbs_g": 2,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "ISO100 Hydrolyzed Whey Isolate, Fruity Pebbles",
+      "category": "Whey Protein",
+      "serving": "1 scoop (30 g)",
+      "calories": 120,
+      "protein_g": 25,
+      "carbs_g": 2,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "ISO100 Hydrolyzed Whey Isolate, Cocoa Pebbles",
+      "category": "Whey Protein",
+      "serving": "1 scoop (32 g)",
+      "calories": 120,
+      "protein_g": 25,
+      "carbs_g": 2,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "ISO100 Hydrolyzed Whey Isolate, Chocolate Peanut Butter",
+      "category": "Whey Protein",
+      "serving": "1 scoop (32 g)",
+      "calories": 120,
+      "protein_g": 25,
+      "carbs_g": 2,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "ISO100 Hydrolyzed Whey Isolate, Strawberry",
+      "category": "Whey Protein",
+      "serving": "1 scoop (30 g)",
+      "calories": 110,
+      "protein_g": 25,
+      "carbs_g": 2,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Elite 100% Whey, Rich Chocolate",
+      "category": "Whey Protein",
+      "serving": "1 scoop (36 g)",
+      "calories": 140,
+      "protein_g": 25,
+      "carbs_g": 3,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Elite 100% Whey, Gourmet Vanilla",
+      "category": "Whey Protein",
+      "serving": "1 scoop (34 g)",
+      "calories": 140,
+      "protein_g": 25,
+      "carbs_g": 2,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Elite Casein, Rich Chocolate",
+      "category": "Casein",
+      "serving": "2 scoops (36 g)",
+      "calories": 130,
+      "protein_g": 25,
+      "carbs_g": 3,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Elite Casein, Smooth Vanilla",
+      "category": "Casein",
+      "serving": "2 scoops (33 g)",
+      "calories": 120,
+      "protein_g": 25,
+      "carbs_g": 2,
+      "fat_g": 1.5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Elite Casein, Cookies & Cream",
+      "category": "Casein",
+      "serving": "2 scoops (34 g)",
+      "calories": 130,
+      "protein_g": 25,
+      "carbs_g": 2,
+      "fat_g": 1.5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Super Mass Gainer, Rich Chocolate",
+      "category": "Mass Gainer",
+      "serving": "2 1/2 cups (335 g)",
+      "calories": 1280,
+      "protein_g": 52,
+      "carbs_g": 245,
+      "fat_g": 11,
+      "fiber_g": 3
+    },
+    {
+      "name": "Super Mass Gainer, Gourmet Vanilla",
+      "category": "Mass Gainer",
+      "serving": "2 1/2 cups (333 g)",
+      "calories": 1280,
+      "protein_g": 52,
+      "carbs_g": 245,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Super Mass Gainer, Fruity Pebbles",
+      "category": "Mass Gainer",
+      "serving": "2 1/2 cups (333 g)",
+      "calories": 1280,
+      "protein_g": 52,
+      "carbs_g": 245,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Performance Protein Shake, Cocoa Pebbles",
+      "category": "Ready-to-Drink",
+      "serving": "1 shake (11.5 fl oz)",
+      "calories": 160,
+      "protein_g": 30,
+      "carbs_g": 5,
+      "fat_g": 3,
+      "fiber_g": 2
+    },
+    {
+      "name": "Performance Protein Shake, Fruity Pebbles",
+      "category": "Ready-to-Drink",
+      "serving": "1 shake (11.5 fl oz)",
+      "calories": 160,
+      "protein_g": 30,
+      "carbs_g": 2,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Performance Protein Shake, Baskin-Robbins Very Berry",
+      "category": "Ready-to-Drink",
+      "serving": "1 shake (11.5 fl oz)",
+      "calories": 160,
+      "protein_g": 30,
+      "carbs_g": 3,
+      "fat_g": 3,
+      "fiber_g": 0
+    }
+  ]
+}

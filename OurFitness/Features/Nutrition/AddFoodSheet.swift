@@ -2,8 +2,10 @@
 // "Browse" (library) sheets. One field does both jobs:
 //   • empty  → quick picks (recipes · favorites · recently logged) + the full
 //              library, ordered favorites → most-logged (30 days) → rest
-//   • typed  → a "log what you described" card (FoodParser, AI-refined on open)
-//              on top of matching library foods (curated + USDA)
+//   • typed  → matching restaurants (RestaurantCatalog — tap = that chain's menu,
+//              RestaurantMenuView), then a "log what you described" card
+//              (FoodParser, AI-refined on open) on top of matching library foods
+//              (curated + USDA + restaurant items)
 // Tapping a food/recipe/recent opens MealIngredientDetailSheet (portion + slot);
 // the sheet stays open so several foods can be added in a row.
 
@@ -16,6 +18,13 @@ private struct QuickMealLog: Identifiable {
     let name: String
     let emoji: String
     let ingredients: [MealIngredient]
+}
+
+/// Push target for a chain's menu; `query` is what followed the chain name
+/// ("shake shack fries" → "fries"), pre-filled into the menu's search.
+private struct RestaurantRoute: Hashable {
+    let chain: RestaurantChain
+    let query: String
 }
 
 struct AddFoodSheet: View {
@@ -40,6 +49,10 @@ struct AddFoodSheet: View {
     @State private var mealToLog: QuickMealLog?
     @State private var templateToLog: SavedMealTemplateDTO?
     @State private var describeText: String?
+    @State private var restaurantRoute: RestaurantRoute?
+    /// False until the catalog has loaded off the main thread; until then the
+    /// Restaurants row stays empty rather than blocking `body` on the load.
+    @State private var restaurantsReady = false
     @FocusState private var searchFocused: Bool
 
     init(profile: ProfileDTO, targetDate: String, onSave: @escaping (FoodLogEntryDTO) -> Bool) {
@@ -134,6 +147,7 @@ struct AddFoodSheet: View {
                         manualEntryRow
                         sectionHeader("All foods")
                     } else {
+                        restaurantRow
                         describeCard
                         if !displayedResults.isEmpty { sectionHeader("Foods") }
                     }
@@ -170,6 +184,19 @@ struct AddFoodSheet: View {
                     if onSave(dto) { dismiss() }
                 }
             }
+            .navigationDestination(item: $restaurantRoute) { route in
+                RestaurantMenuView(chain: route.chain, initialQuery: route.query) { item in
+                    // Same confirm/log path as every other pick.
+                    mealToLog = QuickMealLog(name: item.food.name, emoji: "🍽️",
+                                             ingredients: [MealIngredient.from(item.food.asCommonFood)])
+                }
+            }
+        }
+        .task {
+            // Read the (small) restaurant catalog off the main thread once, so the
+            // first keystroke that consults it doesn't pay for the SQLite read.
+            await Task.detached(priority: .userInitiated) { _ = RestaurantCatalog.shared.isEmpty }.value
+            restaurantsReady = true
         }
         .debouncedFoodSearch(query: query, results: $displayedResults) {
             defaultOrdered(logModels.map(\.snapshot))
@@ -232,6 +259,48 @@ struct AddFoodSheet: View {
         .background(theme.card)
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+    }
+
+    // MARK: - Restaurants (typed query)
+
+    /// Chains the query names or starts to spell ("shakesha" → Shake Shack).
+    /// In-memory over a few chains — cheap enough to run in `body`.
+    @ViewBuilder
+    private var restaurantRow: some View {
+        let chains = restaurantsReady ? RestaurantCatalog.shared.chains(matching: trimmedQuery) : []
+        VStack(alignment: .leading, spacing: 8) {
+            if !chains.isEmpty {
+                sectionHeader(chains.allSatisfy(\.isBrand) ? "Brands" : chains.contains(where: \.isBrand) ? "Restaurants & brands" : "Restaurants")
+                ForEach(chains) { chain in
+                    PressableCard(action: {
+                        Haptics.tap()
+                        searchFocused = false
+                        let split = RestaurantCatalog.shared.split(trimmedQuery)
+                        let rest = split?.chain.slug == chain.slug ? split?.remainder ?? "" : ""
+                        restaurantRoute = RestaurantRoute(chain: chain, query: rest)
+                    }) {
+                        HStack(spacing: 12) {
+                            Image(systemName: chain.isBrand ? "dumbbell.fill" : "fork.knife")
+                                .font(.system(size: 16))
+                                .foregroundStyle(theme.accent)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(chain.name)
+                                    .font(.system(size: 15, weight: .semibold))
+                                    .foregroundStyle(theme.text)
+                                Text("\(chain.isBrand ? "Products" : "Menu") · \(chain.itemCount) items")
+                                    .font(.caption).foregroundStyle(theme.dim)
+                            }
+                            Spacer(minLength: 0)
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 12))
+                                .foregroundStyle(theme.dim)
+                        }
+                    }
+                    .transition(.opacity.combined(with: .move(edge: .top)))
+                }
+            }
+        }
+        .animation(.spring(response: 0.3, dampingFraction: 0.8), value: chains.map(\.slug))
     }
 
     // MARK: - Describe card (typed query)
@@ -406,7 +475,15 @@ private struct DebouncedFoodSearch: ViewModifier {
             guard !Task.isCancelled else { return }
             let found = await FoodSearch.combined(matching: q)
             guard !Task.isCancelled else { return }
-            results = found
+            // "shake shack fries": that chain's fries lead, ranked within its menu
+            // (FTS rank alone can't promise it); the same rows aren't repeated below.
+            // Off the main actor: the first call may still be loading the catalog.
+            let menuHits = await Task.detached(priority: .userInitiated) {
+                RestaurantCatalog.shared.menuMatches(for: q).map { $0.food.asCommonFood }
+            }.value
+            guard !Task.isCancelled else { return }
+            let leadIds = Set(menuHits.map(\.id))
+            results = menuHits + found.filter { !leadIds.contains($0.id) }
         }
     }
 }

@@ -41,13 +41,27 @@ public final class SQLiteFoodDatabase: @unchecked Sendable {
         guard let url = bundle.url(forResource: "usda-foods", withExtension: "db") else {
             return SQLiteFoodDatabase(db: nil)
         }
+        return open(path: url.path)
+    }
+
+    /// Opens a food database file read-only (the bundled one, or a fixture in
+    /// tests). Returns empty (non-crashing) if it can't be opened.
+    public static func open(path: String) -> SQLiteFoodDatabase {
         var db: OpaquePointer?
         let flags = SQLITE_OPEN_READONLY | SQLITE_OPEN_FULLMUTEX
-        guard sqlite3_open_v2(url.path, &db, flags, nil) == SQLITE_OK else {
+        guard sqlite3_open_v2(path, &db, flags, nil) == SQLITE_OK else {
             sqlite3_close(db)
             return SQLiteFoodDatabase(db: nil)
         }
         return SQLiteFoodDatabase(db: db)
+    }
+
+    /// Every restaurant chain + menu item (`restaurant_chains` / `restaurant_items`,
+    /// written by `scripts/build-food-db.py`). Small — a few hundred rows per
+    /// chain — so `RestaurantCatalog` reads it ONCE into memory. Returns empty
+    /// arrays when the database is empty or predates the restaurant tables.
+    public func restaurantData() -> (chains: [RestaurantChain], items: [RestaurantMenuItem]) {
+        queue.sync { (_restaurantChains(), _restaurantItems()) }
     }
 
     /// Best-match for a natural-language meal chunk. Returns the top FTS5 result,
@@ -90,6 +104,60 @@ public final class SQLiteFoodDatabase: @unchecked Sendable {
         let tokens = clean.components(separatedBy: .whitespaces).filter { !$0.isEmpty }
         let ftsQuery = tokens.map { "\(escapeFTS($0))*" }.joined(separator: " ")
         return _query(ftsQuery: ftsQuery, limit: limit)
+    }
+
+    private func _restaurantChains() -> [RestaurantChain] {
+        rows(sql: "SELECT slug, name, aliases, kind, item_count FROM restaurant_chains ORDER BY name") { stmt in
+            RestaurantChain(
+                slug: Self.text(stmt, 0),
+                name: Self.text(stmt, 1),
+                aliases: Self.text(stmt, 2).split(separator: "|").map(String.init),
+                kind: Self.text(stmt, 3),
+                itemCount: Int(sqlite3_column_int(stmt, 4))
+            )
+        }
+    }
+
+    private func _restaurantItems() -> [RestaurantMenuItem] {
+        let sql = """
+            SELECT id, chain_slug, category, sort_order, item_name, name, serving_label,
+                   calories, protein_g, carbs_g, fat_g, fiber_g
+            FROM restaurant_items ORDER BY chain_slug, sort_order
+            """
+        return rows(sql: sql) { stmt in
+            RestaurantMenuItem(
+                chainSlug: Self.text(stmt, 1),
+                category: Self.text(stmt, 2),
+                sortOrder: Int(sqlite3_column_int(stmt, 3)),
+                itemName: Self.text(stmt, 4),
+                food: FoodDatabaseEntry(
+                    id: Self.text(stmt, 0), name: Self.text(stmt, 5), aliases: [],
+                    servingLabel: Self.text(stmt, 6),
+                    calories: Int(sqlite3_column_int(stmt, 7)),
+                    proteinG: Int(sqlite3_column_int(stmt, 8)),
+                    carbsG: Int(sqlite3_column_int(stmt, 9)),
+                    fatG: Int(sqlite3_column_int(stmt, 10)),
+                    fiberG: Int(sqlite3_column_int(stmt, 11))
+                )
+            )
+        }
+    }
+
+    /// Runs a parameterless SELECT. A prepare failure (e.g. the table doesn't
+    /// exist in an older database) yields no rows rather than an error.
+    private func rows<T>(sql: String, _ map: (OpaquePointer?) -> T) -> [T] {
+        guard let db else { return [] }
+        var stmt: OpaquePointer?
+        guard sqlite3_prepare_v2(db, sql, -1, &stmt, nil) == SQLITE_OK else { return [] }
+        defer { sqlite3_finalize(stmt) }
+        var out: [T] = []
+        while sqlite3_step(stmt) == SQLITE_ROW { out.append(map(stmt)) }
+        return out
+    }
+
+    private static func text(_ stmt: OpaquePointer?, _ col: Int32) -> String {
+        guard let c = sqlite3_column_text(stmt, col) else { return "" }
+        return String(cString: c)
     }
 
     /// Wrap a token in double quotes (an FTS5 string literal) so punctuation and

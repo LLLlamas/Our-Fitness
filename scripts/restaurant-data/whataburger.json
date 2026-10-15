@@ -1,0 +1,2329 @@
+{
+  "chain": "Whataburger",
+  "slug": "whataburger",
+  "aliases": [
+    "whataburger",
+    "what a burger",
+    "whatburger",
+    "whataburgers",
+    "wataburger",
+    "whatabuger"
+  ],
+  "kind": "fast-food",
+  "source_url": "https://wbimageserver.whataburger.com/Nutrition.pdf",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "From Whataburger's nutrition PDF, which is the 'Nutritional Information' link on whataburger.com today, but the document itself states 'Nutritional information as of March 29, 2021' - values and menu may be out of date. Items the PDF marks Limited Time Only (†) were excluded (Buffalo Ranch Chicken Strip Sandwich, Jr. Buffalo Ranch Chicken Strip Sandwich, Buffalo Ranch Chicken Salad with Grilled Chicken, Buffalo Ranch Chicken Salad with Whatachick’n®, Buffalo Ranch Chicken Salad with Spicy Chicken, Hard-Boiled Egg, Blue Cheese, Small Dr Pepper ® Shake (16 fl oz), Medium Dr Pepper ® Shake (20 fl oz), Large Dr Pepper ® Shake (32 fl oz)); items marked Limited Market Only (*) are kept. Values printed as '<1' are stored as 0. Strip/Bites meals add Texas Toast (160 cal) per the PDF; the a-la-carte rows here exclude it.",
+  "items": [
+    {
+      "name": "Whataburger",
+      "category": "Burgers",
+      "serving": "1 serving",
+      "calories": 590,
+      "protein_g": 29,
+      "carbs_g": 62,
+      "fat_g": 25,
+      "fiber_g": 4
+    },
+    {
+      "name": "Double Meat Whataburger",
+      "category": "Burgers",
+      "serving": "1 serving",
+      "calories": 830,
+      "protein_g": 47,
+      "carbs_g": 62,
+      "fat_g": 44,
+      "fiber_g": 4
+    },
+    {
+      "name": "Triple Meat Whataburger",
+      "category": "Burgers",
+      "serving": "1 serving",
+      "calories": 1070,
+      "protein_g": 65,
+      "carbs_g": 62,
+      "fat_g": 63,
+      "fiber_g": 4
+    },
+    {
+      "name": "Jalapeño & Cheese Whataburger",
+      "category": "Burgers",
+      "serving": "1 serving",
+      "calories": 680,
+      "protein_g": 34,
+      "carbs_g": 63,
+      "fat_g": 32,
+      "fiber_g": 4
+    },
+    {
+      "name": "Bacon & Cheese Whataburger",
+      "category": "Burgers",
+      "serving": "1 serving",
+      "calories": 750,
+      "protein_g": 39,
+      "carbs_g": 62,
+      "fat_g": 37,
+      "fiber_g": 4
+    },
+    {
+      "name": "Avocado Bacon Burger",
+      "category": "Burgers",
+      "serving": "1 serving",
+      "calories": 820,
+      "protein_g": 37,
+      "carbs_g": 52,
+      "fat_g": 52,
+      "fiber_g": 4
+    },
+    {
+      "name": "Whataburger Jr.",
+      "category": "Burgers",
+      "serving": "1 serving",
+      "calories": 310,
+      "protein_g": 14,
+      "carbs_g": 37,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Double Meat Whataburger Jr.",
+      "category": "Burgers",
+      "serving": "1 serving",
+      "calories": 420,
+      "protein_g": 23,
+      "carbs_g": 37,
+      "fat_g": 20,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bacon & Cheese Whataburger Jr.",
+      "category": "Burgers",
+      "serving": "1 serving",
+      "calories": 400,
+      "protein_g": 21,
+      "carbs_g": 37,
+      "fat_g": 18,
+      "fiber_g": 2
+    },
+    {
+      "name": "Whatachick’n Sandwich with Whatasauce",
+      "category": "Chicken",
+      "serving": "1 serving",
+      "calories": 540,
+      "protein_g": 32,
+      "carbs_g": 54,
+      "fat_g": 22,
+      "fiber_g": 3
+    },
+    {
+      "name": "Whatachick’n Sandwich with Mayonnaise",
+      "category": "Chicken",
+      "serving": "1 serving",
+      "calories": 580,
+      "protein_g": 32,
+      "carbs_g": 52,
+      "fat_g": 28,
+      "fiber_g": 3
+    },
+    {
+      "name": "Grilled Chicken Sandwich with Whatasauce",
+      "category": "Chicken",
+      "serving": "1 serving",
+      "calories": 430,
+      "protein_g": 32,
+      "carbs_g": 44,
+      "fat_g": 14,
+      "fiber_g": 4
+    },
+    {
+      "name": "Grilled Chicken Sandwich with Mayonnaise",
+      "category": "Chicken",
+      "serving": "1 serving",
+      "calories": 470,
+      "protein_g": 32,
+      "carbs_g": 42,
+      "fat_g": 20,
+      "fiber_g": 4
+    },
+    {
+      "name": "Spicy Chicken Sandwich",
+      "category": "Chicken",
+      "serving": "1 serving",
+      "calories": 550,
+      "protein_g": 31,
+      "carbs_g": 50,
+      "fat_g": 26,
+      "fiber_g": 4
+    },
+    {
+      "name": "Whatachick’n Strips (3)",
+      "category": "Chicken",
+      "serving": "1 serving",
+      "calories": 460,
+      "protein_g": 24,
+      "carbs_g": 30,
+      "fat_g": 27,
+      "fiber_g": 1
+    },
+    {
+      "name": "Whatachick’n Bites (6)",
+      "category": "Chicken",
+      "serving": "1 serving",
+      "calories": 390,
+      "protein_g": 30,
+      "carbs_g": 25,
+      "fat_g": 19,
+      "fiber_g": 2
+    },
+    {
+      "name": "Whatachick’n Bites (9)",
+      "category": "Chicken",
+      "serving": "1 serving",
+      "calories": 580,
+      "protein_g": 45,
+      "carbs_g": 37,
+      "fat_g": 28,
+      "fiber_g": 3
+    },
+    {
+      "name": "Chicken Fajita Taco",
+      "category": "Chicken",
+      "serving": "1 serving",
+      "calories": 340,
+      "protein_g": 29,
+      "carbs_g": 31,
+      "fat_g": 11,
+      "fiber_g": 3
+    },
+    {
+      "name": "Grilled Chicken Melt",
+      "category": "Chicken",
+      "serving": "1 serving",
+      "calories": 390,
+      "protein_g": 33,
+      "carbs_g": 39,
+      "fat_g": 11,
+      "fiber_g": 3
+    },
+    {
+      "name": "Honey BBQ Chicken Strip Sandwich",
+      "category": "All-Time Favorites & Seasonal Sandwiches",
+      "serving": "1 serving",
+      "calories": 890,
+      "protein_g": 38,
+      "carbs_g": 87,
+      "fat_g": 42,
+      "fiber_g": 3
+    },
+    {
+      "name": "Whataburger Patty Melt",
+      "category": "All-Time Favorites & Seasonal Sandwiches",
+      "serving": "1 serving",
+      "calories": 940,
+      "protein_g": 49,
+      "carbs_g": 45,
+      "fat_g": 61,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mushroom Swiss Burger",
+      "category": "All-Time Favorites & Seasonal Sandwiches",
+      "serving": "1 serving",
+      "calories": 1110,
+      "protein_g": 56,
+      "carbs_g": 61,
+      "fat_g": 70,
+      "fiber_g": 3
+    },
+    {
+      "name": "Whatacatch Sandwich",
+      "category": "All-Time Favorites & Seasonal Sandwiches",
+      "serving": "1 serving",
+      "calories": 490,
+      "protein_g": 19,
+      "carbs_g": 59,
+      "fat_g": 20,
+      "fiber_g": 5
+    },
+    {
+      "name": "Grilled Veggie Wrap",
+      "category": "All-Time Favorites & Seasonal Sandwiches",
+      "serving": "1 serving",
+      "calories": 330,
+      "protein_g": 7,
+      "carbs_g": 38,
+      "fat_g": 18,
+      "fiber_g": 6
+    },
+    {
+      "name": "Sweet & Spicy Bacon Burger",
+      "category": "All-Time Favorites & Seasonal Sandwiches",
+      "serving": "1 serving",
+      "calories": 1080,
+      "protein_g": 60,
+      "carbs_g": 69,
+      "fat_g": 62,
+      "fiber_g": 3
+    },
+    {
+      "name": "Green Chile Double",
+      "category": "All-Time Favorites & Seasonal Sandwiches",
+      "serving": "1 serving",
+      "calories": 980,
+      "protein_g": 54,
+      "carbs_g": 61,
+      "fat_g": 57,
+      "fiber_g": 3
+    },
+    {
+      "name": "Jr. Honey BBQ Chicken Strip Sandwich",
+      "category": "Junior All-Time Favorites & Seasonal Sandwiches",
+      "serving": "1 serving",
+      "calories": 650,
+      "protein_g": 28,
+      "carbs_g": 63,
+      "fat_g": 31,
+      "fiber_g": 3
+    },
+    {
+      "name": "Jr. Whataburger Patty Melt (Single Patty)",
+      "category": "Junior All-Time Favorites & Seasonal Sandwiches",
+      "serving": "1 serving",
+      "calories": 640,
+      "protein_g": 28,
+      "carbs_g": 45,
+      "fat_g": 37,
+      "fiber_g": 1
+    },
+    {
+      "name": "Jr. Mushroom Swiss Burger",
+      "category": "Junior All-Time Favorites & Seasonal Sandwiches",
+      "serving": "1 serving",
+      "calories": 700,
+      "protein_g": 32,
+      "carbs_g": 47,
+      "fat_g": 42,
+      "fiber_g": 3
+    },
+    {
+      "name": "Jr. Sweet & Spicy Bacon Burger",
+      "category": "Junior All-Time Favorites & Seasonal Sandwiches",
+      "serving": "1 serving",
+      "calories": 600,
+      "protein_g": 32,
+      "carbs_g": 42,
+      "fat_g": 33,
+      "fiber_g": 1
+    },
+    {
+      "name": "Jr. Green Chile Double",
+      "category": "Junior All-Time Favorites & Seasonal Sandwiches",
+      "serving": "1 serving",
+      "calories": 540,
+      "protein_g": 28,
+      "carbs_g": 37,
+      "fat_g": 30,
+      "fiber_g": 1
+    },
+    {
+      "name": "Justaburger",
+      "category": "For The Kids",
+      "serving": "1 serving",
+      "calories": 300,
+      "protein_g": 14,
+      "carbs_g": 35,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Whatachick’n Strips (2)",
+      "category": "For The Kids",
+      "serving": "1 serving",
+      "calories": 300,
+      "protein_g": 16,
+      "carbs_g": 20,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Whatachick’n Bites (4)",
+      "category": "For The Kids",
+      "serving": "1 serving",
+      "calories": 260,
+      "protein_g": 20,
+      "carbs_g": 16,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Grilled Cheese",
+      "category": "For The Kids",
+      "serving": "1 serving",
+      "calories": 510,
+      "protein_g": 16,
+      "carbs_g": 42,
+      "fat_g": 28,
+      "fiber_g": 0
+    },
+    {
+      "name": "Apple & Cranberry Salad with Grilled Chicken",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 380,
+      "protein_g": 33,
+      "carbs_g": 38,
+      "fat_g": 12,
+      "fiber_g": 6
+    },
+    {
+      "name": "Apple & Cranberry Salad with Whatachick’n",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 490,
+      "protein_g": 34,
+      "carbs_g": 47,
+      "fat_g": 20,
+      "fiber_g": 4
+    },
+    {
+      "name": "Apple & Cranberry Salad with Spicy Chicken",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 500,
+      "protein_g": 31,
+      "carbs_g": 49,
+      "fat_g": 21,
+      "fiber_g": 6
+    },
+    {
+      "name": "Cobb Salad",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 300,
+      "protein_g": 20,
+      "carbs_g": 8,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cobb Salad with Grilled Chicken",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 430,
+      "protein_g": 44,
+      "carbs_g": 10,
+      "fat_g": 23,
+      "fiber_g": 3
+    },
+    {
+      "name": "Cobb Salad with Whatachick’n",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 540,
+      "protein_g": 45,
+      "carbs_g": 20,
+      "fat_g": 31,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cobb Salad with Spicy Chicken",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 550,
+      "protein_g": 43,
+      "carbs_g": 21,
+      "fat_g": 32,
+      "fiber_g": 3
+    },
+    {
+      "name": "Garden Salad",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 160,
+      "protein_g": 10,
+      "carbs_g": 10,
+      "fat_g": 10,
+      "fiber_g": 5
+    },
+    {
+      "name": "Garden Salad with Grilled Chicken",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 34,
+      "carbs_g": 12,
+      "fat_g": 12,
+      "fiber_g": 6
+    },
+    {
+      "name": "Garden Salad with Whatachick’n",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 400,
+      "protein_g": 35,
+      "carbs_g": 22,
+      "fat_g": 20,
+      "fiber_g": 5
+    },
+    {
+      "name": "Garden Salad with Spicy Chicken",
+      "category": "Salads",
+      "serving": "1 serving",
+      "calories": 400,
+      "protein_g": 32,
+      "carbs_g": 22,
+      "fat_g": 21,
+      "fiber_g": 4
+    },
+    {
+      "name": "Small French Fries",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 270,
+      "protein_g": 3,
+      "carbs_g": 34,
+      "fat_g": 14,
+      "fiber_g": 3
+    },
+    {
+      "name": "Medium French Fries",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 400,
+      "protein_g": 4,
+      "carbs_g": 51,
+      "fat_g": 21,
+      "fiber_g": 4
+    },
+    {
+      "name": "Large French Fries",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 530,
+      "protein_g": 6,
+      "carbs_g": 68,
+      "fat_g": 28,
+      "fiber_g": 6
+    },
+    {
+      "name": "Medium Onion Rings",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 300,
+      "protein_g": 4,
+      "carbs_g": 33,
+      "fat_g": 17,
+      "fiber_g": 4
+    },
+    {
+      "name": "Large Onion Rings",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 450,
+      "protein_g": 7,
+      "carbs_g": 49,
+      "fat_g": 25,
+      "fiber_g": 6
+    },
+    {
+      "name": "Apple Slices",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 8,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Avocado",
+      "category": "Add-Ons",
+      "serving": "1 serving",
+      "calories": 90,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 9,
+      "fiber_g": 3
+    },
+    {
+      "name": "Bacon (per slice)",
+      "category": "Add-Ons",
+      "serving": "1 serving",
+      "calories": 25,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Grilled Peppers and Onions",
+      "category": "Add-Ons",
+      "serving": "1 serving",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Jalapeños (whole or sliced – about 5-8 slices)",
+      "category": "Add-Ons",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small American Cheese (per slice)",
+      "category": "Add-Ons",
+      "serving": "1 serving",
+      "calories": 45,
+      "protein_g": 3,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large American Cheese (per slice)",
+      "category": "Add-Ons",
+      "serving": "1 serving",
+      "calories": 90,
+      "protein_g": 5,
+      "carbs_g": 0,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Monterey Jack Cheese",
+      "category": "Add-Ons",
+      "serving": "1 serving",
+      "calories": 60,
+      "protein_g": 3,
+      "carbs_g": 0,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shredded Cheddar Cheese",
+      "category": "Add-Ons",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 11,
+      "carbs_g": 0,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Green Chiles",
+      "category": "Add-Ons",
+      "serving": "1 serving",
+      "calories": 40,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Fire Roasted Brown Mushrooms",
+      "category": "Add-Ons",
+      "serving": "1 serving",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fancy Ketchup (per portion cup)",
+      "category": "Condiments",
+      "serving": "1 serving",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 8,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spicy Ketchup (per portion cup)",
+      "category": "Condiments",
+      "serving": "1 serving",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 7,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Picante Sauce (per portion cup)",
+      "category": "Condiments",
+      "serving": "1 serving",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salsa Verde (per portion cup)",
+      "category": "Condiments",
+      "serving": "1 serving",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Margarine (per portion cup)",
+      "category": "Condiments",
+      "serving": "1 serving",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Balsamic Vinaigrette",
+      "category": "Dipping Sauces & Dressings",
+      "serving": "1 serving",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buffalo Sauce",
+      "category": "Dipping Sauces & Dressings",
+      "serving": "1 serving",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Buttermilk Ranch Dressing",
+      "category": "Dipping Sauces & Dressings",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 25,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cream Gravy",
+      "category": "Dipping Sauces & Dressings",
+      "serving": "1 serving",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 8,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Creamy Pepper Sauce",
+      "category": "Dipping Sauces & Dressings",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fat-Free Ranch Dressing",
+      "category": "Dipping Sauces & Dressings",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 1,
+      "carbs_g": 13,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Honey BBQ Sauce",
+      "category": "Dipping Sauces & Dressings",
+      "serving": "1 serving",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey Butter Sauce",
+      "category": "Dipping Sauces & Dressings",
+      "serving": "1 serving",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey Mustard Sauce",
+      "category": "Dipping Sauces & Dressings",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 1,
+      "carbs_g": 15,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jalapeño Ranch Dressing",
+      "category": "Dipping Sauces & Dressings",
+      "serving": "1 serving",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Low-Fat Herb Vinaigrette",
+      "category": "Dipping Sauces & Dressings",
+      "serving": "1 serving",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 7,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Low-Fat Honey Pepper Vinaigrette",
+      "category": "Dipping Sauces & Dressings",
+      "serving": "1 serving",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 15,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sugar-Free Pancake Syrup",
+      "category": "Dipping Sauces & Dressings",
+      "serving": "1 serving",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pancake Syrup",
+      "category": "Dipping Sauces & Dressings",
+      "serving": "1 serving",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Thousand Island Dressing",
+      "category": "Dipping Sauces & Dressings",
+      "serving": "1 serving",
+      "calories": 260,
+      "protein_g": 1,
+      "carbs_g": 8,
+      "fat_g": 25,
+      "fiber_g": 0
+    },
+    {
+      "name": "Taquito with Cheese & Bacon",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 400,
+      "protein_g": 20,
+      "carbs_g": 29,
+      "fat_g": 23,
+      "fiber_g": 1
+    },
+    {
+      "name": "Taquito with Cheese & Chorizo",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 450,
+      "protein_g": 19,
+      "carbs_g": 28,
+      "fat_g": 28,
+      "fiber_g": 2
+    },
+    {
+      "name": "Taquito with Cheese & Potato",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 440,
+      "protein_g": 17,
+      "carbs_g": 38,
+      "fat_g": 25,
+      "fiber_g": 2
+    },
+    {
+      "name": "Taquito with Cheese & Sausage",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 420,
+      "protein_g": 19,
+      "carbs_g": 28,
+      "fat_g": 26,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast On A Bun with Bacon",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 360,
+      "protein_g": 18,
+      "carbs_g": 35,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast On A Bun with Sausage",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 510,
+      "protein_g": 27,
+      "carbs_g": 35,
+      "fat_g": 28,
+      "fiber_g": 1
+    },
+    {
+      "name": "Buttermilk Biscuit Sandwich with Bacon",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 490,
+      "protein_g": 18,
+      "carbs_g": 35,
+      "fat_g": 31,
+      "fiber_g": 1
+    },
+    {
+      "name": "Buttermilk Biscuit Sandwich with Sausage",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 640,
+      "protein_g": 27,
+      "carbs_g": 35,
+      "fat_g": 44,
+      "fiber_g": 1
+    },
+    {
+      "name": "Jalapeño Cheddar Biscuit Sandwich with Bacon",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 500,
+      "protein_g": 19,
+      "carbs_g": 31,
+      "fat_g": 32,
+      "fiber_g": 2
+    },
+    {
+      "name": "Jalapeño Cheddar Biscuit Sandwich with Sausage",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 640,
+      "protein_g": 28,
+      "carbs_g": 31,
+      "fat_g": 45,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pancake Platter with Bacon",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 680,
+      "protein_g": 12,
+      "carbs_g": 109,
+      "fat_g": 21,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pancake Platter with Sausage",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 830,
+      "protein_g": 21,
+      "carbs_g": 109,
+      "fat_g": 33,
+      "fiber_g": 3
+    },
+    {
+      "name": "Breakfast Platter with Bacon",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 600,
+      "protein_g": 28,
+      "carbs_g": 39,
+      "fat_g": 38,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Platter with Sausage",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 750,
+      "protein_g": 37,
+      "carbs_g": 39,
+      "fat_g": 50,
+      "fiber_g": 1
+    },
+    {
+      "name": "Honey Butter Chicken Biscuit",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 580,
+      "protein_g": 13,
+      "carbs_g": 52,
+      "fat_g": 36,
+      "fiber_g": 2
+    },
+    {
+      "name": "Buttermilk Biscuit & Gravy",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 490,
+      "protein_g": 8,
+      "carbs_g": 49,
+      "fat_g": 30,
+      "fiber_g": 1
+    },
+    {
+      "name": "Jalapeño Cheddar Biscuit & Gravy",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 490,
+      "protein_g": 9,
+      "carbs_g": 44,
+      "fat_g": 31,
+      "fiber_g": 2
+    },
+    {
+      "name": "Buttermilk Biscuit",
+      "category": "Breakfast à la carte",
+      "serving": "1 serving",
+      "calories": 310,
+      "protein_g": 5,
+      "carbs_g": 34,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Buttermilk Biscuit with Bacon",
+      "category": "Breakfast à la carte",
+      "serving": "1 serving",
+      "calories": 360,
+      "protein_g": 8,
+      "carbs_g": 35,
+      "fat_g": 21,
+      "fiber_g": 1
+    },
+    {
+      "name": "Buttermilk Biscuit with Sausage",
+      "category": "Breakfast à la carte",
+      "serving": "1 serving",
+      "calories": 510,
+      "protein_g": 17,
+      "carbs_g": 35,
+      "fat_g": 34,
+      "fiber_g": 1
+    },
+    {
+      "name": "Buttermilk Biscuit with Egg & Cheese",
+      "category": "Breakfast à la carte",
+      "serving": "1 serving",
+      "calories": 440,
+      "protein_g": 14,
+      "carbs_g": 35,
+      "fat_g": 27,
+      "fiber_g": 1
+    },
+    {
+      "name": "Jalapeño Cheddar Biscuit",
+      "category": "Breakfast à la carte",
+      "serving": "1 serving",
+      "calories": 310,
+      "protein_g": 6,
+      "carbs_g": 30,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jalapeño Cheddar Biscuit with Bacon",
+      "category": "Breakfast à la carte",
+      "serving": "1 serving",
+      "calories": 370,
+      "protein_g": 9,
+      "carbs_g": 31,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jalapeño Cheddar Biscuit with Sausage",
+      "category": "Breakfast à la carte",
+      "serving": "1 serving",
+      "calories": 510,
+      "protein_g": 18,
+      "carbs_g": 30,
+      "fat_g": 35,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jalapeño Cheddar Biscuit with Egg & Cheese",
+      "category": "Breakfast à la carte",
+      "serving": "1 serving",
+      "calories": 440,
+      "protein_g": 16,
+      "carbs_g": 30,
+      "fat_g": 28,
+      "fiber_g": 0
+    },
+    {
+      "name": "Taquito with Bacon",
+      "category": "Breakfast à la carte",
+      "serving": "1 serving",
+      "calories": 360,
+      "protein_g": 17,
+      "carbs_g": 29,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Taquito with Sausage",
+      "category": "Breakfast à la carte",
+      "serving": "1 serving",
+      "calories": 380,
+      "protein_g": 16,
+      "carbs_g": 28,
+      "fat_g": 23,
+      "fiber_g": 1
+    },
+    {
+      "name": "Taquito with Potato",
+      "category": "Breakfast à la carte",
+      "serving": "1 serving",
+      "calories": 400,
+      "protein_g": 15,
+      "carbs_g": 38,
+      "fat_g": 21,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cinnamon Roll (single)",
+      "category": "Breakfast à la carte",
+      "serving": "1 serving",
+      "calories": 580,
+      "protein_g": 8,
+      "carbs_g": 103,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Egg Sandwich",
+      "category": "Breakfast à la carte",
+      "serving": "1 serving",
+      "calories": 310,
+      "protein_g": 15,
+      "carbs_g": 34,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Grits",
+      "category": "Breakfast à la carte",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 2,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hashbrowns",
+      "category": "Breakfast à la carte",
+      "serving": "1 serving",
+      "calories": 190,
+      "protein_g": 2,
+      "carbs_g": 21,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pancakes with syrup & margarine",
+      "category": "Breakfast à la carte",
+      "serving": "1 serving",
+      "calories": 630,
+      "protein_g": 9,
+      "carbs_g": 108,
+      "fat_g": 17,
+      "fiber_g": 3
+    },
+    {
+      "name": "Orange Juice (11.5 fl oz)",
+      "category": "Orange Juice & Milk",
+      "serving": "11.5 fl oz",
+      "calories": 160,
+      "protein_g": 2,
+      "carbs_g": 37,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "1% Low Fat Milk (8 fl oz)",
+      "category": "Orange Juice & Milk",
+      "serving": "8 fl oz",
+      "calories": 110,
+      "protein_g": 9,
+      "carbs_g": 13,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "1% Low Fat Chocolate Milk (8 fl oz)",
+      "category": "Orange Juice & Milk",
+      "serving": "8 fl oz",
+      "calories": 160,
+      "protein_g": 8,
+      "carbs_g": 27,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Coffee (12 fl oz)",
+      "category": "Coffee & Tea",
+      "serving": "12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Coffee (16 fl oz)",
+      "category": "Coffee & Tea",
+      "serving": "16 fl oz",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Coffee (20 fl oz)",
+      "category": "Coffee & Tea",
+      "serving": "20 fl oz",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Decaf Coffee (12 fl oz)",
+      "category": "Coffee & Tea",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Decaf Coffee (16 fl oz)",
+      "category": "Coffee & Tea",
+      "serving": "16 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Decaf Coffee (20 fl oz)",
+      "category": "Coffee & Tea",
+      "serving": "20 fl oz",
+      "calories": 0,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid’s Unsweet Tea (16 fl oz)",
+      "category": "Coffee & Tea",
+      "serving": "16 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Unsweet Tea (20 fl oz)",
+      "category": "Coffee & Tea",
+      "serving": "20 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Unsweet Tea (32 fl oz)",
+      "category": "Coffee & Tea",
+      "serving": "32 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Unsweet Tea (44 fl oz)",
+      "category": "Coffee & Tea",
+      "serving": "44 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid’s Sweet Tea (16 fl oz)",
+      "category": "Coffee & Tea",
+      "serving": "16 fl oz",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Sweet Tea (20 fl oz)",
+      "category": "Coffee & Tea",
+      "serving": "20 fl oz",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 72,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Sweet Tea (32 fl oz)",
+      "category": "Coffee & Tea",
+      "serving": "32 fl oz",
+      "calories": 440,
+      "protein_g": 0,
+      "carbs_g": 115,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Sweet Tea (44 fl oz)",
+      "category": "Coffee & Tea",
+      "serving": "44 fl oz",
+      "calories": 610,
+      "protein_g": 0,
+      "carbs_g": 158,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Apple Pie",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 270,
+      "protein_g": 3,
+      "carbs_g": 34,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hot Lemon Pie",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 320,
+      "protein_g": 4,
+      "carbs_g": 41,
+      "fat_g": 16,
+      "fiber_g": 3
+    },
+    {
+      "name": "Fruit Chews",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 80,
+      "protein_g": 1,
+      "carbs_g": 19,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Chunk Cookie",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 230,
+      "protein_g": 2,
+      "carbs_g": 32,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sugar Cookie",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 230,
+      "protein_g": 3,
+      "carbs_g": 34,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Chocolate Shake (16 fl oz)",
+      "category": "Shakes & Malts",
+      "serving": "16 fl oz",
+      "calories": 440,
+      "protein_g": 10,
+      "carbs_g": 80,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Chocolate Shake (20 fl oz)",
+      "category": "Shakes & Malts",
+      "serving": "20 fl oz",
+      "calories": 560,
+      "protein_g": 13,
+      "carbs_g": 102,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Chocolate Shake (32 fl oz)",
+      "category": "Shakes & Malts",
+      "serving": "32 fl oz",
+      "calories": 890,
+      "protein_g": 20,
+      "carbs_g": 159,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Chocolate Malt (16 fl oz)",
+      "category": "Shakes & Malts",
+      "serving": "16 fl oz",
+      "calories": 460,
+      "protein_g": 10,
+      "carbs_g": 85,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Medium Chocolate Malt (20 fl oz)",
+      "category": "Shakes & Malts",
+      "serving": "20 fl oz",
+      "calories": 590,
+      "protein_g": 12,
+      "carbs_g": 110,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Large Chocolate Malt (32 fl oz)",
+      "category": "Shakes & Malts",
+      "serving": "32 fl oz",
+      "calories": 920,
+      "protein_g": 19,
+      "carbs_g": 170,
+      "fat_g": 22,
+      "fiber_g": 2
+    },
+    {
+      "name": "Small Strawberry Shake (16 fl oz)",
+      "category": "Shakes & Malts",
+      "serving": "16 fl oz",
+      "calories": 450,
+      "protein_g": 9,
+      "carbs_g": 80,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Strawberry Shake (20 fl oz)",
+      "category": "Shakes & Malts",
+      "serving": "20 fl oz",
+      "calories": 560,
+      "protein_g": 12,
+      "carbs_g": 103,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Strawberry Shake (32 fl oz)",
+      "category": "Shakes & Malts",
+      "serving": "32 fl oz",
+      "calories": 890,
+      "protein_g": 19,
+      "carbs_g": 160,
+      "fat_g": 22,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Strawberry Malt (16 fl oz)",
+      "category": "Shakes & Malts",
+      "serving": "16 fl oz",
+      "calories": 460,
+      "protein_g": 9,
+      "carbs_g": 85,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Strawberry Malt (20 fl oz)",
+      "category": "Shakes & Malts",
+      "serving": "20 fl oz",
+      "calories": 590,
+      "protein_g": 11,
+      "carbs_g": 111,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Strawberry Malt (32 fl oz)",
+      "category": "Shakes & Malts",
+      "serving": "32 fl oz",
+      "calories": 920,
+      "protein_g": 18,
+      "carbs_g": 171,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Vanilla Shake (16 fl oz)",
+      "category": "Shakes & Malts",
+      "serving": "16 fl oz",
+      "calories": 410,
+      "protein_g": 10,
+      "carbs_g": 69,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Vanilla Shake (20 fl oz)",
+      "category": "Shakes & Malts",
+      "serving": "20 fl oz",
+      "calories": 510,
+      "protein_g": 13,
+      "carbs_g": 86,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Vanilla Shake (32 fl oz)",
+      "category": "Shakes & Malts",
+      "serving": "32 fl oz",
+      "calories": 820,
+      "protein_g": 21,
+      "carbs_g": 137,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Vanilla Malt (16 fl oz)",
+      "category": "Shakes & Malts",
+      "serving": "16 fl oz",
+      "calories": 430,
+      "protein_g": 10,
+      "carbs_g": 74,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Vanilla Malt (20 fl oz)",
+      "category": "Shakes & Malts",
+      "serving": "20 fl oz",
+      "calories": 540,
+      "protein_g": 12,
+      "carbs_g": 94,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Vanilla Malt (32 fl oz)",
+      "category": "Shakes & Malts",
+      "serving": "32 fl oz",
+      "calories": 860,
+      "protein_g": 20,
+      "carbs_g": 148,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid’s Coca-Cola Classic (16 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "16 fl oz",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 54,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Coca-Cola Classic (20 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "20 fl oz",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Coca-Cola Classic (32 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "32 fl oz",
+      "calories": 390,
+      "protein_g": 0,
+      "carbs_g": 107,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Coca-Cola Classic (44 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "44 fl oz",
+      "calories": 540,
+      "protein_g": 0,
+      "carbs_g": 147,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid’s Diet Coke (16 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "16 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Diet Coke (20 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "20 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Diet Coke (32 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "32 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Diet Coke (44 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "44 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid’s Coke Zero (16 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "16 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Coke Zero (20 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "20 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Coke Zero (32 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "32 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Coke Zero (44 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "44 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid’s Caffeine Free Diet Coke (16 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "16 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Caffeine Free Diet Coke (20 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "20 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Caffeine Free Diet Coke (32 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "32 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Caffeine Free Diet Coke (44 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "44 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid’s Cherry Coke (16 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "16 fl oz",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 56,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Cherry Coke (20 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "20 fl oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 70,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Cherry Coke (32 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "32 fl oz",
+      "calories": 410,
+      "protein_g": 0,
+      "carbs_g": 112,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Cherry Coke (44 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "44 fl oz",
+      "calories": 560,
+      "protein_g": 0,
+      "carbs_g": 154,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid’s Sprite (16 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "16 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 50,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Sprite (20 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "20 fl oz",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 62,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Sprite (32 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "32 fl oz",
+      "calories": 370,
+      "protein_g": 0,
+      "carbs_g": 99,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Sprite (44 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "44 fl oz",
+      "calories": 510,
+      "protein_g": 0,
+      "carbs_g": 137,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid’s Dr Pepper (16 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "16 fl oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 52,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Dr Pepper (20 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "20 fl oz",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Dr Pepper (32 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "32 fl oz",
+      "calories": 380,
+      "protein_g": 0,
+      "carbs_g": 104,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Dr Pepper (44 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "44 fl oz",
+      "calories": 530,
+      "protein_g": 0,
+      "carbs_g": 143,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid’s Diet Dr Pepper (16 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "16 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Diet Dr Pepper (20 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "20 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Diet Dr Pepper (32 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "32 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Diet Dr Pepper (44 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "44 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid’s Barq’s Root Beer (16 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "16 fl oz",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Barq’s Root Beer (20 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "20 fl oz",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 73,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Barq’s Root Beer (32 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "32 fl oz",
+      "calories": 430,
+      "protein_g": 0,
+      "carbs_g": 116,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Barq’s Root Beer (44 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "44 fl oz",
+      "calories": 590,
+      "protein_g": 0,
+      "carbs_g": 160,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid’s Minute Maid Light Lemonade (16 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "16 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Minute Maid Light Lemonade (20 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "20 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Minute Maid Light Lemonade (32 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "32 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Minute Maid Light Lemonade (44 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "44 fl oz",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 7,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid’s POWERADE Mountain Blast (16 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "16 fl oz",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 29,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small POWERADE Mountain Blast (20 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "20 fl oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 37,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium POWERADE Mountain Blast (32 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "32 fl oz",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large POWERADE Mountain Blast (44 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "44 fl oz",
+      "calories": 310,
+      "protein_g": 0,
+      "carbs_g": 80,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid’s POWERADE Fruit Punch (16 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "16 fl oz",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 30,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small POWERADE Fruit Punch (20 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "20 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 37,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium POWERADE Fruit Punch (32 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "32 fl oz",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 59,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large POWERADE Fruit Punch (44 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "44 fl oz",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 82,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid’s Hi-C Orange Lavaburst (16 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "16 fl oz",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Hi-C Orange Lavaburst (20 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "20 fl oz",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 73,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Hi-C Orange Lavaburst (32 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "32 fl oz",
+      "calories": 440,
+      "protein_g": 0,
+      "carbs_g": 116,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Hi-C Orange Lavaburst (44 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "44 fl oz",
+      "calories": 610,
+      "protein_g": 0,
+      "carbs_g": 160,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid’s Hi-C Poppin’ Pink Lemonade (16 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "16 fl oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 50,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Hi-C Poppin’ Pink Lemonade (20 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "20 fl oz",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 63,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Hi-C Poppin’ Pink Lemonade (32 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "32 fl oz",
+      "calories": 380,
+      "protein_g": 0,
+      "carbs_g": 100,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Hi-C Poppin’ Pink Lemonade (44 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "44 fl oz",
+      "calories": 520,
+      "protein_g": 0,
+      "carbs_g": 138,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid’s Fanta Orange (16 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "16 fl oz",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 54,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Fanta Orange (20 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "20 fl oz",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Fanta Orange (32 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "32 fl oz",
+      "calories": 390,
+      "protein_g": 0,
+      "carbs_g": 108,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Fanta Orange (44 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "44 fl oz",
+      "calories": 540,
+      "protein_g": 0,
+      "carbs_g": 148,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid’s Fanta Strawberry (16 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "16 fl oz",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 59,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Fanta Strawberry (20 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "20 fl oz",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 74,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Fanta Strawberry (32 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "32 fl oz",
+      "calories": 430,
+      "protein_g": 0,
+      "carbs_g": 118,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Fanta Strawberry (44 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "44 fl oz",
+      "calories": 600,
+      "protein_g": 0,
+      "carbs_g": 162,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid’s Mello Yello (16 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "16 fl oz",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Mello Yello (20 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "20 fl oz",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 73,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Mello Yello (32 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "32 fl oz",
+      "calories": 440,
+      "protein_g": 0,
+      "carbs_g": 116,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Mello Yello (44 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "44 fl oz",
+      "calories": 600,
+      "protein_g": 0,
+      "carbs_g": 160,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid’s Fuze Raspberry Tea (16 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "16 fl oz",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 31,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Fuze Raspberry Tea (20 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "20 fl oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 38,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Fuze Raspberry Tea (32 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "32 fl oz",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 61,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Fuze Raspberry Tea (44 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "44 fl oz",
+      "calories": 310,
+      "protein_g": 0,
+      "carbs_g": 84,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid’s Pibb Xtra (16 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "16 fl oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 50,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Pibb Xtra (20 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "20 fl oz",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 63,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Pibb Xtra (32 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "32 fl oz",
+      "calories": 380,
+      "protein_g": 0,
+      "carbs_g": 101,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Pibb Xtra (44 fl oz)",
+      "category": "Soft Drinks",
+      "serving": "44 fl oz",
+      "calories": 530,
+      "protein_g": 0,
+      "carbs_g": 139,
+      "fat_g": 0,
+      "fiber_g": 0
+    }
+  ]
+}

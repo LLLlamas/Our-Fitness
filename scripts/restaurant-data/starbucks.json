@@ -1,0 +1,6419 @@
+{
+  "chain": "Starbucks",
+  "slug": "starbucks",
+  "aliases": [
+    "starbucks",
+    "starbs",
+    "sbux",
+    "star bucks",
+    "starbuck",
+    "starbucks coffee"
+  ],
+  "kind": "coffee",
+  "source_url": "https://www.starbucks.com/menu",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Read from starbucks.com's own menu data (www.starbucks.com/apiproxy/v1/ordering/<product>/<form>, the feed behind each starbucks.com/menu/product page), US menu. Drinks are the standard recipe with the default milk named in 'serving' (e.g. 2% milk). Whole-bean / at-home coffee excluded. Products/sizes the site lists without nutrition were skipped. Atwater outliers (kept as published): Khloud™ Sweet & Salty Kettle Corn Protein Popcorn [1 item (30 g)] (150 cal vs Atwater 184).",
+  "items": [
+    {
+      "name": "Aerocano",
+      "category": "Trending",
+      "serving": "Tall 12 fl oz",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Aerocano",
+      "category": "Trending",
+      "serving": "Grande 16 fl oz",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Aerocano",
+      "category": "Trending",
+      "serving": "Venti 24 fl oz",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Aerocano",
+      "category": "Trending",
+      "serving": "Tall 12 fl oz",
+      "calories": 50,
+      "protein_g": 1,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Aerocano",
+      "category": "Trending",
+      "serving": "Grande 16 fl oz",
+      "calories": 80,
+      "protein_g": 1,
+      "carbs_g": 18,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Aerocano",
+      "category": "Trending",
+      "serving": "Venti 24 fl oz",
+      "calories": 100,
+      "protein_g": 1,
+      "carbs_g": 25,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Protein Latte",
+      "category": "Trending",
+      "serving": "Short 8 fl oz",
+      "calories": 160,
+      "protein_g": 14,
+      "carbs_g": 18,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Protein Latte",
+      "category": "Trending",
+      "serving": "Tall 12 fl oz",
+      "calories": 250,
+      "protein_g": 23,
+      "carbs_g": 28,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Protein Latte",
+      "category": "Trending",
+      "serving": "Grande 16 fl oz",
+      "calories": 320,
+      "protein_g": 27,
+      "carbs_g": 38,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Protein Latte",
+      "category": "Trending",
+      "serving": "Venti 20 fl oz",
+      "calories": 380,
+      "protein_g": 29,
+      "carbs_g": 48,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Caramel Protein Matcha",
+      "category": "Trending",
+      "serving": "Tall 12 fl oz",
+      "calories": 160,
+      "protein_g": 18,
+      "carbs_g": 15,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Caramel Protein Matcha",
+      "category": "Trending",
+      "serving": "Grande 16 fl oz",
+      "calories": 270,
+      "protein_g": 31,
+      "carbs_g": 26,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Caramel Protein Matcha",
+      "category": "Trending",
+      "serving": "Venti 24 fl oz",
+      "calories": 420,
+      "protein_g": 50,
+      "carbs_g": 40,
+      "fat_g": 7,
+      "fiber_g": 2
+    },
+    {
+      "name": "Iced Pecan Crunch Latte",
+      "category": "Trending",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 300,
+      "protein_g": 7,
+      "carbs_g": 35,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Pecan Crunch Latte",
+      "category": "Trending",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 380,
+      "protein_g": 10,
+      "carbs_g": 45,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Pecan Crunch Latte",
+      "category": "Trending",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 480,
+      "protein_g": 13,
+      "carbs_g": 61,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pecan Crunch Latte",
+      "category": "Trending",
+      "serving": "Short 8 fl oz, 2% milk",
+      "calories": 120,
+      "protein_g": 5,
+      "carbs_g": 19,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pecan Crunch Latte",
+      "category": "Trending",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 190,
+      "protein_g": 8,
+      "carbs_g": 28,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pecan Crunch Latte",
+      "category": "Trending",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 260,
+      "protein_g": 11,
+      "carbs_g": 39,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pecan Crunch Latte",
+      "category": "Trending",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 330,
+      "protein_g": 14,
+      "carbs_g": 49,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Vanilla Protein Latte",
+      "category": "High Protein Lattes",
+      "serving": "Tall 12 fl oz",
+      "calories": 210,
+      "protein_g": 22,
+      "carbs_g": 23,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Vanilla Protein Latte",
+      "category": "High Protein Lattes",
+      "serving": "Grande 16 fl oz",
+      "calories": 270,
+      "protein_g": 29,
+      "carbs_g": 31,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Vanilla Protein Latte",
+      "category": "High Protein Lattes",
+      "serving": "Venti 24 fl oz",
+      "calories": 390,
+      "protein_g": 40,
+      "carbs_g": 45,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Protein Matcha",
+      "category": "High Protein Lattes",
+      "serving": "Tall 12 fl oz",
+      "calories": 150,
+      "protein_g": 18,
+      "carbs_g": 14,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Protein Matcha",
+      "category": "High Protein Lattes",
+      "serving": "Grande 16 fl oz",
+      "calories": 260,
+      "protein_g": 31,
+      "carbs_g": 25,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Protein Matcha",
+      "category": "High Protein Lattes",
+      "serving": "Venti 24 fl oz",
+      "calories": 420,
+      "protein_g": 50,
+      "carbs_g": 38,
+      "fat_g": 7,
+      "fiber_g": 2
+    },
+    {
+      "name": "Iced Caramel Protein Latte",
+      "category": "High Protein Lattes",
+      "serving": "Tall 12 fl oz",
+      "calories": 220,
+      "protein_g": 22,
+      "carbs_g": 25,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Caramel Protein Latte",
+      "category": "High Protein Lattes",
+      "serving": "Grande 16 fl oz",
+      "calories": 280,
+      "protein_g": 29,
+      "carbs_g": 33,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Caramel Protein Latte",
+      "category": "High Protein Lattes",
+      "serving": "Venti 24 fl oz",
+      "calories": 400,
+      "protein_g": 40,
+      "carbs_g": 48,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Protein Latte",
+      "category": "High Protein Lattes",
+      "serving": "Short 8 fl oz",
+      "calories": 150,
+      "protein_g": 14,
+      "carbs_g": 17,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Protein Latte",
+      "category": "High Protein Lattes",
+      "serving": "Tall 12 fl oz",
+      "calories": 240,
+      "protein_g": 23,
+      "carbs_g": 26,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Protein Latte",
+      "category": "High Protein Lattes",
+      "serving": "Grande 16 fl oz",
+      "calories": 310,
+      "protein_g": 27,
+      "carbs_g": 36,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Protein Latte",
+      "category": "High Protein Lattes",
+      "serving": "Venti 20 fl oz",
+      "calories": 360,
+      "protein_g": 29,
+      "carbs_g": 45,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Protein Matcha",
+      "category": "High Protein Lattes",
+      "serving": "Short 8 fl oz",
+      "calories": 130,
+      "protein_g": 14,
+      "carbs_g": 12,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Protein Matcha",
+      "category": "High Protein Lattes",
+      "serving": "Tall 12 fl oz",
+      "calories": 220,
+      "protein_g": 22,
+      "carbs_g": 22,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Protein Matcha",
+      "category": "High Protein Lattes",
+      "serving": "Grande 16 fl oz",
+      "calories": 300,
+      "protein_g": 28,
+      "carbs_g": 32,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Protein Matcha",
+      "category": "High Protein Lattes",
+      "serving": "Venti 20 fl oz",
+      "calories": 370,
+      "protein_g": 31,
+      "carbs_g": 42,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramel Protein Matcha",
+      "category": "High Protein Lattes",
+      "serving": "Short 8 fl oz",
+      "calories": 130,
+      "protein_g": 14,
+      "carbs_g": 13,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Protein Matcha",
+      "category": "High Protein Lattes",
+      "serving": "Tall 12 fl oz",
+      "calories": 220,
+      "protein_g": 22,
+      "carbs_g": 23,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramel Protein Matcha",
+      "category": "High Protein Lattes",
+      "serving": "Grande 16 fl oz",
+      "calories": 310,
+      "protein_g": 28,
+      "carbs_g": 34,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramel Protein Matcha",
+      "category": "High Protein Lattes",
+      "serving": "Venti 20 fl oz",
+      "calories": 380,
+      "protein_g": 32,
+      "carbs_g": 45,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Sugar-Free Vanilla Protein Latte",
+      "category": "No Added Sugar Options",
+      "serving": "Tall 12 fl oz",
+      "calories": 150,
+      "protein_g": 22,
+      "carbs_g": 9,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Sugar-Free Vanilla Protein Latte",
+      "category": "No Added Sugar Options",
+      "serving": "Grande 16 fl oz",
+      "calories": 200,
+      "protein_g": 29,
+      "carbs_g": 12,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Sugar-Free Vanilla Protein Latte",
+      "category": "No Added Sugar Options",
+      "serving": "Venti 24 fl oz",
+      "calories": 280,
+      "protein_g": 40,
+      "carbs_g": 17,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Sugar-Free Vanilla Protein Matcha",
+      "category": "No Added Sugar Options",
+      "serving": "Tall 12 fl oz",
+      "calories": 130,
+      "protein_g": 18,
+      "carbs_g": 7,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Sugar-Free Vanilla Protein Matcha",
+      "category": "No Added Sugar Options",
+      "serving": "Grande 16 fl oz",
+      "calories": 210,
+      "protein_g": 31,
+      "carbs_g": 12,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Sugar-Free Vanilla Protein Matcha",
+      "category": "No Added Sugar Options",
+      "serving": "Venti 24 fl oz",
+      "calories": 340,
+      "protein_g": 50,
+      "carbs_g": 20,
+      "fat_g": 7,
+      "fiber_g": 2
+    },
+    {
+      "name": "Iced Sugar-Free Caramel Protein Latte",
+      "category": "No Added Sugar Options",
+      "serving": "Tall 12 fl oz",
+      "calories": 150,
+      "protein_g": 22,
+      "carbs_g": 9,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Sugar-Free Caramel Protein Latte",
+      "category": "No Added Sugar Options",
+      "serving": "Grande 16 fl oz",
+      "calories": 200,
+      "protein_g": 29,
+      "carbs_g": 12,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Sugar-Free Caramel Protein Latte",
+      "category": "No Added Sugar Options",
+      "serving": "Venti 24 fl oz",
+      "calories": 280,
+      "protein_g": 40,
+      "carbs_g": 16,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Sugar-Free Caramel Protein Matcha",
+      "category": "No Added Sugar Options",
+      "serving": "Tall 12 fl oz",
+      "calories": 130,
+      "protein_g": 18,
+      "carbs_g": 7,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Sugar-Free Caramel Protein Matcha",
+      "category": "No Added Sugar Options",
+      "serving": "Grande 16 fl oz",
+      "calories": 210,
+      "protein_g": 31,
+      "carbs_g": 12,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Sugar-Free Caramel Protein Matcha",
+      "category": "No Added Sugar Options",
+      "serving": "Venti 24 fl oz",
+      "calories": 340,
+      "protein_g": 50,
+      "carbs_g": 19,
+      "fat_g": 7,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sugar-Free Caramel Protein Latte",
+      "category": "No Added Sugar Options",
+      "serving": "Short 8 fl oz",
+      "calories": 110,
+      "protein_g": 14,
+      "carbs_g": 8,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sugar-Free Caramel Protein Latte",
+      "category": "No Added Sugar Options",
+      "serving": "Tall 12 fl oz",
+      "calories": 180,
+      "protein_g": 23,
+      "carbs_g": 12,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sugar-Free Caramel Protein Latte",
+      "category": "No Added Sugar Options",
+      "serving": "Grande 16 fl oz",
+      "calories": 230,
+      "protein_g": 27,
+      "carbs_g": 17,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sugar-Free Caramel Protein Latte",
+      "category": "No Added Sugar Options",
+      "serving": "Venti 20 fl oz",
+      "calories": 280,
+      "protein_g": 29,
+      "carbs_g": 21,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sugar-Free Caramel Protein Matcha",
+      "category": "No Added Sugar Options",
+      "serving": "Short 8 fl oz",
+      "calories": 110,
+      "protein_g": 14,
+      "carbs_g": 7,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sugar-Free Caramel Protein Matcha",
+      "category": "No Added Sugar Options",
+      "serving": "Tall 12 fl oz",
+      "calories": 180,
+      "protein_g": 22,
+      "carbs_g": 12,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sugar-Free Caramel Protein Matcha",
+      "category": "No Added Sugar Options",
+      "serving": "Grande 16 fl oz",
+      "calories": 240,
+      "protein_g": 28,
+      "carbs_g": 18,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sugar-Free Caramel Protein Matcha",
+      "category": "No Added Sugar Options",
+      "serving": "Venti 20 fl oz",
+      "calories": 300,
+      "protein_g": 32,
+      "carbs_g": 23,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sugar-Free Vanilla Protein Latte",
+      "category": "No Added Sugar Options",
+      "serving": "Short 8 fl oz",
+      "calories": 110,
+      "protein_g": 14,
+      "carbs_g": 8,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sugar-Free Vanilla Protein Latte",
+      "category": "No Added Sugar Options",
+      "serving": "Tall 12 fl oz",
+      "calories": 180,
+      "protein_g": 23,
+      "carbs_g": 12,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sugar-Free Vanilla Protein Latte",
+      "category": "No Added Sugar Options",
+      "serving": "Grande 16 fl oz",
+      "calories": 230,
+      "protein_g": 27,
+      "carbs_g": 17,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sugar-Free Vanilla Protein Latte",
+      "category": "No Added Sugar Options",
+      "serving": "Venti 20 fl oz",
+      "calories": 270,
+      "protein_g": 29,
+      "carbs_g": 21,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sugar-Free Vanilla Protein Matcha",
+      "category": "No Added Sugar Options",
+      "serving": "Short 8 fl oz",
+      "calories": 110,
+      "protein_g": 14,
+      "carbs_g": 7,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sugar-Free Vanilla Protein Matcha",
+      "category": "No Added Sugar Options",
+      "serving": "Tall 12 fl oz",
+      "calories": 180,
+      "protein_g": 22,
+      "carbs_g": 12,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sugar-Free Vanilla Protein Matcha",
+      "category": "No Added Sugar Options",
+      "serving": "Grande 16 fl oz",
+      "calories": 240,
+      "protein_g": 28,
+      "carbs_g": 18,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sugar-Free Vanilla Protein Matcha",
+      "category": "No Added Sugar Options",
+      "serving": "Venti 20 fl oz",
+      "calories": 300,
+      "protein_g": 31,
+      "carbs_g": 23,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Vanilla Protein Cream Shaken Espresso",
+      "category": "Protein Cold Foam Drinks",
+      "serving": "Tall 12 fl oz, oatmilk",
+      "calories": 310,
+      "protein_g": 15,
+      "carbs_g": 28,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Vanilla Protein Cream Shaken Espresso",
+      "category": "Protein Cold Foam Drinks",
+      "serving": "Grande 16 fl oz, oatmilk",
+      "calories": 410,
+      "protein_g": 19,
+      "carbs_g": 41,
+      "fat_g": 20,
+      "fiber_g": 2
+    },
+    {
+      "name": "Iced Vanilla Protein Cream Shaken Espresso",
+      "category": "Protein Cold Foam Drinks",
+      "serving": "Venti 24 fl oz, oatmilk",
+      "calories": 490,
+      "protein_g": 20,
+      "carbs_g": 53,
+      "fat_g": 23,
+      "fiber_g": 2
+    },
+    {
+      "name": "Iced Banana Protein Cream Matcha",
+      "category": "Protein Cold Foam Drinks",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 350,
+      "protein_g": 21,
+      "carbs_g": 31,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Banana Protein Cream Matcha",
+      "category": "Protein Cold Foam Drinks",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 400,
+      "protein_g": 23,
+      "carbs_g": 40,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Banana Protein Cream Matcha",
+      "category": "Protein Cold Foam Drinks",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 510,
+      "protein_g": 29,
+      "carbs_g": 53,
+      "fat_g": 21,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Protein Cream Cold Brew",
+      "category": "Protein Cold Foam Drinks",
+      "serving": "Tall 12 fl oz",
+      "calories": 230,
+      "protein_g": 13,
+      "carbs_g": 15,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Protein Cream Cold Brew",
+      "category": "Protein Cold Foam Drinks",
+      "serving": "Grande 16 fl oz",
+      "calories": 300,
+      "protein_g": 17,
+      "carbs_g": 23,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Protein Cream Cold Brew",
+      "category": "Protein Cold Foam Drinks",
+      "serving": "Venti 24 fl oz",
+      "calories": 340,
+      "protein_g": 18,
+      "carbs_g": 28,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Protein Cream Cold Brew",
+      "category": "Protein Cold Foam Drinks",
+      "serving": "Trenta 30 fl oz",
+      "calories": 360,
+      "protein_g": 18,
+      "carbs_g": 33,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blonde Roast - Starbucks® Sunsera",
+      "category": "Brewed Coffee",
+      "serving": "Short 8 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blonde Roast - Starbucks® Sunsera",
+      "category": "Brewed Coffee",
+      "serving": "Tall 12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blonde Roast - Starbucks® Sunsera",
+      "category": "Brewed Coffee",
+      "serving": "Grande 16 fl oz",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blonde Roast - Starbucks® Sunsera",
+      "category": "Brewed Coffee",
+      "serving": "Venti 20 fl oz",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Roast - Pike Place® Roast",
+      "category": "Brewed Coffee",
+      "serving": "Short 8 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Roast - Pike Place® Roast",
+      "category": "Brewed Coffee",
+      "serving": "Tall 12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Roast - Pike Place® Roast",
+      "category": "Brewed Coffee",
+      "serving": "Grande 16 fl oz",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Roast - Pike Place® Roast",
+      "category": "Brewed Coffee",
+      "serving": "Venti 20 fl oz",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Featured Dark Roast - Starbucks 1971 Roast™",
+      "category": "Brewed Coffee",
+      "serving": "Short 8 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Featured Dark Roast - Starbucks 1971 Roast™",
+      "category": "Brewed Coffee",
+      "serving": "Tall 12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Featured Dark Roast - Starbucks 1971 Roast™",
+      "category": "Brewed Coffee",
+      "serving": "Grande 16 fl oz",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Featured Dark Roast - Starbucks 1971 Roast™",
+      "category": "Brewed Coffee",
+      "serving": "Venti 20 fl oz",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Half-Caff – Pike Place® Roast",
+      "category": "Brewed Coffee",
+      "serving": "Short 8 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Half-Caff – Pike Place® Roast",
+      "category": "Brewed Coffee",
+      "serving": "Tall 12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Half-Caff – Pike Place® Roast",
+      "category": "Brewed Coffee",
+      "serving": "Grande 16 fl oz",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Half-Caff – Pike Place® Roast",
+      "category": "Brewed Coffee",
+      "serving": "Venti 20 fl oz",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Decaf Roast - Pike Place® Roast",
+      "category": "Brewed Coffee",
+      "serving": "Short 8 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Decaf Roast - Pike Place® Roast",
+      "category": "Brewed Coffee",
+      "serving": "Tall 12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Decaf Roast - Pike Place® Roast",
+      "category": "Brewed Coffee",
+      "serving": "Grande 16 fl oz",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Decaf Roast - Pike Place® Roast",
+      "category": "Brewed Coffee",
+      "serving": "Venti 20 fl oz",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caffè Misto",
+      "category": "Brewed Coffee",
+      "serving": "Short 8 fl oz, 2% milk",
+      "calories": 50,
+      "protein_g": 4,
+      "carbs_g": 5,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caffè Misto",
+      "category": "Brewed Coffee",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 80,
+      "protein_g": 5,
+      "carbs_g": 8,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caffè Misto",
+      "category": "Brewed Coffee",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 110,
+      "protein_g": 7,
+      "carbs_g": 10,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caffè Misto",
+      "category": "Brewed Coffee",
+      "serving": "Venti 20 fl oz, 2% milk",
+      "calories": 130,
+      "protein_g": 9,
+      "carbs_g": 13,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caffè Americano",
+      "category": "Americano",
+      "serving": "Short 8 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caffè Americano",
+      "category": "Americano",
+      "serving": "Tall 12 fl oz",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caffè Americano",
+      "category": "Americano",
+      "serving": "Grande 16 fl oz",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caffè Americano",
+      "category": "Americano",
+      "serving": "Venti 20 fl oz",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caffè Latte",
+      "category": "Latte",
+      "serving": "Short 8 fl oz, 2% milk",
+      "calories": 100,
+      "protein_g": 6,
+      "carbs_g": 10,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caffè Latte",
+      "category": "Latte",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 150,
+      "protein_g": 10,
+      "carbs_g": 15,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caffè Latte",
+      "category": "Latte",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 190,
+      "protein_g": 13,
+      "carbs_g": 19,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caffè Latte",
+      "category": "Latte",
+      "serving": "Venti 20 fl oz, 2% milk",
+      "calories": 250,
+      "protein_g": 16,
+      "carbs_g": 24,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lavender Latte",
+      "category": "Latte",
+      "serving": "Short 8 fl oz, 2% milk",
+      "calories": 100,
+      "protein_g": 5,
+      "carbs_g": 13,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lavender Latte",
+      "category": "Latte",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 170,
+      "protein_g": 8,
+      "carbs_g": 23,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lavender Latte",
+      "category": "Latte",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 240,
+      "protein_g": 12,
+      "carbs_g": 33,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lavender Latte",
+      "category": "Latte",
+      "serving": "Venti 20 fl oz, 2% milk",
+      "calories": 310,
+      "protein_g": 15,
+      "carbs_g": 43,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Toasted Coconut Latte",
+      "category": "Latte",
+      "serving": "Short 8 fl oz, 2% milk",
+      "calories": 100,
+      "protein_g": 5,
+      "carbs_g": 15,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Toasted Coconut Latte",
+      "category": "Latte",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 160,
+      "protein_g": 8,
+      "carbs_g": 22,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Toasted Coconut Latte",
+      "category": "Latte",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 230,
+      "protein_g": 11,
+      "carbs_g": 31,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Toasted Coconut Latte",
+      "category": "Latte",
+      "serving": "Venti 20 fl oz, 2% milk",
+      "calories": 290,
+      "protein_g": 14,
+      "carbs_g": 39,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pistachio Latte",
+      "category": "Latte",
+      "serving": "Short 8 fl oz, 2% milk",
+      "calories": 150,
+      "protein_g": 6,
+      "carbs_g": 23,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pistachio Latte",
+      "category": "Latte",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 230,
+      "protein_g": 9,
+      "carbs_g": 35,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pistachio Latte",
+      "category": "Latte",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 320,
+      "protein_g": 12,
+      "carbs_g": 48,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pistachio Latte",
+      "category": "Latte",
+      "serving": "Venti 20 fl oz, 2% milk",
+      "calories": 400,
+      "protein_g": 16,
+      "carbs_g": 60,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cinnamon Dolce Latte",
+      "category": "Latte",
+      "serving": "Short 8 fl oz, 2% milk",
+      "calories": 190,
+      "protein_g": 6,
+      "carbs_g": 22,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cinnamon Dolce Latte",
+      "category": "Latte",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 270,
+      "protein_g": 9,
+      "carbs_g": 33,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cinnamon Dolce Latte",
+      "category": "Latte",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 340,
+      "protein_g": 12,
+      "carbs_g": 43,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cinnamon Dolce Latte",
+      "category": "Latte",
+      "serving": "Venti 20 fl oz, 2% milk",
+      "calories": 420,
+      "protein_g": 15,
+      "carbs_g": 54,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Starbucks® Blonde Vanilla Latte",
+      "category": "Latte",
+      "serving": "Short 8 fl oz, 2% milk",
+      "calories": 130,
+      "protein_g": 6,
+      "carbs_g": 18,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Starbucks® Blonde Vanilla Latte",
+      "category": "Latte",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 200,
+      "protein_g": 9,
+      "carbs_g": 28,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Starbucks® Blonde Vanilla Latte",
+      "category": "Latte",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 250,
+      "protein_g": 12,
+      "carbs_g": 37,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Starbucks® Blonde Vanilla Latte",
+      "category": "Latte",
+      "serving": "Venti 20 fl oz, 2% milk",
+      "calories": 320,
+      "protein_g": 15,
+      "carbs_g": 46,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino",
+      "category": "Cappuccino",
+      "serving": "Short 8 fl oz, 2% milk",
+      "calories": 70,
+      "protein_g": 4,
+      "carbs_g": 7,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino",
+      "category": "Cappuccino",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 100,
+      "protein_g": 7,
+      "carbs_g": 10,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino",
+      "category": "Cappuccino",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 140,
+      "protein_g": 9,
+      "carbs_g": 14,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino",
+      "category": "Cappuccino",
+      "serving": "Venti 20 fl oz, 2% milk",
+      "calories": 200,
+      "protein_g": 13,
+      "carbs_g": 20,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caffè Mocha",
+      "category": "Mocha",
+      "serving": "Short 8 fl oz, 2% milk",
+      "calories": 200,
+      "protein_g": 7,
+      "carbs_g": 22,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Caffè Mocha",
+      "category": "Mocha",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 290,
+      "protein_g": 11,
+      "carbs_g": 33,
+      "fat_g": 13,
+      "fiber_g": 3
+    },
+    {
+      "name": "Caffè Mocha",
+      "category": "Mocha",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 370,
+      "protein_g": 14,
+      "carbs_g": 43,
+      "fat_g": 15,
+      "fiber_g": 4
+    },
+    {
+      "name": "Caffè Mocha",
+      "category": "Mocha",
+      "serving": "Venti 20 fl oz, 2% milk",
+      "calories": 450,
+      "protein_g": 18,
+      "carbs_g": 54,
+      "fat_g": 18,
+      "fiber_g": 5
+    },
+    {
+      "name": "White Chocolate Mocha",
+      "category": "Mocha",
+      "serving": "Short 8 fl oz, 2% milk",
+      "calories": 200,
+      "protein_g": 6,
+      "carbs_g": 23,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Chocolate Mocha",
+      "category": "Mocha",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 290,
+      "protein_g": 10,
+      "carbs_g": 35,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Chocolate Mocha",
+      "category": "Mocha",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 390,
+      "protein_g": 13,
+      "carbs_g": 47,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Chocolate Mocha",
+      "category": "Mocha",
+      "serving": "Venti 20 fl oz, 2% milk",
+      "calories": 480,
+      "protein_g": 17,
+      "carbs_g": 59,
+      "fat_g": 20,
+      "fiber_g": 0
+    },
+    {
+      "name": "Espresso Macchiato",
+      "category": "Macchiato",
+      "serving": "Single 0.8 fl oz, 2% milk",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Espresso Macchiato",
+      "category": "Macchiato",
+      "serving": "Double 1.6 fl oz, 2% milk",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Espresso Macchiato",
+      "category": "Macchiato",
+      "serving": "Triple 2.3 fl oz, 2% milk",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Espresso Macchiato",
+      "category": "Macchiato",
+      "serving": "Quad 3.1 fl oz, 2% milk",
+      "calories": 25,
+      "protein_g": 2,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Macchiato",
+      "category": "Macchiato",
+      "serving": "Short 8 fl oz, 2% milk",
+      "calories": 120,
+      "protein_g": 5,
+      "carbs_g": 16,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Macchiato",
+      "category": "Macchiato",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 190,
+      "protein_g": 8,
+      "carbs_g": 26,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Macchiato",
+      "category": "Macchiato",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 250,
+      "protein_g": 10,
+      "carbs_g": 35,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Macchiato",
+      "category": "Macchiato",
+      "serving": "Venti 20 fl oz, 2% milk",
+      "calories": 310,
+      "protein_g": 13,
+      "carbs_g": 44,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Flat White",
+      "category": "Flat White",
+      "serving": "Short 8 fl oz, whole milk",
+      "calories": 110,
+      "protein_g": 6,
+      "carbs_g": 9,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Flat White",
+      "category": "Flat White",
+      "serving": "Tall 12 fl oz, whole milk",
+      "calories": 170,
+      "protein_g": 9,
+      "carbs_g": 14,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Flat White",
+      "category": "Flat White",
+      "serving": "Grande 16 fl oz, whole milk",
+      "calories": 220,
+      "protein_g": 12,
+      "carbs_g": 18,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Flat White",
+      "category": "Flat White",
+      "serving": "Venti 20 fl oz, whole milk",
+      "calories": 290,
+      "protein_g": 15,
+      "carbs_g": 24,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cortado",
+      "category": "Cortado",
+      "serving": "Short 8 fl oz, whole milk",
+      "calories": 90,
+      "protein_g": 5,
+      "carbs_g": 8,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pecan Cortado",
+      "category": "Cortado",
+      "serving": "Short 8 fl oz, whole milk",
+      "calories": 130,
+      "protein_g": 5,
+      "carbs_g": 19,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pistachio Cortado",
+      "category": "Cortado",
+      "serving": "Short 8 fl oz, whole milk",
+      "calories": 150,
+      "protein_g": 5,
+      "carbs_g": 22,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brown Sugar Oatmilk Cortado",
+      "category": "Cortado",
+      "serving": "Short 8 fl oz, oatmilk",
+      "calories": 130,
+      "protein_g": 1,
+      "carbs_g": 24,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Espresso",
+      "category": "Espresso Shot",
+      "serving": "Single 0.75 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Espresso",
+      "category": "Espresso Shot",
+      "serving": "Double 1.5 fl oz",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Espresso",
+      "category": "Espresso Shot",
+      "serving": "Triple 2.25 fl oz",
+      "calories": 15,
+      "protein_g": 2,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Espresso",
+      "category": "Espresso Shot",
+      "serving": "Quad 3 fl oz",
+      "calories": 20,
+      "protein_g": 2,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Espresso Con Panna",
+      "category": "Espresso Shot",
+      "serving": "Single 0.75 fl oz",
+      "calories": 30,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Espresso Con Panna",
+      "category": "Espresso Shot",
+      "serving": "Double 1.5 fl oz",
+      "calories": 35,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Espresso Con Panna",
+      "category": "Espresso Shot",
+      "serving": "Triple 2.25 fl oz",
+      "calories": 40,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Espresso Con Panna",
+      "category": "Espresso Shot",
+      "serving": "Quad 3 fl oz",
+      "calories": 45,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee Traveler – Pike Place® Roast",
+      "category": "Coffee Traveler",
+      "serving": "Traveler 8 fl oz",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee Traveler – Decaf Pike Place® Roast",
+      "category": "Coffee Traveler",
+      "serving": "Traveler 8 fl oz",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Tall 12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Grande 16 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Venti 24 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Trenta 30 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Orange Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Tall 12 fl oz",
+      "calories": 200,
+      "protein_g": 2,
+      "carbs_g": 22,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Orange Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Grande 16 fl oz",
+      "calories": 240,
+      "protein_g": 2,
+      "carbs_g": 28,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Orange Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Venti 24 fl oz",
+      "calories": 280,
+      "protein_g": 2,
+      "carbs_g": 35,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Orange Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Trenta 30 fl oz",
+      "calories": 320,
+      "protein_g": 2,
+      "carbs_g": 41,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Toasted Coconut Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Tall 12 fl oz",
+      "calories": 180,
+      "protein_g": 2,
+      "carbs_g": 19,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Toasted Coconut Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Grande 16 fl oz",
+      "calories": 240,
+      "protein_g": 2,
+      "carbs_g": 27,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Toasted Coconut Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Venti 24 fl oz",
+      "calories": 250,
+      "protein_g": 2,
+      "carbs_g": 32,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Toasted Coconut Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Trenta 30 fl oz",
+      "calories": 290,
+      "protein_g": 2,
+      "carbs_g": 38,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pistachio Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Tall 12 fl oz",
+      "calories": 210,
+      "protein_g": 2,
+      "carbs_g": 25,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pistachio Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Grande 16 fl oz",
+      "calories": 250,
+      "protein_g": 2,
+      "carbs_g": 33,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pistachio Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Venti 24 fl oz",
+      "calories": 280,
+      "protein_g": 2,
+      "carbs_g": 38,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pistachio Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Trenta 30 fl oz",
+      "calories": 310,
+      "protein_g": 3,
+      "carbs_g": 44,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Sweet Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Tall 12 fl oz",
+      "calories": 90,
+      "protein_g": 1,
+      "carbs_g": 9,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Sweet Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Grande 16 fl oz",
+      "calories": 110,
+      "protein_g": 1,
+      "carbs_g": 14,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Sweet Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Venti 24 fl oz",
+      "calories": 200,
+      "protein_g": 2,
+      "carbs_g": 23,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Sweet Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Trenta 30 fl oz",
+      "calories": 220,
+      "protein_g": 2,
+      "carbs_g": 28,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salted Caramel Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Tall 12 fl oz",
+      "calories": 190,
+      "protein_g": 2,
+      "carbs_g": 19,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salted Caramel Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Grande 16 fl oz",
+      "calories": 240,
+      "protein_g": 2,
+      "carbs_g": 26,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salted Caramel Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Venti 24 fl oz",
+      "calories": 270,
+      "protein_g": 2,
+      "carbs_g": 32,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salted Caramel Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Trenta 30 fl oz",
+      "calories": 300,
+      "protein_g": 2,
+      "carbs_g": 37,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Tall 12 fl oz",
+      "calories": 190,
+      "protein_g": 2,
+      "carbs_g": 19,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Grande 16 fl oz",
+      "calories": 240,
+      "protein_g": 3,
+      "carbs_g": 26,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Venti 24 ct",
+      "calories": 270,
+      "protein_g": 3,
+      "carbs_g": 32,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Trenta 30 fl oz",
+      "calories": 290,
+      "protein_g": 3,
+      "carbs_g": 36,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Nondairy Vanilla Sweet Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Tall 12 fl oz",
+      "calories": 80,
+      "protein_g": 1,
+      "carbs_g": 9,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Nondairy Vanilla Sweet Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Grande 16 fl oz",
+      "calories": 100,
+      "protein_g": 1,
+      "carbs_g": 14,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Nondairy Vanilla Sweet Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Venti 24 fl oz",
+      "calories": 170,
+      "protein_g": 3,
+      "carbs_g": 23,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Nondairy Vanilla Sweet Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Trenta 30 fl oz",
+      "calories": 190,
+      "protein_g": 3,
+      "carbs_g": 28,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Nondairy Salted Caramel Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Tall 12 fl oz",
+      "calories": 130,
+      "protein_g": 2,
+      "carbs_g": 15,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Nondairy Salted Caramel Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Grande 16 fl oz",
+      "calories": 150,
+      "protein_g": 2,
+      "carbs_g": 19,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Nondairy Salted Caramel Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Venti 24 fl oz",
+      "calories": 180,
+      "protein_g": 2,
+      "carbs_g": 26,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Nondairy Salted Caramel Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Trenta 30 fl oz",
+      "calories": 230,
+      "protein_g": 3,
+      "carbs_g": 33,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew with Nondairy Vanilla Sweet Cream Cold Foam",
+      "category": "Cold Brew",
+      "serving": "Tall 12 fl oz",
+      "calories": 100,
+      "protein_g": 2,
+      "carbs_g": 11,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew with Nondairy Vanilla Sweet Cream Cold Foam",
+      "category": "Cold Brew",
+      "serving": "Grande 16 fl oz",
+      "calories": 160,
+      "protein_g": 3,
+      "carbs_g": 19,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew with Nondairy Vanilla Sweet Cream Cold Foam",
+      "category": "Cold Brew",
+      "serving": "Venti 24 fl oz",
+      "calories": 190,
+      "protein_g": 3,
+      "carbs_g": 24,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew with Nondairy Vanilla Sweet Cream Cold Foam",
+      "category": "Cold Brew",
+      "serving": "Trenta 30 fl oz",
+      "calories": 220,
+      "protein_g": 3,
+      "carbs_g": 30,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Nondairy Chocolate Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Tall 12 fl oz",
+      "calories": 150,
+      "protein_g": 3,
+      "carbs_g": 18,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Nondairy Chocolate Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Grande 16 fl oz",
+      "calories": 190,
+      "protein_g": 3,
+      "carbs_g": 24,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Nondairy Chocolate Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Venti 24 fl oz",
+      "calories": 230,
+      "protein_g": 4,
+      "carbs_g": 31,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Nondairy Chocolate Cream Cold Brew",
+      "category": "Cold Brew",
+      "serving": "Trenta 30 fl oz",
+      "calories": 250,
+      "protein_g": 4,
+      "carbs_g": 36,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Nitro Cold Brew",
+      "category": "Nitro Cold Brew",
+      "serving": "Tall 12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Nitro Cold Brew",
+      "category": "Nitro Cold Brew",
+      "serving": "Grande 16 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Sweet Cream Nitro Cold Brew",
+      "category": "Nitro Cold Brew",
+      "serving": "Tall 12 fl oz",
+      "calories": 70,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Sweet Cream Nitro Cold Brew",
+      "category": "Nitro Cold Brew",
+      "serving": "Grande 16 fl oz",
+      "calories": 70,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee",
+      "category": "Iced Coffee",
+      "serving": "Tall 12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee",
+      "category": "Iced Coffee",
+      "serving": "Grande 16 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee",
+      "category": "Iced Coffee",
+      "serving": "Venti 24 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee",
+      "category": "Iced Coffee",
+      "serving": "Trenta 30 fl oz",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Shaken Espresso",
+      "category": "Iced Shaken Espresso",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 70,
+      "protein_g": 3,
+      "carbs_g": 11,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Shaken Espresso",
+      "category": "Iced Shaken Espresso",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 100,
+      "protein_g": 4,
+      "carbs_g": 17,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Shaken Espresso",
+      "category": "Iced Shaken Espresso",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 160,
+      "protein_g": 6,
+      "carbs_g": 25,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Horchata Shaken Espresso",
+      "category": "Iced Shaken Espresso",
+      "serving": "Tall 12 fl oz, oatmilk",
+      "calories": 100,
+      "protein_g": 1,
+      "carbs_g": 17,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Horchata Shaken Espresso",
+      "category": "Iced Shaken Espresso",
+      "serving": "Grande 16 fl oz, oatmilk",
+      "calories": 150,
+      "protein_g": 2,
+      "carbs_g": 28,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Horchata Shaken Espresso",
+      "category": "Iced Shaken Espresso",
+      "serving": "Venti 24 fl oz, oatmilk",
+      "calories": 220,
+      "protein_g": 3,
+      "carbs_g": 40,
+      "fat_g": 6,
+      "fiber_g": 2
+    },
+    {
+      "name": "Iced Brown Sugar Oatmilk Shaken Espresso",
+      "category": "Iced Shaken Espresso",
+      "serving": "Tall 12 fl oz, oatmilk",
+      "calories": 100,
+      "protein_g": 1,
+      "carbs_g": 18,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Brown Sugar Oatmilk Shaken Espresso",
+      "category": "Iced Shaken Espresso",
+      "serving": "Grande 16 fl oz, oatmilk",
+      "calories": 150,
+      "protein_g": 2,
+      "carbs_g": 27,
+      "fat_g": 4,
+      "fiber_g": 2
+    },
+    {
+      "name": "Iced Brown Sugar Oatmilk Shaken Espresso",
+      "category": "Iced Shaken Espresso",
+      "serving": "Venti 24 fl oz, oatmilk",
+      "calories": 220,
+      "protein_g": 3,
+      "carbs_g": 39,
+      "fat_g": 6,
+      "fiber_g": 2
+    },
+    {
+      "name": "Iced Hazelnut Oatmilk Shaken Espresso",
+      "category": "Iced Shaken Espresso",
+      "serving": "Tall 12 fl oz, oatmilk",
+      "calories": 100,
+      "protein_g": 1,
+      "carbs_g": 17,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Hazelnut Oatmilk Shaken Espresso",
+      "category": "Iced Shaken Espresso",
+      "serving": "Grande 16 fl oz, oatmilk",
+      "calories": 150,
+      "protein_g": 2,
+      "carbs_g": 27,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Hazelnut Oatmilk Shaken Espresso",
+      "category": "Iced Shaken Espresso",
+      "serving": "Venti 24 fl oz, oatmilk",
+      "calories": 220,
+      "protein_g": 3,
+      "carbs_g": 40,
+      "fat_g": 6,
+      "fiber_g": 2
+    },
+    {
+      "name": "Iced Espresso",
+      "category": "Iced Espresso",
+      "serving": "Single 0.75 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Espresso",
+      "category": "Iced Espresso",
+      "serving": "Double 1.5 fl oz",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Espresso",
+      "category": "Iced Espresso",
+      "serving": "Triple 2.25 fl oz",
+      "calories": 15,
+      "protein_g": 2,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Espresso",
+      "category": "Iced Espresso",
+      "serving": "Quad 3 fl oz",
+      "calories": 20,
+      "protein_g": 2,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Caffè Americano",
+      "category": "Iced Americano",
+      "serving": "Tall 12 fl oz",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Caffè Americano",
+      "category": "Iced Americano",
+      "serving": "Grande 16 fl oz",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Caffè Americano",
+      "category": "Iced Americano",
+      "serving": "Venti 24 fl oz",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Caffè Latte",
+      "category": "Iced Latte",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 100,
+      "protein_g": 6,
+      "carbs_g": 10,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Caffè Latte",
+      "category": "Iced Latte",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 130,
+      "protein_g": 8,
+      "carbs_g": 13,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Caffè Latte",
+      "category": "Iced Latte",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 180,
+      "protein_g": 12,
+      "carbs_g": 18,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Banana Bread Latte",
+      "category": "Iced Latte",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 290,
+      "protein_g": 7,
+      "carbs_g": 38,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Banana Bread Latte",
+      "category": "Iced Latte",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 360,
+      "protein_g": 9,
+      "carbs_g": 49,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Banana Bread Latte",
+      "category": "Iced Latte",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 470,
+      "protein_g": 12,
+      "carbs_g": 66,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Lavender Latte",
+      "category": "Iced Latte",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 130,
+      "protein_g": 6,
+      "carbs_g": 19,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Lavender Latte",
+      "category": "Iced Latte",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 180,
+      "protein_g": 8,
+      "carbs_g": 27,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Lavender Latte",
+      "category": "Iced Latte",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 250,
+      "protein_g": 11,
+      "carbs_g": 37,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Toasted Coconut Latte",
+      "category": "Iced Latte",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 130,
+      "protein_g": 6,
+      "carbs_g": 19,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Toasted Coconut Latte",
+      "category": "Iced Latte",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 170,
+      "protein_g": 8,
+      "carbs_g": 26,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Toasted Coconut Latte",
+      "category": "Iced Latte",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 250,
+      "protein_g": 11,
+      "carbs_g": 38,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Pistachio Latte",
+      "category": "Iced Latte",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 190,
+      "protein_g": 7,
+      "carbs_g": 32,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Pistachio Latte",
+      "category": "Iced Latte",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 260,
+      "protein_g": 9,
+      "carbs_g": 42,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Pistachio Latte",
+      "category": "Iced Latte",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 370,
+      "protein_g": 12,
+      "carbs_g": 62,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Starbucks® Blonde Vanilla Latte",
+      "category": "Iced Latte",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 140,
+      "protein_g": 6,
+      "carbs_g": 23,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Starbucks® Blonde Vanilla Latte",
+      "category": "Iced Latte",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 190,
+      "protein_g": 7,
+      "carbs_g": 30,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Starbucks® Blonde Vanilla Latte",
+      "category": "Iced Latte",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 270,
+      "protein_g": 10,
+      "carbs_g": 45,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Cinnamon Dolce Latte",
+      "category": "Iced Latte",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 240,
+      "protein_g": 6,
+      "carbs_g": 29,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Cinnamon Dolce Latte",
+      "category": "Iced Latte",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 300,
+      "protein_g": 8,
+      "carbs_g": 38,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Cinnamon Dolce Latte",
+      "category": "Iced Latte",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 420,
+      "protein_g": 12,
+      "carbs_g": 55,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Caffè Mocha",
+      "category": "Iced Mocha",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 260,
+      "protein_g": 8,
+      "carbs_g": 29,
+      "fat_g": 13,
+      "fiber_g": 3
+    },
+    {
+      "name": "Iced Caffè Mocha",
+      "category": "Iced Mocha",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 350,
+      "protein_g": 10,
+      "carbs_g": 38,
+      "fat_g": 17,
+      "fiber_g": 4
+    },
+    {
+      "name": "Iced Caffè Mocha",
+      "category": "Iced Mocha",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 450,
+      "protein_g": 14,
+      "carbs_g": 55,
+      "fat_g": 20,
+      "fiber_g": 6
+    },
+    {
+      "name": "Iced Dubai Chocolate Mocha",
+      "category": "Iced Mocha",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 330,
+      "protein_g": 9,
+      "carbs_g": 41,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Dubai Chocolate Mocha",
+      "category": "Iced Mocha",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 470,
+      "protein_g": 12,
+      "carbs_g": 63,
+      "fat_g": 20,
+      "fiber_g": 2
+    },
+    {
+      "name": "Iced Dubai Chocolate Mocha",
+      "category": "Iced Mocha",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 620,
+      "protein_g": 16,
+      "carbs_g": 85,
+      "fat_g": 25,
+      "fiber_g": 3
+    },
+    {
+      "name": "Iced White Chocolate Mocha",
+      "category": "Iced Mocha",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 290,
+      "protein_g": 8,
+      "carbs_g": 33,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced White Chocolate Mocha",
+      "category": "Iced Mocha",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 390,
+      "protein_g": 11,
+      "carbs_g": 44,
+      "fat_g": 20,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced White Chocolate Mocha",
+      "category": "Iced Mocha",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 520,
+      "protein_g": 15,
+      "carbs_g": 64,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Caramel Macchiato",
+      "category": "Iced Macchiato",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 180,
+      "protein_g": 7,
+      "carbs_g": 26,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Caramel Macchiato",
+      "category": "Iced Macchiato",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 250,
+      "protein_g": 10,
+      "carbs_g": 37,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Caramel Macchiato",
+      "category": "Iced Macchiato",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 350,
+      "protein_g": 13,
+      "carbs_g": 53,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Flat White",
+      "category": "Iced Flat White",
+      "serving": "Tall 12 fl oz, whole milk",
+      "calories": 110,
+      "protein_g": 6,
+      "carbs_g": 10,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Flat White",
+      "category": "Iced Flat White",
+      "serving": "Grande 16 fl oz, whole milk",
+      "calories": 150,
+      "protein_g": 8,
+      "carbs_g": 13,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Flat White",
+      "category": "Iced Flat White",
+      "serving": "Venti 24 fl oz, whole milk",
+      "calories": 220,
+      "protein_g": 12,
+      "carbs_g": 19,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chai Latte",
+      "category": "Classic Chai",
+      "serving": "Short 8 fl oz, 2% milk",
+      "calories": 80,
+      "protein_g": 3,
+      "carbs_g": 14,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chai Latte",
+      "category": "Classic Chai",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 130,
+      "protein_g": 5,
+      "carbs_g": 21,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chai Latte",
+      "category": "Classic Chai",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 200,
+      "protein_g": 7,
+      "carbs_g": 33,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chai Latte",
+      "category": "Classic Chai",
+      "serving": "Venti 20 fl oz, 2% milk",
+      "calories": 270,
+      "protein_g": 10,
+      "carbs_g": 44,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Chai Latte",
+      "category": "Classic Chai",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 140,
+      "protein_g": 4,
+      "carbs_g": 24,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Chai Latte",
+      "category": "Classic Chai",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 190,
+      "protein_g": 6,
+      "carbs_g": 32,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Chai Latte",
+      "category": "Classic Chai",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 270,
+      "protein_g": 8,
+      "carbs_g": 47,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Chaider",
+      "category": "Chaider",
+      "serving": "Tall 12 fl oz",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 16,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Chaider",
+      "category": "Chaider",
+      "serving": "Grande 16 fl oz",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Chaider",
+      "category": "Chaider",
+      "serving": "Venti 24 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 32,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Chaider",
+      "category": "Chaider",
+      "serving": "Trenta 30 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Banana Bread Chai",
+      "category": "Specialty Chai",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 280,
+      "protein_g": 6,
+      "carbs_g": 39,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Banana Bread Chai",
+      "category": "Specialty Chai",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 350,
+      "protein_g": 8,
+      "carbs_g": 50,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Banana Bread Chai",
+      "category": "Specialty Chai",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 460,
+      "protein_g": 10,
+      "carbs_g": 66,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Orange Cream Chai",
+      "category": "Specialty Chai",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 320,
+      "protein_g": 6,
+      "carbs_g": 41,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Orange Cream Chai",
+      "category": "Specialty Chai",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 390,
+      "protein_g": 8,
+      "carbs_g": 51,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Orange Cream Chai",
+      "category": "Specialty Chai",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 490,
+      "protein_g": 10,
+      "carbs_g": 68,
+      "fat_g": 20,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Mango Cream Chai",
+      "category": "Specialty Chai",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 230,
+      "protein_g": 5,
+      "carbs_g": 32,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Mango Cream Chai",
+      "category": "Specialty Chai",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 310,
+      "protein_g": 7,
+      "carbs_g": 43,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Mango Cream Chai",
+      "category": "Specialty Chai",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 410,
+      "protein_g": 10,
+      "carbs_g": 60,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Lavender Cream Chai",
+      "category": "Specialty Chai",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 320,
+      "protein_g": 6,
+      "carbs_g": 41,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Lavender Cream Chai",
+      "category": "Specialty Chai",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 380,
+      "protein_g": 8,
+      "carbs_g": 50,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Lavender Cream Chai",
+      "category": "Specialty Chai",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 500,
+      "protein_g": 10,
+      "carbs_g": 69,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Matcha Latte",
+      "category": "Classic Matcha",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 120,
+      "protein_g": 6,
+      "carbs_g": 17,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Matcha Latte",
+      "category": "Classic Matcha",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 190,
+      "protein_g": 9,
+      "carbs_g": 27,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Matcha Latte",
+      "category": "Classic Matcha",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 240,
+      "protein_g": 11,
+      "carbs_g": 34,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Matcha Latte",
+      "category": "Classic Matcha",
+      "serving": "Short 8 fl oz, 2% milk",
+      "calories": 100,
+      "protein_g": 5,
+      "carbs_g": 13,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Matcha Latte",
+      "category": "Classic Matcha",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 170,
+      "protein_g": 8,
+      "carbs_g": 22,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Matcha Latte",
+      "category": "Classic Matcha",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 220,
+      "protein_g": 11,
+      "carbs_g": 31,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Matcha Latte",
+      "category": "Classic Matcha",
+      "serving": "Venti 20 fl oz, 2% milk",
+      "calories": 290,
+      "protein_g": 14,
+      "carbs_g": 41,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Matcha Crème Frappuccino® Blended Beverage",
+      "category": "Classic Matcha",
+      "serving": "Tall 12 fl oz, whole milk",
+      "calories": 220,
+      "protein_g": 4,
+      "carbs_g": 31,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Matcha Crème Frappuccino® Blended Beverage",
+      "category": "Classic Matcha",
+      "serving": "Grande 16 fl oz, whole milk",
+      "calories": 320,
+      "protein_g": 5,
+      "carbs_g": 46,
+      "fat_g": 13,
+      "fiber_g": 1
+    },
+    {
+      "name": "Matcha Crème Frappuccino® Blended Beverage",
+      "category": "Classic Matcha",
+      "serving": "Venti 24 fl oz, whole milk",
+      "calories": 440,
+      "protein_g": 8,
+      "carbs_g": 62,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Orange Cream Matcha",
+      "category": "Specialty Matcha",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 260,
+      "protein_g": 6,
+      "carbs_g": 29,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Orange Cream Matcha",
+      "category": "Specialty Matcha",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 350,
+      "protein_g": 9,
+      "carbs_g": 40,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Orange Cream Matcha",
+      "category": "Specialty Matcha",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 440,
+      "protein_g": 13,
+      "carbs_g": 52,
+      "fat_g": 21,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Dubai Chocolate Matcha",
+      "category": "Specialty Matcha",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 290,
+      "protein_g": 7,
+      "carbs_g": 32,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Dubai Chocolate Matcha",
+      "category": "Specialty Matcha",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 400,
+      "protein_g": 10,
+      "carbs_g": 48,
+      "fat_g": 19,
+      "fiber_g": 2
+    },
+    {
+      "name": "Iced Dubai Chocolate Matcha",
+      "category": "Specialty Matcha",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 490,
+      "protein_g": 13,
+      "carbs_g": 64,
+      "fat_g": 21,
+      "fiber_g": 2
+    },
+    {
+      "name": "Iced Mango Cream Matcha",
+      "category": "Specialty Matcha",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 170,
+      "protein_g": 5,
+      "carbs_g": 20,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Mango Cream Matcha",
+      "category": "Specialty Matcha",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 270,
+      "protein_g": 8,
+      "carbs_g": 32,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Mango Cream Matcha",
+      "category": "Specialty Matcha",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 350,
+      "protein_g": 11,
+      "carbs_g": 43,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Lavender Cream Matcha",
+      "category": "Specialty Matcha",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 260,
+      "protein_g": 6,
+      "carbs_g": 28,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Lavender Cream Matcha",
+      "category": "Specialty Matcha",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 350,
+      "protein_g": 9,
+      "carbs_g": 40,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Lavender Cream Matcha",
+      "category": "Specialty Matcha",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 430,
+      "protein_g": 12,
+      "carbs_g": 51,
+      "fat_g": 21,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Banana Bread Matcha",
+      "category": "Specialty Matcha",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 280,
+      "protein_g": 6,
+      "carbs_g": 32,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Banana Bread Matcha",
+      "category": "Specialty Matcha",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 330,
+      "protein_g": 8,
+      "carbs_g": 40,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Banana Bread Matcha",
+      "category": "Specialty Matcha",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 430,
+      "protein_g": 12,
+      "carbs_g": 53,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Double Berry Matcha",
+      "category": "Specialty Matcha",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 210,
+      "protein_g": 5,
+      "carbs_g": 25,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Double Berry Matcha",
+      "category": "Specialty Matcha",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 310,
+      "protein_g": 8,
+      "carbs_g": 39,
+      "fat_g": 13,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Double Berry Matcha",
+      "category": "Specialty Matcha",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 410,
+      "protein_g": 12,
+      "carbs_g": 53,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Honey Citrus Mint Tea",
+      "category": "Brewed Tea",
+      "serving": "Short 8 fl oz",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 16,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey Citrus Mint Tea",
+      "category": "Brewed Tea",
+      "serving": "Tall 12 fl oz",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey Citrus Mint Tea",
+      "category": "Brewed Tea",
+      "serving": "Grande 16 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 33,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey Citrus Mint Tea",
+      "category": "Brewed Tea",
+      "serving": "Venti 20 fl oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 38,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Royal English Breakfast Tea",
+      "category": "Brewed Tea",
+      "serving": "Short 8 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Royal English Breakfast Tea",
+      "category": "Brewed Tea",
+      "serving": "Tall 12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Royal English Breakfast Tea",
+      "category": "Brewed Tea",
+      "serving": "Grande 16 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Royal English Breakfast Tea",
+      "category": "Brewed Tea",
+      "serving": "Venti 20 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Emperor's Clouds & Mist® Tea",
+      "category": "Brewed Tea",
+      "serving": "Short 8 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Emperor's Clouds & Mist® Tea",
+      "category": "Brewed Tea",
+      "serving": "Tall 12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Emperor's Clouds & Mist® Tea",
+      "category": "Brewed Tea",
+      "serving": "Grande 16 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Emperor's Clouds & Mist® Tea",
+      "category": "Brewed Tea",
+      "serving": "Venti 20 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mint Majesty® Tea",
+      "category": "Brewed Tea",
+      "serving": "Short 8 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mint Majesty® Tea",
+      "category": "Brewed Tea",
+      "serving": "Tall 12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mint Majesty® Tea",
+      "category": "Brewed Tea",
+      "serving": "Grande 16 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mint Majesty® Tea",
+      "category": "Brewed Tea",
+      "serving": "Venti 20 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Earl Grey Tea",
+      "category": "Brewed Tea",
+      "serving": "Short 8 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Earl Grey Tea",
+      "category": "Brewed Tea",
+      "serving": "Tall 12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Earl Grey Tea",
+      "category": "Brewed Tea",
+      "serving": "Grande 16 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Earl Grey Tea",
+      "category": "Brewed Tea",
+      "serving": "Venti 20 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chamomile Mint Blossom Tea",
+      "category": "Brewed Tea",
+      "serving": "Short 8 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chamomile Mint Blossom Tea",
+      "category": "Brewed Tea",
+      "serving": "Tall 12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chamomile Mint Blossom Tea",
+      "category": "Brewed Tea",
+      "serving": "Grande 16 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chamomile Mint Blossom Tea",
+      "category": "Brewed Tea",
+      "serving": "Venti 20 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "London Fog Latte",
+      "category": "Tea Latte",
+      "serving": "Short 8 fl oz, 2% milk",
+      "calories": 90,
+      "protein_g": 4,
+      "carbs_g": 15,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "London Fog Latte",
+      "category": "Tea Latte",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 140,
+      "protein_g": 5,
+      "carbs_g": 22,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "London Fog Latte",
+      "category": "Tea Latte",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 180,
+      "protein_g": 7,
+      "carbs_g": 29,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "London Fog Latte",
+      "category": "Tea Latte",
+      "serving": "Venti 20 fl oz, 2% milk",
+      "calories": 230,
+      "protein_g": 9,
+      "carbs_g": 37,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Black Tea",
+      "category": "Iced Tea",
+      "serving": "Tall 12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Black Tea",
+      "category": "Iced Tea",
+      "serving": "Grande 16 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Black Tea",
+      "category": "Iced Tea",
+      "serving": "Venti 24 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Black Tea",
+      "category": "Iced Tea",
+      "serving": "Trenta 30 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Black Tea Lemonade",
+      "category": "Iced Tea",
+      "serving": "Tall 12 fl oz",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Black Tea Lemonade",
+      "category": "Iced Tea",
+      "serving": "Grande 16 fl oz",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Black Tea Lemonade",
+      "category": "Iced Tea",
+      "serving": "Venti 24 fl oz",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 18,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Black Tea Lemonade",
+      "category": "Iced Tea",
+      "serving": "Trenta 30 fl oz",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Green Tea",
+      "category": "Iced Tea",
+      "serving": "Tall 12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Green Tea",
+      "category": "Iced Tea",
+      "serving": "Grande 16 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Green Tea",
+      "category": "Iced Tea",
+      "serving": "Venti 24 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Green Tea",
+      "category": "Iced Tea",
+      "serving": "Trenta 30 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Green Tea Lemonade",
+      "category": "Iced Tea",
+      "serving": "Tall 12 fl oz",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Green Tea Lemonade",
+      "category": "Iced Tea",
+      "serving": "Grande 16 fl oz",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Green Tea Lemonade",
+      "category": "Iced Tea",
+      "serving": "Venti 24 fl oz",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 18,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Green Tea Lemonade",
+      "category": "Iced Tea",
+      "serving": "Trenta 30 fl oz",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Peach Green Tea",
+      "category": "Iced Tea",
+      "serving": "Tall 12 fl oz",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Peach Green Tea",
+      "category": "Iced Tea",
+      "serving": "Grande 16 fl oz",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 15,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Peach Green Tea",
+      "category": "Iced Tea",
+      "serving": "Venti 24 fl oz",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Peach Green Tea",
+      "category": "Iced Tea",
+      "serving": "Trenta 30 fl oz",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 30,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Peach Green Tea Lemonade",
+      "category": "Iced Tea",
+      "serving": "Tall 12 fl oz",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 16,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Peach Green Tea Lemonade",
+      "category": "Iced Tea",
+      "serving": "Grande 16 fl oz",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Peach Green Tea Lemonade",
+      "category": "Iced Tea",
+      "serving": "Venti 24 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 31,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Peach Green Tea Lemonade",
+      "category": "Iced Tea",
+      "serving": "Trenta 30 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Passion Tango® Tea",
+      "category": "Iced Tea",
+      "serving": "Tall 12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Passion Tango® Tea",
+      "category": "Iced Tea",
+      "serving": "Grande 16 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Passion Tango® Tea",
+      "category": "Iced Tea",
+      "serving": "Venti 24 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Passion Tango® Tea",
+      "category": "Iced Tea",
+      "serving": "Trenta 30 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Passion Tango® Tea Lemonade",
+      "category": "Iced Tea",
+      "serving": "Tall 12 fl oz",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Passion Tango® Tea Lemonade",
+      "category": "Iced Tea",
+      "serving": "Grande 16 fl oz",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 13,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Passion Tango® Tea Lemonade",
+      "category": "Iced Tea",
+      "serving": "Venti 24 fl oz",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 19,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Passion Tango® Tea Lemonade",
+      "category": "Iced Tea",
+      "serving": "Trenta 30 fl oz",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 25,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced London Fog Latte",
+      "category": "Iced Tea Latte",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 100,
+      "protein_g": 3,
+      "carbs_g": 19,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced London Fog Latte",
+      "category": "Iced Tea Latte",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 140,
+      "protein_g": 4,
+      "carbs_g": 25,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced London Fog Latte",
+      "category": "Iced Tea Latte",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 210,
+      "protein_g": 6,
+      "carbs_g": 37,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Açaí Lemonade Refresher",
+      "category": "Lemonade Refreshers",
+      "serving": "Tall 12 fl oz",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 27,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Strawberry Açaí Lemonade Refresher",
+      "category": "Lemonade Refreshers",
+      "serving": "Grande 16 fl oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Strawberry Açaí Lemonade Refresher",
+      "category": "Lemonade Refreshers",
+      "serving": "Venti 24 fl oz",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 51,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Strawberry Açaí Lemonade Refresher",
+      "category": "Lemonade Refreshers",
+      "serving": "Trenta 30 fl oz",
+      "calories": 290,
+      "protein_g": 1,
+      "carbs_g": 70,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mango Strawberry Lemonade Refresher",
+      "category": "Lemonade Refreshers",
+      "serving": "Tall 12 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 31,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Strawberry Lemonade Refresher",
+      "category": "Lemonade Refreshers",
+      "serving": "Grande 16 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Strawberry Lemonade Refresher",
+      "category": "Lemonade Refreshers",
+      "serving": "Venti 24 fl oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 62,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Strawberry Lemonade Refresher",
+      "category": "Lemonade Refreshers",
+      "serving": "Trenta 30 fl oz",
+      "calories": 360,
+      "protein_g": 1,
+      "carbs_g": 85,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mango Dragonfruit Lemonade Refresher",
+      "category": "Lemonade Refreshers",
+      "serving": "Tall 12 fl oz",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 27,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango Dragonfruit Lemonade Refresher",
+      "category": "Lemonade Refreshers",
+      "serving": "Grande 16 fl oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Dragonfruit Lemonade Refresher",
+      "category": "Lemonade Refreshers",
+      "serving": "Venti 24 fl oz",
+      "calories": 200,
+      "protein_g": 1,
+      "carbs_g": 50,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Dragonfruit Lemonade Refresher",
+      "category": "Lemonade Refreshers",
+      "serving": "Trenta 30 fl oz",
+      "calories": 290,
+      "protein_g": 1,
+      "carbs_g": 69,
+      "fat_g": 1,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cannon Ball Drink",
+      "category": "Lemonade Refreshers",
+      "serving": "Tall 12 fl oz",
+      "calories": 130,
+      "protein_g": 1,
+      "carbs_g": 30,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cannon Ball Drink",
+      "category": "Lemonade Refreshers",
+      "serving": "Grande 16 fl oz",
+      "calories": 160,
+      "protein_g": 1,
+      "carbs_g": 38,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cannon Ball Drink",
+      "category": "Lemonade Refreshers",
+      "serving": "Venti 24 fl oz",
+      "calories": 220,
+      "protein_g": 1,
+      "carbs_g": 54,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cannon Ball Drink",
+      "category": "Lemonade Refreshers",
+      "serving": "Trenta 30 fl oz",
+      "calories": 320,
+      "protein_g": 1,
+      "carbs_g": 76,
+      "fat_g": 1,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pink Drink",
+      "category": "Coconutmilk Refreshers",
+      "serving": "Tall 12 fl oz, coconut milk",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pink Drink",
+      "category": "Coconutmilk Refreshers",
+      "serving": "Grande 16 fl oz, coconut milk",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 28,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pink Drink",
+      "category": "Coconutmilk Refreshers",
+      "serving": "Venti 24 fl oz, coconut milk",
+      "calories": 200,
+      "protein_g": 1,
+      "carbs_g": 40,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pink Drink",
+      "category": "Coconutmilk Refreshers",
+      "serving": "Trenta 30 fl oz, coconut milk",
+      "calories": 280,
+      "protein_g": 1,
+      "carbs_g": 56,
+      "fat_g": 5,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mango Dream",
+      "category": "Coconutmilk Refreshers",
+      "serving": "Tall 12 fl oz, coconut milk",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 26,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Dream",
+      "category": "Coconutmilk Refreshers",
+      "serving": "Grande 16 fl oz, coconut milk",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 35,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Dream",
+      "category": "Coconutmilk Refreshers",
+      "serving": "Venti 24 fl oz, coconut milk",
+      "calories": 250,
+      "protein_g": 1,
+      "carbs_g": 51,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Dream",
+      "category": "Coconutmilk Refreshers",
+      "serving": "Trenta 30 fl oz, coconut milk",
+      "calories": 340,
+      "protein_g": 1,
+      "carbs_g": 71,
+      "fat_g": 5,
+      "fiber_g": 2
+    },
+    {
+      "name": "Dragon Drink®",
+      "category": "Coconutmilk Refreshers",
+      "serving": "Tall 12 fl oz, coconut milk",
+      "calories": 110,
+      "protein_g": 1,
+      "carbs_g": 21,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dragon Drink®",
+      "category": "Coconutmilk Refreshers",
+      "serving": "Grande 16 fl oz, coconut milk",
+      "calories": 140,
+      "protein_g": 1,
+      "carbs_g": 27,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Dragon Drink®",
+      "category": "Coconutmilk Refreshers",
+      "serving": "Venti 24 fl oz, coconut milk",
+      "calories": 200,
+      "protein_g": 1,
+      "carbs_g": 39,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Dragon Drink®",
+      "category": "Coconutmilk Refreshers",
+      "serving": "Trenta 30 fl oz, coconut milk",
+      "calories": 270,
+      "protein_g": 1,
+      "carbs_g": 55,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pink Cannon Ball Drink",
+      "category": "Coconutmilk Refreshers",
+      "serving": "Tall 12 fl oz, coconut milk",
+      "calories": 120,
+      "protein_g": 1,
+      "carbs_g": 25,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pink Cannon Ball Drink",
+      "category": "Coconutmilk Refreshers",
+      "serving": "Grande 16 fl oz, coconut milk",
+      "calories": 150,
+      "protein_g": 1,
+      "carbs_g": 31,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pink Cannon Ball Drink",
+      "category": "Coconutmilk Refreshers",
+      "serving": "Venti 24 fl oz, coconut milk",
+      "calories": 210,
+      "protein_g": 1,
+      "carbs_g": 43,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pink Cannon Ball Drink",
+      "category": "Coconutmilk Refreshers",
+      "serving": "Trenta 30 fl oz, coconut milk",
+      "calories": 310,
+      "protein_g": 2,
+      "carbs_g": 62,
+      "fat_g": 6,
+      "fiber_g": 3
+    },
+    {
+      "name": "Strawberry Açaí Refresher",
+      "category": "Refreshers",
+      "serving": "Tall 12 fl oz",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 18,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Strawberry Açaí Refresher",
+      "category": "Refreshers",
+      "serving": "Grande 16 fl oz",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 23,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Strawberry Açaí Refresher",
+      "category": "Refreshers",
+      "serving": "Venti 24 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 33,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Strawberry Açaí Refresher",
+      "category": "Refreshers",
+      "serving": "Trenta 30 fl oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mango Strawberry Refresher",
+      "category": "Refreshers",
+      "serving": "Tall 12 fl oz",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Strawberry Refresher",
+      "category": "Refreshers",
+      "serving": "Grande 16 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 31,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Strawberry Refresher",
+      "category": "Refreshers",
+      "serving": "Venti 24 fl oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Strawberry Refresher",
+      "category": "Refreshers",
+      "serving": "Trenta 30 fl oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 61,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mango Dragonfruit Refresher",
+      "category": "Refreshers",
+      "serving": "Tall 12 fl oz",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 18,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango Dragonfruit Refresher",
+      "category": "Refreshers",
+      "serving": "Grande 16 fl oz",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango Dragonfruit Refresher",
+      "category": "Refreshers",
+      "serving": "Venti 24 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 32,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango Dragonfruit Refresher",
+      "category": "Refreshers",
+      "serving": "Trenta 30 fl oz",
+      "calories": 190,
+      "protein_g": 1,
+      "carbs_g": 45,
+      "fat_g": 1,
+      "fiber_g": 1
+    },
+    {
+      "name": "Strawberry Açaí Lemonade Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Tall 12 fl oz",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 27,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Strawberry Açaí Lemonade Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Grande 16 fl oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Strawberry Açaí Lemonade Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Venti 24 fl oz",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 51,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Strawberry Açaí Lemonade Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Trenta 30 fl oz",
+      "calories": 290,
+      "protein_g": 1,
+      "carbs_g": 70,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mango Strawberry Lemonade Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Tall 12 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 31,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Strawberry Lemonade Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Grande 16 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Strawberry Lemonade Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Venti 24 fl oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 62,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Strawberry Lemonade Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Trenta 30 fl oz",
+      "calories": 360,
+      "protein_g": 1,
+      "carbs_g": 85,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mango Dragonfruit Lemonade Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Tall 12 fl oz",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 27,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango Dragonfruit Lemonade Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Grande 16 fl oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Dragonfruit Lemonade Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Venti 24 fl oz",
+      "calories": 210,
+      "protein_g": 1,
+      "carbs_g": 50,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Dragonfruit Lemonade Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Trenta 30 fl oz",
+      "calories": 290,
+      "protein_g": 1,
+      "carbs_g": 69,
+      "fat_g": 1,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cannon Ball Energy Drink",
+      "category": "Energy Refresher",
+      "serving": "Tall 12 fl oz",
+      "calories": 130,
+      "protein_g": 1,
+      "carbs_g": 31,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cannon Ball Energy Drink",
+      "category": "Energy Refresher",
+      "serving": "Grande 16 fl oz",
+      "calories": 160,
+      "protein_g": 1,
+      "carbs_g": 38,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cannon Ball Energy Drink",
+      "category": "Energy Refresher",
+      "serving": "Venti 24 fl oz",
+      "calories": 220,
+      "protein_g": 1,
+      "carbs_g": 54,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cannon Ball Energy Drink",
+      "category": "Energy Refresher",
+      "serving": "Trenta 30 fl oz",
+      "calories": 320,
+      "protein_g": 1,
+      "carbs_g": 76,
+      "fat_g": 1,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pink Energy Drink",
+      "category": "Energy Refresher",
+      "serving": "Tall 12 fl oz, coconut milk",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pink Energy Drink",
+      "category": "Energy Refresher",
+      "serving": "Grande 16 fl oz, coconut milk",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 28,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pink Energy Drink",
+      "category": "Energy Refresher",
+      "serving": "Venti 24 fl oz, coconut milk",
+      "calories": 200,
+      "protein_g": 1,
+      "carbs_g": 40,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pink Energy Drink",
+      "category": "Energy Refresher",
+      "serving": "Trenta 30 fl oz, coconut milk",
+      "calories": 280,
+      "protein_g": 1,
+      "carbs_g": 56,
+      "fat_g": 5,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mango Dream Energy Drink",
+      "category": "Energy Refresher",
+      "serving": "Tall 12 fl oz, coconut milk",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 26,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Dream Energy Drink",
+      "category": "Energy Refresher",
+      "serving": "Grande 16 fl oz, coconut milk",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 36,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Dream Energy Drink",
+      "category": "Energy Refresher",
+      "serving": "Venti 24 fl oz, coconut milk",
+      "calories": 250,
+      "protein_g": 1,
+      "carbs_g": 52,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Dream Energy Drink",
+      "category": "Energy Refresher",
+      "serving": "Trenta 30 fl oz, coconut milk",
+      "calories": 350,
+      "protein_g": 1,
+      "carbs_g": 71,
+      "fat_g": 5,
+      "fiber_g": 2
+    },
+    {
+      "name": "Dragon Energy Drink",
+      "category": "Energy Refresher",
+      "serving": "Tall 12 fl oz, coconut milk",
+      "calories": 110,
+      "protein_g": 1,
+      "carbs_g": 22,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dragon Energy Drink",
+      "category": "Energy Refresher",
+      "serving": "Grande 16 fl oz, coconut milk",
+      "calories": 140,
+      "protein_g": 1,
+      "carbs_g": 27,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Dragon Energy Drink",
+      "category": "Energy Refresher",
+      "serving": "Venti 24 fl oz, coconut milk",
+      "calories": 200,
+      "protein_g": 1,
+      "carbs_g": 39,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Dragon Energy Drink",
+      "category": "Energy Refresher",
+      "serving": "Trenta 30 fl oz, coconut milk",
+      "calories": 280,
+      "protein_g": 1,
+      "carbs_g": 55,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pink Cannon Ball Energy Drink",
+      "category": "Energy Refresher",
+      "serving": "Tall 12 fl oz, coconut milk",
+      "calories": 130,
+      "protein_g": 1,
+      "carbs_g": 25,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pink Cannon Ball Energy Drink",
+      "category": "Energy Refresher",
+      "serving": "Grande 16 fl oz, coconut milk",
+      "calories": 160,
+      "protein_g": 1,
+      "carbs_g": 31,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pink Cannon Ball Energy Drink",
+      "category": "Energy Refresher",
+      "serving": "Venti 24 fl oz, coconut milk",
+      "calories": 220,
+      "protein_g": 1,
+      "carbs_g": 43,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pink Cannon Ball Energy Drink",
+      "category": "Energy Refresher",
+      "serving": "Trenta 30 fl oz, coconut milk",
+      "calories": 310,
+      "protein_g": 2,
+      "carbs_g": 62,
+      "fat_g": 6,
+      "fiber_g": 3
+    },
+    {
+      "name": "Strawberry Açaí Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Tall 12 fl oz",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 18,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Strawberry Açaí Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Grande 16 fl oz",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 23,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Strawberry Açaí Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Venti 24 fl oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 33,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Strawberry Açaí Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Trenta 30 fl oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mango Strawberry Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Tall 12 fl oz",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Strawberry Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Grande 16 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 31,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Strawberry Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Venti 24 fl oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Strawberry Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Trenta 30 fl oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 61,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mango Dragonfruit Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Tall 12 fl oz",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 18,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango Dragonfruit Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Grande 16 fl oz",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango Dragonfruit Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Venti 24 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 32,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango Dragonfruit Energy Refresher",
+      "category": "Energy Refresher",
+      "serving": "Trenta 30 fl oz",
+      "calories": 190,
+      "protein_g": 1,
+      "carbs_g": 45,
+      "fat_g": 1,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramel Ribbon Crunch Frappuccino® Blended Beverage",
+      "category": "Coffee Frappuccino®",
+      "serving": "Tall 12 fl oz, whole milk",
+      "calories": 330,
+      "protein_g": 4,
+      "carbs_g": 45,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Ribbon Crunch Frappuccino® Blended Beverage",
+      "category": "Coffee Frappuccino®",
+      "serving": "Grande 16 fl oz, whole milk",
+      "calories": 470,
+      "protein_g": 5,
+      "carbs_g": 65,
+      "fat_g": 22,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Ribbon Crunch Frappuccino® Blended Beverage",
+      "category": "Coffee Frappuccino®",
+      "serving": "Venti 24 fl oz, whole milk",
+      "calories": 570,
+      "protein_g": 7,
+      "carbs_g": 84,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Horchata Frappuccino® Blended Beverage",
+      "category": "Coffee Frappuccino®",
+      "serving": "Tall 12 fl oz, whole milk",
+      "calories": 270,
+      "protein_g": 3,
+      "carbs_g": 42,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Horchata Frappuccino® Blended Beverage",
+      "category": "Coffee Frappuccino®",
+      "serving": "Grande 16 fl oz, whole milk",
+      "calories": 400,
+      "protein_g": 4,
+      "carbs_g": 63,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Horchata Frappuccino® Blended Beverage",
+      "category": "Coffee Frappuccino®",
+      "serving": "Venti 24 fl oz, whole milk",
+      "calories": 470,
+      "protein_g": 5,
+      "carbs_g": 81,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pistachio Frappuccino® Blended Beverage",
+      "category": "Coffee Frappuccino®",
+      "serving": "Tall 12 fl oz, whole milk",
+      "calories": 270,
+      "protein_g": 3,
+      "carbs_g": 38,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pistachio Frappuccino® Blended Beverage",
+      "category": "Coffee Frappuccino®",
+      "serving": "Grande 16 fl oz, whole milk",
+      "calories": 380,
+      "protein_g": 4,
+      "carbs_g": 57,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pistachio Frappuccino® Blended Beverage",
+      "category": "Coffee Frappuccino®",
+      "serving": "Venti 24 fl oz, whole milk",
+      "calories": 420,
+      "protein_g": 6,
+      "carbs_g": 64,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Frappuccino® Blended Beverage",
+      "category": "Coffee Frappuccino®",
+      "serving": "Tall 12 fl oz, whole milk",
+      "calories": 260,
+      "protein_g": 3,
+      "carbs_g": 38,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Frappuccino® Blended Beverage",
+      "category": "Coffee Frappuccino®",
+      "serving": "Grande 16 fl oz, whole milk",
+      "calories": 380,
+      "protein_g": 4,
+      "carbs_g": 55,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Frappuccino® Blended Beverage",
+      "category": "Coffee Frappuccino®",
+      "serving": "Venti 24 fl oz, whole milk",
+      "calories": 470,
+      "protein_g": 6,
+      "carbs_g": 73,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mocha Cookie Crumble Frappuccino® Blended Beverage",
+      "category": "Coffee Frappuccino®",
+      "serving": "Tall 12 fl oz, whole milk",
+      "calories": 350,
+      "protein_g": 4,
+      "carbs_g": 45,
+      "fat_g": 17,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Cookie Crumble Frappuccino® Blended Beverage",
+      "category": "Coffee Frappuccino®",
+      "serving": "Grande 16 fl oz, whole milk",
+      "calories": 480,
+      "protein_g": 6,
+      "carbs_g": 62,
+      "fat_g": 24,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Cookie Crumble Frappuccino® Blended Beverage",
+      "category": "Coffee Frappuccino®",
+      "serving": "Venti 24 fl oz, whole milk",
+      "calories": 590,
+      "protein_g": 8,
+      "carbs_g": 82,
+      "fat_g": 27,
+      "fiber_g": 3
+    },
+    {
+      "name": "Mocha Frappuccino® Blended Beverage",
+      "category": "Coffee Frappuccino®",
+      "serving": "Tall 12 fl oz, whole milk",
+      "calories": 250,
+      "protein_g": 4,
+      "carbs_g": 36,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mocha Frappuccino® Blended Beverage",
+      "category": "Coffee Frappuccino®",
+      "serving": "Grande 16 fl oz, whole milk",
+      "calories": 370,
+      "protein_g": 5,
+      "carbs_g": 54,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mocha Frappuccino® Blended Beverage",
+      "category": "Coffee Frappuccino®",
+      "serving": "Venti 24 fl oz, whole milk",
+      "calories": 470,
+      "protein_g": 7,
+      "carbs_g": 71,
+      "fat_g": 17,
+      "fiber_g": 2
+    },
+    {
+      "name": "Coffee Frappuccino® Blended Beverage",
+      "category": "Coffee Frappuccino®",
+      "serving": "Tall 12 fl oz, whole milk",
+      "calories": 160,
+      "protein_g": 3,
+      "carbs_g": 31,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee Frappuccino® Blended Beverage",
+      "category": "Coffee Frappuccino®",
+      "serving": "Grande 16 fl oz, whole milk",
+      "calories": 230,
+      "protein_g": 3,
+      "carbs_g": 46,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee Frappuccino® Blended Beverage",
+      "category": "Coffee Frappuccino®",
+      "serving": "Venti 24 fl oz, whole milk",
+      "calories": 310,
+      "protein_g": 5,
+      "carbs_g": 60,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Bean Crème Frappuccino® Blended Beverage",
+      "category": "Crème Frappuccino®",
+      "serving": "Tall 12 fl oz, whole milk",
+      "calories": 260,
+      "protein_g": 4,
+      "carbs_g": 35,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Bean Crème Frappuccino® Blended Beverage",
+      "category": "Crème Frappuccino®",
+      "serving": "Grande 16 fl oz, whole milk",
+      "calories": 380,
+      "protein_g": 5,
+      "carbs_g": 53,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Bean Crème Frappuccino® Blended Beverage",
+      "category": "Crème Frappuccino®",
+      "serving": "Venti 24 fl oz, whole milk",
+      "calories": 470,
+      "protein_g": 7,
+      "carbs_g": 68,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Horchata Crème Frappuccino® Blended Beverage",
+      "category": "Crème Frappuccino®",
+      "serving": "Tall 12 fl oz, whole milk",
+      "calories": 260,
+      "protein_g": 4,
+      "carbs_g": 36,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Horchata Crème Frappuccino® Blended Beverage",
+      "category": "Crème Frappuccino®",
+      "serving": "Grande 16 fl oz, whole milk",
+      "calories": 380,
+      "protein_g": 5,
+      "carbs_g": 53,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Horchata Crème Frappuccino® Blended Beverage",
+      "category": "Crème Frappuccino®",
+      "serving": "Venti 24 fl oz, whole milk",
+      "calories": 430,
+      "protein_g": 6,
+      "carbs_g": 66,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Orange Cream Frappuccino® Blended Beverage",
+      "category": "Crème Frappuccino®",
+      "serving": "Tall 12 fl oz, whole milk",
+      "calories": 190,
+      "protein_g": 3,
+      "carbs_g": 21,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Orange Cream Frappuccino® Blended Beverage",
+      "category": "Crème Frappuccino®",
+      "serving": "Grande 16 fl oz, whole milk",
+      "calories": 320,
+      "protein_g": 5,
+      "carbs_g": 41,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Orange Cream Frappuccino® Blended Beverage",
+      "category": "Crème Frappuccino®",
+      "serving": "Venti 24 fl oz, whole milk",
+      "calories": 450,
+      "protein_g": 7,
+      "carbs_g": 57,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lavender Crème Frappuccino® Blended Beverage",
+      "category": "Crème Frappuccino®",
+      "serving": "Tall 12 fl oz, whole milk",
+      "calories": 260,
+      "protein_g": 4,
+      "carbs_g": 35,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lavender Crème Frappuccino® Blended Beverage",
+      "category": "Crème Frappuccino®",
+      "serving": "Grande 16 fl oz, whole milk",
+      "calories": 370,
+      "protein_g": 5,
+      "carbs_g": 52,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lavender Crème Frappuccino® Blended Beverage",
+      "category": "Crème Frappuccino®",
+      "serving": "Venti 24 fl oz, whole milk",
+      "calories": 450,
+      "protein_g": 7,
+      "carbs_g": 68,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pistachio Crème Frappuccino® Blended Beverage",
+      "category": "Crème Frappuccino®",
+      "serving": "Tall 12 fl oz, whole milk",
+      "calories": 240,
+      "protein_g": 4,
+      "carbs_g": 30,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pistachio Crème Frappuccino® Blended Beverage",
+      "category": "Crème Frappuccino®",
+      "serving": "Grande 16 fl oz, whole milk",
+      "calories": 360,
+      "protein_g": 6,
+      "carbs_g": 46,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pistachio Crème Frappuccino® Blended Beverage",
+      "category": "Crème Frappuccino®",
+      "serving": "Venti 24 fl oz, whole milk",
+      "calories": 410,
+      "protein_g": 7,
+      "carbs_g": 55,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Crème Frappuccino® Blended Beverage",
+      "category": "Crème Frappuccino®",
+      "serving": "Tall 12 fl oz, whole milk",
+      "calories": 250,
+      "protein_g": 4,
+      "carbs_g": 33,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Crème Frappuccino® Blended Beverage",
+      "category": "Crème Frappuccino®",
+      "serving": "Grande 16 fl oz, whole milk",
+      "calories": 370,
+      "protein_g": 5,
+      "carbs_g": 51,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Crème Frappuccino® Blended Beverage",
+      "category": "Crème Frappuccino®",
+      "serving": "Venti 24 fl oz, whole milk",
+      "calories": 460,
+      "protein_g": 7,
+      "carbs_g": 66,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hot Chocolate",
+      "category": "Hot Chocolate",
+      "serving": "Kids 8 fl oz, 2% milk",
+      "calories": 190,
+      "protein_g": 6,
+      "carbs_g": 21,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hot Chocolate",
+      "category": "Hot Chocolate",
+      "serving": "Short 8 fl oz, 2% milk",
+      "calories": 190,
+      "protein_g": 6,
+      "carbs_g": 21,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hot Chocolate",
+      "category": "Hot Chocolate",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 280,
+      "protein_g": 10,
+      "carbs_g": 32,
+      "fat_g": 12,
+      "fiber_g": 3
+    },
+    {
+      "name": "Hot Chocolate",
+      "category": "Hot Chocolate",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 370,
+      "protein_g": 14,
+      "carbs_g": 43,
+      "fat_g": 16,
+      "fiber_g": 4
+    },
+    {
+      "name": "Hot Chocolate",
+      "category": "Hot Chocolate",
+      "serving": "Venti 20 fl oz, 2% milk",
+      "calories": 450,
+      "protein_g": 17,
+      "carbs_g": 54,
+      "fat_g": 18,
+      "fiber_g": 5
+    },
+    {
+      "name": "Lemonade",
+      "category": "Lemonade",
+      "serving": "Kids 12 fl oz",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade",
+      "category": "Lemonade",
+      "serving": "Tall 12 fl oz",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade",
+      "category": "Lemonade",
+      "serving": "Grande 16 fl oz",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 28,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade",
+      "category": "Lemonade",
+      "serving": "Venti 24 fl oz",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 40,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade",
+      "category": "Lemonade",
+      "serving": "Trenta 30 fl oz",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Lemonade",
+      "category": "Lemonade",
+      "serving": "Tall 12 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 32,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Lemonade",
+      "category": "Lemonade",
+      "serving": "Grande 16 fl oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Lemonade",
+      "category": "Lemonade",
+      "serving": "Venti 24 fl oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 64,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Milk",
+      "category": "Milk & Steamers",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 200,
+      "protein_g": 13,
+      "carbs_g": 19,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Milk",
+      "category": "Milk & Steamers",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 260,
+      "protein_g": 17,
+      "carbs_g": 25,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Milk",
+      "category": "Milk & Steamers",
+      "serving": "Venti 24 fl oz, 2% milk",
+      "calories": 370,
+      "protein_g": 24,
+      "carbs_g": 36,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Steamed Milk",
+      "category": "Milk & Steamers",
+      "serving": "Kids 8 fl oz, 2% milk",
+      "calories": 100,
+      "protein_g": 7,
+      "carbs_g": 10,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Steamed Milk",
+      "category": "Milk & Steamers",
+      "serving": "Short 8 fl oz, 2% milk",
+      "calories": 100,
+      "protein_g": 7,
+      "carbs_g": 10,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Steamed Milk",
+      "category": "Milk & Steamers",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 160,
+      "protein_g": 10,
+      "carbs_g": 15,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Steamed Milk",
+      "category": "Milk & Steamers",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 200,
+      "protein_g": 13,
+      "carbs_g": 19,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Steamed Milk",
+      "category": "Milk & Steamers",
+      "serving": "Venti 20 fl oz, 2% milk",
+      "calories": 260,
+      "protein_g": 17,
+      "carbs_g": 25,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Crème",
+      "category": "Milk & Steamers",
+      "serving": "Kids 8 fl oz, 2% milk",
+      "calories": 200,
+      "protein_g": 7,
+      "carbs_g": 22,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Crème",
+      "category": "Milk & Steamers",
+      "serving": "Short 8 fl oz, 2% milk",
+      "calories": 190,
+      "protein_g": 6,
+      "carbs_g": 23,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Crème",
+      "category": "Milk & Steamers",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 280,
+      "protein_g": 10,
+      "carbs_g": 34,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Crème",
+      "category": "Milk & Steamers",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 350,
+      "protein_g": 13,
+      "carbs_g": 44,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Crème",
+      "category": "Milk & Steamers",
+      "serving": "Venti 20 fl oz, 2% milk",
+      "calories": 430,
+      "protein_g": 16,
+      "carbs_g": 55,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pistachio Crème",
+      "category": "Milk & Steamers",
+      "serving": "Kids 8 fl oz, 2% milk",
+      "calories": 150,
+      "protein_g": 6,
+      "carbs_g": 23,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pistachio Crème",
+      "category": "Milk & Steamers",
+      "serving": "Short 8 fl oz, 2% milk",
+      "calories": 150,
+      "protein_g": 6,
+      "carbs_g": 23,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pistachio Crème",
+      "category": "Milk & Steamers",
+      "serving": "Tall 12 fl oz, 2% milk",
+      "calories": 230,
+      "protein_g": 9,
+      "carbs_g": 35,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pistachio Crème",
+      "category": "Milk & Steamers",
+      "serving": "Grande 16 fl oz, 2% milk",
+      "calories": 330,
+      "protein_g": 13,
+      "carbs_g": 48,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pistachio Crème",
+      "category": "Milk & Steamers",
+      "serving": "Venti 20 fl oz, 2% milk",
+      "calories": 410,
+      "protein_g": 16,
+      "carbs_g": 60,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Waiākea Hawaiian Volcanic Water",
+      "category": "Water & Sparkling",
+      "serving": "500-Packaged 8 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ethos® Water",
+      "category": "Water & Sparkling",
+      "serving": "23.7-Packaged 23.7 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spindrift® Lemon Sparkling Water",
+      "category": "Water & Sparkling",
+      "serving": "12-Packaged 12 fl oz",
+      "calories": 3,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spindrift® Raspberry Lime Sparkling Water",
+      "category": "Water & Sparkling",
+      "serving": "12-Packaged 12 fl oz",
+      "calories": 9,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "DASANI® Water",
+      "category": "Water & Sparkling",
+      "serving": "20-Packaged 20 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Koia® Cacao Bean Nutrition Shake",
+      "category": "Protein & Milk",
+      "serving": "11-Packaged 11 fl oz",
+      "calories": 180,
+      "protein_g": 20,
+      "carbs_g": 12,
+      "fat_g": 6,
+      "fiber_g": 6
+    },
+    {
+      "name": "Koia® Vanilla Bean Nutrition Shake",
+      "category": "Protein & Milk",
+      "serving": "11-Packaged 11 fl oz",
+      "calories": 180,
+      "protein_g": 20,
+      "carbs_g": 12,
+      "fat_g": 6,
+      "fiber_g": 6
+    },
+    {
+      "name": "Horizon Organic® Lowfat Chocolate Milk",
+      "category": "Protein & Milk",
+      "serving": "8-Packaged 8 fl oz",
+      "calories": 150,
+      "protein_g": 8,
+      "carbs_g": 23,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Horizon Organic® Lowfat Milk",
+      "category": "Protein & Milk",
+      "serving": "8-Packaged 8 fl oz",
+      "calories": 110,
+      "protein_g": 8,
+      "carbs_g": 13,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sol-ti® GINGER SuperShot®",
+      "category": "Juice",
+      "serving": "2.1-Packaged 1 ct",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sol-ti® TURMERIC SuperShot®",
+      "category": "Juice",
+      "serving": "2.1-Packaged 1 ct",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Evolution Fresh® Pure Orange",
+      "category": "Juice",
+      "serving": "11-Packaged 11 fl oz",
+      "calories": 170,
+      "protein_g": 3,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Evolution Fresh® Organic Defense Up®",
+      "category": "Juice",
+      "serving": "11-Packaged 11 fl oz",
+      "calories": 170,
+      "protein_g": 2,
+      "carbs_g": 41,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Evolution Fresh® Organic Super Fruit Greens",
+      "category": "Juice",
+      "serving": "11-Packaged 11 fl oz",
+      "calories": 180,
+      "protein_g": 3,
+      "carbs_g": 41,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Tree Top® Organic Apple Juice – 6.75 fl oz",
+      "category": "Juice",
+      "serving": "6.75-Packaged 6.75 fl oz",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Poppi® Shirley Temple Soda",
+      "category": "Soda",
+      "serving": "12-Packaged 12 fl oz",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Poppi® Grape Soda",
+      "category": "Soda",
+      "serving": "12-Packaged 12 fl oz",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Starbucks® Iced Energy Blueberry Lemonade",
+      "category": "Energy",
+      "serving": "12-Packaged 1 ct",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Starbucks® Iced Energy Tropical Peach",
+      "category": "Energy",
+      "serving": "12-Packaged 1 ct",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double-Smoked Bacon, Cheddar & Egg Sandwich",
+      "category": "Breakfast Sandwiches",
+      "serving": "1 item (148 g)",
+      "calories": 500,
+      "protein_g": 21,
+      "carbs_g": 43,
+      "fat_g": 27,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bacon, Gouda & Egg Sandwich",
+      "category": "Breakfast Sandwiches",
+      "serving": "1 item (120 g)",
+      "calories": 360,
+      "protein_g": 18,
+      "carbs_g": 35,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sausage, Cheddar & Egg Sandwich",
+      "category": "Breakfast Sandwiches",
+      "serving": "1 item (157 g)",
+      "calories": 480,
+      "protein_g": 18,
+      "carbs_g": 34,
+      "fat_g": 29,
+      "fiber_g": 1
+    },
+    {
+      "name": "Turkey Bacon, Cheddar & Egg White Sandwich",
+      "category": "Breakfast Sandwiches",
+      "serving": "1 item (142 g)",
+      "calories": 260,
+      "protein_g": 17,
+      "carbs_g": 30,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Egg, Pesto & Mozzarella Sandwich",
+      "category": "Breakfast Sandwiches",
+      "serving": "1 item (146 g)",
+      "calories": 390,
+      "protein_g": 21,
+      "carbs_g": 36,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Ham & Swiss Croissant",
+      "category": "Breakfast Sandwiches",
+      "serving": "1 item (102 g)",
+      "calories": 330,
+      "protein_g": 14,
+      "carbs_g": 31,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Impossible™ Breakfast Sandwich",
+      "category": "Breakfast Sandwiches",
+      "serving": "1 item (150 g)",
+      "calories": 420,
+      "protein_g": 21,
+      "carbs_g": 36,
+      "fat_g": 22,
+      "fiber_g": 3
+    },
+    {
+      "name": "Avocado Spread",
+      "category": "Breakfast Sandwiches",
+      "serving": "1 item (57 g)",
+      "calories": 90,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 8,
+      "fiber_g": 4
+    },
+    {
+      "name": "Bacon, Sausage & Egg Wrap",
+      "category": "Breakfast Wraps",
+      "serving": "1 item (214 g)",
+      "calories": 640,
+      "protein_g": 27,
+      "carbs_g": 57,
+      "fat_g": 33,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chicken Bacon Protein Pocket",
+      "category": "Breakfast Wraps",
+      "serving": "1 item (124 g)",
+      "calories": 310,
+      "protein_g": 20,
+      "carbs_g": 29,
+      "fat_g": 13,
+      "fiber_g": 4
+    },
+    {
+      "name": "Spinach, Feta & Egg White Wrap",
+      "category": "Breakfast Wraps",
+      "serving": "1 item (159 g)",
+      "calories": 290,
+      "protein_g": 20,
+      "carbs_g": 34,
+      "fat_g": 8,
+      "fiber_g": 3
+    },
+    {
+      "name": "Bacon & Gruyère Egg Bites",
+      "category": "Egg Bites & Bakes",
+      "serving": "1 item (130 g)",
+      "calories": 300,
+      "protein_g": 19,
+      "carbs_g": 9,
+      "fat_g": 20,
+      "fiber_g": 0
+    },
+    {
+      "name": "Egg White & Roasted Red Pepper Egg Bites",
+      "category": "Egg Bites & Bakes",
+      "serving": "1 item (130 g)",
+      "calories": 170,
+      "protein_g": 12,
+      "carbs_g": 11,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Potato, Cheddar & Chive Bakes",
+      "category": "Egg Bites & Bakes",
+      "serving": "1 item (130 g)",
+      "calories": 240,
+      "protein_g": 12,
+      "carbs_g": 14,
+      "fat_g": 14,
+      "fiber_g": 6
+    },
+    {
+      "name": "Rolled & Steel-Cut Oatmeal",
+      "category": "More Breakfast Classics",
+      "serving": "1 item (42 g)",
+      "calories": 160,
+      "protein_g": 5,
+      "carbs_g": 28,
+      "fat_g": 2,
+      "fiber_g": 4
+    },
+    {
+      "name": "Butter Croissant",
+      "category": "More Breakfast Classics",
+      "serving": "1 item (62 g)",
+      "calories": 250,
+      "protein_g": 5,
+      "carbs_g": 26,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Plain Bagel",
+      "category": "More Breakfast Classics",
+      "serving": "1 item (100 g)",
+      "calories": 250,
+      "protein_g": 9,
+      "carbs_g": 51,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Everything Bagel",
+      "category": "More Breakfast Classics",
+      "serving": "1 item (102 g)",
+      "calories": 270,
+      "protein_g": 10,
+      "carbs_g": 52,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cinnamon Pull-Apart",
+      "category": "More Breakfast Classics",
+      "serving": "1 item (82 g)",
+      "calories": 300,
+      "protein_g": 6,
+      "carbs_g": 38,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Cream Cheese Icing",
+      "category": "More Breakfast Classics",
+      "serving": "1 item (56 g)",
+      "calories": 140,
+      "protein_g": 2,
+      "carbs_g": 12,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "MUSH Chocolate Peanut Butter Protein Overnight Oats",
+      "category": "More Breakfast Classics",
+      "serving": "1 item (156 g)",
+      "calories": 290,
+      "protein_g": 15,
+      "carbs_g": 40,
+      "fat_g": 10,
+      "fiber_g": 7
+    },
+    {
+      "name": "Ellenos® Muesli Yogurt – No Added Sugar",
+      "category": "More Breakfast Classics",
+      "serving": "1 item (198 g)",
+      "calories": 280,
+      "protein_g": 18,
+      "carbs_g": 28,
+      "fat_g": 11,
+      "fiber_g": 4
+    },
+    {
+      "name": "Ellenos Strawberry Shortcake Greek Yogurt",
+      "category": "More Breakfast Classics",
+      "serving": "1 item (198 g)",
+      "calories": 310,
+      "protein_g": 16,
+      "carbs_g": 39,
+      "fat_g": 11,
+      "fiber_g": 3
+    },
+    {
+      "name": "Ellenos Muesli Yogurt",
+      "category": "More Breakfast Classics",
+      "serving": "1 item (198 g)",
+      "calories": 340,
+      "protein_g": 19,
+      "carbs_g": 38,
+      "fat_g": 13,
+      "fiber_g": 4
+    },
+    {
+      "name": "Chocolate Croissant",
+      "category": "Croissants & Danishes",
+      "serving": "1 item (80 g)",
+      "calories": 300,
+      "protein_g": 5,
+      "carbs_g": 34,
+      "fat_g": 18,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cheese Danish",
+      "category": "Croissants & Danishes",
+      "serving": "1 item (80 g)",
+      "calories": 290,
+      "protein_g": 7,
+      "carbs_g": 33,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cookie Croissant Swirl",
+      "category": "Croissants & Danishes",
+      "serving": "1 item (62 g)",
+      "calories": 270,
+      "protein_g": 4,
+      "carbs_g": 36,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Apple Crumble Mini Pie",
+      "category": "Mini Pies",
+      "serving": "1 item (81 g)",
+      "calories": 290,
+      "protein_g": 3,
+      "carbs_g": 40,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pecan Mini Pie",
+      "category": "Mini Pies",
+      "serving": "1 item (58 g)",
+      "calories": 250,
+      "protein_g": 3,
+      "carbs_g": 25,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Pistachio Loaf",
+      "category": "Loaves, Muffins, & Cakes",
+      "serving": "1 item (105 g)",
+      "calories": 400,
+      "protein_g": 6,
+      "carbs_g": 49,
+      "fat_g": 21,
+      "fiber_g": 2
+    },
+    {
+      "name": "Banana, Walnut & Pecan Loaf",
+      "category": "Loaves, Muffins, & Cakes",
+      "serving": "1 item (113 g)",
+      "calories": 380,
+      "protein_g": 6,
+      "carbs_g": 46,
+      "fat_g": 20,
+      "fiber_g": 2
+    },
+    {
+      "name": "Iced Lemon Loaf",
+      "category": "Loaves, Muffins, & Cakes",
+      "serving": "1 item (115 g)",
+      "calories": 410,
+      "protein_g": 5,
+      "carbs_g": 59,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cinnamon Coffee Cake",
+      "category": "Loaves, Muffins, & Cakes",
+      "serving": "1 item (100 g)",
+      "calories": 380,
+      "protein_g": 4,
+      "carbs_g": 57,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Blueberry Streusel Muffin",
+      "category": "Loaves, Muffins, & Cakes",
+      "serving": "1 item (105 g)",
+      "calories": 370,
+      "protein_g": 5,
+      "carbs_g": 47,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Petite Vanilla Bean Scone",
+      "category": "Loaves, Muffins, & Cakes",
+      "serving": "1 item (33 g)",
+      "calories": 140,
+      "protein_g": 2,
+      "carbs_g": 20,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hedgehog Cake Pop",
+      "category": "Cake Pops",
+      "serving": "1 item (41 g)",
+      "calories": 160,
+      "protein_g": 2,
+      "carbs_g": 21,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Unicorn Cake Pop",
+      "category": "Cake Pops",
+      "serving": "1 item (42 g)",
+      "calories": 170,
+      "protein_g": 2,
+      "carbs_g": 22,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Birthday Cake Pop",
+      "category": "Cake Pops",
+      "serving": "1 item (38 g)",
+      "calories": 160,
+      "protein_g": 2,
+      "carbs_g": 21,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Cake Pop",
+      "category": "Cake Pops",
+      "serving": "1 item (38 g)",
+      "calories": 150,
+      "protein_g": 2,
+      "carbs_g": 21,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Dubai Chocolate Bite",
+      "category": "Cookies, Brownies, & Bars",
+      "serving": "1 item (45 g)",
+      "calories": 220,
+      "protein_g": 3,
+      "carbs_g": 21,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Berry Blondie",
+      "category": "Cookies, Brownies, & Bars",
+      "serving": "1 item (78 g)",
+      "calories": 300,
+      "protein_g": 3,
+      "carbs_g": 44,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Chip Cookie",
+      "category": "Cookies, Brownies, & Bars",
+      "serving": "1 item (80 g)",
+      "calories": 370,
+      "protein_g": 5,
+      "carbs_g": 47,
+      "fat_g": 19,
+      "fiber_g": 2
+    },
+    {
+      "name": "Double Chocolate Brownie",
+      "category": "Cookies, Brownies, & Bars",
+      "serving": "1 item (104 g)",
+      "calories": 480,
+      "protein_g": 6,
+      "carbs_g": 55,
+      "fat_g": 28,
+      "fiber_g": 3
+    },
+    {
+      "name": "Crispy Grilled Cheese on Sourdough",
+      "category": "Lunch Sandwiches",
+      "serving": "1 item (143 g)",
+      "calories": 520,
+      "protein_g": 21,
+      "carbs_g": 47,
+      "fat_g": 27,
+      "fiber_g": 4
+    },
+    {
+      "name": "Ham & Swiss on Baguette",
+      "category": "Lunch Sandwiches",
+      "serving": "1 item (176 g)",
+      "calories": 510,
+      "protein_g": 25,
+      "carbs_g": 43,
+      "fat_g": 25,
+      "fiber_g": 2
+    },
+    {
+      "name": "Tomato & Mozzarella on Focaccia",
+      "category": "Lunch Sandwiches",
+      "serving": "1 item (153 g)",
+      "calories": 360,
+      "protein_g": 15,
+      "carbs_g": 47,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Spicy Falafel Pocket",
+      "category": "Pockets",
+      "serving": "1 item (94 g)",
+      "calories": 230,
+      "protein_g": 8,
+      "carbs_g": 34,
+      "fat_g": 7,
+      "fiber_g": 4
+    },
+    {
+      "name": "Jalapeño Chicken Pocket",
+      "category": "Pockets",
+      "serving": "1 item (84 g)",
+      "calories": 200,
+      "protein_g": 11,
+      "carbs_g": 23,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Apples & Cheese Trio Protein Box",
+      "category": "Protein Boxes",
+      "serving": "1 item (225 g)",
+      "calories": 470,
+      "protein_g": 22,
+      "carbs_g": 36,
+      "fat_g": 27,
+      "fiber_g": 5
+    },
+    {
+      "name": "Cheese Trio Protein Box",
+      "category": "Protein Boxes",
+      "serving": "1 item (135 g)",
+      "calories": 520,
+      "protein_g": 20,
+      "carbs_g": 59,
+      "fat_g": 24,
+      "fiber_g": 5
+    },
+    {
+      "name": "Floura Blueberry Matcha Fiber Bar",
+      "category": "Protein & Snack Bars",
+      "serving": "1 item (45 g)",
+      "calories": 160,
+      "protein_g": 3,
+      "carbs_g": 30,
+      "fat_g": 6,
+      "fiber_g": 15
+    },
+    {
+      "name": "CirC Peanut Chocolate Chip Protein Bites",
+      "category": "Protein & Snack Bars",
+      "serving": "1 item (50 g)",
+      "calories": 210,
+      "protein_g": 10,
+      "carbs_g": 24,
+      "fat_g": 9,
+      "fiber_g": 3
+    },
+    {
+      "name": "Perfect Bar® – Dark Chocolate Chip Peanut Butter",
+      "category": "Protein & Snack Bars",
+      "serving": "1 item (65 g)",
+      "calories": 330,
+      "protein_g": 15,
+      "carbs_g": 24,
+      "fat_g": 20,
+      "fiber_g": 4
+    },
+    {
+      "name": "Perfect Bar® Peanut Butter",
+      "category": "Protein & Snack Bars",
+      "serving": "1 item (71 g)",
+      "calories": 340,
+      "protein_g": 17,
+      "carbs_g": 27,
+      "fat_g": 19,
+      "fiber_g": 3
+    },
+    {
+      "name": "KIND® Salted Caramel & Dark Chocolate Nut Bar",
+      "category": "Protein & Snack Bars",
+      "serving": "1 item (40 g)",
+      "calories": 200,
+      "protein_g": 6,
+      "carbs_g": 16,
+      "fat_g": 15,
+      "fiber_g": 7
+    },
+    {
+      "name": "All In™ Madagascar Vanilla, Honey & Almonds Bar",
+      "category": "Protein & Snack Bars",
+      "serving": "1 item (40 g)",
+      "calories": 170,
+      "protein_g": 4,
+      "carbs_g": 21,
+      "fat_g": 9,
+      "fiber_g": 7
+    },
+    {
+      "name": "KIND - Almond Coconut Cashew Chai",
+      "category": "Protein & Snack Bars",
+      "serving": "1 item (40 g)",
+      "calories": 200,
+      "protein_g": 5,
+      "carbs_g": 18,
+      "fat_g": 14,
+      "fiber_g": 3
+    },
+    {
+      "name": "That's It® – Apple + Mango Bar",
+      "category": "Protein & Snack Bars",
+      "serving": "1 item (35 g)",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 27,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "That's It® – Apple + Blueberry Bar",
+      "category": "Protein & Snack Bars",
+      "serving": "1 item (35 g)",
+      "calories": 100,
+      "protein_g": 1,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 4
+    },
+    {
+      "name": "Olli Genoa Salami & Fontina Cheese Snack Tray",
+      "category": "Savory Snacks",
+      "serving": "1 item (56.7 g)",
+      "calories": 210,
+      "protein_g": 13,
+      "carbs_g": 9,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chomps® Original Beef Stick",
+      "category": "Savory Snacks",
+      "serving": "1 item (32 g)",
+      "calories": 100,
+      "protein_g": 10,
+      "carbs_g": 0,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Siete Sea Salt Kettle Cooked Potato Chips",
+      "category": "Savory Snacks",
+      "serving": "1 item (42.5 g)",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 27,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Country Archer™ – Hickory Smoke Turkey Jerky",
+      "category": "Savory Snacks",
+      "serving": "1 item (28 g)",
+      "calories": 70,
+      "protein_g": 10,
+      "carbs_g": 5,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Khloud™ White Cheddar Protein Popcorn",
+      "category": "Protein Popcorn",
+      "serving": "1 item (30 g)",
+      "calories": 160,
+      "protein_g": 7,
+      "carbs_g": 11,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Khloud™ Sweet & Salty Kettle Corn Protein Popcorn",
+      "category": "Protein Popcorn",
+      "serving": "1 item (30 g)",
+      "calories": 150,
+      "protein_g": 7,
+      "carbs_g": 12,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Madeleines",
+      "category": "Sweet Snacks",
+      "serving": "1 item (51 g)",
+      "calories": 220,
+      "protein_g": 3,
+      "carbs_g": 26,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Marshmallow Dream Bar",
+      "category": "Sweet Snacks",
+      "serving": "1 item (60 g)",
+      "calories": 230,
+      "protein_g": 1,
+      "carbs_g": 44,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Biscotti with Almonds",
+      "category": "Sweet Snacks",
+      "serving": "1 item (42 g)",
+      "calories": 200,
+      "protein_g": 5,
+      "carbs_g": 25,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "SkinnyDipped Coconut Almond Bite",
+      "category": "Sweet Snacks",
+      "serving": "1 item (15 g)",
+      "calories": 80,
+      "protein_g": 1,
+      "carbs_g": 7,
+      "fat_g": 6,
+      "fiber_g": 2
+    },
+    {
+      "name": "SkinnyDipped Dark Chocolate Cocoa Almonds",
+      "category": "Sweet Snacks",
+      "serving": "1 item (28 g)",
+      "calories": 170,
+      "protein_g": 5,
+      "carbs_g": 15,
+      "fat_g": 12,
+      "fiber_g": 6
+    },
+    {
+      "name": "SkinnyDipped Lemon Bliss Almonds",
+      "category": "Sweet Snacks",
+      "serving": "1 item (28 g)",
+      "calories": 170,
+      "protein_g": 4,
+      "carbs_g": 17,
+      "fat_g": 11,
+      "fiber_g": 3
+    },
+    {
+      "name": "Organic Valley Stringles® Mozzarella String Cheese",
+      "category": "Cheese & Fruit",
+      "serving": "1 item (28 g)",
+      "calories": 80,
+      "protein_g": 7,
+      "carbs_g": 1,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peter Rabbit™ Organics Strawberry Banana",
+      "category": "Cheese & Fruit",
+      "serving": "1 item (113 g)",
+      "calories": 80,
+      "protein_g": 1,
+      "carbs_g": 18,
+      "fat_g": 0,
+      "fiber_g": 2
+    }
+  ]
+}

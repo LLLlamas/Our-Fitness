@@ -1,0 +1,8138 @@
+{
+  "chain": "Firehouse Subs",
+  "slug": "firehouse-subs",
+  "aliases": [
+    "firehouse subs",
+    "firehouse",
+    "firehouse sub",
+    "fire house subs",
+    "fhs"
+  ],
+  "kind": "deli",
+  "source_url": "https://www.nutritionix.com/firehouse-subs/menu/premium",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Nutritionix-hosted restaurant nutrition calculator (last updated 09/09/2026). firehousesubs.com links its nutrition info to nutritionix.com/firehouse-subs/portal (verified in the site's JS bundle). Fountain-drink flavour-shot permutations ('X with Y', 'Specialty') omitted; base fountain drinks kept per cup size. Atwater outliers (kept as published): Steak [1 serving (Large Sub Meats portion)] (390 cal vs Atwater 225); USDA Choice Roast Beef [1 serving (Large Sub Meats portion)] (240 cal vs Atwater 180); Steak [1 serving (Medium Sub Meats portion)] (200 cal vs Atwater 110); USDA Choice Roast Beef [1 serving (Medium Sub Meats portion)] (160 cal vs Atwater 123); Steak [1 serving (Small Sub Meats portion)] (100 cal vs Atwater 53).",
+  "items": [
+    {
+      "name": "Cajun Chicken - Large",
+      "category": "Hot Specialty Subs",
+      "serving": "1 large",
+      "calories": 1180,
+      "protein_g": 85,
+      "carbs_g": 89,
+      "fat_g": 55,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cajun Chicken - Medium",
+      "category": "Hot Specialty Subs",
+      "serving": "1 medium",
+      "calories": 700,
+      "protein_g": 45,
+      "carbs_g": 53,
+      "fat_g": 35,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cajun Chicken - Small",
+      "category": "Hot Specialty Subs",
+      "serving": "1 small",
+      "calories": 360,
+      "protein_g": 23,
+      "carbs_g": 27,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken n' Cheddar Rancher - Large",
+      "category": "Hot Specialty Subs",
+      "serving": "1 large",
+      "calories": 1550,
+      "protein_g": 90,
+      "carbs_g": 92,
+      "fat_g": 91,
+      "fiber_g": 9
+    },
+    {
+      "name": "Chicken n' Cheddar Rancher - Medium",
+      "category": "Hot Specialty Subs",
+      "serving": "1 medium",
+      "calories": 940,
+      "protein_g": 49,
+      "carbs_g": 58,
+      "fat_g": 58,
+      "fiber_g": 6
+    },
+    {
+      "name": "Chicken n' Cheddar Rancher - Small",
+      "category": "Hot Specialty Subs",
+      "serving": "1 small",
+      "calories": 470,
+      "protein_g": 24,
+      "carbs_g": 29,
+      "fat_g": 29,
+      "fiber_g": 3
+    },
+    {
+      "name": "Club on a Sub - Large",
+      "category": "Hot Specialty Subs",
+      "serving": "1 large",
+      "calories": 1370,
+      "protein_g": 81,
+      "carbs_g": 108,
+      "fat_g": 70,
+      "fiber_g": 3
+    },
+    {
+      "name": "Club on a Sub - Medium",
+      "category": "Hot Specialty Subs",
+      "serving": "1 medium",
+      "calories": 760,
+      "protein_g": 40,
+      "carbs_g": 63,
+      "fat_g": 39,
+      "fiber_g": 2
+    },
+    {
+      "name": "Club on a Sub - Small",
+      "category": "Hot Specialty Subs",
+      "serving": "1 small",
+      "calories": 380,
+      "protein_g": 20,
+      "carbs_g": 32,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Engineer - Large",
+      "category": "Hot Specialty Subs",
+      "serving": "1 large",
+      "calories": 1130,
+      "protein_g": 70,
+      "carbs_g": 99,
+      "fat_g": 53,
+      "fiber_g": 6
+    },
+    {
+      "name": "Engineer - Medium",
+      "category": "Hot Specialty Subs",
+      "serving": "1 medium",
+      "calories": 690,
+      "protein_g": 39,
+      "carbs_g": 60,
+      "fat_g": 35,
+      "fiber_g": 4
+    },
+    {
+      "name": "Engineer - Small",
+      "category": "Hot Specialty Subs",
+      "serving": "1 small",
+      "calories": 350,
+      "protein_g": 19,
+      "carbs_g": 30,
+      "fat_g": 17,
+      "fiber_g": 2
+    },
+    {
+      "name": "Firehouse Captain's Club - Large",
+      "category": "Hot Specialty Subs",
+      "serving": "1 large",
+      "calories": 1200,
+      "protein_g": 79,
+      "carbs_g": 109,
+      "fat_g": 52,
+      "fiber_g": 10
+    },
+    {
+      "name": "Firehouse Captain's Club - Medium",
+      "category": "Hot Specialty Subs",
+      "serving": "1 medium",
+      "calories": 730,
+      "protein_g": 43,
+      "carbs_g": 68,
+      "fat_g": 33,
+      "fiber_g": 7
+    },
+    {
+      "name": "Firehouse Captain's Club - Small",
+      "category": "Hot Specialty Subs",
+      "serving": "1 small",
+      "calories": 360,
+      "protein_g": 22,
+      "carbs_g": 34,
+      "fat_g": 17,
+      "fiber_g": 3
+    },
+    {
+      "name": "Hero - Large",
+      "category": "Hot Specialty Subs",
+      "serving": "1 large",
+      "calories": 1180,
+      "protein_g": 69,
+      "carbs_g": 105,
+      "fat_g": 54,
+      "fiber_g": 3
+    },
+    {
+      "name": "Hero - Medium",
+      "category": "Hot Specialty Subs",
+      "serving": "1 medium",
+      "calories": 780,
+      "protein_g": 49,
+      "carbs_g": 63,
+      "fat_g": 36,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hero - Small",
+      "category": "Hot Specialty Subs",
+      "serving": "1 small",
+      "calories": 390,
+      "protein_g": 24,
+      "carbs_g": 32,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hook & Ladder - Large",
+      "category": "Hot Specialty Subs",
+      "serving": "1 large",
+      "calories": 1130,
+      "protein_g": 64,
+      "carbs_g": 102,
+      "fat_g": 54,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hook & Ladder - Medium",
+      "category": "Hot Specialty Subs",
+      "serving": "1 medium",
+      "calories": 710,
+      "protein_g": 37,
+      "carbs_g": 63,
+      "fat_g": 35,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hook & Ladder - Small",
+      "category": "Hot Specialty Subs",
+      "serving": "1 small",
+      "calories": 350,
+      "protein_g": 18,
+      "carbs_g": 31,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Italian - Large",
+      "category": "Hot Specialty Subs",
+      "serving": "1 large",
+      "calories": 1420,
+      "protein_g": 70,
+      "carbs_g": 115,
+      "fat_g": 77,
+      "fiber_g": 3
+    },
+    {
+      "name": "Italian - Medium",
+      "category": "Hot Specialty Subs",
+      "serving": "1 medium",
+      "calories": 920,
+      "protein_g": 40,
+      "carbs_g": 65,
+      "fat_g": 56,
+      "fiber_g": 2
+    },
+    {
+      "name": "Italian - Small",
+      "category": "Hot Specialty Subs",
+      "serving": "1 small",
+      "calories": 460,
+      "protein_g": 20,
+      "carbs_g": 32,
+      "fat_g": 28,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jamaican Jerk Turkey - Large",
+      "category": "Hot Specialty Subs",
+      "serving": "1 large",
+      "calories": 1160,
+      "protein_g": 64,
+      "carbs_g": 110,
+      "fat_g": 54,
+      "fiber_g": 3
+    },
+    {
+      "name": "Jamaican Jerk Turkey - Medium",
+      "category": "Hot Specialty Subs",
+      "serving": "1 medium",
+      "calories": 720,
+      "protein_g": 35,
+      "carbs_g": 68,
+      "fat_g": 36,
+      "fiber_g": 2
+    },
+    {
+      "name": "Jamaican Jerk Turkey - Small",
+      "category": "Hot Specialty Subs",
+      "serving": "1 small",
+      "calories": 360,
+      "protein_g": 18,
+      "carbs_g": 34,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Meatball - Large",
+      "category": "Hot Specialty Subs",
+      "serving": "1 large",
+      "calories": 1310,
+      "protein_g": 59,
+      "carbs_g": 95,
+      "fat_g": 78,
+      "fiber_g": 3
+    },
+    {
+      "name": "Meatball - Medium *contains gluten",
+      "category": "Hot Specialty Subs",
+      "serving": "1 medium",
+      "calories": 820,
+      "protein_g": 37,
+      "carbs_g": 59,
+      "fat_g": 49,
+      "fiber_g": 2
+    },
+    {
+      "name": "Meatball - Small",
+      "category": "Hot Specialty Subs",
+      "serving": "1 small",
+      "calories": 460,
+      "protein_g": 21,
+      "carbs_g": 30,
+      "fat_g": 29,
+      "fiber_g": 0
+    },
+    {
+      "name": "New York Steamer - Large",
+      "category": "Hot Specialty Subs",
+      "serving": "1 large",
+      "calories": 1190,
+      "protein_g": 75,
+      "carbs_g": 80,
+      "fat_g": 61,
+      "fiber_g": 0
+    },
+    {
+      "name": "New York Steamer - Medium",
+      "category": "Hot Specialty Subs",
+      "serving": "1 medium",
+      "calories": 720,
+      "protein_g": 41,
+      "carbs_g": 49,
+      "fat_g": 39,
+      "fiber_g": 0
+    },
+    {
+      "name": "New York Steamer - Small",
+      "category": "Hot Specialty Subs",
+      "serving": "1 small",
+      "calories": 360,
+      "protein_g": 20,
+      "carbs_g": 24,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepperoni Pizza Meatball Sub - Large",
+      "category": "Hot Specialty Subs",
+      "serving": "1 large",
+      "calories": 1920,
+      "protein_g": 79,
+      "carbs_g": 100,
+      "fat_g": 137,
+      "fiber_g": 6
+    },
+    {
+      "name": "Pepperoni Pizza Meatball Sub - Medium",
+      "category": "Hot Specialty Subs",
+      "serving": "1 medium",
+      "calories": 1250,
+      "protein_g": 51,
+      "carbs_g": 68,
+      "fat_g": 88,
+      "fiber_g": 5
+    },
+    {
+      "name": "Pepperoni Pizza Meatball Sub - Small",
+      "category": "Hot Specialty Subs",
+      "serving": "1 small",
+      "calories": 680,
+      "protein_g": 28,
+      "carbs_g": 32,
+      "fat_g": 49,
+      "fiber_g": 2
+    },
+    {
+      "name": "Prime Rib Steak - Large",
+      "category": "Hot Specialty Subs",
+      "serving": "1 large",
+      "calories": 1310,
+      "protein_g": 78,
+      "carbs_g": 95,
+      "fat_g": 69,
+      "fiber_g": 4
+    },
+    {
+      "name": "Prime Rib Steak - Medium",
+      "category": "Hot Specialty Subs",
+      "serving": "1 medium",
+      "calories": 780,
+      "protein_g": 43,
+      "carbs_g": 60,
+      "fat_g": 42,
+      "fiber_g": 3
+    },
+    {
+      "name": "Prime Rib Steak - Small",
+      "category": "Hot Specialty Subs",
+      "serving": "1 small",
+      "calories": 390,
+      "protein_g": 22,
+      "carbs_g": 31,
+      "fat_g": 21,
+      "fiber_g": 2
+    },
+    {
+      "name": "Smokehouse Beef & Cheddar Brisket - Large",
+      "category": "Hot Specialty Subs",
+      "serving": "1 large",
+      "calories": 1520,
+      "protein_g": 57,
+      "carbs_g": 95,
+      "fat_g": 101,
+      "fiber_g": 0
+    },
+    {
+      "name": "Smokehouse Beef & Cheddar Brisket - Medium",
+      "category": "Hot Specialty Subs",
+      "serving": "1 medium",
+      "calories": 890,
+      "protein_g": 32,
+      "carbs_g": 59,
+      "fat_g": 59,
+      "fiber_g": 0
+    },
+    {
+      "name": "Smokehouse Beef & Cheddar Brisket - Small",
+      "category": "Hot Specialty Subs",
+      "serving": "1 small",
+      "calories": 450,
+      "protein_g": 16,
+      "carbs_g": 29,
+      "fat_g": 29,
+      "fiber_g": 0
+    },
+    {
+      "name": "Smokin' Honey Chicken Melt - Large",
+      "category": "Hot Specialty Subs",
+      "serving": "1 large",
+      "calories": 1510,
+      "protein_g": 93,
+      "carbs_g": 100,
+      "fat_g": 80,
+      "fiber_g": 2
+    },
+    {
+      "name": "Smokin' Honey Chicken Melt - Medium",
+      "category": "Hot Specialty Subs",
+      "serving": "1 medium",
+      "calories": 930,
+      "protein_g": 52,
+      "carbs_g": 61,
+      "fat_g": 52,
+      "fiber_g": 1
+    },
+    {
+      "name": "Smokin' Honey Chicken Melt - Small",
+      "category": "Hot Specialty Subs",
+      "serving": "1 small",
+      "calories": 460,
+      "protein_g": 26,
+      "carbs_g": 30,
+      "fat_g": 26,
+      "fiber_g": 0
+    },
+    {
+      "name": "Steak & Cheese - Large",
+      "category": "Hot Specialty Subs",
+      "serving": "1 large",
+      "calories": 1270,
+      "protein_g": 25,
+      "carbs_g": 92,
+      "fat_g": 69,
+      "fiber_g": 2
+    },
+    {
+      "name": "Steak & Cheese - Medium",
+      "category": "Hot Specialty Subs",
+      "serving": "1 medium",
+      "calories": 760,
+      "protein_g": 16,
+      "carbs_g": 54,
+      "fat_g": 43,
+      "fiber_g": 0
+    },
+    {
+      "name": "Steak & Cheese - Small",
+      "category": "Hot Specialty Subs",
+      "serving": "1 small",
+      "calories": 370,
+      "protein_g": 8,
+      "carbs_g": 27,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Steak & Cheese Melt - Large",
+      "category": "Hot Specialty Subs",
+      "serving": "1 large",
+      "calories": 1420,
+      "protein_g": 35,
+      "carbs_g": 92,
+      "fat_g": 81,
+      "fiber_g": 2
+    },
+    {
+      "name": "Steak & Cheese Melt - Medium",
+      "category": "Hot Specialty Subs",
+      "serving": "1 medium",
+      "calories": 850,
+      "protein_g": 22,
+      "carbs_g": 55,
+      "fat_g": 50,
+      "fiber_g": 1
+    },
+    {
+      "name": "Steak & Cheese Melt - Small",
+      "category": "Hot Specialty Subs",
+      "serving": "1 small",
+      "calories": 430,
+      "protein_g": 11,
+      "carbs_g": 28,
+      "fat_g": 25,
+      "fiber_g": 0
+    },
+    {
+      "name": "Steak & Cheese Melt with Chipotle Sauce - Large",
+      "category": "Hot Specialty Subs",
+      "serving": "1 large",
+      "calories": 1590,
+      "protein_g": 35,
+      "carbs_g": 104,
+      "fat_g": 95,
+      "fiber_g": 3
+    },
+    {
+      "name": "Steak & Cheese Melt with Chipotle Sauce - Medium",
+      "category": "Hot Specialty Subs",
+      "serving": "1 medium",
+      "calories": 970,
+      "protein_g": 23,
+      "carbs_g": 63,
+      "fat_g": 59,
+      "fiber_g": 2
+    },
+    {
+      "name": "Steak & Cheese Melt with Chipotle Sauce - Small",
+      "category": "Hot Specialty Subs",
+      "serving": "1 small",
+      "calories": 480,
+      "protein_g": 11,
+      "carbs_g": 32,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet & Spicy Meatball - Large",
+      "category": "Hot Specialty Subs",
+      "serving": "1 large",
+      "calories": 1380,
+      "protein_g": 59,
+      "carbs_g": 118,
+      "fat_g": 79,
+      "fiber_g": 6
+    },
+    {
+      "name": "Sweet & Spicy Meatball - Medium",
+      "category": "Hot Specialty Subs",
+      "serving": "1 medium",
+      "calories": 880,
+      "protein_g": 37,
+      "carbs_g": 76,
+      "fat_g": 50,
+      "fiber_g": 4
+    },
+    {
+      "name": "Sweet & Spicy Meatball - Small",
+      "category": "Hot Specialty Subs",
+      "serving": "1 small",
+      "calories": 480,
+      "protein_g": 21,
+      "carbs_g": 39,
+      "fat_g": 29,
+      "fiber_g": 2
+    },
+    {
+      "name": "Turkey Bacon Ranch - Large",
+      "category": "Hot Specialty Subs",
+      "serving": "1 large",
+      "calories": 1430,
+      "protein_g": 73,
+      "carbs_g": 90,
+      "fat_g": 89,
+      "fiber_g": 3
+    },
+    {
+      "name": "Turkey Bacon Ranch - Medium",
+      "category": "Hot Specialty Subs",
+      "serving": "1 medium",
+      "calories": 900,
+      "protein_g": 41,
+      "carbs_g": 56,
+      "fat_g": 58,
+      "fiber_g": 3
+    },
+    {
+      "name": "Turkey Bacon Ranch - Small",
+      "category": "Hot Specialty Subs",
+      "serving": "1 small",
+      "calories": 470,
+      "protein_g": 22,
+      "carbs_g": 29,
+      "fat_g": 30,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chicken - Large",
+      "category": "Single Meat Subs",
+      "serving": "1 large",
+      "calories": 1130,
+      "protein_g": 71,
+      "carbs_g": 91,
+      "fat_g": 53,
+      "fiber_g": 3
+    },
+    {
+      "name": "Chicken - Medium",
+      "category": "Single Meat Subs",
+      "serving": "1 medium",
+      "calories": 730,
+      "protein_g": 47,
+      "carbs_g": 56,
+      "fat_g": 35,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chicken - Small",
+      "category": "Single Meat Subs",
+      "serving": "1 small",
+      "calories": 360,
+      "protein_g": 23,
+      "carbs_g": 28,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Corned Beef - Large",
+      "category": "Single Meat Subs",
+      "serving": "1 large",
+      "calories": 1130,
+      "protein_g": 69,
+      "carbs_g": 87,
+      "fat_g": 56,
+      "fiber_g": 3
+    },
+    {
+      "name": "Corned Beef - Medium",
+      "category": "Single Meat Subs",
+      "serving": "1 medium",
+      "calories": 730,
+      "protein_g": 45,
+      "carbs_g": 53,
+      "fat_g": 37,
+      "fiber_g": 2
+    },
+    {
+      "name": "Corned Beef - Small",
+      "category": "Single Meat Subs",
+      "serving": "1 small",
+      "calories": 360,
+      "protein_g": 23,
+      "carbs_g": 27,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ham - Large",
+      "category": "Single Meat Subs",
+      "serving": "1 large",
+      "calories": 1130,
+      "protein_g": 57,
+      "carbs_g": 111,
+      "fat_g": 53,
+      "fiber_g": 3
+    },
+    {
+      "name": "Ham - Medium",
+      "category": "Single Meat Subs",
+      "serving": "1 medium",
+      "calories": 730,
+      "protein_g": 37,
+      "carbs_g": 69,
+      "fat_g": 35,
+      "fiber_g": 2
+    },
+    {
+      "name": "Ham - Small",
+      "category": "Single Meat Subs",
+      "serving": "1 small",
+      "calories": 360,
+      "protein_g": 18,
+      "carbs_g": 35,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pastrami - Large",
+      "category": "Single Meat Subs",
+      "serving": "1 large",
+      "calories": 1100,
+      "protein_g": 60,
+      "carbs_g": 90,
+      "fat_g": 54,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pastrami - Medium",
+      "category": "Single Meat Subs",
+      "serving": "1 medium",
+      "calories": 710,
+      "protein_g": 39,
+      "carbs_g": 55,
+      "fat_g": 36,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pastrami - Small",
+      "category": "Single Meat Subs",
+      "serving": "1 small",
+      "calories": 350,
+      "protein_g": 20,
+      "carbs_g": 28,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Roast Beef - Large",
+      "category": "Single Meat Subs",
+      "serving": "1 large",
+      "calories": 1130,
+      "protein_g": 63,
+      "carbs_g": 87,
+      "fat_g": 53,
+      "fiber_g": 3
+    },
+    {
+      "name": "Roast Beef - Medium",
+      "category": "Single Meat Subs",
+      "serving": "1 medium",
+      "calories": 730,
+      "protein_g": 41,
+      "carbs_g": 53,
+      "fat_g": 35,
+      "fiber_g": 2
+    },
+    {
+      "name": "Roast Beef - Small",
+      "category": "Single Meat Subs",
+      "serving": "1 small",
+      "calories": 360,
+      "protein_g": 21,
+      "carbs_g": 27,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Turkey - Large",
+      "category": "Single Meat Subs",
+      "serving": "1 large",
+      "calories": 1040,
+      "protein_g": 55,
+      "carbs_g": 94,
+      "fat_g": 50,
+      "fiber_g": 3
+    },
+    {
+      "name": "Turkey - Medium",
+      "category": "Single Meat Subs",
+      "serving": "1 medium",
+      "calories": 670,
+      "protein_g": 36,
+      "carbs_g": 58,
+      "fat_g": 33,
+      "fiber_g": 2
+    },
+    {
+      "name": "Turkey - Small",
+      "category": "Single Meat Subs",
+      "serving": "1 small",
+      "calories": 330,
+      "protein_g": 18,
+      "carbs_g": 29,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Veggie - Large",
+      "category": "Single Meat Subs",
+      "serving": "1 large",
+      "calories": 1070,
+      "protein_g": 35,
+      "carbs_g": 95,
+      "fat_g": 61,
+      "fiber_g": 5
+    },
+    {
+      "name": "Veggie - Medium",
+      "category": "Single Meat Subs",
+      "serving": "1 medium",
+      "calories": 710,
+      "protein_g": 25,
+      "carbs_g": 58,
+      "fat_g": 43,
+      "fiber_g": 3
+    },
+    {
+      "name": "Veggie - Small",
+      "category": "Single Meat Subs",
+      "serving": "1 small",
+      "calories": 360,
+      "protein_g": 12,
+      "carbs_g": 29,
+      "fat_g": 22,
+      "fiber_g": 1
+    },
+    {
+      "name": "Tuna - Large",
+      "category": "Cold Subs",
+      "serving": "1 large",
+      "calories": 1550,
+      "protein_g": 72,
+      "carbs_g": 101,
+      "fat_g": 95,
+      "fiber_g": 3
+    },
+    {
+      "name": "Tuna - Medium",
+      "category": "Cold Subs",
+      "serving": "1 medium",
+      "calories": 890,
+      "protein_g": 40,
+      "carbs_g": 60,
+      "fat_g": 55,
+      "fiber_g": 2
+    },
+    {
+      "name": "Tuna - Small",
+      "category": "Cold Subs",
+      "serving": "1 small",
+      "calories": 450,
+      "protein_g": 20,
+      "carbs_g": 30,
+      "fat_g": 28,
+      "fiber_g": 1
+    },
+    {
+      "name": "Firehouse Salad",
+      "category": "Chopped Salads",
+      "serving": "1 serving",
+      "calories": 190,
+      "protein_g": 11,
+      "carbs_g": 11,
+      "fat_g": 11,
+      "fiber_g": 5
+    },
+    {
+      "name": "Firehouse Salad add Chicken",
+      "category": "Chopped Salads",
+      "serving": "1 serving",
+      "calories": 350,
+      "protein_g": 41,
+      "carbs_g": 13,
+      "fat_g": 14,
+      "fiber_g": 5
+    },
+    {
+      "name": "Firehouse Salad add Ham",
+      "category": "Chopped Salads",
+      "serving": "1 serving",
+      "calories": 350,
+      "protein_g": 31,
+      "carbs_g": 27,
+      "fat_g": 14,
+      "fiber_g": 5
+    },
+    {
+      "name": "Firehouse Salad add Salami",
+      "category": "Chopped Salads",
+      "serving": "1 serving",
+      "calories": 630,
+      "protein_g": 35,
+      "carbs_g": 14,
+      "fat_g": 47,
+      "fiber_g": 5
+    },
+    {
+      "name": "Firehouse Salad add Turkey",
+      "category": "Chopped Salads",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 30,
+      "carbs_g": 15,
+      "fat_g": 13,
+      "fiber_g": 5
+    },
+    {
+      "name": "Firehouse Side Salad",
+      "category": "Chopped Salads",
+      "serving": "1 serving",
+      "calories": 60,
+      "protein_g": 5,
+      "carbs_g": 5,
+      "fat_g": 3,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hook & Ladder Salad",
+      "category": "Chopped Salads",
+      "serving": "1 serving",
+      "calories": 320,
+      "protein_g": 30,
+      "carbs_g": 21,
+      "fat_g": 13,
+      "fiber_g": 5
+    },
+    {
+      "name": "Italian Chopped Salad with Grilled Chicken Salad",
+      "category": "Chopped Salads",
+      "serving": "1 serving",
+      "calories": 410,
+      "protein_g": 39,
+      "carbs_g": 14,
+      "fat_g": 22,
+      "fiber_g": 5
+    },
+    {
+      "name": "Banana Peppers",
+      "category": "Salad Add-On Toppings",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Olives Add-On",
+      "category": "Salad Add-On Toppings",
+      "serving": "1 serving (Salad Add-On Toppings portion)",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jalapeno Peppers",
+      "category": "Salad Add-On Toppings",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Balsamic Dressing",
+      "category": "Salad Dressings",
+      "serving": "1 serving (Salad Dressings portion)",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 7,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buttermilk Ranch Dressing",
+      "category": "Salad Dressings",
+      "serving": "1 serving (Salad Dressings portion)",
+      "calories": 320,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 34,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey Mustard Dressing",
+      "category": "Salad Dressings",
+      "serving": "1 serving",
+      "calories": 300,
+      "protein_g": 2,
+      "carbs_g": 15,
+      "fat_g": 28,
+      "fiber_g": 0
+    },
+    {
+      "name": "Italian Dressing",
+      "category": "Salad Dressings",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 8,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Light Italian Dressing",
+      "category": "Salad Dressings",
+      "serving": "1 serving",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Oil & Vinegar",
+      "category": "Salad Dressings",
+      "serving": "1 serving",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 28,
+      "fiber_g": 0
+    },
+    {
+      "name": "Broccoli & Cheese Soup, 10 oz",
+      "category": "Soups",
+      "serving": "10 oz",
+      "calories": 340,
+      "protein_g": 11,
+      "carbs_g": 12,
+      "fat_g": 28,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chicken & Dumpling Soup, 6 oz",
+      "category": "Soups",
+      "serving": "6 oz",
+      "calories": 120,
+      "protein_g": 5,
+      "carbs_g": 10,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken & Dumpling Soup, 10 oz",
+      "category": "Soups",
+      "serving": "10 oz",
+      "calories": 190,
+      "protein_g": 8,
+      "carbs_g": 17,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken Noodle Soup, 10 oz",
+      "category": "Soups",
+      "serving": "10 oz",
+      "calories": 120,
+      "protein_g": 8,
+      "carbs_g": 18,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chili, 6 oz",
+      "category": "Soups",
+      "serving": "6 oz",
+      "calories": 180,
+      "protein_g": 11,
+      "carbs_g": 13,
+      "fat_g": 9,
+      "fiber_g": 3
+    },
+    {
+      "name": "Chili, 10 oz",
+      "category": "Soups",
+      "serving": "10 oz",
+      "calories": 300,
+      "protein_g": 18,
+      "carbs_g": 22,
+      "fat_g": 15,
+      "fiber_g": 5
+    },
+    {
+      "name": "Loaded Potato Soup, 6 oz",
+      "category": "Soups",
+      "serving": "6 oz",
+      "calories": 240,
+      "protein_g": 5,
+      "carbs_g": 15,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Loaded Potato Soup, 10 oz",
+      "category": "Soups",
+      "serving": "10 oz",
+      "calories": 380,
+      "protein_g": 9,
+      "carbs_g": 23,
+      "fat_g": 29,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tomato Bisque, 10 oz",
+      "category": "Soups",
+      "serving": "10 oz",
+      "calories": 220,
+      "protein_g": 6,
+      "carbs_g": 19,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "5-Cheese Mac & Cheese",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 380,
+      "protein_g": 17,
+      "carbs_g": 33,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Brownie",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 430,
+      "protein_g": 4,
+      "carbs_g": 61,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cajun Fries",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 400,
+      "protein_g": 4,
+      "carbs_g": 55,
+      "fat_g": 19,
+      "fiber_g": 4
+    },
+    {
+      "name": "Cajun Fries - Large",
+      "category": "Sides & Chips",
+      "serving": "1 large",
+      "calories": 640,
+      "protein_g": 6,
+      "carbs_g": 87,
+      "fat_g": 31,
+      "fiber_g": 6
+    },
+    {
+      "name": "Celebration Sugar Cookie",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 320,
+      "protein_g": 4,
+      "carbs_g": 42,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chili",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 180,
+      "protein_g": 11,
+      "carbs_g": 13,
+      "fat_g": 9,
+      "fiber_g": 3
+    },
+    {
+      "name": "Chocolate Chip Cookie",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 310,
+      "protein_g": 4,
+      "carbs_g": 44,
+      "fat_g": 15,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chocolate Mint Cookie",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 310,
+      "protein_g": 4,
+      "carbs_g": 43,
+      "fat_g": 15,
+      "fiber_g": 2
+    },
+    {
+      "name": "Coleslaw",
+      "category": "Sides & Chips",
+      "serving": "1 serving (Sides & Chips portion)",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Crunchy Cheetos",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 310,
+      "protein_g": 3,
+      "carbs_g": 26,
+      "fat_g": 21,
+      "fiber_g": 1
+    },
+    {
+      "name": "Doritos Cool Ranch",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 260,
+      "protein_g": 3,
+      "carbs_g": 31,
+      "fat_g": 13,
+      "fiber_g": 3
+    },
+    {
+      "name": "Doritos Nacho Cheese",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 3,
+      "carbs_g": 28,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Double Chocolate Chip Cookie",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 3,
+      "carbs_g": 34,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Fries",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 390,
+      "protein_g": 4,
+      "carbs_g": 53,
+      "fat_g": 19,
+      "fiber_g": 4
+    },
+    {
+      "name": "Fries - Large",
+      "category": "Sides & Chips",
+      "serving": "1 large",
+      "calories": 630,
+      "protein_g": 6,
+      "carbs_g": 85,
+      "fat_g": 31,
+      "fiber_g": 6
+    },
+    {
+      "name": "Fritos",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 320,
+      "protein_g": 3,
+      "carbs_g": 32,
+      "fat_g": 20,
+      "fiber_g": 3
+    },
+    {
+      "name": "Funyuns",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 160,
+      "protein_g": 2,
+      "carbs_g": 20,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Garlic Bread - Large",
+      "category": "Sides & Chips",
+      "serving": "1 large",
+      "calories": 670,
+      "protein_g": 13,
+      "carbs_g": 72,
+      "fat_g": 36,
+      "fiber_g": 3
+    },
+    {
+      "name": "Garlic Bread - Medium",
+      "category": "Sides & Chips",
+      "serving": "1 medium",
+      "calories": 440,
+      "protein_g": 8,
+      "carbs_g": 48,
+      "fat_g": 23,
+      "fiber_g": 2
+    },
+    {
+      "name": "Garlic Bread - Small",
+      "category": "Sides & Chips",
+      "serving": "1 small",
+      "calories": 220,
+      "protein_g": 4,
+      "carbs_g": 24,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Lay's Kettle Cooked 40% Less Fat Jalapeno Cheddar",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 190,
+      "protein_g": 3,
+      "carbs_g": 26,
+      "fat_g": 8,
+      "fiber_g": 2
+    },
+    {
+      "name": "Lay's Kettle Cooked 40% Less Fat Original",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 190,
+      "protein_g": 3,
+      "carbs_g": 27,
+      "fat_g": 8,
+      "fiber_g": 2
+    },
+    {
+      "name": "Lay's Original",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 3,
+      "carbs_g": 23,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Lay's Sour Cream and Onion",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 3,
+      "carbs_g": 23,
+      "fat_g": 15,
+      "fiber_g": 2
+    },
+    {
+      "name": "Lemon Cookie",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 330,
+      "protein_g": 4,
+      "carbs_g": 43,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Macaroni and Cheese",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 490,
+      "protein_g": 20,
+      "carbs_g": 39,
+      "fat_g": 28,
+      "fiber_g": 2
+    },
+    {
+      "name": "Miss Vickie's Hand Picked Jalapeno",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 210,
+      "protein_g": 3,
+      "carbs_g": 22,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Miss Vickie's Sea Salt and Vinegar",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 210,
+      "protein_g": 2,
+      "carbs_g": 23,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Miss Vickie's Simply Sea Salt Original",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 210,
+      "protein_g": 3,
+      "carbs_g": 22,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Miss Vickie's Smokehouse BBQ",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 210,
+      "protein_g": 3,
+      "carbs_g": 23,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Oatmeal Raisin Cookie",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 4,
+      "carbs_g": 45,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Oven Baked Lay's BBQ",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 140,
+      "protein_g": 2,
+      "carbs_g": 24,
+      "fat_g": 4,
+      "fiber_g": 2
+    },
+    {
+      "name": "Oven Baked Lay's Regular",
+      "category": "Sides & Chips",
+      "serving": "1 regular",
+      "calories": 130,
+      "protein_g": 2,
+      "carbs_g": 26,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Oven Baked Ruffles Cheddar and Sour Cream",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 130,
+      "protein_g": 2,
+      "carbs_g": 24,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pickle Spear",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sunchips Harvest Cheddar",
+      "category": "Sides & Chips",
+      "serving": "1 serving",
+      "calories": 210,
+      "protein_g": 3,
+      "carbs_g": 29,
+      "fat_g": 10,
+      "fiber_g": 4
+    },
+    {
+      "name": "Kid's Grilled Cheese",
+      "category": "Kid's Subs",
+      "serving": "1 kid",
+      "calories": 440,
+      "protein_g": 12,
+      "carbs_g": 32,
+      "fat_g": 27,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid's Ham Sub",
+      "category": "Kid's Subs",
+      "serving": "1 kid",
+      "calories": 240,
+      "protein_g": 18,
+      "carbs_g": 30,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid's Meatball",
+      "category": "Kid's Subs",
+      "serving": "1 kid",
+      "calories": 350,
+      "protein_g": 16,
+      "carbs_g": 27,
+      "fat_g": 20,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid's Roast Beef",
+      "category": "Kid's Subs",
+      "serving": "1 kid",
+      "calories": 250,
+      "protein_g": 20,
+      "carbs_g": 22,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid's Turkey Sub",
+      "category": "Kid's Subs",
+      "serving": "1 kid",
+      "calories": 210,
+      "protein_g": 17,
+      "carbs_g": 24,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Catering Salad Chopped",
+      "category": "Catering Salad Platters",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 8,
+      "carbs_g": 8,
+      "fat_g": 5,
+      "fiber_g": 3
+    },
+    {
+      "name": "Catering Salad Chopped Deluxe Chicken",
+      "category": "Catering Salad Platters",
+      "serving": "1 serving",
+      "calories": 150,
+      "protein_g": 16,
+      "carbs_g": 9,
+      "fat_g": 7,
+      "fiber_g": 3
+    },
+    {
+      "name": "Catering Salad Chopped Deluxe Ham",
+      "category": "Catering Salad Platters",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 16,
+      "carbs_g": 14,
+      "fat_g": 7,
+      "fiber_g": 3
+    },
+    {
+      "name": "Catering Salad Chopped Deluxe Tuna Salad",
+      "category": "Catering Salad Platters",
+      "serving": "1 serving",
+      "calories": 230,
+      "protein_g": 13,
+      "carbs_g": 11,
+      "fat_g": 16,
+      "fiber_g": 3
+    },
+    {
+      "name": "Catering Salad Chopped Deluxe Turkey",
+      "category": "Catering Salad Platters",
+      "serving": "1 serving",
+      "calories": 140,
+      "protein_g": 16,
+      "carbs_g": 10,
+      "fat_g": 6,
+      "fiber_g": 3
+    },
+    {
+      "name": "Catering Salad Platter",
+      "category": "Catering Salad Platters",
+      "serving": "1 serving",
+      "calories": 35,
+      "protein_g": 2,
+      "carbs_g": 8,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Catering Sub Deluxe Platter",
+      "category": "Catering Sub Platters",
+      "serving": "1 serving",
+      "calories": 450,
+      "protein_g": 34,
+      "carbs_g": 50,
+      "fat_g": 14,
+      "fiber_g": 3
+    },
+    {
+      "name": "Catering Sub Platter",
+      "category": "Catering Sub Platters",
+      "serving": "1 serving",
+      "calories": 430,
+      "protein_g": 34,
+      "carbs_g": 51,
+      "fat_g": 12,
+      "fiber_g": 3
+    },
+    {
+      "name": "Boxed Lunch - Chicken",
+      "category": "Boxed Lunches",
+      "serving": "1 serving",
+      "calories": 520,
+      "protein_g": 37,
+      "carbs_g": 56,
+      "fat_g": 18,
+      "fiber_g": 4
+    },
+    {
+      "name": "Boxed Lunch - Corned Beef",
+      "category": "Boxed Lunches",
+      "serving": "1 serving",
+      "calories": 550,
+      "protein_g": 35,
+      "carbs_g": 54,
+      "fat_g": 22,
+      "fiber_g": 4
+    },
+    {
+      "name": "Boxed Lunch - Ham",
+      "category": "Boxed Lunches",
+      "serving": "1 serving",
+      "calories": 560,
+      "protein_g": 37,
+      "carbs_g": 70,
+      "fat_g": 17,
+      "fiber_g": 4
+    },
+    {
+      "name": "Boxed Lunch - Pastrami",
+      "category": "Boxed Lunches",
+      "serving": "1 serving",
+      "calories": 510,
+      "protein_g": 33,
+      "carbs_g": 56,
+      "fat_g": 18,
+      "fiber_g": 4
+    },
+    {
+      "name": "Boxed Lunch - Roast Beef",
+      "category": "Boxed Lunches",
+      "serving": "1 serving",
+      "calories": 530,
+      "protein_g": 39,
+      "carbs_g": 54,
+      "fat_g": 17,
+      "fiber_g": 4
+    },
+    {
+      "name": "Boxed Lunch - Turkey",
+      "category": "Boxed Lunches",
+      "serving": "1 serving",
+      "calories": 490,
+      "protein_g": 37,
+      "carbs_g": 58,
+      "fat_g": 15,
+      "fiber_g": 4
+    },
+    {
+      "name": "Boxed Lunch - Veggie",
+      "category": "Boxed Lunches",
+      "serving": "1 serving",
+      "calories": 520,
+      "protein_g": 25,
+      "carbs_g": 58,
+      "fat_g": 23,
+      "fiber_g": 4
+    },
+    {
+      "name": "Large Wheat Sub Roll",
+      "category": "Large Sub Bread",
+      "serving": "1 large",
+      "calories": 360,
+      "protein_g": 14,
+      "carbs_g": 66,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large White Sub Roll",
+      "category": "Large Sub Bread",
+      "serving": "1 large",
+      "calories": 400,
+      "protein_g": 14,
+      "carbs_g": 72,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheddar Cheese",
+      "category": "Large Sub Cheese",
+      "serving": "1 serving (Large Sub Cheese portion)",
+      "calories": 170,
+      "protein_g": 11,
+      "carbs_g": 2,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Feta Cheese",
+      "category": "Large Sub Cheese",
+      "serving": "1 serving (Large Sub Cheese portion)",
+      "calories": 110,
+      "protein_g": 8,
+      "carbs_g": 0,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Monterey Jack Cheese",
+      "category": "Large Sub Cheese",
+      "serving": "1 serving (Large Sub Cheese portion)",
+      "calories": 150,
+      "protein_g": 11,
+      "carbs_g": 0,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepper Jack Cheese",
+      "category": "Large Sub Cheese",
+      "serving": "1 serving (Large Sub Cheese portion)",
+      "calories": 150,
+      "protein_g": 9,
+      "carbs_g": 0,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Provolone Cheese",
+      "category": "Large Sub Cheese",
+      "serving": "1 serving (Large Sub Cheese portion)",
+      "calories": 130,
+      "protein_g": 10,
+      "carbs_g": 0,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Swiss Cheese",
+      "category": "Large Sub Cheese",
+      "serving": "1 serving (Large Sub Cheese portion)",
+      "calories": 160,
+      "protein_g": 12,
+      "carbs_g": 0,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon",
+      "category": "Large Sub Meats",
+      "serving": "1 serving (Large Sub Meats portion)",
+      "calories": 100,
+      "protein_g": 7,
+      "carbs_g": 0,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken Breast",
+      "category": "Large Sub Meats",
+      "serving": "1 serving (Large Sub Meats portion)",
+      "calories": 320,
+      "protein_g": 58,
+      "carbs_g": 5,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Meatballs",
+      "category": "Large Sub Meats",
+      "serving": "1 serving (Large Sub Meats portion)",
+      "calories": 720,
+      "protein_g": 32,
+      "carbs_g": 13,
+      "fat_g": 61,
+      "fiber_g": 0
+    },
+    {
+      "name": "Oven Roasted Chicken",
+      "category": "Large Sub Meats",
+      "serving": "1 serving (Large Sub Meats portion)",
+      "calories": 320,
+      "protein_g": 59,
+      "carbs_g": 5,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepperoni",
+      "category": "Large Sub Meats",
+      "serving": "1 serving (Large Sub Meats portion)",
+      "calories": 160,
+      "protein_g": 8,
+      "carbs_g": 0,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salami",
+      "category": "Large Sub Meats",
+      "serving": "1 serving (Large Sub Meats portion)",
+      "calories": 130,
+      "protein_g": 7,
+      "carbs_g": 0,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Seared Seasoned Sliced Beef Rib",
+      "category": "Large Sub Meats",
+      "serving": "1 serving (Large Sub Meats portion)",
+      "calories": 450,
+      "protein_g": 53,
+      "carbs_g": 5,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Smoked Honey Ham",
+      "category": "Large Sub Meats",
+      "serving": "1 serving (Large Sub Meats portion)",
+      "calories": 240,
+      "protein_g": 30,
+      "carbs_g": 24,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Smoked Turkey Breast Roast",
+      "category": "Large Sub Meats",
+      "serving": "1 serving (Large Sub Meats portion)",
+      "calories": 150,
+      "protein_g": 29,
+      "carbs_g": 6,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Steak",
+      "category": "Large Sub Meats",
+      "serving": "1 serving (Large Sub Meats portion)",
+      "calories": 390,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tuna Salad",
+      "category": "Large Sub Meats",
+      "serving": "1 serving (Large Sub Meats portion)",
+      "calories": 660,
+      "protein_g": 45,
+      "carbs_g": 13,
+      "fat_g": 46,
+      "fiber_g": 0
+    },
+    {
+      "name": "USDA Choice Beef Brisket",
+      "category": "Large Sub Meats",
+      "serving": "1 serving (Large Sub Meats portion)",
+      "calories": 430,
+      "protein_g": 24,
+      "carbs_g": 0,
+      "fat_g": 37,
+      "fiber_g": 0
+    },
+    {
+      "name": "USDA Choice Corned Beef Brisket",
+      "category": "Large Sub Meats",
+      "serving": "1 serving (Large Sub Meats portion)",
+      "calories": 240,
+      "protein_g": 42,
+      "carbs_g": 0,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "USDA Choice Pastrami",
+      "category": "Large Sub Meats",
+      "serving": "1 serving (Large Sub Meats portion)",
+      "calories": 210,
+      "protein_g": 33,
+      "carbs_g": 3,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "USDA Choice Roast Beef",
+      "category": "Large Sub Meats",
+      "serving": "1 serving (Large Sub Meats portion)",
+      "calories": 240,
+      "protein_g": 36,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Au Jus Bell Peppers",
+      "category": "Large Sub Toppings",
+      "serving": "1 serving (Large Sub Toppings portion)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Au Jus Mushrooms",
+      "category": "Large Sub Toppings",
+      "serving": "1 serving (Large Sub Toppings portion)",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Avocado",
+      "category": "Large Sub Toppings",
+      "serving": "1 serving (Large Sub Toppings portion)",
+      "calories": 160,
+      "protein_g": 2,
+      "carbs_g": 9,
+      "fat_g": 15,
+      "fiber_g": 7
+    },
+    {
+      "name": "Black Olives",
+      "category": "Large Sub Toppings",
+      "serving": "1 serving (Large Sub Toppings portion)",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Brown Sugar Caramelized Onions",
+      "category": "Large Sub Toppings",
+      "serving": "1 serving (Large Sub Toppings portion)",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramelized Onions",
+      "category": "Large Sub Toppings",
+      "serving": "1 serving (Large Sub Toppings portion)",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Pepper Rings",
+      "category": "Large Sub Toppings",
+      "serving": "1 serving (Large Sub Toppings portion)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chopped Green Peppers",
+      "category": "Large Sub Toppings",
+      "serving": "1 serving (Large Sub Toppings portion)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chopped Pickle Spear",
+      "category": "Large Sub Toppings",
+      "serving": "1 serving (Large Sub Toppings portion)",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coleslaw",
+      "category": "Large Sub Toppings",
+      "serving": "1 serving (Large Sub Toppings portion)",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 12,
+      "fat_g": 16,
+      "fiber_g": 3
+    },
+    {
+      "name": "Cucumber",
+      "category": "Large Sub Toppings",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iceberg Lettuce",
+      "category": "Large Sub Toppings",
+      "serving": "1 serving (Large Sub Toppings portion)",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Onion",
+      "category": "Large Sub Toppings",
+      "serving": "1 serving (Large Sub Toppings portion)",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Red & Green Peppers",
+      "category": "Large Sub Toppings",
+      "serving": "1 serving (Large Sub Toppings portion)",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sliced Pepperoncini",
+      "category": "Large Sub Toppings",
+      "serving": "1 serving (Large Sub Toppings portion)",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Tomato",
+      "category": "Large Sub Toppings",
+      "serving": "1 serving (Large Sub Toppings portion)",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Balsamic Dressing",
+      "category": "Large Sub Condiments",
+      "serving": "1 serving (Large Sub Condiments portion)",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buttermilk Ranch Dressing",
+      "category": "Large Sub Condiments",
+      "serving": "1 serving (Large Sub Condiments portion)",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 26,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cajun Mayo",
+      "category": "Large Sub Condiments",
+      "serving": "1 serving (Large Sub Condiments portion)",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 32,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cajun Seasoning",
+      "category": "Large Sub Condiments",
+      "serving": "1 serving (Large Sub Condiments portion)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Captain Sorensen's Datil Pepper Hot Sauce",
+      "category": "Large Sub Condiments",
+      "serving": "1 serving (Large Sub Condiments portion)",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chipotle Honey Dressing",
+      "category": "Large Sub Condiments",
+      "serving": "1 serving (Large Sub Condiments portion)",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 11,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Garlic Blend",
+      "category": "Large Sub Condiments",
+      "serving": "1 serving (Large Sub Condiments portion)",
+      "calories": 310,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 32,
+      "fiber_g": 0
+    },
+    {
+      "name": "Garlic Mayonnaise",
+      "category": "Large Sub Condiments",
+      "serving": "1 serving (Large Sub Condiments portion)",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey Mustard",
+      "category": "Large Sub Condiments",
+      "serving": "1 serving (Large Sub Condiments portion)",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Italian Salad Dressing",
+      "category": "Large Sub Condiments",
+      "serving": "1 serving (Large Sub Condiments portion)",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Italian Seasoning",
+      "category": "Large Sub Condiments",
+      "serving": "1 serving (Large Sub Condiments portion)",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jerk Mustard",
+      "category": "Large Sub Condiments",
+      "serving": "1 serving (Large Sub Condiments portion)",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 18,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Light Mayonnaise",
+      "category": "Large Sub Condiments",
+      "serving": "1 serving (Large Sub Condiments portion)",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Marinara Sauce",
+      "category": "Large Sub Condiments",
+      "serving": "1 serving (Large Sub Condiments portion)",
+      "calories": 40,
+      "protein_g": 2,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Mayonnaise",
+      "category": "Large Sub Condiments",
+      "serving": "1 serving (Large Sub Condiments portion)",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 33,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spicy Mustard",
+      "category": "Large Sub Condiments",
+      "serving": "1 serving (Large Sub Condiments portion)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sriracha Sauce",
+      "category": "Large Sub Condiments",
+      "serving": "1 serving (Large Sub Condiments portion)",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Baby Ray's BBQ Sauce",
+      "category": "Large Sub Condiments",
+      "serving": "1 serving (Large Sub Condiments portion)",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Mustard",
+      "category": "Large Sub Condiments",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Olives Add-On",
+      "category": "Large Sub Add-On Toppings",
+      "serving": "1 serving (Large Sub Add-On Toppings portion)",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Oil and Vinegar Dressing",
+      "category": "Large Sub Add-On Toppings",
+      "serving": "1 serving (Large Sub Add-On Toppings portion)",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gluten Free Ciabatta Roll",
+      "category": "Medium Sub Bread",
+      "serving": "1 serving",
+      "calories": 220,
+      "protein_g": 3,
+      "carbs_g": 47,
+      "fat_g": 2,
+      "fiber_g": 6
+    },
+    {
+      "name": "Gluten Free Hoagie Roll",
+      "category": "Medium Sub Bread",
+      "serving": "1 serving",
+      "calories": 380,
+      "protein_g": 2,
+      "carbs_g": 77,
+      "fat_g": 9,
+      "fiber_g": 8
+    },
+    {
+      "name": "Medium Wheat Sub Roll",
+      "category": "Medium Sub Bread",
+      "serving": "1 medium (Medium Sub Bread portion)",
+      "calories": 230,
+      "protein_g": 8,
+      "carbs_g": 41,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium White Sub Roll",
+      "category": "Medium Sub Bread",
+      "serving": "1 medium (Medium Sub Bread portion)",
+      "calories": 240,
+      "protein_g": 9,
+      "carbs_g": 43,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheddar Cheese",
+      "category": "Medium Sub Cheese",
+      "serving": "1 serving (Medium Sub Cheese portion)",
+      "calories": 110,
+      "protein_g": 7,
+      "carbs_g": 1,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Feta Cheese",
+      "category": "Medium Sub Cheese",
+      "serving": "1 serving (Medium Sub Cheese portion)",
+      "calories": 70,
+      "protein_g": 5,
+      "carbs_g": 0,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Monterey Jack Cheese",
+      "category": "Medium Sub Cheese",
+      "serving": "1 serving (Medium Sub Cheese portion)",
+      "calories": 100,
+      "protein_g": 7,
+      "carbs_g": 0,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepper Jack Cheese",
+      "category": "Medium Sub Cheese",
+      "serving": "1 serving (Medium Sub Cheese portion)",
+      "calories": 100,
+      "protein_g": 6,
+      "carbs_g": 0,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Provolone Cheese",
+      "category": "Medium Sub Cheese",
+      "serving": "1 serving (Medium Sub Cheese portion)",
+      "calories": 90,
+      "protein_g": 7,
+      "carbs_g": 0,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Swiss Cheese",
+      "category": "Medium Sub Cheese",
+      "serving": "1 serving (Medium Sub Cheese portion)",
+      "calories": 110,
+      "protein_g": 8,
+      "carbs_g": 0,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon",
+      "category": "Medium Sub Meats",
+      "serving": "1 serving (Medium Sub Meats portion)",
+      "calories": 50,
+      "protein_g": 4,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken Breast",
+      "category": "Medium Sub Meats",
+      "serving": "1 serving (Medium Sub Meats portion)",
+      "calories": 160,
+      "protein_g": 29,
+      "carbs_g": 2,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Meatballs",
+      "category": "Medium Sub Meats",
+      "serving": "1 serving (Medium Sub Meats portion)",
+      "calories": 450,
+      "protein_g": 20,
+      "carbs_g": 8,
+      "fat_g": 38,
+      "fiber_g": 0
+    },
+    {
+      "name": "Oven Roasted Chicken",
+      "category": "Medium Sub Meats",
+      "serving": "1 serving (Medium Sub Meats portion)",
+      "calories": 160,
+      "protein_g": 30,
+      "carbs_g": 2,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepperoni",
+      "category": "Medium Sub Meats",
+      "serving": "1 serving (Medium Sub Meats portion)",
+      "calories": 100,
+      "protein_g": 5,
+      "carbs_g": 0,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salami",
+      "category": "Medium Sub Meats",
+      "serving": "1 serving (Medium Sub Meats portion)",
+      "calories": 130,
+      "protein_g": 7,
+      "carbs_g": 0,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Seared Seasoned Sliced Beef Rib",
+      "category": "Medium Sub Meats",
+      "serving": "1 serving (Medium Sub Meats portion)",
+      "calories": 230,
+      "protein_g": 27,
+      "carbs_g": 3,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Smoked Honey Ham",
+      "category": "Medium Sub Meats",
+      "serving": "1 serving (Medium Sub Meats portion)",
+      "calories": 160,
+      "protein_g": 20,
+      "carbs_g": 16,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Smoked Turkey Breast Roast",
+      "category": "Medium Sub Meats",
+      "serving": "1 serving (Medium Sub Meats portion)",
+      "calories": 100,
+      "protein_g": 19,
+      "carbs_g": 4,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Steak",
+      "category": "Medium Sub Meats",
+      "serving": "1 serving (Medium Sub Meats portion)",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tuna Salad",
+      "category": "Medium Sub Meats",
+      "serving": "1 serving (Medium Sub Meats portion)",
+      "calories": 330,
+      "protein_g": 23,
+      "carbs_g": 7,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "USDA Choice Beef Brisket",
+      "category": "Medium Sub Meats",
+      "serving": "1 serving (Medium Sub Meats portion)",
+      "calories": 280,
+      "protein_g": 16,
+      "carbs_g": 0,
+      "fat_g": 25,
+      "fiber_g": 0
+    },
+    {
+      "name": "USDA Choice Corned Beef Brisket",
+      "category": "Medium Sub Meats",
+      "serving": "1 serving (Medium Sub Meats portion)",
+      "calories": 160,
+      "protein_g": 28,
+      "carbs_g": 0,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "USDA Choice Pastrami",
+      "category": "Medium Sub Meats",
+      "serving": "1 serving (Medium Sub Meats portion)",
+      "calories": 140,
+      "protein_g": 22,
+      "carbs_g": 2,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "USDA Choice Roast Beef",
+      "category": "Medium Sub Meats",
+      "serving": "1 serving (Medium Sub Meats portion)",
+      "calories": 160,
+      "protein_g": 24,
+      "carbs_g": 0,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Au Jus Bell Peppers",
+      "category": "Medium Sub Toppings",
+      "serving": "1 serving (Medium Sub Toppings portion)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Au Jus Mushrooms",
+      "category": "Medium Sub Toppings",
+      "serving": "1 serving (Medium Sub Toppings portion)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Avocado",
+      "category": "Medium Sub Toppings",
+      "serving": "1 serving (Medium Sub Toppings portion)",
+      "calories": 80,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 7,
+      "fiber_g": 3
+    },
+    {
+      "name": "Black Olives",
+      "category": "Medium Sub Toppings",
+      "serving": "1 serving (Medium Sub Toppings portion)",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brown Sugar Caramelized Onions",
+      "category": "Medium Sub Toppings",
+      "serving": "1 serving (Medium Sub Toppings portion)",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramelized Onions",
+      "category": "Medium Sub Toppings",
+      "serving": "1 serving (Medium Sub Toppings portion)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Pepper Rings",
+      "category": "Medium Sub Toppings",
+      "serving": "1 serving (Medium Sub Toppings portion)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chopped Green Peppers",
+      "category": "Medium Sub Toppings",
+      "serving": "1 serving (Medium Sub Toppings portion)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chopped Pickle Spear",
+      "category": "Medium Sub Toppings",
+      "serving": "1 serving (Medium Sub Toppings portion)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coleslaw",
+      "category": "Medium Sub Toppings",
+      "serving": "1 serving (Medium Sub Toppings portion)",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Creamy Slaw",
+      "category": "Medium Sub Toppings",
+      "serving": "1 serving",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Iceberg Lettuce",
+      "category": "Medium Sub Toppings",
+      "serving": "1 serving (Medium Sub Toppings portion)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Onion",
+      "category": "Medium Sub Toppings",
+      "serving": "1 serving (Medium Sub Toppings portion)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Red & Green Peppers",
+      "category": "Medium Sub Toppings",
+      "serving": "1 serving (Medium Sub Toppings portion)",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sliced Pepperoncini",
+      "category": "Medium Sub Toppings",
+      "serving": "1 serving (Medium Sub Toppings portion)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Tomato",
+      "category": "Medium Sub Toppings",
+      "serving": "1 serving (Medium Sub Toppings portion)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Balsamic Dressing",
+      "category": "Medium Sub Condiments",
+      "serving": "1 serving (Medium Sub Condiments portion)",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buttermilk Ranch Dressing",
+      "category": "Medium Sub Condiments",
+      "serving": "1 serving (Medium Sub Condiments portion)",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cajun Mayo",
+      "category": "Medium Sub Condiments",
+      "serving": "1 serving (Medium Sub Condiments portion)",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cajun Seasoning",
+      "category": "Medium Sub Condiments",
+      "serving": "1 serving (Medium Sub Condiments portion)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Captain Sorensen's Datil Pepper Hot Sauce",
+      "category": "Medium Sub Condiments",
+      "serving": "1 serving (Medium Sub Condiments portion)",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 8,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chipotle Honey Dressing",
+      "category": "Medium Sub Condiments",
+      "serving": "1 serving (Medium Sub Condiments portion)",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 8,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Garlic Blend",
+      "category": "Medium Sub Condiments",
+      "serving": "1 serving (Medium Sub Condiments portion)",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Garlic Mayonnaise",
+      "category": "Medium Sub Condiments",
+      "serving": "1 serving (Medium Sub Condiments portion)",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 20,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey Mustard",
+      "category": "Medium Sub Condiments",
+      "serving": "1 serving (Medium Sub Condiments portion)",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Italian Salad Dressing",
+      "category": "Medium Sub Condiments",
+      "serving": "1 serving (Medium Sub Condiments portion)",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Italian Seasoning",
+      "category": "Medium Sub Condiments",
+      "serving": "1 serving (Medium Sub Condiments portion)",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jerk Mustard",
+      "category": "Medium Sub Condiments",
+      "serving": "1 serving (Medium Sub Condiments portion)",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Light Mayonnaise",
+      "category": "Medium Sub Condiments",
+      "serving": "1 serving (Medium Sub Condiments portion)",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Marinara Sauce",
+      "category": "Medium Sub Condiments",
+      "serving": "1 serving (Medium Sub Condiments portion)",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mayonnaise",
+      "category": "Medium Sub Condiments",
+      "serving": "1 serving (Medium Sub Condiments portion)",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 22,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spicy Mustard",
+      "category": "Medium Sub Condiments",
+      "serving": "1 serving (Medium Sub Condiments portion)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sriracha Sauce",
+      "category": "Medium Sub Condiments",
+      "serving": "1 serving (Medium Sub Condiments portion)",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Baby Ray's BBQ Sauce",
+      "category": "Medium Sub Condiments",
+      "serving": "1 serving (Medium Sub Condiments portion)",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 13,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Olives Add-On",
+      "category": "Medium Sub Add-On Toppings",
+      "serving": "1 serving (Medium Sub Add-On Toppings portion)",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Oil and Vinegar Dressing",
+      "category": "Medium Sub Add-On Toppings",
+      "serving": "1 serving (Medium Sub Add-On Toppings portion)",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium Wheat Sub Roll",
+      "category": "Small Sub Bread",
+      "serving": "1 medium (Small Sub Bread portion)",
+      "calories": 110,
+      "protein_g": 4,
+      "carbs_g": 21,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Medium White Sub Roll",
+      "category": "Small Sub Bread",
+      "serving": "1 medium (Small Sub Bread portion)",
+      "calories": 120,
+      "protein_g": 4,
+      "carbs_g": 22,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheddar Cheese",
+      "category": "Small Sub Cheese",
+      "serving": "1 serving (Small Sub Cheese portion)",
+      "calories": 60,
+      "protein_g": 4,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Feta Cheese",
+      "category": "Small Sub Cheese",
+      "serving": "1 serving (Small Sub Cheese portion)",
+      "calories": 35,
+      "protein_g": 3,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Monterey Jack Cheese",
+      "category": "Small Sub Cheese",
+      "serving": "1 serving (Small Sub Cheese portion)",
+      "calories": 50,
+      "protein_g": 4,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepper Jack Cheese",
+      "category": "Small Sub Cheese",
+      "serving": "1 serving (Small Sub Cheese portion)",
+      "calories": 50,
+      "protein_g": 3,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Provolone Cheese",
+      "category": "Small Sub Cheese",
+      "serving": "1 serving (Small Sub Cheese portion)",
+      "calories": 45,
+      "protein_g": 3,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Swiss Cheese",
+      "category": "Small Sub Cheese",
+      "serving": "1 serving (Small Sub Cheese portion)",
+      "calories": 50,
+      "protein_g": 4,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon",
+      "category": "Small Sub Meats",
+      "serving": "1 serving (Small Sub Meats portion)",
+      "calories": 25,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken Breast",
+      "category": "Small Sub Meats",
+      "serving": "1 serving (Small Sub Meats portion)",
+      "calories": 80,
+      "protein_g": 14,
+      "carbs_g": 1,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Meatballs",
+      "category": "Small Sub Meats",
+      "serving": "1 serving (Small Sub Meats portion)",
+      "calories": 230,
+      "protein_g": 10,
+      "carbs_g": 4,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Oven Roasted Chicken",
+      "category": "Small Sub Meats",
+      "serving": "1 serving (Small Sub Meats portion)",
+      "calories": 80,
+      "protein_g": 15,
+      "carbs_g": 1,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepperoni",
+      "category": "Small Sub Meats",
+      "serving": "1 serving (Small Sub Meats portion)",
+      "calories": 60,
+      "protein_g": 3,
+      "carbs_g": 0,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salami",
+      "category": "Small Sub Meats",
+      "serving": "1 serving (Small Sub Meats portion)",
+      "calories": 60,
+      "protein_g": 4,
+      "carbs_g": 0,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Seared Seasoned Sliced Beef Rib",
+      "category": "Small Sub Meats",
+      "serving": "1 serving (Small Sub Meats portion)",
+      "calories": 110,
+      "protein_g": 13,
+      "carbs_g": 1,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Smoked Honey Ham",
+      "category": "Small Sub Meats",
+      "serving": "1 serving (Small Sub Meats portion)",
+      "calories": 80,
+      "protein_g": 10,
+      "carbs_g": 8,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Smoked Turkey Breast Roast",
+      "category": "Small Sub Meats",
+      "serving": "1 serving (Small Sub Meats portion)",
+      "calories": 50,
+      "protein_g": 10,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Steak",
+      "category": "Small Sub Meats",
+      "serving": "1 serving (Small Sub Meats portion)",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tuna Salad",
+      "category": "Small Sub Meats",
+      "serving": "1 serving (Small Sub Meats portion)",
+      "calories": 160,
+      "protein_g": 11,
+      "carbs_g": 3,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "USDA Choice Beef Brisket",
+      "category": "Small Sub Meats",
+      "serving": "1 serving (Small Sub Meats portion)",
+      "calories": 140,
+      "protein_g": 8,
+      "carbs_g": 0,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "USDA Choice Corned Beef Brisket",
+      "category": "Small Sub Meats",
+      "serving": "1 serving (Small Sub Meats portion)",
+      "calories": 80,
+      "protein_g": 14,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "USDA Choice Pastrami",
+      "category": "Small Sub Meats",
+      "serving": "1 serving (Small Sub Meats portion)",
+      "calories": 70,
+      "protein_g": 11,
+      "carbs_g": 1,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "USDA Choice Roast Beef",
+      "category": "Small Sub Meats",
+      "serving": "1 serving (Small Sub Meats portion)",
+      "calories": 80,
+      "protein_g": 12,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Au Jus Bell Peppers",
+      "category": "Small Sub Toppings",
+      "serving": "1 serving (Small Sub Toppings portion)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Au Jus Mushrooms",
+      "category": "Small Sub Toppings",
+      "serving": "1 serving (Small Sub Toppings portion)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Avocado",
+      "category": "Small Sub Toppings",
+      "serving": "1 serving (Small Sub Toppings portion)",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 4,
+      "fiber_g": 2
+    },
+    {
+      "name": "Black Olives",
+      "category": "Small Sub Toppings",
+      "serving": "1 serving (Small Sub Toppings portion)",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brown Sugar Caramelized Onions",
+      "category": "Small Sub Toppings",
+      "serving": "1 serving (Small Sub Toppings portion)",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramelized Onions",
+      "category": "Small Sub Toppings",
+      "serving": "1 serving (Small Sub Toppings portion)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Pepper Rings",
+      "category": "Small Sub Toppings",
+      "serving": "1 serving (Small Sub Toppings portion)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chopped Green Peppers",
+      "category": "Small Sub Toppings",
+      "serving": "1 serving (Small Sub Toppings portion)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chopped Pickle Spear",
+      "category": "Small Sub Toppings",
+      "serving": "1 serving (Small Sub Toppings portion)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coleslaw",
+      "category": "Small Sub Toppings",
+      "serving": "1 serving (Small Sub Toppings portion)",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iceberg Lettuce",
+      "category": "Small Sub Toppings",
+      "serving": "1 serving (Small Sub Toppings portion)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Onion",
+      "category": "Small Sub Toppings",
+      "serving": "1 serving (Small Sub Toppings portion)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Red & Green Peppers",
+      "category": "Small Sub Toppings",
+      "serving": "1 serving (Small Sub Toppings portion)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sliced Pepperoncini",
+      "category": "Small Sub Toppings",
+      "serving": "1 serving (Small Sub Toppings portion)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tomato",
+      "category": "Small Sub Toppings",
+      "serving": "1 serving (Small Sub Toppings portion)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Balsamic Dressing",
+      "category": "Small Sub Condiments",
+      "serving": "1 serving (Small Sub Condiments portion)",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buttermilk Ranch Dressing",
+      "category": "Small Sub Condiments",
+      "serving": "1 serving (Small Sub Condiments portion)",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cajun Mayo",
+      "category": "Small Sub Condiments",
+      "serving": "1 serving (Small Sub Condiments portion)",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cajun Seasoning",
+      "category": "Small Sub Condiments",
+      "serving": "1 serving (Small Sub Condiments portion)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Captain Sorensen's Datil Pepper Hot Sauce",
+      "category": "Small Sub Condiments",
+      "serving": "1 serving (Small Sub Condiments portion)",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chipotle Honey Dressing",
+      "category": "Small Sub Condiments",
+      "serving": "1 serving (Small Sub Condiments portion)",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Garlic Blend",
+      "category": "Small Sub Condiments",
+      "serving": "1 serving (Small Sub Condiments portion)",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Garlic Mayonnaise",
+      "category": "Small Sub Condiments",
+      "serving": "1 serving (Small Sub Condiments portion)",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey Mustard",
+      "category": "Small Sub Condiments",
+      "serving": "1 serving (Small Sub Condiments portion)",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Italian Salad Dressing",
+      "category": "Small Sub Condiments",
+      "serving": "1 serving (Small Sub Condiments portion)",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Italian Seasoning",
+      "category": "Small Sub Condiments",
+      "serving": "1 serving (Small Sub Condiments portion)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jerk Mustard",
+      "category": "Small Sub Condiments",
+      "serving": "1 serving (Small Sub Condiments portion)",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Light Mayonnaise",
+      "category": "Small Sub Condiments",
+      "serving": "1 serving (Small Sub Condiments portion)",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Marinara Sauce",
+      "category": "Small Sub Condiments",
+      "serving": "1 serving (Small Sub Condiments portion)",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mayonnaise",
+      "category": "Small Sub Condiments",
+      "serving": "1 serving (Small Sub Condiments portion)",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spicy Mustard",
+      "category": "Small Sub Condiments",
+      "serving": "1 serving (Small Sub Condiments portion)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sriracha Sauce",
+      "category": "Small Sub Condiments",
+      "serving": "1 serving (Small Sub Condiments portion)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Baby Ray's BBQ Sauce",
+      "category": "Small Sub Condiments",
+      "serving": "1 serving (Small Sub Condiments portion)",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 7,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Olives Add-On",
+      "category": "Small Sub Add-On Toppings",
+      "serving": "1 serving (Small Sub Add-On Toppings portion)",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Oil and Vinegar Dressing",
+      "category": "Small Sub Add-On Toppings",
+      "serving": "1 serving (Small Sub Add-On Toppings portion)",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Barq's Root Beer",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caffeine Free Diet Coke",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid Light",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid Light Sparkling",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid Sparkling",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid Zero Sugar",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid Zero Sugar Sparkling",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 40,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coke Zero",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dasani Sparkling Lemon Lime Seltzer Water",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dasani Sparkling Seltzer Water",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Barq's Root Beer",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Seagram's Ginger Ale",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Cherry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Fruit Punch",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Grape",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Lime",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Orange",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Peach",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Raspberry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Strawberry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Cherry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Fruit Punch",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Grape",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Lime",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Orange",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Peach",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Raspberry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Strawberry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy cherry-lime",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy lemon-lime",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy lemonade",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy mixed berry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy peach lemonade",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy strawberry lemonade",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Lemon Tea",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Peach Tea",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Raspberry Peach Tea",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Raspberry Tea",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Strawberry Tea",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Tea",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Lemon Tea",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Peach Tea",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Raspberry Peach Tea",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Raspberry Tea",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Strawberry Tea",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Sweet Tea",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Unsweetened Tea",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Cherry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Fruit Punch",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Grape",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Lemon",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Orange",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Orange Vanilla",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Raspberry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Raspberry Lime",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Strawberry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Cherry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Fruit Punch",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Grape",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Orange",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 33,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Peach",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Raspberry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Strawberry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Cherry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Fruit Punch",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Grape",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Orange",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Peach",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Raspberry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Strawberry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Lemonade",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Light Lemonade",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Light Pink Lemonade",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Pink Lemonade",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra Cherry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra Cherry Vanilla",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra Raspberry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra Raspberry Vanilla",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra Vanilla",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero Cherry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero Cherry Vanilla",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero Raspberry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero Raspberry Vanilla",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero Vanilla",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Cherry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 25,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Fruit Punch",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 25,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Grape",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 25,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Lemon",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 25,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Lime",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 25,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Orange",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 25,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Raspberry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 25,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Strawberry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 25,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Cherry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Fruit Punch",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Grape",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Lemon",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Lime",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Orange",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Raspberry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Strawberry",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Seagram's Ginger Ale",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite Zero",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 40,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweet Tea",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "vitaminwater lemonade-C",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "vitaminwater orangeade-C",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 19,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "vitaminwater pink squeezed",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 19,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "vitaminwater tropical-C",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 19,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Barq's Root Beer",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 82,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caffeine Free Diet Coke",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 330,
+      "protein_g": 0,
+      "carbs_g": 88,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid Light",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid Light Sparkling",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid Sparkling",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 330,
+      "protein_g": 0,
+      "carbs_g": 88,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid Zero Sugar",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid Zero Sugar Sparkling",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 73,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coke Zero",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dasani Sparkling Lemon Lime Seltzer Water",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dasani Sparkling Seltzer Water",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Barq's Root Beer",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Seagram's Ginger Ale",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Cherry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 82,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Fruit Punch",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 310,
+      "protein_g": 0,
+      "carbs_g": 82,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Grape",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 310,
+      "protein_g": 0,
+      "carbs_g": 82,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Lime",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 310,
+      "protein_g": 0,
+      "carbs_g": 82,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Orange",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 82,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Peach",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 310,
+      "protein_g": 0,
+      "carbs_g": 82,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Raspberry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 310,
+      "protein_g": 0,
+      "carbs_g": 82,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Strawberry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 310,
+      "protein_g": 0,
+      "carbs_g": 82,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Cherry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Fruit Punch",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Grape",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Lime",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Orange",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Peach",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Raspberry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Strawberry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy cherry-lime",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy lemon-lime",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy lemonade",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy mixed berry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy peach lemonade",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy strawberry lemonade",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Lemon Tea",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Peach Tea",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Raspberry Peach Tea",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Raspberry Tea",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Strawberry Tea",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Tea",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Lemon Tea",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 62,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Peach Tea",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 62,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Raspberry Peach Tea",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 62,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Raspberry Tea",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 62,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Strawberry Tea",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 62,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Sweet Tea",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 62,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Unsweetened Tea",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Cherry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 320,
+      "protein_g": 0,
+      "carbs_g": 83,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Fruit Punch",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 330,
+      "protein_g": 0,
+      "carbs_g": 83,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Grape",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 320,
+      "protein_g": 0,
+      "carbs_g": 83,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Lemon",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 320,
+      "protein_g": 0,
+      "carbs_g": 83,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Orange",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 320,
+      "protein_g": 0,
+      "carbs_g": 83,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Orange Vanilla",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 320,
+      "protein_g": 0,
+      "carbs_g": 83,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Raspberry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 320,
+      "protein_g": 0,
+      "carbs_g": 83,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Raspberry Lime",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 330,
+      "protein_g": 0,
+      "carbs_g": 83,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Strawberry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 320,
+      "protein_g": 0,
+      "carbs_g": 83,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 63,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Cherry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 63,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Fruit Punch",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 63,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Grape",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 63,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Orange",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 61,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Peach",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 63,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Raspberry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 63,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Strawberry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 63,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Cherry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Fruit Punch",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Grape",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Orange",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Peach",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Raspberry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Strawberry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Lemonade",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 77,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Light Lemonade",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Light Pink Lemonade",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Pink Lemonade",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 77,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra Cherry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra Cherry Vanilla",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra Raspberry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra Raspberry Vanilla",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra Vanilla",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero Cherry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero Cherry Vanilla",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero Raspberry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero Raspberry Vanilla",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero Vanilla",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Cherry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Fruit Punch",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Grape",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Lemon",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Lime",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Orange",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Raspberry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Strawberry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Cherry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Fruit Punch",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Grape",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Lemon",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Lime",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Orange",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Raspberry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Strawberry",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Seagram's Ginger Ale",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite Zero",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 74,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweet Tea",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "vitaminwater lemonade-C",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 36,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "vitaminwater orangeade-C",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "vitaminwater pink squeezed",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "vitaminwater tropical-C",
+      "category": "Beverages",
+      "serving": "22 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Barq's Root Beer",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 440,
+      "protein_g": 0,
+      "carbs_g": 120,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caffeine Free Diet Coke",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 480,
+      "protein_g": 0,
+      "carbs_g": 128,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid Light",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 320,
+      "protein_g": 0,
+      "carbs_g": 64,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid Light Sparkling",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 320,
+      "protein_g": 0,
+      "carbs_g": 64,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid Sparkling",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 480,
+      "protein_g": 0,
+      "carbs_g": 128,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid Zero Sugar",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid Zero Sugar Sparkling",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 390,
+      "protein_g": 0,
+      "carbs_g": 106,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coke Zero",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dasani Sparkling Lemon Lime Seltzer Water",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dasani Sparkling Seltzer Water",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Barq's Root Beer",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Seagram's Ginger Ale",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Cherry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 440,
+      "protein_g": 0,
+      "carbs_g": 119,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Fruit Punch",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 450,
+      "protein_g": 0,
+      "carbs_g": 119,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Grape",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 450,
+      "protein_g": 0,
+      "carbs_g": 119,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Lime",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 450,
+      "protein_g": 0,
+      "carbs_g": 119,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Orange",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 440,
+      "protein_g": 0,
+      "carbs_g": 119,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Peach",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 450,
+      "protein_g": 0,
+      "carbs_g": 119,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Raspberry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 450,
+      "protein_g": 0,
+      "carbs_g": 119,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Strawberry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 450,
+      "protein_g": 0,
+      "carbs_g": 119,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Cherry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Fruit Punch",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Grape",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Lime",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Orange",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Peach",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Raspberry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Strawberry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy cherry-lime",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy lemon-lime",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy lemonade",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy mixed berry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy peach lemonade",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy strawberry lemonade",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Lemon Tea",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Peach Tea",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Raspberry Peach Tea",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Raspberry Tea",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Strawberry Tea",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Tea",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Lemon Tea",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 340,
+      "protein_g": 0,
+      "carbs_g": 90,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Peach Tea",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 340,
+      "protein_g": 0,
+      "carbs_g": 90,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Raspberry Peach Tea",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 340,
+      "protein_g": 0,
+      "carbs_g": 90,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Raspberry Tea",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 340,
+      "protein_g": 0,
+      "carbs_g": 90,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Strawberry Tea",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 340,
+      "protein_g": 0,
+      "carbs_g": 90,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Sweet Tea",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 340,
+      "protein_g": 0,
+      "carbs_g": 90,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Unsweetened Tea",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Cherry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 121,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Fruit Punch",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 480,
+      "protein_g": 0,
+      "carbs_g": 121,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Grape",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 121,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Lemon",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 460,
+      "protein_g": 0,
+      "carbs_g": 121,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Orange",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 460,
+      "protein_g": 0,
+      "carbs_g": 121,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Orange Vanilla",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 121,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Raspberry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 121,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Raspberry Lime",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 480,
+      "protein_g": 0,
+      "carbs_g": 121,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Strawberry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 121,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 340,
+      "protein_g": 0,
+      "carbs_g": 91,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Cherry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 340,
+      "protein_g": 0,
+      "carbs_g": 91,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Fruit Punch",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 350,
+      "protein_g": 0,
+      "carbs_g": 91,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Grape",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 340,
+      "protein_g": 0,
+      "carbs_g": 91,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Orange",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 330,
+      "protein_g": 0,
+      "carbs_g": 89,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Peach",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 340,
+      "protein_g": 0,
+      "carbs_g": 91,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Raspberry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 340,
+      "protein_g": 0,
+      "carbs_g": 91,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Strawberry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 340,
+      "protein_g": 0,
+      "carbs_g": 91,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Cherry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Fruit Punch",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Grape",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Orange",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Peach",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Raspberry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Strawberry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Lemonade",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 430,
+      "protein_g": 0,
+      "carbs_g": 111,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Light Lemonade",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Light Pink Lemonade",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Pink Lemonade",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 430,
+      "protein_g": 0,
+      "carbs_g": 111,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 390,
+      "protein_g": 0,
+      "carbs_g": 104,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra Cherry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 390,
+      "protein_g": 0,
+      "carbs_g": 104,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra Cherry Vanilla",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 400,
+      "protein_g": 0,
+      "carbs_g": 104,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra Raspberry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 390,
+      "protein_g": 0,
+      "carbs_g": 104,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra Raspberry Vanilla",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 400,
+      "protein_g": 0,
+      "carbs_g": 104,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra Vanilla",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 400,
+      "protein_g": 0,
+      "carbs_g": 104,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero Cherry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero Cherry Vanilla",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero Raspberry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero Raspberry Vanilla",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero Vanilla",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Cherry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Fruit Punch",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Grape",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Lemon",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Lime",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Orange",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Raspberry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Strawberry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Cherry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Fruit Punch",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Grape",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Lemon",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Lime",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Orange",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Raspberry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Strawberry",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Seagram's Ginger Ale",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 69,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 390,
+      "protein_g": 0,
+      "carbs_g": 103,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite Zero",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 420,
+      "protein_g": 0,
+      "carbs_g": 108,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweet Tea",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "vitaminwater lemonade-C",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 52,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "vitaminwater orangeade-C",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 51,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "vitaminwater pink squeezed",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 51,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "vitaminwater tropical-C",
+      "category": "Beverages",
+      "serving": "32 fl oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Barq's Root Beer",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 610,
+      "protein_g": 0,
+      "carbs_g": 165,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caffeine Free Diet Coke",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 660,
+      "protein_g": 0,
+      "carbs_g": 176,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid Light",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 440,
+      "protein_g": 0,
+      "carbs_g": 88,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid Light Sparkling",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 440,
+      "protein_g": 0,
+      "carbs_g": 88,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid Sparkling",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 660,
+      "protein_g": 0,
+      "carbs_g": 176,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid Zero Sugar",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime-Aid Zero Sugar Sparkling",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 540,
+      "protein_g": 0,
+      "carbs_g": 146,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coke Zero",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dasani Sparkling Lemon Lime Seltzer Water",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dasani Sparkling Seltzer Water",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Barq's Root Beer",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Seagram's Ginger Ale",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Cherry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 610,
+      "protein_g": 0,
+      "carbs_g": 163,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Fruit Punch",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 620,
+      "protein_g": 0,
+      "carbs_g": 163,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Grape",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 610,
+      "protein_g": 0,
+      "carbs_g": 163,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Lime",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 610,
+      "protein_g": 0,
+      "carbs_g": 163,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Orange",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 600,
+      "protein_g": 0,
+      "carbs_g": 163,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Peach",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 610,
+      "protein_g": 0,
+      "carbs_g": 163,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Raspberry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 610,
+      "protein_g": 0,
+      "carbs_g": 163,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Strawberry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 620,
+      "protein_g": 0,
+      "carbs_g": 163,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Cherry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Fruit Punch",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Grape",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Lime",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Orange",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Peach",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Raspberry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Zero Strawberry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy cherry-lime",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy lemon-lime",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy lemonade",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy mixed berry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy peach lemonade",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "fruitwater fizzy strawberry lemonade",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Lemon Tea",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Peach Tea",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Raspberry Peach Tea",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Raspberry Tea",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Strawberry Tea",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Diet Tea",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Lemon Tea",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 460,
+      "protein_g": 0,
+      "carbs_g": 124,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Peach Tea",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 124,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Raspberry Peach Tea",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 124,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Raspberry Tea",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 124,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Strawberry Tea",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 124,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Sweet Tea",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 460,
+      "protein_g": 0,
+      "carbs_g": 124,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE Unsweetened Tea",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Cherry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 640,
+      "protein_g": 0,
+      "carbs_g": 166,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Fruit Punch",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 660,
+      "protein_g": 0,
+      "carbs_g": 166,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Grape",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 650,
+      "protein_g": 0,
+      "carbs_g": 166,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Lemon",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 630,
+      "protein_g": 0,
+      "carbs_g": 167,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Orange",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 640,
+      "protein_g": 0,
+      "carbs_g": 167,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Orange Vanilla",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 640,
+      "protein_g": 0,
+      "carbs_g": 166,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Raspberry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 650,
+      "protein_g": 0,
+      "carbs_g": 166,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Raspberry Lime",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 650,
+      "protein_g": 0,
+      "carbs_g": 166,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Strawberry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 650,
+      "protein_g": 0,
+      "carbs_g": 166,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 126,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Cherry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 126,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Fruit Punch",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 480,
+      "protein_g": 0,
+      "carbs_g": 126,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Grape",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 126,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Orange",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 450,
+      "protein_g": 0,
+      "carbs_g": 122,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Peach",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 126,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Raspberry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 126,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Strawberry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 126,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Cherry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Fruit Punch",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Grape",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Orange",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Peach",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Raspberry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello Zero Strawberry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Lemonade",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 590,
+      "protein_g": 0,
+      "carbs_g": 153,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Light Lemonade",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 7,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Light Pink Lemonade",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 7,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Pink Lemonade",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 590,
+      "protein_g": 0,
+      "carbs_g": 153,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 530,
+      "protein_g": 0,
+      "carbs_g": 143,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra Cherry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 540,
+      "protein_g": 0,
+      "carbs_g": 143,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra Cherry Vanilla",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 550,
+      "protein_g": 0,
+      "carbs_g": 143,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra Raspberry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 540,
+      "protein_g": 0,
+      "carbs_g": 143,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra Raspberry Vanilla",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 550,
+      "protein_g": 0,
+      "carbs_g": 143,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra Vanilla",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 540,
+      "protein_g": 0,
+      "carbs_g": 143,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero Cherry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero Cherry Vanilla",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero Raspberry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero Raspberry Vanilla",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Zero Vanilla",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Cherry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 350,
+      "protein_g": 0,
+      "carbs_g": 93,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Fruit Punch",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 360,
+      "protein_g": 0,
+      "carbs_g": 93,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Grape",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 350,
+      "protein_g": 0,
+      "carbs_g": 93,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Lemon",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 350,
+      "protein_g": 0,
+      "carbs_g": 93,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Lime",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 350,
+      "protein_g": 0,
+      "carbs_g": 93,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Orange",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 350,
+      "protein_g": 0,
+      "carbs_g": 93,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Raspberry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 350,
+      "protein_g": 0,
+      "carbs_g": 93,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Strawberry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 360,
+      "protein_g": 0,
+      "carbs_g": 93,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Cherry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Fruit Punch",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Grape",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Lemon",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Lime",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Orange",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Raspberry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Zero Strawberry",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Seagram's Ginger Ale",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 360,
+      "protein_g": 0,
+      "carbs_g": 95,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 530,
+      "protein_g": 0,
+      "carbs_g": 141,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite Zero",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 580,
+      "protein_g": 0,
+      "carbs_g": 148,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweet Tea",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "vitaminwater lemonade-C",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 72,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "vitaminwater orangeade-C",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 70,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "vitaminwater pink squeezed",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "vitaminwater tropical-C",
+      "category": "Beverages",
+      "serving": "44 fl oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 68,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "1% Chocolate Milk",
+      "category": "Kids Beverages",
+      "serving": "1 serving",
+      "calories": 150,
+      "protein_g": 7,
+      "carbs_g": 26,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "1% Milk",
+      "category": "Kids Beverages",
+      "serving": "1 serving",
+      "calories": 90,
+      "protein_g": 7,
+      "carbs_g": 10,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Apple Juice",
+      "category": "Kids Beverages",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    }
+  ]
+}

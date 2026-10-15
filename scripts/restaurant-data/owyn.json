@@ -1,0 +1,97 @@
+{
+  "chain": "OWYN",
+  "slug": "owyn",
+  "aliases": [
+    "owyn",
+    "owyn protein",
+    "owyn shake",
+    "owyn pro elite"
+  ],
+  "kind": "supplement",
+  "source_url": "https://liveowyn.com/products/chocolate-pro-elite-protein-shake",
+  "source_kind": "official",
+  "retrieved": "2026-10-15",
+  "notes": "Text Nutrition Facts on liveowyn.com product pages (chocolate-pro-elite-protein-shake, smooth-vanilla-pro-elite-protein-shake, dark-chocolate-protein-shake-1, smooth-vanilla-protein-shake, chocolate-pro-elite-protein-powder-27-servings, vanilla-pro-elite-protein-powder-27-servings, chocolate-protein-powder-2-lbs, smooth-vanilla-protein-powder-2-lbs). The pages give serving size only as '1' (one shake/bottle) or '2' (scoops), with no gram or fl oz weight, so servings are written that way.",
+  "items": [
+    {
+      "name": "Pro Elite Protein Shake, Chocolate",
+      "category": "Ready-to-Drink",
+      "serving": "1 shake",
+      "calories": 200,
+      "protein_g": 32,
+      "carbs_g": 3,
+      "fat_g": 7,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pro Elite Protein Shake, Smooth Vanilla",
+      "category": "Ready-to-Drink",
+      "serving": "1 shake",
+      "calories": 200,
+      "protein_g": 32,
+      "carbs_g": 3,
+      "fat_g": 7,
+      "fiber_g": 3
+    },
+    {
+      "name": "Protein Shake, Dark Chocolate",
+      "category": "Ready-to-Drink",
+      "serving": "1 shake",
+      "calories": 180,
+      "protein_g": 20,
+      "carbs_g": 8,
+      "fat_g": 7,
+      "fiber_g": 3
+    },
+    {
+      "name": "Protein Shake, Smooth Vanilla",
+      "category": "Ready-to-Drink",
+      "serving": "1 shake",
+      "calories": 180,
+      "protein_g": 20,
+      "carbs_g": 8,
+      "fat_g": 7,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pro Elite Protein Powder, Chocolate",
+      "category": "Plant Protein",
+      "serving": "2 scoops",
+      "calories": 180,
+      "protein_g": 30,
+      "carbs_g": 5,
+      "fat_g": 4,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pro Elite Protein Powder, Vanilla",
+      "category": "Plant Protein",
+      "serving": "2 scoops",
+      "calories": 180,
+      "protein_g": 30,
+      "carbs_g": 7,
+      "fat_g": 3.5,
+      "fiber_g": 4
+    },
+    {
+      "name": "Protein Powder, Chocolate",
+      "category": "Plant Protein",
+      "serving": "2 scoops",
+      "calories": 140,
+      "protein_g": 20,
+      "carbs_g": 8,
+      "fat_g": 3,
+      "fiber_g": 2
+    },
+    {
+      "name": "Protein Powder, Smooth Vanilla",
+      "category": "Plant Protein",
+      "serving": "2 scoops",
+      "calories": 140,
+      "protein_g": 20,
+      "carbs_g": 7,
+      "fat_g": 3,
+      "fiber_g": 0
+    }
+  ]
+}

@@ -1,0 +1,3710 @@
+{
+  "chain": "Buffalo Wild Wings",
+  "slug": "buffalo-wild-wings",
+  "aliases": [
+    "buffalo wild wings",
+    "bww",
+    "bdubs",
+    "b-dubs",
+    "b dubs",
+    "buffalo wings",
+    "buffalo wild wing"
+  ],
+  "kind": "casual-dining",
+  "source_url": "https://assets.ctfassets.net/6dxmiqksdkqb/2XgznB5cOqQ9l1r7PQAasB/dd312340082cc00107545e7ab21318a7/BWW_Nutrition_Guide__08-18-2026_-_11-17-2026_.pdf",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Official BWW Nutrition Guide (valid 08-18-2026 to 11-17-2026), linked from buffalowildwings.com/nutrition. Wing counts are plain (no sauce); add a sauce/dry rub item from Sauces, Dry Rubs & Extras (2 fl oz / 1 tsp portions). The guide's per-wing-count sauce portions and range rows (e.g. \"Add Signature Sauce 60-330\") were omitted. Rows with two values (A / B) were split into two items; \"option 1/2\" follow the order named in the item (e.g. \"with Bacon or Sausage\"). Beer is not covered by the guide. Atwater outliers (>20%, left as published): House-Made Guacamole (1 serving): 100 cal vs 122 Atwater; Black Bean Burger Patty (1 serving): 200 cal vs 250 Atwater; B-Dubs Bloody Mary - at select locations (1 serving): 140 cal vs 58 Atwater; Blue Long Island Iced Tea (1 serving): 220 cal vs 104 Atwater; Blue Watermelon Cooler (1 serving): 190 cal vs 116 Atwater; Boozy Dunkin’ Cold Brew (1 serving): 300 cal vs 200 Atwater; Bourbon Old Fashioned - at select locations (1 serving): 200 cal vs 64 Atwater; Buffalo Trace Old Fashioned - at select locations (1 serving): 220 cal vs 72 Atwater; Buffalo Zoo - limited time (1 serving): 240 cal vs 124 Atwater; Caesar - at select locations (ND & SD only) (1 serving): 180 cal vs 80 Atwater; Classic Espresso Martini (1 serving): 210 cal vs 96 Atwater; House Margarita (1 serving): 230 cal vs 108 Atwater; Old Fashioned (1 serving): 220 cal vs 64 Atwater; Mezcal Margarita (1 serving): 230 cal vs 96 Atwater; Modelo Michelada (1 serving): 140 cal vs 68 Atwater; ...",
+  "items": [
+    {
+      "name": "6 Count Boneless Wings",
+      "category": "Boneless Wings",
+      "serving": "1 serving",
+      "calories": 360,
+      "protein_g": 29,
+      "carbs_g": 20,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "10 Count Boneless Wings",
+      "category": "Boneless Wings",
+      "serving": "1 serving",
+      "calories": 610,
+      "protein_g": 48,
+      "carbs_g": 34,
+      "fat_g": 31,
+      "fiber_g": 1
+    },
+    {
+      "name": "15 Count Boneless Wings",
+      "category": "Boneless Wings",
+      "serving": "1 serving",
+      "calories": 910,
+      "protein_g": 72,
+      "carbs_g": 51,
+      "fat_g": 46,
+      "fiber_g": 2
+    },
+    {
+      "name": "20 Count Boneless Wings",
+      "category": "Boneless Wings",
+      "serving": "1 serving",
+      "calories": 1210,
+      "protein_g": 96,
+      "carbs_g": 68,
+      "fat_g": 62,
+      "fiber_g": 2
+    },
+    {
+      "name": "30 Count Boneless Wings",
+      "category": "Boneless Wings",
+      "serving": "1 serving",
+      "calories": 1820,
+      "protein_g": 144,
+      "carbs_g": 102,
+      "fat_g": 93,
+      "fiber_g": 4
+    },
+    {
+      "name": "6 Count Bone-In Wings",
+      "category": "Bone-In Wings",
+      "serving": "1 serving",
+      "calories": 430,
+      "protein_g": 53,
+      "carbs_g": 0,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "6 Count Bone-In Wings (Flats Only)",
+      "category": "Bone-In Wings",
+      "serving": "1 serving",
+      "calories": 410,
+      "protein_g": 46,
+      "carbs_g": 0,
+      "fat_g": 25,
+      "fiber_g": 0
+    },
+    {
+      "name": "6 Count Bone-In Wings (Drums Only)",
+      "category": "Bone-In Wings",
+      "serving": "1 serving",
+      "calories": 450,
+      "protein_g": 60,
+      "carbs_g": 0,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "10 Count Bone-In Wings",
+      "category": "Bone-In Wings",
+      "serving": "1 serving",
+      "calories": 720,
+      "protein_g": 88,
+      "carbs_g": 0,
+      "fat_g": 41,
+      "fiber_g": 0
+    },
+    {
+      "name": "10 Count Bone-In Wings (Flats Only)",
+      "category": "Bone-In Wings",
+      "serving": "1 serving",
+      "calories": 680,
+      "protein_g": 77,
+      "carbs_g": 0,
+      "fat_g": 42,
+      "fiber_g": 0
+    },
+    {
+      "name": "10 Count Bone-In Wings (Drums Only)",
+      "category": "Bone-In Wings",
+      "serving": "1 serving",
+      "calories": 750,
+      "protein_g": 100,
+      "carbs_g": 0,
+      "fat_g": 39,
+      "fiber_g": 0
+    },
+    {
+      "name": "15 Count Bone-In Wings",
+      "category": "Bone-In Wings",
+      "serving": "1 serving",
+      "calories": 1080,
+      "protein_g": 132,
+      "carbs_g": 0,
+      "fat_g": 61,
+      "fiber_g": 0
+    },
+    {
+      "name": "15 Count Bone-In Wings (Flats Only)",
+      "category": "Bone-In Wings",
+      "serving": "1 serving",
+      "calories": 1020,
+      "protein_g": 115,
+      "carbs_g": 0,
+      "fat_g": 63,
+      "fiber_g": 0
+    },
+    {
+      "name": "15 Count Bone-In Wings (Drums Only)",
+      "category": "Bone-In Wings",
+      "serving": "1 serving",
+      "calories": 1120,
+      "protein_g": 150,
+      "carbs_g": 0,
+      "fat_g": 58,
+      "fiber_g": 0
+    },
+    {
+      "name": "20 Count Bone-In Wings",
+      "category": "Bone-In Wings",
+      "serving": "1 serving",
+      "calories": 1440,
+      "protein_g": 177,
+      "carbs_g": 0,
+      "fat_g": 82,
+      "fiber_g": 0
+    },
+    {
+      "name": "20 Count Bone-In Wings (Flats Only)",
+      "category": "Bone-In Wings",
+      "serving": "1 serving",
+      "calories": 1370,
+      "protein_g": 154,
+      "carbs_g": 0,
+      "fat_g": 84,
+      "fiber_g": 0
+    },
+    {
+      "name": "20 Count Bone-In Wings (Drums Only)",
+      "category": "Bone-In Wings",
+      "serving": "1 serving",
+      "calories": 1490,
+      "protein_g": 200,
+      "carbs_g": 0,
+      "fat_g": 77,
+      "fiber_g": 0
+    },
+    {
+      "name": "30 Count Bone-In Wings",
+      "category": "Bone-In Wings",
+      "serving": "1 serving",
+      "calories": 2160,
+      "protein_g": 265,
+      "carbs_g": 0,
+      "fat_g": 122,
+      "fiber_g": 0
+    },
+    {
+      "name": "30 Count Bone-In Wings (Flats Only)",
+      "category": "Bone-In Wings",
+      "serving": "1 serving",
+      "calories": 2050,
+      "protein_g": 230,
+      "carbs_g": 0,
+      "fat_g": 125,
+      "fiber_g": 0
+    },
+    {
+      "name": "30 Count Bone-In Wings (Drums Only)",
+      "category": "Bone-In Wings",
+      "serving": "1 serving",
+      "calories": 2240,
+      "protein_g": 299,
+      "carbs_g": 0,
+      "fat_g": 116,
+      "fiber_g": 0
+    },
+    {
+      "name": "Small Cauliflower Wings",
+      "category": "Cauliflower Wings",
+      "serving": "1 serving",
+      "calories": 520,
+      "protein_g": 8,
+      "carbs_g": 58,
+      "fat_g": 29,
+      "fiber_g": 5
+    },
+    {
+      "name": "Large Cauliflower Wings",
+      "category": "Cauliflower Wings",
+      "serving": "1 serving",
+      "calories": 1040,
+      "protein_g": 16,
+      "carbs_g": 116,
+      "fat_g": 57,
+      "fiber_g": 11
+    },
+    {
+      "name": "Buffalo Dry Rub",
+      "category": "Dry Rubs",
+      "serving": "1 serving",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chipotle BBQ Dry Rub",
+      "category": "Dry Rubs",
+      "serving": "1 serving",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Desert Heat Dry Rub",
+      "category": "Dry Rubs",
+      "serving": "1 serving",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 1,
+      "fiber_g": 1
+    },
+    {
+      "name": "Lemon Pepper Dry Rub",
+      "category": "Dry Rubs",
+      "serving": "1 serving",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Salt & Vinegar Dry Rub",
+      "category": "Dry Rubs",
+      "serving": "1 serving",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Carrots",
+      "category": "Veggies & Dips",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 1,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Celery Sticks",
+      "category": "Veggies & Dips",
+      "serving": "1 serving",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Carrots & Celery Sticks",
+      "category": "Veggies & Dips",
+      "serving": "1 serving",
+      "calories": 35,
+      "protein_g": 1,
+      "carbs_g": 8,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bleu Cheese Dressing",
+      "category": "Veggies & Dips",
+      "serving": "1 serving",
+      "calories": 280,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 29,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bleu Cheese Dressing - Large",
+      "category": "Veggies & Dips",
+      "serving": "1 serving",
+      "calories": 1130,
+      "protein_g": 8,
+      "carbs_g": 9,
+      "fat_g": 117,
+      "fiber_g": 1
+    },
+    {
+      "name": "Ranch Dressing",
+      "category": "Veggies & Dips",
+      "serving": "1 serving",
+      "calories": 320,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 34,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ranch Dressing - Large",
+      "category": "Veggies & Dips",
+      "serving": "1 serving",
+      "calories": 1270,
+      "protein_g": 2,
+      "carbs_g": 9,
+      "fat_g": 136,
+      "fiber_g": 1
+    },
+    {
+      "name": "Honey Mustard",
+      "category": "Veggies & Dips",
+      "serving": "1 serving",
+      "calories": 220,
+      "protein_g": 1,
+      "carbs_g": 11,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Honey Mustard - Large",
+      "category": "Veggies & Dips",
+      "serving": "1 serving",
+      "calories": 890,
+      "protein_g": 6,
+      "carbs_g": 43,
+      "fat_g": 78,
+      "fiber_g": 2
+    },
+    {
+      "name": "Southwestern Ranch",
+      "category": "Veggies & Dips",
+      "serving": "1 serving",
+      "calories": 340,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 37,
+      "fiber_g": 0
+    },
+    {
+      "name": "Southwestern Ranch - Large",
+      "category": "Veggies & Dips",
+      "serving": "1 serving",
+      "calories": 1360,
+      "protein_g": 3,
+      "carbs_g": 9,
+      "fat_g": 146,
+      "fiber_g": 1
+    },
+    {
+      "name": "Asian Zing",
+      "category": "Signature Sauces",
+      "serving": "2 fl oz",
+      "calories": 170,
+      "protein_g": 1,
+      "carbs_g": 41,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Blazin’ Knockout",
+      "category": "Signature Sauces",
+      "serving": "2 fl oz",
+      "calories": 100,
+      "protein_g": 1,
+      "carbs_g": 16,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Buffalo Ranch",
+      "category": "Signature Sauces",
+      "serving": "2 fl oz",
+      "calories": 110,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caribbean Jerk",
+      "category": "Signature Sauces",
+      "serving": "2 fl oz",
+      "calories": 150,
+      "protein_g": 1,
+      "carbs_g": 26,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Golden Fire",
+      "category": "Signature Sauces",
+      "serving": "2 fl oz",
+      "calories": 130,
+      "protein_g": 1,
+      "carbs_g": 25,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Honey BBQ",
+      "category": "Signature Sauces",
+      "serving": "2 fl oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey Garlic",
+      "category": "Signature Sauces",
+      "serving": "2 fl oz",
+      "calories": 160,
+      "protein_g": 1,
+      "carbs_g": 39,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot",
+      "category": "Signature Sauces",
+      "serving": "2 fl oz",
+      "calories": 90,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Jammin’ Jalapeño",
+      "category": "Signature Sauces",
+      "serving": "2 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 40,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemon Pepper",
+      "category": "Signature Sauces",
+      "serving": "2 fl oz",
+      "calories": 300,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 31,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Habanero",
+      "category": "Signature Sauces",
+      "serving": "2 fl oz",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 36,
+      "fat_g": 1,
+      "fiber_g": 1
+    },
+    {
+      "name": "Medium",
+      "category": "Signature Sauces",
+      "serving": "2 fl oz",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mild",
+      "category": "Signature Sauces",
+      "serving": "2 fl oz",
+      "calories": 100,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Original Buffalo",
+      "category": "Signature Sauces",
+      "serving": "2 fl oz",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Parmesan Garlic",
+      "category": "Signature Sauces",
+      "serving": "2 fl oz",
+      "calories": 260,
+      "protein_g": 2,
+      "carbs_g": 6,
+      "fat_g": 25,
+      "fiber_g": 1
+    },
+    {
+      "name": "Spicy Garlic",
+      "category": "Signature Sauces",
+      "serving": "2 fl oz",
+      "calories": 90,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet BBQ",
+      "category": "Signature Sauces",
+      "serving": "2 fl oz",
+      "calories": 100,
+      "protein_g": 1,
+      "carbs_g": 23,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Teriyaki",
+      "category": "Signature Sauces",
+      "serving": "2 fl oz",
+      "calories": 130,
+      "protein_g": 4,
+      "carbs_g": 30,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Thai Curry",
+      "category": "Signature Sauces",
+      "serving": "2 fl oz",
+      "calories": 290,
+      "protein_g": 1,
+      "carbs_g": 8,
+      "fat_g": 29,
+      "fiber_g": 1
+    },
+    {
+      "name": "Wild",
+      "category": "Signature Sauces",
+      "serving": "2 fl oz",
+      "calories": 100,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Buffalo Dry Rub",
+      "category": "Dry Rubs",
+      "serving": "1 tsp",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Desert Heat Dry Rub",
+      "category": "Dry Rubs",
+      "serving": "1 tsp",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chipotle BBQ Dry Rub",
+      "category": "Dry Rubs",
+      "serving": "1 tsp",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemon Pepper Dry Rub",
+      "category": "Dry Rubs",
+      "serving": "1 tsp",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salt & Vinegar Dry Rub",
+      "category": "Dry Rubs",
+      "serving": "1 tsp",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Sauce",
+      "category": "Extras",
+      "serving": "1 serving (Extras)",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 30,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chile-Lime Dressing",
+      "category": "Extras",
+      "serving": "1 serving",
+      "calories": 260,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 28,
+      "fiber_g": 0
+    },
+    {
+      "name": "Crema",
+      "category": "Extras",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 2,
+      "carbs_g": 5,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hatch Queso",
+      "category": "Extras",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 6,
+      "carbs_g": 4,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "House-Made Guacamole",
+      "category": "Extras",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 2,
+      "carbs_g": 6,
+      "fat_g": 10,
+      "fiber_g": 4
+    },
+    {
+      "name": "Marinara",
+      "category": "Extras",
+      "serving": "1 serving",
+      "calories": 45,
+      "protein_g": 2,
+      "carbs_g": 8,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "New Belgium Fat Tire Beer Cheese",
+      "category": "Extras",
+      "serving": "1 serving",
+      "calories": 120,
+      "protein_g": 5,
+      "carbs_g": 5,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pico de Gallo",
+      "category": "Extras",
+      "serving": "1 serving",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Salsa",
+      "category": "Extras",
+      "serving": "1 serving",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Creamy Chimichurri",
+      "category": "Around The World Sauces",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 1,
+      "carbs_g": 15,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Maple Sweet Chili",
+      "category": "Around The World Sauces",
+      "serving": "1 serving",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Peri Peri",
+      "category": "Around The World Sauces",
+      "serving": "1 serving",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Smoky Elote",
+      "category": "Around The World Sauces",
+      "serving": "1 serving",
+      "calories": 230,
+      "protein_g": 2,
+      "carbs_g": 6,
+      "fat_g": 22,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Curry",
+      "category": "Around The World Sauces",
+      "serving": "1 serving",
+      "calories": 90,
+      "protein_g": 1,
+      "carbs_g": 20,
+      "fat_g": 1,
+      "fiber_g": 1
+    },
+    {
+      "name": "Yuzu Wasabi",
+      "category": "Around The World Sauces",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 1,
+      "carbs_g": 15,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "2 count Original Chicken Dippers",
+      "category": "Chicken Dippers",
+      "serving": "1 serving",
+      "calories": 380,
+      "protein_g": 25,
+      "carbs_g": 35,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "3 count Original Chicken Dippers",
+      "category": "Chicken Dippers",
+      "serving": "1 serving",
+      "calories": 570,
+      "protein_g": 37,
+      "carbs_g": 52,
+      "fat_g": 24,
+      "fiber_g": 4
+    },
+    {
+      "name": "5 count Original Chicken Dippers",
+      "category": "Chicken Dippers",
+      "serving": "1 serving",
+      "calories": 960,
+      "protein_g": 62,
+      "carbs_g": 87,
+      "fat_g": 40,
+      "fiber_g": 6
+    },
+    {
+      "name": "10 count Original Chicken Dippers",
+      "category": "Chicken Dippers",
+      "serving": "1 serving",
+      "calories": 1910,
+      "protein_g": 124,
+      "carbs_g": 173,
+      "fat_g": 80,
+      "fiber_g": 12
+    },
+    {
+      "name": "15 count Original Chicken Dippers",
+      "category": "Chicken Dippers",
+      "serving": "1 serving",
+      "calories": 2870,
+      "protein_g": 186,
+      "carbs_g": 260,
+      "fat_g": 121,
+      "fiber_g": 18
+    },
+    {
+      "name": "2 count Spicy Chicken Dippers",
+      "category": "Chicken Dippers",
+      "serving": "1 serving",
+      "calories": 330,
+      "protein_g": 22,
+      "carbs_g": 25,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "3 count Spicy Chicken Dippers",
+      "category": "Chicken Dippers",
+      "serving": "1 serving",
+      "calories": 500,
+      "protein_g": 33,
+      "carbs_g": 38,
+      "fat_g": 24,
+      "fiber_g": 4
+    },
+    {
+      "name": "5 count Spicy Chicken Dippers",
+      "category": "Chicken Dippers",
+      "serving": "1 serving",
+      "calories": 830,
+      "protein_g": 55,
+      "carbs_g": 63,
+      "fat_g": 39,
+      "fiber_g": 6
+    },
+    {
+      "name": "10 count Spicy Chicken Dippers",
+      "category": "Chicken Dippers",
+      "serving": "1 serving",
+      "calories": 1650,
+      "protein_g": 109,
+      "carbs_g": 127,
+      "fat_g": 79,
+      "fiber_g": 12
+    },
+    {
+      "name": "15 count Spicy Chicken Dippers",
+      "category": "Chicken Dippers",
+      "serving": "1 serving",
+      "calories": 2480,
+      "protein_g": 164,
+      "carbs_g": 190,
+      "fat_g": 118,
+      "fiber_g": 18
+    },
+    {
+      "name": "2 count Grilled Chicken Dippers",
+      "category": "Chicken Dippers",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 25,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "3 count Grilled Chicken Dippers",
+      "category": "Chicken Dippers",
+      "serving": "1 serving",
+      "calories": 160,
+      "protein_g": 37,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "5 count Grilled Chicken Dippers",
+      "category": "Chicken Dippers",
+      "serving": "1 serving",
+      "calories": 260,
+      "protein_g": 61,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "10 count Grilled Chicken Dippers",
+      "category": "Chicken Dippers",
+      "serving": "1 serving",
+      "calories": 520,
+      "protein_g": 123,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "15 count Grilled Chicken Dippers",
+      "category": "Chicken Dippers",
+      "serving": "1 serving",
+      "calories": 780,
+      "protein_g": 184,
+      "carbs_g": 0,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "B-Dubs Dip",
+      "category": "Dipping Sauce",
+      "serving": "1 serving",
+      "calories": 260,
+      "protein_g": 1,
+      "carbs_g": 7,
+      "fat_g": 26,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bacon Cheddar Jumbo Tots, with B-Dubs Dip & Ranch",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 1180,
+      "protein_g": 25,
+      "carbs_g": 49,
+      "fat_g": 98,
+      "fiber_g": 5
+    },
+    {
+      "name": "Buffalo Chicken Dip",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 1460,
+      "protein_g": 50,
+      "carbs_g": 119,
+      "fat_g": 87,
+      "fiber_g": 3
+    },
+    {
+      "name": "Buffalo Chicken Tots",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 2110,
+      "protein_g": 57,
+      "carbs_g": 146,
+      "fat_g": 144,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cheeseburger Fries - at select locations",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 1480,
+      "protein_g": 43,
+      "carbs_g": 115,
+      "fat_g": 92,
+      "fiber_g": 6
+    },
+    {
+      "name": "Cheeseburger Sliders with Golden Fire & Ranch",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 1030,
+      "protein_g": 34,
+      "carbs_g": 78,
+      "fat_g": 64,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cheddar Cheese Curds, with B-Dubs Dip",
+      "category": "Appetizers",
+      "serving": "1 serving (Appetizers)",
+      "calories": 1320,
+      "protein_g": 58,
+      "carbs_g": 43,
+      "fat_g": 102,
+      "fiber_g": 4
+    },
+    {
+      "name": "Chips & Dip Trio",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 1490,
+      "protein_g": 37,
+      "carbs_g": 155,
+      "fat_g": 87,
+      "fiber_g": 26
+    },
+    {
+      "name": "Chips & House-made Guacamole - at select locations",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 1060,
+      "protein_g": 16,
+      "carbs_g": 122,
+      "fat_g": 62,
+      "fiber_g": 10
+    },
+    {
+      "name": "Chips & Salsa - at select locations",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 860,
+      "protein_g": 14,
+      "carbs_g": 122,
+      "fat_g": 35,
+      "fiber_g": 14
+    },
+    {
+      "name": "Everything Pretzel Knots, with New Belgium Fat Tire Beer Cheese and Honey Mustard",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 890,
+      "protein_g": 20,
+      "carbs_g": 106,
+      "fat_g": 43,
+      "fiber_g": 3
+    },
+    {
+      "name": "Fried Pickles, with B-Dubs Dip",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 710,
+      "protein_g": 8,
+      "carbs_g": 56,
+      "fat_g": 51,
+      "fiber_g": 6
+    },
+    {
+      "name": "Hatch Queso with Chips",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 1110,
+      "protein_g": 28,
+      "carbs_g": 119,
+      "fat_g": 59,
+      "fiber_g": 11
+    },
+    {
+      "name": "Add Chili",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 8,
+      "carbs_g": 5,
+      "fat_g": 6,
+      "fiber_g": 2
+    },
+    {
+      "name": "Add House-made Guacamole",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 45,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 5,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mozzarella Sticks, with Marinara",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 520,
+      "protein_g": 21,
+      "carbs_g": 53,
+      "fat_g": 25,
+      "fiber_g": 7
+    },
+    {
+      "name": "Onion Rings, with B-Dubs Dip",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 1350,
+      "protein_g": 11,
+      "carbs_g": 134,
+      "fat_g": 86,
+      "fiber_g": 11
+    },
+    {
+      "name": "Ultimate Nachos",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 1760,
+      "protein_g": 48,
+      "carbs_g": 184,
+      "fat_g": 95,
+      "fiber_g": 18
+    },
+    {
+      "name": "Add Chicken",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 120,
+      "protein_g": 21,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beer-Battered Onion Rings",
+      "category": "Ultimate Sampler",
+      "serving": "1 serving",
+      "calories": 550,
+      "protein_g": 5,
+      "carbs_g": 65,
+      "fat_g": 31,
+      "fiber_g": 5
+    },
+    {
+      "name": "Bone-In Wings",
+      "category": "Ultimate Sampler",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 35,
+      "carbs_g": 0,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Boneless Wings",
+      "category": "Ultimate Sampler",
+      "serving": "1 serving (Ultimate Sampler)",
+      "calories": 300,
+      "protein_g": 24,
+      "carbs_g": 17,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cauliflower Wings",
+      "category": "Ultimate Sampler",
+      "serving": "1 serving (Ultimate Sampler)",
+      "calories": 520,
+      "protein_g": 8,
+      "carbs_g": 58,
+      "fat_g": 29,
+      "fiber_g": 5
+    },
+    {
+      "name": "Cheddar Cheese Curds",
+      "category": "Ultimate Sampler",
+      "serving": "1 serving",
+      "calories": 530,
+      "protein_g": 28,
+      "carbs_g": 18,
+      "fat_g": 38,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cheeseburger Sliders - at select locations",
+      "category": "Ultimate Sampler",
+      "serving": "1 serving",
+      "calories": 360,
+      "protein_g": 17,
+      "carbs_g": 38,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Crispy Chicken Dippers",
+      "category": "Ultimate Sampler",
+      "serving": "1 serving",
+      "calories": 380,
+      "protein_g": 25,
+      "carbs_g": 35,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Spicy Chicken Dippers",
+      "category": "Ultimate Sampler",
+      "serving": "1 serving",
+      "calories": 330,
+      "protein_g": 22,
+      "carbs_g": 25,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Everything Pretzel Knots",
+      "category": "Ultimate Sampler",
+      "serving": "1 serving",
+      "calories": 330,
+      "protein_g": 9,
+      "carbs_g": 54,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Fried Pickles",
+      "category": "Ultimate Sampler",
+      "serving": "1 serving",
+      "calories": 450,
+      "protein_g": 7,
+      "carbs_g": 49,
+      "fat_g": 25,
+      "fiber_g": 5
+    },
+    {
+      "name": "Jumbo Stuffed Tots - at select locations",
+      "category": "Ultimate Sampler",
+      "serving": "1 serving",
+      "calories": 260,
+      "protein_g": 10,
+      "carbs_g": 17,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mozzarella Sticks",
+      "category": "Ultimate Sampler",
+      "serving": "1 serving",
+      "calories": 310,
+      "protein_g": 13,
+      "carbs_g": 30,
+      "fat_g": 16,
+      "fiber_g": 4
+    },
+    {
+      "name": "Caramel Sauce - at select locations",
+      "category": "Ultimate Sampler",
+      "serving": "1 serving",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 30,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hatch Queso - at select locations",
+      "category": "Ultimate Sampler",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 6,
+      "carbs_g": 4,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey Mustard - at select locations",
+      "category": "Ultimate Sampler",
+      "serving": "1 serving",
+      "calories": 220,
+      "protein_g": 1,
+      "carbs_g": 11,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "New Belgium Fat Tire Beer Cheese - at select locations",
+      "category": "Ultimate Sampler",
+      "serving": "1 serving",
+      "calories": 120,
+      "protein_g": 5,
+      "carbs_g": 5,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Southwestern Ranch Dressing",
+      "category": "Ultimate Sampler",
+      "serving": "1 serving",
+      "calories": 340,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 37,
+      "fiber_g": 0
+    },
+    {
+      "name": "All-American Cheeseburger",
+      "category": "Burgers",
+      "serving": "1 serving",
+      "calories": 820,
+      "protein_g": 48,
+      "carbs_g": 38,
+      "fat_g": 53,
+      "fiber_g": 3
+    },
+    {
+      "name": "All-American Single Cheeseburger - at select locations",
+      "category": "Burgers",
+      "serving": "1 serving",
+      "calories": 540,
+      "protein_g": 27,
+      "carbs_g": 36,
+      "fat_g": 32,
+      "fiber_g": 3
+    },
+    {
+      "name": "All-American Bacon Cheeseburger",
+      "category": "Burgers",
+      "serving": "1 serving",
+      "calories": 1020,
+      "protein_g": 60,
+      "carbs_g": 39,
+      "fat_g": 69,
+      "fiber_g": 3
+    },
+    {
+      "name": "B-Dubs Signature Smasher - at select locations",
+      "category": "Burgers",
+      "serving": "1 serving",
+      "calories": 900,
+      "protein_g": 49,
+      "carbs_g": 46,
+      "fat_g": 57,
+      "fiber_g": 4
+    },
+    {
+      "name": "B-Dubs Signature Single Smasher - at select locations",
+      "category": "Burgers",
+      "serving": "1 serving",
+      "calories": 620,
+      "protein_g": 28,
+      "carbs_g": 45,
+      "fat_g": 36,
+      "fiber_g": 4
+    },
+    {
+      "name": "Bacon Mac & Cheese Burger",
+      "category": "Burgers",
+      "serving": "1 serving",
+      "calories": 1160,
+      "protein_g": 63,
+      "carbs_g": 55,
+      "fat_g": 76,
+      "fiber_g": 3
+    },
+    {
+      "name": "Bacon-Smashed Hatch Chile Burger",
+      "category": "Burgers",
+      "serving": "1 serving",
+      "calories": 990,
+      "protein_g": 60,
+      "carbs_g": 42,
+      "fat_g": 64,
+      "fiber_g": 3
+    },
+    {
+      "name": "BBQ Bacon Burger",
+      "category": "Burgers",
+      "serving": "1 serving",
+      "calories": 1140,
+      "protein_g": 61,
+      "carbs_g": 54,
+      "fat_g": 75,
+      "fiber_g": 3
+    },
+    {
+      "name": "Blackjack Burger - at select locations",
+      "category": "Burgers",
+      "serving": "1 serving",
+      "calories": 1020,
+      "protein_g": 58,
+      "carbs_g": 51,
+      "fat_g": 65,
+      "fiber_g": 3
+    },
+    {
+      "name": "Mushroom Swiss Burger - at select locations",
+      "category": "Burgers",
+      "serving": "1 serving",
+      "calories": 960,
+      "protein_g": 55,
+      "carbs_g": 41,
+      "fat_g": 64,
+      "fiber_g": 4
+    },
+    {
+      "name": "Southwestern Black Bean Burger",
+      "category": "Burgers",
+      "serving": "1 serving",
+      "calories": 720,
+      "protein_g": 31,
+      "carbs_g": 74,
+      "fat_g": 40,
+      "fiber_g": 16
+    },
+    {
+      "name": "Triple-Bacon Cheeseburger",
+      "category": "Burgers",
+      "serving": "1 serving",
+      "calories": 1200,
+      "protein_g": 72,
+      "carbs_g": 41,
+      "fat_g": 83,
+      "fiber_g": 4
+    },
+    {
+      "name": "Hamburger Patty",
+      "category": "Protein Options",
+      "serving": "1 serving",
+      "calories": 210,
+      "protein_g": 17,
+      "carbs_g": 0,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Bean Burger Patty",
+      "category": "Protein Options",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 18,
+      "carbs_g": 31,
+      "fat_g": 6,
+      "fiber_g": 11
+    },
+    {
+      "name": "American Cheese",
+      "category": "Toppings",
+      "serving": "1 serving",
+      "calories": 70,
+      "protein_g": 3,
+      "carbs_g": 1,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bleu Cheese Crumbles",
+      "category": "Toppings",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 3,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheddar Cheese",
+      "category": "Toppings",
+      "serving": "1 serving",
+      "calories": 90,
+      "protein_g": 5,
+      "carbs_g": 1,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepper Jack Cheese",
+      "category": "Toppings",
+      "serving": "1 serving",
+      "calories": 80,
+      "protein_g": 5,
+      "carbs_g": 0,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Swiss Cheese",
+      "category": "Toppings",
+      "serving": "1 serving",
+      "calories": 80,
+      "protein_g": 6,
+      "carbs_g": 0,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sautéed Mushrooms",
+      "category": "Toppings",
+      "serving": "1 serving",
+      "calories": 10,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Grilled White Onions",
+      "category": "Toppings",
+      "serving": "1 serving",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Thick-Cut Bacon",
+      "category": "Toppings",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 8,
+      "carbs_g": 0,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Guacamole",
+      "category": "Toppings",
+      "serving": "1 serving",
+      "calories": 45,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 5,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mayo",
+      "category": "Toppings",
+      "serving": "1 tbsp",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ketchup",
+      "category": "Toppings",
+      "serving": "1 tbsp",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Yellow Mustard",
+      "category": "Toppings",
+      "serving": "1 tsp",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon Patty Melt",
+      "category": "Sandwiches",
+      "serving": "1 serving",
+      "calories": 1300,
+      "protein_g": 60,
+      "carbs_g": 46,
+      "fat_g": 98,
+      "fiber_g": 3
+    },
+    {
+      "name": "Beer Cheese Beef Cheesesteak",
+      "category": "Sandwiches",
+      "serving": "1 serving",
+      "calories": 700,
+      "protein_g": 57,
+      "carbs_g": 55,
+      "fat_g": 28,
+      "fiber_g": 4
+    },
+    {
+      "name": "add Sautéed Mushrooms",
+      "category": "Sandwiches",
+      "serving": "1 serving",
+      "calories": 40,
+      "protein_g": 2,
+      "carbs_g": 4,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Beer Cheese Chicken Cheesesteak",
+      "category": "Sandwiches",
+      "serving": "1 serving",
+      "calories": 720,
+      "protein_g": 57,
+      "carbs_g": 56,
+      "fat_g": 29,
+      "fiber_g": 4
+    },
+    {
+      "name": "Buffalo Ranch Chicken Sandwich",
+      "category": "Sandwiches",
+      "serving": "1 serving",
+      "calories": 750,
+      "protein_g": 32,
+      "carbs_g": 60,
+      "fat_g": 42,
+      "fiber_g": 6
+    },
+    {
+      "name": "Classic Chicken Sandwich",
+      "category": "Sandwiches",
+      "serving": "1 serving",
+      "calories": 640,
+      "protein_g": 31,
+      "carbs_g": 55,
+      "fat_g": 33,
+      "fiber_g": 4
+    },
+    {
+      "name": "Grilled Classic Chicken Sandwich",
+      "category": "Sandwiches",
+      "serving": "1 serving",
+      "calories": 410,
+      "protein_g": 27,
+      "carbs_g": 34,
+      "fat_g": 19,
+      "fiber_g": 2
+    },
+    {
+      "name": "Kickin’ Chicken Sandwich",
+      "category": "Sandwiches",
+      "serving": "1 serving",
+      "calories": 970,
+      "protein_g": 39,
+      "carbs_g": 62,
+      "fat_g": 64,
+      "fiber_g": 5
+    },
+    {
+      "name": "Spicy Chicken Sandwich",
+      "category": "Sandwiches",
+      "serving": "1 serving",
+      "calories": 640,
+      "protein_g": 29,
+      "carbs_g": 56,
+      "fat_g": 34,
+      "fiber_g": 4
+    },
+    {
+      "name": "Original Crispy Chicken Breast",
+      "category": "Protein Options",
+      "serving": "1 serving",
+      "calories": 330,
+      "protein_g": 25,
+      "carbs_g": 21,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Spicy Crispy Chicken Breast",
+      "category": "Protein Options",
+      "serving": "1 serving",
+      "calories": 330,
+      "protein_g": 23,
+      "carbs_g": 23,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Grilled Chicken Breast",
+      "category": "Protein Options",
+      "serving": "1 serving",
+      "calories": 90,
+      "protein_g": 21,
+      "carbs_g": 1,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shredded Iceberg Lettuce",
+      "category": "Make It Deluxe",
+      "serving": "1 serving",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tomato Slice",
+      "category": "Make It Deluxe",
+      "serving": "1 serving",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buffalo Chips",
+      "category": "Sides & Substitutions",
+      "serving": "Regular",
+      "calories": 370,
+      "protein_g": 6,
+      "carbs_g": 54,
+      "fat_g": 15,
+      "fiber_g": 5
+    },
+    {
+      "name": "Buffalo Chips",
+      "category": "Sides & Substitutions",
+      "serving": "Large",
+      "calories": 740,
+      "protein_g": 13,
+      "carbs_g": 108,
+      "fat_g": 29,
+      "fiber_g": 10
+    },
+    {
+      "name": "Buffalo Loaded Fries - at select locations",
+      "category": "Sides & Substitutions",
+      "serving": "1 serving",
+      "calories": 660,
+      "protein_g": 18,
+      "carbs_g": 51,
+      "fat_g": 43,
+      "fiber_g": 3
+    },
+    {
+      "name": "Carrots & Celery, with Ranch Dressing",
+      "category": "Sides & Substitutions",
+      "serving": "1 serving",
+      "calories": 380,
+      "protein_g": 3,
+      "carbs_g": 16,
+      "fat_g": 34,
+      "fiber_g": 5
+    },
+    {
+      "name": "Cheddar Cheese Curds, with B-Dubs Dip",
+      "category": "Sides & Substitutions",
+      "serving": "1 serving (Sides & Substitutions)",
+      "calories": 790,
+      "protein_g": 29,
+      "carbs_g": 25,
+      "fat_g": 64,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chips & Salsa",
+      "category": "Sides & Substitutions",
+      "serving": "1 serving (Sides & Substitutions)",
+      "calories": 520,
+      "protein_g": 8,
+      "carbs_g": 72,
+      "fat_g": 22,
+      "fiber_g": 1
+    },
+    {
+      "name": "Crispy Battered French Fries",
+      "category": "Sides & Substitutions",
+      "serving": "Regular",
+      "calories": 370,
+      "protein_g": 5,
+      "carbs_g": 47,
+      "fat_g": 18,
+      "fiber_g": 2
+    },
+    {
+      "name": "Crispy Battered French Fries",
+      "category": "Sides & Substitutions",
+      "serving": "Large",
+      "calories": 740,
+      "protein_g": 9,
+      "carbs_g": 94,
+      "fat_g": 37,
+      "fiber_g": 5
+    },
+    {
+      "name": "Garden Side Salad, see Big Salads for Dressings",
+      "category": "Sides & Substitutions",
+      "serving": "1 serving",
+      "calories": 90,
+      "protein_g": 5,
+      "carbs_g": 8,
+      "fat_g": 5,
+      "fiber_g": 3
+    },
+    {
+      "name": "Hatch Queso Bacon Fries - at select locations",
+      "category": "Sides & Substitutions",
+      "serving": "1 serving",
+      "calories": 590,
+      "protein_g": 13,
+      "carbs_g": 52,
+      "fat_g": 37,
+      "fiber_g": 3
+    },
+    {
+      "name": "Mac & Cheese",
+      "category": "Sides & Substitutions",
+      "serving": "1 serving",
+      "calories": 590,
+      "protein_g": 21,
+      "carbs_g": 50,
+      "fat_g": 33,
+      "fiber_g": 2
+    },
+    {
+      "name": "Onion Rings, with B-Dubs Dip, Regular",
+      "category": "Sides & Substitutions",
+      "serving": "1 serving",
+      "calories": 820,
+      "protein_g": 6,
+      "carbs_g": 71,
+      "fat_g": 56,
+      "fiber_g": 6
+    },
+    {
+      "name": "Potato Wedges",
+      "category": "Sides & Substitutions",
+      "serving": "Regular",
+      "calories": 370,
+      "protein_g": 6,
+      "carbs_g": 45,
+      "fat_g": 19,
+      "fiber_g": 6
+    },
+    {
+      "name": "Potato Wedges",
+      "category": "Sides & Substitutions",
+      "serving": "Large",
+      "calories": 750,
+      "protein_g": 12,
+      "carbs_g": 90,
+      "fat_g": 38,
+      "fiber_g": 12
+    },
+    {
+      "name": "Rice (Hawaii only)",
+      "category": "Sides & Substitutions",
+      "serving": "1 serving",
+      "calories": 180,
+      "protein_g": 3,
+      "carbs_g": 40,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Potato Trio",
+      "category": "Sides & Substitutions",
+      "serving": "1 serving",
+      "calories": 1120,
+      "protein_g": 17,
+      "carbs_g": 150,
+      "fat_g": 52,
+      "fiber_g": 8
+    },
+    {
+      "name": "Tots",
+      "category": "Sides & Substitutions",
+      "serving": "Regular",
+      "calories": 620,
+      "protein_g": 5,
+      "carbs_g": 60,
+      "fat_g": 40,
+      "fiber_g": 7
+    },
+    {
+      "name": "Tots",
+      "category": "Sides & Substitutions",
+      "serving": "Large",
+      "calories": 1240,
+      "protein_g": 10,
+      "carbs_g": 120,
+      "fat_g": 80,
+      "fiber_g": 14
+    },
+    {
+      "name": "New Belgium Fat Tire Beer Cheese",
+      "category": "Optional Toppings For French Fries, Potato Wedges, Or Tots (Regular / Large)",
+      "serving": "Regular fries/wedges/tots",
+      "calories": 120,
+      "protein_g": 5,
+      "carbs_g": 5,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "New Belgium Fat Tire Beer Cheese",
+      "category": "Optional Toppings For French Fries, Potato Wedges, Or Tots (Regular / Large)",
+      "serving": "Large fries/wedges/tots",
+      "calories": 350,
+      "protein_g": 14,
+      "carbs_g": 14,
+      "fat_g": 26,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shredded Cheddar Jack Cheese",
+      "category": "Optional Toppings For French Fries, Potato Wedges, Or Tots (Regular / Large)",
+      "serving": "Regular fries/wedges/tots",
+      "calories": 110,
+      "protein_g": 7,
+      "carbs_g": 1,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shredded Cheddar Jack Cheese",
+      "category": "Optional Toppings For French Fries, Potato Wedges, Or Tots (Regular / Large)",
+      "serving": "Large fries/wedges/tots",
+      "calories": 320,
+      "protein_g": 20,
+      "carbs_g": 3,
+      "fat_g": 26,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hatch Queso",
+      "category": "Optional Toppings For French Fries, Potato Wedges, Or Tots (Regular / Large)",
+      "serving": "Regular fries/wedges/tots",
+      "calories": 110,
+      "protein_g": 6,
+      "carbs_g": 4,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hatch Queso",
+      "category": "Optional Toppings For French Fries, Potato Wedges, Or Tots (Regular / Large)",
+      "serving": "Large fries/wedges/tots",
+      "calories": 330,
+      "protein_g": 18,
+      "carbs_g": 12,
+      "fat_g": 24,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chili",
+      "category": "Optional Toppings For French Fries, Potato Wedges, Or Tots (Regular / Large)",
+      "serving": "Regular fries/wedges/tots",
+      "calories": 110,
+      "protein_g": 8,
+      "carbs_g": 5,
+      "fat_g": 6,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chili",
+      "category": "Optional Toppings For French Fries, Potato Wedges, Or Tots (Regular / Large)",
+      "serving": "Large fries/wedges/tots",
+      "calories": 330,
+      "protein_g": 23,
+      "carbs_g": 16,
+      "fat_g": 18,
+      "fiber_g": 5
+    },
+    {
+      "name": "Bacon Crumbles",
+      "category": "Optional Toppings For French Fries, Potato Wedges, Or Tots (Regular / Large)",
+      "serving": "Regular fries/wedges/tots",
+      "calories": 60,
+      "protein_g": 5,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon Crumbles",
+      "category": "Optional Toppings For French Fries, Potato Wedges, Or Tots (Regular / Large)",
+      "serving": "Large fries/wedges/tots",
+      "calories": 170,
+      "protein_g": 14,
+      "carbs_g": 1,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buffalo Dry Rub",
+      "category": "Optional Toppings For French Fries, Potato Wedges, Or Tots (Regular / Large)",
+      "serving": "Regular fries/wedges/tots",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buffalo Dry Rub",
+      "category": "Optional Toppings For French Fries, Potato Wedges, Or Tots (Regular / Large)",
+      "serving": "Large fries/wedges/tots",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chipotle BBQ Dry Rub",
+      "category": "Optional Toppings For French Fries, Potato Wedges, Or Tots (Regular / Large)",
+      "serving": "Regular fries/wedges/tots",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chipotle BBQ Dry Rub",
+      "category": "Optional Toppings For French Fries, Potato Wedges, Or Tots (Regular / Large)",
+      "serving": "Large fries/wedges/tots",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Desert Heat Dry Rub",
+      "category": "Optional Toppings For French Fries, Potato Wedges, Or Tots (Regular / Large)",
+      "serving": "Regular fries/wedges/tots",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Desert Heat Dry Rub",
+      "category": "Optional Toppings For French Fries, Potato Wedges, Or Tots (Regular / Large)",
+      "serving": "Large fries/wedges/tots",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemon Pepper Dry Rub",
+      "category": "Optional Toppings For French Fries, Potato Wedges, Or Tots (Regular / Large)",
+      "serving": "Regular fries/wedges/tots",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemon Pepper Dry Rub",
+      "category": "Optional Toppings For French Fries, Potato Wedges, Or Tots (Regular / Large)",
+      "serving": "Large fries/wedges/tots",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salt & Vinegar Dry Rub",
+      "category": "Optional Toppings For French Fries, Potato Wedges, Or Tots (Regular / Large)",
+      "serving": "Regular fries/wedges/tots",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salt & Vinegar Dry Rub",
+      "category": "Optional Toppings For French Fries, Potato Wedges, Or Tots (Regular / Large)",
+      "serving": "Large fries/wedges/tots",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buffalo Ranch Chicken Wrap",
+      "category": "Wraps & Tacos",
+      "serving": "1 serving",
+      "calories": 860,
+      "protein_g": 35,
+      "carbs_g": 71,
+      "fat_g": 49,
+      "fiber_g": 3
+    },
+    {
+      "name": "Classic Chicken Wrap with Pulled Chicken or Boneless Wings",
+      "category": "Wraps & Tacos",
+      "serving": "with Pulled Chicken",
+      "calories": 680,
+      "protein_g": 56,
+      "carbs_g": 57,
+      "fat_g": 25,
+      "fiber_g": 2
+    },
+    {
+      "name": "Classic Chicken Wrap with Pulled Chicken or Boneless Wings",
+      "category": "Wraps & Tacos",
+      "serving": "with Boneless Wings",
+      "calories": 670,
+      "protein_g": 34,
+      "carbs_g": 68,
+      "fat_g": 29,
+      "fiber_g": 3
+    },
+    {
+      "name": "Street Tacos",
+      "category": "Wraps & Tacos",
+      "serving": "1 serving",
+      "calories": 630,
+      "protein_g": 28,
+      "carbs_g": 43,
+      "fat_g": 39,
+      "fiber_g": 3
+    },
+    {
+      "name": "Crispy Buffalo Chicken Salad with Bleu Cheese Dressing",
+      "category": "Big Salads",
+      "serving": "1 serving",
+      "calories": 1180,
+      "protein_g": 50,
+      "carbs_g": 71,
+      "fat_g": 78,
+      "fiber_g": 12
+    },
+    {
+      "name": "Chicken Caesar Salad with Caesar Dressing",
+      "category": "Big Salads",
+      "serving": "1 serving",
+      "calories": 1020,
+      "protein_g": 56,
+      "carbs_g": 36,
+      "fat_g": 73,
+      "fiber_g": 7
+    },
+    {
+      "name": "Honey BBQ Chicken Salad with Ranch Dressing",
+      "category": "Big Salads",
+      "serving": "1 serving",
+      "calories": 1060,
+      "protein_g": 60,
+      "carbs_g": 50,
+      "fat_g": 70,
+      "fiber_g": 8
+    },
+    {
+      "name": "Bleu Cheese Dressing",
+      "category": "Dressings",
+      "serving": "2 fl oz",
+      "calories": 280,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 29,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caesar Dressing",
+      "category": "Dressings",
+      "serving": "2 fl oz",
+      "calories": 260,
+      "protein_g": 2,
+      "carbs_g": 4,
+      "fat_g": 26,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lite Balsamic with Olive Oil Vinaigrette",
+      "category": "Dressings",
+      "serving": "2 fl oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ranch Dressing",
+      "category": "Dressings",
+      "serving": "2 fl oz",
+      "calories": 320,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 34,
+      "fiber_g": 0
+    },
+    {
+      "name": "Southwestern Ranch Dressing",
+      "category": "Dressings",
+      "serving": "2 fl oz",
+      "calories": 340,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 37,
+      "fiber_g": 0
+    },
+    {
+      "name": "Boneless Wings",
+      "category": "Kids",
+      "serving": "1 serving (Kids)",
+      "calories": 240,
+      "protein_g": 19,
+      "carbs_g": 14,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheeseburger",
+      "category": "Kids",
+      "serving": "1 serving",
+      "calories": 470,
+      "protein_g": 27,
+      "carbs_g": 34,
+      "fat_g": 25,
+      "fiber_g": 2
+    },
+    {
+      "name": "Grilled Cheese Sandwich",
+      "category": "Kids",
+      "serving": "1 serving",
+      "calories": 470,
+      "protein_g": 18,
+      "carbs_g": 43,
+      "fat_g": 25,
+      "fiber_g": 2
+    },
+    {
+      "name": "Grilled Chicken Dippers",
+      "category": "Kids",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 25,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Crispy Battered French Fries",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 370,
+      "protein_g": 5,
+      "carbs_g": 47,
+      "fat_g": 18,
+      "fiber_g": 2
+    },
+    {
+      "name": "Unsweetened Applesauce",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 18,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Fudge Cake",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 530,
+      "protein_g": 7,
+      "carbs_g": 76,
+      "fat_g": 24,
+      "fiber_g": 1
+    },
+    {
+      "name": "Ghirardelli Chocolate Chunk Brownie",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 350,
+      "protein_g": 4,
+      "carbs_g": 52,
+      "fat_g": 15,
+      "fiber_g": 3
+    },
+    {
+      "name": "New York Style Cheesecake",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 670,
+      "protein_g": 12,
+      "carbs_g": 52,
+      "fat_g": 46,
+      "fiber_g": 1
+    },
+    {
+      "name": "Triple Chocolate Chip Cookie",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 410,
+      "protein_g": 4,
+      "carbs_g": 56,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "Triple Chocolate Chip Cookie Skillet",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 660,
+      "protein_g": 7,
+      "carbs_g": 95,
+      "fat_g": 29,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramel Sauce",
+      "category": "Accompaniments",
+      "serving": "1 serving (Accompaniments)",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 8,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Sauce",
+      "category": "Accompaniments",
+      "serving": "1 serving",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Maraschino Cherry",
+      "category": "Accompaniments",
+      "serving": "1 serving",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Ice Cream",
+      "category": "Accompaniments",
+      "serving": "1 serving",
+      "calories": 160,
+      "protein_g": 3,
+      "carbs_g": 17,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Whipped Cream",
+      "category": "Accompaniments",
+      "serving": "1 serving",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "American Breakfast, with Bacon or Sausage, JFK Airport",
+      "category": "Breakfast",
+      "serving": "with Bacon",
+      "calories": 590,
+      "protein_g": 33,
+      "carbs_g": 40,
+      "fat_g": 32,
+      "fiber_g": 2
+    },
+    {
+      "name": "American Breakfast, with Bacon or Sausage, JFK Airport",
+      "category": "Breakfast",
+      "serving": "with Sausage",
+      "calories": 660,
+      "protein_g": 29,
+      "carbs_g": 40,
+      "fat_g": 42,
+      "fiber_g": 2
+    },
+    {
+      "name": "B-Dubs Breakfast Bowl",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 1250,
+      "protein_g": 45,
+      "carbs_g": 77,
+      "fat_g": 85,
+      "fiber_g": 1
+    },
+    {
+      "name": "Add Boneless",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 19,
+      "carbs_g": 14,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon, Egg & Cheese Sandwich",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 580,
+      "protein_g": 30,
+      "carbs_g": 37,
+      "fat_g": 33,
+      "fiber_g": 2
+    },
+    {
+      "name": "Boneless Breakfast Wrap",
+      "category": "Breakfast",
+      "serving": "1 serving",
+      "calories": 1220,
+      "protein_g": 51,
+      "carbs_g": 85,
+      "fat_g": 74,
+      "fiber_g": 0
+    },
+    {
+      "name": "Breakfast Sandwich, with Bacon or Sausage, JFK Airport",
+      "category": "Breakfast",
+      "serving": "with Bacon",
+      "calories": 560,
+      "protein_g": 34,
+      "carbs_g": 35,
+      "fat_g": 31,
+      "fiber_g": 2
+    },
+    {
+      "name": "Breakfast Sandwich, with Bacon or Sausage, JFK Airport",
+      "category": "Breakfast",
+      "serving": "with Sausage",
+      "calories": 640,
+      "protein_g": 31,
+      "carbs_g": 35,
+      "fat_g": 41,
+      "fiber_g": 2
+    },
+    {
+      "name": "Breakfast Wrap, with Bacon or Sausage, JFK Airport",
+      "category": "Breakfast",
+      "serving": "with Bacon",
+      "calories": 690,
+      "protein_g": 38,
+      "carbs_g": 52,
+      "fat_g": 36,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Wrap, with Bacon or Sausage, JFK Airport",
+      "category": "Breakfast",
+      "serving": "with Sausage",
+      "calories": 770,
+      "protein_g": 34,
+      "carbs_g": 52,
+      "fat_g": 46,
+      "fiber_g": 1
+    },
+    {
+      "name": "50 Count Boneless Wings",
+      "category": "Wings & Accompaniments",
+      "serving": "1 serving",
+      "calories": 3030,
+      "protein_g": 240,
+      "carbs_g": 170,
+      "fat_g": 155,
+      "fiber_g": 6
+    },
+    {
+      "name": "100 Count Boneless Wings",
+      "category": "Wings & Accompaniments",
+      "serving": "1 serving",
+      "calories": 6070,
+      "protein_g": 479,
+      "carbs_g": 340,
+      "fat_g": 310,
+      "fiber_g": 12
+    },
+    {
+      "name": "150 Count Boneless Wings",
+      "category": "Wings & Accompaniments",
+      "serving": "1 serving",
+      "calories": 9100,
+      "protein_g": 719,
+      "carbs_g": 509,
+      "fat_g": 465,
+      "fiber_g": 18
+    },
+    {
+      "name": "50 Count Bone-In Wings",
+      "category": "Wings & Accompaniments",
+      "serving": "1 serving",
+      "calories": 3600,
+      "protein_g": 442,
+      "carbs_g": 0,
+      "fat_g": 204,
+      "fiber_g": 0
+    },
+    {
+      "name": "100 Count Bone-In Wings",
+      "category": "Wings & Accompaniments",
+      "serving": "1 serving",
+      "calories": 7200,
+      "protein_g": 883,
+      "carbs_g": 0,
+      "fat_g": 408,
+      "fiber_g": 0
+    },
+    {
+      "name": "150 Count Bone-In Wings",
+      "category": "Wings & Accompaniments",
+      "serving": "1 serving",
+      "calories": 10800,
+      "protein_g": 1325,
+      "carbs_g": 0,
+      "fat_g": 612,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cauliflower Wings",
+      "category": "Wings & Accompaniments",
+      "serving": "1 serving (Wings & Accompaniments)",
+      "calories": 4180,
+      "protein_g": 64,
+      "carbs_g": 465,
+      "fat_g": 229,
+      "fiber_g": 1
+    },
+    {
+      "name": "Carrots and Celery Sticks",
+      "category": "Accompaniments",
+      "serving": "1 serving",
+      "calories": 130,
+      "protein_g": 4,
+      "carbs_g": 28,
+      "fat_g": 0,
+      "fiber_g": 9
+    },
+    {
+      "name": "Bleu Cheese Dressing",
+      "category": "Accompaniments",
+      "serving": "8 fl oz",
+      "calories": 1130,
+      "protein_g": 8,
+      "carbs_g": 9,
+      "fat_g": 117,
+      "fiber_g": 1
+    },
+    {
+      "name": "Ranch Dressing",
+      "category": "Accompaniments",
+      "serving": "8 fl oz",
+      "calories": 1270,
+      "protein_g": 2,
+      "carbs_g": 9,
+      "fat_g": 136,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pickles - 6 ea (6 ea per 50 Nashville Hot wings)",
+      "category": "Accompaniments",
+      "serving": "1 serving",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Asian Zing",
+      "category": "Signature Sauces",
+      "serving": "8 fl oz",
+      "calories": 690,
+      "protein_g": 3,
+      "carbs_g": 166,
+      "fat_g": 2,
+      "fiber_g": 4
+    },
+    {
+      "name": "Blazin’ Knockout",
+      "category": "Signature Sauces",
+      "serving": "8 fl oz",
+      "calories": 410,
+      "protein_g": 2,
+      "carbs_g": 64,
+      "fat_g": 16,
+      "fiber_g": 4
+    },
+    {
+      "name": "Buffalo Ranch",
+      "category": "Signature Sauces",
+      "serving": "8 fl oz",
+      "calories": 440,
+      "protein_g": 3,
+      "carbs_g": 14,
+      "fat_g": 41,
+      "fiber_g": 4
+    },
+    {
+      "name": "Caribbean Jerk",
+      "category": "Signature Sauces",
+      "serving": "8 fl oz",
+      "calories": 600,
+      "protein_g": 3,
+      "carbs_g": 103,
+      "fat_g": 21,
+      "fiber_g": 4
+    },
+    {
+      "name": "Golden Fire",
+      "category": "Signature Sauces",
+      "serving": "8 fl oz",
+      "calories": 500,
+      "protein_g": 5,
+      "carbs_g": 101,
+      "fat_g": 10,
+      "fiber_g": 5
+    },
+    {
+      "name": "Honey BBQ",
+      "category": "Signature Sauces",
+      "serving": "8 fl oz",
+      "calories": 540,
+      "protein_g": 2,
+      "carbs_g": 134,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Honey Garlic",
+      "category": "Signature Sauces",
+      "serving": "8 fl oz",
+      "calories": 660,
+      "protein_g": 3,
+      "carbs_g": 157,
+      "fat_g": 4,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hot",
+      "category": "Signature Sauces",
+      "serving": "8 fl oz",
+      "calories": 370,
+      "protein_g": 3,
+      "carbs_g": 15,
+      "fat_g": 32,
+      "fiber_g": 3
+    },
+    {
+      "name": "Jammin’ Jalapeño",
+      "category": "Signature Sauces",
+      "serving": "8 fl oz",
+      "calories": 720,
+      "protein_g": 0,
+      "carbs_g": 160,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemon Pepper",
+      "category": "Signature Sauces",
+      "serving": "8 fl oz",
+      "calories": 1210,
+      "protein_g": 2,
+      "carbs_g": 21,
+      "fat_g": 124,
+      "fiber_g": 4
+    },
+    {
+      "name": "Mango Habanero",
+      "category": "Signature Sauces",
+      "serving": "8 fl oz",
+      "calories": 600,
+      "protein_g": 2,
+      "carbs_g": 141,
+      "fat_g": 5,
+      "fiber_g": 3
+    },
+    {
+      "name": "Medium",
+      "category": "Signature Sauces",
+      "serving": "8 fl oz",
+      "calories": 260,
+      "protein_g": 3,
+      "carbs_g": 10,
+      "fat_g": 22,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mild",
+      "category": "Signature Sauces",
+      "serving": "8 fl oz",
+      "calories": 390,
+      "protein_g": 2,
+      "carbs_g": 11,
+      "fat_g": 37,
+      "fiber_g": 1
+    },
+    {
+      "name": "Original Buffalo",
+      "category": "Signature Sauces",
+      "serving": "8 fl oz",
+      "calories": 890,
+      "protein_g": 2,
+      "carbs_g": 9,
+      "fat_g": 95,
+      "fiber_g": 1
+    },
+    {
+      "name": "Parmesan Garlic",
+      "category": "Signature Sauces",
+      "serving": "8 fl oz",
+      "calories": 1030,
+      "protein_g": 9,
+      "carbs_g": 24,
+      "fat_g": 101,
+      "fiber_g": 3
+    },
+    {
+      "name": "Spicy Garlic",
+      "category": "Signature Sauces",
+      "serving": "8 fl oz",
+      "calories": 370,
+      "protein_g": 3,
+      "carbs_g": 15,
+      "fat_g": 32,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sweet BBQ",
+      "category": "Signature Sauces",
+      "serving": "8 fl oz",
+      "calories": 390,
+      "protein_g": 3,
+      "carbs_g": 93,
+      "fat_g": 1,
+      "fiber_g": 4
+    },
+    {
+      "name": "Teriyaki",
+      "category": "Signature Sauces",
+      "serving": "8 fl oz",
+      "calories": 540,
+      "protein_g": 15,
+      "carbs_g": 120,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Thai Curry",
+      "category": "Signature Sauces",
+      "serving": "8 fl oz",
+      "calories": 1170,
+      "protein_g": 5,
+      "carbs_g": 30,
+      "fat_g": 115,
+      "fiber_g": 5
+    },
+    {
+      "name": "Wild",
+      "category": "Signature Sauces",
+      "serving": "8 fl oz",
+      "calories": 390,
+      "protein_g": 3,
+      "carbs_g": 20,
+      "fat_g": 33,
+      "fiber_g": 3
+    },
+    {
+      "name": "Original Chicken Dippers (25 ea)",
+      "category": "Dippers & More",
+      "serving": "1 serving",
+      "calories": 4780,
+      "protein_g": 310,
+      "carbs_g": 433,
+      "fat_g": 201,
+      "fiber_g": 31
+    },
+    {
+      "name": "B-Dubs Dip",
+      "category": "Dippers & More",
+      "serving": "8 fl oz",
+      "calories": 1050,
+      "protein_g": 4,
+      "carbs_g": 26,
+      "fat_g": 103,
+      "fiber_g": 2
+    },
+    {
+      "name": "Spicy Chicken Dippers (25 ea)",
+      "category": "Dippers & More",
+      "serving": "1 serving",
+      "calories": 4140,
+      "protein_g": 274,
+      "carbs_g": 317,
+      "fat_g": 196,
+      "fiber_g": 29
+    },
+    {
+      "name": "Grilled Chicken Dippers (25 ea)",
+      "category": "Dippers & More",
+      "serving": "1 serving",
+      "calories": 2370,
+      "protein_g": 514,
+      "carbs_g": 17,
+      "fat_g": 29,
+      "fiber_g": 0
+    },
+    {
+      "name": "Classic Chicken Wraps with Pulled Chicken or Boneless Wings (6 ea)",
+      "category": "Dippers & More",
+      "serving": "with Pulled Chicken",
+      "calories": 4050,
+      "protein_g": 206,
+      "carbs_g": 341,
+      "fat_g": 149,
+      "fiber_g": 17
+    },
+    {
+      "name": "Classic Chicken Wraps with Pulled Chicken or Boneless Wings (6 ea)",
+      "category": "Dippers & More",
+      "serving": "with Boneless Wings (6 ea)",
+      "calories": 4030,
+      "protein_g": 206,
+      "carbs_g": 410,
+      "fat_g": 174,
+      "fiber_g": 17
+    },
+    {
+      "name": "Chili con Queso with Chips",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 3320,
+      "protein_g": 122,
+      "carbs_g": 286,
+      "fat_g": 189,
+      "fiber_g": 30
+    },
+    {
+      "name": "Chips & House-made Guacamole",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 2420,
+      "protein_g": 36,
+      "carbs_g": 262,
+      "fat_g": 152,
+      "fiber_g": 30
+    },
+    {
+      "name": "Party Sampler",
+      "category": "Appetizers",
+      "serving": "1 serving",
+      "calories": 4250,
+      "protein_g": 67,
+      "carbs_g": 332,
+      "fat_g": 297,
+      "fiber_g": 18
+    },
+    {
+      "name": "Baked Mac & Cheese",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 3870,
+      "protein_g": 148,
+      "carbs_g": 303,
+      "fat_g": 227,
+      "fiber_g": 11
+    },
+    {
+      "name": "Caesar Salad with Caesar Dressing",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 1570,
+      "protein_g": 31,
+      "carbs_g": 89,
+      "fat_g": 121,
+      "fiber_g": 11
+    },
+    {
+      "name": "Chips & Salsa",
+      "category": "Sides",
+      "serving": "1 serving (Sides)",
+      "calories": 1770,
+      "protein_g": 29,
+      "carbs_g": 256,
+      "fat_g": 71,
+      "fiber_g": 31
+    },
+    {
+      "name": "Potato Wedges",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 2240,
+      "protein_g": 36,
+      "carbs_g": 270,
+      "fat_g": 113,
+      "fiber_g": 36
+    },
+    {
+      "name": "Add Bacon Crumbles",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 460,
+      "protein_g": 37,
+      "carbs_g": 4,
+      "fat_g": 33,
+      "fiber_g": 1
+    },
+    {
+      "name": "Add Beer Cheese",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 470,
+      "protein_g": 18,
+      "carbs_g": 18,
+      "fat_g": 34,
+      "fiber_g": 0
+    },
+    {
+      "name": "Add Cheddar Jack Cheese",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 650,
+      "protein_g": 40,
+      "carbs_g": 5,
+      "fat_g": 52,
+      "fiber_g": 1
+    },
+    {
+      "name": "Add Hatch Queso",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 440,
+      "protein_g": 23,
+      "carbs_g": 16,
+      "fat_g": 32,
+      "fiber_g": 1
+    },
+    {
+      "name": "Whole Cheesecake with Caramel Sauce",
+      "category": "Sweets",
+      "serving": "1 serving",
+      "calories": 11110,
+      "protein_g": 193,
+      "carbs_g": 923,
+      "fat_g": 738,
+      "fiber_g": 16
+    },
+    {
+      "name": "Whole Cheesecake with Chocolate Sauce",
+      "category": "Sweets",
+      "serving": "1 serving",
+      "calories": 11270,
+      "protein_g": 197,
+      "carbs_g": 965,
+      "fat_g": 739,
+      "fiber_g": 16
+    },
+    {
+      "name": "Whole Chocolate Fudge Cake",
+      "category": "Sweets",
+      "serving": "1 serving",
+      "calories": 7420,
+      "protein_g": 98,
+      "carbs_g": 1064,
+      "fat_g": 336,
+      "fiber_g": 14
+    },
+    {
+      "name": "Deluxe Shirley Temple - at select locations",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 310,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Orange Cream - at select locations",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 270,
+      "protein_g": 1,
+      "carbs_g": 55,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passionita",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 29,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Tea - at select locations",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Red Bull Watermelon Punch",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 1,
+      "carbs_g": 73,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spicy Marg-No-Rita",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Strawberry Dirty Soda - at select locations",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 65,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Lemonade",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Diet Pepsi",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mountain Dew",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 30,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mug Root Beer",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 28,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Zero",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Starry",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Lemonade",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 27,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fresh-Brewed Lipton Unsweetened Iced Tea",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea - at select locations",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 29,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Brisk Iced Tea - at select locations",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 18,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Aquafina Bottled Water",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "bubly sparkling water - at select locations",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mug Root Beer Bottle",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 72,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lowfat Milk - at select locations",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 8,
+      "carbs_g": 12,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Milk - at select locations",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 140,
+      "protein_g": 9,
+      "carbs_g": 22,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Apple Juice - at select locations",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Orange Juice - at select locations",
+      "category": "Handcrafted & Zero Proof",
+      "serving": "1 serving",
+      "calories": 80,
+      "protein_g": 1,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Cherry",
+      "category": "Flavors",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango",
+      "category": "Flavors",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 13,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit",
+      "category": "Flavors",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach",
+      "category": "Flavors",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pineapple",
+      "category": "Flavors",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 13,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry",
+      "category": "Flavors",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Watermelon",
+      "category": "Flavors",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ginger Beer",
+      "category": "Mixers",
+      "serving": "1 serving",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tonic",
+      "category": "Mixers",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Club Soda",
+      "category": "Mixers",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Q Hibiscus Ginger Beer",
+      "category": "Mixers",
+      "serving": "1 serving",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Red Bull",
+      "category": "Mixers",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 28,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Red Bull Sugarfree",
+      "category": "Mixers",
+      "serving": "1 serving",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Red Bull Peach Edition (White Peach)",
+      "category": "Mixers",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 28,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Red Bull Sea Blue Edition (Juneberry)",
+      "category": "Mixers",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 28,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Red Bull Red Edition (Watermelon)",
+      "category": "Mixers",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 28,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "B-Dubs Bloody Mary - at select locations",
+      "category": "Cocktails",
+      "serving": "1 serving",
+      "calories": 140,
+      "protein_g": 2,
+      "carbs_g": 8,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Blue Long Island Iced Tea",
+      "category": "Cocktails",
+      "serving": "1 serving",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blue Watermelon Cooler",
+      "category": "Cocktails",
+      "serving": "1 serving",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 29,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Boozy Dunkin’ Cold Brew",
+      "category": "Cocktails",
+      "serving": "1 serving",
+      "calories": 300,
+      "protein_g": 1,
+      "carbs_g": 31,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bourbon Old Fashioned - at select locations",
+      "category": "Cocktails",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 16,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buffalo Trace Old Fashioned - at select locations",
+      "category": "Cocktails",
+      "serving": "1 serving",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 18,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caesar - at select locations (ND & SD only)",
+      "category": "Cocktails",
+      "serving": "1 serving",
+      "calories": 180,
+      "protein_g": 1,
+      "carbs_g": 19,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Classic Espresso Martini",
+      "category": "Cocktails",
+      "serving": "1 serving",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "House Margarita",
+      "category": "Cocktails",
+      "serving": "1 serving",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 27,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Old Fashioned",
+      "category": "Cocktails",
+      "serving": "1 serving",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 16,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mezcal Margarita",
+      "category": "Cocktails",
+      "serving": "1 serving",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Modelo Michelada",
+      "category": "Cocktails",
+      "serving": "1 serving",
+      "calories": 140,
+      "protein_g": 1,
+      "carbs_g": 16,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Patrón Margarita",
+      "category": "Cocktails",
+      "serving": "1 serving",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Red Bull Sunrise",
+      "category": "Cocktails",
+      "serving": "1 serving",
+      "calories": 400,
+      "protein_g": 1,
+      "carbs_g": 74,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Red, White & Booze - at select locations",
+      "category": "Cocktails",
+      "serving": "1 serving",
+      "calories": 380,
+      "protein_g": 0,
+      "carbs_g": 60,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salted Caramel Espresso Martini",
+      "category": "Cocktails",
+      "serving": "1 serving",
+      "calories": 330,
+      "protein_g": 0,
+      "carbs_g": 36,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spicy Margarita",
+      "category": "Cocktails",
+      "serving": "1 serving",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 23,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Spicy Pickle Bloody Mary",
+      "category": "Cocktails",
+      "serving": "1 serving",
+      "calories": 140,
+      "protein_g": 2,
+      "carbs_g": 7,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Strawberry Margarita",
+      "category": "Cocktails",
+      "serving": "1 serving",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Tito’s Spiked Lemonade",
+      "category": "Cocktails",
+      "serving": "1 serving",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 37,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Top Shelf Long Island Iced Tea",
+      "category": "Cocktails",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Margarita",
+      "category": "Cocktails",
+      "serving": "1 serving",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 40,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Barefoot, Pinot Grigio",
+      "category": "Wine",
+      "serving": "6.7 fl oz",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter, Chardonnay",
+      "category": "Wine",
+      "serving": "8.4 fl oz",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Josh, Chardonnay",
+      "category": "Wine",
+      "serving": "12.7 fl oz",
+      "calories": 310,
+      "protein_g": 0,
+      "carbs_g": 8,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Barefoot, Cabernet Sauvignon",
+      "category": "Wine",
+      "serving": "6.7 fl oz",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Archer Roose, Pinot Noir",
+      "category": "Wine",
+      "serving": "8.4 fl oz",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Josh, Cabernet Sauvignon",
+      "category": "Wine",
+      "serving": "12.7 fl oz",
+      "calories": 310,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Francis Coppola, Prosecco",
+      "category": "Wine",
+      "serving": "187 mL",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Graham & Fish, Moscato w/ Bubbles",
+      "category": "Wine",
+      "serving": "250 mL",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    }
+  ]
+}

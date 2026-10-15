@@ -1,0 +1,117 @@
+{
+  "chain": "Transparent Labs",
+  "slug": "transparent-labs",
+  "aliases": [
+    "transparent labs",
+    "transparentlabs",
+    "transparent labs whey",
+    "transparent labs mass gainer"
+  ],
+  "kind": "supplement",
+  "source_url": "https://www.transparentlabs.com/products/whey-protein-isolate",
+  "source_kind": "official",
+  "retrieved": "2026-10-15",
+  "notes": "Nutrition Facts panel images on transparentlabs.com product pages: whey-protein-isolate (Milk_Chocolate_SFP, ChocolateChipCookieDoughSFP), casein-protein (Casein_Vanilla_SFP, Casein-ChocolateSFP), mass-gainer (Chocolate_Glaze_SFP, Sweet_Vanilla_SFP), protein-shakes (Chocolate_NFP, Vanilla_NFP), protein-bars (Dark_Chocolate_SFP, Peanut_Butter_Chocolate_Chip_SFP). The panels carry no flavour title; the flavour is taken from the brand's image file name (each matched its ingredient list).",
+  "items": [
+    {
+      "name": "Grass-Fed Whey Protein Isolate, Milk Chocolate",
+      "category": "Whey Protein",
+      "serving": "1 scoop (34.9 g)",
+      "calories": 130,
+      "protein_g": 28,
+      "carbs_g": 1,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Grass-Fed Whey Protein Isolate, Chocolate Chip Cookie Dough",
+      "category": "Whey Protein",
+      "serving": "1 scoop (34.8 g)",
+      "calories": 130,
+      "protein_g": 28,
+      "carbs_g": 1,
+      "fat_g": 0.5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Grass-Fed Casein Protein, Vanilla",
+      "category": "Casein",
+      "serving": "1 scoop (31.8 g)",
+      "calories": 110,
+      "protein_g": 25,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Grass-Fed Casein Protein, Chocolate",
+      "category": "Casein",
+      "serving": "1 scoop (35 g)",
+      "calories": 120,
+      "protein_g": 25,
+      "carbs_g": 4,
+      "fat_g": 0.5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mass Gainer, Chocolate Glaze",
+      "category": "Mass Gainer",
+      "serving": "2 scoops (199 g)",
+      "calories": 770,
+      "protein_g": 53,
+      "carbs_g": 110,
+      "fat_g": 15,
+      "fiber_g": 6
+    },
+    {
+      "name": "Mass Gainer, Sweet Vanilla",
+      "category": "Mass Gainer",
+      "serving": "2 scoops (194 g)",
+      "calories": 760,
+      "protein_g": 53,
+      "carbs_g": 107,
+      "fat_g": 14,
+      "fiber_g": 4
+    },
+    {
+      "name": "Grass-Fed Protein Shake, Chocolate",
+      "category": "Ready-to-Drink",
+      "serving": "1 bottle (355 mL)",
+      "calories": 150,
+      "protein_g": 30,
+      "carbs_g": 4,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Grass-Fed Protein Shake, Vanilla",
+      "category": "Ready-to-Drink",
+      "serving": "1 bottle (355 mL)",
+      "calories": 130,
+      "protein_g": 30,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Grass-Fed Protein+ Bar, Dark Chocolate",
+      "category": "Bars",
+      "serving": "1 bar (60 g)",
+      "calories": 270,
+      "protein_g": 16,
+      "carbs_g": 20,
+      "fat_g": 17,
+      "fiber_g": 4
+    },
+    {
+      "name": "Grass-Fed Protein+ Bar, Peanut Butter Chocolate Chip",
+      "category": "Bars",
+      "serving": "1 bar (60 g)",
+      "calories": 280,
+      "protein_g": 15,
+      "carbs_g": 23,
+      "fat_g": 16,
+      "fiber_g": 3
+    }
+  ]
+}

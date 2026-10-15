@@ -1,0 +1,2027 @@
+{
+  "chain": "White Castle",
+  "slug": "white-castle",
+  "aliases": [
+    "white castle",
+    "whitecastle",
+    "white castles",
+    "wc sliders"
+  ],
+  "kind": "fast-food",
+  "source_url": "https://www.whitecastle.com/about-us/restaurant-menu-nutrition-information",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Parsed from the nutrition data embedded in whitecastle.com's Restaurant Menu Nutrition Information page (FDA rounding per the page). Items the page labels Limited Time were excluded. Regional variants (e.g. New York / New Jersey only, city-specific shakes) are kept with their region in the name. Slider serving weights are pre-cooking weights per the page; beverage/shake serving sizes are as listed (fl oz or g).",
+  "items": [
+    {
+      "name": "The Original Slider",
+      "category": "Sliders",
+      "serving": "55 g",
+      "calories": 140,
+      "protein_g": 6,
+      "carbs_g": 15,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "The Original Slider (New York / New Jersey only)",
+      "category": "Sliders",
+      "serving": "59 g",
+      "calories": 150,
+      "protein_g": 6,
+      "carbs_g": 17,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Double Original Slider",
+      "category": "Sliders",
+      "serving": "98 g",
+      "calories": 250,
+      "protein_g": 11,
+      "carbs_g": 24,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Double Original Slider (New York / New Jersey only)",
+      "category": "Sliders",
+      "serving": "107 g",
+      "calories": 260,
+      "protein_g": 11,
+      "carbs_g": 27,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cheese",
+      "category": "Sliders",
+      "serving": "63 g",
+      "calories": 170,
+      "protein_g": 8,
+      "carbs_g": 16,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cheese (New York / New Jersey only)",
+      "category": "Sliders",
+      "serving": "67 g",
+      "calories": 170,
+      "protein_g": 8,
+      "carbs_g": 17,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Double Cheese",
+      "category": "Sliders",
+      "serving": "113 g",
+      "calories": 300,
+      "protein_g": 14,
+      "carbs_g": 24,
+      "fat_g": 17,
+      "fiber_g": 2
+    },
+    {
+      "name": "Double Cheese (New York / New Jersey only)",
+      "category": "Sliders",
+      "serving": "122 g",
+      "calories": 310,
+      "protein_g": 14,
+      "carbs_g": 27,
+      "fat_g": 17,
+      "fiber_g": 2
+    },
+    {
+      "name": "Smoked Cheddar Cheese",
+      "category": "Sliders",
+      "serving": "60 g",
+      "calories": 180,
+      "protein_g": 8,
+      "carbs_g": 16,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Smoked Cheddar Cheese (New York / New Jersey only)",
+      "category": "Sliders",
+      "serving": "65 g",
+      "calories": 180,
+      "protein_g": 8,
+      "carbs_g": 18,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Double Smoked Cheddar Cheese",
+      "category": "Sliders",
+      "serving": "108 g",
+      "calories": 320,
+      "protein_g": 15,
+      "carbs_g": 25,
+      "fat_g": 19,
+      "fiber_g": 2
+    },
+    {
+      "name": "Double Smoked Cheddar Cheese (New York / New Jersey only)",
+      "category": "Sliders",
+      "serving": "117 g",
+      "calories": 330,
+      "protein_g": 15,
+      "carbs_g": 28,
+      "fat_g": 19,
+      "fiber_g": 2
+    },
+    {
+      "name": "Jalapeño Cheese",
+      "category": "Sliders",
+      "serving": "60 g",
+      "calories": 170,
+      "protein_g": 8,
+      "carbs_g": 16,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Jalapeño Cheese (New York / New Jersey only)",
+      "category": "Sliders",
+      "serving": "65 g",
+      "calories": 180,
+      "protein_g": 8,
+      "carbs_g": 17,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Double Jalapeño Cheese",
+      "category": "Sliders",
+      "serving": "108 g",
+      "calories": 320,
+      "protein_g": 15,
+      "carbs_g": 25,
+      "fat_g": 19,
+      "fiber_g": 2
+    },
+    {
+      "name": "Double Jalapeño Cheese (New York / New Jersey only)",
+      "category": "Sliders",
+      "serving": "117 g",
+      "calories": 320,
+      "protein_g": 15,
+      "carbs_g": 27,
+      "fat_g": 18,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bacon Cheese",
+      "category": "Sliders",
+      "serving": "66 g",
+      "calories": 220,
+      "protein_g": 11,
+      "carbs_g": 15,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bacon Cheese (New York / New Jersey only)",
+      "category": "Sliders",
+      "serving": "71 g",
+      "calories": 230,
+      "protein_g": 11,
+      "carbs_g": 17,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bacon Jalapeño Cheese",
+      "category": "Sliders",
+      "serving": "67 g",
+      "calories": 230,
+      "protein_g": 11,
+      "carbs_g": 16,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bacon Jalapeño Cheese (New York / New Jersey only)",
+      "category": "Sliders",
+      "serving": "72 g",
+      "calories": 230,
+      "protein_g": 11,
+      "carbs_g": 17,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bacon Smoked Cheddar Cheese",
+      "category": "Sliders",
+      "serving": "68 g",
+      "calories": 230,
+      "protein_g": 11,
+      "carbs_g": 16,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bacon Smoked Cheddar Cheese (New York / New Jersey only)",
+      "category": "Sliders",
+      "serving": "72 g",
+      "calories": 240,
+      "protein_g": 11,
+      "carbs_g": 18,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Panko Fish Slider - Plain",
+      "category": "Sliders",
+      "serving": "100 g",
+      "calories": 320,
+      "protein_g": 9,
+      "carbs_g": 25,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Panko Fish Slider w/Cheese",
+      "category": "Sliders",
+      "serving": "108 g",
+      "calories": 340,
+      "protein_g": 11,
+      "carbs_g": 25,
+      "fat_g": 22,
+      "fiber_g": 1
+    },
+    {
+      "name": "Panko Fish Slider w/Jalapeno Cheese",
+      "category": "Sliders",
+      "serving": "109 g",
+      "calories": 350,
+      "protein_g": 11,
+      "carbs_g": 26,
+      "fat_g": 23,
+      "fiber_g": 1
+    },
+    {
+      "name": "Panko Fish Slider w/Cheddar Cheese",
+      "category": "Sliders",
+      "serving": "109 g",
+      "calories": 350,
+      "protein_g": 11,
+      "carbs_g": 26,
+      "fat_g": 23,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chicken Ring w/Cheese",
+      "category": "Sliders",
+      "serving": "71 g",
+      "calories": 200,
+      "protein_g": 9,
+      "carbs_g": 18,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chicken Ring w/Jalapeno Cheese",
+      "category": "Sliders",
+      "serving": "72 g",
+      "calories": 210,
+      "protein_g": 10,
+      "carbs_g": 19,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chicken Ring w/Smoked Cheddar Cheese",
+      "category": "Sliders",
+      "serving": "72 g",
+      "calories": 210,
+      "protein_g": 10,
+      "carbs_g": 19,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Crispy Chicken",
+      "category": "Sliders",
+      "serving": "112 g",
+      "calories": 330,
+      "protein_g": 13,
+      "carbs_g": 31,
+      "fat_g": 18,
+      "fiber_g": 2
+    },
+    {
+      "name": "Southwest Veggie Slider",
+      "category": "Sliders",
+      "serving": "85 g",
+      "calories": 240,
+      "protein_g": 6,
+      "carbs_g": 31,
+      "fat_g": 10,
+      "fiber_g": 4
+    },
+    {
+      "name": "French Fries (Small)",
+      "category": "Sides",
+      "serving": "small, 148 g",
+      "calories": 330,
+      "protein_g": 3,
+      "carbs_g": 32,
+      "fat_g": 21,
+      "fiber_g": 3
+    },
+    {
+      "name": "French Fries (Medium)",
+      "category": "Sides",
+      "serving": "medium, 266 g",
+      "calories": 600,
+      "protein_g": 6,
+      "carbs_g": 57,
+      "fat_g": 39,
+      "fiber_g": 6
+    },
+    {
+      "name": "French Fries (Sack (serves 3))",
+      "category": "Sides",
+      "serving": "sack (serves 3), 353 g",
+      "calories": 770,
+      "protein_g": 8,
+      "carbs_g": 76,
+      "fat_g": 49,
+      "fiber_g": 8
+    },
+    {
+      "name": "French Fries (New York / New Jersey only) (Small)",
+      "category": "Sides",
+      "serving": "small, 148 g",
+      "calories": 350,
+      "protein_g": 5,
+      "carbs_g": 34,
+      "fat_g": 21,
+      "fiber_g": 3
+    },
+    {
+      "name": "French Fries (New York / New Jersey only) (Medium)",
+      "category": "Sides",
+      "serving": "medium, 266 g",
+      "calories": 630,
+      "protein_g": 9,
+      "carbs_g": 60,
+      "fat_g": 39,
+      "fiber_g": 6
+    },
+    {
+      "name": "French Fries (New York / New Jersey only) (Sack (serves 3))",
+      "category": "Sides",
+      "serving": "sack (serves 3), 353 g",
+      "calories": 810,
+      "protein_g": 12,
+      "carbs_g": 81,
+      "fat_g": 49,
+      "fiber_g": 8
+    },
+    {
+      "name": "Cheese Fries",
+      "category": "Sides",
+      "serving": "199 g",
+      "calories": 400,
+      "protein_g": 4,
+      "carbs_g": 35,
+      "fat_g": 27,
+      "fiber_g": 3
+    },
+    {
+      "name": "Cheese Fries (New York / New Jersey only)",
+      "category": "Sides",
+      "serving": "201 g",
+      "calories": 410,
+      "protein_g": 4,
+      "carbs_g": 35,
+      "fat_g": 28,
+      "fiber_g": 3
+    },
+    {
+      "name": "French Fries (AZ/FL only) (Small)",
+      "category": "Sides",
+      "serving": "small, 195 g",
+      "calories": 430,
+      "protein_g": 3,
+      "carbs_g": 42,
+      "fat_g": 29,
+      "fiber_g": 3
+    },
+    {
+      "name": "French Fries (AZ/FL only) (Medium)",
+      "category": "Sides",
+      "serving": "medium, 268 g",
+      "calories": 540,
+      "protein_g": 4,
+      "carbs_g": 59,
+      "fat_g": 33,
+      "fiber_g": 5
+    },
+    {
+      "name": "French Fries (AZ/FL only) (Sack (serves 3))",
+      "category": "Sides",
+      "serving": "sack (serves 3), 348 g",
+      "calories": 770,
+      "protein_g": 5,
+      "carbs_g": 74,
+      "fat_g": 51,
+      "fiber_g": 6
+    },
+    {
+      "name": "Cheese Fries (Scottsdale / Orlando only)",
+      "category": "Sides",
+      "serving": "237 g",
+      "calories": 470,
+      "protein_g": 4,
+      "carbs_g": 43,
+      "fat_g": 32,
+      "fiber_g": 3
+    },
+    {
+      "name": "Onion Chips (Small)",
+      "category": "Sides",
+      "serving": "small, 124 g",
+      "calories": 480,
+      "protein_g": 4,
+      "carbs_g": 33,
+      "fat_g": 36,
+      "fiber_g": 6
+    },
+    {
+      "name": "Onion Chips (Medium)",
+      "category": "Sides",
+      "serving": "medium, 262 g",
+      "calories": 930,
+      "protein_g": 8,
+      "carbs_g": 73,
+      "fat_g": 65,
+      "fiber_g": 13
+    },
+    {
+      "name": "Onion Chips (Sack (serves 3))",
+      "category": "Sides",
+      "serving": "sack (serves 3), 349 g",
+      "calories": 1350,
+      "protein_g": 11,
+      "carbs_g": 92,
+      "fat_g": 101,
+      "fiber_g": 16
+    },
+    {
+      "name": "Onion Rings (Small)",
+      "category": "Sides",
+      "serving": "small, 141 g",
+      "calories": 480,
+      "protein_g": 6,
+      "carbs_g": 40,
+      "fat_g": 33,
+      "fiber_g": 2
+    },
+    {
+      "name": "Onion Rings (Sack (serves 3))",
+      "category": "Sides",
+      "serving": "sack (serves 3), 262 g",
+      "calories": 890,
+      "protein_g": 11,
+      "carbs_g": 74,
+      "fat_g": 61,
+      "fiber_g": 3
+    },
+    {
+      "name": "Onion Rings (New York / New Jersey only) (Small)",
+      "category": "Sides",
+      "serving": "small, 112 g",
+      "calories": 340,
+      "protein_g": 2,
+      "carbs_g": 33,
+      "fat_g": 22,
+      "fiber_g": 3
+    },
+    {
+      "name": "Onion Rings (New York / New Jersey only) (Sack (serves 3))",
+      "category": "Sides",
+      "serving": "sack (serves 3), 210 g",
+      "calories": 640,
+      "protein_g": 4,
+      "carbs_g": 62,
+      "fat_g": 41,
+      "fiber_g": 6
+    },
+    {
+      "name": "Mozzarella Cheese Sticks (3 Sticks)",
+      "category": "Sides",
+      "serving": "3 sticks, 138 g",
+      "calories": 460,
+      "protein_g": 12,
+      "carbs_g": 26,
+      "fat_g": 33,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mozzarella Cheese Sticks (5 Sticks)",
+      "category": "Sides",
+      "serving": "5 sticks, 211 g",
+      "calories": 760,
+      "protein_g": 21,
+      "carbs_g": 40,
+      "fat_g": 55,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mozzarella Cheese Sticks (10 Sticks (serves 3))",
+      "category": "Sides",
+      "serving": "10 sticks (serves 3), 394 g",
+      "calories": 1490,
+      "protein_g": 41,
+      "carbs_g": 77,
+      "fat_g": 111,
+      "fiber_g": 4
+    },
+    {
+      "name": "Fish Nibblers (Small)",
+      "category": "Sides",
+      "serving": "small, 141 g",
+      "calories": 320,
+      "protein_g": 16,
+      "carbs_g": 28,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Fish Nibblers (Medium)",
+      "category": "Sides",
+      "serving": "medium, 262 g",
+      "calories": 590,
+      "protein_g": 30,
+      "carbs_g": 51,
+      "fat_g": 29,
+      "fiber_g": 2
+    },
+    {
+      "name": "Fish Nibblers (Sack (serves 3))",
+      "category": "Sides",
+      "serving": "sack (serves 3), 483 g",
+      "calories": 1100,
+      "protein_g": 55,
+      "carbs_g": 95,
+      "fat_g": 53,
+      "fiber_g": 3
+    },
+    {
+      "name": "Clam Strips - Select locations (Small)",
+      "category": "Sides",
+      "serving": "small, 128 g",
+      "calories": 440,
+      "protein_g": 8,
+      "carbs_g": 38,
+      "fat_g": 29,
+      "fiber_g": 1
+    },
+    {
+      "name": "Clam Strips - Select locations (Medium)",
+      "category": "Sides",
+      "serving": "medium, 255 g",
+      "calories": 890,
+      "protein_g": 16,
+      "carbs_g": 75,
+      "fat_g": 57,
+      "fiber_g": 2
+    },
+    {
+      "name": "Clam Strips - Select locations (Sack (serves 3))",
+      "category": "Sides",
+      "serving": "sack (serves 3), 383 g",
+      "calories": 1330,
+      "protein_g": 25,
+      "carbs_g": 113,
+      "fat_g": 86,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chicken Rings (6 pc.)",
+      "category": "Sides",
+      "serving": "6 pc., 114 g",
+      "calories": 320,
+      "protein_g": 18,
+      "carbs_g": 12,
+      "fat_g": 20,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken Rings (9 pc.)",
+      "category": "Sides",
+      "serving": "9 pc., 171 g",
+      "calories": 470,
+      "protein_g": 26,
+      "carbs_g": 18,
+      "fat_g": 31,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chicken Rings (20 pc. (serves 3))",
+      "category": "Sides",
+      "serving": "20 pc. (serves 3), 380 g",
+      "calories": 1050,
+      "protein_g": 58,
+      "carbs_g": 41,
+      "fat_g": 68,
+      "fiber_g": 2
+    },
+    {
+      "name": "Breakfast Slider w/Egg & Cheese",
+      "category": "Breakfast",
+      "serving": "81 g",
+      "calories": 200,
+      "protein_g": 9,
+      "carbs_g": 15,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Slider w/Egg & Jalapeño Cheese",
+      "category": "Breakfast",
+      "serving": "82 g",
+      "calories": 210,
+      "protein_g": 9,
+      "carbs_g": 15,
+      "fat_g": 13,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Slider w/Egg & Cheddar Cheese",
+      "category": "Breakfast",
+      "serving": "82 g",
+      "calories": 210,
+      "protein_g": 10,
+      "carbs_g": 15,
+      "fat_g": 13,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Slider w/Sausage, Egg & Cheese",
+      "category": "Breakfast",
+      "serving": "118 g",
+      "calories": 350,
+      "protein_g": 14,
+      "carbs_g": 15,
+      "fat_g": 26,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Slider w/Sausage, Egg & Jalapeño Cheese",
+      "category": "Breakfast",
+      "serving": "119 g",
+      "calories": 360,
+      "protein_g": 15,
+      "carbs_g": 16,
+      "fat_g": 27,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Slider w/Sausage, Egg & Cheddar Cheese",
+      "category": "Breakfast",
+      "serving": "119 g",
+      "calories": 360,
+      "protein_g": 15,
+      "carbs_g": 16,
+      "fat_g": 27,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Slider w/Bacon, Egg & Cheese",
+      "category": "Breakfast",
+      "serving": "88 g",
+      "calories": 260,
+      "protein_g": 12,
+      "carbs_g": 15,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Slider w/Bacon, Egg & Jalapeño Cheese",
+      "category": "Breakfast",
+      "serving": "88 g",
+      "calories": 260,
+      "protein_g": 12,
+      "carbs_g": 15,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Slider w/Bacon, Egg & Cheddar Cheese",
+      "category": "Breakfast",
+      "serving": "89 g",
+      "calories": 260,
+      "protein_g": 13,
+      "carbs_g": 15,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Slider w/Bologna, Egg & Cheese",
+      "category": "Breakfast",
+      "serving": "95 g",
+      "calories": 250,
+      "protein_g": 11,
+      "carbs_g": 15,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Slider w/Bologna, Egg & Jalapeño Cheese",
+      "category": "Breakfast",
+      "serving": "96 g",
+      "calories": 250,
+      "protein_g": 11,
+      "carbs_g": 15,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Slider w/Bologna, Egg & Cheddar Cheese",
+      "category": "Breakfast",
+      "serving": "96 g",
+      "calories": 250,
+      "protein_g": 11,
+      "carbs_g": 16,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Original Slider w/Egg & Cheese",
+      "category": "Breakfast",
+      "serving": "108 g",
+      "calories": 270,
+      "protein_g": 13,
+      "carbs_g": 16,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Original Slider w/Egg & Jalapeño Cheese",
+      "category": "Breakfast",
+      "serving": "109 g",
+      "calories": 280,
+      "protein_g": 14,
+      "carbs_g": 17,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Original Slider w/Egg & Cheddar Cheese",
+      "category": "Breakfast",
+      "serving": "109 g",
+      "calories": 280,
+      "protein_g": 14,
+      "carbs_g": 17,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Toast Sandwich w/Egg, Cheese",
+      "category": "Breakfast",
+      "serving": "112 g",
+      "calories": 270,
+      "protein_g": 11,
+      "carbs_g": 29,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Breakfast Toast Sandwich w/Egg, Jalapeño Cheese",
+      "category": "Breakfast",
+      "serving": "112 g",
+      "calories": 280,
+      "protein_g": 11,
+      "carbs_g": 29,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Breakfast Toast Sandwich w/Egg, Cheddar Cheese",
+      "category": "Breakfast",
+      "serving": "112 g",
+      "calories": 280,
+      "protein_g": 12,
+      "carbs_g": 29,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Breakfast Toast Sandwich w/Sausage, Egg, Cheese",
+      "category": "Breakfast",
+      "serving": "149 g",
+      "calories": 420,
+      "protein_g": 16,
+      "carbs_g": 29,
+      "fat_g": 27,
+      "fiber_g": 2
+    },
+    {
+      "name": "Breakfast Toast Sandwich w/Sausage, Egg, Jalapeño Cheese",
+      "category": "Breakfast",
+      "serving": "150 g",
+      "calories": 430,
+      "protein_g": 17,
+      "carbs_g": 30,
+      "fat_g": 28,
+      "fiber_g": 2
+    },
+    {
+      "name": "Breakfast Toast Sandwich w/Sausage, Egg, Cheddar Cheese",
+      "category": "Breakfast",
+      "serving": "150 g",
+      "calories": 430,
+      "protein_g": 17,
+      "carbs_g": 30,
+      "fat_g": 28,
+      "fiber_g": 2
+    },
+    {
+      "name": "Breakfast Toast Sandwich w/Bacon, Egg, Cheese",
+      "category": "Breakfast",
+      "serving": "126 g",
+      "calories": 380,
+      "protein_g": 17,
+      "carbs_g": 29,
+      "fat_g": 23,
+      "fiber_g": 2
+    },
+    {
+      "name": "Breakfast Toast Sandwich w/Bacon, Egg, Jalapeño Cheese",
+      "category": "Breakfast",
+      "serving": "127 g",
+      "calories": 390,
+      "protein_g": 18,
+      "carbs_g": 29,
+      "fat_g": 24,
+      "fiber_g": 2
+    },
+    {
+      "name": "Breakfast Toast Sandwich w/Bacon, Egg, Cheddar Cheese",
+      "category": "Breakfast",
+      "serving": "127 g",
+      "calories": 390,
+      "protein_g": 18,
+      "carbs_g": 29,
+      "fat_g": 24,
+      "fiber_g": 2
+    },
+    {
+      "name": "Breakfast Toast Sandwich w/Bologna, Egg, Cheese",
+      "category": "Breakfast",
+      "serving": "122 g",
+      "calories": 320,
+      "protein_g": 13,
+      "carbs_g": 29,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Breakfast Toast Sandwich w/Bologna, Egg, Jalapeño Cheese",
+      "category": "Breakfast",
+      "serving": "123 g",
+      "calories": 320,
+      "protein_g": 13,
+      "carbs_g": 29,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Breakfast Toast Sandwich w/Bologna, Egg, Cheddar Cheese",
+      "category": "Breakfast",
+      "serving": "123 g",
+      "calories": 320,
+      "protein_g": 13,
+      "carbs_g": 30,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hash Round Nibblers (Small)",
+      "category": "Sides",
+      "serving": "small, 119 g",
+      "calories": 360,
+      "protein_g": 2,
+      "carbs_g": 25,
+      "fat_g": 28,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hash Round Nibblers (Medium)",
+      "category": "Sides",
+      "serving": "medium, 198 g",
+      "calories": 720,
+      "protein_g": 5,
+      "carbs_g": 51,
+      "fat_g": 55,
+      "fiber_g": 5
+    },
+    {
+      "name": "Hash Round Nibblers (Sack)",
+      "category": "Sides",
+      "serving": "sack, 476 g",
+      "calories": 1440,
+      "protein_g": 10,
+      "carbs_g": 101,
+      "fat_g": 110,
+      "fiber_g": 10
+    },
+    {
+      "name": "Hash Round Nibblers (New York / New Jersey only) (Small)",
+      "category": "Sides",
+      "serving": "small, 113 g",
+      "calories": 340,
+      "protein_g": 2,
+      "carbs_g": 23,
+      "fat_g": 25,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hash Round Nibblers (New York / New Jersey only) (Medium)",
+      "category": "Sides",
+      "serving": "medium, 186 g",
+      "calories": 560,
+      "protein_g": 4,
+      "carbs_g": 39,
+      "fat_g": 42,
+      "fiber_g": 4
+    },
+    {
+      "name": "Hash Round Nibblers (New York / New Jersey only) (Sack)",
+      "category": "Sides",
+      "serving": "sack, 447 g",
+      "calories": 1330,
+      "protein_g": 9,
+      "carbs_g": 92,
+      "fat_g": 101,
+      "fiber_g": 9
+    },
+    {
+      "name": "BBQ Sauce Tubs",
+      "category": "Condiments",
+      "serving": "28 g",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "BBQ Sauce Packets",
+      "category": "Condiments",
+      "serving": "9 g",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fat-Free Honey Mustard Tubs",
+      "category": "Condiments",
+      "serving": "28 g",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fat-Free Honey Mustard Packets",
+      "category": "Condiments",
+      "serving": "12 g",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Sauce Packets",
+      "category": "Condiments",
+      "serving": "7 g",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Marinara Tubs",
+      "category": "Condiments",
+      "serving": "28 g",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mayonnaise Packets",
+      "category": "Condiments",
+      "serving": "9 g",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ranch Tubs",
+      "category": "Condiments",
+      "serving": "28 g",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tartar Sauce Tubs",
+      "category": "Condiments",
+      "serving": "25 g",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tartar Sauce Packets",
+      "category": "Condiments",
+      "serving": "9 g",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zesty Zing Sauce Tubs",
+      "category": "Condiments",
+      "serving": "28 g",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Yellow Mustard Packets",
+      "category": "Condiments",
+      "serving": "6 g",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dusseldorf Mustard Packets",
+      "category": "Condiments",
+      "serving": "6 g",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Horseradish Mustard Packets",
+      "category": "Condiments",
+      "serving": "6 g",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheese Sauce",
+      "category": "Condiments",
+      "serving": "43 g",
+      "calories": 40,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheese Sauce (Detroit Only)",
+      "category": "Condiments",
+      "serving": "43 g",
+      "calories": 45,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fudge Dipped Brownie",
+      "category": "Dessert On-A-Stick",
+      "serving": "57 g",
+      "calories": 240,
+      "protein_g": 2,
+      "carbs_g": 34,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Strawberry Swirl Cheesecake",
+      "category": "Dessert On-A-Stick",
+      "serving": "48 g",
+      "calories": 150,
+      "protein_g": 2,
+      "carbs_g": 20,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gooey Butter Cake",
+      "category": "Dessert On-A-Stick",
+      "serving": "57 g",
+      "calories": 220,
+      "protein_g": 3,
+      "carbs_g": 31,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Coffee (small)",
+      "category": "Beverages",
+      "serving": "small, 12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee (medium)",
+      "category": "Beverages",
+      "serving": "medium, 16 fl oz",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee (large)",
+      "category": "Beverages",
+      "serving": "large, 20 fl oz",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Decaf Coffee (small)",
+      "category": "Beverages",
+      "serving": "small, 12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Chocolate (medium)",
+      "category": "Beverages",
+      "serving": "medium, 16 fl oz",
+      "calories": 240,
+      "protein_g": 2,
+      "carbs_g": 41,
+      "fat_g": 6,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hot Chocolate - Columbus only (medium)",
+      "category": "Beverages",
+      "serving": "medium, 16 fl oz",
+      "calories": 300,
+      "protein_g": 1,
+      "carbs_g": 46,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Coca-Cola (small)",
+      "category": "Icee Crave Coolers",
+      "serving": "small, 23 fl oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 50,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola (medium)",
+      "category": "Icee Crave Coolers",
+      "serving": "medium, 32.7 fl oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola (large)",
+      "category": "Icee Crave Coolers",
+      "serving": "large, 37.5 fl oz",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 82,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blue Raspberry (small)",
+      "category": "Icee Crave Coolers",
+      "serving": "small, 23 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blue Raspberry (medium)",
+      "category": "Icee Crave Coolers",
+      "serving": "medium, 32.7 fl oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 70,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blue Raspberry (large)",
+      "category": "Icee Crave Coolers",
+      "serving": "large, 37.5 fl oz",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 80,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wild Cherry (small)",
+      "category": "Icee Crave Coolers",
+      "serving": "small, 23 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wild Cherry (medium)",
+      "category": "Icee Crave Coolers",
+      "serving": "medium, 32.7 fl oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 70,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wild Cherry (large)",
+      "category": "Icee Crave Coolers",
+      "serving": "large, 37.5 fl oz",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 80,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake - Chicago only (small)",
+      "category": "Shakes",
+      "serving": "small, 21 fl oz",
+      "calories": 560,
+      "protein_g": 13,
+      "carbs_g": 108,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chocolate Shake - Chicago only (medium)",
+      "category": "Shakes",
+      "serving": "medium, 30 fl oz",
+      "calories": 800,
+      "protein_g": 19,
+      "carbs_g": 155,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chocolate Shake - Chicago only (large)",
+      "category": "Shakes",
+      "serving": "large, 40 fl oz",
+      "calories": 1060,
+      "protein_g": 25,
+      "carbs_g": 206,
+      "fat_g": 16,
+      "fiber_g": 3
+    },
+    {
+      "name": "Vanilla Shake - Chicago only (small)",
+      "category": "Shakes",
+      "serving": "small, 21 fl oz",
+      "calories": 460,
+      "protein_g": 12,
+      "carbs_g": 85,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Shake - Chicago only (medium)",
+      "category": "Shakes",
+      "serving": "medium, 30 fl oz",
+      "calories": 660,
+      "protein_g": 17,
+      "carbs_g": 122,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Shake - Chicago only (large)",
+      "category": "Shakes",
+      "serving": "large, 40 fl oz",
+      "calories": 890,
+      "protein_g": 23,
+      "carbs_g": 163,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Strawberry Shake - Chicago only (small)",
+      "category": "Shakes",
+      "serving": "small, 21 fl oz",
+      "calories": 630,
+      "protein_g": 16,
+      "carbs_g": 109,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Shake - Chicago only (medium)",
+      "category": "Shakes",
+      "serving": "medium, 30 fl oz",
+      "calories": 900,
+      "protein_g": 23,
+      "carbs_g": 156,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Shake - Chicago only (large)",
+      "category": "Shakes",
+      "serving": "large, 40 fl oz",
+      "calories": 1190,
+      "protein_g": 30,
+      "carbs_g": 207,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake - Cincinnati only (small)",
+      "category": "Shakes",
+      "serving": "small, 21 fl oz",
+      "calories": 650,
+      "protein_g": 17,
+      "carbs_g": 114,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Shake - Cincinnati only (medium)",
+      "category": "Shakes",
+      "serving": "medium, 30 fl oz",
+      "calories": 930,
+      "protein_g": 24,
+      "carbs_g": 163,
+      "fat_g": 24,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Shake - Cincinnati only (large)",
+      "category": "Shakes",
+      "serving": "large, 40 fl oz",
+      "calories": 1240,
+      "protein_g": 32,
+      "carbs_g": 217,
+      "fat_g": 30,
+      "fiber_g": 2
+    },
+    {
+      "name": "Vanilla Shake - Cincinnati only (small)",
+      "category": "Shakes",
+      "serving": "small, 21 fl oz",
+      "calories": 560,
+      "protein_g": 16,
+      "carbs_g": 91,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake - Cincinnati only (medium)",
+      "category": "Shakes",
+      "serving": "medium, 30 fl oz",
+      "calories": 790,
+      "protein_g": 23,
+      "carbs_g": 130,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake - Cincinnati only (large)",
+      "category": "Shakes",
+      "serving": "large, 40 fl oz",
+      "calories": 1060,
+      "protein_g": 30,
+      "carbs_g": 174,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Shake - Cincinnati only (small)",
+      "category": "Shakes",
+      "serving": "small, 21 fl oz",
+      "calories": 630,
+      "protein_g": 16,
+      "carbs_g": 109,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Shake - Cincinnati only (medium)",
+      "category": "Shakes",
+      "serving": "medium, 30 fl oz",
+      "calories": 900,
+      "protein_g": 23,
+      "carbs_g": 157,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Shake - Cincinnati only (large)",
+      "category": "Shakes",
+      "serving": "large, 40 fl oz",
+      "calories": 1200,
+      "protein_g": 30,
+      "carbs_g": 209,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake - Columbus only (small)",
+      "category": "Shakes",
+      "serving": "small, 21 fl oz",
+      "calories": 520,
+      "protein_g": 13,
+      "carbs_g": 89,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Shake - Columbus only (medium)",
+      "category": "Shakes",
+      "serving": "medium, 30 fl oz",
+      "calories": 730,
+      "protein_g": 18,
+      "carbs_g": 125,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Shake - Columbus only (large)",
+      "category": "Shakes",
+      "serving": "large, 40 fl oz",
+      "calories": 1010,
+      "protein_g": 25,
+      "carbs_g": 171,
+      "fat_g": 24,
+      "fiber_g": 2
+    },
+    {
+      "name": "Vanilla Shake  - Columbus only (small)",
+      "category": "Shakes",
+      "serving": "small, 21 fl oz",
+      "calories": 430,
+      "protein_g": 12,
+      "carbs_g": 67,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake  - Columbus only (medium)",
+      "category": "Shakes",
+      "serving": "medium, 30 fl oz",
+      "calories": 600,
+      "protein_g": 16,
+      "carbs_g": 93,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake  - Columbus only (large)",
+      "category": "Shakes",
+      "serving": "large, 40 fl oz",
+      "calories": 830,
+      "protein_g": 23,
+      "carbs_g": 128,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Shake - Columbus only (small)",
+      "category": "Shakes",
+      "serving": "small, 21 fl oz",
+      "calories": 500,
+      "protein_g": 12,
+      "carbs_g": 84,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Shake - Columbus only (medium)",
+      "category": "Shakes",
+      "serving": "medium, 30 fl oz",
+      "calories": 700,
+      "protein_g": 16,
+      "carbs_g": 118,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Shake - Columbus only (large)",
+      "category": "Shakes",
+      "serving": "large, 40 fl oz",
+      "calories": 960,
+      "protein_g": 23,
+      "carbs_g": 162,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake - Detroit only (small)",
+      "category": "Shakes",
+      "serving": "small, 21 fl oz",
+      "calories": 560,
+      "protein_g": 16,
+      "carbs_g": 91,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake - Detroit only (medium)",
+      "category": "Shakes",
+      "serving": "medium, 30 fl oz",
+      "calories": 790,
+      "protein_g": 23,
+      "carbs_g": 130,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake - Detroit only (large)",
+      "category": "Shakes",
+      "serving": "large, 40 fl oz",
+      "calories": 1060,
+      "protein_g": 30,
+      "carbs_g": 174,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake - Detroit only (small)",
+      "category": "Shakes",
+      "serving": "small, 21 fl oz",
+      "calories": 560,
+      "protein_g": 16,
+      "carbs_g": 91,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake - Detroit only (medium)",
+      "category": "Shakes",
+      "serving": "medium, 30 fl oz",
+      "calories": 790,
+      "protein_g": 23,
+      "carbs_g": 130,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake - Detroit only (large)",
+      "category": "Shakes",
+      "serving": "large, 40 fl oz",
+      "calories": 1060,
+      "protein_g": 30,
+      "carbs_g": 174,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake - Indianapolis only (small)",
+      "category": "Shakes",
+      "serving": "small, 21 fl oz",
+      "calories": 560,
+      "protein_g": 16,
+      "carbs_g": 91,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake - Indianapolis only (medium)",
+      "category": "Shakes",
+      "serving": "medium, 30 fl oz",
+      "calories": 790,
+      "protein_g": 23,
+      "carbs_g": 130,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake - Indianapolis only (large)",
+      "category": "Shakes",
+      "serving": "large, 40 fl oz",
+      "calories": 1060,
+      "protein_g": 30,
+      "carbs_g": 174,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake - Louisville only (small)",
+      "category": "Shakes",
+      "serving": "small, 21 fl oz",
+      "calories": 650,
+      "protein_g": 32,
+      "carbs_g": 114,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Shake - Louisville only (medium)",
+      "category": "Shakes",
+      "serving": "medium, 30 fl oz",
+      "calories": 990,
+      "protein_g": 26,
+      "carbs_g": 173,
+      "fat_g": 25,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Shake - Louisville only (large)",
+      "category": "Shakes",
+      "serving": "large, 40 fl oz",
+      "calories": 1360,
+      "protein_g": 36,
+      "carbs_g": 238,
+      "fat_g": 34,
+      "fiber_g": 2
+    },
+    {
+      "name": "Vanilla Shake - Louisville only (small)",
+      "category": "Shakes",
+      "serving": "small, 21 fl oz",
+      "calories": 560,
+      "protein_g": 16,
+      "carbs_g": 91,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake - Louisville only (medium)",
+      "category": "Shakes",
+      "serving": "medium, 30 fl oz",
+      "calories": 850,
+      "protein_g": 24,
+      "carbs_g": 139,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake - Louisville only (large)",
+      "category": "Shakes",
+      "serving": "large, 40 fl oz",
+      "calories": 1160,
+      "protein_g": 33,
+      "carbs_g": 191,
+      "fat_g": 33,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Shake - Louisville only (small)",
+      "category": "Shakes",
+      "serving": "small, 21 fl oz",
+      "calories": 630,
+      "protein_g": 16,
+      "carbs_g": 109,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Shake - Louisville only (medium)",
+      "category": "Shakes",
+      "serving": "medium, 30 fl oz",
+      "calories": 950,
+      "protein_g": 24,
+      "carbs_g": 166,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Shake - Louisville only (large)",
+      "category": "Shakes",
+      "serving": "large, 40 fl oz",
+      "calories": 1310,
+      "protein_g": 33,
+      "carbs_g": 228,
+      "fat_g": 33,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake - Nashville only (small)",
+      "category": "Shakes",
+      "serving": "small, 21 fl oz",
+      "calories": 650,
+      "protein_g": 32,
+      "carbs_g": 114,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Shake - Nashville only (medium)",
+      "category": "Shakes",
+      "serving": "medium, 30 fl oz",
+      "calories": 990,
+      "protein_g": 26,
+      "carbs_g": 173,
+      "fat_g": 25,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Shake - Nashville only (large)",
+      "category": "Shakes",
+      "serving": "large, 40 fl oz",
+      "calories": 1360,
+      "protein_g": 36,
+      "carbs_g": 238,
+      "fat_g": 34,
+      "fiber_g": 2
+    },
+    {
+      "name": "Vanilla Shake - Nashville only (small)",
+      "category": "Shakes",
+      "serving": "small, 21 fl oz",
+      "calories": 560,
+      "protein_g": 16,
+      "carbs_g": 91,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake - Nashville only (medium)",
+      "category": "Shakes",
+      "serving": "medium, 30 fl oz",
+      "calories": 850,
+      "protein_g": 24,
+      "carbs_g": 139,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake - Nashville only (large)",
+      "category": "Shakes",
+      "serving": "large, 40 fl oz",
+      "calories": 1160,
+      "protein_g": 33,
+      "carbs_g": 191,
+      "fat_g": 33,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake - Minneapolis only (small)",
+      "category": "Shakes",
+      "serving": "small, 21 fl oz",
+      "calories": 460,
+      "protein_g": 12,
+      "carbs_g": 85,
+      "fat_g": 8,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chocolate Shake - Minneapolis only (medium)",
+      "category": "Shakes",
+      "serving": "medium, 30 fl oz",
+      "calories": 660,
+      "protein_g": 16,
+      "carbs_g": 122,
+      "fat_g": 12,
+      "fiber_g": 3
+    },
+    {
+      "name": "Chocolate Shake - Minneapolis only (large)",
+      "category": "Shakes",
+      "serving": "large, 40 fl oz",
+      "calories": 880,
+      "protein_g": 22,
+      "carbs_g": 163,
+      "fat_g": 16,
+      "fiber_g": 4
+    },
+    {
+      "name": "Chocolate Shake - New Jersey only (small)",
+      "category": "Shakes",
+      "serving": "small, 21 fl oz",
+      "calories": 560,
+      "protein_g": 16,
+      "carbs_g": 91,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake - New Jersey only (medium)",
+      "category": "Shakes",
+      "serving": "medium, 30 fl oz",
+      "calories": 790,
+      "protein_g": 23,
+      "carbs_g": 130,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake - New Jersey only (large)",
+      "category": "Shakes",
+      "serving": "large, 40 fl oz",
+      "calories": 1060,
+      "protein_g": 30,
+      "carbs_g": 174,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake - New Jersey only (small)",
+      "category": "Shakes",
+      "serving": "small, 21 fl oz",
+      "calories": 560,
+      "protein_g": 16,
+      "carbs_g": 91,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake - New Jersey only (medium)",
+      "category": "Shakes",
+      "serving": "medium, 30 fl oz",
+      "calories": 790,
+      "protein_g": 23,
+      "carbs_g": 130,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake - New Jersey only (large)",
+      "category": "Shakes",
+      "serving": "large, 40 fl oz",
+      "calories": 1060,
+      "protein_g": 30,
+      "carbs_g": 174,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake - New York only (small)",
+      "category": "Shakes",
+      "serving": "small, 21 fl oz",
+      "calories": 560,
+      "protein_g": 16,
+      "carbs_g": 91,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake - New York only (medium)",
+      "category": "Shakes",
+      "serving": "medium, 30 fl oz",
+      "calories": 790,
+      "protein_g": 23,
+      "carbs_g": 130,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake - New York only (large)",
+      "category": "Shakes",
+      "serving": "large, 40 fl oz",
+      "calories": 1060,
+      "protein_g": 30,
+      "carbs_g": 174,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake - New York only (small)",
+      "category": "Shakes",
+      "serving": "small, 21 fl oz",
+      "calories": 560,
+      "protein_g": 16,
+      "carbs_g": 91,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake - New York only (medium)",
+      "category": "Shakes",
+      "serving": "medium, 30 fl oz",
+      "calories": 790,
+      "protein_g": 23,
+      "carbs_g": 130,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake - New York only (large)",
+      "category": "Shakes",
+      "serving": "large, 40 fl oz",
+      "calories": 1060,
+      "protein_g": 30,
+      "carbs_g": 174,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake - St. Louis only (small)",
+      "category": "Shakes",
+      "serving": "small, 21 fl oz",
+      "calories": 490,
+      "protein_g": 11,
+      "carbs_g": 87,
+      "fat_g": 11,
+      "fiber_g": 4
+    },
+    {
+      "name": "Chocolate Shake - St. Louis only (medium)",
+      "category": "Shakes",
+      "serving": "medium, 30 fl oz",
+      "calories": 700,
+      "protein_g": 16,
+      "carbs_g": 124,
+      "fat_g": 16,
+      "fiber_g": 5
+    },
+    {
+      "name": "Chocolate Shake - St. Louis only (large)",
+      "category": "Shakes",
+      "serving": "large, 40 fl oz",
+      "calories": 980,
+      "protein_g": 23,
+      "carbs_g": 174,
+      "fat_g": 23,
+      "fiber_g": 8
+    },
+    {
+      "name": "SIMPLY ORANGE JUICE",
+      "category": "Shakes",
+      "serving": "11.5 fl oz",
+      "calories": 160,
+      "protein_g": 2,
+      "carbs_g": 37,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "BOTTLED WATER",
+      "category": "Bottled Beverages",
+      "serving": "16.9 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "100% APPLE JUICE BOX",
+      "category": "Bottled Beverages",
+      "serving": "6.75 fl oz",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    }
+  ]
+}

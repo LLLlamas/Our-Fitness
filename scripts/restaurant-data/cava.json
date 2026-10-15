@@ -1,0 +1,1137 @@
+{
+  "chain": "CAVA",
+  "slug": "cava",
+  "aliases": [
+    "cava",
+    "cava grill",
+    "cava mezze",
+    "kava"
+  ],
+  "kind": "fast-casual",
+  "source_url": "https://assets.ctfassets.net/kugm9fp9ib18/Ki4gri5pvT2rtPcjBQPjR/c78bed9be8448e2ab700f440f6faa83e/KT6_26_AN_ANGUIDE_RETAIL_T_MKTAN11724.pdf",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Official CAVA Nutrition and Allergen Guide (restaurant), linked from cava.com/nutrition. Build-your-own: sum base + main + toppings + dips/spreads + dressing; component rows are one standard portion as served (portion weight not printed). Drinks calculated without ice. Atwater outliers (>20%, left as published): Pita Crisps (1 portion): 70 cal vs 127 Atwater",
+  "items": [
+    {
+      "name": "Greek Goddess Steak Salad",
+      "category": "Curated Bowls",
+      "serving": "1 entree",
+      "calories": 470,
+      "protein_g": 34,
+      "carbs_g": 22,
+      "fat_g": 29,
+      "fiber_g": 4
+    },
+    {
+      "name": "Greek Goddess Salmon Bowl",
+      "category": "Curated Bowls",
+      "serving": "1 entree",
+      "calories": 700,
+      "protein_g": 34,
+      "carbs_g": 57,
+      "fat_g": 40,
+      "fiber_g": 7
+    },
+    {
+      "name": "Spicy Lamb + Avocado Bowl",
+      "category": "Curated Bowls",
+      "serving": "1 entree",
+      "calories": 800,
+      "protein_g": 43,
+      "carbs_g": 49,
+      "fat_g": 52,
+      "fiber_g": 17
+    },
+    {
+      "name": "Steak + Harissa Bowl",
+      "category": "Curated Bowls",
+      "serving": "1 entree",
+      "calories": 620,
+      "protein_g": 37,
+      "carbs_g": 39,
+      "fat_g": 35,
+      "fiber_g": 7
+    },
+    {
+      "name": "Harissa Avocado Bowl",
+      "category": "Curated Bowls",
+      "serving": "1 entree",
+      "calories": 830,
+      "protein_g": 41,
+      "carbs_g": 62,
+      "fat_g": 49,
+      "fiber_g": 12
+    },
+    {
+      "name": "Chicken + Rice Bowl",
+      "category": "Curated Bowls",
+      "serving": "1 entree",
+      "calories": 700,
+      "protein_g": 40,
+      "carbs_g": 44,
+      "fat_g": 42,
+      "fiber_g": 7
+    },
+    {
+      "name": "Greek Salad Bowl",
+      "category": "Curated Bowls",
+      "serving": "1 entree",
+      "calories": 580,
+      "protein_g": 37,
+      "carbs_g": 19,
+      "fat_g": 40,
+      "fiber_g": 8
+    },
+    {
+      "name": "Falafel Crunch Bowl",
+      "category": "Curated Bowls",
+      "serving": "1 entree",
+      "calories": 860,
+      "protein_g": 24,
+      "carbs_g": 88,
+      "fat_g": 56,
+      "fiber_g": 18
+    },
+    {
+      "name": "Salmon + Yogurt Dill Bowl",
+      "category": "Curated Bowls",
+      "serving": "1 entree",
+      "calories": 710,
+      "protein_g": 35,
+      "carbs_g": 49,
+      "fat_g": 43,
+      "fiber_g": 5
+    },
+    {
+      "name": "Pomegranate Glazed Salmon Bowl",
+      "category": "Curated Bowls",
+      "serving": "1 entree",
+      "calories": 1040,
+      "protein_g": 36,
+      "carbs_g": 80,
+      "fat_g": 65,
+      "fiber_g": 9
+    },
+    {
+      "name": "Spicy Chicken + Avocado",
+      "category": "Curated Pitas",
+      "serving": "1 entree",
+      "calories": 930,
+      "protein_g": 48,
+      "carbs_g": 80,
+      "fat_g": 48,
+      "fiber_g": 13
+    },
+    {
+      "name": "Steak + Feta Pita",
+      "category": "Curated Pitas",
+      "serving": "1 entree",
+      "calories": 820,
+      "protein_g": 44,
+      "carbs_g": 68,
+      "fat_g": 42,
+      "fiber_g": 9
+    },
+    {
+      "name": "Greek Chicken",
+      "category": "Curated Pitas",
+      "serving": "1 entree",
+      "calories": 720,
+      "protein_g": 48,
+      "carbs_g": 64,
+      "fat_g": 30,
+      "fiber_g": 8
+    },
+    {
+      "name": "Brown Rice",
+      "category": "Bases",
+      "serving": "1 portion",
+      "calories": 310,
+      "protein_g": 7,
+      "carbs_g": 48,
+      "fat_g": 10,
+      "fiber_g": 5
+    },
+    {
+      "name": "Saffron Basmati Rice",
+      "category": "Bases",
+      "serving": "1 portion",
+      "calories": 290,
+      "protein_g": 5,
+      "carbs_g": 54,
+      "fat_g": 7,
+      "fiber_g": 2
+    },
+    {
+      "name": "Black Lentils",
+      "category": "Bases",
+      "serving": "1 portion",
+      "calories": 270,
+      "protein_g": 18,
+      "carbs_g": 37,
+      "fat_g": 7,
+      "fiber_g": 15
+    },
+    {
+      "name": "Super Greens",
+      "category": "Bases",
+      "serving": "1 portion",
+      "calories": 35,
+      "protein_g": 3,
+      "carbs_g": 6,
+      "fat_g": 1,
+      "fiber_g": 4
+    },
+    {
+      "name": "Arugula",
+      "category": "Bases",
+      "serving": "1 portion",
+      "calories": 20,
+      "protein_g": 2,
+      "carbs_g": 3,
+      "fat_g": 1,
+      "fiber_g": 1
+    },
+    {
+      "name": "Baby Spinach",
+      "category": "Bases",
+      "serving": "1 portion",
+      "calories": 20,
+      "protein_g": 3,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Romaine",
+      "category": "Bases",
+      "serving": "1 portion",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Power Greens",
+      "category": "Bases",
+      "serving": "1 portion",
+      "calories": 30,
+      "protein_g": 2,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Braised Lamb",
+      "category": "Mains",
+      "serving": "1 portion",
+      "calories": 210,
+      "protein_g": 24,
+      "carbs_g": 2,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Grilled Chicken",
+      "category": "Mains",
+      "serving": "1 portion",
+      "calories": 250,
+      "protein_g": 28,
+      "carbs_g": 3,
+      "fat_g": 13,
+      "fiber_g": 1
+    },
+    {
+      "name": "Falafel",
+      "category": "Mains",
+      "serving": "1 portion",
+      "calories": 350,
+      "protein_g": 6,
+      "carbs_g": 24,
+      "fat_g": 26,
+      "fiber_g": 5
+    },
+    {
+      "name": "Grilled Steak",
+      "category": "Mains",
+      "serving": "1 portion",
+      "calories": 170,
+      "protein_g": 23,
+      "carbs_g": 1,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Harissa Honey Chicken",
+      "category": "Mains",
+      "serving": "1 portion",
+      "calories": 260,
+      "protein_g": 26,
+      "carbs_g": 7,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Roasted Vegetables",
+      "category": "Mains",
+      "serving": "1 portion",
+      "calories": 100,
+      "protein_g": 3,
+      "carbs_g": 14,
+      "fat_g": 5,
+      "fiber_g": 5
+    },
+    {
+      "name": "Spicy Lamb Meatballs",
+      "category": "Mains",
+      "serving": "1 portion",
+      "calories": 300,
+      "protein_g": 24,
+      "carbs_g": 3,
+      "fat_g": 21,
+      "fiber_g": 1
+    },
+    {
+      "name": "Glazed Salmon",
+      "category": "Mains",
+      "serving": "1 portion",
+      "calories": 320,
+      "protein_g": 23,
+      "carbs_g": 5,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kids Saffron Basmati Rice",
+      "category": "Kids Meal",
+      "serving": "1 portion",
+      "calories": 150,
+      "protein_g": 3,
+      "carbs_g": 27,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Kids Brown Rice",
+      "category": "Kids Meal",
+      "serving": "1 portion",
+      "calories": 150,
+      "protein_g": 3,
+      "carbs_g": 24,
+      "fat_g": 5,
+      "fiber_g": 2
+    },
+    {
+      "name": "Kids Black Lentils",
+      "category": "Kids Meal",
+      "serving": "1 portion",
+      "calories": 130,
+      "protein_g": 9,
+      "carbs_g": 18,
+      "fat_g": 4,
+      "fiber_g": 7
+    },
+    {
+      "name": "Kids Chicken",
+      "category": "Kids Meal",
+      "serving": "1 portion",
+      "calories": 120,
+      "protein_g": 14,
+      "carbs_g": 1,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Kids Harissa Honey Chicken",
+      "category": "Kids Meal",
+      "serving": "1 portion",
+      "calories": 130,
+      "protein_g": 13,
+      "carbs_g": 4,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Kids Falafel",
+      "category": "Kids Meal",
+      "serving": "1 portion",
+      "calories": 170,
+      "protein_g": 3,
+      "carbs_g": 12,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Kids Spicy Lamb Meatballs",
+      "category": "Kids Meal",
+      "serving": "1 portion",
+      "calories": 150,
+      "protein_g": 12,
+      "carbs_g": 2,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kids Roasted Vegetables",
+      "category": "Kids Meal",
+      "serving": "1 portion",
+      "calories": 50,
+      "protein_g": 2,
+      "carbs_g": 7,
+      "fat_g": 2,
+      "fiber_g": 3
+    },
+    {
+      "name": "Kids Braised Lamb",
+      "category": "Kids Meal",
+      "serving": "1 portion",
+      "calories": 110,
+      "protein_g": 12,
+      "carbs_g": 1,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kids Grilled Steak",
+      "category": "Kids Meal",
+      "serving": "1 portion",
+      "calories": 90,
+      "protein_g": 11,
+      "carbs_g": 0,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kids Pita Chips",
+      "category": "Kids Meal",
+      "serving": "1 portion",
+      "calories": 140,
+      "protein_g": 5,
+      "carbs_g": 20,
+      "fat_g": 4,
+      "fiber_g": 2
+    },
+    {
+      "name": "Shredded Romaine",
+      "category": "Toppings",
+      "serving": "1 portion",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sumac Cabbage Slaw",
+      "category": "Toppings",
+      "serving": "1 portion",
+      "calories": 30,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Tomato + Onion",
+      "category": "Toppings",
+      "serving": "1 portion",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Persian Cucumber",
+      "category": "Toppings",
+      "serving": "1 portion",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tomato + Cucumber",
+      "category": "Toppings",
+      "serving": "1 portion",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kalamata Olives",
+      "category": "Toppings",
+      "serving": "1 portion",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 3,
+      "fiber_g": 2
+    },
+    {
+      "name": "Fiery Broccoli",
+      "category": "Toppings",
+      "serving": "1 portion",
+      "calories": 35,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pickled Onions",
+      "category": "Toppings",
+      "serving": "1 portion",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salt-Brined Pickles",
+      "category": "Toppings",
+      "serving": "1 portion",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Crumbled Feta",
+      "category": "Toppings",
+      "serving": "1 portion",
+      "calories": 35,
+      "protein_g": 3,
+      "carbs_g": 0,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fire-Roasted Corn",
+      "category": "Toppings",
+      "serving": "1 portion",
+      "calories": 45,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Avocado",
+      "category": "Toppings",
+      "serving": "1 portion",
+      "calories": 110,
+      "protein_g": 1,
+      "carbs_g": 6,
+      "fat_g": 10,
+      "fiber_g": 4
+    },
+    {
+      "name": "Tzatziki",
+      "category": "Dips + Spreads",
+      "serving": "1 portion",
+      "calories": 30,
+      "protein_g": 2,
+      "carbs_g": 1,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hummus",
+      "category": "Dips + Spreads",
+      "serving": "1 portion",
+      "calories": 50,
+      "protein_g": 2,
+      "carbs_g": 4,
+      "fat_g": 3,
+      "fiber_g": 2
+    },
+    {
+      "name": "Roasted Eggplant",
+      "category": "Dips + Spreads",
+      "serving": "1 portion",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Crazy Feta",
+      "category": "Dips + Spreads",
+      "serving": "1 portion",
+      "calories": 70,
+      "protein_g": 4,
+      "carbs_g": 1,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Harissa",
+      "category": "Dips + Spreads",
+      "serving": "1 portion",
+      "calories": 70,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Red Pepper Hummus",
+      "category": "Dips + Spreads",
+      "serving": "1 portion",
+      "calories": 40,
+      "protein_g": 2,
+      "carbs_g": 5,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Greek Goddess",
+      "category": "Dressings",
+      "serving": "1 portion",
+      "calories": 35,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Balsamic Date Vinaigrette",
+      "category": "Dressings",
+      "serving": "1 portion",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 7,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Yogurt Dill",
+      "category": "Dressings",
+      "serving": "1 portion",
+      "calories": 30,
+      "protein_g": 2,
+      "carbs_g": 1,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemon Herb Tahini",
+      "category": "Dressings",
+      "serving": "1 portion",
+      "calories": 70,
+      "protein_g": 2,
+      "carbs_g": 4,
+      "fat_g": 6,
+      "fiber_g": 2
+    },
+    {
+      "name": "Greek Vinaigrette",
+      "category": "Dressings",
+      "serving": "1 portion",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Skhug",
+      "category": "Dressings",
+      "serving": "1 portion",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Harissa Vinaigrette",
+      "category": "Dressings",
+      "serving": "1 portion",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Garlic Dressing",
+      "category": "Dressings",
+      "serving": "1 portion",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 20,
+      "fiber_g": 0
+    },
+    {
+      "name": "Whole Pita",
+      "category": "Sides",
+      "serving": "1 portion",
+      "calories": 320,
+      "protein_g": 13,
+      "carbs_g": 54,
+      "fat_g": 6,
+      "fiber_g": 6
+    },
+    {
+      "name": "Side Quarter Pita",
+      "category": "Sides",
+      "serving": "1 portion",
+      "calories": 80,
+      "protein_g": 3,
+      "carbs_g": 14,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pita Chips",
+      "category": "Sides",
+      "serving": "1 portion",
+      "calories": 280,
+      "protein_g": 10,
+      "carbs_g": 41,
+      "fat_g": 8,
+      "fiber_g": 5
+    },
+    {
+      "name": "Harissa BBQ Pita Chips",
+      "category": "Sides",
+      "serving": "1 portion",
+      "calories": 280,
+      "protein_g": 10,
+      "carbs_g": 43,
+      "fat_g": 10,
+      "fiber_g": 5
+    },
+    {
+      "name": "Greyston Chocolate Chip Blondie",
+      "category": "Sides",
+      "serving": "1 portion",
+      "calories": 140,
+      "protein_g": 2,
+      "carbs_g": 22,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Greyston Brownie",
+      "category": "Sides",
+      "serving": "1 portion",
+      "calories": 150,
+      "protein_g": 2,
+      "carbs_g": 17,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Whisked! Apricot Honey (DMV)",
+      "category": "Sides",
+      "serving": "1 portion",
+      "calories": 220,
+      "protein_g": 3,
+      "carbs_g": 34,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Whisked! Salted Dark Chocolate Oat Cookie",
+      "category": "Sides",
+      "serving": "1 portion",
+      "calories": 240,
+      "protein_g": 4,
+      "carbs_g": 31,
+      "fat_g": 13,
+      "fiber_g": 3
+    },
+    {
+      "name": "Classic Lemonade",
+      "category": "Drinks",
+      "serving": "Kids (12 oz)",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 52,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Classic Lemonade",
+      "category": "Drinks",
+      "serving": "Small (16 oz)",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 69,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Classic Lemonade",
+      "category": "Drinks",
+      "serving": "Large (22 oz)",
+      "calories": 360,
+      "protein_g": 0,
+      "carbs_g": 95,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Classic Lemonade (CA)",
+      "category": "Drinks",
+      "serving": "Kids (12 oz)",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 41,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Classic Lemonade (CA)",
+      "category": "Drinks",
+      "serving": "Small (16 oz)",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 55,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Classic Lemonade (CA)",
+      "category": "Drinks",
+      "serving": "Large (22 oz)",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 75,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Tea Unsweetened",
+      "category": "Drinks",
+      "serving": "Kids (12 oz)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Tea Unsweetened",
+      "category": "Drinks",
+      "serving": "Small (16 oz)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Tea Unsweetened",
+      "category": "Drinks",
+      "serving": "Large (22 oz)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea",
+      "category": "Drinks",
+      "serving": "Kids (12 oz)",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 28,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea",
+      "category": "Drinks",
+      "serving": "Small (16 oz)",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 37,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea",
+      "category": "Drinks",
+      "serving": "Large (22 oz)",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 51,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jasmine Green Tea",
+      "category": "Drinks",
+      "serving": "Kids (12 oz)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jasmine Green Tea",
+      "category": "Drinks",
+      "serving": "Small (16 oz)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jasmine Green Tea",
+      "category": "Drinks",
+      "serving": "Large (22 oz)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pomegranate Apple",
+      "category": "Drinks",
+      "serving": "Kids (12 oz)",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pomegranate Apple",
+      "category": "Drinks",
+      "serving": "Small (16 oz)",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pomegranate Apple",
+      "category": "Drinks",
+      "serving": "Large (22 oz)",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 62,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cucumber Mint Lime",
+      "category": "Drinks",
+      "serving": "Kids (12 oz)",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 33,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cucumber Mint Lime",
+      "category": "Drinks",
+      "serving": "Small (16 oz)",
+      "calories": 180,
+      "protein_g": 1,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cucumber Mint Lime",
+      "category": "Drinks",
+      "serving": "Large (22 oz)",
+      "calories": 240,
+      "protein_g": 1,
+      "carbs_g": 61,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Blueberry Lavender",
+      "category": "Drinks",
+      "serving": "Kids (12 oz)",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 27,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blueberry Lavender",
+      "category": "Drinks",
+      "serving": "Small (16 oz)",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 36,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blueberry Lavender",
+      "category": "Drinks",
+      "serving": "Large (22 oz)",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 50,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Maine Root Soda (Fountain)",
+      "category": "Drinks",
+      "serving": "Kids (12 oz)",
+      "calories": 145,
+      "protein_g": 0,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Maine Root Soda (Fountain)",
+      "category": "Drinks",
+      "serving": "Small (16 oz)",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 50,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Maine Root Soda (Fountain)",
+      "category": "Drinks",
+      "serving": "Large (22 oz)",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 60,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Maine Root Soda (Bottled)",
+      "category": "Drinks",
+      "serving": "1 portion",
+      "calories": 145,
+      "protein_g": 0,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Maine Root Diet Soda (Fountain)",
+      "category": "Drinks",
+      "serving": "Kids (12 oz)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Maine Root Diet Soda (Fountain)",
+      "category": "Drinks",
+      "serving": "Small (16 oz)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Maine Root Diet Soda (Fountain)",
+      "category": "Drinks",
+      "serving": "Large (22 oz)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spindrift Grapefruit",
+      "category": "Drinks",
+      "serving": "1 portion",
+      "calories": 17,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spindrift Raspberry Lime",
+      "category": "Drinks",
+      "serving": "1 portion",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spindrift Lemon",
+      "category": "Drinks",
+      "serving": "1 portion",
+      "calories": 3,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spindrift Half Tea + Half Lemon",
+      "category": "Drinks",
+      "serving": "1 portion",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Milk",
+      "category": "Drinks",
+      "serving": "1 portion",
+      "calories": 150,
+      "protein_g": 8,
+      "carbs_g": 22,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "1% Milk",
+      "category": "Drinks",
+      "serving": "1 portion",
+      "calories": 110,
+      "protein_g": 8,
+      "carbs_g": 12,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honest Apple Juice",
+      "category": "Drinks",
+      "serving": "1 portion",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 0
+    }
+  ]
+}

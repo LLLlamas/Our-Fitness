@@ -1,0 +1,5859 @@
+{
+  "chain": "Panera Bread",
+  "slug": "panera",
+  "aliases": [
+    "panera",
+    "panera bread",
+    "panara",
+    "paneras",
+    "panera bread co",
+    "st louis bread"
+  ],
+  "kind": "fast-casual",
+  "source_url": "https://www.panerabread.com/content/dam/panerabread/documents/c8-26-nutrition-guide.pdf",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Official Panera Bread Nutrition Guide (effective 9/2/2026, edition 1) linked from panerabread.com's Allergen and Nutrition Information page. Table read by column position; wrapped names/servings rejoined.",
+  "items": [
+    {
+      "name": "Asiago Cheese Bagel",
+      "category": "Bagels & Spreads",
+      "serving": "1 Bagel",
+      "calories": 350,
+      "protein_g": 14,
+      "carbs_g": 55,
+      "fat_g": 9,
+      "fiber_g": 3
+    },
+    {
+      "name": "Asiago Everything Bagel",
+      "category": "Bagels & Spreads",
+      "serving": "1 Bagel",
+      "calories": 370,
+      "protein_g": 15,
+      "carbs_g": 55,
+      "fat_g": 9,
+      "fiber_g": 3
+    },
+    {
+      "name": "Blueberry Bagel",
+      "category": "Bagels & Spreads",
+      "serving": "1 Bagel",
+      "calories": 290,
+      "protein_g": 10,
+      "carbs_g": 60,
+      "fat_g": 2,
+      "fiber_g": 3
+    },
+    {
+      "name": "Chocolate Chip Bagel",
+      "category": "Bagels & Spreads",
+      "serving": "1 Bagel",
+      "calories": 330,
+      "protein_g": 10,
+      "carbs_g": 65,
+      "fat_g": 4,
+      "fiber_g": 3
+    },
+    {
+      "name": "Cinnamon Crunch Bagel",
+      "category": "Bagels & Spreads",
+      "serving": "1 Bagel",
+      "calories": 430,
+      "protein_g": 13,
+      "carbs_g": 78,
+      "fat_g": 7,
+      "fiber_g": 3
+    },
+    {
+      "name": "Cinnamon Swirl Raisin Bagel",
+      "category": "Bagels & Spreads",
+      "serving": "1 Bagel",
+      "calories": 300,
+      "protein_g": 8,
+      "carbs_g": 65,
+      "fat_g": 2,
+      "fiber_g": 3
+    },
+    {
+      "name": "Everything Bagel",
+      "category": "Bagels & Spreads",
+      "serving": "1 Bagel",
+      "calories": 300,
+      "protein_g": 8,
+      "carbs_g": 61,
+      "fat_g": 2,
+      "fiber_g": 3
+    },
+    {
+      "name": "Multigrain Bagel Flat",
+      "category": "Bagels & Spreads",
+      "serving": "1 Bagel",
+      "calories": 190,
+      "protein_g": 6,
+      "carbs_g": 35,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Plain Bagel",
+      "category": "Bagels & Spreads",
+      "serving": "1 Bagel",
+      "calories": 280,
+      "protein_g": 7,
+      "carbs_g": 59,
+      "fat_g": 1,
+      "fiber_g": 3
+    },
+    {
+      "name": "Sesame Bagel",
+      "category": "Bagels & Spreads",
+      "serving": "1 Bagel",
+      "calories": 310,
+      "protein_g": 8,
+      "carbs_g": 61,
+      "fat_g": 4,
+      "fiber_g": 3
+    },
+    {
+      "name": "Honey Walnut Cream Cheese Spread - 1.5 oz",
+      "category": "Bagels & Spreads",
+      "serving": "1 Container",
+      "calories": 130,
+      "protein_g": 4,
+      "carbs_g": 9,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey Walnut Cream Cheese Spread - 8 oz",
+      "category": "Bagels & Spreads",
+      "serving": "2 Tbsp",
+      "calories": 90,
+      "protein_g": 3,
+      "carbs_g": 6,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Plain Cream Cheese Spread - 1.5 oz",
+      "category": "Bagels & Spreads",
+      "serving": "1 Container",
+      "calories": 110,
+      "protein_g": 3,
+      "carbs_g": 3,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Plain Cream Cheese Spread - 8 oz",
+      "category": "Bagels & Spreads",
+      "serving": "2 Tbsp",
+      "calories": 80,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bread Portion - Croissant",
+      "category": "Breads",
+      "serving": "1 Croissant",
+      "calories": 260,
+      "protein_g": 6,
+      "carbs_g": 32,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bread Portion - Italian Style Roll",
+      "category": "Breads",
+      "serving": "1/2 Roll",
+      "calories": 230,
+      "protein_g": 8,
+      "carbs_g": 42,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Artisan Ciabatta 2 oz",
+      "category": "Breads",
+      "serving": "(about 2 3/4 inch slice / 57g)",
+      "calories": 150,
+      "protein_g": 5,
+      "carbs_g": 30,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Black Pepper Focaccia 2 oz",
+      "category": "Breads",
+      "serving": "(about 1 3/4 inch slice / 57g)",
+      "calories": 160,
+      "protein_g": 5,
+      "carbs_g": 30,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Classic White Loaf",
+      "category": "Breads",
+      "serving": "2.2 oz (about 3/4 inch slice / 62g)",
+      "calories": 190,
+      "protein_g": 6,
+      "carbs_g": 32,
+      "fat_g": 4,
+      "fiber_g": 3
+    },
+    {
+      "name": "Country Rustic Sourdough",
+      "category": "Breads",
+      "serving": "2 oz (about 2/3 inch slice / 57g)",
+      "calories": 140,
+      "protein_g": 5,
+      "carbs_g": 30,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "French Baguette 2 oz",
+      "category": "Breads",
+      "serving": "(about 2 3/4 inch slice / 57g)",
+      "calories": 150,
+      "protein_g": 5,
+      "carbs_g": 32,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sourdough Soup Bowl",
+      "category": "Breads",
+      "serving": "1 Bread Bowl",
+      "calories": 650,
+      "protein_g": 21,
+      "carbs_g": 136,
+      "fat_g": 2,
+      "fiber_g": 5
+    },
+    {
+      "name": "Tomato Basil Miche",
+      "category": "Breads",
+      "serving": "2 oz (about 1/2 inch slice / 57g)",
+      "calories": 150,
+      "protein_g": 5,
+      "carbs_g": 30,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Italian Style Roll",
+      "category": "Breads",
+      "serving": "2 oz (about 2.5 inch slice / 57g)",
+      "calories": 150,
+      "protein_g": 5,
+      "carbs_g": 28,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Whole Grain Lahvash",
+      "category": "Breads",
+      "serving": "1 Lahvash",
+      "calories": 170,
+      "protein_g": 12,
+      "carbs_g": 25,
+      "fat_g": 4,
+      "fiber_g": 9
+    },
+    {
+      "name": "Bacon, Egg & Cheese on Croissant",
+      "category": "Breakfast",
+      "serving": "1 Sandwich",
+      "calories": 480,
+      "protein_g": 22,
+      "carbs_g": 33,
+      "fat_g": 29,
+      "fiber_g": 2
+    },
+    {
+      "name": "Frittata - Broccoli Cheddar",
+      "category": "Breakfast",
+      "serving": "1 Crustless Frittata",
+      "calories": 280,
+      "protein_g": 15,
+      "carbs_g": 11,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "Asiago Bagel Stack - Sausage & Egg",
+      "category": "Breakfast",
+      "serving": "1 Sandwich",
+      "calories": 810,
+      "protein_g": 33,
+      "carbs_g": 58,
+      "fat_g": 50,
+      "fiber_g": 3
+    },
+    {
+      "name": "Bacon, Egg & Cheese on Artisan Ciabatta",
+      "category": "Breakfast",
+      "serving": "1 Sandwich",
+      "calories": 470,
+      "protein_g": 23,
+      "carbs_g": 51,
+      "fat_g": 20,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bacon Double Take on Black Pepper Focaccia",
+      "category": "Breakfast",
+      "serving": "1 Sandwich",
+      "calories": 550,
+      "protein_g": 28,
+      "carbs_g": 43,
+      "fat_g": 29,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Portion - Artisan Ciabatta",
+      "category": "Breakfast",
+      "serving": "1/3 Loaf",
+      "calories": 250,
+      "protein_g": 8,
+      "carbs_g": 49,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Breakfast Portion - Black Pepper Focaccia",
+      "category": "Breakfast",
+      "serving": "1/4 loaf",
+      "calories": 210,
+      "protein_g": 6,
+      "carbs_g": 40,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Portion - Classic White Miche",
+      "category": "Breakfast",
+      "serving": "1 Slice",
+      "calories": 190,
+      "protein_g": 6,
+      "carbs_g": 32,
+      "fat_g": 4,
+      "fiber_g": 3
+    },
+    {
+      "name": "Breakfast Portion - Country Rustic Sourdough",
+      "category": "Breakfast",
+      "serving": "1 Slice",
+      "calories": 130,
+      "protein_g": 4,
+      "carbs_g": 27,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breakfast Portion - French Baguette",
+      "category": "Breakfast",
+      "serving": "1/4 Baguette",
+      "calories": 290,
+      "protein_g": 9,
+      "carbs_g": 61,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Breakfast Portion - Tomato Basil Miche",
+      "category": "Breakfast",
+      "serving": "1 Slice",
+      "calories": 160,
+      "protein_g": 6,
+      "carbs_g": 33,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chipotle Chicken, Egg & Avo on Artisan Ciabatta",
+      "category": "Breakfast",
+      "serving": "1 Sandwich",
+      "calories": 600,
+      "protein_g": 26,
+      "carbs_g": 55,
+      "fat_g": 31,
+      "fiber_g": 4
+    },
+    {
+      "name": "Ham, Egg & Cheese on Ciabatta",
+      "category": "Breakfast",
+      "serving": "1 Sandwich",
+      "calories": 460,
+      "protein_g": 25,
+      "carbs_g": 51,
+      "fat_g": 17,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sausage, Egg & Cheese on Artisan Ciabatta",
+      "category": "Breakfast",
+      "serving": "1 Sandwich",
+      "calories": 610,
+      "protein_g": 28,
+      "carbs_g": 51,
+      "fat_g": 33,
+      "fiber_g": 2
+    },
+    {
+      "name": "Egg & Cheese on Artisan Ciabatta",
+      "category": "Breakfast",
+      "serving": "1 Sandwich",
+      "calories": 430,
+      "protein_g": 20,
+      "carbs_g": 51,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Steak & Wake on Ciabatta",
+      "category": "Breakfast",
+      "serving": "1 Sandwich",
+      "calories": 520,
+      "protein_g": 32,
+      "carbs_g": 53,
+      "fat_g": 20,
+      "fiber_g": 2
+    },
+    {
+      "name": "Asiago Everything Bagel Stack Sandwich - Wake-Up BLT",
+      "category": "Breakfast",
+      "serving": "1 Sandwich",
+      "calories": 570,
+      "protein_g": 27,
+      "carbs_g": 59,
+      "fat_g": 24,
+      "fiber_g": 3
+    },
+    {
+      "name": "Breakfast Asiago Bagel Stack - Farmhouse Duo",
+      "category": "Breakfast",
+      "serving": "1 Sandwich",
+      "calories": 730,
+      "protein_g": 34,
+      "carbs_g": 58,
+      "fat_g": 40,
+      "fiber_g": 3
+    },
+    {
+      "name": "Frittata - Five Cheese & Bacon",
+      "category": "Breakfast",
+      "serving": "1 Crustless Frittata",
+      "calories": 300,
+      "protein_g": 17,
+      "carbs_g": 9,
+      "fat_g": 22,
+      "fiber_g": 0
+    },
+    {
+      "name": "Egg Whites",
+      "category": "Breakfast",
+      "serving": "1 Portion",
+      "calories": 30,
+      "protein_g": 6,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Souffle - Four Cheese",
+      "category": "Breakfast",
+      "serving": "1 Souffle",
+      "calories": 470,
+      "protein_g": 14,
+      "carbs_g": 36,
+      "fat_g": 30,
+      "fiber_g": 1
+    },
+    {
+      "name": "Ham Croissant Benny",
+      "category": "Breakfast",
+      "serving": "1 Sandwich",
+      "calories": 430,
+      "protein_g": 21,
+      "carbs_g": 34,
+      "fat_g": 24,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sausage, Egg & Cheese on Croissant",
+      "category": "Breakfast",
+      "serving": "1 Sandwich",
+      "calories": 620,
+      "protein_g": 26,
+      "carbs_g": 33,
+      "fat_g": 42,
+      "fiber_g": 2
+    },
+    {
+      "name": "Scrambled Egg",
+      "category": "Breakfast",
+      "serving": "1 egg",
+      "calories": 90,
+      "protein_g": 8,
+      "carbs_g": 1,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Egg & Cheese on Croissant",
+      "category": "Breakfast",
+      "serving": "1 Sandwich",
+      "calories": 440,
+      "protein_g": 19,
+      "carbs_g": 33,
+      "fat_g": 25,
+      "fiber_g": 2
+    },
+    {
+      "name": "Souffle - Spinach & Bacon",
+      "category": "Breakfast",
+      "serving": "1 Souffle",
+      "calories": 550,
+      "protein_g": 19,
+      "carbs_g": 36,
+      "fat_g": 37,
+      "fiber_g": 1
+    },
+    {
+      "name": "Steel Cut Oatmeal with Strawberries, Pecans & Cinnamon Crunch Topping",
+      "category": "Breakfast",
+      "serving": "1 Bowl",
+      "calories": 330,
+      "protein_g": 8,
+      "carbs_g": 51,
+      "fat_g": 13,
+      "fiber_g": 7
+    },
+    {
+      "name": "Cinnamon Crunch Topping without pecans",
+      "category": "Breakfast",
+      "serving": "1 Bowl",
+      "calories": 230,
+      "protein_g": 7,
+      "carbs_g": 49,
+      "fat_g": 3,
+      "fiber_g": 6
+    },
+    {
+      "name": "Sauce - Apple Cider Vinegar BBQ Sauce - Sandwich Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 portion",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Asian Sesame Vinaigrette - Half Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 dressing cup",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Asian Sesame Vinaigrette - Whole Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "2 dressing cups",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sauce - Balsamic Glaze - Sandwich Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 Portion",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dressing - Caesar - Half",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 dressing cup",
+      "calories": 160,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dressing - Caesar - Whole",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "2 dressing cups",
+      "calories": 320,
+      "protein_g": 3,
+      "carbs_g": 4,
+      "fat_g": 33,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sauce - Chipotle Aioli - Sandwich Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 Portion",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Creamy Garden Herb Dressing - Half Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 dressing cup",
+      "calories": 160,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Creamy Garden Herb Dressing - Whole Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "2 dressing cups",
+      "calories": 330,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 34,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sauce - Creamy Pesto - Sandwich Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 portion",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Farmhouse Ranch Dressing - Half Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 dressing cup",
+      "calories": 170,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dressing - Farmhouse Ranch Dressing - Sandwich Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 portion",
+      "calories": 110,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Farmhouse Ranch Dressing - Whole Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "2 dressing cups",
+      "calories": 340,
+      "protein_g": 2,
+      "carbs_g": 5,
+      "fat_g": 35,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sauce - Garlic Aioli - Sandwich Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 portion",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dressing Greek - Half",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 dressing cup",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dressing - Greek Dressing - Sandwich Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 Portion",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dressing Greek - Whole",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "2 dressing cups",
+      "calories": 440,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 48,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dressing - Green Goddess - Half Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 dressing cup",
+      "calories": 80,
+      "protein_g": 2,
+      "carbs_g": 4,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dressing - Green Goddess Dressing - Sandwich Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 Portion",
+      "calories": 30,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dressing - Green Goddess - Whole Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "2 dressing cups",
+      "calories": 150,
+      "protein_g": 4,
+      "carbs_g": 7,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Spread - Hummus - Sandwich Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 portion",
+      "calories": 60,
+      "protein_g": 2,
+      "carbs_g": 4,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sauce - Mayonnaise - Sandwich Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 portion",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spread - Green Chile Salsa Verde - Sandwich Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 Portion",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sauce- Cheese Hollandaise - Breakfast Sandwich Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 portion",
+      "calories": 50,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sauce- Creamy Basil Pesto- Sandwich Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 portion",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sesame Ginger Dressing - Half Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 dressing cup",
+      "calories": 170,
+      "protein_g": 1,
+      "carbs_g": 6,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sesame Ginger Dressing - Whole Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "2 dressing cups",
+      "calories": 340,
+      "protein_g": 1,
+      "carbs_g": 13,
+      "fat_g": 32,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sauce - Signature Sauce -Sandwich Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 portion",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Balsamic with Apple Vinaigrette - Half Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 dressing cup",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Balsamic with Apple Vinaigrette - Whole Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "2 dressing cups",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zesty Smoky Lemon Vinaigrette - Half Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 dressing cup",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zesty Smoky Lemon Vinaigrette - Whole Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "2 dressing cups",
+      "calories": 350,
+      "protein_g": 0,
+      "carbs_g": 7,
+      "fat_g": 36,
+      "fiber_g": 0
+    },
+    {
+      "name": "Balsamic Vinaigrette Dressing - Half Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "1 dressing cup",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 8,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Balsamic Vinaigrette Dressing - Whole Portion",
+      "category": "Dressings/Sauces/Spreads",
+      "serving": "2 dressing cups",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 16,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "1 Pump Chocolatey Hazelnut Flavored Syrup",
+      "category": "Drinks",
+      "serving": "1 pump",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "1 Pump Rocky Road Syrup",
+      "category": "Drinks",
+      "serving": "1 Pump",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "1 Pump Snickerdoodle Syrup",
+      "category": "Drinks",
+      "serving": "1 pump",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Cream Cold Foam",
+      "category": "Drinks",
+      "serving": "3 swirls",
+      "calories": 80,
+      "protein_g": 1,
+      "carbs_g": 13,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "1 Pump Caramel Syrup",
+      "category": "Drinks",
+      "serving": "1 Pump",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "1 Pump Chocolate Flavored Sauce",
+      "category": "Drinks",
+      "serving": "1 Pump",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 13,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Additional Shot of Espresso",
+      "category": "Drinks",
+      "serving": "1 fl oz (30 mL)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "1 Pump Madagascar Vanilla Syrup",
+      "category": "Drinks",
+      "serving": "1 Pump",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Agave Lemonade - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 52,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Agave Lemonade - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 320,
+      "protein_g": 0,
+      "carbs_g": 78,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Agave Lemonade - Serves 4 - Group",
+      "category": "Drinks",
+      "serving": "1 container",
+      "calories": 670,
+      "protein_g": 1,
+      "carbs_g": 165,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Agave Lemonade - Serves 8 - Group",
+      "category": "Drinks",
+      "serving": "2 containers",
+      "calories": 1350,
+      "protein_g": 2,
+      "carbs_g": 331,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "AHA Blueberry Pomegranate Sparkling Water- 12 fl oz can",
+      "category": "Drinks",
+      "serving": "12 fl oz can",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "AHA Lime Watermelon Sparkling Water- 12 fl oz can",
+      "category": "Drinks",
+      "serving": "12 fl oz can",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Substitute Almondmilk - 20 fl oz",
+      "category": "Drinks",
+      "serving": "10 fl oz (296 mL)",
+      "calories": 50,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Americano - 16 fl oz",
+      "category": "Drinks",
+      "serving": "16 fl oz (473 mL)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweetened Iced Tea - Serves 4 - Group",
+      "category": "Drinks",
+      "serving": "1 Container",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweetened Iced Tea - Serves 8 - Group",
+      "category": "Drinks",
+      "serving": "2 Containers",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bottled Passionfruit Papaya Naturally Flavored Iced Green Tea",
+      "category": "Drinks",
+      "serving": "1 Bottle (500 mL)",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 31,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bottled Water",
+      "category": "Drinks",
+      "serving": "16.9 fl oz (500mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "British Breakfast Tea - 16 fl oz",
+      "category": "Drinks",
+      "serving": "16 fl oz (473 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bubly Sparkling Water 12 fl oz Can- Lemon",
+      "category": "Drinks",
+      "serving": "12 fl oz (355 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bubly Sparkling Water 12 fl oz - Lime",
+      "category": "Drinks",
+      "serving": "12 fl oz (355 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cafe Blend Dark Roast Coffee - 16 fl oz",
+      "category": "Drinks",
+      "serving": "16 fl oz (473 mL)",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cafe Blend Dark Roast Coffee - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cafe blend Dark Roast Coffee - Group",
+      "category": "Drinks",
+      "serving": "1 Container",
+      "calories": 35,
+      "protein_g": 4,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cafe Blend Light Roast Coffee - Group",
+      "category": "Drinks",
+      "serving": "1 Container",
+      "calories": 35,
+      "protein_g": 4,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cafe Blend Light Roast Coffee - 16 fl oz",
+      "category": "Drinks",
+      "serving": "16 fl oz (473 mL)",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cafe Blend Light Roast Coffee - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cafe Frozen Java - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 440,
+      "protein_g": 8,
+      "carbs_g": 73,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caffe Latte - 16 fl oz",
+      "category": "Drinks",
+      "serving": "16 fl oz (473mL)",
+      "calories": 130,
+      "protein_g": 8,
+      "carbs_g": 12,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caffe Latte - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591mL)",
+      "calories": 160,
+      "protein_g": 10,
+      "carbs_g": 15,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caffeine Free Diet Pepsi - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caffeine Free Diet Pepsi - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Canada Dry Ginger Ale - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 60,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Canada Dry Ginger Ale - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 340,
+      "protein_g": 0,
+      "carbs_g": 90,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino - 16 fl oz",
+      "category": "Drinks",
+      "serving": "16 fl oz (473mL)",
+      "calories": 130,
+      "protein_g": 8,
+      "carbs_g": 12,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591mL)",
+      "calories": 160,
+      "protein_g": 10,
+      "carbs_g": 15,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Latte - 16 fl oz",
+      "category": "Drinks",
+      "serving": "16 fl oz (473 mL)",
+      "calories": 320,
+      "protein_g": 9,
+      "carbs_g": 50,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Latte - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591mL)",
+      "calories": 400,
+      "protein_g": 11,
+      "carbs_g": 64,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chai Tea Latte - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 280,
+      "protein_g": 12,
+      "carbs_g": 42,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chai Tea Latte - 16 fl oz",
+      "category": "Drinks",
+      "serving": "16 fl oz (473 mL)",
+      "calories": 230,
+      "protein_g": 10,
+      "carbs_g": 33,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime Fresca - 20 fl oz with ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime Fresca - 30 fl oz with ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 69,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime Fresca - Serves 4 - Group",
+      "category": "Drinks",
+      "serving": "1 Container",
+      "calories": 960,
+      "protein_g": 2,
+      "carbs_g": 237,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cherry Lime Fresca - Serves 8 - Group",
+      "category": "Drinks",
+      "serving": "2 Containers",
+      "calories": 1930,
+      "protein_g": 3,
+      "carbs_g": 473,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Blue Packet Sweetener",
+      "category": "Drinks",
+      "serving": "1 Packet",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Half & Half - 1 fl oz",
+      "category": "Drinks",
+      "serving": "1 fl oz",
+      "calories": 40,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pink Packet Sweetener",
+      "category": "Drinks",
+      "serving": "1 Packet",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sugar",
+      "category": "Drinks",
+      "serving": "1 packet",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Turbinado Cane Sugar Packet",
+      "category": "Drinks",
+      "serving": "1 Packet",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Yellow Packet Sweetener",
+      "category": "Drinks",
+      "serving": "1 Packet",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "1 pump of Cane Sugar Syrup",
+      "category": "Drinks",
+      "serving": "1 pump",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coke - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coke - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 370,
+      "protein_g": 0,
+      "carbs_g": 100,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coke 20 fl oz Bottle",
+      "category": "Drinks",
+      "serving": "20 fl oz bottle (591 mL)",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 68,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coke Zero - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coke Zero - 20 fl oz bottle",
+      "category": "Drinks",
+      "serving": "20 fl oz bottle (591 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coke Zero - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dasani Lemon - 12 fl oz can",
+      "category": "Drinks",
+      "serving": "12 fl oz can (355 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dasani Lime - 12 fl oz can",
+      "category": "Drinks",
+      "serving": "12 oz can (355 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Decaf Coffee - Group",
+      "category": "Drinks",
+      "serving": "1 Container",
+      "calories": 15,
+      "protein_g": 4,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Decaf Coffee - 16 fl oz",
+      "category": "Drinks",
+      "serving": "16 fl oz (473 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Decaf Coffee - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 0,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "20 oz Diet Coke Bottle",
+      "category": "Drinks",
+      "serving": "20 fl oz bottle (591 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Dr. Pepper - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Dr. Pepper - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Mountain Dew - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Mountain Dew - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Mountain Dew - 12 fl oz can",
+      "category": "Drinks",
+      "serving": "12 fl oz Can (355 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Pepsi - 12 fl oz can",
+      "category": "Drinks",
+      "serving": "12 fl oz can (355 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Pepsi - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Pepsi - 20 fl oz bottle",
+      "category": "Drinks",
+      "serving": "20 fl oz bottle (591 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Pepsi - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper - 20 fl oz bottle",
+      "category": "Drinks",
+      "serving": "20 fl oz bottle (591 mL)",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 66,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr. Pepper - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr. Pepper - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 360,
+      "protein_g": 0,
+      "carbs_g": 98,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dragonfruit Sunset Energy Refresher - Naturally Flavored - 20 fl oz with ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 190,
+      "protein_g": 1,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Dragonfruit Sunset Energy Refresher - Naturally Flavored - 30 fl oz with ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 270,
+      "protein_g": 1,
+      "carbs_g": 64,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Drive Thru - Agave Lemonade - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 32,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Agave Lemonade - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Caffeine Free Diet Pepsi - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Caffeine Free Diet Pepsi - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Canada Dry Ginger Ale - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 38,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Canada Dry Ginger Ale - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 57,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Coke - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Coke - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 63,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Coke Zero - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Coke Zero - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Diet Coke - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Diet Coke - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Diet Dr. Pepper - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Diet Dr. Pepper - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Diet Mountain Dew - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Diet Mountain Dew - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Diet Pepsi - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Diet Pepsi - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Dr. Pepper - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 41,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Dr. Pepper - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 61,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Fanta Orange - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Fanta Orange - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 63,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Lipton Brisk Raspberry Tea - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 19,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Lipton Brisk Raspberry Tea - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 28,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Mountain Dew - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Mountain Dew - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 69,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Mug Root Beer - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 40,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Mug Root Beer - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 60,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Naturally Flavored Herbal Tea - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz with ice",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Naturally Flavored Herbal Tea - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz with ice",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Flavored Iced Green Tea - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Flavored Iced Green Tea - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 29,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Pepsi - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Pepsi - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Pepsi Zero - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Pibb Xtra - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Pibb Xtra - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Powerade Mountain Blast - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 23,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Powerade Mountain Blast - 30 Fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - SoBe Life Water Yumberry Pomegranate - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - SoBe Life Water Yumberry Pomegranate - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Sprite - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 38,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Sprite - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 57,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Starry Lemon Lime - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Starry Lemon Lime - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 61,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Basil Lemonade Fresca - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 150,
+      "protein_g": 1,
+      "carbs_g": 36,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Strawberry Basil Lemonade Fresca - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 220,
+      "protein_g": 1,
+      "carbs_g": 55,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Drive Thru - Sweet Iced Tea - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Sweet Tea - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 50,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Tropicana Fruit Punch - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Tropicana Fruit Punch - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Tropicana Lemonade - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Tropicana Lemonade - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 62,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Tropicana Light Lemonade - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Tropicana Light Lemonade - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Unsweetened Iced Tea - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Unsweetened Iced Tea - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Wild Cherry Pepsi 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive Thru - Wild Cherry Pepsi 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 66,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive-Thru - Lime Bubly Sparkling Water - 20 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Drive-Thru - Lime Bubly Sparkling Water - 30 fl oz with Ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Espresso",
+      "category": "Drinks",
+      "serving": "2 fl oz (59 mL)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Orange - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 66,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Orange - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 370,
+      "protein_g": 0,
+      "carbs_g": 99,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Frozen Signature Hot Chocolate",
+      "category": "Drinks",
+      "serving": "16 fl oz",
+      "calories": 530,
+      "protein_g": 9,
+      "carbs_g": 93,
+      "fat_g": 14,
+      "fiber_g": 3
+    },
+    {
+      "name": "Gold Peak Unsweetened Iced Tea - 18.5 fl oz",
+      "category": "Drinks",
+      "serving": "18.5 fl oz (547 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hazelnut Coffee - Group",
+      "category": "Drinks",
+      "serving": "1 Container",
+      "calories": 35,
+      "protein_g": 4,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hazelnut Flavored Coffee - 16 fl oz",
+      "category": "Drinks",
+      "serving": "16 fl oz (473 mL)",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hazelnut Flavored Coffee - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hazelnut Flavored Mocha Frozen Coffee - Naturally Flavored - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 460,
+      "protein_g": 8,
+      "carbs_g": 74,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hazelnut Flavored Mocha Iced Coffee - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 210,
+      "protein_g": 1,
+      "carbs_g": 42,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hazelnut Flavored Mocha Iced Coffee - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 240,
+      "protein_g": 1,
+      "carbs_g": 48,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honest Berry Hibiscus Iced Tea - 16.9 fl oz bottle",
+      "category": "Drinks",
+      "serving": "16.9 fl oz bottle",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey Ginseng Green Tea - 16 fl oz",
+      "category": "Drinks",
+      "serving": "16 fl oz (473 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Signature Hot Chocolate - 16 fl oz",
+      "category": "Drinks",
+      "serving": "16 fl oz (473 mL)",
+      "calories": 340,
+      "protein_g": 10,
+      "carbs_g": 53,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Signature Hot Chocolate - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 420,
+      "protein_g": 13,
+      "carbs_g": 68,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Signature Hot Chocolate - Group",
+      "category": "Drinks",
+      "serving": "1 Container",
+      "calories": 3530,
+      "protein_g": 54,
+      "carbs_g": 426,
+      "fat_g": 183,
+      "fiber_g": 15
+    },
+    {
+      "name": "Hot Tea - 16 fl oz",
+      "category": "Drinks",
+      "serving": "16 fl oz (473 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cafe Blend Iced Coffee - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cafe Blend Iced Coffee - 20 fl oz - no ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cafe Blend Iced Coffee - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Café Blend Iced Coffee - 30 fl oz - no ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Caffe Latte - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 160,
+      "protein_g": 10,
+      "carbs_g": 15,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Caramel Latte - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 350,
+      "protein_g": 11,
+      "carbs_g": 53,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Chai Tea Latte - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 230,
+      "protein_g": 10,
+      "carbs_g": 33,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Café Blend Iced Coffee - Serves 4 - Group",
+      "category": "Drinks",
+      "serving": "1 Container",
+      "calories": 20,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Café Blend Iced Coffee - Serves 8 - Group",
+      "category": "Drinks",
+      "serving": "2 Containers",
+      "calories": 40,
+      "protein_g": 3,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Madagascar Vanilla Latte - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 280,
+      "protein_g": 11,
+      "carbs_g": 35,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Mocha Latte - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL",
+      "calories": 380,
+      "protein_g": 13,
+      "carbs_g": 57,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Island Mango Energy Refresher - Naturally Flavored - 20 fl oz with ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591mL)",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Island Mango Energy Refresher - Naturally Flavored - 30 fl oz with ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887mL)",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Naturally Flavored - 20 fl oz with ice - With Pineapple",
+      "category": "Drinks",
+      "serving": "20 fl oz (591mL)",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Naturally Flavored - 30 fl oz with ice - With Pineapple",
+      "category": "Drinks",
+      "serving": "30 fl oz (887mL)",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kids Organic Apple juice",
+      "category": "Drinks",
+      "serving": "6.75 fl oz (200 mL)",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kids Organic Chocolate Milk",
+      "category": "Drinks",
+      "serving": "8 fl oz (237 mL)",
+      "calories": 150,
+      "protein_g": 8,
+      "carbs_g": 23,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kids Organic White Milk",
+      "category": "Drinks",
+      "serving": "8 fl oz (237 mL)",
+      "calories": 110,
+      "protein_g": 8,
+      "carbs_g": 13,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lime Bubly Sparkling Water - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lime Bubly Sparkling Water - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Brisk Raspberry Tea - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 30,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Brisk Raspberry Tea - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Madagascar Vanilla Latte - 16 fl oz",
+      "category": "Drinks",
+      "serving": "16 fl oz (473 mL)",
+      "calories": 250,
+      "protein_g": 9,
+      "carbs_g": 32,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Madagascar Vanilla Latte - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 300,
+      "protein_g": 11,
+      "carbs_g": 41,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango Smoothie with Greek Yogurt - 16 fl oz",
+      "category": "Drinks",
+      "serving": "16 fl oz (473 mL)",
+      "calories": 300,
+      "protein_g": 13,
+      "carbs_g": 51,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Minute Maid Orange Juice - 12 fl oz bottle",
+      "category": "Drinks",
+      "serving": "12 fl oz (355 mL)",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 51,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mocha Latte - 16 fl oz",
+      "category": "Drinks",
+      "serving": "16 fl oz (473 mL)",
+      "calories": 340,
+      "protein_g": 10,
+      "carbs_g": 54,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Latte - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591mL)",
+      "calories": 430,
+      "protein_g": 13,
+      "carbs_g": 69,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mountain Dew - 12 fl oz can",
+      "category": "Drinks",
+      "serving": "1 can (355 mL)",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mountain Dew - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 73,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mountain Dew- 20 fl oz bottle",
+      "category": "Drinks",
+      "serving": "20 fl oz bottle (591 mL)",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 77,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mountain Dew - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 420,
+      "protein_g": 0,
+      "carbs_g": 110,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mug Root Beer - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 64,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mug Root Beer - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 360,
+      "protein_g": 0,
+      "carbs_g": 96,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blackberry Hibiscus Iced Tea - Naturally Flavored Herbal Tea - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blackberry Hibiscus Iced Tea - Naturally Flavored Herbal Tea - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blackberry Hibiscus Iced Tea - Naturally Flavored Herbal Tea - Serves 4 - Group",
+      "category": "Drinks",
+      "serving": "1 container",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blackberry Hibiscus Iced Tea - Naturally Flavored Herbal Tea - Serves 8 - Group",
+      "category": "Drinks",
+      "serving": "2 containers",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Orange Ginger Mint Tea - 16 fl oz",
+      "category": "Drinks",
+      "serving": "16 fl oz (473 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Papaya Naturally Flavored Iced Green Tea - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 36,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Papaya Naturally Flavored Iced Green Tea - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 54,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Papaya Naturally Flavored Iced Green Tea - Serves 4 - Group",
+      "category": "Drinks",
+      "serving": "1 Container",
+      "calories": 460,
+      "protein_g": 0,
+      "carbs_g": 115,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Papaya Naturally Flavored Iced Green Tea - Serves 8 - Group",
+      "category": "Drinks",
+      "serving": "2 Containers",
+      "calories": 920,
+      "protein_g": 0,
+      "carbs_g": 229,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passionfruit Paradise Energy Refresher - Naturally Flavored - 20 fl oz with ice",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 31,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passionfruit Paradise Energy Refresher - Naturally Flavored - 30 fl oz with ice",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 47,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 69,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi - 20 fl oz bottle",
+      "category": "Drinks",
+      "serving": "20 fl oz bottle (591 mL)",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 69,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 380,
+      "protein_g": 0,
+      "carbs_g": 103,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi 12 fl oz can",
+      "category": "Drinks",
+      "serving": "12 fl oz can (355 mL)",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 41,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Zero - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Zero - 20 fl oz bottle",
+      "category": "Drinks",
+      "serving": "20 fl oz bottle (591 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 61,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pibb Xtra - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 370,
+      "protein_g": 0,
+      "carbs_g": 92,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Powerade Mountain Blast - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 37,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Powerade Mountain Blast - 30 Fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 55,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Premium Orange Juice - Serves 4 - Group",
+      "category": "Drinks",
+      "serving": "2 Containers",
+      "calories": 900,
+      "protein_g": 17,
+      "carbs_g": 204,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Premium Orange Juice - Serves 8- Group",
+      "category": "Drinks",
+      "serving": "2 Containers",
+      "calories": 1800,
+      "protein_g": 33,
+      "carbs_g": 408,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Premium OJ 11.5 fl oz",
+      "category": "Drinks",
+      "serving": "1 Bottle",
+      "calories": 160,
+      "protein_g": 2,
+      "carbs_g": 37,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Rocky Road Frozen Java - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 450,
+      "protein_g": 8,
+      "carbs_g": 72,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Rocky Road Iced Coffee - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 210,
+      "protein_g": 1,
+      "carbs_g": 41,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Rocky Road Iced Coffee - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 230,
+      "protein_g": 1,
+      "carbs_g": 46,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Snickerdoodle Frozen Java - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 440,
+      "protein_g": 8,
+      "carbs_g": 71,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Snickerdoodle Iced Coffee - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 190,
+      "protein_g": 1,
+      "carbs_g": 40,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Snickerdoodle Iced Coffee - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 220,
+      "protein_g": 1,
+      "carbs_g": 45,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "SoBe Life Water Yumberry Pomegranate - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "SoBe Life Water Yumberry Pomegranate - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 61,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 340,
+      "protein_g": 0,
+      "carbs_g": 91,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite 20 fl oz Bottle",
+      "category": "Drinks",
+      "serving": "20 fl oz bottle (591 mL)",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 64,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite Zero - 20 fl oz bottle",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Starry Lemon Lime - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 68,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Starry Lemon Lime - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 370,
+      "protein_g": 0,
+      "carbs_g": 97,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Starry Lemon Lime 12 fl oz Can",
+      "category": "Drinks",
+      "serving": "1 Can (355 mL)",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Starry Lemon Lime 20 fl oz bottle",
+      "category": "Drinks",
+      "serving": "20 fl oz bottle (591mL)",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 68,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Banana Smoothie with Greek Yogurt - 16 fl oz",
+      "category": "Drinks",
+      "serving": "16 fl oz (473 mL)",
+      "calories": 250,
+      "protein_g": 7,
+      "carbs_g": 51,
+      "fat_g": 2,
+      "fiber_g": 4
+    },
+    {
+      "name": "Strawberry Basil Lemonade Fresca - Serves 4 - Group",
+      "category": "Drinks",
+      "serving": "1 Container",
+      "calories": 880,
+      "protein_g": 4,
+      "carbs_g": 215,
+      "fat_g": 1,
+      "fiber_g": 6
+    },
+    {
+      "name": "Strawberry Basil Lemonade Fresca - Serves 8 - Group",
+      "category": "Drinks",
+      "serving": "2 Containers",
+      "calories": 1750,
+      "protein_g": 7,
+      "carbs_g": 429,
+      "fat_g": 2,
+      "fiber_g": 13
+    },
+    {
+      "name": "Strawberry Smoothie with Greek Yogurt - 16 fl oz",
+      "category": "Drinks",
+      "serving": "16 fl oz ( 473 mL)",
+      "calories": 260,
+      "protein_g": 12,
+      "carbs_g": 43,
+      "fat_g": 4,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sweet Iced Tea - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Iced Tea - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 68,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea - Serves 4 - Group",
+      "category": "Drinks",
+      "serving": "1 Container (1893 mL)",
+      "calories": 560,
+      "protein_g": 0,
+      "carbs_g": 145,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea - Serves 8 - Group",
+      "category": "Drinks",
+      "serving": "2 Containers (3785 mL)",
+      "calories": 1120,
+      "protein_g": 0,
+      "carbs_g": 290,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Green Smoothie - 16 fl oz",
+      "category": "Drinks",
+      "serving": "16 fl oz (473mL)",
+      "calories": 200,
+      "protein_g": 1,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Tropicana Fruit Punch - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 78,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Fruit Punch - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 420,
+      "protein_g": 0,
+      "carbs_g": 113,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Lemonade - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Lemonade - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 380,
+      "protein_g": 0,
+      "carbs_g": 100,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Light Lemonade - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Light Lemonade - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweetened Iced Tea - 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweetened Iced Tea - 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wild Cherry Pepsi 20 fl oz",
+      "category": "Drinks",
+      "serving": "20 fl oz (591 mL)",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 70,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wild Cherry Pepsi 30 fl oz",
+      "category": "Drinks",
+      "serving": "30 fl oz (887 mL)",
+      "calories": 390,
+      "protein_g": 0,
+      "carbs_g": 106,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Grilled Cheese on Classic White Loaf - Whole",
+      "category": "Kids",
+      "serving": "1 Sandwich",
+      "calories": 810,
+      "protein_g": 32,
+      "carbs_g": 74,
+      "fat_g": 42,
+      "fiber_g": 5
+    },
+    {
+      "name": "Kids Ham & American Cheese on Classic White Loaf - Whole",
+      "category": "Kids",
+      "serving": "1 Sandwich",
+      "calories": 640,
+      "protein_g": 38,
+      "carbs_g": 69,
+      "fat_g": 24,
+      "fiber_g": 5
+    },
+    {
+      "name": "Kids Turkey & American Cheese on Classic White Loaf - Whole",
+      "category": "Kids",
+      "serving": "1 Sandwich",
+      "calories": 640,
+      "protein_g": 40,
+      "carbs_g": 69,
+      "fat_g": 22,
+      "fiber_g": 5
+    },
+    {
+      "name": "Mac & Cheese- Cup",
+      "category": "Kids",
+      "serving": "About 1 Cup",
+      "calories": 490,
+      "protein_g": 16,
+      "carbs_g": 34,
+      "fat_g": 32,
+      "fiber_g": 0
+    },
+    {
+      "name": "Broccoli Cheddar - Cup",
+      "category": "Kids",
+      "serving": "1 Cup",
+      "calories": 280,
+      "protein_g": 8,
+      "carbs_g": 17,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pastry - Asiago Croissant Twists 2 -Pack",
+      "category": "Pastries & Sweets",
+      "serving": "2 Twists",
+      "calories": 210,
+      "protein_g": 7,
+      "carbs_g": 16,
+      "fat_g": 13,
+      "fiber_g": 1
+    },
+    {
+      "name": "Muffin - Blueberry",
+      "category": "Pastries & Sweets",
+      "serving": "1 Muffin",
+      "calories": 530,
+      "protein_g": 7,
+      "carbs_g": 75,
+      "fat_g": 22,
+      "fiber_g": 2
+    },
+    {
+      "name": "Brownie",
+      "category": "Pastries & Sweets",
+      "serving": "1 Brownie",
+      "calories": 520,
+      "protein_g": 7,
+      "carbs_g": 70,
+      "fat_g": 24,
+      "fiber_g": 4
+    },
+    {
+      "name": "Cookie - Candy",
+      "category": "Pastries & Sweets",
+      "serving": "1 Cookie",
+      "calories": 410,
+      "protein_g": 4,
+      "carbs_g": 58,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "Muffie - Chocolate Chip",
+      "category": "Pastries & Sweets",
+      "serving": "1 Muffie",
+      "calories": 340,
+      "protein_g": 5,
+      "carbs_g": 51,
+      "fat_g": 13,
+      "fiber_g": 3
+    },
+    {
+      "name": "Cookie - Chocolate Chipper",
+      "category": "Pastries & Sweets",
+      "serving": "1 Cookie",
+      "calories": 390,
+      "protein_g": 4,
+      "carbs_g": 52,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pastry - Chocolate Croissant",
+      "category": "Pastries & Sweets",
+      "serving": "1 Croissant",
+      "calories": 410,
+      "protein_g": 7,
+      "carbs_g": 51,
+      "fat_g": 20,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cookie - Chocolate Coconut Macaroon",
+      "category": "Pastries & Sweets",
+      "serving": "1 macaroon",
+      "calories": 190,
+      "protein_g": 3,
+      "carbs_g": 23,
+      "fat_g": 10,
+      "fiber_g": 3
+    },
+    {
+      "name": "Cookie - Coconut Macaroon",
+      "category": "Pastries & Sweets",
+      "serving": "1 macaroon",
+      "calories": 180,
+      "protein_g": 3,
+      "carbs_g": 24,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cookie - PB&J",
+      "category": "Pastries & Sweets",
+      "serving": "1 Cookie",
+      "calories": 390,
+      "protein_g": 6,
+      "carbs_g": 52,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pastry - Cranberry Orange Loaf Slice - Naturally Flavored",
+      "category": "Pastries & Sweets",
+      "serving": "1 Slice",
+      "calories": 370,
+      "protein_g": 5,
+      "carbs_g": 53,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cookie - Dubai Style Chocolate Pistachio",
+      "category": "Pastries & Sweets",
+      "serving": "1 Cookie",
+      "calories": 220,
+      "protein_g": 4,
+      "carbs_g": 25,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cinnamon Roll",
+      "category": "Pastries & Sweets",
+      "serving": "1 Roll",
+      "calories": 580,
+      "protein_g": 7,
+      "carbs_g": 97,
+      "fat_g": 18,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cookie - Kitchen Sink",
+      "category": "Pastries & Sweets",
+      "serving": "1 Cookie",
+      "calories": 810,
+      "protein_g": 7,
+      "carbs_g": 100,
+      "fat_g": 42,
+      "fiber_g": 3
+    },
+    {
+      "name": "Mini Scone - Orange",
+      "category": "Pastries & Sweets",
+      "serving": "1 mini scone",
+      "calories": 180,
+      "protein_g": 3,
+      "carbs_g": 25,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cookie - Oatmeal Raisin with Berries",
+      "category": "Pastries & Sweets",
+      "serving": "1 Cookie",
+      "calories": 340,
+      "protein_g": 4,
+      "carbs_g": 55,
+      "fat_g": 12,
+      "fiber_g": 3
+    },
+    {
+      "name": "Scone - Orange",
+      "category": "Pastries & Sweets",
+      "serving": "1 Scone",
+      "calories": 540,
+      "protein_g": 8,
+      "carbs_g": 77,
+      "fat_g": 21,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pastry - Almond",
+      "category": "Pastries & Sweets",
+      "serving": "1 Pastry",
+      "calories": 470,
+      "protein_g": 10,
+      "carbs_g": 54,
+      "fat_g": 24,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pastry - Cherry",
+      "category": "Pastries & Sweets",
+      "serving": "1 Pastry",
+      "calories": 330,
+      "protein_g": 6,
+      "carbs_g": 53,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pastry - Pecan Braid",
+      "category": "Pastries & Sweets",
+      "serving": "1 Pastry",
+      "calories": 450,
+      "protein_g": 7,
+      "carbs_g": 51,
+      "fat_g": 25,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pastry - Cinnamon Croissant Bites with Icing - 12 Count",
+      "category": "Pastries & Sweets",
+      "serving": "12 Pieces with Icing",
+      "calories": 750,
+      "protein_g": 10,
+      "carbs_g": 113,
+      "fat_g": 29,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pastry - Cinnamon Croissant Bites with Icing - 24 Count",
+      "category": "Pastries & Sweets",
+      "serving": "24 Pieces with Icing",
+      "calories": 2180,
+      "protein_g": 22,
+      "carbs_g": 392,
+      "fat_g": 60,
+      "fiber_g": 5
+    },
+    {
+      "name": "Pastry - Cinnamon Croissant Bites with Icing - 4 Count",
+      "category": "Pastries & Sweets",
+      "serving": "4 Pieces with Icing",
+      "calories": 360,
+      "protein_g": 4,
+      "carbs_g": 65,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cookie - Petite Chocolate Chipper",
+      "category": "Pastries & Sweets",
+      "serving": "1 Cookie",
+      "calories": 100,
+      "protein_g": 1,
+      "carbs_g": 13,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Add on - White Icing Portion Cup",
+      "category": "Pastries & Sweets",
+      "serving": "1 portion cup",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salad Stuffer - Green Goddess Cobb with Chicken",
+      "category": "Salads & Stuffers",
+      "serving": "1 Stuffer",
+      "calories": 600,
+      "protein_g": 29,
+      "carbs_g": 61,
+      "fat_g": 26,
+      "fiber_g": 5
+    },
+    {
+      "name": "Asian Sesame Chicken - Half",
+      "category": "Salads & Stuffers",
+      "serving": "1/2 Salad",
+      "calories": 260,
+      "protein_g": 15,
+      "carbs_g": 17,
+      "fat_g": 15,
+      "fiber_g": 3
+    },
+    {
+      "name": "Asian Sesame Chicken- Half (no nuts)",
+      "category": "Salads & Stuffers",
+      "serving": "1/2 Salad",
+      "calories": 220,
+      "protein_g": 13,
+      "carbs_g": 16,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Asian Sesame Chicken - Whole",
+      "category": "Salads & Stuffers",
+      "serving": "1 Salad",
+      "calories": 530,
+      "protein_g": 29,
+      "carbs_g": 35,
+      "fat_g": 31,
+      "fiber_g": 6
+    },
+    {
+      "name": "Asian Sesame Chicken - Whole (no nuts)",
+      "category": "Salads & Stuffers",
+      "serving": "1 Salad",
+      "calories": 440,
+      "protein_g": 26,
+      "carbs_g": 32,
+      "fat_g": 23,
+      "fiber_g": 5
+    },
+    {
+      "name": "Caesar Salad - Half",
+      "category": "Salads & Stuffers",
+      "serving": "1/2 Salad",
+      "calories": 270,
+      "protein_g": 7,
+      "carbs_g": 11,
+      "fat_g": 22,
+      "fiber_g": 2
+    },
+    {
+      "name": "Caesar Salad - Whole",
+      "category": "Salads & Stuffers",
+      "serving": "1 Salad",
+      "calories": 530,
+      "protein_g": 14,
+      "carbs_g": 22,
+      "fat_g": 44,
+      "fiber_g": 4
+    },
+    {
+      "name": "Caesar with Chicken Salad - Half",
+      "category": "Salads & Stuffers",
+      "serving": "1/2 Salad",
+      "calories": 340,
+      "protein_g": 18,
+      "carbs_g": 14,
+      "fat_g": 23,
+      "fiber_g": 2
+    },
+    {
+      "name": "Caesar with Chicken Salad - Whole",
+      "category": "Salads & Stuffers",
+      "serving": "1 Salad",
+      "calories": 670,
+      "protein_g": 35,
+      "carbs_g": 27,
+      "fat_g": 47,
+      "fiber_g": 4
+    },
+    {
+      "name": "Fuji Apple Chicken Salad - Half",
+      "category": "Salads & Stuffers",
+      "serving": "1/2 Salad",
+      "calories": 350,
+      "protein_g": 14,
+      "carbs_g": 24,
+      "fat_g": 22,
+      "fiber_g": 3
+    },
+    {
+      "name": "Fuji Apple Chicken Salad without pecans - Half",
+      "category": "Salads & Stuffers",
+      "serving": "1/2 Salad",
+      "calories": 300,
+      "protein_g": 13,
+      "carbs_g": 23,
+      "fat_g": 17,
+      "fiber_g": 2
+    },
+    {
+      "name": "Fuji Apple Chicken Salad - Whole",
+      "category": "Salads & Stuffers",
+      "serving": "1 Salad",
+      "calories": 710,
+      "protein_g": 28,
+      "carbs_g": 49,
+      "fat_g": 44,
+      "fiber_g": 5
+    },
+    {
+      "name": "Fuji Apple Chicken Salad without pecans - Whole",
+      "category": "Salads & Stuffers",
+      "serving": "1 Salad",
+      "calories": 600,
+      "protein_g": 26,
+      "carbs_g": 47,
+      "fat_g": 34,
+      "fiber_g": 4
+    },
+    {
+      "name": "Greek Salad - Half",
+      "category": "Salads & Stuffers",
+      "serving": "1/2 Salad",
+      "calories": 310,
+      "protein_g": 4,
+      "carbs_g": 9,
+      "fat_g": 30,
+      "fiber_g": 2
+    },
+    {
+      "name": "Greek Salad - Whole",
+      "category": "Salads & Stuffers",
+      "serving": "1 Salad",
+      "calories": 630,
+      "protein_g": 8,
+      "carbs_g": 17,
+      "fat_g": 59,
+      "fiber_g": 5
+    },
+    {
+      "name": "Greek Salad with Chicken - Half",
+      "category": "Salads & Stuffers",
+      "serving": "1/2 Salad",
+      "calories": 380,
+      "protein_g": 15,
+      "carbs_g": 11,
+      "fat_g": 31,
+      "fiber_g": 3
+    },
+    {
+      "name": "Greek Salad with Chicken - Whole",
+      "category": "Salads & Stuffers",
+      "serving": "1 Salad",
+      "calories": 760,
+      "protein_g": 30,
+      "carbs_g": 22,
+      "fat_g": 62,
+      "fiber_g": 5
+    },
+    {
+      "name": "Green Goddess Cobb Salad with Chicken - Half",
+      "category": "Salads & Stuffers",
+      "serving": "1/2 Salad",
+      "calories": 290,
+      "protein_g": 20,
+      "carbs_g": 15,
+      "fat_g": 17,
+      "fiber_g": 4
+    },
+    {
+      "name": "Green Goddess Cobb Salad with Chicken - Whole",
+      "category": "Salads & Stuffers",
+      "serving": "1 Salad",
+      "calories": 580,
+      "protein_g": 40,
+      "carbs_g": 30,
+      "fat_g": 34,
+      "fiber_g": 7
+    },
+    {
+      "name": "Harvest Medley Chicken Salad - Half",
+      "category": "Salads & Stuffers",
+      "serving": "1/2 Salad",
+      "calories": 440,
+      "protein_g": 17,
+      "carbs_g": 41,
+      "fat_g": 23,
+      "fiber_g": 3
+    },
+    {
+      "name": "Harvest Medley Chicken Salad - Half - No Pecans",
+      "category": "Salads & Stuffers",
+      "serving": "1/2 Salad",
+      "calories": 390,
+      "protein_g": 16,
+      "carbs_g": 40,
+      "fat_g": 18,
+      "fiber_g": 3
+    },
+    {
+      "name": "Harvest Medley Chicken Salad - Whole",
+      "category": "Salads & Stuffers",
+      "serving": "1 Salad",
+      "calories": 880,
+      "protein_g": 34,
+      "carbs_g": 83,
+      "fat_g": 47,
+      "fiber_g": 7
+    },
+    {
+      "name": "Harvest Medley Chicken Salad - Whole - No Pecans",
+      "category": "Salads & Stuffers",
+      "serving": "1 Salad",
+      "calories": 780,
+      "protein_g": 32,
+      "carbs_g": 81,
+      "fat_g": 36,
+      "fiber_g": 6
+    },
+    {
+      "name": "Harvest Medley Salad - Half",
+      "category": "Salads & Stuffers",
+      "serving": "1/2 Salad",
+      "calories": 370,
+      "protein_g": 6,
+      "carbs_g": 39,
+      "fat_g": 22,
+      "fiber_g": 3
+    },
+    {
+      "name": "Harvest Medley Salad - Half - No Pecans",
+      "category": "Salads & Stuffers",
+      "serving": "1/2 Salad",
+      "calories": 320,
+      "protein_g": 5,
+      "carbs_g": 38,
+      "fat_g": 17,
+      "fiber_g": 3
+    },
+    {
+      "name": "Harvest Medley Salad - Whole",
+      "category": "Salads & Stuffers",
+      "serving": "1 Salad",
+      "calories": 750,
+      "protein_g": 12,
+      "carbs_g": 78,
+      "fat_g": 44,
+      "fiber_g": 7
+    },
+    {
+      "name": "Harvest Medley Salad - Whole - No Pecans",
+      "category": "Salads & Stuffers",
+      "serving": "1 Salad",
+      "calories": 640,
+      "protein_g": 11,
+      "carbs_g": 76,
+      "fat_g": 34,
+      "fiber_g": 6
+    },
+    {
+      "name": "Salad Stuffer - Harvest Medley Chicken Salad",
+      "category": "Salads & Stuffers",
+      "serving": "1 Stuffer",
+      "calories": 770,
+      "protein_g": 25,
+      "carbs_g": 91,
+      "fat_g": 34,
+      "fiber_g": 5
+    },
+    {
+      "name": "Salad Stuffer - Harvest Medley Chicken Salad - No Pecans",
+      "category": "Salads & Stuffers",
+      "serving": "1 Stuffer",
+      "calories": 720,
+      "protein_g": 24,
+      "carbs_g": 90,
+      "fat_g": 29,
+      "fiber_g": 4
+    },
+    {
+      "name": "Salad Stuffer - Harvest Medley Salad",
+      "category": "Salads & Stuffers",
+      "serving": "1 Stuffer",
+      "calories": 700,
+      "protein_g": 14,
+      "carbs_g": 88,
+      "fat_g": 33,
+      "fiber_g": 5
+    },
+    {
+      "name": "Salad Stuffer - Harvest Medley Salad - No Pecans",
+      "category": "Salads & Stuffers",
+      "serving": "1 Stuffer",
+      "calories": 650,
+      "protein_g": 13,
+      "carbs_g": 88,
+      "fat_g": 27,
+      "fiber_g": 4
+    },
+    {
+      "name": "Ranch Parm BLT Salad- Half",
+      "category": "Salads & Stuffers",
+      "serving": "1/2 Salad",
+      "calories": 380,
+      "protein_g": 12,
+      "carbs_g": 14,
+      "fat_g": 31,
+      "fiber_g": 2
+    },
+    {
+      "name": "Ranch Parm BLT Salad- Whole",
+      "category": "Salads & Stuffers",
+      "serving": "1 Salad",
+      "calories": 750,
+      "protein_g": 23,
+      "carbs_g": 28,
+      "fat_g": 62,
+      "fiber_g": 4
+    },
+    {
+      "name": "Salad Stuffer - Farmhouse Crunch Salad - No Almonds",
+      "category": "Salads & Stuffers",
+      "serving": "1 Stuffer",
+      "calories": 750,
+      "protein_g": 17,
+      "carbs_g": 62,
+      "fat_g": 49,
+      "fiber_g": 6
+    },
+    {
+      "name": "Salad Stuffer - Ranch Parm BLT",
+      "category": "Salads & Stuffers",
+      "serving": "1 Stuffer",
+      "calories": 780,
+      "protein_g": 21,
+      "carbs_g": 59,
+      "fat_g": 51,
+      "fiber_g": 3
+    },
+    {
+      "name": "Salad Stuffer - Southwest Chicken Ranch",
+      "category": "Salads & Stuffers",
+      "serving": "1 Stuffer",
+      "calories": 800,
+      "protein_g": 24,
+      "carbs_g": 65,
+      "fat_g": 50,
+      "fiber_g": 6
+    },
+    {
+      "name": "Southwest Chicken Ranch Salad - Half",
+      "category": "Salads & Stuffers",
+      "serving": "1/2 Salad",
+      "calories": 400,
+      "protein_g": 15,
+      "carbs_g": 20,
+      "fat_g": 30,
+      "fiber_g": 5
+    },
+    {
+      "name": "Southwest Chicken Ranch Salad - Whole",
+      "category": "Salads & Stuffers",
+      "serving": "1 Salad",
+      "calories": 810,
+      "protein_g": 30,
+      "carbs_g": 40,
+      "fat_g": 59,
+      "fiber_g": 10
+    },
+    {
+      "name": "Salad Stuffer - Farmhouse Crunch Salad",
+      "category": "Salads & Stuffers",
+      "serving": "1 Stuffer",
+      "calories": 790,
+      "protein_g": 18,
+      "carbs_g": 69,
+      "fat_g": 51,
+      "fiber_g": 7
+    },
+    {
+      "name": "Salad Stuffer - Ultimate Garden Steak Salad",
+      "category": "Salads & Stuffers",
+      "serving": "1 Stuffer",
+      "calories": 790,
+      "protein_g": 25,
+      "carbs_g": 70,
+      "fat_g": 46,
+      "fiber_g": 5
+    },
+    {
+      "name": "Salad Stuffer - Asian Sesame Chicken Salad",
+      "category": "Salads & Stuffers",
+      "serving": "1 Stuffer",
+      "calories": 580,
+      "protein_g": 22,
+      "carbs_g": 64,
+      "fat_g": 26,
+      "fiber_g": 5
+    },
+    {
+      "name": "Salad Stuffer - Asian Sesame Chicken - No Almonds",
+      "category": "Salads & Stuffers",
+      "serving": "1 Stuffer",
+      "calories": 540,
+      "protein_g": 21,
+      "carbs_g": 62,
+      "fat_g": 22,
+      "fiber_g": 4
+    },
+    {
+      "name": "Salad Stuffer - Caesar",
+      "category": "Salads & Stuffers",
+      "serving": "1 Stuffer",
+      "calories": 650,
+      "protein_g": 16,
+      "carbs_g": 55,
+      "fat_g": 41,
+      "fiber_g": 4
+    },
+    {
+      "name": "Salad Stuffer - Caesar with Chicken",
+      "category": "Salads & Stuffers",
+      "serving": "1 Stuffer",
+      "calories": 720,
+      "protein_g": 27,
+      "carbs_g": 57,
+      "fat_g": 42,
+      "fiber_g": 4
+    },
+    {
+      "name": "Salad Stuffer - Fuji Apple Chicken",
+      "category": "Salads & Stuffers",
+      "serving": "1 Stuffer",
+      "calories": 700,
+      "protein_g": 21,
+      "carbs_g": 74,
+      "fat_g": 34,
+      "fiber_g": 4
+    },
+    {
+      "name": "Salad Stuffer - Fuji Apple Chicken - No Pecans",
+      "category": "Salads & Stuffers",
+      "serving": "1 Stuffer",
+      "calories": 640,
+      "protein_g": 21,
+      "carbs_g": 73,
+      "fat_g": 29,
+      "fiber_g": 3
+    },
+    {
+      "name": "Salad Stuffer - Greek",
+      "category": "Salads & Stuffers",
+      "serving": "1 Stuffer",
+      "calories": 700,
+      "protein_g": 12,
+      "carbs_g": 51,
+      "fat_g": 50,
+      "fiber_g": 4
+    },
+    {
+      "name": "Salad Stuffer - Greek with Chicken",
+      "category": "Salads & Stuffers",
+      "serving": "1 Stuffer",
+      "calories": 770,
+      "protein_g": 23,
+      "carbs_g": 53,
+      "fat_g": 51,
+      "fiber_g": 4
+    },
+    {
+      "name": "Farmhouse Crunch Salad - Half",
+      "category": "Salads & Stuffers",
+      "serving": "1/2 Salad",
+      "calories": 400,
+      "protein_g": 9,
+      "carbs_g": 25,
+      "fat_g": 31,
+      "fiber_g": 5
+    },
+    {
+      "name": "Farmhouse Crunch Salad - Whole",
+      "category": "Salads & Stuffers",
+      "serving": "1 Salad",
+      "calories": 790,
+      "protein_g": 18,
+      "carbs_g": 49,
+      "fat_g": 61,
+      "fiber_g": 11
+    },
+    {
+      "name": "Farmhouse Crunch Salad - Half - No Almonds",
+      "category": "Salads & Stuffers",
+      "serving": "1/2 Salad",
+      "calories": 350,
+      "protein_g": 8,
+      "carbs_g": 18,
+      "fat_g": 28,
+      "fiber_g": 5
+    },
+    {
+      "name": "Farmhouse Crunch Salad - Whole - No Almonds",
+      "category": "Salads & Stuffers",
+      "serving": "1 Salad",
+      "calories": 700,
+      "protein_g": 17,
+      "carbs_g": 36,
+      "fat_g": 57,
+      "fiber_g": 10
+    },
+    {
+      "name": "Ultimate Garden Steak Salad - Half",
+      "category": "Salads & Stuffers",
+      "serving": "1/2 Salad",
+      "calories": 400,
+      "protein_g": 16,
+      "carbs_g": 26,
+      "fat_g": 26,
+      "fiber_g": 4
+    },
+    {
+      "name": "Ultimate Garden Steak Salad - Whole",
+      "category": "Salads & Stuffers",
+      "serving": "1 Salad",
+      "calories": 800,
+      "protein_g": 33,
+      "carbs_g": 53,
+      "fat_g": 52,
+      "fiber_g": 7
+    },
+    {
+      "name": "Market Bowl - All-In Veggie - Half",
+      "category": "Market Bowls",
+      "serving": "1/2 Bowl",
+      "calories": 450,
+      "protein_g": 7,
+      "carbs_g": 50,
+      "fat_g": 24,
+      "fiber_g": 5
+    },
+    {
+      "name": "Market Bowl -All-In Veggie - Whole",
+      "category": "Market Bowls",
+      "serving": "1 Bowl",
+      "calories": 910,
+      "protein_g": 14,
+      "carbs_g": 101,
+      "fat_g": 49,
+      "fiber_g": 10
+    },
+    {
+      "name": "Market Bowl - Carnitas Elote - Half",
+      "category": "Market Bowls",
+      "serving": "1/2 Bowl",
+      "calories": 550,
+      "protein_g": 22,
+      "carbs_g": 43,
+      "fat_g": 32,
+      "fiber_g": 6
+    },
+    {
+      "name": "Market Bowl - Carnitas Elote - Whole",
+      "category": "Market Bowls",
+      "serving": "1 Bowl",
+      "calories": 1100,
+      "protein_g": 44,
+      "carbs_g": 86,
+      "fat_g": 63,
+      "fiber_g": 11
+    },
+    {
+      "name": "Market Bowl - Sesame Ginger Chicken - Half",
+      "category": "Market Bowls",
+      "serving": "1/2 Bowl",
+      "calories": 470,
+      "protein_g": 19,
+      "carbs_g": 47,
+      "fat_g": 22,
+      "fiber_g": 5
+    },
+    {
+      "name": "Market Bowl - Sesame Ginger Chicken - Whole",
+      "category": "Market Bowls",
+      "serving": "1 Bowl",
+      "calories": 930,
+      "protein_g": 38,
+      "carbs_g": 95,
+      "fat_g": 44,
+      "fiber_g": 11
+    },
+    {
+      "name": "Market Bowl - Sesame Ginger Chicken - Half - No Almonds",
+      "category": "Market Bowls",
+      "serving": "1/2 Bowl",
+      "calories": 420,
+      "protein_g": 18,
+      "carbs_g": 41,
+      "fat_g": 20,
+      "fiber_g": 5
+    },
+    {
+      "name": "Market Bowl - Sesame Ginger Chicken - Whole - No Almonds",
+      "category": "Market Bowls",
+      "serving": "1 Bowl",
+      "calories": 840,
+      "protein_g": 36,
+      "carbs_g": 82,
+      "fat_g": 40,
+      "fiber_g": 10
+    },
+    {
+      "name": "Chicken Bacon Rancher on Black Pepper Focaccia - Half",
+      "category": "Market Bowls",
+      "serving": "1/2 Sandwich",
+      "calories": 510,
+      "protein_g": 26,
+      "carbs_g": 44,
+      "fat_g": 26,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chicken Bacon Rancher on Black Pepper Focaccia - Whole",
+      "category": "Market Bowls",
+      "serving": "1 Sandwich",
+      "calories": 1010,
+      "protein_g": 52,
+      "carbs_g": 87,
+      "fat_g": 51,
+      "fiber_g": 3
+    },
+    {
+      "name": "Mediterranean Veggie on Tomato Basil - Half",
+      "category": "Market Bowls",
+      "serving": "1/2 Sandwich",
+      "calories": 260,
+      "protein_g": 9,
+      "carbs_g": 41,
+      "fat_g": 7,
+      "fiber_g": 4
+    },
+    {
+      "name": "Mediterranean Veggie on Tomato Basil - Whole",
+      "category": "Market Bowls",
+      "serving": "1 Sandwich",
+      "calories": 520,
+      "protein_g": 18,
+      "carbs_g": 83,
+      "fat_g": 14,
+      "fiber_g": 8
+    },
+    {
+      "name": "Toasted Italiano on Baguette - Half",
+      "category": "Market Bowls",
+      "serving": "1/2 Sandwich",
+      "calories": 670,
+      "protein_g": 29,
+      "carbs_g": 65,
+      "fat_g": 32,
+      "fiber_g": 3
+    },
+    {
+      "name": "Toasted Italiano on Baguette - Whole",
+      "category": "Market Bowls",
+      "serving": "1 Sandwich",
+      "calories": 1330,
+      "protein_g": 58,
+      "carbs_g": 130,
+      "fat_g": 64,
+      "fiber_g": 5
+    },
+    {
+      "name": "Bacon Turkey Bravo® Sandwich on Tomato Basil - Half",
+      "category": "Market Bowls",
+      "serving": "1/2 Sandwich",
+      "calories": 430,
+      "protein_g": 24,
+      "carbs_g": 40,
+      "fat_g": 20,
+      "fiber_g": 3
+    },
+    {
+      "name": "Bacon Turkey Bravo® Sandwich on Tomato Basil - Whole",
+      "category": "Market Bowls",
+      "serving": "1 Sandwich",
+      "calories": 860,
+      "protein_g": 47,
+      "carbs_g": 80,
+      "fat_g": 39,
+      "fiber_g": 6
+    },
+    {
+      "name": "Chipotle Chicken Avo Melt on Black Pepper Focaccia Round - Half",
+      "category": "Market Bowls",
+      "serving": "1/2 Sandwich",
+      "calories": 500,
+      "protein_g": 21,
+      "carbs_g": 45,
+      "fat_g": 26,
+      "fiber_g": 3
+    },
+    {
+      "name": "Chipotle Chicken Avo Melt on Black Pepper Focaccia Round - Whole",
+      "category": "Market Bowls",
+      "serving": "1 Sandwich",
+      "calories": 1000,
+      "protein_g": 43,
+      "carbs_g": 90,
+      "fat_g": 52,
+      "fiber_g": 7
+    },
+    {
+      "name": "Ciabatta Cheesesteak on Ciabatta- Half",
+      "category": "Market Bowls",
+      "serving": "1/2 Sandwich",
+      "calories": 580,
+      "protein_g": 26,
+      "carbs_g": 58,
+      "fat_g": 27,
+      "fiber_g": 3
+    },
+    {
+      "name": "Ciabatta Cheesesteak on Ciabatta- Whole",
+      "category": "Market Bowls",
+      "serving": "1 Sandwich",
+      "calories": 1160,
+      "protein_g": 52,
+      "carbs_g": 117,
+      "fat_g": 54,
+      "fiber_g": 5
+    },
+    {
+      "name": "Cranberry Walnut Chicken Salad on Country Rustic - Half",
+      "category": "Market Bowls",
+      "serving": "1/2 Sandwich",
+      "calories": 350,
+      "protein_g": 16,
+      "carbs_g": 34,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cranberry Walnut Chicken Salad on Country Rustic - Whole",
+      "category": "Market Bowls",
+      "serving": "1 Sandwich",
+      "calories": 690,
+      "protein_g": 32,
+      "carbs_g": 68,
+      "fat_g": 33,
+      "fiber_g": 5
+    },
+    {
+      "name": "Grilled Cheese on Classic White Loaf - Half",
+      "category": "Market Bowls",
+      "serving": "1/2 Sandwich",
+      "calories": 400,
+      "protein_g": 16,
+      "carbs_g": 37,
+      "fat_g": 21,
+      "fiber_g": 3
+    },
+    {
+      "name": "Grilled Chicken & Avo BLT on Country Rustic Sourdough - Half",
+      "category": "Market Bowls",
+      "serving": "1/2 Sandwich",
+      "calories": 470,
+      "protein_g": 24,
+      "carbs_g": 33,
+      "fat_g": 27,
+      "fiber_g": 3
+    },
+    {
+      "name": "Grilled Chicken & Avo BLT on Country Rustic Sourdough - Whole",
+      "category": "Market Bowls",
+      "serving": "1 Sandwich",
+      "calories": 940,
+      "protein_g": 48,
+      "carbs_g": 66,
+      "fat_g": 55,
+      "fiber_g": 7
+    },
+    {
+      "name": "Smokehouse BBQ Chicken on Artisan Ciabatta - Half",
+      "category": "Market Bowls",
+      "serving": "1/2 Sandwich",
+      "calories": 410,
+      "protein_g": 22,
+      "carbs_g": 56,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Smokehouse BBQ Chicken on Artisan Ciabatta - Whole",
+      "category": "Market Bowls",
+      "serving": "1 Sandwich",
+      "calories": 820,
+      "protein_g": 45,
+      "carbs_g": 113,
+      "fat_g": 21,
+      "fiber_g": 4
+    },
+    {
+      "name": "Spicy Fiesta Chicken on Ciabatta - Half",
+      "category": "Market Bowls",
+      "serving": "1/2 Sandwich",
+      "calories": 470,
+      "protein_g": 26,
+      "carbs_g": 56,
+      "fat_g": 16,
+      "fiber_g": 3
+    },
+    {
+      "name": "Spicy Fiesta Chicken on Ciabatta - Whole",
+      "category": "Market Bowls",
+      "serving": "1 Sandwich",
+      "calories": 940,
+      "protein_g": 51,
+      "carbs_g": 112,
+      "fat_g": 32,
+      "fiber_g": 6
+    },
+    {
+      "name": "Toasted Frontega Chicken on Black Pepper Focaccia - Half",
+      "category": "Market Bowls",
+      "serving": "1/2 Sandwich",
+      "calories": 430,
+      "protein_g": 20,
+      "carbs_g": 43,
+      "fat_g": 19,
+      "fiber_g": 2
+    },
+    {
+      "name": "Toasted Frontega Chicken on Black Pepper Focaccia - Whole",
+      "category": "Market Bowls",
+      "serving": "1 Sandwich",
+      "calories": 860,
+      "protein_g": 40,
+      "carbs_g": 87,
+      "fat_g": 39,
+      "fiber_g": 4
+    },
+    {
+      "name": "Tomato Basil BLT on Tomato Basil Miche - Half",
+      "category": "Market Bowls",
+      "serving": "1/2 Sandwich",
+      "calories": 390,
+      "protein_g": 12,
+      "carbs_g": 35,
+      "fat_g": 22,
+      "fiber_g": 3
+    },
+    {
+      "name": "Tomato Basil BLT on Tomato Basil Miche - Whole",
+      "category": "Market Bowls",
+      "serving": "1 Sandwich",
+      "calories": 780,
+      "protein_g": 23,
+      "carbs_g": 71,
+      "fat_g": 45,
+      "fiber_g": 6
+    },
+    {
+      "name": "Tuna Salad on Country Rustic Sourdough - Half",
+      "category": "Market Bowls",
+      "serving": "1/2 Sandwich",
+      "calories": 300,
+      "protein_g": 12,
+      "carbs_g": 30,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Tuna Salad on Country Rustic Sourdough - Whole",
+      "category": "Market Bowls",
+      "serving": "1 Sandwich",
+      "calories": 590,
+      "protein_g": 24,
+      "carbs_g": 60,
+      "fat_g": 29,
+      "fiber_g": 4
+    },
+    {
+      "name": "Turkey & Cheddar on Country Rustic Sourdough - Half",
+      "category": "Market Bowls",
+      "serving": "1/2 Sandwich",
+      "calories": 420,
+      "protein_g": 20,
+      "carbs_g": 31,
+      "fat_g": 24,
+      "fiber_g": 2
+    },
+    {
+      "name": "Turkey & Cheddar on Country Rustic Sourdough - Whole",
+      "category": "Market Bowls",
+      "serving": "1 Sandwich",
+      "calories": 840,
+      "protein_g": 40,
+      "carbs_g": 63,
+      "fat_g": 47,
+      "fiber_g": 3
+    },
+    {
+      "name": "Asiago Bagel Stack Sandwich - Chicken Roma",
+      "category": "Market Bowls",
+      "serving": "1 Sandwich",
+      "calories": 610,
+      "protein_g": 31,
+      "carbs_g": 59,
+      "fat_g": 27,
+      "fiber_g": 3
+    },
+    {
+      "name": "Asiago Bagel Stack Sandwich - Spicy Steak",
+      "category": "Market Bowls",
+      "serving": "1 Sandwich",
+      "calories": 630,
+      "protein_g": 39,
+      "carbs_g": 62,
+      "fat_g": 26,
+      "fiber_g": 4
+    },
+    {
+      "name": "Toasted Caprese Focaccia - Half",
+      "category": "Market Bowls",
+      "serving": "1/2 sandwich",
+      "calories": 370,
+      "protein_g": 15,
+      "carbs_g": 48,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Toasted Caprese Focaccia - Whole",
+      "category": "Market Bowls",
+      "serving": "1sandwich",
+      "calories": 740,
+      "protein_g": 30,
+      "carbs_g": 97,
+      "fat_g": 27,
+      "fiber_g": 4
+    },
+    {
+      "name": "French Ciabatta Dipper - Half",
+      "category": "Market Bowls",
+      "serving": "1/2 Sandwich + Dipper",
+      "calories": 640,
+      "protein_g": 34,
+      "carbs_g": 61,
+      "fat_g": 30,
+      "fiber_g": 2
+    },
+    {
+      "name": "French Ciabatta Dipper - Whole",
+      "category": "Market Bowls",
+      "serving": "1 Sandwich + Dipper",
+      "calories": 1240,
+      "protein_g": 66,
+      "carbs_g": 114,
+      "fat_g": 58,
+      "fiber_g": 4
+    },
+    {
+      "name": "Chicken Pesto Ciabatta Dipper - Half",
+      "category": "Market Bowls",
+      "serving": "1/2 Sandwich + Dipper",
+      "calories": 560,
+      "protein_g": 30,
+      "carbs_g": 61,
+      "fat_g": 21,
+      "fiber_g": 3
+    },
+    {
+      "name": "Chicken Pesto Ciabatta Dipper - Whole",
+      "category": "Market Bowls",
+      "serving": "1 Sandwich + Dipper",
+      "calories": 1010,
+      "protein_g": 59,
+      "carbs_g": 114,
+      "fat_g": 35,
+      "fiber_g": 5
+    },
+    {
+      "name": "Side - Apple",
+      "category": "Sides",
+      "serving": "1 Apple",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 5
+    },
+    {
+      "name": "Banana",
+      "category": "Sides",
+      "serving": "1 Banana",
+      "calories": 90,
+      "protein_g": 1,
+      "carbs_g": 23,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "French Baguette - Side Portion",
+      "category": "Sides",
+      "serving": "3 1/2 inch slice",
+      "calories": 190,
+      "protein_g": 6,
+      "carbs_g": 41,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Greek Yogurt with Berries",
+      "category": "Sides",
+      "serving": "1 Parfait",
+      "calories": 250,
+      "protein_g": 15,
+      "carbs_g": 27,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Kettle Cooked Potato Chips",
+      "category": "Sides",
+      "serving": "1 package",
+      "calories": 150,
+      "protein_g": 2,
+      "carbs_g": 17,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Side - Pickle Spear",
+      "category": "Sides",
+      "serving": "1 Spear",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fruit Cup",
+      "category": "Sides",
+      "serving": "1 container",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 14,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bistro French Onion Soup - Group",
+      "category": "Soups & Mac",
+      "serving": "1 Container",
+      "calories": 810,
+      "protein_g": 26,
+      "carbs_g": 88,
+      "fat_g": 40,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bistro French Onion - Bowl",
+      "category": "Soups & Mac",
+      "serving": "1 1/2 Cups",
+      "calories": 300,
+      "protein_g": 10,
+      "carbs_g": 33,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bistro French Onion - Cup",
+      "category": "Soups & Mac",
+      "serving": "1 Cup",
+      "calories": 200,
+      "protein_g": 6,
+      "carbs_g": 22,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bistro French Onion - Bread Bowl",
+      "category": "Soups & Mac",
+      "serving": "1 Bread bowl with soup",
+      "calories": 850,
+      "protein_g": 27,
+      "carbs_g": 158,
+      "fat_g": 12,
+      "fiber_g": 5
+    },
+    {
+      "name": "Vegetarian Creamy Tomato with Croissant Croutons - Bread Bowl",
+      "category": "Soups & Mac",
+      "serving": "1 Bread bowl with soup",
+      "calories": 880,
+      "protein_g": 24,
+      "carbs_g": 157,
+      "fat_g": 18,
+      "fiber_g": 6
+    },
+    {
+      "name": "Vegetarian Creamy Tomato Soup with Croissant Croutons - Bowl",
+      "category": "Soups & Mac",
+      "serving": "1 1/2 Cups",
+      "calories": 340,
+      "protein_g": 4,
+      "carbs_g": 30,
+      "fat_g": 23,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vegetarian Creamy Tomato Soup with Croissant Croutons - Cup",
+      "category": "Soups & Mac",
+      "serving": "1 Cup",
+      "calories": 240,
+      "protein_g": 3,
+      "carbs_g": 21,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vegetarian Creamy Tomato Soup with Croissant Croutons - Group",
+      "category": "Soups & Mac",
+      "serving": "1 Container",
+      "calories": 840,
+      "protein_g": 10,
+      "carbs_g": 75,
+      "fat_g": 56,
+      "fiber_g": 2
+    },
+    {
+      "name": "Broccoli Cheddar - Bowl",
+      "category": "Soups & Mac",
+      "serving": "1 1/2 Cups",
+      "calories": 420,
+      "protein_g": 12,
+      "carbs_g": 25,
+      "fat_g": 31,
+      "fiber_g": 1
+    },
+    {
+      "name": "Broccoli Cheddar Soup - Group",
+      "category": "Soups & Mac",
+      "serving": "1 Container",
+      "calories": 990,
+      "protein_g": 28,
+      "carbs_g": 58,
+      "fat_g": 72,
+      "fiber_g": 3
+    },
+    {
+      "name": "Broccoli Cheddar Soup - Bread Bowl",
+      "category": "Soups & Mac",
+      "serving": "1 Bread bowl with soup",
+      "calories": 930,
+      "protein_g": 29,
+      "carbs_g": 152,
+      "fat_g": 23,
+      "fiber_g": 6
+    },
+    {
+      "name": "Bacon Mac & Cheese - Group",
+      "category": "Soups & Mac",
+      "serving": "1 Container",
+      "calories": 2110,
+      "protein_g": 73,
+      "carbs_g": 137,
+      "fat_g": 141,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon Mac & Cheese - Bowl",
+      "category": "Soups & Mac",
+      "serving": "About 2 Cups",
+      "calories": 1050,
+      "protein_g": 36,
+      "carbs_g": 68,
+      "fat_g": 71,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon Mac & Cheese - Cup",
+      "category": "Soups & Mac",
+      "serving": "About 1 Cup",
+      "calories": 530,
+      "protein_g": 18,
+      "carbs_g": 34,
+      "fat_g": 35,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon Mac & Cheese - Bread Bowl",
+      "category": "Soups & Mac",
+      "serving": "1 bread bowl with mac & cheese",
+      "calories": 1170,
+      "protein_g": 39,
+      "carbs_g": 170,
+      "fat_g": 38,
+      "fiber_g": 5
+    },
+    {
+      "name": "Cream of Chicken & Wild Rice - Bowl",
+      "category": "Soups & Mac",
+      "serving": "1 1/2 Cups",
+      "calories": 300,
+      "protein_g": 9,
+      "carbs_g": 29,
+      "fat_g": 16,
+      "fiber_g": 3
+    },
+    {
+      "name": "Cream of Chicken & Wild Rice - Cup",
+      "category": "Soups & Mac",
+      "serving": "1 Cup",
+      "calories": 200,
+      "protein_g": 6,
+      "carbs_g": 19,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cream of Chicken & Wild Rice Soup - Bread Bowl",
+      "category": "Soups & Mac",
+      "serving": "1 Bread bowl with soup",
+      "calories": 850,
+      "protein_g": 27,
+      "carbs_g": 155,
+      "fat_g": 13,
+      "fiber_g": 7
+    },
+    {
+      "name": "Cream of Chicken and Wild Rice - Group",
+      "category": "Soups & Mac",
+      "serving": "1 Container",
+      "calories": 700,
+      "protein_g": 22,
+      "carbs_g": 67,
+      "fat_g": 38,
+      "fiber_g": 7
+    },
+    {
+      "name": "Homestyle Chicken Noodle Soup - Bowl",
+      "category": "Soups & Mac",
+      "serving": "1 bowl",
+      "calories": 180,
+      "protein_g": 14,
+      "carbs_g": 21,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Homestyle Chicken Noodle Soup - Cup",
+      "category": "Soups & Mac",
+      "serving": "1 cup",
+      "calories": 120,
+      "protein_g": 10,
+      "carbs_g": 14,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Homestyle Chicken Noodle Soup - Bread Bowl",
+      "category": "Soups & Mac",
+      "serving": "1 bread bowl with soup",
+      "calories": 770,
+      "protein_g": 30,
+      "carbs_g": 150,
+      "fat_g": 5,
+      "fiber_g": 5
+    },
+    {
+      "name": "Homestyle Chicken Noodle Soup - Group",
+      "category": "Soups & Mac",
+      "serving": "1 container",
+      "calories": 420,
+      "protein_g": 33,
+      "carbs_g": 49,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mac & Cheese - Bowl",
+      "category": "Soups & Mac",
+      "serving": "About 2 Cups",
+      "calories": 980,
+      "protein_g": 32,
+      "carbs_g": 68,
+      "fat_g": 64,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mac & Cheese - Bread Bowl",
+      "category": "Soups & Mac",
+      "serving": "1 bread bowl with mac & cheese",
+      "calories": 1140,
+      "protein_g": 37,
+      "carbs_g": 170,
+      "fat_g": 34,
+      "fiber_g": 5
+    },
+    {
+      "name": "Mac & Cheese - Group",
+      "category": "Soups & Mac",
+      "serving": "1 Container",
+      "calories": 1950,
+      "protein_g": 63,
+      "carbs_g": 135,
+      "fat_g": 128,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hearty Fireside Chili - Bowl",
+      "category": "Soups & Mac",
+      "serving": "1 Bowl",
+      "calories": 410,
+      "protein_g": 19,
+      "carbs_g": 49,
+      "fat_g": 15,
+      "fiber_g": 9
+    },
+    {
+      "name": "Hearty Fireside Chili - Bread Bowl",
+      "category": "Soups & Mac",
+      "serving": "1 Bread bowl with soup",
+      "calories": 940,
+      "protein_g": 40,
+      "carbs_g": 163,
+      "fat_g": 14,
+      "fiber_g": 11
+    },
+    {
+      "name": "Hearty Fireside Chili - Cup",
+      "category": "Soups & Mac",
+      "serving": "1 Cup",
+      "calories": 270,
+      "protein_g": 13,
+      "carbs_g": 32,
+      "fat_g": 10,
+      "fiber_g": 6
+    },
+    {
+      "name": "Hearty Fireside Chili - Group",
+      "category": "Soups & Mac",
+      "serving": "1 Container",
+      "calories": 950,
+      "protein_g": 45,
+      "carbs_g": 113,
+      "fat_g": 35,
+      "fiber_g": 22
+    },
+    {
+      "name": "Three Cheese Lasagna Soup - Bowl",
+      "category": "Soups & Mac",
+      "serving": "1 Bowl",
+      "calories": 360,
+      "protein_g": 19,
+      "carbs_g": 33,
+      "fat_g": 17,
+      "fiber_g": 3
+    },
+    {
+      "name": "Three Cheese Lasagna Soup - Bread Bowl",
+      "category": "Soups & Mac",
+      "serving": "1 Bread bowl with soup",
+      "calories": 880,
+      "protein_g": 33,
+      "carbs_g": 158,
+      "fat_g": 13,
+      "fiber_g": 7
+    },
+    {
+      "name": "Three Cheese Lasagna Soup - Cup",
+      "category": "Soups & Mac",
+      "serving": "1 Cup",
+      "calories": 230,
+      "protein_g": 12,
+      "carbs_g": 22,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Three Cheese Lasagna Soup - Group",
+      "category": "Soups & Mac",
+      "serving": "1 Container",
+      "calories": 820,
+      "protein_g": 43,
+      "carbs_g": 77,
+      "fat_g": 39,
+      "fiber_g": 8
+    },
+    {
+      "name": "Vegetarian Autumn Squash Soup - Bowl",
+      "category": "Soups & Mac",
+      "serving": "1 1/2 Cups",
+      "calories": 330,
+      "protein_g": 8,
+      "carbs_g": 41,
+      "fat_g": 17,
+      "fiber_g": 5
+    },
+    {
+      "name": "Vegetarian Autumn Squash Soup - Cup",
+      "category": "Soups & Mac",
+      "serving": "1 Cup",
+      "calories": 220,
+      "protein_g": 5,
+      "carbs_g": 27,
+      "fat_g": 11,
+      "fiber_g": 3
+    },
+    {
+      "name": "Vegetarian Autumn Squash Soup with Pepitas - Bread Bowl",
+      "category": "Soups & Mac",
+      "serving": "1 Bread bowl with soup",
+      "calories": 860,
+      "protein_g": 26,
+      "carbs_g": 163,
+      "fat_g": 13,
+      "fiber_g": 8
+    },
+    {
+      "name": "Vegetarian Autumn Squash Soup - Group",
+      "category": "Soups & Mac",
+      "serving": "1 Container",
+      "calories": 760,
+      "protein_g": 18,
+      "carbs_g": 96,
+      "fat_g": 38,
+      "fiber_g": 11
+    },
+    {
+      "name": "Rustic Baked Potato Soup - Bowl",
+      "category": "Soups & Mac",
+      "serving": "1 1/2 cups",
+      "calories": 430,
+      "protein_g": 14,
+      "carbs_g": 38,
+      "fat_g": 26,
+      "fiber_g": 2
+    },
+    {
+      "name": "Rustic Baked Potato Soup - Bread Bowl",
+      "category": "Soups & Mac",
+      "serving": "1 bread bowl with soup",
+      "calories": 920,
+      "protein_g": 29,
+      "carbs_g": 161,
+      "fat_g": 19,
+      "fiber_g": 6
+    },
+    {
+      "name": "Rustic Baked Potato Soup - Cup",
+      "category": "Soups & Mac",
+      "serving": "1 Cup",
+      "calories": 280,
+      "protein_g": 9,
+      "carbs_g": 25,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Rustic Baked Potato Soup - Group",
+      "category": "Soups & Mac",
+      "serving": "1 Container",
+      "calories": 990,
+      "protein_g": 32,
+      "carbs_g": 88,
+      "fat_g": 58,
+      "fiber_g": 5
+    },
+    {
+      "name": "Ultimate Mac Stuffer",
+      "category": "Soups & Mac",
+      "serving": "1 Stuffer",
+      "calories": 930,
+      "protein_g": 39,
+      "carbs_g": 78,
+      "fat_g": 51,
+      "fiber_g": 1
+    },
+    {
+      "name": "Catering Asian Sesame Chicken Salad - serves 10",
+      "category": "Catering",
+      "serving": "2 Containers",
+      "calories": 2530,
+      "protein_g": 148,
+      "carbs_g": 172,
+      "fat_g": 142,
+      "fiber_g": 34
+    },
+    {
+      "name": "Catering Asian Sesame Chicken Salad - serves 10 (no nuts)",
+      "category": "Catering",
+      "serving": "2 Containers",
+      "calories": 2100,
+      "protein_g": 134,
+      "carbs_g": 157,
+      "fat_g": 104,
+      "fiber_g": 26
+    },
+    {
+      "name": "Catering Asian Sesame Chicken Salad - serves 5",
+      "category": "Catering",
+      "serving": "1 Container",
+      "calories": 1260,
+      "protein_g": 74,
+      "carbs_g": 86,
+      "fat_g": 71,
+      "fiber_g": 17
+    },
+    {
+      "name": "Catering Asian Sesame Chicken Salad - serves 5 (no nuts)",
+      "category": "Catering",
+      "serving": "1 Container",
+      "calories": 1050,
+      "protein_g": 67,
+      "carbs_g": 79,
+      "fat_g": 52,
+      "fiber_g": 13
+    },
+    {
+      "name": "Catering Asian Sesame Salad - serves 10",
+      "category": "Catering",
+      "serving": "2 Containers",
+      "calories": 1840,
+      "protein_g": 40,
+      "carbs_g": 146,
+      "fat_g": 129,
+      "fiber_g": 34
+    },
+    {
+      "name": "Catering Asian Sesame Salad - serves 5",
+      "category": "Catering",
+      "serving": "1 Container",
+      "calories": 920,
+      "protein_g": 20,
+      "carbs_g": 73,
+      "fat_g": 65,
+      "fiber_g": 17
+    },
+    {
+      "name": "Catering Asian Sesame Salad - Half (no nuts and no chicken)",
+      "category": "Catering",
+      "serving": "1/2 Salad",
+      "calories": 150,
+      "protein_g": 2,
+      "carbs_g": 13,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Catering Asian Sesame Salad - Whole (no nuts and no chicken)",
+      "category": "Catering",
+      "serving": "1 Salad",
+      "calories": 310,
+      "protein_g": 5,
+      "carbs_g": 27,
+      "fat_g": 21,
+      "fiber_g": 4
+    },
+    {
+      "name": "Catering Asian Sesame Salad - Half",
+      "category": "Catering",
+      "serving": "1/2 Salad",
+      "calories": 200,
+      "protein_g": 4,
+      "carbs_g": 15,
+      "fat_g": 14,
+      "fiber_g": 3
+    },
+    {
+      "name": "Catering Asian Sesame Salad - serves 10 (no nuts and no chicken)",
+      "category": "Catering",
+      "serving": "2 Containers",
+      "calories": 1420,
+      "protein_g": 25,
+      "carbs_g": 131,
+      "fat_g": 92,
+      "fiber_g": 26
+    },
+    {
+      "name": "Catering Asian Sesame Salad - serves 5 (no nuts and no chicken)",
+      "category": "Catering",
+      "serving": "1 Container",
+      "calories": 710,
+      "protein_g": 12,
+      "carbs_g": 66,
+      "fat_g": 46,
+      "fiber_g": 13
+    },
+    {
+      "name": "Catering Asian Sesame Salad - Whole",
+      "category": "Catering",
+      "serving": "1 Salad",
+      "calories": 390,
+      "protein_g": 8,
+      "carbs_g": 30,
+      "fat_g": 28,
+      "fiber_g": 6
+    },
+    {
+      "name": "Catering Caesar Salad - Serves 10",
+      "category": "Catering",
+      "serving": "2 Containers",
+      "calories": 2500,
+      "protein_g": 69,
+      "carbs_g": 114,
+      "fat_g": 202,
+      "fiber_g": 25
+    },
+    {
+      "name": "Catering Caesar Salad - Serves 5",
+      "category": "Catering",
+      "serving": "1 Container",
+      "calories": 1250,
+      "protein_g": 34,
+      "carbs_g": 57,
+      "fat_g": 101,
+      "fiber_g": 13
+    },
+    {
+      "name": "Catering Caesar Salad with Chicken - Serves 10",
+      "category": "Catering",
+      "serving": "2 Containers",
+      "calories": 3190,
+      "protein_g": 178,
+      "carbs_g": 140,
+      "fat_g": 214,
+      "fiber_g": 26
+    },
+    {
+      "name": "Catering Caesar Salad with Chicken - Serves 5",
+      "category": "Catering",
+      "serving": "1 Container",
+      "calories": 1590,
+      "protein_g": 89,
+      "carbs_g": 70,
+      "fat_g": 107,
+      "fiber_g": 13
+    },
+    {
+      "name": "Catering Fuji Apple Salad - Half",
+      "category": "Catering",
+      "serving": "1/2 Salad",
+      "calories": 280,
+      "protein_g": 3,
+      "carbs_g": 22,
+      "fat_g": 21,
+      "fiber_g": 3
+    },
+    {
+      "name": "Catering Fuji Apple Salad - serves 10",
+      "category": "Catering",
+      "serving": "2 Containers",
+      "calories": 2630,
+      "protein_g": 31,
+      "carbs_g": 206,
+      "fat_g": 189,
+      "fiber_g": 27
+    },
+    {
+      "name": "Catering Fuji Apple Salad - serves 5",
+      "category": "Catering",
+      "serving": "1 Container",
+      "calories": 1310,
+      "protein_g": 15,
+      "carbs_g": 103,
+      "fat_g": 95,
+      "fiber_g": 14
+    },
+    {
+      "name": "Catering Fuji Apple Salad - Whole",
+      "category": "Catering",
+      "serving": "1 Salad",
+      "calories": 570,
+      "protein_g": 6,
+      "carbs_g": 44,
+      "fat_g": 42,
+      "fiber_g": 5
+    },
+    {
+      "name": "Catering Fuji Apple without pecans - Half",
+      "category": "Catering",
+      "serving": "1/2 Salad",
+      "calories": 230,
+      "protein_g": 2,
+      "carbs_g": 21,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Catering Fuji Apple Salad without pecans - serves 10",
+      "category": "Catering",
+      "serving": "2 Containers",
+      "calories": 2090,
+      "protein_g": 24,
+      "carbs_g": 195,
+      "fat_g": 138,
+      "fiber_g": 22
+    },
+    {
+      "name": "Catering Fuji Apple Salad without pecans - serves 5",
+      "category": "Catering",
+      "serving": "1 Container",
+      "calories": 1050,
+      "protein_g": 12,
+      "carbs_g": 98,
+      "fat_g": 69,
+      "fiber_g": 11
+    },
+    {
+      "name": "Catering Fuji Apple without pecans - Whole",
+      "category": "Catering",
+      "serving": "1 Salad",
+      "calories": 460,
+      "protein_g": 4,
+      "carbs_g": 42,
+      "fat_g": 31,
+      "fiber_g": 4
+    },
+    {
+      "name": "Catering Fuji Apple with Chicken Salad without Pecans- Serves 5",
+      "category": "Catering",
+      "serving": "1 Container",
+      "calories": 1390,
+      "protein_g": 66,
+      "carbs_g": 111,
+      "fat_g": 75,
+      "fiber_g": 11
+    },
+    {
+      "name": "Catering Fuji Apple with Chicken Salad - Serves 10",
+      "category": "Catering",
+      "serving": "2 Containers",
+      "calories": 3310,
+      "protein_g": 140,
+      "carbs_g": 232,
+      "fat_g": 202,
+      "fiber_g": 28
+    },
+    {
+      "name": "Catering Fuji Apple with Chicken Salad - Serves 5",
+      "category": "Catering",
+      "serving": "1 Container",
+      "calories": 1660,
+      "protein_g": 70,
+      "carbs_g": 116,
+      "fat_g": 101,
+      "fiber_g": 14
+    },
+    {
+      "name": "Catering Fuji Apple with Chicken Salad without Pecans- Serves 10",
+      "category": "Catering",
+      "serving": "2 Containers",
+      "calories": 2780,
+      "protein_g": 133,
+      "carbs_g": 221,
+      "fat_g": 150,
+      "fiber_g": 23
+    },
+    {
+      "name": "Catering Greek Salad - Serves 10",
+      "category": "Catering",
+      "serving": "2 Containers",
+      "calories": 2780,
+      "protein_g": 42,
+      "carbs_g": 91,
+      "fat_g": 257,
+      "fiber_g": 28
+    },
+    {
+      "name": "Catering Greek Salad - Serves 5",
+      "category": "Catering",
+      "serving": "1 Container",
+      "calories": 1390,
+      "protein_g": 21,
+      "carbs_g": 45,
+      "fat_g": 128,
+      "fiber_g": 14
+    },
+    {
+      "name": "Catering Greek Salad with Chicken - Serves 10",
+      "category": "Catering",
+      "serving": "2 Containers",
+      "calories": 3470,
+      "protein_g": 151,
+      "carbs_g": 117,
+      "fat_g": 269,
+      "fiber_g": 29
+    },
+    {
+      "name": "Catering Greek Salad with Chicken - Serves 5",
+      "category": "Catering",
+      "serving": "1 Container",
+      "calories": 1740,
+      "protein_g": 75,
+      "carbs_g": 59,
+      "fat_g": 135,
+      "fiber_g": 14
+    },
+    {
+      "name": "Catering Green Goddess Cobb Salad with Chicken - Serves 10",
+      "category": "Catering",
+      "serving": "2 Containers",
+      "calories": 2840,
+      "protein_g": 197,
+      "carbs_g": 151,
+      "fat_g": 163,
+      "fiber_g": 38
+    },
+    {
+      "name": "Catering Green Goddess Cobb Salad with Chicken - Serves 5",
+      "category": "Catering",
+      "serving": "1 Container",
+      "calories": 1420,
+      "protein_g": 98,
+      "carbs_g": 76,
+      "fat_g": 82,
+      "fiber_g": 19
+    },
+    {
+      "name": "Catering Ranch Parm BLT Salad - Serves 10",
+      "category": "Catering",
+      "serving": "2 Containers",
+      "calories": 3490,
+      "protein_g": 116,
+      "carbs_g": 139,
+      "fat_g": 277,
+      "fiber_g": 20
+    },
+    {
+      "name": "Catering Ranch Parm BLT Salad - Serves 5",
+      "category": "Catering",
+      "serving": "1 Container",
+      "calories": 1740,
+      "protein_g": 58,
+      "carbs_g": 70,
+      "fat_g": 139,
+      "fiber_g": 10
+    },
+    {
+      "name": "Catering Southwest Chicken Ranch Salad - Serves 10",
+      "category": "Catering",
+      "serving": "2 Containers",
+      "calories": 3780,
+      "protein_g": 151,
+      "carbs_g": 203,
+      "fat_g": 269,
+      "fiber_g": 52
+    },
+    {
+      "name": "Catering Southwest Chicken Ranch Salad - Serves 5",
+      "category": "Catering",
+      "serving": "1 Container",
+      "calories": 1890,
+      "protein_g": 76,
+      "carbs_g": 101,
+      "fat_g": 135,
+      "fiber_g": 26
+    },
+    {
+      "name": "Catering French Baguette",
+      "category": "Catering",
+      "serving": "1 Baguette",
+      "calories": 1160,
+      "protein_g": 37,
+      "carbs_g": 244,
+      "fat_g": 4,
+      "fiber_g": 9
+    },
+    {
+      "name": "Catering Ham & Cheddar on Country Rustic Sourdough - Whole",
+      "category": "Catering",
+      "serving": "1 Sandwich",
+      "calories": 840,
+      "protein_g": 38,
+      "carbs_g": 63,
+      "fat_g": 49,
+      "fiber_g": 3
+    },
+    {
+      "name": "Catering Butter Pat",
+      "category": "Catering",
+      "serving": "1 pat",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pastry - Asiago Croissant Twist",
+      "category": "Catering",
+      "serving": "1 Twist",
+      "calories": 100,
+      "protein_g": 3,
+      "carbs_g": 8,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Catering Chipotle Aioli for Breakfast Sandwiches",
+      "category": "Catering",
+      "serving": "about 0.5 oz",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Catering Farmhouse Crunch Salad - Serves 10",
+      "category": "Catering",
+      "serving": "2 Containers",
+      "calories": 3720,
+      "protein_g": 91,
+      "carbs_g": 246,
+      "fat_g": 278,
+      "fiber_g": 58
+    },
+    {
+      "name": "Catering Farmhouse Crunch Salad - Serves 5",
+      "category": "Catering",
+      "serving": "1 Container",
+      "calories": 1860,
+      "protein_g": 45,
+      "carbs_g": 123,
+      "fat_g": 139,
+      "fiber_g": 29
+    },
+    {
+      "name": "Catering Farmhouse Crunch Salad - Serves 10 - No Almonds",
+      "category": "Catering",
+      "serving": "2 Containers",
+      "calories": 3250,
+      "protein_g": 83,
+      "carbs_g": 182,
+      "fat_g": 256,
+      "fiber_g": 54
+    },
+    {
+      "name": "Catering Farmhouse Crunch Salad - Serves 5 - No Almonds",
+      "category": "Catering",
+      "serving": "1 Container",
+      "calories": 1630,
+      "protein_g": 42,
+      "carbs_g": 91,
+      "fat_g": 128,
+      "fiber_g": 27
+    },
+    {
+      "name": "Catering Garlic Aioli for Breakfast Sandwiches",
+      "category": "Catering",
+      "serving": "about 0.5 oz",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Catering Summer Fruit Bowl - Serves 10",
+      "category": "Catering",
+      "serving": "2 containers",
+      "calories": 680,
+      "protein_g": 10,
+      "carbs_g": 169,
+      "fat_g": 4,
+      "fiber_g": 26
+    },
+    {
+      "name": "Catering Summer Fruit Bowl - Serves 5",
+      "category": "Catering",
+      "serving": "1 container",
+      "calories": 340,
+      "protein_g": 5,
+      "carbs_g": 85,
+      "fat_g": 2,
+      "fiber_g": 13
+    },
+    {
+      "name": "Catering Ultimate Garden Steak Salad - Serves 10",
+      "category": "Catering",
+      "serving": "2 Containers",
+      "calories": 3760,
+      "protein_g": 163,
+      "carbs_g": 264,
+      "fat_g": 232,
+      "fiber_g": 38
+    },
+    {
+      "name": "Catering Ultimate Garden Steak Salad - Serves 5",
+      "category": "Catering",
+      "serving": "1 Container",
+      "calories": 1880,
+      "protein_g": 82,
+      "carbs_g": 132,
+      "fat_g": 116,
+      "fiber_g": 19
+    },
+    {
+      "name": "Catering Harvest Medley Chicken Salad - Serves 10",
+      "category": "Catering",
+      "serving": "2 Containers",
+      "calories": 4230,
+      "protein_g": 169,
+      "carbs_g": 400,
+      "fat_g": 219,
+      "fiber_g": 35
+    },
+    {
+      "name": "Catering Harvest Medley Chicken Salad - Serves 10 - No Pecans",
+      "category": "Catering",
+      "serving": "2 Containers",
+      "calories": 3720,
+      "protein_g": 163,
+      "carbs_g": 391,
+      "fat_g": 165,
+      "fiber_g": 28
+    },
+    {
+      "name": "Catering Harvest Medley Chicken Salad - Serves 5",
+      "category": "Catering",
+      "serving": "1 Container",
+      "calories": 2110,
+      "protein_g": 84,
+      "carbs_g": 200,
+      "fat_g": 109,
+      "fiber_g": 17
+    },
+    {
+      "name": "Catering Harvest Medley Chicken Salad - Serves 5 - No Pecans",
+      "category": "Catering",
+      "serving": "1 Container",
+      "calories": 1860,
+      "protein_g": 82,
+      "carbs_g": 195,
+      "fat_g": 83,
+      "fiber_g": 14
+    },
+    {
+      "name": "Catering Harvest Medley Salad - Serves 10",
+      "category": "Catering",
+      "serving": "2 Containers",
+      "calories": 3540,
+      "protein_g": 60,
+      "carbs_g": 374,
+      "fat_g": 206,
+      "fiber_g": 34
+    },
+    {
+      "name": "Catering Harvest Medley Salad - Serves 10 - No Pecans",
+      "category": "Catering",
+      "serving": "2 Containers",
+      "calories": 3030,
+      "protein_g": 55,
+      "carbs_g": 365,
+      "fat_g": 153,
+      "fiber_g": 28
+    },
+    {
+      "name": "Catering Harvest Medley Salad - Serves 5",
+      "category": "Catering",
+      "serving": "1 Container",
+      "calories": 1770,
+      "protein_g": 30,
+      "carbs_g": 187,
+      "fat_g": 103,
+      "fiber_g": 17
+    },
+    {
+      "name": "Catering Harvest Medley Salad - Serves 5 - No Pecans",
+      "category": "Catering",
+      "serving": "1 Container",
+      "calories": 1520,
+      "protein_g": 27,
+      "carbs_g": 182,
+      "fat_g": 77,
+      "fiber_g": 14
+    },
+    {
+      "name": "Catering White Icing Portion",
+      "category": "Catering",
+      "serving": "1 Cup",
+      "calories": 1040,
+      "protein_g": 3,
+      "carbs_g": 250,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken Caesar Wrap",
+      "category": "Grab N Go",
+      "serving": "1 Wrap",
+      "calories": 480,
+      "protein_g": 32,
+      "carbs_g": 41,
+      "fat_g": 22,
+      "fiber_g": 14
+    },
+    {
+      "name": "Green Goddess Chicken Wrap",
+      "category": "Grab N Go",
+      "serving": "1 Wrap",
+      "calories": 460,
+      "protein_g": 32,
+      "carbs_g": 46,
+      "fat_g": 18,
+      "fiber_g": 14
+    },
+    {
+      "name": "Frontega Chicken Wrap",
+      "category": "Grab N Go",
+      "serving": "1 Wrap",
+      "calories": 450,
+      "protein_g": 30,
+      "carbs_g": 37,
+      "fat_g": 22,
+      "fiber_g": 12
+    },
+    {
+      "name": "Hard Boiled Eggs",
+      "category": "Grab N Go",
+      "serving": "1 Container",
+      "calories": 150,
+      "protein_g": 13,
+      "carbs_g": 1,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Turkey & Cheddar Wrap",
+      "category": "Grab N Go",
+      "serving": "1 wrap",
+      "calories": 460,
+      "protein_g": 32,
+      "carbs_g": 38,
+      "fat_g": 22,
+      "fiber_g": 12
+    }
+  ]
+}

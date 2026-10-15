@@ -1,0 +1,2429 @@
+{
+  "chain": "Shake Shack",
+  "slug": "shake-shack",
+  "aliases": [
+    "shake shack",
+    "shakeshack",
+    "shack",
+    "shake shac",
+    "shakeshak",
+    "shake-shack"
+  ],
+  "kind": "fast-casual",
+  "source_url": "https://shakeshack.com/nutritionandallergeninfo",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "From Shake Shack's 'Master Nut & Allergen 1.6.26' PDF (17 pp, linked from shakeshack.com/nutritionandallergeninfo, hosted at shakeshack.widen.net/view/pdf/f0ckdbaukl). Combo meals, the 'Limited Time Offerings' page, regional beer ranges, and any row with ranged/slashed values were excluded. Fiber is as published (0 where the PDF lists 0). Some items (*) not available at all Shacks. Burger toppings (patty, cheese, bacon, buns) are listed under Burgers as in the PDF. 53 alcoholic drinks fall outside Atwater (alcohol is ~7 cal/g, not counted in P/C/F) - expected.",
+  "items": [
+    {
+      "name": "Big Shack",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 900,
+      "protein_g": 56,
+      "carbs_g": 42,
+      "fat_g": 56,
+      "fiber_g": 4
+    },
+    {
+      "name": "Single ShackBurger",
+      "category": "Burgers",
+      "serving": "1 sandwich (single)",
+      "calories": 500,
+      "protein_g": 29,
+      "carbs_g": 26,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double ShackBurger",
+      "category": "Burgers",
+      "serving": "1 sandwich (double)",
+      "calories": 760,
+      "protein_g": 51,
+      "carbs_g": 27,
+      "fat_g": 48,
+      "fiber_g": 0
+    },
+    {
+      "name": "Triple ShackBurger",
+      "category": "Burgers",
+      "serving": "1 sandwich (triple)",
+      "calories": 1020,
+      "protein_g": 74,
+      "carbs_g": 27,
+      "fat_g": 67,
+      "fiber_g": 2
+    },
+    {
+      "name": "Single Hamburger",
+      "category": "Burgers",
+      "serving": "1 sandwich (single)",
+      "calories": 370,
+      "protein_g": 25,
+      "carbs_g": 24,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Hamburger",
+      "category": "Burgers",
+      "serving": "1 sandwich (double)",
+      "calories": 560,
+      "protein_g": 44,
+      "carbs_g": 24,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Triple Hamburger",
+      "category": "Burgers",
+      "serving": "1 sandwich (triple)",
+      "calories": 750,
+      "protein_g": 63,
+      "carbs_g": 24,
+      "fat_g": 43,
+      "fiber_g": 2
+    },
+    {
+      "name": "Single Cheeseburger",
+      "category": "Burgers",
+      "serving": "1 sandwich (single)",
+      "calories": 440,
+      "protein_g": 29,
+      "carbs_g": 25,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Cheeseburger",
+      "category": "Burgers",
+      "serving": "1 sandwich (double)",
+      "calories": 700,
+      "protein_g": 51,
+      "carbs_g": 25,
+      "fat_g": 42,
+      "fiber_g": 0
+    },
+    {
+      "name": "Triple Cheeseburger",
+      "category": "Burgers",
+      "serving": "1 sandwich (triple)",
+      "calories": 950,
+      "protein_g": 73,
+      "carbs_g": 26,
+      "fat_g": 60,
+      "fiber_g": 2
+    },
+    {
+      "name": "Single SmokeShack",
+      "category": "Burgers",
+      "serving": "1 sandwich (single)",
+      "calories": 600,
+      "protein_g": 36,
+      "carbs_g": 28,
+      "fat_g": 38,
+      "fiber_g": 2
+    },
+    {
+      "name": "Double SmokeShack",
+      "category": "Burgers",
+      "serving": "1 sandwich (double)",
+      "calories": 860,
+      "protein_g": 58,
+      "carbs_g": 28,
+      "fat_g": 56,
+      "fiber_g": 2
+    },
+    {
+      "name": "Triple SmokeShack",
+      "category": "Burgers",
+      "serving": "1 sandwich (triple)",
+      "calories": 1120,
+      "protein_g": 80,
+      "carbs_g": 29,
+      "fat_g": 74,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bacon Cheeseburger, Single",
+      "category": "Burgers",
+      "serving": "1 sandwich (single)",
+      "calories": 530,
+      "protein_g": 35,
+      "carbs_g": 25,
+      "fat_g": 32,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bacon Cheeseburger, Double",
+      "category": "Burgers",
+      "serving": "1 sandwich (double)",
+      "calories": 790,
+      "protein_g": 58,
+      "carbs_g": 26,
+      "fat_g": 50,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bacon Cheeseburger, Triple",
+      "category": "Burgers",
+      "serving": "1 sandwich (triple)",
+      "calories": 1050,
+      "protein_g": 80,
+      "carbs_g": 26,
+      "fat_g": 68,
+      "fiber_g": 2
+    },
+    {
+      "name": "Avocado Bacon Burger, Single",
+      "category": "Burgers",
+      "serving": "1 sandwich (single)",
+      "calories": 670,
+      "protein_g": 37,
+      "carbs_g": 30,
+      "fat_g": 45,
+      "fiber_g": 5
+    },
+    {
+      "name": "Avocado Bacon Burger, Double",
+      "category": "Burgers",
+      "serving": "1 sandwich (double)",
+      "calories": 920,
+      "protein_g": 59,
+      "carbs_g": 31,
+      "fat_g": 63,
+      "fiber_g": 5
+    },
+    {
+      "name": "Avocado Bacon Burger, Triple",
+      "category": "Burgers",
+      "serving": "1 sandwich (triple)",
+      "calories": 1180,
+      "protein_g": 81,
+      "carbs_g": 31,
+      "fat_g": 81,
+      "fiber_g": 5
+    },
+    {
+      "name": "‘Shroom Burger",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 510,
+      "protein_g": 18,
+      "carbs_g": 49,
+      "fat_g": 27,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shack Stack",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 770,
+      "protein_g": 40,
+      "carbs_g": 50,
+      "fat_g": 45,
+      "fiber_g": 0
+    },
+    {
+      "name": "Veggie Shack, Single",
+      "category": "Burgers",
+      "serving": "1 sandwich (single)",
+      "calories": 630,
+      "protein_g": 20,
+      "carbs_g": 53,
+      "fat_g": 31,
+      "fiber_g": 2
+    },
+    {
+      "name": "Veggie Shack, Double",
+      "category": "Burgers",
+      "serving": "1 sandwich (double)",
+      "calories": 910,
+      "protein_g": 31,
+      "carbs_g": 73,
+      "fat_g": 41,
+      "fiber_g": 3
+    },
+    {
+      "name": "Grilled Cheese",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 320,
+      "protein_g": 14,
+      "carbs_g": 25,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "BLT",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 500,
+      "protein_g": 20,
+      "carbs_g": 28,
+      "fat_g": 34,
+      "fiber_g": 3
+    },
+    {
+      "name": "Potato Roll",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 180,
+      "protein_g": 7,
+      "carbs_g": 24,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gluten Free Bun",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 160,
+      "protein_g": 3,
+      "carbs_g": 31,
+      "fat_g": 3,
+      "fiber_g": 2
+    },
+    {
+      "name": "Lettuce Wrap",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Burger Patty",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 190,
+      "protein_g": 19,
+      "carbs_g": 0,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Veggie Patty",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 210,
+      "protein_g": 8,
+      "carbs_g": 20,
+      "fat_g": 7,
+      "fiber_g": 2
+    },
+    {
+      "name": "American Cheese",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 70,
+      "protein_g": 4,
+      "carbs_g": 1,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Avocado",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 5,
+      "fiber_g": 2
+    },
+    {
+      "name": "Lettuce",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 1,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tomato",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pickle",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 1,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Onion",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon (2 Slices)",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 90,
+      "protein_g": 6,
+      "carbs_g": 0,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Peppers",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pickled Jalapenos",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Crispy Onions",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 110,
+      "protein_g": 1,
+      "carbs_g": 7,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken Shack",
+      "category": "Chicken",
+      "serving": "1 serving",
+      "calories": 550,
+      "protein_g": 33,
+      "carbs_g": 34,
+      "fat_g": 31,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken Bites (6 piece)",
+      "category": "Chicken",
+      "serving": "6 pieces",
+      "calories": 350,
+      "protein_g": 18,
+      "carbs_g": 28,
+      "fat_g": 18,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chicken Bites (10 piece)",
+      "category": "Chicken",
+      "serving": "10 pieces",
+      "calories": 580,
+      "protein_g": 31,
+      "carbs_g": 47,
+      "fat_g": 30,
+      "fiber_g": 3
+    },
+    {
+      "name": "Chicken Bites (Catering Box, 12 servings)",
+      "category": "Chicken",
+      "serving": "1 serving (catering box per-serving)",
+      "calories": 420,
+      "protein_g": 22,
+      "carbs_g": 34,
+      "fat_g": 22,
+      "fiber_g": 2
+    },
+    {
+      "name": "Avocado Bacon Chicken",
+      "category": "Chicken",
+      "serving": "1 serving",
+      "calories": 670,
+      "protein_g": 40,
+      "carbs_g": 35,
+      "fat_g": 41,
+      "fiber_g": 3
+    },
+    {
+      "name": "Buttermilk Chicken Breast",
+      "category": "Chicken",
+      "serving": "1 serving",
+      "calories": 280,
+      "protein_g": 26,
+      "carbs_g": 9,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Egg and Cheese Sandwich",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 340,
+      "protein_g": 17,
+      "carbs_g": 25,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Egg and Cheese Sandwich (Dbl Egg)",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 430,
+      "protein_g": 23,
+      "carbs_g": 26,
+      "fat_g": 25,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bacon Egg and Cheese Sandwich",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 430,
+      "protein_g": 23,
+      "carbs_g": 26,
+      "fat_g": 26,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bacon Egg and Cheese Sandwich (Dbl Egg)",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 520,
+      "protein_g": 29,
+      "carbs_g": 26,
+      "fat_g": 33,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sausage Breakfast Sandwich",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 530,
+      "protein_g": 30,
+      "carbs_g": 28,
+      "fat_g": 32,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sausage Breakfast Sandwich (Dbl Egg)",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 620,
+      "protein_g": 36,
+      "carbs_g": 28,
+      "fat_g": 39,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wake up Shack",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 670,
+      "protein_g": 24,
+      "carbs_g": 38,
+      "fat_g": 47,
+      "fiber_g": 3
+    },
+    {
+      "name": "Wake up Shack (Dbl Egg)",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 760,
+      "protein_g": 31,
+      "carbs_g": 38,
+      "fat_g": 53,
+      "fiber_g": 3
+    },
+    {
+      "name": "Egg White Light",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 320,
+      "protein_g": 15,
+      "carbs_g": 26,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Egg White Light (Dbl Egg)",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 340,
+      "protein_g": 19,
+      "carbs_g": 26,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hashbrowns with Sauce",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 740,
+      "protein_g": 6,
+      "carbs_g": 58,
+      "fat_g": 54,
+      "fiber_g": 5
+    },
+    {
+      "name": "Crossiant",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 420,
+      "protein_g": 7,
+      "carbs_g": 39,
+      "fat_g": 26,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Crossiant",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 390,
+      "protein_g": 6,
+      "carbs_g": 38,
+      "fat_g": 24,
+      "fiber_g": 2
+    },
+    {
+      "name": "Blueberry Cheese Danish",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 340,
+      "protein_g": 6,
+      "carbs_g": 37,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "Monkey Bread",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 380,
+      "protein_g": 6,
+      "carbs_g": 48,
+      "fat_g": 18,
+      "fiber_g": 2
+    },
+    {
+      "name": "Egg",
+      "category": "Extras",
+      "serving": "1 portion",
+      "calories": 90,
+      "protein_g": 6,
+      "carbs_g": 0,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Egg White",
+      "category": "Extras",
+      "serving": "1 portion",
+      "calories": 35,
+      "protein_g": 7,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hashbrowns",
+      "category": "Extras",
+      "serving": "1 portion",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 7,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sausage Patty",
+      "category": "Extras",
+      "serving": "1 portion",
+      "calories": 190,
+      "protein_g": 13,
+      "carbs_g": 3,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Dog",
+      "category": "Flat-Top Dogs",
+      "serving": "1 hot dog",
+      "calories": 350,
+      "protein_g": 16,
+      "carbs_g": 25,
+      "fat_g": 22,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shack-Cago Dog",
+      "category": "Flat-Top Dogs",
+      "serving": "1 hot dog",
+      "calories": 390,
+      "protein_g": 17,
+      "carbs_g": 32,
+      "fat_g": 22,
+      "fiber_g": 0
+    },
+    {
+      "name": "Garden Dog",
+      "category": "Flat-Top Dogs",
+      "serving": "1 hot dog",
+      "calories": 180,
+      "protein_g": 8,
+      "carbs_g": 27,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cheese Dog",
+      "category": "Flat-Top Dogs",
+      "serving": "1 hot dog",
+      "calories": 450,
+      "protein_g": 19,
+      "carbs_g": 25,
+      "fat_g": 31,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bacon Cheese Dog",
+      "category": "Flat-Top Dogs",
+      "serving": "1 hot dog",
+      "calories": 540,
+      "protein_g": 25,
+      "carbs_g": 26,
+      "fat_g": 38,
+      "fiber_g": 2
+    },
+    {
+      "name": "Crispy Onion Cheese Dog",
+      "category": "Flat-Top Dogs",
+      "serving": "1 hot dog",
+      "calories": 560,
+      "protein_g": 20,
+      "carbs_g": 32,
+      "fat_g": 39,
+      "fiber_g": 3
+    },
+    {
+      "name": "Regular Fries",
+      "category": "Fries & Sides",
+      "serving": "1 order (regular)",
+      "calories": 470,
+      "protein_g": 6,
+      "carbs_g": 63,
+      "fat_g": 22,
+      "fiber_g": 7
+    },
+    {
+      "name": "Cheese Fries",
+      "category": "Fries & Sides",
+      "serving": "1 order",
+      "calories": 710,
+      "protein_g": 12,
+      "carbs_g": 64,
+      "fat_g": 44,
+      "fiber_g": 7
+    },
+    {
+      "name": "Bacon Cheese Fries",
+      "category": "Fries & Sides",
+      "serving": "1 order",
+      "calories": 850,
+      "protein_g": 21,
+      "carbs_g": 65,
+      "fat_g": 55,
+      "fiber_g": 6
+    },
+    {
+      "name": "Double Down Fries",
+      "category": "Fries & Sides",
+      "serving": "1 order (double)",
+      "calories": 1920,
+      "protein_g": 39,
+      "carbs_g": 164,
+      "fat_g": 120,
+      "fiber_g": 16
+    },
+    {
+      "name": "Beer Battered Onion Rings",
+      "category": "Fries & Sides",
+      "serving": "1 order",
+      "calories": 570,
+      "protein_g": 6,
+      "carbs_g": 64,
+      "fat_g": 33,
+      "fiber_g": 4
+    },
+    {
+      "name": "Beer Battered Onion Rings (Catering Box, 6 servings)",
+      "category": "Fries & Sides",
+      "serving": "1 serving (catering box per-serving)",
+      "calories": 640,
+      "protein_g": 7,
+      "carbs_g": 71,
+      "fat_g": 36,
+      "fiber_g": 4
+    },
+    {
+      "name": "Mac & Cheese with Panko Breadcrumbs",
+      "category": "Fries & Sides",
+      "serving": "1 order",
+      "calories": 550,
+      "protein_g": 18,
+      "carbs_g": 28,
+      "fat_g": 41,
+      "fiber_g": 1
+    },
+    {
+      "name": "Add Grilled/Caramelized Onions",
+      "category": "Fries & Sides",
+      "serving": "1 order",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Add Panko Breadcrumbs",
+      "category": "Fries & Sides",
+      "serving": "1 order",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shack Sauce",
+      "category": "Sauces",
+      "serving": "1 portion",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Secret Sauce",
+      "category": "Sauces",
+      "serving": "1 portion",
+      "calories": 120,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Herb Mayonnaise",
+      "category": "Sauces",
+      "serving": "1 portion",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ranch",
+      "category": "Sauces",
+      "serving": "1 portion",
+      "calories": 140,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "BBQ Sauce",
+      "category": "Sauces",
+      "serving": "1 portion",
+      "calories": 70,
+      "protein_g": 1,
+      "carbs_g": 16,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey Mustard",
+      "category": "Sauces",
+      "serving": "1 portion",
+      "calories": 180,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Breakfast Sauce",
+      "category": "Sauces",
+      "serving": "1 portion",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Add Cheese Sauce",
+      "category": "Sauces",
+      "serving": "1 portion",
+      "calories": 80,
+      "protein_g": 2,
+      "carbs_g": 1,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake",
+      "category": "Shakes",
+      "serving": "1 shake",
+      "calories": 680,
+      "protein_g": 18,
+      "carbs_g": 72,
+      "fat_g": 36,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake",
+      "category": "Shakes",
+      "serving": "1 shake",
+      "calories": 750,
+      "protein_g": 16,
+      "carbs_g": 76,
+      "fat_g": 45,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla & Chocolate Shake",
+      "category": "Shakes",
+      "serving": "1 shake",
+      "calories": 720,
+      "protein_g": 18,
+      "carbs_g": 74,
+      "fat_g": 41,
+      "fiber_g": 2
+    },
+    {
+      "name": "Black & White Shake",
+      "category": "Shakes",
+      "serving": "1 shake",
+      "calories": 770,
+      "protein_g": 19,
+      "carbs_g": 80,
+      "fat_g": 42,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Shake",
+      "category": "Shakes",
+      "serving": "1 shake",
+      "calories": 690,
+      "protein_g": 17,
+      "carbs_g": 77,
+      "fat_g": 35,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cookies & Cream Shake",
+      "category": "Shakes",
+      "serving": "1 shake",
+      "calories": 850,
+      "protein_g": 19,
+      "carbs_g": 98,
+      "fat_g": 44,
+      "fiber_g": 0
+    },
+    {
+      "name": "Orange County Dreamsicle Shake",
+      "category": "Shakes",
+      "serving": "1 shake",
+      "calories": 740,
+      "protein_g": 16,
+      "carbs_g": 86,
+      "fat_g": 38,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee Shake",
+      "category": "Shakes",
+      "serving": "1 shake",
+      "calories": 700,
+      "protein_g": 19,
+      "carbs_g": 76,
+      "fat_g": 36,
+      "fiber_g": 0
+    },
+    {
+      "name": "Whipped Cream",
+      "category": "Shakes",
+      "serving": "1 shake",
+      "calories": 70,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Malt",
+      "category": "Shakes",
+      "serving": "1 shake",
+      "calories": 90,
+      "protein_g": 2,
+      "carbs_g": 19,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Oreo Cookie Crumbs",
+      "category": "Shakes",
+      "serving": "1 shake",
+      "calories": 210,
+      "protein_g": 2,
+      "carbs_g": 33,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Root Beer Float",
+      "category": "Floats",
+      "serving": "1 float",
+      "calories": 470,
+      "protein_g": 7,
+      "carbs_g": 75,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Creamsicle Float",
+      "category": "Floats",
+      "serving": "1 float",
+      "calories": 440,
+      "protein_g": 7,
+      "carbs_g": 75,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Single Chocolate Cup",
+      "category": "Cups & Sundaes",
+      "serving": "1 cup (single)",
+      "calories": 310,
+      "protein_g": 6,
+      "carbs_g": 32,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Chocolate Cup",
+      "category": "Cups & Sundaes",
+      "serving": "1 cup (double)",
+      "calories": 490,
+      "protein_g": 9,
+      "carbs_g": 51,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Single Vanilla Cup",
+      "category": "Cups & Sundaes",
+      "serving": "1 cup (single)",
+      "calories": 280,
+      "protein_g": 7,
+      "carbs_g": 30,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Vanilla Cup",
+      "category": "Cups & Sundaes",
+      "serving": "1 cup (double)",
+      "calories": 450,
+      "protein_g": 11,
+      "carbs_g": 49,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Single Vanilla & Chocolate Cup",
+      "category": "Cups & Sundaes",
+      "serving": "1 cup (single)",
+      "calories": 290,
+      "protein_g": 6,
+      "carbs_g": 31,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Vanilla & Chocolate Cup",
+      "category": "Cups & Sundaes",
+      "serving": "1 cup (double)",
+      "calories": 470,
+      "protein_g": 10,
+      "carbs_g": 50,
+      "fat_g": 27,
+      "fiber_g": 0
+    },
+    {
+      "name": "Whipped Cream",
+      "category": "Cups & Sundaes",
+      "serving": "1 cup",
+      "calories": 35,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade Small",
+      "category": "Drinks",
+      "serving": "1 drink (small)",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade Large",
+      "category": "Drinks",
+      "serving": "1 drink (large)",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 70,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade (Gallon)",
+      "category": "Drinks",
+      "serving": "Gallon",
+      "calories": 1480,
+      "protein_g": 0,
+      "carbs_g": 369,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fifty-Fifty Small",
+      "category": "Drinks",
+      "serving": "1 drink (small)",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fifty-Fifty Large",
+      "category": "Drinks",
+      "serving": "1 drink (large)",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 36,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Lemonade Small",
+      "category": "Drinks",
+      "serving": "1 drink (small)",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 36,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Lemonade Large",
+      "category": "Drinks",
+      "serving": "1 drink (large)",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweetened Iced Tea Small",
+      "category": "Drinks",
+      "serving": "1 drink (small)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweetened Iced Tea Large",
+      "category": "Drinks",
+      "serving": "1 drink (large)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweetened Iced (Gallon)",
+      "category": "Drinks",
+      "serving": "Gallon",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweetened Iced Tea Small",
+      "category": "Drinks",
+      "serving": "1 drink (small)",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 28,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweetened Iced Tea Large",
+      "category": "Drinks",
+      "serving": "1 drink (large)",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweetened Iced (Gallon)",
+      "category": "Drinks",
+      "serving": "Gallon",
+      "calories": 1190,
+      "protein_g": 0,
+      "carbs_g": 309,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coke Small",
+      "category": "Drinks",
+      "serving": "1 drink (small)",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coke Large",
+      "category": "Drinks",
+      "serving": "1 drink (large)",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke Small",
+      "category": "Drinks",
+      "serving": "1 drink (small)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke Large",
+      "category": "Drinks",
+      "serving": "1 drink (large)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coke Zero Small",
+      "category": "Drinks",
+      "serving": "1 drink (small)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coke Zero Large",
+      "category": "Drinks",
+      "serving": "1 drink (large)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite Small",
+      "category": "Drinks",
+      "serving": "1 drink (small)",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 36,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite Large",
+      "category": "Drinks",
+      "serving": "1 drink (large)",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 60,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Orange Small",
+      "category": "Drinks",
+      "serving": "1 drink (small)",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Orange Large",
+      "category": "Drinks",
+      "serving": "1 drink (large)",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gingerale Small",
+      "category": "Drinks",
+      "serving": "1 drink (small)",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 31,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gingerale Large",
+      "category": "Drinks",
+      "serving": "1 drink (large)",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 51,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr. Pepper Small",
+      "category": "Drinks",
+      "serving": "1 drink (small)",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 40,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr. Pepper Large",
+      "category": "Drinks",
+      "serving": "1 drink (large)",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 59,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Dr. Pepper Small",
+      "category": "Drinks",
+      "serving": "1 drink (small)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Dr. Pepper Large",
+      "category": "Drinks",
+      "serving": "1 drink (large)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Crush Small",
+      "category": "Drinks",
+      "serving": "1 drink (small)",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Crush Large",
+      "category": "Drinks",
+      "serving": "1 drink (large)",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Pepsi Small",
+      "category": "Drinks",
+      "serving": "1 drink (small)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Pepsi Large",
+      "category": "Drinks",
+      "serving": "1 drink (large)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Starry Small",
+      "category": "Drinks",
+      "serving": "1 drink (small)",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Starry Large",
+      "category": "Drinks",
+      "serving": "1 drink (large)",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mountain Dew Small",
+      "category": "Drinks",
+      "serving": "1 drink (small)",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mountain Dew Large",
+      "category": "Drinks",
+      "serving": "1 drink (large)",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 69,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Mountain Dew Small",
+      "category": "Drinks",
+      "serving": "1 drink (small)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Mountain Dew Large",
+      "category": "Drinks",
+      "serving": "1 drink (large)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Small",
+      "category": "Drinks",
+      "serving": "1 drink (small)",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 41,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Large",
+      "category": "Drinks",
+      "serving": "1 drink (large)",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 62,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Zero Sugar Small",
+      "category": "Drinks",
+      "serving": "1 drink (small)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Zero Sugar Large",
+      "category": "Drinks",
+      "serving": "1 drink (large)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Root Beer Small",
+      "category": "Drinks",
+      "serving": "1 drink (small)",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Root Beer Large",
+      "category": "Drinks",
+      "serving": "1 drink (large)",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Root Beer (20oz Bottle)",
+      "category": "Drinks",
+      "serving": "20oz Bottle",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 74,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Orange Juice (8 fl.oz)",
+      "category": "Drinks",
+      "serving": "8 fl.oz",
+      "calories": 110,
+      "protein_g": 2,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "ShackBlend Drip Coffee (12oz or 16oz)",
+      "category": "Drinks",
+      "serving": "12oz or 16oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Joe’s Coffee Cold Brew (16oz & 24oz)- Draft",
+      "category": "Drinks",
+      "serving": "16oz & 24oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Joe’s Coffee Nitro Cold Brew (10oz & 16oz)- Draft",
+      "category": "Drinks",
+      "serving": "10oz & 16oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Joe Coffee Cold Brew (7.5oz can)",
+      "category": "Drinks",
+      "serving": "7.5oz can",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honest Kids Apple Juice",
+      "category": "Drinks",
+      "serving": "1 drink (kids)",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "SHACK2O Sparkling",
+      "category": "Drinks",
+      "serving": "1 drink",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "SHACK2O",
+      "category": "Drinks",
+      "serving": "1 drink",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "ShackBurger, Single Lettuce Wrap",
+      "category": "Lifestyle Offerings",
+      "serving": "1 sandwich (single)",
+      "calories": 330,
+      "protein_g": 23,
+      "carbs_g": 3,
+      "fat_g": 25,
+      "fiber_g": 1
+    },
+    {
+      "name": "ShackBurger, Double Lettuce Wrap",
+      "category": "Lifestyle Offerings",
+      "serving": "1 sandwich (double)",
+      "calories": 580,
+      "protein_g": 45,
+      "carbs_g": 3,
+      "fat_g": 43,
+      "fiber_g": 1
+    },
+    {
+      "name": "ShackBurger, Triple Lettuce Wrap",
+      "category": "Lifestyle Offerings",
+      "serving": "1 sandwich (triple)",
+      "calories": 840,
+      "protein_g": 67,
+      "carbs_g": 4,
+      "fat_g": 61,
+      "fiber_g": 1
+    },
+    {
+      "name": "ShackBurger Gluten Free Bun, Single",
+      "category": "Lifestyle Offerings",
+      "serving": "1 sandwich (single)",
+      "calories": 480,
+      "protein_g": 25,
+      "carbs_g": 33,
+      "fat_g": 28,
+      "fiber_g": 2
+    },
+    {
+      "name": "ShackBurger Gluten Free Bun, Double",
+      "category": "Lifestyle Offerings",
+      "serving": "1 sandwich (double)",
+      "calories": 740,
+      "protein_g": 47,
+      "carbs_g": 34,
+      "fat_g": 46,
+      "fiber_g": 1
+    },
+    {
+      "name": "ShackBurger Gluten Free Bun, Triple",
+      "category": "Lifestyle Offerings",
+      "serving": "1 sandwich (triple)",
+      "calories": 1000,
+      "protein_g": 69,
+      "carbs_g": 34,
+      "fat_g": 64,
+      "fiber_g": 1
+    },
+    {
+      "name": "SmokeShack, Single Lettuce Wrap",
+      "category": "Lifestyle Offerings",
+      "serving": "1 sandwich (single)",
+      "calories": 430,
+      "protein_g": 29,
+      "carbs_g": 5,
+      "fat_g": 32,
+      "fiber_g": 1
+    },
+    {
+      "name": "SmokeShack, Double Lettuce Wrap",
+      "category": "Lifestyle Offerings",
+      "serving": "1 sandwich (double)",
+      "calories": 690,
+      "protein_g": 52,
+      "carbs_g": 5,
+      "fat_g": 50,
+      "fiber_g": 1
+    },
+    {
+      "name": "SmokeShack, Triple Lettuce Wrap",
+      "category": "Lifestyle Offerings",
+      "serving": "1 sandwich (triple)",
+      "calories": 950,
+      "protein_g": 74,
+      "carbs_g": 6,
+      "fat_g": 68,
+      "fiber_g": 1
+    },
+    {
+      "name": "Avocado Bacon Burger Lettuce Wrap, Single",
+      "category": "Lifestyle Offerings",
+      "serving": "1 sandwich (single)",
+      "calories": 430,
+      "protein_g": 29,
+      "carbs_g": 3,
+      "fat_g": 33,
+      "fiber_g": 1
+    },
+    {
+      "name": "Avocado Bacon Burger Lettuce Wrap, Double",
+      "category": "Lifestyle Offerings",
+      "serving": "1 sandwich (double)",
+      "calories": 690,
+      "protein_g": 51,
+      "carbs_g": 4,
+      "fat_g": 51,
+      "fiber_g": 1
+    },
+    {
+      "name": "Avocado Bacon Burger Lettuce Wrap, Triple",
+      "category": "Lifestyle Offerings",
+      "serving": "1 sandwich (triple)",
+      "calories": 950,
+      "protein_g": 73,
+      "carbs_g": 4,
+      "fat_g": 69,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chicken Shack Lettuce Wrap",
+      "category": "Lifestyle Offerings",
+      "serving": "1 sandwich",
+      "calories": 420,
+      "protein_g": 27,
+      "carbs_g": 11,
+      "fat_g": 30,
+      "fiber_g": 1
+    },
+    {
+      "name": "Veggie Shack, Single Lettuce Wrap",
+      "category": "Lifestyle Offerings",
+      "serving": "1 sandwich (single)",
+      "calories": 460,
+      "protein_g": 13,
+      "carbs_g": 30,
+      "fat_g": 25,
+      "fiber_g": 3
+    },
+    {
+      "name": "Veggie Shack, Double Lettuce Wrap",
+      "category": "Lifestyle Offerings",
+      "serving": "1 sandwich (double)",
+      "calories": 740,
+      "protein_g": 25,
+      "carbs_g": 51,
+      "fat_g": 35,
+      "fiber_g": 4
+    },
+    {
+      "name": "Brooklyn Brewery ShackMeister Ale (12oz. Draft)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "12oz. Draft",
+      "calories": 160,
+      "protein_g": 2,
+      "carbs_g": 17,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brooklyn Brewery ShackMeister Ale (16oz. Draft)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "16oz. Draft",
+      "calories": 210,
+      "protein_g": 2,
+      "carbs_g": 17,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brooklyn Brewery ShackMeister Ale (24oz. Draft)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "24oz. Draft",
+      "calories": 310,
+      "protein_g": 4,
+      "carbs_g": 25,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brooklyn Brewery ShackMeister Ale (32oz. Draft)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "32oz. Draft",
+      "calories": 420,
+      "protein_g": 5,
+      "carbs_g": 33,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brooklyn Brewery ShackMeister Ale (60oz. Draft)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "60oz. Draft",
+      "calories": 780,
+      "protein_g": 9,
+      "carbs_g": 62,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shack White (6oz)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "6oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shack Red (6oz)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "6oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shack Red Can (8.4oz)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "8.4oz",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shack White Can (8.4oz)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "8.4oz",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shack Rosé Can (8.4oz)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "8.4oz",
+      "calories": 210,
+      "protein_g": 1,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gotham Project Red Wine Can (8.4oz)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "8.4oz",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gotham Project White Wine Can (8.4oz)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "8.4oz",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gotham Project Rosé Wine Can (8.4oz)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "8.4oz",
+      "calories": 210,
+      "protein_g": 1,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Margarita Can (100mL)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "100mL",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 15,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Old Fashioned Can Tip Top or Straightaway (100mL)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "100mL",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Negroni Can (100mL)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "100mL",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Appico Spritz Can (250mL)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "250mL",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 18,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vodka White Tea Soda Can (250mL)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "250mL",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Paloma Can (250mL)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "250mL",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 7,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tip Top Cosmopolitan - 100ml can",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Truly Can (24oz)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "24oz",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Surfside Iced Tea & Lemonade (12oz can)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "12oz can",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Claw Black Cherry (12oz can)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "12oz can",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "High Noon Pineapple (12oz can)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "12oz can",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Topo Chico Strawberry Guava Hard Seltzer (16oz)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "16oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Angry Orchid Crisp Apple (12oz)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "12oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Frozen Lemonade (16oz)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "16oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 30,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Prosecco (La Marca, Mionetto), 187ml Bottle",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Prosecco (Mionetto), 750ml Bottle",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 600,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vodka Soda",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Rum and Coke",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gin and Tonic",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 8,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tequila Soda",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Whiskey Ginger",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemon Fizz",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gin Slam",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 380,
+      "protein_g": 0,
+      "carbs_g": 25,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bourbon Peach Fifty/Fifty",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 23,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Aperol Spritz",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 310,
+      "protein_g": 0,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Patron Shackarita",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 30,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spicy Patron Shackarita",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 32,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Frozen Patron Shackarita, Classic",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Frozen Patron Shackarita, Strawberry",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 32,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Boozy Frozen Lemonade",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 30,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "RBI Mai Tai",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 250,
+      "protein_g": 1,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bourbon Peaches & Cream Shake",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 880,
+      "protein_g": 16,
+      "carbs_g": 104,
+      "fat_g": 34,
+      "fiber_g": 0
+    },
+    {
+      "name": "Boozy Espresso Shake",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 780,
+      "protein_g": 15,
+      "carbs_g": 72,
+      "fat_g": 40,
+      "fiber_g": 3
+    },
+    {
+      "name": "Negroni",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Old Fashioned Cocktail",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 390,
+      "protein_g": 0,
+      "carbs_g": 53,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Manhattan",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 380,
+      "protein_g": 0,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Martini (Gin or Vodka)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dirty Martini (Gin or Vodka)",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Long Island Iced Tea",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cosmopolitan Cocktail",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 17,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hugo Spritz",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Desert Sunrise",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 360,
+      "protein_g": 2,
+      "carbs_g": 36,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bloody Mary",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 260,
+      "protein_g": 2,
+      "carbs_g": 11,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Manhattan Shake",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 980,
+      "protein_g": 16,
+      "carbs_g": 120,
+      "fat_g": 36,
+      "fiber_g": 2
+    },
+    {
+      "name": "Fever-Tree Ginger Beer Mixer",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fever-Tree Tonic Water Mixer",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 7,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Club Soda Mixer",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Red Bull Mixer",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Orange Juice Mixer",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cranberry Juice Mixer",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pineapple Juice Mixer",
+      "category": "Beer, Wine & Cocktails",
+      "serving": "1 drink",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 13,
+      "fat_g": 0,
+      "fiber_g": 0
+    }
+  ]
+}

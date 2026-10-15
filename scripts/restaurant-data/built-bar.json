@@ -1,0 +1,47 @@
+{
+  "chain": "Built",
+  "slug": "built-bar",
+  "aliases": [
+    "built bar",
+    "built bars",
+    "built puff",
+    "built protein bar"
+  ],
+  "kind": "supplement",
+  "source_url": "https://builtbar.com/products/cookies-n-cream-puff-4ct",
+  "source_kind": "official",
+  "retrieved": "2026-10-15",
+  "notes": "Nutrition Facts panel images (Puff_<flavor>_Stack_4CT_NFP) on builtbar.com product pages cookies-n-cream-puff-4ct, brownie-batter-puff-4ct, salted-caramel-puff-4ct. Brownie Batter fiber is '<1g' on the label, recorded as 0.",
+  "items": [
+    {
+      "name": "Built Puff, Cookies 'N Cream",
+      "category": "Bars",
+      "serving": "1 bar (40 g)",
+      "calories": 150,
+      "protein_g": 17,
+      "carbs_g": 14,
+      "fat_g": 2.5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Built Puff, Brownie Batter",
+      "category": "Bars",
+      "serving": "1 bar (40 g)",
+      "calories": 140,
+      "protein_g": 17,
+      "carbs_g": 14,
+      "fat_g": 2.5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Built Puff, Salted Caramel",
+      "category": "Bars",
+      "serving": "1 bar (40 g)",
+      "calories": 140,
+      "protein_g": 17,
+      "carbs_g": 14,
+      "fat_g": 2.5,
+      "fiber_g": 0
+    }
+  ]
+}

@@ -1,0 +1,169 @@
+{
+  "chain": "Quest Nutrition",
+  "slug": "quest-nutrition",
+  "aliases": [
+    "quest",
+    "quest nutrition",
+    "quest bar",
+    "quest protein bar",
+    "quest chips",
+    "quest protein chips"
+  ],
+  "kind": "supplement",
+  "source_url": "https://www.questnutrition.com/products/chocolate-chip-cookie-dough-protein-bar",
+  "source_kind": "official",
+  "retrieved": "2026-10-15",
+  "notes": "Text Nutrition Facts on each questnutrition.com/products/<handle> page (e.g. chocolate-chip-cookie-dough-protein-bar, cookies-cream-hero-bar, vanilla-milkshake-protein-powder, nacho-cheese-protein-chips, chocolate-45g-protein-milkshake). Bar carbs include fiber and erythritol/allulose, so Atwater runs above the label calories (left as published). 45g Protein Milkshake pages give serving size only as '1' (one container). Birthday Cake and Double Chocolate Chunk bars, Chocolate Milkshake powder and BBQ chips pages omitted a protein figure, so they are excluded.",
+  "items": [
+    {
+      "name": "Protein Bar, Chocolate Chip Cookie Dough",
+      "category": "Bars",
+      "serving": "1 bar (60 g)",
+      "calories": 190,
+      "protein_g": 21,
+      "carbs_g": 22,
+      "fat_g": 9,
+      "fiber_g": 12
+    },
+    {
+      "name": "Protein Bar, Cookies & Cream",
+      "category": "Bars",
+      "serving": "1 bar (60 g)",
+      "calories": 190,
+      "protein_g": 21,
+      "carbs_g": 22,
+      "fat_g": 8,
+      "fiber_g": 13
+    },
+    {
+      "name": "Protein Bar, Chocolate Brownie",
+      "category": "Bars",
+      "serving": "1 bar (60 g)",
+      "calories": 170,
+      "protein_g": 20,
+      "carbs_g": 24,
+      "fat_g": 6,
+      "fiber_g": 15
+    },
+    {
+      "name": "Protein Bar, Chocolate Peanut Butter",
+      "category": "Bars",
+      "serving": "1 bar (60 g)",
+      "calories": 190,
+      "protein_g": 20,
+      "carbs_g": 22,
+      "fat_g": 9,
+      "fiber_g": 11
+    },
+    {
+      "name": "Protein Bar, S'mores",
+      "category": "Bars",
+      "serving": "1 bar (60 g)",
+      "calories": 190,
+      "protein_g": 21,
+      "carbs_g": 23,
+      "fat_g": 7,
+      "fiber_g": 12
+    },
+    {
+      "name": "Protein Bar, Blueberry Muffin",
+      "category": "Bars",
+      "serving": "1 bar (60 g)",
+      "calories": 180,
+      "protein_g": 20,
+      "carbs_g": 23,
+      "fat_g": 7,
+      "fiber_g": 13
+    },
+    {
+      "name": "Crispy Hero Protein Bar, Cookies & Cream",
+      "category": "Bars",
+      "serving": "1 bar (52 g)",
+      "calories": 150,
+      "protein_g": 18,
+      "carbs_g": 23,
+      "fat_g": 6,
+      "fiber_g": 6
+    },
+    {
+      "name": "Crispy Hero Protein Bar, Chocolate Peanut Butter",
+      "category": "Bars",
+      "serving": "1 bar (54 g)",
+      "calories": 200,
+      "protein_g": 18,
+      "carbs_g": 19,
+      "fat_g": 12,
+      "fiber_g": 4
+    },
+    {
+      "name": "Protein Powder, Vanilla Milkshake",
+      "category": "Whey Protein",
+      "serving": "1 scoop (31 g)",
+      "calories": 110,
+      "protein_g": 24,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Protein Powder, Salted Caramel",
+      "category": "Whey Protein",
+      "serving": "1 scoop (34 g)",
+      "calories": 120,
+      "protein_g": 26,
+      "carbs_g": 3,
+      "fat_g": 0.5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tortilla Style Protein Chips, Nacho Cheese",
+      "category": "Protein Chips",
+      "serving": "1 bag (32 g)",
+      "calories": 150,
+      "protein_g": 18,
+      "carbs_g": 5,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Tortilla Style Protein Chips, Ranch",
+      "category": "Protein Chips",
+      "serving": "1 bag (32 g)",
+      "calories": 140,
+      "protein_g": 19,
+      "carbs_g": 5,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Original Style Protein Chips, Sour Cream & Onion",
+      "category": "Protein Chips",
+      "serving": "1 bag (32 g)",
+      "calories": 140,
+      "protein_g": 19,
+      "carbs_g": 5,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "45g Protein Milkshake, Chocolate",
+      "category": "Ready-to-Drink",
+      "serving": "1 shake",
+      "calories": 230,
+      "protein_g": 45,
+      "carbs_g": 6,
+      "fat_g": 4,
+      "fiber_g": 2
+    },
+    {
+      "name": "45g Protein Milkshake, Vanilla",
+      "category": "Ready-to-Drink",
+      "serving": "1 shake",
+      "calories": 230,
+      "protein_g": 45,
+      "carbs_g": 3,
+      "fat_g": 4,
+      "fiber_g": 0
+    }
+  ]
+}

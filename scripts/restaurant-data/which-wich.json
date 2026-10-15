@@ -1,0 +1,2138 @@
+{
+  "chain": "Which Wich",
+  "slug": "which-wich",
+  "aliases": [
+    "which wich",
+    "whichwich",
+    "which-wich",
+    "wich wich",
+    "which wich superior sandwiches"
+  ],
+  "kind": "deli",
+  "source_url": "https://whichwich.com/pdf/WW-Nutritional-Info.pdf",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Official Which Wich Nutritional Information PDF linked from whichwich.com/menu. Sandwiches are as the guide lists them (on white bread, standard build). Table cells read by column position; rows where calories, carbs, fat or protein were blank in the source were dropped (mostly cheese/sauce toppings with blank carb cells). 143 kept rows had a blank fiber cell, recorded as 0. Atwater outliers (kept as published): Hummus (Spreads & Sauces topping) [1 large] (100 cal vs Atwater 123); Tzatziki (Spreads & Sauces topping) [1 large] (90 cal vs Atwater 70).",
+  "items": [
+    {
+      "name": "Steak & Egg",
+      "category": "Breakfast",
+      "serving": "1 super sandwich on white bread",
+      "calories": 920,
+      "protein_g": 58,
+      "carbs_g": 117,
+      "fat_g": 26,
+      "fiber_g": 0
+    },
+    {
+      "name": "Veggie & Egg",
+      "category": "Breakfast",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 380,
+      "protein_g": 19,
+      "carbs_g": 57,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Veggie & Egg",
+      "category": "Breakfast",
+      "serving": "1 large sandwich on white bread",
+      "calories": 570,
+      "protein_g": 28,
+      "carbs_g": 85,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Veggie & Egg",
+      "category": "Breakfast",
+      "serving": "1 super sandwich on white bread",
+      "calories": 760,
+      "protein_g": 37,
+      "carbs_g": 114,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buffalo Chicken",
+      "category": "Chicken",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 530,
+      "protein_g": 42,
+      "carbs_g": 57,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buffalo Chicken",
+      "category": "Chicken",
+      "serving": "1 large sandwich on white bread",
+      "calories": 790,
+      "protein_g": 63,
+      "carbs_g": 86,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buffalo Chicken",
+      "category": "Chicken",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1060,
+      "protein_g": 84,
+      "carbs_g": 115,
+      "fat_g": 28,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken Parm",
+      "category": "Chicken",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 520,
+      "protein_g": 42,
+      "carbs_g": 60,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken Parm",
+      "category": "Chicken",
+      "serving": "1 large sandwich on white bread",
+      "calories": 770,
+      "protein_g": 63,
+      "carbs_g": 90,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chicken Parm",
+      "category": "Chicken",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1030,
+      "protein_g": 84,
+      "carbs_g": 120,
+      "fat_g": 23,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chicken Pesto",
+      "category": "Chicken",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 480,
+      "protein_g": 37,
+      "carbs_g": 57,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken Pesto",
+      "category": "Chicken",
+      "serving": "1 large sandwich on white bread",
+      "calories": 720,
+      "protein_g": 56,
+      "carbs_g": 86,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken Pesto",
+      "category": "Chicken",
+      "serving": "1 super sandwich on white bread",
+      "calories": 960,
+      "protein_g": 74,
+      "carbs_g": 115,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken Salad",
+      "category": "Chicken",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 620,
+      "protein_g": 32,
+      "carbs_g": 56,
+      "fat_g": 28,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken Salad",
+      "category": "Chicken",
+      "serving": "1 large sandwich on white bread",
+      "calories": 930,
+      "protein_g": 49,
+      "carbs_g": 85,
+      "fat_g": 43,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken Salad",
+      "category": "Chicken",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1240,
+      "protein_g": 65,
+      "carbs_g": 113,
+      "fat_g": 57,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken Sandwich",
+      "category": "Chicken",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 420,
+      "protein_g": 36,
+      "carbs_g": 57,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken Sandwich",
+      "category": "Chicken",
+      "serving": "1 large sandwich on white bread",
+      "calories": 640,
+      "protein_g": 54,
+      "carbs_g": 85,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken Sandwich",
+      "category": "Chicken",
+      "serving": "1 super sandwich on white bread",
+      "calories": 850,
+      "protein_g": 72,
+      "carbs_g": 113,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chzbgrwich™",
+      "category": "Classics",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 780,
+      "protein_g": 36,
+      "carbs_g": 68,
+      "fat_g": 40,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chzbgrwich™",
+      "category": "Classics",
+      "serving": "1 large sandwich on white bread",
+      "calories": 1180,
+      "protein_g": 54,
+      "carbs_g": 102,
+      "fat_g": 60,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chzbgrwich™",
+      "category": "Classics",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1570,
+      "protein_g": 73,
+      "carbs_g": 136,
+      "fat_g": 79,
+      "fiber_g": 1
+    },
+    {
+      "name": "Egg Salad",
+      "category": "Classics",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 1260,
+      "protein_g": 27,
+      "carbs_g": 57,
+      "fat_g": 100,
+      "fiber_g": 0
+    },
+    {
+      "name": "Egg Salad",
+      "category": "Classics",
+      "serving": "1 large sandwich on white bread",
+      "calories": 1890,
+      "protein_g": 41,
+      "carbs_g": 85,
+      "fat_g": 150,
+      "fiber_g": 0
+    },
+    {
+      "name": "Egg Salad",
+      "category": "Classics",
+      "serving": "1 super sandwich on white bread",
+      "calories": 2520,
+      "protein_g": 54,
+      "carbs_g": 113,
+      "fat_g": 201,
+      "fiber_g": 0
+    },
+    {
+      "name": "Elviswich",
+      "category": "Classics",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 910,
+      "protein_g": 35,
+      "carbs_g": 105,
+      "fat_g": 43,
+      "fiber_g": 7
+    },
+    {
+      "name": "Elviswich",
+      "category": "Classics",
+      "serving": "1 large sandwich on white bread",
+      "calories": 1360,
+      "protein_g": 52,
+      "carbs_g": 157,
+      "fat_g": 65,
+      "fiber_g": 10
+    },
+    {
+      "name": "Elviswich",
+      "category": "Classics",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1820,
+      "protein_g": 69,
+      "carbs_g": 210,
+      "fat_g": 87,
+      "fiber_g": 13
+    },
+    {
+      "name": "Gyrowich",
+      "category": "Classics",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 660,
+      "protein_g": 23,
+      "carbs_g": 67,
+      "fat_g": 32,
+      "fiber_g": 2
+    },
+    {
+      "name": "Gyrowich",
+      "category": "Classics",
+      "serving": "1 large sandwich on white bread",
+      "calories": 990,
+      "protein_g": 34,
+      "carbs_g": 100,
+      "fat_g": 48,
+      "fiber_g": 2
+    },
+    {
+      "name": "Gyrowich",
+      "category": "Classics",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1320,
+      "protein_g": 46,
+      "carbs_g": 134,
+      "fat_g": 64,
+      "fiber_g": 3
+    },
+    {
+      "name": "PB&JWICH™",
+      "category": "Classics",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 760,
+      "protein_g": 21,
+      "carbs_g": 102,
+      "fat_g": 31,
+      "fiber_g": 4
+    },
+    {
+      "name": "PB&JWICH™",
+      "category": "Classics",
+      "serving": "1 large sandwich on white bread",
+      "calories": 1140,
+      "protein_g": 32,
+      "carbs_g": 154,
+      "fat_g": 47,
+      "fiber_g": 5
+    },
+    {
+      "name": "PB&JWICH™",
+      "category": "Classics",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1520,
+      "protein_g": 43,
+      "carbs_g": 205,
+      "fat_g": 62,
+      "fiber_g": 7
+    },
+    {
+      "name": "BBQ Pork",
+      "category": "Ham & Pork",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 550,
+      "protein_g": 32,
+      "carbs_g": 72,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "BBQ Pork",
+      "category": "Ham & Pork",
+      "serving": "1 large sandwich on white bread",
+      "calories": 820,
+      "protein_g": 47,
+      "carbs_g": 108,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "BBQ Pork",
+      "category": "Ham & Pork",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1100,
+      "protein_g": 63,
+      "carbs_g": 145,
+      "fat_g": 29,
+      "fiber_g": 0
+    },
+    {
+      "name": "BLT",
+      "category": "Ham & Pork",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 710,
+      "protein_g": 45,
+      "carbs_g": 59,
+      "fat_g": 39,
+      "fiber_g": 0
+    },
+    {
+      "name": "BLT",
+      "category": "Ham & Pork",
+      "serving": "1 large sandwich on white bread",
+      "calories": 1070,
+      "protein_g": 68,
+      "carbs_g": 89,
+      "fat_g": 58,
+      "fiber_g": 1
+    },
+    {
+      "name": "BLT",
+      "category": "Ham & Pork",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1430,
+      "protein_g": 91,
+      "carbs_g": 118,
+      "fat_g": 77,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bac-hammon™",
+      "category": "Ham & Pork",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 530,
+      "protein_g": 35,
+      "carbs_g": 59,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bac-hammon™",
+      "category": "Ham & Pork",
+      "serving": "1 large sandwich on white bread",
+      "calories": 790,
+      "protein_g": 53,
+      "carbs_g": 89,
+      "fat_g": 29,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bac-hammon™",
+      "category": "Ham & Pork",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1060,
+      "protein_g": 70,
+      "carbs_g": 119,
+      "fat_g": 38,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cuban",
+      "category": "Ham & Pork",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 490,
+      "protein_g": 35,
+      "carbs_g": 60,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cuban",
+      "category": "Ham & Pork",
+      "serving": "1 large sandwich on white bread",
+      "calories": 690,
+      "protein_g": 47,
+      "carbs_g": 91,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cuban",
+      "category": "Ham & Pork",
+      "serving": "1 super sandwich on white bread",
+      "calories": 970,
+      "protein_g": 70,
+      "carbs_g": 120,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ham",
+      "category": "Ham & Pork",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 390,
+      "protein_g": 23,
+      "carbs_g": 58,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ham",
+      "category": "Ham & Pork",
+      "serving": "1 large sandwich on white bread",
+      "calories": 580,
+      "protein_g": 35,
+      "carbs_g": 88,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ham",
+      "category": "Ham & Pork",
+      "serving": "1 super sandwich on white bread",
+      "calories": 780,
+      "protein_g": 46,
+      "carbs_g": 117,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Grinder",
+      "category": "Italian",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 600,
+      "protein_g": 24,
+      "carbs_g": 57,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Grinder",
+      "category": "Italian",
+      "serving": "1 large sandwich on white bread",
+      "calories": 900,
+      "protein_g": 36,
+      "carbs_g": 85,
+      "fat_g": 46,
+      "fiber_g": 0
+    },
+    {
+      "name": "Grinder",
+      "category": "Italian",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1200,
+      "protein_g": 48,
+      "carbs_g": 114,
+      "fat_g": 61,
+      "fiber_g": 0
+    },
+    {
+      "name": "Italian Beef",
+      "category": "Italian",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 670,
+      "protein_g": 36,
+      "carbs_g": 61,
+      "fat_g": 31,
+      "fiber_g": 0
+    },
+    {
+      "name": "Italian Beef",
+      "category": "Italian",
+      "serving": "1 large sandwich on white bread",
+      "calories": 1010,
+      "protein_g": 54,
+      "carbs_g": 91,
+      "fat_g": 47,
+      "fiber_g": 0
+    },
+    {
+      "name": "Italian Beef",
+      "category": "Italian",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1350,
+      "protein_g": 73,
+      "carbs_g": 121,
+      "fat_g": 63,
+      "fiber_g": 1
+    },
+    {
+      "name": "Meatball",
+      "category": "Italian",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 710,
+      "protein_g": 30,
+      "carbs_g": 72,
+      "fat_g": 35,
+      "fiber_g": 3
+    },
+    {
+      "name": "Meatball",
+      "category": "Italian",
+      "serving": "1 large sandwich on white bread",
+      "calories": 1060,
+      "protein_g": 45,
+      "carbs_g": 108,
+      "fat_g": 53,
+      "fiber_g": 4
+    },
+    {
+      "name": "Meatball",
+      "category": "Italian",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1420,
+      "protein_g": 60,
+      "carbs_g": 144,
+      "fat_g": 70,
+      "fiber_g": 5
+    },
+    {
+      "name": "Muffuletta",
+      "category": "Italian",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 790,
+      "protein_g": 33,
+      "carbs_g": 60,
+      "fat_g": 46,
+      "fiber_g": 0
+    },
+    {
+      "name": "Muffuletta",
+      "category": "Italian",
+      "serving": "1 large sandwich on white bread",
+      "calories": 1010,
+      "protein_g": 45,
+      "carbs_g": 89,
+      "fat_g": 52,
+      "fiber_g": 0
+    },
+    {
+      "name": "Muffuletta",
+      "category": "Italian",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1580,
+      "protein_g": 67,
+      "carbs_g": 120,
+      "fat_g": 92,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pizzawich®",
+      "category": "Italian",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 660,
+      "protein_g": 25,
+      "carbs_g": 59,
+      "fat_g": 35,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pizzawich®",
+      "category": "Italian",
+      "serving": "1 large sandwich on white bread",
+      "calories": 990,
+      "protein_g": 38,
+      "carbs_g": 88,
+      "fat_g": 52,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pizzawich®",
+      "category": "Italian",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1330,
+      "protein_g": 50,
+      "carbs_g": 118,
+      "fat_g": 70,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cali Roll",
+      "category": "Seafood",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 500,
+      "protein_g": 12,
+      "carbs_g": 66,
+      "fat_g": 21,
+      "fiber_g": 3
+    },
+    {
+      "name": "Cali Roll",
+      "category": "Seafood",
+      "serving": "1 large sandwich on white bread",
+      "calories": 750,
+      "protein_g": 18,
+      "carbs_g": 98,
+      "fat_g": 31,
+      "fiber_g": 4
+    },
+    {
+      "name": "Cali Roll",
+      "category": "Seafood",
+      "serving": "1 super sandwich on white bread",
+      "calories": 990,
+      "protein_g": 24,
+      "carbs_g": 131,
+      "fat_g": 41,
+      "fiber_g": 5
+    },
+    {
+      "name": "Krab Salad",
+      "category": "Seafood",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 590,
+      "protein_g": 14,
+      "carbs_g": 69,
+      "fat_g": 28,
+      "fiber_g": 0
+    },
+    {
+      "name": "Krab Salad",
+      "category": "Seafood",
+      "serving": "1 large sandwich on white bread",
+      "calories": 890,
+      "protein_g": 21,
+      "carbs_g": 103,
+      "fat_g": 43,
+      "fiber_g": 0
+    },
+    {
+      "name": "Krab Salad",
+      "category": "Seafood",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1190,
+      "protein_g": 28,
+      "carbs_g": 138,
+      "fat_g": 57,
+      "fiber_g": 0
+    },
+    {
+      "name": "Land & Sea",
+      "category": "Seafood",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 520,
+      "protein_g": 22,
+      "carbs_g": 64,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Land & Sea",
+      "category": "Seafood",
+      "serving": "1 large sandwich on white bread",
+      "calories": 810,
+      "protein_g": 28,
+      "carbs_g": 98,
+      "fat_g": 33,
+      "fiber_g": 0
+    },
+    {
+      "name": "Land & Sea",
+      "category": "Seafood",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1040,
+      "protein_g": 43,
+      "carbs_g": 127,
+      "fat_g": 38,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tuna Melt",
+      "category": "Seafood",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 690,
+      "protein_g": 35,
+      "carbs_g": 56,
+      "fat_g": 36,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tuna Melt",
+      "category": "Seafood",
+      "serving": "1 large sandwich on white bread",
+      "calories": 1040,
+      "protein_g": 52,
+      "carbs_g": 84,
+      "fat_g": 54,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tuna Melt",
+      "category": "Seafood",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1390,
+      "protein_g": 70,
+      "carbs_g": 112,
+      "fat_g": 72,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tuna Salad",
+      "category": "Seafood",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 580,
+      "protein_g": 28,
+      "carbs_g": 55,
+      "fat_g": 27,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tuna Salad",
+      "category": "Seafood",
+      "serving": "1 large sandwich on white bread",
+      "calories": 870,
+      "protein_g": 42,
+      "carbs_g": 82,
+      "fat_g": 41,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tuna Salad",
+      "category": "Seafood",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1170,
+      "protein_g": 56,
+      "carbs_g": 110,
+      "fat_g": 54,
+      "fiber_g": 0
+    },
+    {
+      "name": "Thank You Turkey™",
+      "category": "Turkey",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 690,
+      "protein_g": 32,
+      "carbs_g": 119,
+      "fat_g": 9,
+      "fiber_g": 4
+    },
+    {
+      "name": "Thank You Turkey™",
+      "category": "Turkey",
+      "serving": "1 large sandwich on white bread",
+      "calories": 1030,
+      "protein_g": 49,
+      "carbs_g": 178,
+      "fat_g": 13,
+      "fiber_g": 6
+    },
+    {
+      "name": "Thank You Turkey™",
+      "category": "Turkey",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1370,
+      "protein_g": 65,
+      "carbs_g": 237,
+      "fat_g": 18,
+      "fiber_g": 9
+    },
+    {
+      "name": "Turkey Bacon Ranch",
+      "category": "Turkey",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 610,
+      "protein_g": 38,
+      "carbs_g": 59,
+      "fat_g": 26,
+      "fiber_g": 0
+    },
+    {
+      "name": "Turkey Bacon Ranch",
+      "category": "Turkey",
+      "serving": "1 large sandwich on white bread",
+      "calories": 910,
+      "protein_g": 57,
+      "carbs_g": 88,
+      "fat_g": 39,
+      "fiber_g": 0
+    },
+    {
+      "name": "Turkey Bacon Ranch",
+      "category": "Turkey",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1210,
+      "protein_g": 77,
+      "carbs_g": 117,
+      "fat_g": 52,
+      "fiber_g": 0
+    },
+    {
+      "name": "Turkey Club",
+      "category": "Turkey",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 520,
+      "protein_g": 37,
+      "carbs_g": 58,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Turkey Club",
+      "category": "Turkey",
+      "serving": "1 large sandwich on white bread",
+      "calories": 790,
+      "protein_g": 54,
+      "carbs_g": 88,
+      "fat_g": 27,
+      "fiber_g": 0
+    },
+    {
+      "name": "Turkey Club",
+      "category": "Turkey",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1040,
+      "protein_g": 73,
+      "carbs_g": 117,
+      "fat_g": 35,
+      "fiber_g": 0
+    },
+    {
+      "name": "Turkey",
+      "category": "Turkey",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 370,
+      "protein_g": 26,
+      "carbs_g": 57,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Turkey",
+      "category": "Turkey",
+      "serving": "1 large sandwich on white bread",
+      "calories": 560,
+      "protein_g": 39,
+      "carbs_g": 85,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Turkey",
+      "category": "Turkey",
+      "serving": "1 super sandwich on white bread",
+      "calories": 740,
+      "protein_g": 53,
+      "carbs_g": 114,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Turkey Vibewich™",
+      "category": "Turkey",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 470,
+      "protein_g": 27,
+      "carbs_g": 64,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Turkey Vibewich™",
+      "category": "Turkey",
+      "serving": "1 large sandwich on white bread",
+      "calories": 700,
+      "protein_g": 40,
+      "carbs_g": 96,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Turkey Vibewich™",
+      "category": "Turkey",
+      "serving": "1 super sandwich on white bread",
+      "calories": 930,
+      "protein_g": 53,
+      "carbs_g": 128,
+      "fat_g": 22,
+      "fiber_g": 1
+    },
+    {
+      "name": "Black Bean Patty",
+      "category": "Vegetarian",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 450,
+      "protein_g": 17,
+      "carbs_g": 79,
+      "fat_g": 8,
+      "fiber_g": 8
+    },
+    {
+      "name": "Black Bean Patty",
+      "category": "Vegetarian",
+      "serving": "1 large sandwich on white bread",
+      "calories": 680,
+      "protein_g": 25,
+      "carbs_g": 118,
+      "fat_g": 11,
+      "fiber_g": 12
+    },
+    {
+      "name": "Black Bean Patty",
+      "category": "Vegetarian",
+      "serving": "1 super sandwich on white bread",
+      "calories": 910,
+      "protein_g": 34,
+      "carbs_g": 158,
+      "fat_g": 15,
+      "fiber_g": 16
+    },
+    {
+      "name": "Caprese",
+      "category": "Vegetarian",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 510,
+      "protein_g": 22,
+      "carbs_g": 62,
+      "fat_g": 19,
+      "fiber_g": 2
+    },
+    {
+      "name": "Caprese",
+      "category": "Vegetarian",
+      "serving": "1 large sandwich on white bread",
+      "calories": 770,
+      "protein_g": 32,
+      "carbs_g": 93,
+      "fat_g": 28,
+      "fiber_g": 3
+    },
+    {
+      "name": "Caprese",
+      "category": "Vegetarian",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1020,
+      "protein_g": 43,
+      "carbs_g": 124,
+      "fat_g": 38,
+      "fiber_g": 4
+    },
+    {
+      "name": "Hummus",
+      "category": "Vegetarian",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 420,
+      "protein_g": 15,
+      "carbs_g": 69,
+      "fat_g": 12,
+      "fiber_g": 4
+    },
+    {
+      "name": "Hummus",
+      "category": "Vegetarian",
+      "serving": "1 large sandwich on white bread",
+      "calories": 640,
+      "protein_g": 22,
+      "carbs_g": 103,
+      "fat_g": 17,
+      "fiber_g": 6
+    },
+    {
+      "name": "Hummus",
+      "category": "Vegetarian",
+      "serving": "1 super sandwich on white bread",
+      "calories": 850,
+      "protein_g": 30,
+      "carbs_g": 138,
+      "fat_g": 23,
+      "fiber_g": 8
+    },
+    {
+      "name": "Triple Cheese Please™",
+      "category": "Vegetarian",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 610,
+      "protein_g": 30,
+      "carbs_g": 58,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Triple Cheese Please™",
+      "category": "Vegetarian",
+      "serving": "1 large sandwich on white bread",
+      "calories": 920,
+      "protein_g": 45,
+      "carbs_g": 87,
+      "fat_g": 44,
+      "fiber_g": 0
+    },
+    {
+      "name": "Triple Cheese Please™",
+      "category": "Vegetarian",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1230,
+      "protein_g": 60,
+      "carbs_g": 116,
+      "fat_g": 59,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tomato & Avocado",
+      "category": "Vegetarian",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 420,
+      "protein_g": 11,
+      "carbs_g": 65,
+      "fat_g": 13,
+      "fiber_g": 6
+    },
+    {
+      "name": "Tomato & Avocado",
+      "category": "Vegetarian",
+      "serving": "1 large sandwich on white bread",
+      "calories": 620,
+      "protein_g": 17,
+      "carbs_g": 98,
+      "fat_g": 20,
+      "fiber_g": 9
+    },
+    {
+      "name": "Tomato & Avocado",
+      "category": "Vegetarian",
+      "serving": "1 super sandwich on white bread",
+      "calories": 830,
+      "protein_g": 23,
+      "carbs_g": 131,
+      "fat_g": 26,
+      "fiber_g": 12
+    },
+    {
+      "name": "Wicked®",
+      "category": "Wicked®",
+      "serving": "1 regular sandwich on white bread",
+      "calories": 580,
+      "protein_g": 37,
+      "carbs_g": 59,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wicked®",
+      "category": "Wicked®",
+      "serving": "1 large sandwich on white bread",
+      "calories": 870,
+      "protein_g": 56,
+      "carbs_g": 88,
+      "fat_g": 35,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wicked®",
+      "category": "Wicked®",
+      "serving": "1 super sandwich on white bread",
+      "calories": 1160,
+      "protein_g": 75,
+      "carbs_g": 118,
+      "fat_g": 47,
+      "fiber_g": 0
+    },
+    {
+      "name": "Grilled Cheese",
+      "category": "Kids",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 14,
+      "carbs_g": 28,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "PB&JWICH™",
+      "category": "Kids",
+      "serving": "1 serving",
+      "calories": 380,
+      "protein_g": 11,
+      "carbs_g": 51,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cheese Pizzawich®",
+      "category": "Kids",
+      "serving": "1 serving",
+      "calories": 350,
+      "protein_g": 19,
+      "carbs_g": 31,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ham Kidswich™",
+      "category": "Kids",
+      "serving": "1 serving",
+      "calories": 190,
+      "protein_g": 12,
+      "carbs_g": 29,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Roast Beef Kidswich™",
+      "category": "Kids",
+      "serving": "1 serving",
+      "calories": 190,
+      "protein_g": 13,
+      "carbs_g": 30,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Turkey Kidswich™",
+      "category": "Kids",
+      "serving": "1 serving",
+      "calories": 190,
+      "protein_g": 13,
+      "carbs_g": 28,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "White",
+      "category": "Breads & Bases",
+      "serving": "1 regular",
+      "calories": 280,
+      "protein_g": 9,
+      "carbs_g": 55,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "White",
+      "category": "Breads & Bases",
+      "serving": "1 large",
+      "calories": 430,
+      "protein_g": 13,
+      "carbs_g": 82,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "White",
+      "category": "Breads & Bases",
+      "serving": "1 super",
+      "calories": 570,
+      "protein_g": 18,
+      "carbs_g": 110,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wheat",
+      "category": "Breads & Bases",
+      "serving": "1 regular",
+      "calories": 270,
+      "protein_g": 11,
+      "carbs_g": 55,
+      "fat_g": 2,
+      "fiber_g": 4
+    },
+    {
+      "name": "Wheat",
+      "category": "Breads & Bases",
+      "serving": "1 large",
+      "calories": 400,
+      "protein_g": 16,
+      "carbs_g": 82,
+      "fat_g": 4,
+      "fiber_g": 5
+    },
+    {
+      "name": "Wheat",
+      "category": "Breads & Bases",
+      "serving": "1 super",
+      "calories": 530,
+      "protein_g": 21,
+      "carbs_g": 110,
+      "fat_g": 5,
+      "fiber_g": 7
+    },
+    {
+      "name": "Bowlwich®",
+      "category": "Breads & Bases",
+      "serving": "1 serving",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Lettucewich",
+      "category": "Breads & Bases",
+      "serving": "1 serving",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Wrapwich",
+      "category": "Breads & Bases",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 8,
+      "carbs_g": 47,
+      "fat_g": 8,
+      "fiber_g": 2
+    },
+    {
+      "name": "Blue (Cheese topping)",
+      "category": "Toppings - Cheese",
+      "serving": "1 regular",
+      "calories": 60,
+      "protein_g": 4,
+      "carbs_g": 0,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blue (Cheese topping)",
+      "category": "Toppings - Cheese",
+      "serving": "1 large",
+      "calories": 120,
+      "protein_g": 7,
+      "carbs_g": 1,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blue (Cheese topping)",
+      "category": "Toppings - Cheese",
+      "serving": "1 super",
+      "calories": 120,
+      "protein_g": 7,
+      "carbs_g": 1,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheddar (Cheese topping)",
+      "category": "Toppings - Cheese",
+      "serving": "1 regular",
+      "calories": 110,
+      "protein_g": 7,
+      "carbs_g": 1,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheddar (Cheese topping)",
+      "category": "Toppings - Cheese",
+      "serving": "1 large",
+      "calories": 160,
+      "protein_g": 10,
+      "carbs_g": 1,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheddar (Cheese topping)",
+      "category": "Toppings - Cheese",
+      "serving": "1 super",
+      "calories": 220,
+      "protein_g": 14,
+      "carbs_g": 2,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheez Whiz (Cheese topping)",
+      "category": "Toppings - Cheese",
+      "serving": "1 regular",
+      "calories": 90,
+      "protein_g": 4,
+      "carbs_g": 3,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheez Whiz (Cheese topping)",
+      "category": "Toppings - Cheese",
+      "serving": "1 large",
+      "calories": 160,
+      "protein_g": 7,
+      "carbs_g": 5,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheez Whiz (Cheese topping)",
+      "category": "Toppings - Cheese",
+      "serving": "1 super",
+      "calories": 180,
+      "protein_g": 8,
+      "carbs_g": 6,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepper Jack (Cheese topping)",
+      "category": "Toppings - Cheese",
+      "serving": "1 regular",
+      "calories": 100,
+      "protein_g": 6,
+      "carbs_g": 1,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepper Jack (Cheese topping)",
+      "category": "Toppings - Cheese",
+      "serving": "1 large",
+      "calories": 150,
+      "protein_g": 9,
+      "carbs_g": 1,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepperjack (Cheese topping)",
+      "category": "Toppings - Cheese",
+      "serving": "1 super",
+      "calories": 200,
+      "protein_g": 12,
+      "carbs_g": 2,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Provolone (Cheese topping)",
+      "category": "Toppings - Cheese",
+      "serving": "1 regular",
+      "calories": 100,
+      "protein_g": 7,
+      "carbs_g": 1,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Provolone (Cheese topping)",
+      "category": "Toppings - Cheese",
+      "serving": "1 large",
+      "calories": 150,
+      "protein_g": 10,
+      "carbs_g": 1,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Provolone (Cheese topping)",
+      "category": "Toppings - Cheese",
+      "serving": "1 super",
+      "calories": 200,
+      "protein_g": 14,
+      "carbs_g": 2,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Swiss (Cheese topping)",
+      "category": "Toppings - Cheese",
+      "serving": "1 regular",
+      "calories": 110,
+      "protein_g": 9,
+      "carbs_g": 1,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Swiss (Cheese topping)",
+      "category": "Toppings - Cheese",
+      "serving": "1 large",
+      "calories": 160,
+      "protein_g": 14,
+      "carbs_g": 1,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Swiss (Cheese topping)",
+      "category": "Toppings - Cheese",
+      "serving": "1 super",
+      "calories": 220,
+      "protein_g": 18,
+      "carbs_g": 2,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Deli (Mustard topping)",
+      "category": "Toppings - Mustard",
+      "serving": "1 regular",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Deli (Mustard topping)",
+      "category": "Toppings - Mustard",
+      "serving": "1 large",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Deli (Mustard topping)",
+      "category": "Toppings - Mustard",
+      "serving": "1 super",
+      "calories": 30,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Dijon (Mustard topping)",
+      "category": "Toppings - Mustard",
+      "serving": "1 regular",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dijon (Mustard topping)",
+      "category": "Toppings - Mustard",
+      "serving": "1 large",
+      "calories": 35,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Dijon (Mustard topping)",
+      "category": "Toppings - Mustard",
+      "serving": "1 super",
+      "calories": 50,
+      "protein_g": 2,
+      "carbs_g": 3,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Yellow (Mustard topping)",
+      "category": "Toppings - Mustard",
+      "serving": "1 regular",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Yellow (Mustard topping)",
+      "category": "Toppings - Mustard",
+      "serving": "1 large",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Yellow (Mustard topping)",
+      "category": "Toppings - Mustard",
+      "serving": "1 super",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Crushed Red Pepper (Oils, Spices & More topping)",
+      "category": "Toppings - Oils, Spices & More",
+      "serving": "1 regular",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Crushed Red Pepper (Oils, Spices & More topping)",
+      "category": "Toppings - Oils, Spices & More",
+      "serving": "1 large",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Crushed Red Pepper (Oils, Spices & More topping)",
+      "category": "Toppings - Oils, Spices & More",
+      "serving": "1 super",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Oregano (Oils, Spices & More topping)",
+      "category": "Toppings - Oils, Spices & More",
+      "serving": "1 super",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Parmesan (Oils, Spices & More topping)",
+      "category": "Toppings - Oils, Spices & More",
+      "serving": "1 regular",
+      "calories": 35,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Parmesan (Oils, Spices & More topping)",
+      "category": "Toppings - Oils, Spices & More",
+      "serving": "1 large",
+      "calories": 50,
+      "protein_g": 3,
+      "carbs_g": 3,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Parmesan (Oils, Spices & More topping)",
+      "category": "Toppings - Oils, Spices & More",
+      "serving": "1 super",
+      "calories": 70,
+      "protein_g": 3,
+      "carbs_g": 3,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hummus (Spreads & Sauces topping)",
+      "category": "Toppings - Spreads & Sauces",
+      "serving": "1 regular",
+      "calories": 70,
+      "protein_g": 3,
+      "carbs_g": 7,
+      "fat_g": 4,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hummus (Spreads & Sauces topping)",
+      "category": "Toppings - Spreads & Sauces",
+      "serving": "1 large",
+      "calories": 100,
+      "protein_g": 5,
+      "carbs_g": 10,
+      "fat_g": 7,
+      "fiber_g": 3
+    },
+    {
+      "name": "Hummus (Spreads & Sauces topping)",
+      "category": "Toppings - Spreads & Sauces",
+      "serving": "1 super",
+      "calories": 140,
+      "protein_g": 6,
+      "carbs_g": 14,
+      "fat_g": 9,
+      "fiber_g": 4
+    },
+    {
+      "name": "Marinara (Spreads & Sauces topping)",
+      "category": "Toppings - Spreads & Sauces",
+      "serving": "1 regular",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Marinara (Spreads & Sauces topping)",
+      "category": "Toppings - Spreads & Sauces",
+      "serving": "1 large",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Marinara (Spreads & Sauces topping)",
+      "category": "Toppings - Spreads & Sauces",
+      "serving": "1 super",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peanut Butter (Spreads & Sauces topping)",
+      "category": "Toppings - Spreads & Sauces",
+      "serving": "1 regular",
+      "calories": 170,
+      "protein_g": 6,
+      "carbs_g": 5,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Peanut Butter (Spreads & Sauces topping)",
+      "category": "Toppings - Spreads & Sauces",
+      "serving": "1 large",
+      "calories": 340,
+      "protein_g": 12,
+      "carbs_g": 11,
+      "fat_g": 28,
+      "fiber_g": 4
+    },
+    {
+      "name": "Peanut Butter (Spreads & Sauces topping)",
+      "category": "Toppings - Spreads & Sauces",
+      "serving": "1 super",
+      "calories": 340,
+      "protein_g": 12,
+      "carbs_g": 11,
+      "fat_g": 28,
+      "fiber_g": 4
+    },
+    {
+      "name": "Pesto (Spreads & Sauces topping)",
+      "category": "Toppings - Spreads & Sauces",
+      "serving": "1 regular",
+      "calories": 30,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pesto (Spreads & Sauces topping)",
+      "category": "Toppings - Spreads & Sauces",
+      "serving": "1 large",
+      "calories": 45,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pesto (Spreads & Sauces topping)",
+      "category": "Toppings - Spreads & Sauces",
+      "serving": "1 super",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tzatziki (Spreads & Sauces topping)",
+      "category": "Toppings - Spreads & Sauces",
+      "serving": "1 regular",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tzatziki (Spreads & Sauces topping)",
+      "category": "Toppings - Spreads & Sauces",
+      "serving": "1 large",
+      "calories": 90,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tzatziki (Spreads & Sauces topping)",
+      "category": "Toppings - Spreads & Sauces",
+      "serving": "1 super",
+      "calories": 110,
+      "protein_g": 2,
+      "carbs_g": 4,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Avocado (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 regular",
+      "calories": 45,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 4,
+      "fiber_g": 2
+    },
+    {
+      "name": "Avocado (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 large",
+      "calories": 70,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 6,
+      "fiber_g": 3
+    },
+    {
+      "name": "Avocado (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 super",
+      "calories": 90,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 8,
+      "fiber_g": 4
+    },
+    {
+      "name": "Bacon (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 regular",
+      "calories": 140,
+      "protein_g": 12,
+      "carbs_g": 1,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 large",
+      "calories": 210,
+      "protein_g": 18,
+      "carbs_g": 1,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 super",
+      "calories": 280,
+      "protein_g": 24,
+      "carbs_g": 2,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Carmelized Onions (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 super",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coleslaw (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 regular",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coleslaw (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 large",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coleslaw (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 super",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 7,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Crushed Chips (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 regular",
+      "calories": 45,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Crushed Chips (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 large",
+      "calories": 70,
+      "protein_g": 1,
+      "carbs_g": 7,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Crushed Chips (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 super",
+      "calories": 90,
+      "protein_g": 1,
+      "carbs_g": 10,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cucumbers (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 large",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cucumbers (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 super",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lettuce (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 large",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lettuce (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 super",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mushrooms (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 regular",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mushrooms (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 large",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mushrooms (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 super",
+      "calories": 10,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spinach (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 regular",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spinach (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 large",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spinach (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 super",
+      "calories": 15,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Tomatoes (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 regular",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tomatoes (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 large",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Tomatoes (Veggies & More topping)",
+      "category": "Toppings - Veggies & More",
+      "serving": "1 super",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Courtney’s Cookie",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 310,
+      "protein_g": 4,
+      "carbs_g": 45,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "French Fries",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 570,
+      "protein_g": 5,
+      "carbs_g": 53,
+      "fat_g": 37,
+      "fiber_g": 3
+    },
+    {
+      "name": "Banana Shake",
+      "category": "Shakes",
+      "serving": "1 serving",
+      "calories": 780,
+      "protein_g": 18,
+      "carbs_g": 108,
+      "fat_g": 37,
+      "fiber_g": 3
+    },
+    {
+      "name": "Chocolate Shake",
+      "category": "Shakes",
+      "serving": "1 serving",
+      "calories": 870,
+      "protein_g": 18,
+      "carbs_g": 137,
+      "fat_g": 36,
+      "fiber_g": 5
+    },
+    {
+      "name": "Courtney’s Cookies Shake",
+      "category": "Shakes",
+      "serving": "1 serving",
+      "calories": 990,
+      "protein_g": 21,
+      "carbs_g": 126,
+      "fat_g": 50,
+      "fiber_g": 2
+    },
+    {
+      "name": "Oreo® Shake",
+      "category": "Shakes",
+      "serving": "1 serving",
+      "calories": 950,
+      "protein_g": 20,
+      "carbs_g": 121,
+      "fat_g": 49,
+      "fiber_g": 2
+    },
+    {
+      "name": "Strawberry Shake",
+      "category": "Shakes",
+      "serving": "1 serving",
+      "calories": 800,
+      "protein_g": 16,
+      "carbs_g": 114,
+      "fat_g": 35,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake",
+      "category": "Shakes",
+      "serving": "1 serving",
+      "calories": 660,
+      "protein_g": 16,
+      "carbs_g": 79,
+      "fat_g": 35,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Milk (16 Oz)",
+      "category": "Drinks",
+      "serving": "16 fl oz",
+      "calories": 340,
+      "protein_g": 16,
+      "carbs_g": 36,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Whole Milk (16oz)",
+      "category": "Drinks",
+      "serving": "16 fl oz",
+      "calories": 300,
+      "protein_g": 15,
+      "carbs_g": 23,
+      "fat_g": 16,
+      "fiber_g": 0
+    }
+  ]
+}

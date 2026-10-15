@@ -1,0 +1,27 @@
+{
+  "chain": "Myprotein",
+  "slug": "myprotein",
+  "aliases": [
+    "myprotein",
+    "my protein",
+    "impact whey",
+    "myprotein impact whey"
+  ],
+  "kind": "supplement",
+  "source_url": "https://us.myprotein.com/p/sports-nutrition/impact-whey-protein/10852500/",
+  "source_kind": "official",
+  "retrieved": "2026-10-15",
+  "notes": "Text Nutrition Facts on the us.myprotein.com Impact Whey Protein page. The site serves this one panel for every flavour variation checked (Unflavored, Salted Caramel, Strawberry Milkshake, Chocolate Milkshake, Vanilla Ice Cream), so it is recorded once as a product-level item rather than copied per flavour.",
+  "items": [
+    {
+      "name": "Impact Whey Protein",
+      "category": "Whey Protein",
+      "serving": "1 scoop (25 g)",
+      "calories": 100,
+      "protein_g": 19,
+      "carbs_g": 3,
+      "fat_g": 1,
+      "fiber_g": 0
+    }
+  ]
+}

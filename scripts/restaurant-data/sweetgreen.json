@@ -1,0 +1,566 @@
+{
+  "chain": "Sweetgreen",
+  "slug": "sweetgreen",
+  "aliases": [
+    "sweetgreen",
+    "sweet green",
+    "sweetgreens"
+  ],
+  "kind": "fast-casual",
+  "source_url": "https://www.sweetgreen.com/nutrition",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Official sweetgreen nutrition tables (per serving as prepared). The official page publishes menu items only, no per-ingredient (build-your-own) table. Atwater outliers (>20%, left as published): OLIPOP Lemon Lime Soda (12 oz): 50 cal vs 64 Atwater",
+  "items": [
+    {
+      "name": "Molly’s Pickle Caesar Salad",
+      "category": "Salads",
+      "serving": "606 g",
+      "calories": 665,
+      "protein_g": 33,
+      "carbs_g": 36,
+      "fat_g": 45,
+      "fiber_g": 10
+    },
+    {
+      "name": "Chicken Sesame Crunch Salad",
+      "category": "Salads",
+      "serving": "496 g",
+      "calories": 615,
+      "protein_g": 35,
+      "carbs_g": 54,
+      "fat_g": 29,
+      "fiber_g": 9
+    },
+    {
+      "name": "Buffalo Chicken",
+      "category": "Salads",
+      "serving": "541 g",
+      "calories": 580,
+      "protein_g": 37,
+      "carbs_g": 30,
+      "fat_g": 35,
+      "fiber_g": 8
+    },
+    {
+      "name": "Super Green Goddess",
+      "category": "Salads",
+      "serving": "347 g",
+      "calories": 465,
+      "protein_g": 12,
+      "carbs_g": 36,
+      "fat_g": 32,
+      "fiber_g": 13
+    },
+    {
+      "name": "Kale Caesar",
+      "category": "Salads",
+      "serving": "415 g",
+      "calories": 545,
+      "protein_g": 41,
+      "carbs_g": 18,
+      "fat_g": 35,
+      "fiber_g": 5
+    },
+    {
+      "name": "Hummus Crunch",
+      "category": "Salads",
+      "serving": "562 g",
+      "calories": 505,
+      "protein_g": 21,
+      "carbs_g": 42,
+      "fat_g": 27,
+      "fiber_g": 10
+    },
+    {
+      "name": "Guacamole Greens",
+      "category": "Salads",
+      "serving": "635 g",
+      "calories": 555,
+      "protein_g": 29,
+      "carbs_g": 35,
+      "fat_g": 32,
+      "fiber_g": 12
+    },
+    {
+      "name": "Mediterranean Market (select locations)",
+      "category": "Bowls",
+      "serving": "671 g",
+      "calories": 675,
+      "protein_g": 44,
+      "carbs_g": 54,
+      "fat_g": 32,
+      "fiber_g": 10
+    },
+    {
+      "name": "Crispy Rice Bowl",
+      "category": "Bowls",
+      "serving": "457 g",
+      "calories": 680,
+      "protein_g": 33,
+      "carbs_g": 61,
+      "fat_g": 31,
+      "fiber_g": 8
+    },
+    {
+      "name": "Harvest Bowl",
+      "category": "Bowls",
+      "serving": "425 g",
+      "calories": 760,
+      "protein_g": 40,
+      "carbs_g": 60,
+      "fat_g": 42,
+      "fiber_g": 10
+    },
+    {
+      "name": "Chicken Pesto Parm",
+      "category": "Bowls",
+      "serving": "420 g",
+      "calories": 510,
+      "protein_g": 38,
+      "carbs_g": 30,
+      "fat_g": 24,
+      "fiber_g": 6
+    },
+    {
+      "name": "Steak Honey Crunch",
+      "category": "Bowls",
+      "serving": "466 g",
+      "calories": 605,
+      "protein_g": 32,
+      "carbs_g": 43,
+      "fat_g": 33,
+      "fiber_g": 5
+    },
+    {
+      "name": "Shroomami",
+      "category": "Bowls",
+      "serving": "457 g",
+      "calories": 665,
+      "protein_g": 20,
+      "carbs_g": 51,
+      "fat_g": 45,
+      "fiber_g": 11
+    },
+    {
+      "name": "Chicken Avocado Ranch",
+      "category": "Bowls",
+      "serving": "546 g",
+      "calories": 725,
+      "protein_g": 28,
+      "carbs_g": 55,
+      "fat_g": 42,
+      "fiber_g": 13
+    },
+    {
+      "name": "Omega Glow",
+      "category": "Bowls",
+      "serving": "515 g",
+      "calories": 710,
+      "protein_g": 31,
+      "carbs_g": 48,
+      "fat_g": 43,
+      "fiber_g": 7
+    },
+    {
+      "name": "Maple Glazed Salmon Plate",
+      "category": "Warm plates",
+      "serving": "541 g",
+      "calories": 875,
+      "protein_g": 31,
+      "carbs_g": 87,
+      "fat_g": 45,
+      "fiber_g": 8
+    },
+    {
+      "name": "Caramelized Garlic Steak",
+      "category": "Warm plates",
+      "serving": "484 g",
+      "calories": 770,
+      "protein_g": 34,
+      "carbs_g": 82,
+      "fat_g": 32,
+      "fiber_g": 8
+    },
+    {
+      "name": "Mezze Medley (select locations)",
+      "category": "Warm plates",
+      "serving": "704 g",
+      "calories": 875,
+      "protein_g": 35,
+      "carbs_g": 95,
+      "fat_g": 42,
+      "fiber_g": 9
+    },
+    {
+      "name": "Miso Glazed Salmon",
+      "category": "Warm plates",
+      "serving": "529 g",
+      "calories": 880,
+      "protein_g": 34,
+      "carbs_g": 77,
+      "fat_g": 48,
+      "fiber_g": 12
+    },
+    {
+      "name": "Hot Honey Chicken",
+      "category": "Warm plates",
+      "serving": "544 g",
+      "calories": 845,
+      "protein_g": 49,
+      "carbs_g": 66,
+      "fat_g": 38,
+      "fiber_g": 7
+    },
+    {
+      "name": "Steak Mezze",
+      "category": "Warm plates",
+      "serving": "515 g",
+      "calories": 755,
+      "protein_g": 34,
+      "carbs_g": 76,
+      "fat_g": 38,
+      "fiber_g": 3
+    },
+    {
+      "name": "Molly's Big Dill Caesar",
+      "category": "Wraps",
+      "serving": "631 g",
+      "calories": 1080,
+      "protein_g": 36,
+      "carbs_g": 74,
+      "fat_g": 72,
+      "fiber_g": 5
+    },
+    {
+      "name": "Classic Chicken Caesar",
+      "category": "Wraps",
+      "serving": "486 g",
+      "calories": 990,
+      "protein_g": 47,
+      "carbs_g": 64,
+      "fat_g": 61,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cali Chicken Club",
+      "category": "Wraps",
+      "serving": "614 g",
+      "calories": 1285,
+      "protein_g": 49,
+      "carbs_g": 73,
+      "fat_g": 90,
+      "fiber_g": 12
+    },
+    {
+      "name": "Chicken Jalapeño Ranch",
+      "category": "Wraps",
+      "serving": "646 g",
+      "calories": 1320,
+      "protein_g": 41,
+      "carbs_g": 110,
+      "fat_g": 78,
+      "fiber_g": 5
+    },
+    {
+      "name": "Ranchy Chicken + Rice",
+      "category": "Kids meals",
+      "serving": "294 g",
+      "calories": 550,
+      "protein_g": 33,
+      "carbs_g": 34,
+      "fat_g": 32,
+      "fiber_g": 2
+    },
+    {
+      "name": "Little Harvest",
+      "category": "Kids meals",
+      "serving": "245 g",
+      "calories": 430,
+      "protein_g": 24,
+      "carbs_g": 23,
+      "fat_g": 28,
+      "fiber_g": 3
+    },
+    {
+      "name": "Mini Mezze",
+      "category": "Kids meals",
+      "serving": "225 g",
+      "calories": 295,
+      "protein_g": 30,
+      "carbs_g": 26,
+      "fat_g": 8,
+      "fiber_g": 3
+    },
+    {
+      "name": "Molly’s Double Chick Scoop",
+      "category": "Sides",
+      "serving": "272 g",
+      "calories": 385,
+      "protein_g": 34,
+      "carbs_g": 3,
+      "fat_g": 26,
+      "fiber_g": 0
+    },
+    {
+      "name": "Roasted Bacon Brussels",
+      "category": "Sides",
+      "serving": "218 g",
+      "calories": 440,
+      "protein_g": 14,
+      "carbs_g": 23,
+      "fat_g": 34,
+      "fiber_g": 7
+    },
+    {
+      "name": "Roasted Brussels",
+      "category": "Sides",
+      "serving": "198 g",
+      "calories": 370,
+      "protein_g": 5,
+      "carbs_g": 23,
+      "fat_g": 29,
+      "fiber_g": 7
+    },
+    {
+      "name": "Olive Oil Tortilla",
+      "category": "Sides",
+      "serving": "102 g",
+      "calories": 320,
+      "protein_g": 8,
+      "carbs_g": 51,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Rosemary Focaccia",
+      "category": "Sides",
+      "serving": "94 g",
+      "calories": 230,
+      "protein_g": 8,
+      "carbs_g": 34,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "SG X Siete: Green Goddess Ranch Potato Chips",
+      "category": "Sides",
+      "serving": "42 g",
+      "calories": 220,
+      "protein_g": 3,
+      "carbs_g": 23,
+      "fat_g": 13,
+      "fiber_g": 3
+    },
+    {
+      "name": "Hummus + Focaccia",
+      "category": "Sides",
+      "serving": "131 g",
+      "calories": 290,
+      "protein_g": 10,
+      "carbs_g": 37,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Siete Sea Salt Potato Chips",
+      "category": "Sides",
+      "serving": "42 g",
+      "calories": 210,
+      "protein_g": 3,
+      "carbs_g": 27,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Roasted Sweet Potatoes + Hot Honey Mustard",
+      "category": "Sides",
+      "serving": "185 g",
+      "calories": 350,
+      "protein_g": 2,
+      "carbs_g": 37,
+      "fat_g": 20,
+      "fiber_g": 4
+    },
+    {
+      "name": "Roasted Sweet Potatoes + Green Goddess Ranch",
+      "category": "Sides",
+      "serving": "179 g",
+      "calories": 360,
+      "protein_g": 3,
+      "carbs_g": 29,
+      "fat_g": 25,
+      "fiber_g": 4
+    },
+    {
+      "name": "Hu Salty Dark Chocolate Bar",
+      "category": "Dessert",
+      "serving": "60 g",
+      "calories": 380,
+      "protein_g": 6,
+      "carbs_g": 28,
+      "fat_g": 28,
+      "fiber_g": 6
+    },
+    {
+      "name": "Sourdough Chocolate Chip Cookie Select locations only (select locations)",
+      "category": "Dessert",
+      "serving": "36 g",
+      "calories": 240,
+      "protein_g": 3,
+      "carbs_g": 32,
+      "fat_g": 11,
+      "fiber_g": 3
+    },
+    {
+      "name": "Hu Cashews + Vanilla Bean Hunks",
+      "category": "Dessert",
+      "serving": "28 g",
+      "calories": 170,
+      "protein_g": 4,
+      "carbs_g": 10,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Crispy Rice Treat",
+      "category": "Dessert",
+      "serving": "40 g",
+      "calories": 190,
+      "protein_g": 2,
+      "carbs_g": 23,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mott’s Apple Juice Select locations only (select locations)",
+      "category": "Beverages",
+      "serving": "6.75 oz",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade (select locations)",
+      "category": "Beverages",
+      "serving": "16 oz",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 27,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hibiscus Berry Tea Select locations only (select locations)",
+      "category": "Beverages",
+      "serving": "16 oz",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ginger Greens Select locations only (select locations)",
+      "category": "Beverages",
+      "serving": "16 oz",
+      "calories": 120,
+      "protein_g": 1,
+      "carbs_g": 32,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Honest Kids Apple Juice Select locations only (select locations)",
+      "category": "Beverages",
+      "serving": "6 oz",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Mint Select locations only (select locations)",
+      "category": "Beverages",
+      "serving": "16 oz",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 29,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Tree Top Apple Juice (select locations)",
+      "category": "Beverages",
+      "serving": "8 oz",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 28,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "OLIPOP Lemon Lime Soda",
+      "category": "Beverages",
+      "serving": "12 oz",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 16,
+      "fat_g": 0,
+      "fiber_g": 9
+    },
+    {
+      "name": "OLIPOP Vintage Cola",
+      "category": "Beverages",
+      "serving": "12 oz",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 16,
+      "fat_g": 0,
+      "fiber_g": 9
+    },
+    {
+      "name": "Harney & Sons Organic Lemonade",
+      "category": "Beverages",
+      "serving": "16 oz",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spindrift Raspberry Lime",
+      "category": "Beverages",
+      "serving": "12 oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Health-Ade Kombucha Blueberry Pomegranate",
+      "category": "Beverages",
+      "serving": "12 oz",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 14,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spindrift Lemon",
+      "category": "Beverages",
+      "serving": "12 oz",
+      "calories": 3,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    }
+  ]
+}

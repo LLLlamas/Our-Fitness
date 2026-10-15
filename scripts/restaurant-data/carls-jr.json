@@ -1,0 +1,1361 @@
+{
+  "chain": "Carl's Jr.",
+  "slug": "carls-jr",
+  "aliases": [
+    "carls jr",
+    "carl's jr",
+    "carls",
+    "carl's",
+    "carls junior",
+    "carl's junior",
+    "carlsjr",
+    "carl jr"
+  ],
+  "kind": "fast-food",
+  "source_url": "https://www.carlsjr.com/getContentAsset/cccf694a-3d94-4cbc-adfc-28c255939f92/dfc3d011-8f63-43f6-9ed8-4b444333a1d0/nutritional-info.pdf?language=en-US",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "From Carl's Jr. 'Nutritional Information' PDF on carlsjr.com (states it is current as of June 24, 2025). Natural-Cut Fries fiber/protein print in the PDF as '3/5/06' and '3/4/05' (spreadsheet date artefacts); read as 3/5/6 g fiber and 3/4/5 g protein for Small/Medium/Large. Kids Meal values include fries and a cookie but not the drink, per the PDF. Fiber not published for 1 item(s), set to 0: Fried Zucchini (114 g).",
+  "items": [
+    {
+      "name": "The Breakfast Burger (279 g)",
+      "category": "Breakfast",
+      "serving": "279 g",
+      "calories": 780,
+      "protein_g": 40,
+      "carbs_g": 67,
+      "fat_g": 40,
+      "fiber_g": 4
+    },
+    {
+      "name": "Grilled Cheese Breakfast Sandwich (Sausage) (211 g)",
+      "category": "Breakfast",
+      "serving": "211 g",
+      "calories": 640,
+      "protein_g": 27,
+      "carbs_g": 43,
+      "fat_g": 41,
+      "fiber_g": 2
+    },
+    {
+      "name": "Grilled Cheese Breakfast Sandwich (Bacon) (186 g)",
+      "category": "Breakfast",
+      "serving": "186 g",
+      "calories": 530,
+      "protein_g": 26,
+      "carbs_g": 43,
+      "fat_g": 29,
+      "fiber_g": 2
+    },
+    {
+      "name": "Steak & Egg Burrito (272 g)",
+      "category": "Breakfast",
+      "serving": "272 g",
+      "calories": 530,
+      "protein_g": 33,
+      "carbs_g": 41,
+      "fat_g": 26,
+      "fiber_g": 2
+    },
+    {
+      "name": "Loaded Breakfast Burrito (308 g)",
+      "category": "Breakfast",
+      "serving": "308 g",
+      "calories": 830,
+      "protein_g": 39,
+      "carbs_g": 49,
+      "fat_g": 53,
+      "fiber_g": 3
+    },
+    {
+      "name": "Big Country Breakfast Burrito (326 g)",
+      "category": "Breakfast",
+      "serving": "326 g",
+      "calories": 860,
+      "protein_g": 37,
+      "carbs_g": 54,
+      "fat_g": 55,
+      "fiber_g": 3
+    },
+    {
+      "name": "Bacon, Egg & Cheese Burrito (177 g)",
+      "category": "Breakfast",
+      "serving": "177 g",
+      "calories": 470,
+      "protein_g": 26,
+      "carbs_g": 36,
+      "fat_g": 24,
+      "fiber_g": 2
+    },
+    {
+      "name": "French Toast Dips (5 pc) (186 g)",
+      "category": "Breakfast",
+      "serving": "186 g",
+      "calories": 620,
+      "protein_g": 9,
+      "carbs_g": 106,
+      "fat_g": 19,
+      "fiber_g": 3
+    },
+    {
+      "name": "Hash Rounds (Small) (78 g)",
+      "category": "Breakfast",
+      "serving": "78 g",
+      "calories": 240,
+      "protein_g": 2,
+      "carbs_g": 22,
+      "fat_g": 15,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hash Rounds (Medium) (102 g)",
+      "category": "Breakfast",
+      "serving": "102 g",
+      "calories": 320,
+      "protein_g": 3,
+      "carbs_g": 28,
+      "fat_g": 19,
+      "fiber_g": 3
+    },
+    {
+      "name": "Hash Rounds (Large) (144 g)",
+      "category": "Breakfast",
+      "serving": "144 g",
+      "calories": 450,
+      "protein_g": 4,
+      "carbs_g": 40,
+      "fat_g": 27,
+      "fiber_g": 4
+    },
+    {
+      "name": "Sausage, Egg & Cheese Biscuit (184 g)",
+      "category": "Breakfast",
+      "serving": "184 g",
+      "calories": 640,
+      "protein_g": 19,
+      "carbs_g": 44,
+      "fat_g": 42,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bacon, Egg & Cheese Biscuit (155 g)",
+      "category": "Breakfast",
+      "serving": "155 g",
+      "calories": 510,
+      "protein_g": 17,
+      "carbs_g": 43,
+      "fat_g": 29,
+      "fiber_g": 1
+    },
+    {
+      "name": "Monster Biscuit (249 g)",
+      "category": "Breakfast",
+      "serving": "249 g",
+      "calories": 820,
+      "protein_g": 32,
+      "carbs_g": 47,
+      "fat_g": 56,
+      "fiber_g": 2
+    },
+    {
+      "name": "Biscuit 'N' Gravy (235 g)",
+      "category": "Breakfast",
+      "serving": "235 g",
+      "calories": 500,
+      "protein_g": 8,
+      "carbs_g": 53,
+      "fat_g": 27,
+      "fiber_g": 1
+    },
+    {
+      "name": "Famous Star with Cheese (Single) (285 g)",
+      "category": "Charbroiled Burgers",
+      "serving": "285 g",
+      "calories": 680,
+      "protein_g": 28,
+      "carbs_g": 57,
+      "fat_g": 38,
+      "fiber_g": 4
+    },
+    {
+      "name": "Famous Star with Cheese (Double) (387 g)",
+      "category": "Charbroiled Burgers",
+      "serving": "387 g",
+      "calories": 940,
+      "protein_g": 48,
+      "carbs_g": 60,
+      "fat_g": 57,
+      "fiber_g": 4
+    },
+    {
+      "name": "Famous Star with Cheese (Triple) (470 g)",
+      "category": "Charbroiled Burgers",
+      "serving": "470 g",
+      "calories": 1190,
+      "protein_g": 67,
+      "carbs_g": 59,
+      "fat_g": 77,
+      "fiber_g": 4
+    },
+    {
+      "name": "Western Bacon Cheeseburger (Single) (248 g)",
+      "category": "Charbroiled Burgers",
+      "serving": "248 g",
+      "calories": 770,
+      "protein_g": 35,
+      "carbs_g": 77,
+      "fat_g": 36,
+      "fiber_g": 4
+    },
+    {
+      "name": "Western Bacon Cheeseburger (Double) (331 g)",
+      "category": "Charbroiled Burgers",
+      "serving": "331 g",
+      "calories": 1020,
+      "protein_g": 55,
+      "carbs_g": 78,
+      "fat_g": 55,
+      "fiber_g": 4
+    },
+    {
+      "name": "Western Bacon Cheeseburger (Triple) (413 g)",
+      "category": "Charbroiled Burgers",
+      "serving": "413 g",
+      "calories": 1280,
+      "protein_g": 74,
+      "carbs_g": 79,
+      "fat_g": 75,
+      "fiber_g": 4
+    },
+    {
+      "name": "Guacamole Bacon Burger (Single) (327 g)",
+      "category": "Charbroiled Burgers",
+      "serving": "327 g",
+      "calories": 850,
+      "protein_g": 34,
+      "carbs_g": 55,
+      "fat_g": 56,
+      "fiber_g": 4
+    },
+    {
+      "name": "Guacamole Bacon Burger (Double) (428 g)",
+      "category": "Charbroiled Burgers",
+      "serving": "428 g",
+      "calories": 1100,
+      "protein_g": 54,
+      "carbs_g": 56,
+      "fat_g": 74,
+      "fiber_g": 4
+    },
+    {
+      "name": "Guacamole Bacon Burger (Triple) (509 g)",
+      "category": "Charbroiled Burgers",
+      "serving": "509 g",
+      "calories": 1350,
+      "protein_g": 73,
+      "carbs_g": 57,
+      "fat_g": 93,
+      "fiber_g": 4
+    },
+    {
+      "name": "The Big Carl (Single) (237 g)",
+      "category": "Charbroiled Burgers",
+      "serving": "237 g",
+      "calories": 670,
+      "protein_g": 28,
+      "carbs_g": 55,
+      "fat_g": 38,
+      "fiber_g": 3
+    },
+    {
+      "name": "The Big Carl (Double) (320 g)",
+      "category": "Charbroiled Burgers",
+      "serving": "320 g",
+      "calories": 920,
+      "protein_g": 47,
+      "carbs_g": 56,
+      "fat_g": 58,
+      "fiber_g": 3
+    },
+    {
+      "name": "The Big Carl (Triple) (402 g)",
+      "category": "Charbroiled Burgers",
+      "serving": "402 g",
+      "calories": 1180,
+      "protein_g": 66,
+      "carbs_g": 57,
+      "fat_g": 77,
+      "fiber_g": 3
+    },
+    {
+      "name": "El Diablo (Single) (315 g)",
+      "category": "Charbroiled Burgers",
+      "serving": "315 g",
+      "calories": 940,
+      "protein_g": 39,
+      "carbs_g": 78,
+      "fat_g": 40,
+      "fiber_g": 4
+    },
+    {
+      "name": "El Diablo (Double) (396 g)",
+      "category": "Charbroiled Burgers",
+      "serving": "396 g",
+      "calories": 1180,
+      "protein_g": 58,
+      "carbs_g": 78,
+      "fat_g": 59,
+      "fiber_g": 4
+    },
+    {
+      "name": "El Diablo (Triple) (477 g)",
+      "category": "Charbroiled Burgers",
+      "serving": "477 g",
+      "calories": 1430,
+      "protein_g": 77,
+      "carbs_g": 79,
+      "fat_g": 78,
+      "fiber_g": 4
+    },
+    {
+      "name": "Zucchini Star (262 g)",
+      "category": "Charbroiled Burgers",
+      "serving": "262 g",
+      "calories": 600,
+      "protein_g": 13,
+      "carbs_g": 69,
+      "fat_g": 31,
+      "fiber_g": 3
+    },
+    {
+      "name": "California Classic Double Cheeseburger (221 g)",
+      "category": "Charbroiled Burgers",
+      "serving": "221 g",
+      "calories": 520,
+      "protein_g": 19,
+      "carbs_g": 37,
+      "fat_g": 36,
+      "fiber_g": 2
+    },
+    {
+      "name": "Jalapeño Double Cheeseburger (212 g)",
+      "category": "Charbroiled Burgers",
+      "serving": "212 g",
+      "calories": 510,
+      "protein_g": 19,
+      "carbs_g": 32,
+      "fat_g": 36,
+      "fiber_g": 2
+    },
+    {
+      "name": "Double Cheeseburger (159 g)",
+      "category": "Charbroiled Burgers",
+      "serving": "159 g",
+      "calories": 370,
+      "protein_g": 19,
+      "carbs_g": 34,
+      "fat_g": 21,
+      "fiber_g": 1
+    },
+    {
+      "name": "Big Cheeseburger (219 g)",
+      "category": "Charbroiled Burgers",
+      "serving": "219 g",
+      "calories": 540,
+      "protein_g": 28,
+      "carbs_g": 56,
+      "fat_g": 22,
+      "fiber_g": 3
+    },
+    {
+      "name": "Hand-Breaded Chicken Sandwich (255 g)",
+      "category": "Chicken Sandwiches & More",
+      "serving": "255 g",
+      "calories": 660,
+      "protein_g": 31,
+      "carbs_g": 50,
+      "fat_g": 37,
+      "fiber_g": 0
+    },
+    {
+      "name": "Charbroiled Chicken Club Sandwich (308 g)",
+      "category": "Chicken Sandwiches & More",
+      "serving": "308 g",
+      "calories": 690,
+      "protein_g": 43,
+      "carbs_g": 45,
+      "fat_g": 38,
+      "fiber_g": 2
+    },
+    {
+      "name": "Charbroiled Santa Fe Chicken Sandwich (325 g)",
+      "category": "Chicken Sandwiches & More",
+      "serving": "325 g",
+      "calories": 690,
+      "protein_g": 38,
+      "carbs_g": 45,
+      "fat_g": 40,
+      "fiber_g": 2
+    },
+    {
+      "name": "Charbroiled BBQ Chicken Sandwich (275 g)",
+      "category": "Chicken Sandwiches & More",
+      "serving": "275 g",
+      "calories": 440,
+      "protein_g": 35,
+      "carbs_g": 48,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hand-Breaded Bacon Swiss Chicken Sandwich (317 g)",
+      "category": "Chicken Sandwiches & More",
+      "serving": "317 g",
+      "calories": 790,
+      "protein_g": 40,
+      "carbs_g": 53,
+      "fat_g": 47,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hand-Breaded Chicken Tenders (3 pieces) (128 g)",
+      "category": "Chicken Sandwiches & More",
+      "serving": "128 g",
+      "calories": 260,
+      "protein_g": 25,
+      "carbs_g": 13,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hand-Breaded Chicken Tenders (5 pieces) (213 g)",
+      "category": "Chicken Sandwiches & More",
+      "serving": "213 g",
+      "calories": 440,
+      "protein_g": 41,
+      "carbs_g": 21,
+      "fat_g": 21,
+      "fiber_g": 3
+    },
+    {
+      "name": "Spicy Chicken Sandwich (177 g)",
+      "category": "Chicken Sandwiches & More",
+      "serving": "177 g",
+      "calories": 490,
+      "protein_g": 14,
+      "carbs_g": 43,
+      "fat_g": 29,
+      "fiber_g": 4
+    },
+    {
+      "name": "Chicken Stars (6 pieces) (91 g)",
+      "category": "Chicken Sandwiches & More",
+      "serving": "91 g",
+      "calories": 270,
+      "protein_g": 14,
+      "carbs_g": 19,
+      "fat_g": 15,
+      "fiber_g": 3
+    },
+    {
+      "name": "Natural-Cut Fries (Small) (97 g)",
+      "category": "Sides",
+      "serving": "97 g",
+      "calories": 280,
+      "protein_g": 3,
+      "carbs_g": 36,
+      "fat_g": 14,
+      "fiber_g": 3
+    },
+    {
+      "name": "Natural-Cut Fries (Medium) (137 g)",
+      "category": "Sides",
+      "serving": "137 g",
+      "calories": 400,
+      "protein_g": 4,
+      "carbs_g": 51,
+      "fat_g": 19,
+      "fiber_g": 5
+    },
+    {
+      "name": "Natural-Cut Fries (Large) (157 g)",
+      "category": "Sides",
+      "serving": "157 g",
+      "calories": 450,
+      "protein_g": 5,
+      "carbs_g": 59,
+      "fat_g": 22,
+      "fiber_g": 6
+    },
+    {
+      "name": "Waffle Fries (120 g)",
+      "category": "Sides",
+      "serving": "120 g",
+      "calories": 380,
+      "protein_g": 5,
+      "carbs_g": 36,
+      "fat_g": 25,
+      "fiber_g": 0
+    },
+    {
+      "name": "Onion Rings (116 g)",
+      "category": "Sides",
+      "serving": "116 g",
+      "calories": 560,
+      "protein_g": 9,
+      "carbs_g": 66,
+      "fat_g": 30,
+      "fiber_g": 4
+    },
+    {
+      "name": "Jalapeno POPPERS Bites (6 piece) (124 g)",
+      "category": "Sides",
+      "serving": "124 g",
+      "calories": 370,
+      "protein_g": 9,
+      "carbs_g": 40,
+      "fat_g": 19,
+      "fiber_g": 3
+    },
+    {
+      "name": "Jalapeno POPPERS Bites (9 piece) (186 g)",
+      "category": "Sides",
+      "serving": "186 g",
+      "calories": 550,
+      "protein_g": 13,
+      "carbs_g": 60,
+      "fat_g": 28,
+      "fiber_g": 4
+    },
+    {
+      "name": "Fried Zucchini (114 g)",
+      "category": "Sides",
+      "serving": "114 g",
+      "calories": 310,
+      "protein_g": 4,
+      "carbs_g": 32,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolatey Chip Cookie (35 g)",
+      "category": "Desserts",
+      "serving": "35 g",
+      "calories": 170,
+      "protein_g": 1,
+      "carbs_g": 22,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Cake (85 g)",
+      "category": "Desserts",
+      "serving": "85 g",
+      "calories": 290,
+      "protein_g": 3,
+      "carbs_g": 46,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Shake (397 g)",
+      "category": "Hand-Scooped Ice Cream Shakes",
+      "serving": "397 g",
+      "calories": 720,
+      "protein_g": 13,
+      "carbs_g": 87,
+      "fat_g": 36,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chocolate Shake (397 g)",
+      "category": "Hand-Scooped Ice Cream Shakes",
+      "serving": "397 g",
+      "calories": 710,
+      "protein_g": 13,
+      "carbs_g": 86,
+      "fat_g": 36,
+      "fiber_g": 1
+    },
+    {
+      "name": "Strawberry Shake (397 g)",
+      "category": "Hand-Scooped Ice Cream Shakes",
+      "serving": "397 g",
+      "calories": 710,
+      "protein_g": 13,
+      "carbs_g": 85,
+      "fat_g": 36,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cookies & Cream Shake (397 g)",
+      "category": "Hand-Scooped Ice Cream Shakes",
+      "serving": "397 g",
+      "calories": 730,
+      "protein_g": 14,
+      "carbs_g": 81,
+      "fat_g": 40,
+      "fiber_g": 1
+    },
+    {
+      "name": "Kids Meal - Chicken Tenders (2 Piece) with fries & cookie (187 g)",
+      "category": "Star Pals Kids Meals",
+      "serving": "187 g",
+      "calories": 540,
+      "protein_g": 20,
+      "carbs_g": 56,
+      "fat_g": 27,
+      "fiber_g": 4
+    },
+    {
+      "name": "Kids Meal - Hamburger with fries & cookie (211 g)",
+      "category": "Star Pals Kids Meals",
+      "serving": "211 g",
+      "calories": 620,
+      "protein_g": 14,
+      "carbs_g": 79,
+      "fat_g": 28,
+      "fiber_g": 2
+    },
+    {
+      "name": "Kids Meal - Cheeseburger with fries & cookie (224 g)",
+      "category": "Star Pals Kids Meals",
+      "serving": "224 g",
+      "calories": 660,
+      "protein_g": 16,
+      "carbs_g": 80,
+      "fat_g": 32,
+      "fiber_g": 2
+    },
+    {
+      "name": "Kids Meal - Chicken Stars (4 Piece) with fries & cookie (163 g)",
+      "category": "Star Pals Kids Meals",
+      "serving": "163 g",
+      "calories": 550,
+      "protein_g": 13,
+      "carbs_g": 60,
+      "fat_g": 29,
+      "fiber_g": 5
+    },
+    {
+      "name": "Chocolate Milk (1 carton)",
+      "category": "Beverages",
+      "serving": "1 carton",
+      "calories": 150,
+      "protein_g": 7,
+      "carbs_g": 26,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "1% Milk (1 carton)",
+      "category": "Beverages",
+      "serving": "1 carton",
+      "calories": 100,
+      "protein_g": 9,
+      "carbs_g": 13,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Orange Juice (1 bottle)",
+      "category": "Beverages",
+      "serving": "1 bottle",
+      "calories": 160,
+      "protein_g": 2,
+      "carbs_g": 37,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey Mustard Dipping Sauce (25 g)",
+      "category": "Dipping Sauces",
+      "serving": "25 g",
+      "calories": 140,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spicy Buffalo Dipping Sauce (21 g)",
+      "category": "Dipping Sauces",
+      "serving": "21 g",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet & Bold BBQ Dipping Sauce (25 g)",
+      "category": "Dipping Sauces",
+      "serving": "25 g",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buttermilk Ranch Dipping Sauce (25 g)",
+      "category": "Dipping Sauces",
+      "serving": "25 g",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "House Dressing (dipping cup) (25 g)",
+      "category": "Dipping Sauces",
+      "serving": "25 g",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Barq’s Root Beer (12 oz)",
+      "category": "Beverages",
+      "serving": "12 oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Barq’s Root Beer (20 oz)",
+      "category": "Beverages",
+      "serving": "20 oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 70,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Barq’s Root Beer (24 oz)",
+      "category": "Beverages",
+      "serving": "24 oz",
+      "calories": 310,
+      "protein_g": 0,
+      "carbs_g": 84,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Barq’s Root Beer (32 oz)",
+      "category": "Beverages",
+      "serving": "32 oz",
+      "calories": 410,
+      "protein_g": 0,
+      "carbs_g": 112,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola (12 oz)",
+      "category": "Beverages",
+      "serving": "12 oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola (20 oz)",
+      "category": "Beverages",
+      "serving": "20 oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 70,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola (24 oz)",
+      "category": "Beverages",
+      "serving": "24 oz",
+      "calories": 310,
+      "protein_g": 0,
+      "carbs_g": 84,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola (32 oz)",
+      "category": "Beverages",
+      "serving": "32 oz",
+      "calories": 410,
+      "protein_g": 0,
+      "carbs_g": 112,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola Cherry (12 oz)",
+      "category": "Beverages",
+      "serving": "12 oz",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola Cherry (20 oz)",
+      "category": "Beverages",
+      "serving": "20 oz",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 73,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola Cherry (24 oz)",
+      "category": "Beverages",
+      "serving": "24 oz",
+      "calories": 320,
+      "protein_g": 0,
+      "carbs_g": 87,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola Cherry (32 oz)",
+      "category": "Beverages",
+      "serving": "32 oz",
+      "calories": 430,
+      "protein_g": 0,
+      "carbs_g": 116,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola Zero (12 oz)",
+      "category": "Beverages",
+      "serving": "12 oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola Zero (20 oz)",
+      "category": "Beverages",
+      "serving": "20 oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola Zero (24 oz)",
+      "category": "Beverages",
+      "serving": "24 oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola Zero (32 oz)",
+      "category": "Beverages",
+      "serving": "32 oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke (12 oz)",
+      "category": "Beverages",
+      "serving": "12 oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke (20 oz)",
+      "category": "Beverages",
+      "serving": "20 oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke (24 oz)",
+      "category": "Beverages",
+      "serving": "24 oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke (32 oz)",
+      "category": "Beverages",
+      "serving": "32 oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Dr Pepper (12 oz)",
+      "category": "Beverages",
+      "serving": "12 oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Dr Pepper (20 oz)",
+      "category": "Beverages",
+      "serving": "20 oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Dr Pepper (24 oz)",
+      "category": "Beverages",
+      "serving": "24 oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Dr Pepper (32 oz)",
+      "category": "Beverages",
+      "serving": "32 oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper (12 oz)",
+      "category": "Beverages",
+      "serving": "12 oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper (20 oz)",
+      "category": "Beverages",
+      "serving": "20 oz",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 60,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper (24 oz)",
+      "category": "Beverages",
+      "serving": "24 oz",
+      "calories": 264,
+      "protein_g": 0,
+      "carbs_g": 72,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper (32 oz)",
+      "category": "Beverages",
+      "serving": "32 oz",
+      "calories": 352,
+      "protein_g": 0,
+      "carbs_g": 96,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Orange (12 oz)",
+      "category": "Beverages",
+      "serving": "12 oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 41,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Orange (20 oz)",
+      "category": "Beverages",
+      "serving": "20 oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 69,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Orange (24 oz)",
+      "category": "Beverages",
+      "serving": "24 oz",
+      "calories": 310,
+      "protein_g": 0,
+      "carbs_g": 83,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Orange (32 oz)",
+      "category": "Beverages",
+      "serving": "32 oz",
+      "calories": 410,
+      "protein_g": 0,
+      "carbs_g": 111,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Strawberry (12 oz)",
+      "category": "Beverages",
+      "serving": "12 oz",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Strawberry (20 oz)",
+      "category": "Beverages",
+      "serving": "20 oz",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 75,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Strawberry (24 oz)",
+      "category": "Beverages",
+      "serving": "24 oz",
+      "calories": 330,
+      "protein_g": 0,
+      "carbs_g": 90,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Strawberry (32 oz)",
+      "category": "Beverages",
+      "serving": "32 oz",
+      "calories": 440,
+      "protein_g": 0,
+      "carbs_g": 120,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fuze Raspberry Iced Tea (12 oz)",
+      "category": "Beverages",
+      "serving": "12 oz",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 23,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fuze Raspberry Iced Tea (20 oz)",
+      "category": "Beverages",
+      "serving": "20 oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fuze Raspberry Iced Tea (24 oz)",
+      "category": "Beverages",
+      "serving": "24 oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fuze Raspberry Iced Tea (32 oz)",
+      "category": "Beverages",
+      "serving": "32 oz",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 62,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hand-Crafted Lemonade (16 oz)",
+      "category": "Beverages",
+      "serving": "16 oz",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 53,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hand-Crafted Lemonade (24 oz)",
+      "category": "Beverages",
+      "serving": "24 oz",
+      "calories": 330,
+      "protein_g": 0,
+      "carbs_g": 88,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hand-Crafted Strawberry Lemonade (16 oz)",
+      "category": "Beverages",
+      "serving": "16 oz",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hand-Crafted Strawberry Lemonade (24 oz)",
+      "category": "Beverages",
+      "serving": "24 oz",
+      "calories": 370,
+      "protein_g": 0,
+      "carbs_g": 97,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Fruit Punch (12 oz)",
+      "category": "Beverages",
+      "serving": "12 oz",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Fruit Punch (20 oz)",
+      "category": "Beverages",
+      "serving": "20 oz",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 74,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Fruit Punch (24 oz)",
+      "category": "Beverages",
+      "serving": "24 oz",
+      "calories": 320,
+      "protein_g": 0,
+      "carbs_g": 88,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Fruit Punch (32 oz)",
+      "category": "Beverages",
+      "serving": "32 oz",
+      "calories": 430,
+      "protein_g": 0,
+      "carbs_g": 118,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Zero Sugar Lemonade (12 oz)",
+      "category": "Beverages",
+      "serving": "12 oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Zero Sugar Lemonade (20 oz)",
+      "category": "Beverages",
+      "serving": "20 oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Zero Sugar Lemonade (24 oz)",
+      "category": "Beverages",
+      "serving": "24 oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Zero Sugar Lemonade (32 oz)",
+      "category": "Beverages",
+      "serving": "32 oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Powerade Mountain Berry Blast (12 oz)",
+      "category": "Beverages",
+      "serving": "12 oz",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 23,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Powerade Mountain Berry Blast (20 oz)",
+      "category": "Beverages",
+      "serving": "20 oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 38,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Powerade Mountain Berry Blast (24 oz)",
+      "category": "Beverages",
+      "serving": "24 oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Powerade Mountain Berry Blast (32 oz)",
+      "category": "Beverages",
+      "serving": "32 oz",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 61,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite (12 oz)",
+      "category": "Beverages",
+      "serving": "12 oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite (20 oz)",
+      "category": "Beverages",
+      "serving": "20 oz",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 64,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite (24 oz)",
+      "category": "Beverages",
+      "serving": "24 oz",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 77,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite (32 oz)",
+      "category": "Beverages",
+      "serving": "32 oz",
+      "calories": 380,
+      "protein_g": 0,
+      "carbs_g": 103,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweetened Iced Tea (12 oz)",
+      "category": "Beverages",
+      "serving": "12 oz",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweetened Iced Tea (20 oz)",
+      "category": "Beverages",
+      "serving": "20 oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 33,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweetened Iced Tea (24 oz)",
+      "category": "Beverages",
+      "serving": "24 oz",
+      "calories": 152,
+      "protein_g": 0,
+      "carbs_g": 40,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweetened Iced Tea (32 oz)",
+      "category": "Beverages",
+      "serving": "32 oz",
+      "calories": 184,
+      "protein_g": 0,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 0
+    }
+  ]
+}

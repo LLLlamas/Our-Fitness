@@ -1,0 +1,1050 @@
+{
+  "chain": "The Habit Burger Grill",
+  "slug": "habit-burger",
+  "aliases": [
+    "habit",
+    "the habit",
+    "habit burger",
+    "habit burger grill",
+    "the habit burger",
+    "habit burger & grill",
+    "habitburger"
+  ],
+  "kind": "fast-casual",
+  "source_url": "https://www.habitburger.com/nutritional-information/",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Parsed from the nutrition table on habitburger.com/nutritional-information. Values the site prints as '<1' are stored as 0. Salads include dressing and desserts include whipped cream, as the source's section names state.",
+  "items": [
+    {
+      "name": "Charburger",
+      "category": "Charburgers",
+      "serving": "1 serving",
+      "calories": 480,
+      "protein_g": 21,
+      "carbs_g": 43,
+      "fat_g": 24,
+      "fiber_g": 3
+    },
+    {
+      "name": "Charburger with Cheese",
+      "category": "Charburgers",
+      "serving": "1 serving",
+      "calories": 540,
+      "protein_g": 24,
+      "carbs_g": 45,
+      "fat_g": 29,
+      "fiber_g": 3
+    },
+    {
+      "name": "Double Charburger",
+      "category": "Charburgers",
+      "serving": "1 serving",
+      "calories": 630,
+      "protein_g": 34,
+      "carbs_g": 44,
+      "fat_g": 33,
+      "fiber_g": 3
+    },
+    {
+      "name": "Double Char with Cheese",
+      "category": "Charburgers",
+      "serving": "1 serving",
+      "calories": 750,
+      "protein_g": 41,
+      "carbs_g": 47,
+      "fat_g": 43,
+      "fiber_g": 3
+    },
+    {
+      "name": "Teriyaki Char",
+      "category": "Charburgers",
+      "serving": "1 serving",
+      "calories": 580,
+      "protein_g": 25,
+      "carbs_g": 53,
+      "fat_g": 29,
+      "fiber_g": 3
+    },
+    {
+      "name": "BBQ Bacon Char",
+      "category": "Charburgers",
+      "serving": "1 serving",
+      "calories": 650,
+      "protein_g": 29,
+      "carbs_g": 51,
+      "fat_g": 35,
+      "fiber_g": 2
+    },
+    {
+      "name": "Portabella Char",
+      "category": "Charburgers",
+      "serving": "1 serving",
+      "calories": 700,
+      "protein_g": 25,
+      "carbs_g": 47,
+      "fat_g": 46,
+      "fiber_g": 3
+    },
+    {
+      "name": "Santa Barbara Char",
+      "category": "Charburgers",
+      "serving": "1 serving",
+      "calories": 1070,
+      "protein_g": 45,
+      "carbs_g": 65,
+      "fat_g": 69,
+      "fiber_g": 8
+    },
+    {
+      "name": "Lettuce Wrap Charburger",
+      "category": "Charburgers",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 15,
+      "carbs_g": 8,
+      "fat_g": 21,
+      "fiber_g": 2
+    },
+    {
+      "name": "Grilled Chicken Sandwich on Wheat",
+      "category": "Sandwiches",
+      "serving": "1 serving",
+      "calories": 550,
+      "protein_g": 40,
+      "carbs_g": 42,
+      "fat_g": 26,
+      "fiber_g": 4
+    },
+    {
+      "name": "Chicken Club on Sourdough",
+      "category": "Sandwiches",
+      "serving": "1 serving",
+      "calories": 900,
+      "protein_g": 48,
+      "carbs_g": 57,
+      "fat_g": 52,
+      "fiber_g": 6
+    },
+    {
+      "name": "Ahi Tuna Filet on Seeded Bun",
+      "category": "Sandwiches",
+      "serving": "1 serving",
+      "calories": 400,
+      "protein_g": 35,
+      "carbs_g": 43,
+      "fat_g": 8,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sirloin Steak Sandwich on Sourdough",
+      "category": "Sandwiches",
+      "serving": "1 serving",
+      "calories": 760,
+      "protein_g": 32,
+      "carbs_g": 65,
+      "fat_g": 40,
+      "fiber_g": 5
+    },
+    {
+      "name": "Veggie Burger on Wheat Bun with Cheese",
+      "category": "Sandwiches",
+      "serving": "1 serving",
+      "calories": 480,
+      "protein_g": 24,
+      "carbs_g": 51,
+      "fat_g": 23,
+      "fiber_g": 9
+    },
+    {
+      "name": "Garden Ranch Salad",
+      "category": "Salads (with dressing)",
+      "serving": "1 serving",
+      "calories": 420,
+      "protein_g": 9,
+      "carbs_g": 26,
+      "fat_g": 31,
+      "fiber_g": 6
+    },
+    {
+      "name": "Grilled Chicken Caesar",
+      "category": "Salads (with dressing)",
+      "serving": "1 serving",
+      "calories": 580,
+      "protein_g": 43,
+      "carbs_g": 25,
+      "fat_g": 35,
+      "fiber_g": 5
+    },
+    {
+      "name": "BBQ Chicken Salad",
+      "category": "Salads (with dressing)",
+      "serving": "1 serving",
+      "calories": 750,
+      "protein_g": 47,
+      "carbs_g": 35,
+      "fat_g": 47,
+      "fiber_g": 7
+    },
+    {
+      "name": "Mango Miso Crunch",
+      "category": "Salads (with dressing)",
+      "serving": "1 serving",
+      "calories": 550,
+      "protein_g": 36,
+      "carbs_g": 35,
+      "fat_g": 29,
+      "fiber_g": 6
+    },
+    {
+      "name": "Santa Barbara Cobb",
+      "category": "Salads (with dressing)",
+      "serving": "1 serving",
+      "calories": 770,
+      "protein_g": 51,
+      "carbs_g": 17,
+      "fat_g": 54,
+      "fiber_g": 8
+    },
+    {
+      "name": "French Fries",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 440,
+      "protein_g": 4,
+      "carbs_g": 60,
+      "fat_g": 27,
+      "fiber_g": 4
+    },
+    {
+      "name": "Onion Rings",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 500,
+      "protein_g": 10,
+      "carbs_g": 62,
+      "fat_g": 24,
+      "fiber_g": 3
+    },
+    {
+      "name": "Sweet Potato Fries",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 374,
+      "protein_g": 3,
+      "carbs_g": 50,
+      "fat_g": 11,
+      "fiber_g": 8
+    },
+    {
+      "name": "Tempura Green Beans",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 250,
+      "protein_g": 3,
+      "carbs_g": 34,
+      "fat_g": 11,
+      "fiber_g": 7
+    },
+    {
+      "name": "Side Garden Ranch Salad",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 5,
+      "carbs_g": 13,
+      "fat_g": 19,
+      "fiber_g": 3
+    },
+    {
+      "name": "Crispy Chicken Bites (5pc)",
+      "category": "Sides",
+      "serving": "5pc",
+      "calories": 240,
+      "protein_g": 21,
+      "carbs_g": 23,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Crispy Chicken Bites (10pc)",
+      "category": "Sides",
+      "serving": "10pc",
+      "calories": 480,
+      "protein_g": 43,
+      "carbs_g": 45,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Grilled Cheese",
+      "category": "Kid's Meals",
+      "serving": "1 serving",
+      "calories": 510,
+      "protein_g": 15,
+      "carbs_g": 53,
+      "fat_g": 26,
+      "fiber_g": 2
+    },
+    {
+      "name": "Crispy Chicken Bites",
+      "category": "Kid's Meals",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 21,
+      "carbs_g": 23,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kids Fries",
+      "category": "Kid's Meals",
+      "serving": "1 serving",
+      "calories": 190,
+      "protein_g": 2,
+      "carbs_g": 26,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Vanilla Shake",
+      "category": "Desserts (with whipped cream)",
+      "serving": "1 serving",
+      "calories": 520,
+      "protein_g": 12,
+      "carbs_g": 69,
+      "fat_g": 22,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake",
+      "category": "Desserts (with whipped cream)",
+      "serving": "1 serving",
+      "calories": 670,
+      "protein_g": 12,
+      "carbs_g": 108,
+      "fat_g": 20,
+      "fiber_g": 2
+    },
+    {
+      "name": "Strawberry Shake",
+      "category": "Desserts (with whipped cream)",
+      "serving": "1 serving",
+      "calories": 580,
+      "protein_g": 11,
+      "carbs_g": 88,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mocha Shake",
+      "category": "Desserts (with whipped cream)",
+      "serving": "1 serving",
+      "calories": 590,
+      "protein_g": 12,
+      "carbs_g": 89,
+      "fat_g": 20,
+      "fiber_g": 2
+    },
+    {
+      "name": "Coffee Shake",
+      "category": "Desserts (with whipped cream)",
+      "serving": "1 serving",
+      "calories": 500,
+      "protein_g": 11,
+      "carbs_g": 68,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cookies & Cream Shake",
+      "category": "Desserts (with whipped cream)",
+      "serving": "1 serving",
+      "calories": 670,
+      "protein_g": 12,
+      "carbs_g": 94,
+      "fat_g": 28,
+      "fiber_g": 1
+    },
+    {
+      "name": "Blue Wave Shake",
+      "category": "Desserts (with whipped cream)",
+      "serving": "1 serving",
+      "calories": 550,
+      "protein_g": 11,
+      "carbs_g": 80,
+      "fat_g": 20,
+      "fiber_g": 0
+    },
+    {
+      "name": "Orange Dream Shake",
+      "category": "Desserts (with whipped cream)",
+      "serving": "1 serving",
+      "calories": 560,
+      "protein_g": 11,
+      "carbs_g": 82,
+      "fat_g": 20,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salted Caramel Shake",
+      "category": "Desserts (with whipped cream)",
+      "serving": "1 serving",
+      "calories": 640,
+      "protein_g": 12,
+      "carbs_g": 97,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Sundae",
+      "category": "Desserts (with whipped cream)",
+      "serving": "1 serving",
+      "calories": 670,
+      "protein_g": 12,
+      "carbs_g": 107,
+      "fat_g": 22,
+      "fiber_g": 3
+    },
+    {
+      "name": "Strawberry Sundae",
+      "category": "Desserts (with whipped cream)",
+      "serving": "1 serving",
+      "calories": 580,
+      "protein_g": 11,
+      "carbs_g": 87,
+      "fat_g": 21,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Sundae",
+      "category": "Desserts (with whipped cream)",
+      "serving": "1 serving",
+      "calories": 490,
+      "protein_g": 10,
+      "carbs_g": 65,
+      "fat_g": 21,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cone",
+      "category": "Desserts (with whipped cream)",
+      "serving": "1 serving",
+      "calories": 210,
+      "protein_g": 5,
+      "carbs_g": 34,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 28,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Pepsi",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Starry",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brisk Iced Tea Raspberry",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Fruit Punch",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 30,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Lemonade",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 27,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 27,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mt Dew",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 29,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Iced Tea",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Tea",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Limeade",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 32,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mug RootBeer",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 27,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Zero Sugar",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Original Lemonade",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 8,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Lower Sugar Lemonade",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 8,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kids Milk",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 210,
+      "protein_g": 11,
+      "carbs_g": 15,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Seeded Bun",
+      "category": "Bread Options",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 6,
+      "carbs_g": 37,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sourdough with Butter",
+      "category": "Bread Options",
+      "serving": "1 serving",
+      "calories": 390,
+      "protein_g": 9,
+      "carbs_g": 49,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Wheat Bun",
+      "category": "Bread Options",
+      "serving": "1 serving",
+      "calories": 150,
+      "protein_g": 5,
+      "carbs_g": 27,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Plain Bun",
+      "category": "Bread Options",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 5,
+      "carbs_g": 31,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iceberg Lettuce",
+      "category": "Bread Options",
+      "serving": "1 serving",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Classic Ranch (1 oz)",
+      "category": "Dressings & Sauces",
+      "serving": "1 oz",
+      "calories": 130,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Classic Ranch Dressing (2 oz)",
+      "category": "Dressings & Sauces",
+      "serving": "2 oz",
+      "calories": 210,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 22,
+      "fiber_g": 0
+    },
+    {
+      "name": "Avocado Ranch (1 oz)",
+      "category": "Dressings & Sauces",
+      "serving": "1 oz",
+      "calories": 150,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Spicy Ranch (1 oz)",
+      "category": "Dressings & Sauces",
+      "serving": "1 oz",
+      "calories": 140,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "BBQ Sauce (1 oz)",
+      "category": "Dressings & Sauces",
+      "serving": "1 oz",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 15,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemon Caesar Dressing (2 oz)",
+      "category": "Dressings & Sauces",
+      "serving": "2 oz",
+      "calories": 200,
+      "protein_g": 2,
+      "carbs_g": 5,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Miso Ginger Dressing (2 oz)",
+      "category": "Dressings & Sauces",
+      "serving": "2 oz",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "House Dressing (2 oz)",
+      "category": "Dressings & Sauces",
+      "serving": "2 oz",
+      "calories": 350,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 35,
+      "fiber_g": 0
+    },
+    {
+      "name": "Roasted Garlic Aioli (1 oz)",
+      "category": "Dressings & Sauces",
+      "serving": "1 oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Mustard (Vegan) (1 oz)",
+      "category": "Dressings & Sauces",
+      "serving": "1 oz",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 7,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tartar (1 oz)",
+      "category": "Dressings & Sauces",
+      "serving": "1 oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Teriyaki Sauce (1 oz)",
+      "category": "Dressings & Sauces",
+      "serving": "1 oz",
+      "calories": 70,
+      "protein_g": 2,
+      "carbs_g": 16,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "1000 Island Dressing (2 oz)",
+      "category": "Dressings & Sauces",
+      "serving": "2 oz",
+      "calories": 210,
+      "protein_g": 1,
+      "carbs_g": 11,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ahi Tuna",
+      "category": "Optional Items",
+      "serving": "1 serving",
+      "calories": 130,
+      "protein_g": 28,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beef Patty",
+      "category": "Optional Items",
+      "serving": "1 serving",
+      "calories": 150,
+      "protein_g": 14,
+      "carbs_g": 0,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken Breast",
+      "category": "Optional Items",
+      "serving": "1 serving",
+      "calories": 180,
+      "protein_g": 30,
+      "carbs_g": 1,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sirloin Steak",
+      "category": "Optional Items",
+      "serving": "1 serving",
+      "calories": 140,
+      "protein_g": 17,
+      "carbs_g": 3,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Veggie Patty",
+      "category": "Optional Items",
+      "serving": "1 serving",
+      "calories": 140,
+      "protein_g": 15,
+      "carbs_g": 18,
+      "fat_g": 4,
+      "fiber_g": 6
+    },
+    {
+      "name": "American Cheese (1 slice)",
+      "category": "Optional Items",
+      "serving": "1 slice",
+      "calories": 60,
+      "protein_g": 3,
+      "carbs_g": 2,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Apple Juice",
+      "category": "Optional Items",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Apple Sauce",
+      "category": "Optional Items",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 13,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chunky Avocado (1 scoop)",
+      "category": "Optional Items",
+      "serving": "1 scoop",
+      "calories": 80,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 7,
+      "fiber_g": 3
+    },
+    {
+      "name": "Avocado Half",
+      "category": "Optional Items",
+      "serving": "1 serving",
+      "calories": 80,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 8,
+      "fiber_g": 3
+    },
+    {
+      "name": "Bacon (2 strips)",
+      "category": "Optional Items",
+      "serving": "2 strips",
+      "calories": 100,
+      "protein_g": 7,
+      "carbs_g": 0,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramelized Onions (1 oz)",
+      "category": "Optional Items",
+      "serving": "1 oz",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Corn & Black Bean Salsa",
+      "category": "Optional Items",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 2,
+      "carbs_g": 8,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Croutons (2TBS)",
+      "category": "Optional Items",
+      "serving": "2TBS",
+      "calories": 90,
+      "protein_g": 2,
+      "carbs_g": 13,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Crumbled Cheddar Cheese (1 slice)",
+      "category": "Optional Items",
+      "serving": "1 slice",
+      "calories": 80,
+      "protein_g": 5,
+      "carbs_g": 0,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Egg, Hardboiled",
+      "category": "Optional Items",
+      "serving": "1 serving",
+      "calories": 70,
+      "protein_g": 6,
+      "carbs_g": 1,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango Salsa (2 oz)",
+      "category": "Optional Items",
+      "serving": "2 oz",
+      "calories": 45,
+      "protein_g": 1,
+      "carbs_g": 10,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Margarine (2 Tsp)",
+      "category": "Optional Items",
+      "serving": "2 Tsp",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mayo (1 TBSP)",
+      "category": "Optional Items",
+      "serving": "1 TBSP",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Onion Tanglers",
+      "category": "Optional Items",
+      "serving": "1 serving",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pineapple Slice",
+      "category": "Optional Items",
+      "serving": "1 serving",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Parmesan Cheese",
+      "category": "Optional Items",
+      "serving": "1 serving",
+      "calories": 70,
+      "protein_g": 6,
+      "carbs_g": 0,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pickled Red Onion",
+      "category": "Optional Items",
+      "serving": "1 serving",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Portabella Mushrooms (2 oz)",
+      "category": "Optional Items",
+      "serving": "2 oz",
+      "calories": 130,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 13,
+      "fiber_g": 1
+    },
+    {
+      "name": "Whipped Cream (2 TBS)",
+      "category": "Optional Items",
+      "serving": "2 TBS",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "White American (1 slice)",
+      "category": "Optional Items",
+      "serving": "1 slice",
+      "calories": 70,
+      "protein_g": 3,
+      "carbs_g": 1,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wonton Almond Mix",
+      "category": "Optional Items",
+      "serving": "1 serving",
+      "calories": 80,
+      "protein_g": 3,
+      "carbs_g": 7,
+      "fat_g": 5,
+      "fiber_g": 1
+    }
+  ]
+}

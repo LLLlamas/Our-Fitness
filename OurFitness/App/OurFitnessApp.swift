@@ -22,6 +22,8 @@ struct OurFitnessApp: App {
         UNUserNotificationCenter.current().delegate = AppNotificationDelegate.shared
         ReminderNotificationService.registerCategories()
         WatchSyncService.shared.activate(container: container)
+        // Observes saves to re-plan meal-logging nudges; never prompts.
+        MealReminderService.shared.activate(container: container)
     }
 
     var body: some Scene {

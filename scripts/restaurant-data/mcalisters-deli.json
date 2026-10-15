@@ -1,0 +1,4069 @@
+{
+  "chain": "McAlister's Deli",
+  "slug": "mcalisters-deli",
+  "aliases": [
+    "mcalisters",
+    "mcalister's",
+    "mcalisters deli",
+    "mcallisters",
+    "mcalister",
+    "mac's deli"
+  ],
+  "kind": "deli",
+  "source_url": "https://www.nutritionix.com/mcalisters-deli/menu/premium",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Nutritionix-hosted restaurant nutrition calculator (last updated 06/18/2026). This is the calculator embedded on mcalistersdeli.com/nutrition (iframe verified). 'Choose 2 Portion' rows are the half portions used in Choose 2 combos.",
+  "items": [
+    {
+      "name": "Chicago Style French Dip",
+      "category": "Featured Items",
+      "serving": "1 serving",
+      "calories": 750,
+      "protein_g": 50,
+      "carbs_g": 47,
+      "fat_g": 40,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chicago Style French Dip (12-inch)",
+      "category": "Featured Items",
+      "serving": "12-inch",
+      "calories": 1500,
+      "protein_g": 99,
+      "carbs_g": 95,
+      "fat_g": 81,
+      "fiber_g": 4
+    },
+    {
+      "name": "Chicago Style French Dip (Choose 2 Portion)",
+      "category": "Featured Items",
+      "serving": "1 choose 2 portion",
+      "calories": 450,
+      "protein_g": 32,
+      "carbs_g": 31,
+      "fat_g": 23,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pineapple Upside Down Cheesecake",
+      "category": "Featured Items",
+      "serving": "1 serving",
+      "calories": 520,
+      "protein_g": 5,
+      "carbs_g": 61,
+      "fat_g": 29,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pineapple Upside Down Lemonade",
+      "category": "Featured Items",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 76,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pineapple Upside Down Lemonade - Kids",
+      "category": "Featured Items",
+      "serving": "1 kids",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 47,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pineapple Upside Down Lemonade Gallon",
+      "category": "Featured Items",
+      "serving": "1 serving",
+      "calories": 2580,
+      "protein_g": 0,
+      "carbs_g": 667,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Nacho Basket (Choose 2 Portion)",
+      "category": "Starters",
+      "serving": "1 choose 2 portion",
+      "calories": 830,
+      "protein_g": 18,
+      "carbs_g": 90,
+      "fat_g": 47,
+      "fiber_g": 6
+    },
+    {
+      "name": "Nacho Basket (Serves 2-4)",
+      "category": "Starters",
+      "serving": "1 serving",
+      "calories": 1350,
+      "protein_g": 32,
+      "carbs_g": 138,
+      "fat_g": 78,
+      "fiber_g": 9
+    },
+    {
+      "name": "Ultimate Honey BBQ Pork Nachos (Choose 2 Portion)",
+      "category": "Starters",
+      "serving": "1 choose 2 portion",
+      "calories": 770,
+      "protein_g": 24,
+      "carbs_g": 62,
+      "fat_g": 47,
+      "fiber_g": 2
+    },
+    {
+      "name": "Ultimate Honey BBQ Pork Nachos (Serves 2-4)",
+      "category": "Starters",
+      "serving": "1 serving",
+      "calories": 1530,
+      "protein_g": 47,
+      "carbs_g": 124,
+      "fat_g": 94,
+      "fiber_g": 5
+    },
+    {
+      "name": "Ultimate Nachos (Choose 2 Portion)",
+      "category": "Starters",
+      "serving": "1 choose 2 portion",
+      "calories": 620,
+      "protein_g": 16,
+      "carbs_g": 55,
+      "fat_g": 38,
+      "fiber_g": 5
+    },
+    {
+      "name": "Ultimate Nachos (Serves 2-4)",
+      "category": "Starters",
+      "serving": "1 serving",
+      "calories": 1240,
+      "protein_g": 33,
+      "carbs_g": 109,
+      "fat_g": 77,
+      "fiber_g": 10
+    },
+    {
+      "name": "Broccoli Cheddar, Cup",
+      "category": "Soups (Cup)",
+      "serving": "1 cup",
+      "calories": 300,
+      "protein_g": 11,
+      "carbs_g": 23,
+      "fat_g": 19,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chicken Tortilla, Cup",
+      "category": "Soups (Cup)",
+      "serving": "1 cup",
+      "calories": 210,
+      "protein_g": 7,
+      "carbs_g": 25,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Country Potato, Cup",
+      "category": "Soups (Cup)",
+      "serving": "1 cup",
+      "calories": 270,
+      "protein_g": 9,
+      "carbs_g": 35,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Traditional Chili, Cup",
+      "category": "Soups (Cup)",
+      "serving": "1 cup",
+      "calories": 300,
+      "protein_g": 19,
+      "carbs_g": 32,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Veggie Chili, Cup",
+      "category": "Soups (Cup)",
+      "serving": "1 cup",
+      "calories": 230,
+      "protein_g": 11,
+      "carbs_g": 43,
+      "fat_g": 3,
+      "fiber_g": 9
+    },
+    {
+      "name": "Applewood Smoked Bacon",
+      "category": "Soup Garnishes - Cup",
+      "serving": "1 serving (Soup Garnishes - Cup portion)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blue Corn Tortilla Chips",
+      "category": "Soup Garnishes - Cup",
+      "serving": "1 serving",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheddar-Jack",
+      "category": "Soup Garnishes - Cup",
+      "serving": "1 serving (Soup Garnishes - Cup portion)",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Crispy Onion",
+      "category": "Soup Garnishes - Cup",
+      "serving": "1 serving",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Croutons",
+      "category": "Soup Garnishes - Cup",
+      "serving": "1 serving (Soup Garnishes - Cup portion)",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Green Onions",
+      "category": "Soup Garnishes - Cup",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jalapenos",
+      "category": "Soup Garnishes - Cup",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Parmesan",
+      "category": "Soup Garnishes - Cup",
+      "serving": "1 serving (Soup Garnishes - Cup portion)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sour Cream",
+      "category": "Soup Garnishes - Cup",
+      "serving": "1 serving (Soup Garnishes - Cup portion)",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Saltines",
+      "category": "Soup Crackers - Cup",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 2,
+      "carbs_g": 10,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tortilla Chips",
+      "category": "Soup Crackers - Cup",
+      "serving": "1 serving (Soup Crackers - Cup portion)",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Broccoli Cheddar, Bowl",
+      "category": "Soups (Bowl)",
+      "serving": "1 bowl",
+      "calories": 420,
+      "protein_g": 16,
+      "carbs_g": 30,
+      "fat_g": 27,
+      "fiber_g": 3
+    },
+    {
+      "name": "Chicken Tortilla, Bowl",
+      "category": "Soups (Bowl)",
+      "serving": "1 bowl",
+      "calories": 350,
+      "protein_g": 11,
+      "carbs_g": 44,
+      "fat_g": 16,
+      "fiber_g": 3
+    },
+    {
+      "name": "Country Potato, Bowl",
+      "category": "Soups (Bowl)",
+      "serving": "1 bowl",
+      "calories": 390,
+      "protein_g": 12,
+      "carbs_g": 47,
+      "fat_g": 18,
+      "fiber_g": 4
+    },
+    {
+      "name": "Traditional Chili, Bowl",
+      "category": "Soups (Bowl)",
+      "serving": "1 bowl",
+      "calories": 420,
+      "protein_g": 28,
+      "carbs_g": 43,
+      "fat_g": 18,
+      "fiber_g": 4
+    },
+    {
+      "name": "Veggie Chili, Bowl",
+      "category": "Soups (Bowl)",
+      "serving": "1 bowl",
+      "calories": 320,
+      "protein_g": 16,
+      "carbs_g": 60,
+      "fat_g": 4,
+      "fiber_g": 14
+    },
+    {
+      "name": "Applewood Smoked Bacon",
+      "category": "Soup Garnishes - Bowl",
+      "serving": "1 serving (Soup Garnishes - Bowl portion)",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheddar-Jack",
+      "category": "Soup Garnishes - Bowl",
+      "serving": "1 serving (Soup Garnishes - Bowl portion)",
+      "calories": 30,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Croutons",
+      "category": "Soup Garnishes - Bowl",
+      "serving": "1 serving (Soup Garnishes - Bowl portion)",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Parmesan",
+      "category": "Soup Garnishes - Bowl",
+      "serving": "1 serving (Soup Garnishes - Bowl portion)",
+      "calories": 20,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sour Cream",
+      "category": "Soup Garnishes - Bowl",
+      "serving": "1 serving (Soup Garnishes - Bowl portion)",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bread Bowl",
+      "category": "Soup Bread & Crackers - Bowl",
+      "serving": "1 bowl",
+      "calories": 460,
+      "protein_g": 16,
+      "carbs_g": 87,
+      "fat_g": 4,
+      "fiber_g": 4
+    },
+    {
+      "name": "Tortilla Chips",
+      "category": "Soup Bread & Crackers - Bowl",
+      "serving": "1 serving (Soup Bread & Crackers - Bowl portion)",
+      "calories": 80,
+      "protein_g": 1,
+      "carbs_g": 10,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caesar Salad",
+      "category": "Fresh Salads",
+      "serving": "1 serving",
+      "calories": 970,
+      "protein_g": 25,
+      "carbs_g": 20,
+      "fat_g": 89,
+      "fiber_g": 6
+    },
+    {
+      "name": "Garden Salad",
+      "category": "Fresh Salads",
+      "serving": "1 serving",
+      "calories": 310,
+      "protein_g": 18,
+      "carbs_g": 19,
+      "fat_g": 19,
+      "fiber_g": 3
+    },
+    {
+      "name": "Garden Salad with Harvest Chicken Salad",
+      "category": "Fresh Salads",
+      "serving": "1 serving",
+      "calories": 830,
+      "protein_g": 39,
+      "carbs_g": 34,
+      "fat_g": 61,
+      "fiber_g": 4
+    },
+    {
+      "name": "Grilled Chicken Caesar Salad",
+      "category": "Fresh Salads",
+      "serving": "1 serving",
+      "calories": 1100,
+      "protein_g": 50,
+      "carbs_g": 21,
+      "fat_g": 92,
+      "fiber_g": 7
+    },
+    {
+      "name": "Grilled Chicken Salad",
+      "category": "Fresh Salads",
+      "serving": "1 serving",
+      "calories": 490,
+      "protein_g": 47,
+      "carbs_g": 20,
+      "fat_g": 26,
+      "fiber_g": 4
+    },
+    {
+      "name": "McAlister's Chef Salad",
+      "category": "Fresh Salads",
+      "serving": "1 serving",
+      "calories": 480,
+      "protein_g": 40,
+      "carbs_g": 21,
+      "fat_g": 26,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pecanberry Salad",
+      "category": "Fresh Salads",
+      "serving": "1 serving",
+      "calories": 360,
+      "protein_g": 30,
+      "carbs_g": 33,
+      "fat_g": 14,
+      "fiber_g": 7
+    },
+    {
+      "name": "Savannah Chopped Salad",
+      "category": "Fresh Salads",
+      "serving": "1 serving",
+      "calories": 450,
+      "protein_g": 36,
+      "carbs_g": 41,
+      "fat_g": 16,
+      "fiber_g": 5
+    },
+    {
+      "name": "Southwest Chicken & Avocado Salad",
+      "category": "Fresh Salads",
+      "serving": "1 serving",
+      "calories": 600,
+      "protein_g": 45,
+      "carbs_g": 36,
+      "fat_g": 32,
+      "fiber_g": 10
+    },
+    {
+      "name": "Caesar Salad (Choose 2 Portion)",
+      "category": "Choose 2 - Salad Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 480,
+      "protein_g": 12,
+      "carbs_g": 9,
+      "fat_g": 45,
+      "fiber_g": 2
+    },
+    {
+      "name": "Garden Salad (Choose 2 Portion)",
+      "category": "Choose 2 - Salad Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 150,
+      "protein_g": 9,
+      "carbs_g": 8,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Garden Salad with Harvest Chicken Salad (Choose 2 Portion)",
+      "category": "Choose 2 - Salad Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 410,
+      "protein_g": 19,
+      "carbs_g": 16,
+      "fat_g": 30,
+      "fiber_g": 2
+    },
+    {
+      "name": "Grilled Chicken Caesar Salad (Choose 2 Portion)",
+      "category": "Choose 2 - Salad Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 540,
+      "protein_g": 25,
+      "carbs_g": 10,
+      "fat_g": 46,
+      "fiber_g": 3
+    },
+    {
+      "name": "Grilled Chicken Salad (Choose 2 Portion)",
+      "category": "Choose 2 - Salad Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 250,
+      "protein_g": 24,
+      "carbs_g": 9,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "McAlister's Chef Salad (Choose 2 Portion)",
+      "category": "Choose 2 - Salad Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 240,
+      "protein_g": 20,
+      "carbs_g": 10,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pecanberry Salad (Choose 2 Portion)",
+      "category": "Choose 2 - Salad Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 170,
+      "protein_g": 15,
+      "carbs_g": 16,
+      "fat_g": 7,
+      "fiber_g": 3
+    },
+    {
+      "name": "Savannah Chopped Salad (Choose 2 Portion)",
+      "category": "Choose 2 - Salad Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 220,
+      "protein_g": 18,
+      "carbs_g": 20,
+      "fat_g": 8,
+      "fiber_g": 2
+    },
+    {
+      "name": "Southwest Chicken & Avocado Salad (Choose 2 Portion)",
+      "category": "Choose 2 - Salad Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 300,
+      "protein_g": 22,
+      "carbs_g": 17,
+      "fat_g": 16,
+      "fiber_g": 5
+    },
+    {
+      "name": "Corned Beef",
+      "category": "Craft Your Own Sandwiches",
+      "serving": "1 serving (Craft Your Own Sandwiches portion)",
+      "calories": 550,
+      "protein_g": 37,
+      "carbs_g": 73,
+      "fat_g": 13,
+      "fiber_g": 7
+    },
+    {
+      "name": "Corned Beef (Choose 2 Portion)",
+      "category": "Craft Your Own Sandwiches",
+      "serving": "1 choose 2 portion",
+      "calories": 280,
+      "protein_g": 18,
+      "carbs_g": 37,
+      "fat_g": 7,
+      "fiber_g": 3
+    },
+    {
+      "name": "Grilled Chicken",
+      "category": "Craft Your Own Sandwiches",
+      "serving": "1 serving",
+      "calories": 490,
+      "protein_g": 38,
+      "carbs_g": 72,
+      "fat_g": 6,
+      "fiber_g": 8
+    },
+    {
+      "name": "Grilled Chicken (Choose 2 Portion)",
+      "category": "Craft Your Own Sandwiches",
+      "serving": "1 choose 2 portion",
+      "calories": 240,
+      "protein_g": 19,
+      "carbs_g": 36,
+      "fat_g": 3,
+      "fiber_g": 4
+    },
+    {
+      "name": "Ham",
+      "category": "Craft Your Own Sandwiches",
+      "serving": "1 serving",
+      "calories": 490,
+      "protein_g": 30,
+      "carbs_g": 73,
+      "fat_g": 9,
+      "fiber_g": 7
+    },
+    {
+      "name": "Ham (Choose 2 Portion)",
+      "category": "Craft Your Own Sandwiches",
+      "serving": "1 choose 2 portion",
+      "calories": 240,
+      "protein_g": 15,
+      "carbs_g": 37,
+      "fat_g": 4,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pastrami",
+      "category": "Craft Your Own Sandwiches",
+      "serving": "1 serving (Craft Your Own Sandwiches portion)",
+      "calories": 540,
+      "protein_g": 37,
+      "carbs_g": 73,
+      "fat_g": 13,
+      "fiber_g": 7
+    },
+    {
+      "name": "Pastrami (Choose 2 Portion)",
+      "category": "Craft Your Own Sandwiches",
+      "serving": "1 choose 2 portion",
+      "calories": 270,
+      "protein_g": 18,
+      "carbs_g": 37,
+      "fat_g": 7,
+      "fiber_g": 3
+    },
+    {
+      "name": "Roast Beef",
+      "category": "Craft Your Own Sandwiches",
+      "serving": "1 serving",
+      "calories": 540,
+      "protein_g": 37,
+      "carbs_g": 73,
+      "fat_g": 13,
+      "fiber_g": 7
+    },
+    {
+      "name": "Roast Beef (Choose 2 Portion)",
+      "category": "Craft Your Own Sandwiches",
+      "serving": "1 choose 2 portion",
+      "calories": 270,
+      "protein_g": 18,
+      "carbs_g": 37,
+      "fat_g": 7,
+      "fiber_g": 3
+    },
+    {
+      "name": "Salami",
+      "category": "Craft Your Own Sandwiches",
+      "serving": "1 serving (Craft Your Own Sandwiches portion)",
+      "calories": 590,
+      "protein_g": 24,
+      "carbs_g": 71,
+      "fat_g": 24,
+      "fiber_g": 7
+    },
+    {
+      "name": "Salami (Choose 2 Portion)",
+      "category": "Craft Your Own Sandwiches",
+      "serving": "1 choose 2 portion",
+      "calories": 290,
+      "protein_g": 12,
+      "carbs_g": 36,
+      "fat_g": 12,
+      "fiber_g": 3
+    },
+    {
+      "name": "Turkey",
+      "category": "Craft Your Own Sandwiches",
+      "serving": "1 serving",
+      "calories": 460,
+      "protein_g": 32,
+      "carbs_g": 73,
+      "fat_g": 5,
+      "fiber_g": 7
+    },
+    {
+      "name": "Turkey (Choose 2 Portion)",
+      "category": "Craft Your Own Sandwiches",
+      "serving": "1 choose 2 portion",
+      "calories": 230,
+      "protein_g": 16,
+      "carbs_g": 37,
+      "fat_g": 2,
+      "fiber_g": 4
+    },
+    {
+      "name": "Black Angus Club",
+      "category": "Club Sandwiches",
+      "serving": "1 serving",
+      "calories": 990,
+      "protein_g": 50,
+      "carbs_g": 87,
+      "fat_g": 53,
+      "fiber_g": 7
+    },
+    {
+      "name": "Black Angus King Club",
+      "category": "Club Sandwiches",
+      "serving": "1 serving",
+      "calories": 1300,
+      "protein_g": 82,
+      "carbs_g": 82,
+      "fat_g": 75,
+      "fiber_g": 1
+    },
+    {
+      "name": "Grilled Chicken Club",
+      "category": "Club Sandwiches",
+      "serving": "1 serving",
+      "calories": 860,
+      "protein_g": 40,
+      "carbs_g": 89,
+      "fat_g": 42,
+      "fiber_g": 7
+    },
+    {
+      "name": "Grilled Chicken King Club",
+      "category": "Club Sandwiches",
+      "serving": "1 serving",
+      "calories": 1170,
+      "protein_g": 85,
+      "carbs_g": 82,
+      "fat_g": 58,
+      "fiber_g": 4
+    },
+    {
+      "name": "King Club",
+      "category": "Club Sandwiches",
+      "serving": "1 serving",
+      "calories": 1140,
+      "protein_g": 72,
+      "carbs_g": 85,
+      "fat_g": 60,
+      "fiber_g": 2
+    },
+    {
+      "name": "McAlister's Club",
+      "category": "Club Sandwiches",
+      "serving": "1 serving",
+      "calories": 910,
+      "protein_g": 45,
+      "carbs_g": 91,
+      "fat_g": 44,
+      "fiber_g": 7
+    },
+    {
+      "name": "McAlister's Club Wrap",
+      "category": "Club Sandwiches",
+      "serving": "1 serving",
+      "calories": 810,
+      "protein_g": 38,
+      "carbs_g": 61,
+      "fat_g": 46,
+      "fiber_g": 2
+    },
+    {
+      "name": "BLT&A Sandwich",
+      "category": "Classic Sandwiches",
+      "serving": "1 serving",
+      "calories": 880,
+      "protein_g": 33,
+      "carbs_g": 52,
+      "fat_g": 62,
+      "fiber_g": 5
+    },
+    {
+      "name": "Four Cheese Melt",
+      "category": "Classic Sandwiches",
+      "serving": "1 serving",
+      "calories": 730,
+      "protein_g": 37,
+      "carbs_g": 71,
+      "fat_g": 34,
+      "fiber_g": 5
+    },
+    {
+      "name": "Grilled Chicken Caesar Wrap",
+      "category": "Classic Sandwiches",
+      "serving": "1 serving",
+      "calories": 780,
+      "protein_g": 36,
+      "carbs_g": 50,
+      "fat_g": 48,
+      "fiber_g": 3
+    },
+    {
+      "name": "Grilled Chicken Sandwich",
+      "category": "Classic Sandwiches",
+      "serving": "1 serving",
+      "calories": 590,
+      "protein_g": 39,
+      "carbs_g": 46,
+      "fat_g": 27,
+      "fiber_g": 3
+    },
+    {
+      "name": "Ham & Cheese Melt",
+      "category": "Classic Sandwiches",
+      "serving": "1 serving",
+      "calories": 670,
+      "protein_g": 35,
+      "carbs_g": 71,
+      "fat_g": 27,
+      "fiber_g": 5
+    },
+    {
+      "name": "Harvest Chicken Salad",
+      "category": "Classic Sandwiches",
+      "serving": "1 serving (Classic Sandwiches portion)",
+      "calories": 700,
+      "protein_g": 23,
+      "carbs_g": 52,
+      "fat_g": 44,
+      "fiber_g": 3
+    },
+    {
+      "name": "The Veggie",
+      "category": "Classic Sandwiches",
+      "serving": "1 serving",
+      "calories": 680,
+      "protein_g": 15,
+      "carbs_g": 80,
+      "fat_g": 37,
+      "fiber_g": 12
+    },
+    {
+      "name": "Turkey Ranch BLT",
+      "category": "Classic Sandwiches",
+      "serving": "1 serving",
+      "calories": 670,
+      "protein_g": 37,
+      "carbs_g": 49,
+      "fat_g": 39,
+      "fiber_g": 2
+    },
+    {
+      "name": "Honey BBQ Pork Melt",
+      "category": "Bold Flavors",
+      "serving": "1 serving",
+      "calories": 1240,
+      "protein_g": 65,
+      "carbs_g": 87,
+      "fat_g": 70,
+      "fiber_g": 5
+    },
+    {
+      "name": "Jalapeno Turkey Crunch Sandwich",
+      "category": "Bold Flavors",
+      "serving": "1 serving",
+      "calories": 1030,
+      "protein_g": 48,
+      "carbs_g": 86,
+      "fat_g": 57,
+      "fiber_g": 8
+    },
+    {
+      "name": "Reuben",
+      "category": "Bold Flavors",
+      "serving": "1 serving",
+      "calories": 920,
+      "protein_g": 57,
+      "carbs_g": 65,
+      "fat_g": 48,
+      "fiber_g": 5
+    },
+    {
+      "name": "Smoky Pepper Jack Turkey",
+      "category": "Bold Flavors",
+      "serving": "1 serving",
+      "calories": 780,
+      "protein_g": 45,
+      "carbs_g": 77,
+      "fat_g": 33,
+      "fiber_g": 4
+    },
+    {
+      "name": "Spicy BBQ Chicken Crunch Sandwich",
+      "category": "Bold Flavors",
+      "serving": "1 serving",
+      "calories": 730,
+      "protein_g": 47,
+      "carbs_g": 96,
+      "fat_g": 19,
+      "fiber_g": 5
+    },
+    {
+      "name": "Spicy Southwest Chicken",
+      "category": "Bold Flavors",
+      "serving": "1 serving",
+      "calories": 880,
+      "protein_g": 50,
+      "carbs_g": 84,
+      "fat_g": 39,
+      "fiber_g": 9
+    },
+    {
+      "name": "The New Yorker",
+      "category": "Bold Flavors",
+      "serving": "1 serving",
+      "calories": 730,
+      "protein_g": 67,
+      "carbs_g": 52,
+      "fat_g": 28,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cuban Sandwich",
+      "category": "6-inch & 12-inch Sandwiches",
+      "serving": "1 serving",
+      "calories": 810,
+      "protein_g": 47,
+      "carbs_g": 51,
+      "fat_g": 44,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cuban Sandwich (12-inch)",
+      "category": "6-inch & 12-inch Sandwiches",
+      "serving": "12-inch",
+      "calories": 1630,
+      "protein_g": 94,
+      "carbs_g": 103,
+      "fat_g": 88,
+      "fiber_g": 4
+    },
+    {
+      "name": "French Dip",
+      "category": "6-inch & 12-inch Sandwiches",
+      "serving": "1 serving",
+      "calories": 640,
+      "protein_g": 53,
+      "carbs_g": 45,
+      "fat_g": 27,
+      "fiber_g": 2
+    },
+    {
+      "name": "French Dip (12-inch)",
+      "category": "6-inch & 12-inch Sandwiches",
+      "serving": "12-inch",
+      "calories": 1280,
+      "protein_g": 106,
+      "carbs_g": 90,
+      "fat_g": 54,
+      "fiber_g": 4
+    },
+    {
+      "name": "Memphian",
+      "category": "6-inch & 12-inch Sandwiches",
+      "serving": "1 serving",
+      "calories": 630,
+      "protein_g": 45,
+      "carbs_g": 50,
+      "fat_g": 28,
+      "fiber_g": 3
+    },
+    {
+      "name": "Memphian (12-inch)",
+      "category": "6-inch & 12-inch Sandwiches",
+      "serving": "12-inch",
+      "calories": 1260,
+      "protein_g": 90,
+      "carbs_g": 100,
+      "fat_g": 57,
+      "fiber_g": 6
+    },
+    {
+      "name": "Spicy Turkey Melt",
+      "category": "6-inch & 12-inch Sandwiches",
+      "serving": "1 serving",
+      "calories": 770,
+      "protein_g": 42,
+      "carbs_g": 56,
+      "fat_g": 42,
+      "fiber_g": 7
+    },
+    {
+      "name": "Spicy Turkey Melt (12-inch)",
+      "category": "6-inch & 12-inch Sandwiches",
+      "serving": "12-inch",
+      "calories": 1530,
+      "protein_g": 84,
+      "carbs_g": 113,
+      "fat_g": 84,
+      "fiber_g": 14
+    },
+    {
+      "name": "The Italian",
+      "category": "6-inch & 12-inch Sandwiches",
+      "serving": "1 serving",
+      "calories": 810,
+      "protein_g": 45,
+      "carbs_g": 52,
+      "fat_g": 46,
+      "fiber_g": 3
+    },
+    {
+      "name": "The Italian (12-inch)",
+      "category": "6-inch & 12-inch Sandwiches",
+      "serving": "12-inch",
+      "calories": 1630,
+      "protein_g": 91,
+      "carbs_g": 104,
+      "fat_g": 92,
+      "fiber_g": 6
+    },
+    {
+      "name": "Black Angus Club (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 490,
+      "protein_g": 25,
+      "carbs_g": 44,
+      "fat_g": 26,
+      "fiber_g": 3
+    },
+    {
+      "name": "Black Angus King Club (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 650,
+      "protein_g": 41,
+      "carbs_g": 41,
+      "fat_g": 37,
+      "fiber_g": 0
+    },
+    {
+      "name": "BLT&A Sandwich (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 440,
+      "protein_g": 16,
+      "carbs_g": 26,
+      "fat_g": 31,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cuban Sandwich (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 440,
+      "protein_g": 25,
+      "carbs_g": 32,
+      "fat_g": 22,
+      "fiber_g": 1
+    },
+    {
+      "name": "Four Cheese Melt (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 370,
+      "protein_g": 19,
+      "carbs_g": 35,
+      "fat_g": 17,
+      "fiber_g": 2
+    },
+    {
+      "name": "French Dip (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 430,
+      "protein_g": 36,
+      "carbs_g": 30,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Grilled Chicken Caesar Wrap (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 390,
+      "protein_g": 18,
+      "carbs_g": 25,
+      "fat_g": 24,
+      "fiber_g": 2
+    },
+    {
+      "name": "Grilled Chicken Club (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 430,
+      "protein_g": 20,
+      "carbs_g": 45,
+      "fat_g": 21,
+      "fiber_g": 4
+    },
+    {
+      "name": "Grilled Chicken King Club (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 580,
+      "protein_g": 43,
+      "carbs_g": 41,
+      "fat_g": 29,
+      "fiber_g": 2
+    },
+    {
+      "name": "Grilled Chicken Sandwich (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 300,
+      "protein_g": 20,
+      "carbs_g": 23,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Ham & Cheese Melt (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 340,
+      "protein_g": 18,
+      "carbs_g": 36,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Harvest Chicken Salad (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 350,
+      "protein_g": 11,
+      "carbs_g": 26,
+      "fat_g": 22,
+      "fiber_g": 1
+    },
+    {
+      "name": "Honey BBQ Pork Melt (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 620,
+      "protein_g": 33,
+      "carbs_g": 43,
+      "fat_g": 35,
+      "fiber_g": 2
+    },
+    {
+      "name": "Jalapeno Turkey Crunch Sandwich (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 520,
+      "protein_g": 24,
+      "carbs_g": 43,
+      "fat_g": 29,
+      "fiber_g": 4
+    },
+    {
+      "name": "King Club (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 570,
+      "protein_g": 36,
+      "carbs_g": 42,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "McAlister's Club (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 450,
+      "protein_g": 23,
+      "carbs_g": 45,
+      "fat_g": 22,
+      "fiber_g": 4
+    },
+    {
+      "name": "McAlister's Club Wrap (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 400,
+      "protein_g": 19,
+      "carbs_g": 30,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Memphian (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 350,
+      "protein_g": 24,
+      "carbs_g": 31,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Reuben (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 460,
+      "protein_g": 29,
+      "carbs_g": 32,
+      "fat_g": 24,
+      "fiber_g": 3
+    },
+    {
+      "name": "Smoky Pepper Jack Turkey (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 390,
+      "protein_g": 23,
+      "carbs_g": 39,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Spicy BBQ Chicken Crunch Sandwich (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 370,
+      "protein_g": 24,
+      "carbs_g": 48,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Spicy Southwest Chicken (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 440,
+      "protein_g": 25,
+      "carbs_g": 42,
+      "fat_g": 20,
+      "fiber_g": 5
+    },
+    {
+      "name": "Spicy Turkey Melt (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 420,
+      "protein_g": 23,
+      "carbs_g": 35,
+      "fat_g": 21,
+      "fiber_g": 3
+    },
+    {
+      "name": "The Italian (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 440,
+      "protein_g": 24,
+      "carbs_g": 33,
+      "fat_g": 24,
+      "fiber_g": 1
+    },
+    {
+      "name": "The New Yorker (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 400,
+      "protein_g": 38,
+      "carbs_g": 26,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "The Veggie (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 340,
+      "protein_g": 8,
+      "carbs_g": 40,
+      "fat_g": 18,
+      "fiber_g": 6
+    },
+    {
+      "name": "Turkey Ranch BLT (Choose 2 Portion)",
+      "category": "Choose 2 - Sandwich Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 330,
+      "protein_g": 18,
+      "carbs_g": 25,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken Bacon Ranch Spud",
+      "category": "Spuds",
+      "serving": "1 serving",
+      "calories": 1160,
+      "protein_g": 61,
+      "carbs_g": 135,
+      "fat_g": 45,
+      "fiber_g": 15
+    },
+    {
+      "name": "Classic Spud",
+      "category": "Spuds",
+      "serving": "1 serving",
+      "calories": 710,
+      "protein_g": 17,
+      "carbs_g": 131,
+      "fat_g": 14,
+      "fiber_g": 14
+    },
+    {
+      "name": "Honey BBQ Pork Spud",
+      "category": "Spuds",
+      "serving": "1 serving",
+      "calories": 1460,
+      "protein_g": 56,
+      "carbs_g": 166,
+      "fat_g": 64,
+      "fiber_g": 14
+    },
+    {
+      "name": "Loaded Bacon Spud",
+      "category": "Spuds",
+      "serving": "1 serving",
+      "calories": 930,
+      "protein_g": 35,
+      "carbs_g": 132,
+      "fat_g": 32,
+      "fiber_g": 14
+    },
+    {
+      "name": "Smokehouse Spud",
+      "category": "Spuds",
+      "serving": "1 serving",
+      "calories": 1510,
+      "protein_g": 65,
+      "carbs_g": 166,
+      "fat_g": 65,
+      "fiber_g": 15
+    },
+    {
+      "name": "Spud Max",
+      "category": "Spuds",
+      "serving": "1 serving",
+      "calories": 1090,
+      "protein_g": 45,
+      "carbs_g": 135,
+      "fat_g": 42,
+      "fiber_g": 14
+    },
+    {
+      "name": "Veggie Spud",
+      "category": "Spuds",
+      "serving": "1 serving",
+      "calories": 910,
+      "protein_g": 28,
+      "carbs_g": 148,
+      "fat_g": 25,
+      "fiber_g": 18
+    },
+    {
+      "name": "Chicken Bacon Ranch Spud (Choose 2 Portion)",
+      "category": "Choose 2 - Spud Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 580,
+      "protein_g": 30,
+      "carbs_g": 67,
+      "fat_g": 22,
+      "fiber_g": 8
+    },
+    {
+      "name": "Classic Spud (Choose 2 Portion)",
+      "category": "Choose 2 - Spud Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 360,
+      "protein_g": 9,
+      "carbs_g": 66,
+      "fat_g": 7,
+      "fiber_g": 7
+    },
+    {
+      "name": "Honey BBQ Pork Spud (Choose 2 Portion)",
+      "category": "Choose 2 - Spud Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 730,
+      "protein_g": 28,
+      "carbs_g": 83,
+      "fat_g": 32,
+      "fiber_g": 7
+    },
+    {
+      "name": "Loaded Bacon Spud (Choose 2 Portion)",
+      "category": "Choose 2 - Spud Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 470,
+      "protein_g": 17,
+      "carbs_g": 66,
+      "fat_g": 16,
+      "fiber_g": 7
+    },
+    {
+      "name": "Smokehouse Spud (Choose 2 Portion)",
+      "category": "Choose 2 - Spud Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 750,
+      "protein_g": 33,
+      "carbs_g": 83,
+      "fat_g": 32,
+      "fiber_g": 7
+    },
+    {
+      "name": "Spud Max (Choose 2 Portion)",
+      "category": "Choose 2 - Spud Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 550,
+      "protein_g": 23,
+      "carbs_g": 68,
+      "fat_g": 21,
+      "fiber_g": 7
+    },
+    {
+      "name": "Veggie Spud (Choose 2 Portion)",
+      "category": "Choose 2 - Spud Choices",
+      "serving": "1 choose 2 portion",
+      "calories": 460,
+      "protein_g": 14,
+      "carbs_g": 74,
+      "fat_g": 12,
+      "fiber_g": 9
+    },
+    {
+      "name": "Brookie",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 480,
+      "protein_g": 7,
+      "carbs_g": 55,
+      "fat_g": 28,
+      "fiber_g": 2
+    },
+    {
+      "name": "Brownie",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 430,
+      "protein_g": 4,
+      "carbs_g": 61,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Chip Cookie",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 370,
+      "protein_g": 4,
+      "carbs_g": 53,
+      "fat_g": 17,
+      "fiber_g": 2
+    },
+    {
+      "name": "Colossal Carrot Cake",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 1170,
+      "protein_g": 11,
+      "carbs_g": 110,
+      "fat_g": 79,
+      "fiber_g": 6
+    },
+    {
+      "name": "Salted Caramel Cookie",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 380,
+      "protein_g": 4,
+      "carbs_g": 52,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sugar Cookie",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 340,
+      "protein_g": 3,
+      "carbs_g": 43,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "White Chocolate Macadamia Nut Cookie",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 400,
+      "protein_g": 5,
+      "carbs_g": 47,
+      "fat_g": 23,
+      "fiber_g": 1
+    },
+    {
+      "name": "Kids Classic Spud",
+      "category": "Kids Meals",
+      "serving": "1 kids",
+      "calories": 430,
+      "protein_g": 9,
+      "carbs_g": 66,
+      "fat_g": 15,
+      "fiber_g": 7
+    },
+    {
+      "name": "Kids Garden Salad",
+      "category": "Kids Meals",
+      "serving": "1 kids",
+      "calories": 150,
+      "protein_g": 9,
+      "carbs_g": 8,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Kids Ham & Cheese Toastie",
+      "category": "Kids Meals",
+      "serving": "1 kids",
+      "calories": 370,
+      "protein_g": 20,
+      "carbs_g": 52,
+      "fat_g": 10,
+      "fiber_g": 4
+    },
+    {
+      "name": "Kids Mac & Cheese",
+      "category": "Kids Meals",
+      "serving": "1 kids",
+      "calories": 360,
+      "protein_g": 14,
+      "carbs_g": 27,
+      "fat_g": 23,
+      "fiber_g": 1
+    },
+    {
+      "name": "Kids Pizza",
+      "category": "Kids Meals",
+      "serving": "1 kids",
+      "calories": 390,
+      "protein_g": 13,
+      "carbs_g": 49,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Kids Pretzel Dogs - 5 Piece",
+      "category": "Kids Meals",
+      "serving": "1 kids",
+      "calories": 340,
+      "protein_g": 11,
+      "carbs_g": 35,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Kids Toasted Cheese Sandwich",
+      "category": "Kids Meals",
+      "serving": "1 kids",
+      "calories": 410,
+      "protein_g": 16,
+      "carbs_g": 54,
+      "fat_g": 17,
+      "fiber_g": 4
+    },
+    {
+      "name": "Kids Turkey & Cheese Toastie",
+      "category": "Kids Meals",
+      "serving": "1 kids",
+      "calories": 350,
+      "protein_g": 21,
+      "carbs_g": 52,
+      "fat_g": 9,
+      "fiber_g": 4
+    },
+    {
+      "name": "Kids Uncrustable Sandwich",
+      "category": "Kids Meals",
+      "serving": "1 kids",
+      "calories": 300,
+      "protein_g": 9,
+      "carbs_g": 32,
+      "fat_g": 16,
+      "fiber_g": 4
+    },
+    {
+      "name": "Cajun Red Beans and Rice",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 160,
+      "protein_g": 7,
+      "carbs_g": 19,
+      "fat_g": 7,
+      "fiber_g": 5
+    },
+    {
+      "name": "Fruit",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 60,
+      "protein_g": 2,
+      "carbs_g": 15,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mac & Cheese",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 230,
+      "protein_g": 8,
+      "carbs_g": 20,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pickle Spear",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Potato Salad",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 3,
+      "carbs_g": 20,
+      "fat_g": 22,
+      "fiber_g": 2
+    },
+    {
+      "name": "Steamed Broccoli",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 3,
+      "carbs_g": 6,
+      "fat_g": 8,
+      "fiber_g": 3
+    },
+    {
+      "name": "Baked Lay's Original Potato Crisps",
+      "category": "Chips",
+      "serving": "1 serving",
+      "calories": 140,
+      "protein_g": 2,
+      "carbs_g": 24,
+      "fat_g": 4,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cajun Spice Potato Chips",
+      "category": "Chips",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 3,
+      "carbs_g": 23,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cheetos Crunchy Mellow Cheese Snacks",
+      "category": "Chips",
+      "serving": "1 serving",
+      "calories": 310,
+      "protein_g": 3,
+      "carbs_g": 26,
+      "fat_g": 21,
+      "fiber_g": 1
+    },
+    {
+      "name": "Doritos Nacho Cheese Tortilla Chips",
+      "category": "Chips",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 3,
+      "carbs_g": 28,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Lay's Classic Potato Chips",
+      "category": "Chips",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 3,
+      "carbs_g": 23,
+      "fat_g": 15,
+      "fiber_g": 2
+    },
+    {
+      "name": "McAlister's Deli BBQ Spud Chips",
+      "category": "Chips",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 2,
+      "carbs_g": 23,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Miss Vickie's Jalapeno Potato Chips",
+      "category": "Chips",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 3,
+      "carbs_g": 23,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Miss Vickie's Salt & Vinegar Potato Chips",
+      "category": "Chips",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 3,
+      "carbs_g": 23,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Miss Vickie's Sea Salt Potato Chips",
+      "category": "Chips",
+      "serving": "1 serving",
+      "calories": 210,
+      "protein_g": 3,
+      "carbs_g": 23,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Miss Vickie's Smokehouse BBQ Potato Chips",
+      "category": "Chips",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 3,
+      "carbs_g": 23,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "1% Milk",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 8,
+      "carbs_g": 13,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Barq's Root Beer",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 53,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee, Decaffeinated",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coke",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coke Zero",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr. Pepper",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 47,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Fruit Punch",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 50,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade",
+      "category": "Beverages",
+      "serving": "1 serving (Beverages portion)",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 52,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Lemonade",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 74,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweetened Lemonade Tea",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea",
+      "category": "Beverages",
+      "serving": "1 serving (Beverages portion)",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweetened Lemonade Tea",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweet Tea",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "1% Milk - Kids",
+      "category": "Kids Beverages",
+      "serving": "1 kids",
+      "calories": 110,
+      "protein_g": 8,
+      "carbs_g": 13,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Apple Juice - Kids",
+      "category": "Kids Beverages",
+      "serving": "1 kids",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Barq's Root Beer - Kids",
+      "category": "Kids Beverages",
+      "serving": "1 kids",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Milk - Kids",
+      "category": "Kids Beverages",
+      "serving": "1 kids",
+      "calories": 150,
+      "protein_g": 8,
+      "carbs_g": 23,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coke - Kids",
+      "category": "Kids Beverages",
+      "serving": "1 kids",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 17,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coke Zero - Kids",
+      "category": "Kids Beverages",
+      "serving": "1 kids",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke - Kids",
+      "category": "Kids Beverages",
+      "serving": "1 kids",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr. Pepper - Kids",
+      "category": "Kids Beverages",
+      "serving": "1 kids",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 18,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Fruit Punch - Kids",
+      "category": "Kids Beverages",
+      "serving": "1 kids",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 19,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade - Kids",
+      "category": "Kids Beverages",
+      "serving": "1 kids",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 19,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite - Kids",
+      "category": "Kids Beverages",
+      "serving": "1 kids",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 17,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea - Kids",
+      "category": "Kids Beverages",
+      "serving": "1 kids",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 15,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweet Tea - Kids",
+      "category": "Kids Beverages",
+      "serving": "1 kids",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Cherry Purée",
+      "category": "Flavor Shots",
+      "serving": "1 serving",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Purée",
+      "category": "Flavor Shots",
+      "serving": "1 serving",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Purée",
+      "category": "Flavor Shots",
+      "serving": "1 serving",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Applewood Smoked Bacon",
+      "category": "Craft Your Own Spud",
+      "serving": "1 serving (Craft Your Own Spud portion)",
+      "calories": 210,
+      "protein_g": 14,
+      "carbs_g": 0,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Au Jus",
+      "category": "Craft Your Own Spud",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Angus Roast Beef",
+      "category": "Craft Your Own Spud",
+      "serving": "1 serving (Craft Your Own Spud portion)",
+      "calories": 180,
+      "protein_g": 24,
+      "carbs_g": 2,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Forest Ham",
+      "category": "Craft Your Own Spud",
+      "serving": "1 serving (Craft Your Own Spud portion)",
+      "calories": 120,
+      "protein_g": 17,
+      "carbs_g": 2,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Olives",
+      "category": "Craft Your Own Spud",
+      "serving": "1 serving (Craft Your Own Spud portion)",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Broccoli",
+      "category": "Craft Your Own Spud",
+      "serving": "1 serving (Craft Your Own Spud portion)",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Buttermilk Ranch",
+      "category": "Craft Your Own Spud",
+      "serving": "1 serving (Craft Your Own Spud portion)",
+      "calories": 300,
+      "protein_g": 3,
+      "carbs_g": 3,
+      "fat_g": 33,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Packet",
+      "category": "Craft Your Own Spud",
+      "serving": "1 serving (Craft Your Own Spud portion)",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramelized Onions",
+      "category": "Craft Your Own Spud",
+      "serving": "1 serving (Craft Your Own Spud portion)",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cheddar-Jack",
+      "category": "Craft Your Own Spud",
+      "serving": "1 serving (Craft Your Own Spud portion)",
+      "calories": 220,
+      "protein_g": 14,
+      "carbs_g": 2,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diced Red Onions",
+      "category": "Craft Your Own Spud",
+      "serving": "1 serving (Craft Your Own Spud portion)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diced Tomatoes",
+      "category": "Craft Your Own Spud",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Green Bell Peppers",
+      "category": "Craft Your Own Spud",
+      "serving": "1 serving (Craft Your Own Spud portion)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Grilled Chicken Breast",
+      "category": "Craft Your Own Spud",
+      "serving": "1 serving (Craft Your Own Spud portion)",
+      "calories": 120,
+      "protein_g": 25,
+      "carbs_g": 1,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Oven Roasted Turkey",
+      "category": "Craft Your Own Spud",
+      "serving": "1 serving (Craft Your Own Spud portion)",
+      "calories": 100,
+      "protein_g": 19,
+      "carbs_g": 2,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "RO*TEL Cheese Sauce",
+      "category": "Craft Your Own Spud",
+      "serving": "1 serving (Craft Your Own Spud portion)",
+      "calories": 210,
+      "protein_g": 10,
+      "carbs_g": 7,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Roasted Tri-Color Peppers",
+      "category": "Craft Your Own Spud",
+      "serving": "1 serving (Craft Your Own Spud portion)",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sliced Red Onions",
+      "category": "Craft Your Own Spud",
+      "serving": "1 serving (Craft Your Own Spud portion)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sour Cream",
+      "category": "Craft Your Own Spud",
+      "serving": "1 serving (Craft Your Own Spud portion)",
+      "calories": 80,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Traditional Chili (meat)",
+      "category": "Craft Your Own Spud",
+      "serving": "1 serving (Craft Your Own Spud portion)",
+      "calories": 250,
+      "protein_g": 17,
+      "carbs_g": 22,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Veggie Chili",
+      "category": "Craft Your Own Spud",
+      "serving": "1 serving (Craft Your Own Spud portion)",
+      "calories": 180,
+      "protein_g": 9,
+      "carbs_g": 33,
+      "fat_g": 2,
+      "fiber_g": 9
+    },
+    {
+      "name": "Applewood Smoked Bacon",
+      "category": "Craft Your Own Spud (Choose 2 Portion)",
+      "serving": "1 serving (Craft Your Own Spud (Choose 2 Portion) portion)",
+      "calories": 110,
+      "protein_g": 7,
+      "carbs_g": 0,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Angus Roast Beef",
+      "category": "Craft Your Own Spud (Choose 2 Portion)",
+      "serving": "1 serving (Craft Your Own Spud (Choose 2 Portion) portion)",
+      "calories": 90,
+      "protein_g": 12,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Forest Ham",
+      "category": "Craft Your Own Spud (Choose 2 Portion)",
+      "serving": "1 serving (Craft Your Own Spud (Choose 2 Portion) portion)",
+      "calories": 60,
+      "protein_g": 9,
+      "carbs_g": 1,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Olives",
+      "category": "Craft Your Own Spud (Choose 2 Portion)",
+      "serving": "1 serving (Craft Your Own Spud (Choose 2 Portion) portion)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Broccoli",
+      "category": "Craft Your Own Spud (Choose 2 Portion)",
+      "serving": "1 serving (Craft Your Own Spud (Choose 2 Portion) portion)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Buttermilk Ranch",
+      "category": "Craft Your Own Spud (Choose 2 Portion)",
+      "serving": "1 serving (Craft Your Own Spud (Choose 2 Portion) portion)",
+      "calories": 150,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Packet",
+      "category": "Craft Your Own Spud (Choose 2 Portion)",
+      "serving": "1 serving (Craft Your Own Spud (Choose 2 Portion) portion)",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramelized Onions",
+      "category": "Craft Your Own Spud (Choose 2 Portion)",
+      "serving": "1 serving (Craft Your Own Spud (Choose 2 Portion) portion)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheddar-Jack",
+      "category": "Craft Your Own Spud (Choose 2 Portion)",
+      "serving": "1 serving (Craft Your Own Spud (Choose 2 Portion) portion)",
+      "calories": 110,
+      "protein_g": 7,
+      "carbs_g": 1,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diced Red Onions",
+      "category": "Craft Your Own Spud (Choose 2 Portion)",
+      "serving": "1 serving (Craft Your Own Spud (Choose 2 Portion) portion)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Green Bell Peppers",
+      "category": "Craft Your Own Spud (Choose 2 Portion)",
+      "serving": "1 serving (Craft Your Own Spud (Choose 2 Portion) portion)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Grilled Chicken Breast",
+      "category": "Craft Your Own Spud (Choose 2 Portion)",
+      "serving": "1 serving (Craft Your Own Spud (Choose 2 Portion) portion)",
+      "calories": 60,
+      "protein_g": 12,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Oven Roasted Turkey",
+      "category": "Craft Your Own Spud (Choose 2 Portion)",
+      "serving": "1 serving (Craft Your Own Spud (Choose 2 Portion) portion)",
+      "calories": 50,
+      "protein_g": 10,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "RO*TEL Cheese Sauce",
+      "category": "Craft Your Own Spud (Choose 2 Portion)",
+      "serving": "1 serving (Craft Your Own Spud (Choose 2 Portion) portion)",
+      "calories": 110,
+      "protein_g": 5,
+      "carbs_g": 4,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Roasted Tri-Color Peppers",
+      "category": "Craft Your Own Spud (Choose 2 Portion)",
+      "serving": "1 serving (Craft Your Own Spud (Choose 2 Portion) portion)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sliced Red Onions",
+      "category": "Craft Your Own Spud (Choose 2 Portion)",
+      "serving": "1 serving (Craft Your Own Spud (Choose 2 Portion) portion)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sour Cream",
+      "category": "Craft Your Own Spud (Choose 2 Portion)",
+      "serving": "1 serving (Craft Your Own Spud (Choose 2 Portion) portion)",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Traditional Chili (meat)",
+      "category": "Craft Your Own Spud (Choose 2 Portion)",
+      "serving": "1 serving (Craft Your Own Spud (Choose 2 Portion) portion)",
+      "calories": 120,
+      "protein_g": 9,
+      "carbs_g": 11,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Veggie Chili",
+      "category": "Craft Your Own Spud (Choose 2 Portion)",
+      "serving": "1 serving (Craft Your Own Spud (Choose 2 Portion) portion)",
+      "calories": 90,
+      "protein_g": 5,
+      "carbs_g": 17,
+      "fat_g": 1,
+      "fiber_g": 5
+    },
+    {
+      "name": "Buttermilk Ranch",
+      "category": "Salad Dressings - 2 oz",
+      "serving": "2 oz",
+      "calories": 200,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 22,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caesar Dressing",
+      "category": "Salad Dressings - 2 oz",
+      "serving": "2 oz (Salad Dressings - 2 oz portion)",
+      "calories": 340,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 36,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chili Lime Vinaigrette",
+      "category": "Salad Dressings - 2 oz",
+      "serving": "2 oz",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chipotle Ranch",
+      "category": "Salad Dressings - 2 oz",
+      "serving": "2 oz",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 8,
+      "fat_g": 28,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fat-Free Chipotle Peach",
+      "category": "Salad Dressings - 2 oz",
+      "serving": "2 oz",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 38,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fat-Free Raspberry Pecan Vinaigrette",
+      "category": "Salad Dressings - 2 oz",
+      "serving": "2 oz",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Green Goddess Dressing",
+      "category": "Salad Dressings - 2 oz",
+      "serving": "2 oz",
+      "calories": 280,
+      "protein_g": 2,
+      "carbs_g": 4,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "McAlister's Honey Mustard Dressing",
+      "category": "Salad Dressings - 2 oz",
+      "serving": "2 oz",
+      "calories": 260,
+      "protein_g": 2,
+      "carbs_g": 20,
+      "fat_g": 20,
+      "fiber_g": 0
+    },
+    {
+      "name": "Olive Oil & Balsamic Vinaigrette",
+      "category": "Salad Dressings - 2 oz",
+      "serving": "2 oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sherry Shallot Dressing",
+      "category": "Salad Dressings - 2 oz",
+      "serving": "2 oz",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 28,
+      "fiber_g": 0
+    },
+    {
+      "name": "Thousand Island",
+      "category": "Salad Dressings - 2 oz",
+      "serving": "2 oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 14,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buttermilk Ranch (3 oz)",
+      "category": "Salad Dressings - 3 oz",
+      "serving": "3 oz",
+      "calories": 300,
+      "protein_g": 3,
+      "carbs_g": 3,
+      "fat_g": 33,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caesar Dressing (3 oz)",
+      "category": "Salad Dressings - 3 oz",
+      "serving": "3 oz",
+      "calories": 510,
+      "protein_g": 3,
+      "carbs_g": 3,
+      "fat_g": 54,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chili Lime Vinaigrette",
+      "category": "Salad Dressings - 3 oz",
+      "serving": "3 oz",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 15,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chipotle Ranch (3 oz)",
+      "category": "Salad Dressings - 3 oz",
+      "serving": "3 oz",
+      "calories": 420,
+      "protein_g": 0,
+      "carbs_g": 12,
+      "fat_g": 42,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fat-Free Chipotle Peach (3 oz)",
+      "category": "Salad Dressings - 3 oz",
+      "serving": "3 oz",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 57,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fat-Free Raspberry Pecan Vinaigrette (3 oz)",
+      "category": "Salad Dressings - 3 oz",
+      "serving": "3 oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 30,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Green Goddess Dressing",
+      "category": "Salad Dressings - 3 oz",
+      "serving": "3 oz",
+      "calories": 420,
+      "protein_g": 3,
+      "carbs_g": 6,
+      "fat_g": 45,
+      "fiber_g": 0
+    },
+    {
+      "name": "McAlister's Honey Mustard Dressing (3 oz)",
+      "category": "Salad Dressings - 3 oz",
+      "serving": "3 oz",
+      "calories": 390,
+      "protein_g": 3,
+      "carbs_g": 30,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Olive Oil & Balsamic Vinaigrette (3 oz)",
+      "category": "Salad Dressings - 3 oz",
+      "serving": "3 oz",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sherry Shallot Dressing (3 oz)",
+      "category": "Salad Dressings - 3 oz",
+      "serving": "3 oz",
+      "calories": 450,
+      "protein_g": 0,
+      "carbs_g": 15,
+      "fat_g": 42,
+      "fiber_g": 0
+    },
+    {
+      "name": "Thousand Island (3 oz)",
+      "category": "Salad Dressings - 3 oz",
+      "serving": "3 oz",
+      "calories": 390,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 36,
+      "fiber_g": 0
+    },
+    {
+      "name": "9-Grain",
+      "category": "Sandwich Bread",
+      "serving": "1 serving (Sandwich Bread portion)",
+      "calories": 340,
+      "protein_g": 12,
+      "carbs_g": 66,
+      "fat_g": 4,
+      "fiber_g": 6
+    },
+    {
+      "name": "Baguette (6 inch)",
+      "category": "Sandwich Bread",
+      "serving": "6 inch",
+      "calories": 210,
+      "protein_g": 7,
+      "carbs_g": 41,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Baguette (12 inch)",
+      "category": "Sandwich Bread",
+      "serving": "12 inch",
+      "calories": 420,
+      "protein_g": 14,
+      "carbs_g": 82,
+      "fat_g": 4,
+      "fiber_g": 4
+    },
+    {
+      "name": "Ciabatta",
+      "category": "Sandwich Bread",
+      "serving": "1 serving (Sandwich Bread portion)",
+      "calories": 330,
+      "protein_g": 11,
+      "carbs_g": 64,
+      "fat_g": 4,
+      "fiber_g": 4
+    },
+    {
+      "name": "Country White Bread",
+      "category": "Sandwich Bread",
+      "serving": "1 serving (Sandwich Bread portion)",
+      "calories": 210,
+      "protein_g": 6,
+      "carbs_g": 42,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Croissant",
+      "category": "Sandwich Bread",
+      "serving": "1 serving (Sandwich Bread portion)",
+      "calories": 280,
+      "protein_g": 6,
+      "carbs_g": 37,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Gluten-Free White Bread (available at select locations only)",
+      "category": "Sandwich Bread",
+      "serving": "1 serving (Sandwich Bread portion)",
+      "calories": 220,
+      "protein_g": 6,
+      "carbs_g": 35,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Gluten-Free Whole Grain Bread (available at select locations only)",
+      "category": "Sandwich Bread",
+      "serving": "1 whole (Sandwich Bread portion)",
+      "calories": 220,
+      "protein_g": 6,
+      "carbs_g": 34,
+      "fat_g": 6,
+      "fiber_g": 2
+    },
+    {
+      "name": "Marbled Rye Bread",
+      "category": "Sandwich Bread",
+      "serving": "1 serving (Sandwich Bread portion)",
+      "calories": 240,
+      "protein_g": 12,
+      "carbs_g": 44,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sliced Wheat",
+      "category": "Sandwich Bread",
+      "serving": "1 serving (Sandwich Bread portion)",
+      "calories": 250,
+      "protein_g": 9,
+      "carbs_g": 50,
+      "fat_g": 4,
+      "fiber_g": 4
+    },
+    {
+      "name": "Wheat Wrap",
+      "category": "Sandwich Bread",
+      "serving": "1 serving (Sandwich Bread portion)",
+      "calories": 280,
+      "protein_g": 6,
+      "carbs_g": 45,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "9-Grain",
+      "category": "Sandwich Bread (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Bread (Choose 2 Portion) portion)",
+      "calories": 170,
+      "protein_g": 6,
+      "carbs_g": 33,
+      "fat_g": 2,
+      "fiber_g": 3
+    },
+    {
+      "name": "Baguette (4 inch)",
+      "category": "Sandwich Bread (Choose 2 Portion)",
+      "serving": "4 inch",
+      "calories": 140,
+      "protein_g": 5,
+      "carbs_g": 27,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Ciabatta",
+      "category": "Sandwich Bread (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Bread (Choose 2 Portion) portion)",
+      "calories": 170,
+      "protein_g": 6,
+      "carbs_g": 32,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Country White Bread",
+      "category": "Sandwich Bread (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Bread (Choose 2 Portion) portion)",
+      "calories": 100,
+      "protein_g": 3,
+      "carbs_g": 21,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Croissant",
+      "category": "Sandwich Bread (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Bread (Choose 2 Portion) portion)",
+      "calories": 140,
+      "protein_g": 3,
+      "carbs_g": 19,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gluten-Free White Bread (available at select locations only)",
+      "category": "Sandwich Bread (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Bread (Choose 2 Portion) portion)",
+      "calories": 110,
+      "protein_g": 3,
+      "carbs_g": 18,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gluten-Free Whole Grain Bread (available at select locations only)",
+      "category": "Sandwich Bread (Choose 2 Portion)",
+      "serving": "1 whole (Sandwich Bread (Choose 2 Portion) portion)",
+      "calories": 110,
+      "protein_g": 3,
+      "carbs_g": 17,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Marbled Rye Bread",
+      "category": "Sandwich Bread (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Bread (Choose 2 Portion) portion)",
+      "calories": 120,
+      "protein_g": 6,
+      "carbs_g": 22,
+      "fat_g": 1,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sliced Wheat",
+      "category": "Sandwich Bread (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Bread (Choose 2 Portion) portion)",
+      "calories": 130,
+      "protein_g": 4,
+      "carbs_g": 25,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Wheat Wrap",
+      "category": "Sandwich Bread (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Bread (Choose 2 Portion) portion)",
+      "calories": 140,
+      "protein_g": 3,
+      "carbs_g": 23,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "American",
+      "category": "Sandwich Cheeses",
+      "serving": "1 serving (Sandwich Cheeses portion)",
+      "calories": 110,
+      "protein_g": 5,
+      "carbs_g": 3,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheddar",
+      "category": "Sandwich Cheeses",
+      "serving": "1 serving (Sandwich Cheeses portion)",
+      "calories": 120,
+      "protein_g": 8,
+      "carbs_g": 2,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Parmesan",
+      "category": "Sandwich Cheeses",
+      "serving": "1 serving (Sandwich Cheeses portion)",
+      "calories": 25,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepper Jack",
+      "category": "Sandwich Cheeses",
+      "serving": "1 serving (Sandwich Cheeses portion)",
+      "calories": 150,
+      "protein_g": 9,
+      "carbs_g": 0,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Provolone",
+      "category": "Sandwich Cheeses",
+      "serving": "1 serving (Sandwich Cheeses portion)",
+      "calories": 100,
+      "protein_g": 7,
+      "carbs_g": 0,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Swiss",
+      "category": "Sandwich Cheeses",
+      "serving": "1 serving (Sandwich Cheeses portion)",
+      "calories": 110,
+      "protein_g": 7,
+      "carbs_g": 0,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "American",
+      "category": "Sandwich Cheeses (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Cheeses (Choose 2 Portion) portion)",
+      "calories": 50,
+      "protein_g": 3,
+      "carbs_g": 2,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheddar",
+      "category": "Sandwich Cheeses (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Cheeses (Choose 2 Portion) portion)",
+      "calories": 60,
+      "protein_g": 4,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Parmesan",
+      "category": "Sandwich Cheeses (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Cheeses (Choose 2 Portion) portion)",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepper Jack",
+      "category": "Sandwich Cheeses (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Cheeses (Choose 2 Portion) portion)",
+      "calories": 70,
+      "protein_g": 5,
+      "carbs_g": 0,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Provolone",
+      "category": "Sandwich Cheeses (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Cheeses (Choose 2 Portion) portion)",
+      "calories": 50,
+      "protein_g": 4,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Swiss",
+      "category": "Sandwich Cheeses (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Cheeses (Choose 2 Portion) portion)",
+      "calories": 50,
+      "protein_g": 3,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buttermilk Ranch",
+      "category": "Sandwich Condiments",
+      "serving": "1 serving (Sandwich Condiments portion)",
+      "calories": 200,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 22,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caesar Dressing",
+      "category": "Sandwich Condiments",
+      "serving": "1 serving (Sandwich Condiments portion)",
+      "calories": 320,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 34,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chipotle Ranch",
+      "category": "Sandwich Condiments",
+      "serving": "1 serving (Sandwich Condiments portion)",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fat-Free Raspberry Pecan Vinaigrette",
+      "category": "Sandwich Condiments",
+      "serving": "1 serving (Sandwich Condiments portion)",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Herb Mayo",
+      "category": "Sandwich Condiments",
+      "serving": "1 serving (Sandwich Condiments portion)",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey BBQ Sauce",
+      "category": "Sandwich Condiments",
+      "serving": "1 serving (Sandwich Condiments portion)",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 16,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Horseradish Dijon",
+      "category": "Sandwich Condiments",
+      "serving": "1 serving (Sandwich Condiments portion)",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mayo, Regular",
+      "category": "Sandwich Condiments",
+      "serving": "1 regular (Sandwich Condiments portion)",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "McAlister's Honey Mustard",
+      "category": "Sandwich Condiments",
+      "serving": "1 serving (Sandwich Condiments portion)",
+      "calories": 130,
+      "protein_g": 1,
+      "carbs_g": 10,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Olive Oil",
+      "category": "Sandwich Condiments",
+      "serving": "1 serving (Sandwich Condiments portion)",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Olive Oil & Balsamic Vinaigrette",
+      "category": "Sandwich Condiments",
+      "serving": "1 serving (Sandwich Condiments portion)",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Orange Cranberry Sauce",
+      "category": "Sandwich Condiments",
+      "serving": "1 serving (Sandwich Condiments portion)",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Poblano Mayo",
+      "category": "Sandwich Condiments",
+      "serving": "1 serving (Sandwich Condiments portion)",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spicy Brown Mustard",
+      "category": "Sandwich Condiments",
+      "serving": "1 serving (Sandwich Condiments portion)",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet and Smoky BBQ Sauce",
+      "category": "Sandwich Condiments",
+      "serving": "1 serving (Sandwich Condiments portion)",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 19,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Thousand Island",
+      "category": "Sandwich Condiments",
+      "serving": "1 serving (Sandwich Condiments portion)",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 14,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Yellow Mustard",
+      "category": "Sandwich Condiments",
+      "serving": "1 serving (Sandwich Condiments portion)",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buttermilk Ranch",
+      "category": "Sandwich Condiments (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Condiments (Choose 2 Portion) portion)",
+      "calories": 100,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caesar Dressing",
+      "category": "Sandwich Condiments (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Condiments (Choose 2 Portion) portion)",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chipotle Ranch",
+      "category": "Sandwich Condiments (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Condiments (Choose 2 Portion) portion)",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fat-Free Raspberry Pecan Vinaigrette",
+      "category": "Sandwich Condiments (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Condiments (Choose 2 Portion) portion)",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Herb Mayo",
+      "category": "Sandwich Condiments (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Condiments (Choose 2 Portion) portion)",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey BBQ Sauce",
+      "category": "Sandwich Condiments (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Condiments (Choose 2 Portion) portion)",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 8,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Horseradish Dijon",
+      "category": "Sandwich Condiments (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Condiments (Choose 2 Portion) portion)",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mayo, Regular",
+      "category": "Sandwich Condiments (Choose 2 Portion)",
+      "serving": "1 regular (Sandwich Condiments (Choose 2 Portion) portion)",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "McAlister's Honey Mustard",
+      "category": "Sandwich Condiments (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Condiments (Choose 2 Portion) portion)",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Olive Oil",
+      "category": "Sandwich Condiments (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Condiments (Choose 2 Portion) portion)",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Olive Oil & Balsamic Vinaigrette",
+      "category": "Sandwich Condiments (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Condiments (Choose 2 Portion) portion)",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Orange Cranberry Sauce",
+      "category": "Sandwich Condiments (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Condiments (Choose 2 Portion) portion)",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Poblano Mayo",
+      "category": "Sandwich Condiments (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Condiments (Choose 2 Portion) portion)",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spicy Brown Mustard",
+      "category": "Sandwich Condiments (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Condiments (Choose 2 Portion) portion)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet and Smoky BBQ Sauce",
+      "category": "Sandwich Condiments (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Condiments (Choose 2 Portion) portion)",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Thousand Island",
+      "category": "Sandwich Condiments (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Condiments (Choose 2 Portion) portion)",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 7,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Yellow Mustard",
+      "category": "Sandwich Condiments (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Condiments (Choose 2 Portion) portion)",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Applewood Smoked Bacon",
+      "category": "Sandwich Meats",
+      "serving": "1 serving (Sandwich Meats portion)",
+      "calories": 70,
+      "protein_g": 5,
+      "carbs_g": 0,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Angus Roast Beef",
+      "category": "Sandwich Meats",
+      "serving": "1 serving (Sandwich Meats portion)",
+      "calories": 180,
+      "protein_g": 24,
+      "carbs_g": 2,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Forest Ham",
+      "category": "Sandwich Meats",
+      "serving": "1 serving (Sandwich Meats portion)",
+      "calories": 120,
+      "protein_g": 17,
+      "carbs_g": 2,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Corned Beef",
+      "category": "Sandwich Meats",
+      "serving": "1 serving (Sandwich Meats portion)",
+      "calories": 190,
+      "protein_g": 24,
+      "carbs_g": 2,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Grilled Chicken Breast",
+      "category": "Sandwich Meats",
+      "serving": "1 serving (Sandwich Meats portion)",
+      "calories": 120,
+      "protein_g": 25,
+      "carbs_g": 1,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Harvest Chicken Salad",
+      "category": "Sandwich Meats",
+      "serving": "1 serving (Sandwich Meats portion)",
+      "calories": 400,
+      "protein_g": 16,
+      "carbs_g": 12,
+      "fat_g": 32,
+      "fiber_g": 1
+    },
+    {
+      "name": "Oven Roasted Turkey",
+      "category": "Sandwich Meats",
+      "serving": "1 serving (Sandwich Meats portion)",
+      "calories": 100,
+      "protein_g": 19,
+      "carbs_g": 2,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pastrami",
+      "category": "Sandwich Meats",
+      "serving": "1 serving (Sandwich Meats portion)",
+      "calories": 180,
+      "protein_g": 24,
+      "carbs_g": 2,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salami",
+      "category": "Sandwich Meats",
+      "serving": "1 serving (Sandwich Meats portion)",
+      "calories": 220,
+      "protein_g": 11,
+      "carbs_g": 0,
+      "fat_g": 20,
+      "fiber_g": 0
+    },
+    {
+      "name": "Applewood Smoked Bacon",
+      "category": "Sandwich Meats (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Meats (Choose 2 Portion) portion)",
+      "calories": 35,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Angus Roast Beef",
+      "category": "Sandwich Meats (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Meats (Choose 2 Portion) portion)",
+      "calories": 90,
+      "protein_g": 12,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Forest Ham",
+      "category": "Sandwich Meats (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Meats (Choose 2 Portion) portion)",
+      "calories": 60,
+      "protein_g": 9,
+      "carbs_g": 1,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Corned Beef",
+      "category": "Sandwich Meats (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Meats (Choose 2 Portion) portion)",
+      "calories": 100,
+      "protein_g": 12,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Grilled Chicken Breast",
+      "category": "Sandwich Meats (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Meats (Choose 2 Portion) portion)",
+      "calories": 60,
+      "protein_g": 12,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Harvest Chicken Salad",
+      "category": "Sandwich Meats (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Meats (Choose 2 Portion) portion)",
+      "calories": 200,
+      "protein_g": 8,
+      "carbs_g": 6,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Oven Roasted Turkey",
+      "category": "Sandwich Meats (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Meats (Choose 2 Portion) portion)",
+      "calories": 50,
+      "protein_g": 10,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pastrami",
+      "category": "Sandwich Meats (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Meats (Choose 2 Portion) portion)",
+      "calories": 90,
+      "protein_g": 12,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salami",
+      "category": "Sandwich Meats (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Meats (Choose 2 Portion) portion)",
+      "calories": 110,
+      "protein_g": 6,
+      "carbs_g": 0,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Avocado",
+      "category": "Sandwich Toppings",
+      "serving": "1 serving (Sandwich Toppings portion)",
+      "calories": 80,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 7,
+      "fiber_g": 3
+    },
+    {
+      "name": "Black Olives",
+      "category": "Sandwich Toppings",
+      "serving": "1 serving (Sandwich Toppings portion)",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Pepper",
+      "category": "Sandwich Toppings",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramelized Onions",
+      "category": "Sandwich Toppings",
+      "serving": "1 serving (Sandwich Toppings portion)",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cucumbers",
+      "category": "Sandwich Toppings",
+      "serving": "1 serving (Sandwich Toppings portion)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Giardiniera",
+      "category": "Sandwich Toppings",
+      "serving": "1 serving (Sandwich Toppings portion)",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Green Bell Peppers",
+      "category": "Sandwich Toppings",
+      "serving": "1 serving (Sandwich Toppings portion)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jalapeno Chips",
+      "category": "Sandwich Toppings",
+      "serving": "1 serving",
+      "calories": 220,
+      "protein_g": 2,
+      "carbs_g": 25,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Roasted Corn & Black Bean Relish",
+      "category": "Sandwich Toppings",
+      "serving": "1 serving (Sandwich Toppings portion)",
+      "calories": 45,
+      "protein_g": 2,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Roasted Tri-Color Peppers",
+      "category": "Sandwich Toppings",
+      "serving": "1 serving (Sandwich Toppings portion)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Romaine",
+      "category": "Sandwich Toppings",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salad Mix",
+      "category": "Sandwich Toppings",
+      "serving": "1 serving (Sandwich Toppings portion)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salt",
+      "category": "Sandwich Toppings",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sauerkraut",
+      "category": "Sandwich Toppings",
+      "serving": "1 serving (Sandwich Toppings portion)",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Sliced Cucumbers",
+      "category": "Sandwich Toppings",
+      "serving": "1 serving (Sandwich Toppings portion)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sliced Pickles",
+      "category": "Sandwich Toppings",
+      "serving": "1 serving (Sandwich Toppings portion)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sliced Red Onions",
+      "category": "Sandwich Toppings",
+      "serving": "1 serving (Sandwich Toppings portion)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sliced Tomatoes",
+      "category": "Sandwich Toppings",
+      "serving": "1 serving (Sandwich Toppings portion)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spinach",
+      "category": "Sandwich Toppings",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spring Mix",
+      "category": "Sandwich Toppings",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Avocado",
+      "category": "Sandwich Toppings (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Toppings (Choose 2 Portion) portion)",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 4,
+      "fiber_g": 2
+    },
+    {
+      "name": "Black Olives",
+      "category": "Sandwich Toppings (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Toppings (Choose 2 Portion) portion)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramelized Onions",
+      "category": "Sandwich Toppings (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Toppings (Choose 2 Portion) portion)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cucumbers",
+      "category": "Sandwich Toppings (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Toppings (Choose 2 Portion) portion)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Giardiniera",
+      "category": "Sandwich Toppings (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Toppings (Choose 2 Portion) portion)",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Green Bell Peppers",
+      "category": "Sandwich Toppings (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Toppings (Choose 2 Portion) portion)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Roasted Corn & Black Bean Relish",
+      "category": "Sandwich Toppings (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Toppings (Choose 2 Portion) portion)",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Roasted Tri-Color Peppers",
+      "category": "Sandwich Toppings (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Toppings (Choose 2 Portion) portion)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salad Mix",
+      "category": "Sandwich Toppings (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Toppings (Choose 2 Portion) portion)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sauerkraut",
+      "category": "Sandwich Toppings (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Toppings (Choose 2 Portion) portion)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sliced Cucumbers",
+      "category": "Sandwich Toppings (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Toppings (Choose 2 Portion) portion)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sliced Pickles",
+      "category": "Sandwich Toppings (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Toppings (Choose 2 Portion) portion)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sliced Red Onions",
+      "category": "Sandwich Toppings (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Toppings (Choose 2 Portion) portion)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sliced Tomatoes",
+      "category": "Sandwich Toppings (Choose 2 Portion)",
+      "serving": "1 serving (Sandwich Toppings (Choose 2 Portion) portion)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade",
+      "category": "Tea and Lemonade (Gallon)",
+      "serving": "1 serving (Tea and Lemonade (Gallon) portion)",
+      "calories": 1830,
+      "protein_g": 0,
+      "carbs_g": 475,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea",
+      "category": "Tea and Lemonade (Gallon)",
+      "serving": "1 serving (Tea and Lemonade (Gallon) portion)",
+      "calories": 1370,
+      "protein_g": 0,
+      "carbs_g": 357,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade",
+      "category": "Tea and Lemonade (Half Gallon)",
+      "serving": "1 serving (Tea and Lemonade (Half Gallon) portion)",
+      "calories": 910,
+      "protein_g": 0,
+      "carbs_g": 238,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea",
+      "category": "Tea and Lemonade (Half Gallon)",
+      "serving": "1 serving (Tea and Lemonade (Half Gallon) portion)",
+      "calories": 690,
+      "protein_g": 0,
+      "carbs_g": 178,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mac & Cheese Bar",
+      "category": "For the Family (Serves 4)",
+      "serving": "1 serving",
+      "calories": 490,
+      "protein_g": 22,
+      "carbs_g": 34,
+      "fat_g": 30,
+      "fiber_g": 2
+    },
+    {
+      "name": "Spud Max Bar",
+      "category": "For the Family (Serves 4)",
+      "serving": "1 serving",
+      "calories": 1050,
+      "protein_g": 44,
+      "carbs_g": 135,
+      "fat_g": 38,
+      "fiber_g": 14
+    },
+    {
+      "name": "Caesar Dressing",
+      "category": "For the Family - Grilled Chicken Salad Dressings (2 oz)",
+      "serving": "2 oz (For the Family - Grilled Chicken Salad Dressings (2 oz) portion)",
+      "calories": 320,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 34,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fruit",
+      "category": "For the Family - Sides (32 oz)",
+      "serving": "32 oz",
+      "calories": 430,
+      "protein_g": 11,
+      "carbs_g": 107,
+      "fat_g": 0,
+      "fiber_g": 11
+    },
+    {
+      "name": "Mac & Cheese",
+      "category": "For the Family - Sides (32 oz)",
+      "serving": "32 oz",
+      "calories": 1600,
+      "protein_g": 56,
+      "carbs_g": 139,
+      "fat_g": 97,
+      "fiber_g": 7
+    },
+    {
+      "name": "Potato Salad",
+      "category": "For the Family - Sides (32 oz)",
+      "serving": "32 oz",
+      "calories": 2040,
+      "protein_g": 20,
+      "carbs_g": 140,
+      "fat_g": 158,
+      "fiber_g": 15
+    },
+    {
+      "name": "Steamed Broccoli",
+      "category": "For the Family - Sides (32 oz)",
+      "serving": "32 oz",
+      "calories": 800,
+      "protein_g": 24,
+      "carbs_g": 48,
+      "fat_g": 64,
+      "fiber_g": 24
+    },
+    {
+      "name": "Lemonade",
+      "category": "For the Family - Beverages (Gallon)",
+      "serving": "1 serving (For the Family - Beverages (Gallon) portion)",
+      "calories": 1830,
+      "protein_g": 0,
+      "carbs_g": 475,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea",
+      "category": "For the Family - Beverages (Gallon)",
+      "serving": "1 serving (For the Family - Beverages (Gallon) portion)",
+      "calories": 1370,
+      "protein_g": 0,
+      "carbs_g": 357,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "4 Chocolate Chip Cookies",
+      "category": "For the Family - Add Ons",
+      "serving": "1 serving",
+      "calories": 1480,
+      "protein_g": 16,
+      "carbs_g": 212,
+      "fat_g": 68,
+      "fiber_g": 8
+    }
+  ]
+}

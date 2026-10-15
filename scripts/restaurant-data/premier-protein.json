@@ -1,0 +1,97 @@
+{
+  "chain": "Premier Protein",
+  "slug": "premier-protein",
+  "aliases": [
+    "premier protein",
+    "premier",
+    "premier shake",
+    "premier protein shake"
+  ],
+  "kind": "supplement",
+  "source_url": "https://www.premierprotein.com/all-products",
+  "source_kind": "official",
+  "retrieved": "2026-10-15",
+  "notes": "Text Nutrition Facts tables on premierprotein.com/products/<handle> (chocolate-protein-shake, vanilla-protein-shake, caramel-protein-shake, cafe-latte-protein-shake, cookies-cream-protein-shake, chocolate-milkshake-protein-powder, vanilla-milkshake-protein-powder, cafe-latte-protein-powder). Shake pages carry both an 11.5 fl oz and an 11 fl oz panel; the 11.5 fl oz panel is used (the chocolate panels were checked and match). Cafe Latte shake fiber '<1g' recorded as 0.",
+  "items": [
+    {
+      "name": "Protein Shake, Chocolate",
+      "category": "Ready-to-Drink",
+      "serving": "1 shake (11.5 fl oz)",
+      "calories": 160,
+      "protein_g": 30,
+      "carbs_g": 4,
+      "fat_g": 3,
+      "fiber_g": 2
+    },
+    {
+      "name": "Protein Shake, Vanilla",
+      "category": "Ready-to-Drink",
+      "serving": "1 shake (11.5 fl oz)",
+      "calories": 160,
+      "protein_g": 30,
+      "carbs_g": 3,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Protein Shake, Caramel",
+      "category": "Ready-to-Drink",
+      "serving": "1 shake (11.5 fl oz)",
+      "calories": 160,
+      "protein_g": 30,
+      "carbs_g": 2,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Protein Shake, Cafe Latte",
+      "category": "Ready-to-Drink",
+      "serving": "1 shake (11.5 fl oz)",
+      "calories": 160,
+      "protein_g": 30,
+      "carbs_g": 4,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Protein Shake, Cookies & Cream",
+      "category": "Ready-to-Drink",
+      "serving": "1 shake (11.5 fl oz)",
+      "calories": 160,
+      "protein_g": 30,
+      "carbs_g": 4,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Protein Powder, Chocolate Milkshake",
+      "category": "Whey Protein",
+      "serving": "2 scoops (41 g)",
+      "calories": 150,
+      "protein_g": 30,
+      "carbs_g": 4,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Protein Powder, Vanilla Milkshake",
+      "category": "Whey Protein",
+      "serving": "2 scoops (39 g)",
+      "calories": 150,
+      "protein_g": 30,
+      "carbs_g": 3,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Protein Powder, Cafe Latte",
+      "category": "Whey Protein",
+      "serving": "2 scoops (40 g)",
+      "calories": 150,
+      "protein_g": 30,
+      "carbs_g": 3,
+      "fat_g": 2,
+      "fiber_g": 1
+    }
+  ]
+}

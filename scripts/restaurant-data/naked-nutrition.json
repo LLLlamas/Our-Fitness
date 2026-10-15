@@ -1,0 +1,68 @@
+{
+  "chain": "Naked Nutrition",
+  "slug": "naked-nutrition",
+  "aliases": [
+    "naked nutrition",
+    "naked whey",
+    "naked mass",
+    "naked pea",
+    "naked casein"
+  ],
+  "kind": "supplement",
+  "source_url": "https://nakednutrition.com/products/grass-fed-whey-protein-powder-2280g",
+  "source_kind": "official",
+  "retrieved": "2026-10-15",
+  "notes": "Nutrition Facts panel images on nakednutrition.com product pages: grass-fed-whey-protein-powder-2280g (unflavored), vanilla-whey-protein-powder-2280g, weight-gainer-protein-supplement-12lb (unflavored Naked Mass), chocolate-weight-gainer-protein-supplement-12lb, pea-protein-powder-450g. Chocolate whey and whey isolate pages had no readable panel, so they are omitted.",
+  "items": [
+    {
+      "name": "Naked Whey, Unflavored Grass-Fed Whey Protein",
+      "category": "Whey Protein",
+      "serving": "2 scoops (30 g)",
+      "calories": 120,
+      "protein_g": 25,
+      "carbs_g": 3,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Naked Whey, Vanilla",
+      "category": "Whey Protein",
+      "serving": "2 scoops (37 g)",
+      "calories": 150,
+      "protein_g": 25,
+      "carbs_g": 8,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Naked Mass, Unflavored",
+      "category": "Mass Gainer",
+      "serving": "7 scoops (321 g)",
+      "calories": 1250,
+      "protein_g": 50,
+      "carbs_g": 252,
+      "fat_g": 2.5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Naked Mass, Chocolate",
+      "category": "Mass Gainer",
+      "serving": "7 scoops (333 g)",
+      "calories": 1360,
+      "protein_g": 50,
+      "carbs_g": 251,
+      "fat_g": 15,
+      "fiber_g": 12
+    },
+    {
+      "name": "Naked Pea, Unflavored Pea Protein",
+      "category": "Plant Protein",
+      "serving": "2 scoops (30 g)",
+      "calories": 120,
+      "protein_g": 27,
+      "carbs_g": 2,
+      "fat_g": 0.5,
+      "fiber_g": 0
+    }
+  ]
+}

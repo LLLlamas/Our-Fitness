@@ -1,0 +1,141 @@
+{
+  "chain": "MuscleTech",
+  "slug": "muscletech",
+  "aliases": [
+    "muscletech",
+    "muscle tech",
+    "nitro-tech",
+    "nitro tech",
+    "nitrotech",
+    "mass-tech",
+    "mass tech",
+    "masstech"
+  ],
+  "kind": "supplement",
+  "source_url": "https://www.muscletech.com/products/nitro-tech",
+  "source_kind": "official",
+  "retrieved": "2026-10-15",
+  "notes": "Supplement Facts on muscletech.com product pages: text tables on /products/nitro-tech, /products/nitro-tech-100-whey-gold and /products/100-mass-gainer; label images on /products/mass-tech (supplement-facts-chocolate / -vanilla) and /products/mass-tech-extreme-2000 (supplement-facts-masstech-extreme-van). Mass-gainer servings are dry powder (Mass-Tech Extreme figures are the full 6-scoop serving mixed with water, i.e. powder only). Fiber 0 where the panel omits it or says '<1 g' (Nitro-Tech Milk Chocolate). Nitro-Tech Cookies & Cream and the Mass-Tech Extreme Triple Chocolate Brownie panel were not readable, so they are omitted.",
+  "items": [
+    {
+      "name": "Nitro-Tech Whey Protein, Milk Chocolate",
+      "category": "Whey Protein",
+      "serving": "1 scoop (46 g)",
+      "calories": 160,
+      "protein_g": 30,
+      "carbs_g": 4,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Nitro-Tech Whey Protein, Vanilla Cream",
+      "category": "Whey Protein",
+      "serving": "1 scoop (45 g)",
+      "calories": 150,
+      "protein_g": 30,
+      "carbs_g": 3,
+      "fat_g": 2.5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Nitro-Tech Whey Protein, Strawberry",
+      "category": "Whey Protein",
+      "serving": "1 scoop (45 g)",
+      "calories": 160,
+      "protein_g": 30,
+      "carbs_g": 4,
+      "fat_g": 2.5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Nitro-Tech 100% Whey Gold, Double Rich Chocolate",
+      "category": "Whey Protein",
+      "serving": "1 scoop (33 g)",
+      "calories": 120,
+      "protein_g": 24,
+      "carbs_g": 2,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Nitro-Tech 100% Whey Gold, French Vanilla Cream",
+      "category": "Whey Protein",
+      "serving": "1 scoop (33 g)",
+      "calories": 120,
+      "protein_g": 24,
+      "carbs_g": 2,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Nitro-Tech 100% Whey Gold, Strawberry Shortcake",
+      "category": "Whey Protein",
+      "serving": "1 scoop (33 g)",
+      "calories": 120,
+      "protein_g": 24,
+      "carbs_g": 2,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Nitro-Tech 100% Whey Gold, Cookies & Cream",
+      "category": "Whey Protein",
+      "serving": "1 scoop (33 g)",
+      "calories": 120,
+      "protein_g": 24,
+      "carbs_g": 2,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mass-Tech, Chocolate",
+      "category": "Mass Gainer",
+      "serving": "6 scoops (369 g)",
+      "calories": 1370,
+      "protein_g": 50,
+      "carbs_g": 280,
+      "fat_g": 6,
+      "fiber_g": 3
+    },
+    {
+      "name": "Mass-Tech, Vanilla",
+      "category": "Mass Gainer",
+      "serving": "6 scoops (366 g)",
+      "calories": 1370,
+      "protein_g": 50,
+      "carbs_g": 280,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mass-Tech Extreme 2000, Vanilla Milkshake",
+      "category": "Mass Gainer",
+      "serving": "6 scoops (570 g)",
+      "calories": 2130,
+      "protein_g": 60,
+      "carbs_g": 461,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "100% Mass Gainer, Chocolate Fudge Brownie",
+      "category": "Mass Gainer",
+      "serving": "6 scoops (357 g)",
+      "calories": 1330,
+      "protein_g": 44,
+      "carbs_g": 280,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "100% Mass Gainer, Vanilla Milkshake",
+      "category": "Mass Gainer",
+      "serving": "6 scoops (357 g)",
+      "calories": 1330,
+      "protein_g": 44,
+      "carbs_g": 280,
+      "fat_g": 4,
+      "fiber_g": 0
+    }
+  ]
+}

@@ -1,0 +1,1644 @@
+{
+  "chain": "McDonald's",
+  "slug": "mcdonalds",
+  "aliases": [
+    "mcdonalds",
+    "mcdonald's",
+    "mc donalds",
+    "mcdonald",
+    "mcd",
+    "mcds",
+    "mickey d's",
+    "mickey ds",
+    "maccas",
+    "macdonalds",
+    "micky d's"
+  ],
+  "kind": "fast-food",
+  "source_url": "https://www.mcdonalds.com/us/en-us/full-menu.html",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Read from McDonald's US nutrition data (mcdonalds.com /dnaapp/itemDetails JSON behind each product page on the full menu), including every size variant listed. Combo meals excluded. Items McDonald's flags 'Promotional' (Spicy Chicken McNuggets, Daily Double, Frozen Hawaiian Punch) are excluded; standard drinks the feed also flags Promotional (Sweet Tea, Dr Pepper, Coke Zero Sugar, Decaf, Large Hot Tea) are kept. Categories for drinks the feed left uncategorised were assigned by menu section. Fiber not published for 16 item(s), set to 0: Premium Roast Coffee (Medium), Chocolate Shake (Small), Strawberry Shake (Small), Diet Coke (Small), Coca-Cola Zero Sugar (Small), Unsweetened Iced Tea (Small), Creamy Ranch Sauce, Ketchup Packet, Chicken McNuggets (6 piece), Premium Roast Coffee (Large), Unsweetened Iced Tea (Extra Small), Unsweetened Iced Tea (Large), Diet Coke (Extra Small), Diet Coke (Large), Diet Coke (Medium), Strawberry Banana Smoothie (Large).",
+  "items": [
+    {
+      "name": "Egg McMuffin",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 310,
+      "protein_g": 17,
+      "carbs_g": 30,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sausage Burrito",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 310,
+      "protein_g": 13,
+      "carbs_g": 25,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Coffee (Small)",
+      "category": "McCafé",
+      "serving": "1 drink (small)",
+      "calories": 150,
+      "protein_g": 1,
+      "carbs_g": 25,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Big Mac",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 580,
+      "protein_g": 25,
+      "carbs_g": 45,
+      "fat_g": 34,
+      "fiber_g": 3
+    },
+    {
+      "name": "Chicken McNuggets (4 piece)",
+      "category": "Chicken and Sandwiches",
+      "serving": "4 piece",
+      "calories": 170,
+      "protein_g": 9,
+      "carbs_g": 10,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Snack Wrap McCrispy Ranch",
+      "category": "Snack Wraps",
+      "serving": "1 wrap",
+      "calories": 400,
+      "protein_g": 17,
+      "carbs_g": 32,
+      "fat_g": 23,
+      "fiber_g": 1
+    },
+    {
+      "name": "Quarter Pounder with Cheese",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 520,
+      "protein_g": 30,
+      "carbs_g": 42,
+      "fat_g": 26,
+      "fiber_g": 2
+    },
+    {
+      "name": "McCrispy",
+      "category": "Chicken and Sandwiches",
+      "serving": "1 sandwich",
+      "calories": 470,
+      "protein_g": 26,
+      "carbs_g": 46,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sausage Biscuit",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 460,
+      "protein_g": 11,
+      "carbs_g": 37,
+      "fat_g": 30,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sausage McMuffin",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 400,
+      "protein_g": 14,
+      "carbs_g": 29,
+      "fat_g": 26,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hash Browns",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 140,
+      "protein_g": 2,
+      "carbs_g": 18,
+      "fat_g": 8,
+      "fiber_g": 2
+    },
+    {
+      "name": "Premium Roast Coffee (Medium)",
+      "category": "McCafé",
+      "serving": "1 drink (medium)",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "McDouble",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 390,
+      "protein_g": 22,
+      "carbs_g": 32,
+      "fat_g": 20,
+      "fiber_g": 2
+    },
+    {
+      "name": "McChicken",
+      "category": "Chicken and Sandwiches",
+      "serving": "1 sandwich",
+      "calories": 390,
+      "protein_g": 14,
+      "carbs_g": 38,
+      "fat_g": 21,
+      "fiber_g": 1
+    },
+    {
+      "name": "World Famous Fries (Small)",
+      "category": "Snacks & Sides",
+      "serving": "1 order (small)",
+      "calories": 230,
+      "protein_g": 3,
+      "carbs_g": 31,
+      "fat_g": 11,
+      "fiber_g": 3
+    },
+    {
+      "name": "Coca-Cola (No Ice) (Medium)",
+      "category": "Beverages",
+      "serving": "1 drink (medium)",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 70,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon, Egg & Cheese Biscuit",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 460,
+      "protein_g": 17,
+      "carbs_g": 39,
+      "fat_g": 26,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sausage McMuffin with Egg",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 480,
+      "protein_g": 20,
+      "carbs_g": 30,
+      "fat_g": 31,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sausage Biscuit with Egg",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 530,
+      "protein_g": 17,
+      "carbs_g": 38,
+      "fat_g": 35,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bacon, Egg & Cheese McGriddles",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 430,
+      "protein_g": 17,
+      "carbs_g": 44,
+      "fat_g": 21,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sausage McGriddles",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 430,
+      "protein_g": 11,
+      "carbs_g": 41,
+      "fat_g": 24,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sausage, Egg & Cheese McGriddles",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 550,
+      "protein_g": 19,
+      "carbs_g": 44,
+      "fat_g": 33,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bacon, Egg & Cheese Bagel",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 590,
+      "protein_g": 25,
+      "carbs_g": 56,
+      "fat_g": 30,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sausage, Egg & Cheese Bagel",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 710,
+      "protein_g": 27,
+      "carbs_g": 56,
+      "fat_g": 42,
+      "fiber_g": 2
+    },
+    {
+      "name": "Steak, Egg & Cheese Bagel",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 680,
+      "protein_g": 34,
+      "carbs_g": 57,
+      "fat_g": 35,
+      "fiber_g": 3
+    },
+    {
+      "name": "Plain Bagel",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 270,
+      "protein_g": 9,
+      "carbs_g": 51,
+      "fat_g": 4,
+      "fiber_g": 2
+    },
+    {
+      "name": "Egg & Cheese Bagel",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 520,
+      "protein_g": 21,
+      "carbs_g": 55,
+      "fat_g": 24,
+      "fiber_g": 2
+    },
+    {
+      "name": "Egg & Cheese Biscuit",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 390,
+      "protein_g": 13,
+      "carbs_g": 39,
+      "fat_g": 21,
+      "fiber_g": 1
+    },
+    {
+      "name": "Big Breakfast with Hotcakes",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 1340,
+      "protein_g": 36,
+      "carbs_g": 158,
+      "fat_g": 63,
+      "fiber_g": 5
+    },
+    {
+      "name": "Big Breakfast",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 1060,
+      "protein_g": 26,
+      "carbs_g": 131,
+      "fat_g": 48,
+      "fiber_g": 3
+    },
+    {
+      "name": "Hotcakes",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 580,
+      "protein_g": 9,
+      "carbs_g": 101,
+      "fat_g": 15,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hotcakes and Sausage",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 770,
+      "protein_g": 15,
+      "carbs_g": 102,
+      "fat_g": 33,
+      "fiber_g": 2
+    },
+    {
+      "name": "Fruit & Maple Oatmeal",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 320,
+      "protein_g": 6,
+      "carbs_g": 64,
+      "fat_g": 4,
+      "fiber_g": 4
+    },
+    {
+      "name": "Quarter Pounder with Cheese Deluxe",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 630,
+      "protein_g": 30,
+      "carbs_g": 44,
+      "fat_g": 37,
+      "fiber_g": 3
+    },
+    {
+      "name": "Bacon Quarter Pounder with Cheese",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 630,
+      "protein_g": 36,
+      "carbs_g": 43,
+      "fat_g": 35,
+      "fiber_g": 3
+    },
+    {
+      "name": "Double Quarter Pounder with Cheese",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 740,
+      "protein_g": 48,
+      "carbs_g": 43,
+      "fat_g": 42,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cheeseburger",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 300,
+      "protein_g": 15,
+      "carbs_g": 31,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Double Cheeseburger",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 440,
+      "protein_g": 25,
+      "carbs_g": 34,
+      "fat_g": 24,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hamburger",
+      "category": "Burgers",
+      "serving": "1 sandwich",
+      "calories": 250,
+      "protein_g": 12,
+      "carbs_g": 30,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Deluxe McCrispy",
+      "category": "Chicken and Sandwiches",
+      "serving": "1 sandwich",
+      "calories": 530,
+      "protein_g": 27,
+      "carbs_g": 48,
+      "fat_g": 26,
+      "fiber_g": 2
+    },
+    {
+      "name": "Spicy McCrispy",
+      "category": "Chicken and Sandwiches",
+      "serving": "1 sandwich",
+      "calories": 530,
+      "protein_g": 27,
+      "carbs_g": 48,
+      "fat_g": 26,
+      "fiber_g": 2
+    },
+    {
+      "name": "Spicy Deluxe McCrispy",
+      "category": "Chicken and Sandwiches",
+      "serving": "1 sandwich",
+      "calories": 530,
+      "protein_g": 27,
+      "carbs_g": 49,
+      "fat_g": 26,
+      "fiber_g": 2
+    },
+    {
+      "name": "Filet-O-Fish",
+      "category": "Chicken and Sandwiches",
+      "serving": "1 sandwich",
+      "calories": 380,
+      "protein_g": 16,
+      "carbs_g": 38,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "McCrispy Strips (3 piece)",
+      "category": "Chicken and Sandwiches",
+      "serving": "3 piece",
+      "calories": 400,
+      "protein_g": 31,
+      "carbs_g": 24,
+      "fat_g": 20,
+      "fiber_g": 2
+    },
+    {
+      "name": "Snack Wrap McCrispy Spicy",
+      "category": "Snack Wraps",
+      "serving": "1 wrap",
+      "calories": 390,
+      "protein_g": 17,
+      "carbs_g": 32,
+      "fat_g": 22,
+      "fiber_g": 2
+    },
+    {
+      "name": "Apple Slices",
+      "category": "Snacks & Sides",
+      "serving": "1 order",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "McFlurry with OREO Cookies",
+      "category": "Desserts & Shakes",
+      "serving": "1 item",
+      "calories": 410,
+      "protein_g": 10,
+      "carbs_g": 64,
+      "fat_g": 13,
+      "fiber_g": 1
+    },
+    {
+      "name": "McFlurry with M&M'S Candies",
+      "category": "Desserts & Shakes",
+      "serving": "1 item",
+      "calories": 570,
+      "protein_g": 11,
+      "carbs_g": 85,
+      "fat_g": 19,
+      "fiber_g": 2
+    },
+    {
+      "name": "Vanilla Cone",
+      "category": "Desserts & Shakes",
+      "serving": "1 item",
+      "calories": 200,
+      "protein_g": 5,
+      "carbs_g": 33,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake (Small)",
+      "category": "Desserts & Shakes",
+      "serving": "1 item (small)",
+      "calories": 520,
+      "protein_g": 12,
+      "carbs_g": 85,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake (Small)",
+      "category": "Desserts & Shakes",
+      "serving": "1 item (small)",
+      "calories": 480,
+      "protein_g": 10,
+      "carbs_g": 80,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Shake (Small)",
+      "category": "Desserts & Shakes",
+      "serving": "1 item (small)",
+      "calories": 470,
+      "protein_g": 10,
+      "carbs_g": 77,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Fudge Sundae",
+      "category": "Desserts & Shakes",
+      "serving": "1 item",
+      "calories": 330,
+      "protein_g": 8,
+      "carbs_g": 51,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hot Caramel Sundae",
+      "category": "Desserts & Shakes",
+      "serving": "1 item",
+      "calories": 330,
+      "protein_g": 7,
+      "carbs_g": 58,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Baked Apple Pie",
+      "category": "Desserts & Shakes",
+      "serving": "1 item",
+      "calories": 230,
+      "protein_g": 2,
+      "carbs_g": 33,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Chip Cookie",
+      "category": "Desserts & Shakes",
+      "serving": "1 item",
+      "calories": 170,
+      "protein_g": 2,
+      "carbs_g": 22,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Caramel Coffee (Small)",
+      "category": "McCafé",
+      "serving": "1 drink (small)",
+      "calories": 150,
+      "protein_g": 2,
+      "carbs_g": 23,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced French Vanilla Coffee (Small)",
+      "category": "McCafé",
+      "serving": "1 drink (small)",
+      "calories": 150,
+      "protein_g": 1,
+      "carbs_g": 25,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Premium Roast Coffee (Small)",
+      "category": "McCafé",
+      "serving": "1 drink (small)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Decaf Coffee (Small)",
+      "category": "McCafé",
+      "serving": "1 drink (small)",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Tea (Small)",
+      "category": "Beverages",
+      "serving": "1 drink (small)",
+      "calories": 10,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Chocolate (Small)",
+      "category": "McCafé",
+      "serving": "1 drink (small)",
+      "calories": 360,
+      "protein_g": 11,
+      "carbs_g": 51,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Americano (Small)",
+      "category": "McCafé",
+      "serving": "1 drink (small)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Frappé (Small)",
+      "category": "McCafé",
+      "serving": "1 drink (small)",
+      "calories": 420,
+      "protein_g": 7,
+      "carbs_g": 60,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mocha Frappé (Small)",
+      "category": "McCafé",
+      "serving": "1 drink (small)",
+      "calories": 430,
+      "protein_g": 7,
+      "carbs_g": 61,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino (Small)",
+      "category": "McCafé",
+      "serving": "1 drink (small)",
+      "calories": 110,
+      "protein_g": 6,
+      "carbs_g": 10,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Cappuccino (Small)",
+      "category": "McCafé",
+      "serving": "1 drink (small)",
+      "calories": 210,
+      "protein_g": 5,
+      "carbs_g": 37,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Cappuccino (Small)",
+      "category": "McCafé",
+      "serving": "1 drink (small)",
+      "calories": 210,
+      "protein_g": 7,
+      "carbs_g": 35,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mocha (Small)",
+      "category": "McCafé",
+      "serving": "1 drink (small)",
+      "calories": 290,
+      "protein_g": 8,
+      "carbs_g": 45,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Iced Mocha (Small)",
+      "category": "McCafé",
+      "serving": "1 drink (small)",
+      "calories": 270,
+      "protein_g": 7,
+      "carbs_g": 39,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Latte (Small)",
+      "category": "McCafé",
+      "serving": "1 drink (small)",
+      "calories": 140,
+      "protein_g": 8,
+      "carbs_g": 13,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Latte (Small)",
+      "category": "McCafé",
+      "serving": "1 drink (small)",
+      "calories": 250,
+      "protein_g": 9,
+      "carbs_g": 39,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Latte (Small)",
+      "category": "McCafé",
+      "serving": "1 drink (small)",
+      "calories": 250,
+      "protein_g": 8,
+      "carbs_g": 41,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Latte (Small)",
+      "category": "McCafé",
+      "serving": "1 drink (small)",
+      "calories": 80,
+      "protein_g": 5,
+      "carbs_g": 8,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Caramel Latte (Small)",
+      "category": "McCafé",
+      "serving": "1 drink (small)",
+      "calories": 180,
+      "protein_g": 6,
+      "carbs_g": 28,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Macchiato (Small)",
+      "category": "McCafé",
+      "serving": "1 drink (small)",
+      "calories": 260,
+      "protein_g": 9,
+      "carbs_g": 41,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Caramel Macchiato (Small)",
+      "category": "McCafé",
+      "serving": "1 drink (small)",
+      "calories": 200,
+      "protein_g": 7,
+      "carbs_g": 33,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Red Bull Dragonberry Energizer (22 oz)",
+      "category": "Beverages",
+      "serving": "22 oz",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 50,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Red Bull Zero Sugar Dragonberry Energizer (Medium)",
+      "category": "Beverages",
+      "serving": "1 drink (medium)",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 29,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sprite Berry Blast (16 oz)",
+      "category": "Beverages",
+      "serving": "16 oz",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 47,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dirty Dr Pepper (16 oz)",
+      "category": "Beverages",
+      "serving": "16 oz",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 51,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Swirl with Coke (Small)",
+      "category": "Beverages",
+      "serving": "1 drink (small)",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 53,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Watermelon Lemonade Refresher (16 oz)",
+      "category": "Beverages",
+      "serving": "16 oz",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 36,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Reduced Sugar Vanilla Swirl with Diet Coke (Small)",
+      "category": "Beverages",
+      "serving": "1 drink (small)",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 25,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango Pineapple Lemonade Refresher (16 oz)",
+      "category": "Beverages",
+      "serving": "16 oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blackberry Passion Fruit Lemonade Refresher (16 oz)",
+      "category": "Beverages",
+      "serving": "16 oz",
+      "calories": 170,
+      "protein_g": 1,
+      "carbs_g": 40,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Orange Dream with Hi-C (Small)",
+      "category": "Beverages",
+      "serving": "1 drink (small)",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 53,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Orange Dream with Fanta (Small)",
+      "category": "Beverages",
+      "serving": "1 drink (small)",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 51,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola (No Ice) (Small)",
+      "category": "Beverages",
+      "serving": "1 drink (small)",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 53,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke (Small)",
+      "category": "Beverages",
+      "serving": "1 drink (small)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola Zero Sugar (Small)",
+      "category": "Beverages",
+      "serving": "1 drink (small)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite (No Ice) (Small)",
+      "category": "Beverages",
+      "serving": "1 drink (small)",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Orange (No Ice) (Small)",
+      "category": "Beverages",
+      "serving": "1 drink (small)",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 56,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper (No Ice) (Small)",
+      "category": "Beverages",
+      "serving": "1 drink (small)",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 52,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Frozen Coke (Small)",
+      "category": "Beverages",
+      "serving": "1 drink (small)",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Frozen Fanta Blue Raspberry (Small)",
+      "category": "Beverages",
+      "serving": "1 drink (small)",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 23,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "McDonald's Lemonade (16 oz)",
+      "category": "Beverages",
+      "serving": "16 oz",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 31,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea (No Ice) (Small)",
+      "category": "Beverages",
+      "serving": "1 drink (small)",
+      "calories": 170,
+      "protein_g": 1,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweetened Iced Tea (Small)",
+      "category": "Beverages",
+      "serving": "1 drink (small)",
+      "calories": 0,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Premium Orange Juice (Medium)",
+      "category": "Beverages",
+      "serving": "1 drink (medium)",
+      "calories": 190,
+      "protein_g": 3,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "DASANI Water",
+      "category": "Beverages",
+      "serving": "1 drink",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honest Kids Appley Ever After Organic Juice Drink (6 fl oz box)",
+      "category": "Beverages",
+      "serving": "6 fl oz box",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 8,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Banana Smoothie (Small)",
+      "category": "McCafé",
+      "serving": "1 drink (small)",
+      "calories": 190,
+      "protein_g": 2,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "McCrispy Signature Creamy Chili Sauce",
+      "category": "Condiments",
+      "serving": "1 packet",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango Pineapple Smoothie (Small)",
+      "category": "McCafé",
+      "serving": "1 drink (small)",
+      "calories": 200,
+      "protein_g": 2,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Tangy Barbeque Sauce",
+      "category": "Condiments",
+      "serving": "1 packet",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spicy Buffalo Sauce",
+      "category": "Condiments",
+      "serving": "1 packet",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Creamy Ranch Sauce",
+      "category": "Condiments",
+      "serving": "1 packet",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey Mustard Sauce",
+      "category": "Condiments",
+      "serving": "1 packet",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sweet 'N Sour Sauce",
+      "category": "Condiments",
+      "serving": "1 packet",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ketchup Packet",
+      "category": "Condiments",
+      "serving": "1 packet",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mayonnaise Packet",
+      "category": "Condiments",
+      "serving": "1 packet",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mustard Packet",
+      "category": "Condiments",
+      "serving": "1 packet",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey",
+      "category": "Condiments",
+      "serving": "1 packet",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken McNuggets (6 piece)",
+      "category": "Chicken and Sandwiches",
+      "serving": "6 piece",
+      "calories": 250,
+      "protein_g": 14,
+      "carbs_g": 15,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken McNuggets (10 piece)",
+      "category": "Chicken and Sandwiches",
+      "serving": "10 piece",
+      "calories": 410,
+      "protein_g": 23,
+      "carbs_g": 26,
+      "fat_g": 24,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chicken McNuggets (20 piece)",
+      "category": "Chicken and Sandwiches",
+      "serving": "20 piece",
+      "calories": 830,
+      "protein_g": 46,
+      "carbs_g": 51,
+      "fat_g": 49,
+      "fiber_g": 2
+    },
+    {
+      "name": "Premium Roast Coffee (Large)",
+      "category": "McCafé",
+      "serving": "1 drink (large)",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken McNuggets (40 piece)",
+      "category": "Chicken and Sandwiches",
+      "serving": "40 piece",
+      "calories": 1650,
+      "protein_g": 92,
+      "carbs_g": 102,
+      "fat_g": 98,
+      "fiber_g": 4
+    },
+    {
+      "name": "World Famous Fries (Kids)",
+      "category": "Snacks & Sides",
+      "serving": "1 order (kids)",
+      "calories": 110,
+      "protein_g": 2,
+      "carbs_g": 14,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "World Famous Fries (Medium)",
+      "category": "Snacks & Sides",
+      "serving": "1 order (medium)",
+      "calories": 320,
+      "protein_g": 5,
+      "carbs_g": 43,
+      "fat_g": 15,
+      "fiber_g": 4
+    },
+    {
+      "name": "World Famous Fries (Large)",
+      "category": "Snacks & Sides",
+      "serving": "1 order (large)",
+      "calories": 480,
+      "protein_g": 7,
+      "carbs_g": 65,
+      "fat_g": 23,
+      "fiber_g": 6
+    },
+    {
+      "name": "Minute Maid Premium Orange Juice (Large)",
+      "category": "Beverages",
+      "serving": "1 drink (large)",
+      "calories": 270,
+      "protein_g": 4,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Minute Maid Premium Orange Juice (Small)",
+      "category": "Beverages",
+      "serving": "1 drink (small)",
+      "calories": 150,
+      "protein_g": 2,
+      "carbs_g": 36,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "French Vanilla Cappuccino (Medium)",
+      "category": "McCafé",
+      "serving": "1 drink (medium)",
+      "calories": 260,
+      "protein_g": 7,
+      "carbs_g": 47,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Vanilla Cappuccino (Large)",
+      "category": "McCafé",
+      "serving": "1 drink (large)",
+      "calories": 340,
+      "protein_g": 9,
+      "carbs_g": 58,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Frozen Coke (Medium)",
+      "category": "Beverages",
+      "serving": "1 drink (medium)",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 31,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Frozen Coke (Large)",
+      "category": "Beverages",
+      "serving": "1 drink (large)",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango Pineapple Smoothie (Medium)",
+      "category": "McCafé",
+      "serving": "1 drink (medium)",
+      "calories": 250,
+      "protein_g": 3,
+      "carbs_g": 57,
+      "fat_g": 1,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Pineapple Smoothie (Large)",
+      "category": "McCafé",
+      "serving": "1 drink (large)",
+      "calories": 340,
+      "protein_g": 4,
+      "carbs_g": 78,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Iced Caramel Macchiato (Large)",
+      "category": "McCafé",
+      "serving": "1 drink (large)",
+      "calories": 360,
+      "protein_g": 12,
+      "carbs_g": 59,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Caramel Macchiato (Medium)",
+      "category": "McCafé",
+      "serving": "1 drink (medium)",
+      "calories": 240,
+      "protein_g": 8,
+      "carbs_g": 41,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Frozen Fanta Blue Raspberry (Medium)",
+      "category": "Beverages",
+      "serving": "1 drink (medium)",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 31,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Frozen Fanta Blue Raspberry (Large)",
+      "category": "Beverages",
+      "serving": "1 drink (large)",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweetened Iced Tea (Extra Small)",
+      "category": "Beverages",
+      "serving": "1 drink (extra small)",
+      "calories": 0,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweetened Iced Tea (Medium)",
+      "category": "Beverages",
+      "serving": "1 drink (medium)",
+      "calories": 0,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweetened Iced Tea (Large)",
+      "category": "Beverages",
+      "serving": "1 drink (large)",
+      "calories": 0,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino (Large)",
+      "category": "McCafé",
+      "serving": "1 drink (large)",
+      "calories": 200,
+      "protein_g": 11,
+      "carbs_g": 18,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cappuccino (Medium)",
+      "category": "McCafé",
+      "serving": "1 drink (medium)",
+      "calories": 160,
+      "protein_g": 9,
+      "carbs_g": 14,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Cappuccino (Large)",
+      "category": "McCafé",
+      "serving": "1 drink (large)",
+      "calories": 340,
+      "protein_g": 11,
+      "carbs_g": 55,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Cappuccino (Medium)",
+      "category": "McCafé",
+      "serving": "1 drink (medium)",
+      "calories": 260,
+      "protein_g": 8,
+      "carbs_g": 44,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake (Large)",
+      "category": "Desserts & Shakes",
+      "serving": "1 item (large)",
+      "calories": 800,
+      "protein_g": 18,
+      "carbs_g": 134,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Shake (Medium)",
+      "category": "Desserts & Shakes",
+      "serving": "1 item (medium)",
+      "calories": 650,
+      "protein_g": 15,
+      "carbs_g": 107,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Shake (Medium)",
+      "category": "Desserts & Shakes",
+      "serving": "1 item (medium)",
+      "calories": 570,
+      "protein_g": 12,
+      "carbs_g": 97,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke (Extra Small)",
+      "category": "Beverages",
+      "serving": "1 drink (extra small)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake (Large)",
+      "category": "Desserts & Shakes",
+      "serving": "1 item (large)",
+      "calories": 780,
+      "protein_g": 17,
+      "carbs_g": 133,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke (Large)",
+      "category": "Beverages",
+      "serving": "1 drink (large)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke (Medium)",
+      "category": "Beverages",
+      "serving": "1 drink (medium)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Banana Smoothie (Medium)",
+      "category": "McCafé",
+      "serving": "1 drink (medium)",
+      "calories": 240,
+      "protein_g": 3,
+      "carbs_g": 55,
+      "fat_g": 1,
+      "fiber_g": 3
+    },
+    {
+      "name": "Strawberry Banana Smoothie (Large)",
+      "category": "McCafé",
+      "serving": "1 drink (large)",
+      "calories": 330,
+      "protein_g": 4,
+      "carbs_g": 76,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mocha Frappé (Medium)",
+      "category": "McCafé",
+      "serving": "1 drink (medium)",
+      "calories": 490,
+      "protein_g": 8,
+      "carbs_g": 72,
+      "fat_g": 20,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mocha Frappé (Large)",
+      "category": "McCafé",
+      "serving": "1 drink (large)",
+      "calories": 660,
+      "protein_g": 11,
+      "carbs_g": 97,
+      "fat_g": 26,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramel Frappé (Medium)",
+      "category": "McCafé",
+      "serving": "1 drink (medium)",
+      "calories": 490,
+      "protein_g": 8,
+      "carbs_g": 70,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramel Frappé (Large)",
+      "category": "McCafé",
+      "serving": "1 drink (large)",
+      "calories": 650,
+      "protein_g": 11,
+      "carbs_g": 94,
+      "fat_g": 26,
+      "fiber_g": 1
+    },
+    {
+      "name": "Strawberry Shake (Medium)",
+      "category": "Desserts & Shakes",
+      "serving": "1 item (medium)",
+      "calories": 600,
+      "protein_g": 13,
+      "carbs_g": 99,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Shake (Large)",
+      "category": "Desserts & Shakes",
+      "serving": "1 item (large)",
+      "calories": 850,
+      "protein_g": 19,
+      "carbs_g": 143,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Tea (Medium)",
+      "category": "Beverages",
+      "serving": "1 drink (medium)",
+      "calories": 10,
+      "protein_g": 3,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Tea (Large)",
+      "category": "Beverages",
+      "serving": "1 drink (large)",
+      "calories": 15,
+      "protein_g": 3,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Macchiato (Medium)",
+      "category": "McCafé",
+      "serving": "1 drink (medium)",
+      "calories": 320,
+      "protein_g": 11,
+      "carbs_g": 51,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Macchiato (Large)",
+      "category": "McCafé",
+      "serving": "1 drink (large)",
+      "calories": 400,
+      "protein_g": 14,
+      "carbs_g": 62,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Americano (Medium)",
+      "category": "McCafé",
+      "serving": "1 drink (medium)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Americano (Large)",
+      "category": "McCafé",
+      "serving": "1 drink (large)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    }
+  ]
+}

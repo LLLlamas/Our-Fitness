@@ -1,0 +1,591 @@
+{
+  "chain": "In-N-Out Burger",
+  "slug": "in-n-out",
+  "aliases": [
+    "in-n-out",
+    "in n out",
+    "innout",
+    "in and out",
+    "in-n-out burger",
+    "in n out burger",
+    "inandout",
+    "innout burger"
+  ],
+  "kind": "fast-food",
+  "source_url": "https://www.in-n-out.com/docs/default-source/downloads/nutrition_info.pdf",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "From In-N-Out's 'Nutrition Facts' PDF (January 2026), linked from in-n-out.com/menu/nutrition-info. The PDF only covers burgers, fries, shakes and drinks; condiments/add-ons are not in it. Fountain drink values are the 'with ice' column (the PDF also lists no-ice values for larger fills). Per the PDF, beverage fat/fiber/protein are 0 unless specified. Sweet Iced Tea is available only in select markets. Item-names 'Protein Style' = bun replaced with lettuce.",
+  "items": [
+    {
+      "name": "Hamburger w/ Onion",
+      "category": "Burgers",
+      "serving": "1 burger",
+      "calories": 360,
+      "protein_g": 16,
+      "carbs_g": 38,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hamburger w/ Onion, Mustard & Ketchup instead of Spread",
+      "category": "Burgers",
+      "serving": "1 burger",
+      "calories": 300,
+      "protein_g": 16,
+      "carbs_g": 38,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hamburger Protein Style (lettuce bun)",
+      "category": "Burgers",
+      "serving": "1 burger",
+      "calories": 210,
+      "protein_g": 12,
+      "carbs_g": 9,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cheeseburger w/ Onion",
+      "category": "Burgers",
+      "serving": "1 burger",
+      "calories": 430,
+      "protein_g": 20,
+      "carbs_g": 40,
+      "fat_g": 21,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cheeseburger w/ Onion, Mustard & Ketchup instead of Spread",
+      "category": "Burgers",
+      "serving": "1 burger",
+      "calories": 380,
+      "protein_g": 20,
+      "carbs_g": 39,
+      "fat_g": 15,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cheeseburger Protein Style (lettuce bun)",
+      "category": "Burgers",
+      "serving": "1 burger",
+      "calories": 280,
+      "protein_g": 16,
+      "carbs_g": 11,
+      "fat_g": 19,
+      "fiber_g": 2
+    },
+    {
+      "name": "Double-Double w/ Onion",
+      "category": "Burgers",
+      "serving": "1 burger",
+      "calories": 610,
+      "protein_g": 34,
+      "carbs_g": 42,
+      "fat_g": 34,
+      "fiber_g": 2
+    },
+    {
+      "name": "Double-Double w/ Onion, Mustard & Ketchup instead of Spread",
+      "category": "Burgers",
+      "serving": "1 burger",
+      "calories": 550,
+      "protein_g": 34,
+      "carbs_g": 41,
+      "fat_g": 27,
+      "fiber_g": 2
+    },
+    {
+      "name": "Double-Double Protein Style (lettuce bun)",
+      "category": "Burgers",
+      "serving": "1 burger",
+      "calories": 460,
+      "protein_g": 30,
+      "carbs_g": 12,
+      "fat_g": 32,
+      "fiber_g": 2
+    },
+    {
+      "name": "French Fries",
+      "category": "French Fries",
+      "serving": "1 order (125 g)",
+      "calories": 360,
+      "protein_g": 6,
+      "carbs_g": 49,
+      "fat_g": 15,
+      "fiber_g": 6
+    },
+    {
+      "name": "Chocolate Shake (15 oz)",
+      "category": "Shakes",
+      "serving": "15 oz",
+      "calories": 610,
+      "protein_g": 16,
+      "carbs_g": 74,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake (15 oz)",
+      "category": "Shakes",
+      "serving": "15 oz",
+      "calories": 590,
+      "protein_g": 16,
+      "carbs_g": 66,
+      "fat_g": 31,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Shake (15 oz)",
+      "category": "Shakes",
+      "serving": "15 oz",
+      "calories": 610,
+      "protein_g": 15,
+      "carbs_g": 74,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee (15 oz)",
+      "category": "Beverages",
+      "serving": "15 oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Cocoa (8 oz)",
+      "category": "Beverages",
+      "serving": "8 oz",
+      "calories": 160,
+      "protein_g": 2,
+      "carbs_g": 33,
+      "fat_g": 3,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hot Cocoa with Marshmallows (8 oz)",
+      "category": "Beverages",
+      "serving": "8 oz",
+      "calories": 180,
+      "protein_g": 2,
+      "carbs_g": 33,
+      "fat_g": 3,
+      "fiber_g": 2
+    },
+    {
+      "name": "Milk (10 oz)",
+      "category": "Beverages",
+      "serving": "10 oz",
+      "calories": 160,
+      "protein_g": 10,
+      "carbs_g": 16,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola (Small 11 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Small 11 oz w/ ice",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 37,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola (Medium 15 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Medium 15 oz w/ ice",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 50,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola (Large 22 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Large 22 oz w/ ice",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 74,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola (X-Large 29 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "X-Large 29 oz w/ ice",
+      "calories": 360,
+      "protein_g": 0,
+      "carbs_g": 97,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke (Small 11 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Small 11 oz w/ ice",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke (Medium 15 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Medium 15 oz w/ ice",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke (Large 22 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Large 22 oz w/ ice",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke (X-Large 29 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "X-Large 29 oz w/ ice",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Coke (Small 11 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Small 11 oz w/ ice",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 38,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Coke (Medium 15 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Medium 15 oz w/ ice",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 52,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Coke (Large 22 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Large 22 oz w/ ice",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 77,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Coke (X-Large 29 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "X-Large 29 oz w/ ice",
+      "calories": 370,
+      "protein_g": 0,
+      "carbs_g": 101,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "7UP (Small 11 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Small 11 oz w/ ice",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "7UP (Medium 15 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Medium 15 oz w/ ice",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "7UP (Large 22 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Large 22 oz w/ ice",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "7UP (X-Large 29 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "X-Large 29 oz w/ ice",
+      "calories": 350,
+      "protein_g": 0,
+      "carbs_g": 93,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper (Small 11 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Small 11 oz w/ ice",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 36,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper (Medium 15 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Medium 15 oz w/ ice",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper (Large 22 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Large 22 oz w/ ice",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 72,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper (X-Large 29 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "X-Large 29 oz w/ ice",
+      "calories": 350,
+      "protein_g": 0,
+      "carbs_g": 94,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Barq's Root Beer (Small 11 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Small 11 oz w/ ice",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 37,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Barq's Root Beer (Medium 15 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Medium 15 oz w/ ice",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 50,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Barq's Root Beer (Large 22 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Large 22 oz w/ ice",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 74,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Barq's Root Beer (X-Large 29 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "X-Large 29 oz w/ ice",
+      "calories": 360,
+      "protein_g": 0,
+      "carbs_g": 97,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Signature Pink Lemonade (Small 11 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Small 11 oz w/ ice",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Signature Pink Lemonade (Medium 15 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Medium 15 oz w/ ice",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Signature Pink Lemonade (Large 22 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Large 22 oz w/ ice",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 70,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Signature Pink Lemonade (X-Large 29 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "X-Large 29 oz w/ ice",
+      "calories": 400,
+      "protein_g": 0,
+      "carbs_g": 93,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lite Pink Lemonade (Small 11 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Small 11 oz w/ ice",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lite Pink Lemonade (Medium 15 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Medium 15 oz w/ ice",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lite Pink Lemonade (Large 22 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "Large 22 oz w/ ice",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lite Pink Lemonade (X-Large 29 oz w/ ice)",
+      "category": "Beverages",
+      "serving": "X-Large 29 oz w/ ice",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 7,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweetened Iced Tea (Small w/ ice)",
+      "category": "Beverages",
+      "serving": "1 drink (small w/ ice)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweetened Iced Tea (Medium w/ ice)",
+      "category": "Beverages",
+      "serving": "1 drink (medium w/ ice)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweetened Iced Tea (Large w/ ice)",
+      "category": "Beverages",
+      "serving": "1 drink (large w/ ice)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweetened Iced Tea (X-Large w/ ice)",
+      "category": "Beverages",
+      "serving": "1 drink (x-large w/ ice)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Iced Tea (Small w/ ice)",
+      "category": "Beverages",
+      "serving": "1 drink (small w/ ice)",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Iced Tea (Medium w/ ice)",
+      "category": "Beverages",
+      "serving": "1 drink (medium w/ ice)",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 30,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Iced Tea (Large w/ ice)",
+      "category": "Beverages",
+      "serving": "1 drink (large w/ ice)",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Iced Tea (X-Large w/ ice)",
+      "category": "Beverages",
+      "serving": "1 drink (x-large w/ ice)",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 63,
+      "fat_g": 0,
+      "fiber_g": 0
+    }
+  ]
+}

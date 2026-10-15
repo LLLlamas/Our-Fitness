@@ -1,0 +1,1450 @@
+{
+  "chain": "Bojangles",
+  "slug": "bojangles",
+  "aliases": [
+    "bojangles",
+    "bojangles'",
+    "bojangle's",
+    "bojangle",
+    "bojangles chicken",
+    "bo jangles",
+    "bojangels"
+  ],
+  "kind": "fast-food",
+  "source_url": "https://storyblok.pleinaircdn.com/f/110020/x/6c7b2a7e6a/m25-099-2025_02-nutritiongudeupdates_bobitessalad_master.pdf",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "From Bojangles' 'Nutrition Facts' sheet (©2025), the PDF behind 'Download Nutrition Info' on bojangles.com/menu/nutrition. Values are for company-owned stores per the sheet. Fixin's sizes: Individual / Picnic (and Small / Medium for Bo-Tato Rounds and fries). Salads exclude dressing and croutons. Kids' meals excluded. The sheet lists 'Garden Salad' twice with different values (170 and 260 cal); only the first is kept. Items marked * are only at participating stores. Atwater outliers (>20% off 4P+4C+9F, left as published): Bo's Chicken Sandwich (670 cal vs 828 Atwater); Sweet Cream Cold Brew (Regular) (190 cal vs 108 Atwater).",
+  "items": [
+    {
+      "name": "Bacon, Egg & Cheese Biscuit",
+      "category": "Biscuits",
+      "serving": "1 item",
+      "calories": 510,
+      "protein_g": 28,
+      "carbs_g": 40,
+      "fat_g": 27,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cajun Filet Biscuit",
+      "category": "Biscuits",
+      "serving": "1 item",
+      "calories": 570,
+      "protein_g": 23,
+      "carbs_g": 57,
+      "fat_g": 27,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bo's Chicken Biscuit",
+      "category": "Biscuits",
+      "serving": "1 item",
+      "calories": 570,
+      "protein_g": 23,
+      "carbs_g": 57,
+      "fat_g": 27,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cheddar Bo Biscuit",
+      "category": "Biscuits",
+      "serving": "1 item",
+      "calories": 490,
+      "protein_g": 15,
+      "carbs_g": 39,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Country Ham & Egg Biscuit",
+      "category": "Biscuits",
+      "serving": "1 item",
+      "calories": 460,
+      "protein_g": 20,
+      "carbs_g": 38,
+      "fat_g": 25,
+      "fiber_g": 1
+    },
+    {
+      "name": "Country Ham Biscuit",
+      "category": "Biscuits",
+      "serving": "1 item",
+      "calories": 380,
+      "protein_g": 14,
+      "carbs_g": 38,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Egg & Cheese Biscuit",
+      "category": "Biscuits",
+      "serving": "1 item",
+      "calories": 430,
+      "protein_g": 13,
+      "carbs_g": 39,
+      "fat_g": 25,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gravy Biscuit",
+      "category": "Biscuits",
+      "serving": "1 item",
+      "calories": 430,
+      "protein_g": 11,
+      "carbs_g": 49,
+      "fat_g": 21,
+      "fiber_g": 1
+    },
+    {
+      "name": "Old Fashioned Gravy Biscuit",
+      "category": "Biscuits",
+      "serving": "1 item",
+      "calories": 410,
+      "protein_g": 7,
+      "carbs_g": 47,
+      "fat_g": 22,
+      "fiber_g": 1
+    },
+    {
+      "name": "Plain Biscuit",
+      "category": "Biscuits",
+      "serving": "1 item",
+      "calories": 310,
+      "protein_g": 6,
+      "carbs_g": 37,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sausage & Egg Biscuit",
+      "category": "Biscuits",
+      "serving": "1 item",
+      "calories": 550,
+      "protein_g": 21,
+      "carbs_g": 38,
+      "fat_g": 34,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sausage Biscuit",
+      "category": "Biscuits",
+      "serving": "1 item",
+      "calories": 470,
+      "protein_g": 15,
+      "carbs_g": 38,
+      "fat_g": 28,
+      "fiber_g": 1
+    },
+    {
+      "name": "Southern Filet Biscuit",
+      "category": "Biscuits",
+      "serving": "1 item",
+      "calories": 550,
+      "protein_g": 23,
+      "carbs_g": 54,
+      "fat_g": 27,
+      "fiber_g": 1
+    },
+    {
+      "name": "Steak Biscuit",
+      "category": "Biscuits",
+      "serving": "1 item",
+      "calories": 620,
+      "protein_g": 16,
+      "carbs_g": 48,
+      "fat_g": 40,
+      "fiber_g": 1
+    },
+    {
+      "name": "Add American Cheese",
+      "category": "Biscuits",
+      "serving": "1 item",
+      "calories": 40,
+      "protein_g": 2,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Add Egg",
+      "category": "Biscuits",
+      "serving": "1 item",
+      "calories": 80,
+      "protein_g": 6,
+      "carbs_g": 0,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bo's Chicken Sandwich",
+      "category": "Sandwiches",
+      "serving": "1 item",
+      "calories": 670,
+      "protein_g": 31,
+      "carbs_g": 95,
+      "fat_g": 36,
+      "fiber_g": 0
+    },
+    {
+      "name": "Grilled Chicken Club Sandwich",
+      "category": "Sandwiches",
+      "serving": "1 item",
+      "calories": 690,
+      "protein_g": 46,
+      "carbs_g": 39,
+      "fat_g": 39,
+      "fiber_g": 1
+    },
+    {
+      "name": "Grilled Chicken Sandwich",
+      "category": "Sandwiches",
+      "serving": "1 item",
+      "calories": 570,
+      "protein_g": 29,
+      "carbs_g": 36,
+      "fat_g": 33,
+      "fiber_g": 1
+    },
+    {
+      "name": "Garden Salad",
+      "category": "Salads",
+      "serving": "1 item",
+      "calories": 170,
+      "protein_g": 14,
+      "carbs_g": 6,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Grilled Chicken Salad",
+      "category": "Salads",
+      "serving": "1 item",
+      "calories": 360,
+      "protein_g": 40,
+      "carbs_g": 9,
+      "fat_g": 17,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chicken Supremes Salad",
+      "category": "Salads",
+      "serving": "1 item",
+      "calories": 420,
+      "protein_g": 29,
+      "carbs_g": 23,
+      "fat_g": 22,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bo Bites Salad",
+      "category": "Salads",
+      "serving": "1 item",
+      "calories": 430,
+      "protein_g": 33,
+      "carbs_g": 21,
+      "fat_g": 24,
+      "fiber_g": 3
+    },
+    {
+      "name": "Bo's House Salad",
+      "category": "Salads",
+      "serving": "1 item",
+      "calories": 780,
+      "protein_g": 49,
+      "carbs_g": 27,
+      "fat_g": 54,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bo-Berry Biscuit",
+      "category": "Sweets",
+      "serving": "1 item",
+      "calories": 370,
+      "protein_g": 5,
+      "carbs_g": 49,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cinnamon Biscuit",
+      "category": "Sweets",
+      "serving": "1 item",
+      "calories": 490,
+      "protein_g": 6,
+      "carbs_g": 57,
+      "fat_g": 27,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cinnamon Twist",
+      "category": "Sweets",
+      "serving": "1 item",
+      "calories": 380,
+      "protein_g": 3,
+      "carbs_g": 38,
+      "fat_g": 24,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sweet Potato Pie",
+      "category": "Sweets",
+      "serving": "1 item",
+      "calories": 350,
+      "protein_g": 3,
+      "carbs_g": 41,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breast",
+      "category": "Chicken",
+      "serving": "1 pc",
+      "calories": 540,
+      "protein_g": 41,
+      "carbs_g": 24,
+      "fat_g": 29,
+      "fiber_g": 1
+    },
+    {
+      "name": "Leg",
+      "category": "Chicken",
+      "serving": "1 pc",
+      "calories": 190,
+      "protein_g": 10,
+      "carbs_g": 8,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Thigh",
+      "category": "Chicken",
+      "serving": "1 pc",
+      "calories": 240,
+      "protein_g": 21,
+      "carbs_g": 14,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Wing",
+      "category": "Chicken",
+      "serving": "1 pc",
+      "calories": 150,
+      "protein_g": 10,
+      "carbs_g": 8,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Supremes",
+      "category": "Chicken",
+      "serving": "4 pc",
+      "calories": 500,
+      "protein_g": 32,
+      "carbs_g": 33,
+      "fat_g": 25,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bo's Chicken Tenders",
+      "category": "Chicken",
+      "serving": "3 pc",
+      "calories": 310,
+      "protein_g": 36,
+      "carbs_g": 17,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bo's Chicken Tenders",
+      "category": "Chicken",
+      "serving": "4 pc",
+      "calories": 410,
+      "protein_g": 48,
+      "carbs_g": 23,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bo's Chicken Tenders",
+      "category": "Chicken",
+      "serving": "5 pc",
+      "calories": 510,
+      "protein_g": 60,
+      "carbs_g": 29,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bo Bites 4pc Ala Carte",
+      "category": "Chicken",
+      "serving": "4 pc",
+      "calories": 220,
+      "protein_g": 16,
+      "carbs_g": 12,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bo Bites 6pc Ala Carte",
+      "category": "Chicken",
+      "serving": "6 pc",
+      "calories": 320,
+      "protein_g": 24,
+      "carbs_g": 18,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bo Bites 9pc Ala Carte",
+      "category": "Chicken",
+      "serving": "9 pc",
+      "calories": 480,
+      "protein_g": 36,
+      "carbs_g": 27,
+      "fat_g": 27,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bo Bites 12pc Ala Carte",
+      "category": "Chicken",
+      "serving": "12 pc",
+      "calories": 640,
+      "protein_g": 48,
+      "carbs_g": 36,
+      "fat_g": 36,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bo Bites 20pc Ala Carte",
+      "category": "Chicken",
+      "serving": "20 pc",
+      "calories": 1060,
+      "protein_g": 80,
+      "carbs_g": 60,
+      "fat_g": 60,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bo-Tato Rounds (Small)",
+      "category": "Fixin's (Sides)",
+      "serving": "Small",
+      "calories": 260,
+      "protein_g": 2,
+      "carbs_g": 27,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bo-Tato Rounds (Medium)",
+      "category": "Fixin's (Sides)",
+      "serving": "Medium",
+      "calories": 390,
+      "protein_g": 3,
+      "carbs_g": 40,
+      "fat_g": 24,
+      "fiber_g": 3
+    },
+    {
+      "name": "Bo-Tato Rounds (Picnic)",
+      "category": "Fixin's (Sides)",
+      "serving": "Picnic",
+      "calories": 650,
+      "protein_g": 5,
+      "carbs_g": 67,
+      "fat_g": 40,
+      "fiber_g": 4
+    },
+    {
+      "name": "Cajun Pintos (Individual)",
+      "category": "Fixin's (Sides)",
+      "serving": "Individual",
+      "calories": 130,
+      "protein_g": 7,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 7
+    },
+    {
+      "name": "Cajun Pintos (Picnic)",
+      "category": "Fixin's (Sides)",
+      "serving": "Picnic",
+      "calories": 420,
+      "protein_g": 22,
+      "carbs_g": 81,
+      "fat_g": 2,
+      "fiber_g": 23
+    },
+    {
+      "name": "Dirty Rice (Individual)",
+      "category": "Fixin's (Sides)",
+      "serving": "Individual",
+      "calories": 170,
+      "protein_g": 5,
+      "carbs_g": 23,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dirty Rice (Picnic)",
+      "category": "Fixin's (Sides)",
+      "serving": "Picnic",
+      "calories": 530,
+      "protein_g": 15,
+      "carbs_g": 74,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cole Slaw (Individual)",
+      "category": "Fixin's (Sides)",
+      "serving": "Individual",
+      "calories": 170,
+      "protein_g": 1,
+      "carbs_g": 20,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cole Slaw (Picnic)",
+      "category": "Fixin's (Sides)",
+      "serving": "Picnic",
+      "calories": 580,
+      "protein_g": 4,
+      "carbs_g": 65,
+      "fat_g": 35,
+      "fiber_g": 6
+    },
+    {
+      "name": "Green Beans (Individual)",
+      "category": "Fixin's (Sides)",
+      "serving": "Individual",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Green Beans (Picnic)",
+      "category": "Fixin's (Sides)",
+      "serving": "Picnic",
+      "calories": 70,
+      "protein_g": 4,
+      "carbs_g": 15,
+      "fat_g": 0,
+      "fiber_g": 5
+    },
+    {
+      "name": "Macaroni 'N Cheese (Individual)",
+      "category": "Fixin's (Sides)",
+      "serving": "Individual",
+      "calories": 280,
+      "protein_g": 8,
+      "carbs_g": 21,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Macaroni 'N Cheese (Picnic)",
+      "category": "Fixin's (Sides)",
+      "serving": "Picnic",
+      "calories": 870,
+      "protein_g": 24,
+      "carbs_g": 64,
+      "fat_g": 54,
+      "fiber_g": 3
+    },
+    {
+      "name": "Baked Macaroni 'N Cheese (Individual)",
+      "category": "Fixin's (Sides)",
+      "serving": "Individual",
+      "calories": 260,
+      "protein_g": 8,
+      "carbs_g": 21,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Baked Macaroni 'N Cheese (Picnic)",
+      "category": "Fixin's (Sides)",
+      "serving": "Picnic",
+      "calories": 790,
+      "protein_g": 24,
+      "carbs_g": 64,
+      "fat_g": 48,
+      "fiber_g": 3
+    },
+    {
+      "name": "Mashed Potatoes 'N Gravy (Individual)",
+      "category": "Fixin's (Sides)",
+      "serving": "Individual",
+      "calories": 120,
+      "protein_g": 4,
+      "carbs_g": 18,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mashed Potatoes 'N Gravy (Picnic)",
+      "category": "Fixin's (Sides)",
+      "serving": "Picnic",
+      "calories": 410,
+      "protein_g": 13,
+      "carbs_g": 69,
+      "fat_g": 9,
+      "fiber_g": 4
+    },
+    {
+      "name": "Mashed Potatoes 'N Old Fashioned Gravy (Individual)",
+      "category": "Fixin's (Sides)",
+      "serving": "Individual",
+      "calories": 110,
+      "protein_g": 2,
+      "carbs_g": 17,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mashed Potatoes 'N Old Fashioned Gravy (Picnic)",
+      "category": "Fixin's (Sides)",
+      "serving": "Picnic",
+      "calories": 400,
+      "protein_g": 9,
+      "carbs_g": 66,
+      "fat_g": 11,
+      "fiber_g": 5
+    },
+    {
+      "name": "Mashed Potatoes 'N Brown Gravy (Individual)",
+      "category": "Fixin's (Sides)",
+      "serving": "Individual",
+      "calories": 100,
+      "protein_g": 2,
+      "carbs_g": 18,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mashed Potatoes 'N Brown Gravy (Picnic)",
+      "category": "Fixin's (Sides)",
+      "serving": "Picnic",
+      "calories": 370,
+      "protein_g": 7,
+      "carbs_g": 69,
+      "fat_g": 7,
+      "fiber_g": 5
+    },
+    {
+      "name": "Grits (Individual)",
+      "category": "Fixin's (Sides)",
+      "serving": "Individual",
+      "calories": 90,
+      "protein_g": 2,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Grits (Picnic)",
+      "category": "Fixin's (Sides)",
+      "serving": "Picnic",
+      "calories": 280,
+      "protein_g": 6,
+      "carbs_g": 62,
+      "fat_g": 1,
+      "fiber_g": 4
+    },
+    {
+      "name": "Seasoned Fries (Small)",
+      "category": "Fixin's (Sides)",
+      "serving": "Small",
+      "calories": 360,
+      "protein_g": 3,
+      "carbs_g": 39,
+      "fat_g": 21,
+      "fiber_g": 3
+    },
+    {
+      "name": "Seasoned Fries (Medium)",
+      "category": "Fixin's (Sides)",
+      "serving": "Medium",
+      "calories": 450,
+      "protein_g": 4,
+      "carbs_g": 49,
+      "fat_g": 26,
+      "fiber_g": 4
+    },
+    {
+      "name": "Seasoned Fries (Picnic)",
+      "category": "Fixin's (Sides)",
+      "serving": "Picnic",
+      "calories": 670,
+      "protein_g": 6,
+      "carbs_g": 73,
+      "fat_g": 38,
+      "fiber_g": 5
+    },
+    {
+      "name": "Chicken Rice Bowl (w/o biscuit)",
+      "category": "Bowls",
+      "serving": "1 Bowl",
+      "calories": 780,
+      "protein_g": 48,
+      "carbs_g": 86,
+      "fat_g": 27,
+      "fiber_g": 12
+    },
+    {
+      "name": "BBQ Sauce",
+      "category": "Dipping Sauces",
+      "serving": "2 oz",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 25,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Peach Honey Pepper Sauce",
+      "category": "Dipping Sauces",
+      "serving": "2 oz",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 27,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Creamy Buffalo Sauce",
+      "category": "Dipping Sauces",
+      "serving": "2 oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey Mustard Sauce",
+      "category": "Dipping Sauces",
+      "serving": "2 oz",
+      "calories": 280,
+      "protein_g": 1,
+      "carbs_g": 13,
+      "fat_g": 25,
+      "fiber_g": 0
+    },
+    {
+      "name": "Housemade Ranch Sauce",
+      "category": "Dipping Sauces",
+      "serving": "2 oz",
+      "calories": 270,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 28,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jalapeño Ranch Sauce",
+      "category": "Dipping Sauces",
+      "serving": "2oz",
+      "calories": 220,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Housemade Ranch Dressing",
+      "category": "Salad Dressing",
+      "serving": "1.5 oz",
+      "calories": 200,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 20,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ken's Blue Cheese Dressing",
+      "category": "Salad Dressing",
+      "serving": "1.5 oz",
+      "calories": 230,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ken's Fat Free Italian Dressing",
+      "category": "Salad Dressing",
+      "serving": "1.5 oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Ken's Honey Dijon Dressing",
+      "category": "Salad Dressing",
+      "serving": "1.5 oz",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 14,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ken's Thousand Island",
+      "category": "Salad Dressing",
+      "serving": "1.5 oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ken's Fat Free Ranch",
+      "category": "Salad Dressing",
+      "serving": "1.5 oz",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Homestyle Cheese Garlic Croutons",
+      "category": "Salad Dressing",
+      "serving": "1/2 oz",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 9,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Milkshake (Regular)",
+      "category": "Sweet Treats",
+      "serving": "Regular",
+      "calories": 620,
+      "protein_g": 12,
+      "carbs_g": 86,
+      "fat_g": 26,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Milkshake (Regular)",
+      "category": "Sweet Treats",
+      "serving": "Regular",
+      "calories": 680,
+      "protein_g": 14,
+      "carbs_g": 101,
+      "fat_g": 26,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bo-Berry Milkshake (Regular)",
+      "category": "Sweet Treats",
+      "serving": "Regular",
+      "calories": 610,
+      "protein_g": 12,
+      "carbs_g": 83,
+      "fat_g": 26,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bottled Water",
+      "category": "Drinks",
+      "serving": "20 oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheerwine (16oz) (Small)",
+      "category": "Drinks",
+      "serving": "Small",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 56,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheerwine (22oz) (Regular)",
+      "category": "Drinks",
+      "serving": "Regular",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 77,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheerwine (32oz) (Large)",
+      "category": "Drinks",
+      "serving": "Large",
+      "calories": 400,
+      "protein_g": 0,
+      "carbs_g": 112,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee (16oz) (Small)",
+      "category": "Drinks",
+      "serving": "Small",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee (20oz) (Regular)",
+      "category": "Drinks",
+      "serving": "Regular",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Mountain Dew (16oz) (Small)",
+      "category": "Drinks",
+      "serving": "Small",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Mountain Dew (22oz) (Regular)",
+      "category": "Drinks",
+      "serving": "Regular",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Mountain Dew (32oz) (Large)",
+      "category": "Drinks",
+      "serving": "Large",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Pepsi (16oz) (Small)",
+      "category": "Drinks",
+      "serving": "Small",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Pepsi (22oz) (Regular)",
+      "category": "Drinks",
+      "serving": "Regular",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Pepsi (32oz) (Large)",
+      "category": "Drinks",
+      "serving": "Large",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper (16oz) (Small)",
+      "category": "Drinks",
+      "serving": "Small",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 52,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper (22oz) (Regular)",
+      "category": "Drinks",
+      "serving": "Regular",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 72,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper (32oz) (Large)",
+      "category": "Drinks",
+      "serving": "Large",
+      "calories": 380,
+      "protein_g": 0,
+      "carbs_g": 104,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Milk 1% Lowfat (White)",
+      "category": "Drinks",
+      "serving": "8oz",
+      "calories": 110,
+      "protein_g": 8,
+      "carbs_g": 13,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Milk 1% Lowfat (Chocolate)",
+      "category": "Drinks",
+      "serving": "8oz",
+      "calories": 160,
+      "protein_g": 8,
+      "carbs_g": 27,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mirinda Strawberry (16oz) (Small)",
+      "category": "Drinks",
+      "serving": "Small",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mirinda Strawberry (22oz) (Regular)",
+      "category": "Drinks",
+      "serving": "Regular",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 80,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mirinda Strawberry (32oz) (Large)",
+      "category": "Drinks",
+      "serving": "Large",
+      "calories": 440,
+      "protein_g": 0,
+      "carbs_g": 116,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mountain Dew (16oz) (Small)",
+      "category": "Drinks",
+      "serving": "Small",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mountain Dew (22oz) (Regular)",
+      "category": "Drinks",
+      "serving": "Regular",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 80,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mountain Dew (32oz) (Large)",
+      "category": "Drinks",
+      "serving": "Large",
+      "calories": 440,
+      "protein_g": 0,
+      "carbs_g": 116,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mug Root Beer (16oz) (Small)",
+      "category": "Drinks",
+      "serving": "Small",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 52,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mug Root Beer (22oz) (Regular)",
+      "category": "Drinks",
+      "serving": "Regular",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 72,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mug Root Beer (32oz) (Large)",
+      "category": "Drinks",
+      "serving": "Large",
+      "calories": 400,
+      "protein_g": 0,
+      "carbs_g": 104,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi (16oz) (Small)",
+      "category": "Drinks",
+      "serving": "Small",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 56,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi (22oz) (Regular)",
+      "category": "Drinks",
+      "serving": "Regular",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 77,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi (32oz) (Large)",
+      "category": "Drinks",
+      "serving": "Large",
+      "calories": 400,
+      "protein_g": 0,
+      "carbs_g": 112,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Zero (16oz) (Small)",
+      "category": "Drinks",
+      "serving": "Small",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Zero (22oz) (Regular)",
+      "category": "Drinks",
+      "serving": "Regular",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Zero (32oz) (Large)",
+      "category": "Drinks",
+      "serving": "Large",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Simply Orange",
+      "category": "Drinks",
+      "serving": "11.5 oz",
+      "calories": 160,
+      "protein_g": 2,
+      "carbs_g": 37,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Starry (16oz) (Small)",
+      "category": "Drinks",
+      "serving": "Small",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Starry (22oz) (Regular)",
+      "category": "Drinks",
+      "serving": "Regular",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Starry (32oz) (Large)",
+      "category": "Drinks",
+      "serving": "Large",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 73,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Fruit Punch (16oz) (Small)",
+      "category": "Drinks",
+      "serving": "Small",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 60,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Fruit Punch (22oz) (Regular)",
+      "category": "Drinks",
+      "serving": "Regular",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 83,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Fruit Punch (32oz) (Large)",
+      "category": "Drinks",
+      "serving": "Large",
+      "calories": 440,
+      "protein_g": 0,
+      "carbs_g": 120,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Lemonade (16oz) (Small)",
+      "category": "Drinks",
+      "serving": "Small",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 54,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Lemonade (22oz) (Regular)",
+      "category": "Drinks",
+      "serving": "Regular",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 75,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Lemonade (32oz) (Large)",
+      "category": "Drinks",
+      "serving": "Large",
+      "calories": 400,
+      "protein_g": 0,
+      "carbs_g": 108,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Pink Lemonade (16oz) (Small)",
+      "category": "Drinks",
+      "serving": "Small",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 54,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Pink Lemonade (22oz) (Regular)",
+      "category": "Drinks",
+      "serving": "Regular",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 74,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Pink Lemonade (32oz) (Large)",
+      "category": "Drinks",
+      "serving": "Large",
+      "calories": 400,
+      "protein_g": 0,
+      "carbs_g": 108,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Twister Soda (16oz) (Small)",
+      "category": "Drinks",
+      "serving": "Small",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 62,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Twister Soda (22oz) (Regular)",
+      "category": "Drinks",
+      "serving": "Regular",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 86,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Twister Soda (32oz) (Large)",
+      "category": "Drinks",
+      "serving": "Large",
+      "calories": 440,
+      "protein_g": 0,
+      "carbs_g": 124,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew (Black) (Regular)",
+      "category": "Drinks",
+      "serving": "Regular",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sweet Cream Cold Brew (Regular)",
+      "category": "Drinks",
+      "serving": "Regular",
+      "calories": 190,
+      "protein_g": 5,
+      "carbs_g": 4,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Cream Cold Brew (Regular)",
+      "category": "Drinks",
+      "serving": "Regular",
+      "calories": 230,
+      "protein_g": 5,
+      "carbs_g": 36,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Half Gallon Sweet Tea",
+      "category": "Legendary Iced Tea",
+      "serving": "1/2 Gal",
+      "calories": 700,
+      "protein_g": 0,
+      "carbs_g": 181,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Half Gallon Unsweetened Tea",
+      "category": "Legendary Iced Tea",
+      "serving": "1/2 Gal",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Iced Tea (16oz) (Small)",
+      "category": "Legendary Iced Tea",
+      "serving": "Small",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Iced Tea (22oz) (Regular)",
+      "category": "Legendary Iced Tea",
+      "serving": "Regular",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 62,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Iced Tea (32oz) (Large)",
+      "category": "Legendary Iced Tea",
+      "serving": "Large",
+      "calories": 350,
+      "protein_g": 0,
+      "carbs_g": 90,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweetened Iced Tea (16oz) (Small)",
+      "category": "Legendary Iced Tea",
+      "serving": "Small",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweetened Iced Tea (22oz) (Regular)",
+      "category": "Legendary Iced Tea",
+      "serving": "Regular",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweetened Iced Tea (32oz) (Large)",
+      "category": "Legendary Iced Tea",
+      "serving": "Large",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    }
+  ]
+}

@@ -1,0 +1,691 @@
+{
+  "chain": "Popeyes",
+  "slug": "popeyes",
+  "aliases": [
+    "popeyes",
+    "popeye",
+    "popeye's",
+    "popeyes chicken",
+    "popeyes louisiana kitchen",
+    "popeyes louisiana chicken",
+    "popeys",
+    "plk"
+  ],
+  "kind": "fast-food",
+  "source_url": "https://plk-use1-prod.sites.rbictg.com/nutrition/PLK_Nutrition.pdf",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "From the \"Popeyes USA Nutrition Guide, September 2026\" PDF linked from popeyes.com/nutritional-information. Signature Chicken values apply to Classic or Spicy, per piece. Beverages are listed only in the Regular size. Kids-meal-only rows were excluded (the guide points to the regular sides/sauces). Some items not available at all locations.",
+  "items": [
+    {
+      "name": "Signature Chicken Wing",
+      "category": "Signature Chicken - Classic or Spicy",
+      "serving": "1 piece",
+      "calories": 220,
+      "protein_g": 14,
+      "carbs_g": 11,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Signature Chicken Leg",
+      "category": "Signature Chicken - Classic or Spicy",
+      "serving": "1 piece",
+      "calories": 200,
+      "protein_g": 15,
+      "carbs_g": 9,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Signature Chicken Thigh",
+      "category": "Signature Chicken - Classic or Spicy",
+      "serving": "1 piece",
+      "calories": 490,
+      "protein_g": 25,
+      "carbs_g": 18,
+      "fat_g": 34,
+      "fiber_g": 1
+    },
+    {
+      "name": "Signature Chicken Breast",
+      "category": "Signature Chicken - Classic or Spicy",
+      "serving": "1 piece",
+      "calories": 620,
+      "protein_g": 52,
+      "carbs_g": 17,
+      "fat_g": 30,
+      "fiber_g": 2
+    },
+    {
+      "name": "Tenders - Classic or Spicy (3 pieces)",
+      "category": "Tenders",
+      "serving": "3 pieces",
+      "calories": 390,
+      "protein_g": 35,
+      "carbs_g": 25,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "Tenders - Classic or Spicy (5 pieces)",
+      "category": "Tenders",
+      "serving": "5 pieces",
+      "calories": 650,
+      "protein_g": 58,
+      "carbs_g": 41,
+      "fat_g": 32,
+      "fiber_g": 2
+    },
+    {
+      "name": "Tenders - Blackened (3 pieces)",
+      "category": "Tenders",
+      "serving": "3 pieces",
+      "calories": 170,
+      "protein_g": 28,
+      "carbs_g": 2,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Tenders - Blackened (5 pieces)",
+      "category": "Tenders",
+      "serving": "5 pieces",
+      "calories": 280,
+      "protein_g": 47,
+      "carbs_g": 4,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Classic Bone-In Wings (6 pieces)",
+      "category": "Wings",
+      "serving": "6 pieces",
+      "calories": 640,
+      "protein_g": 35,
+      "carbs_g": 40,
+      "fat_g": 38,
+      "fiber_g": 3
+    },
+    {
+      "name": "Ghost Pepper Bone-In Wings (6 pieces)",
+      "category": "Wings",
+      "serving": "6 pieces",
+      "calories": 650,
+      "protein_g": 35,
+      "carbs_g": 42,
+      "fat_g": 38,
+      "fiber_g": 3
+    },
+    {
+      "name": "Honey BBQ Bone-In Wings (6 pieces)",
+      "category": "Wings",
+      "serving": "6 pieces",
+      "calories": 850,
+      "protein_g": 36,
+      "carbs_g": 90,
+      "fat_g": 38,
+      "fiber_g": 3
+    },
+    {
+      "name": "Sweet & Spicy Bone-In Wings (6 pieces)",
+      "category": "Wings",
+      "serving": "6 pieces",
+      "calories": 870,
+      "protein_g": 36,
+      "carbs_g": 96,
+      "fat_g": 38,
+      "fiber_g": 3
+    },
+    {
+      "name": "Butterfly Shrimp (8 pieces)",
+      "category": "Seafood",
+      "serving": "8 pieces",
+      "calories": 360,
+      "protein_g": 14,
+      "carbs_g": 30,
+      "fat_g": 21,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chicken Sandwich - Classic",
+      "category": "Sandwiches",
+      "serving": "1 item",
+      "calories": 700,
+      "protein_g": 28,
+      "carbs_g": 50,
+      "fat_g": 42,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chicken Sandwich - Spicy",
+      "category": "Sandwiches",
+      "serving": "1 item",
+      "calories": 700,
+      "protein_g": 28,
+      "carbs_g": 50,
+      "fat_g": 42,
+      "fiber_g": 2
+    },
+    {
+      "name": "Honey Chicken Biscuit",
+      "category": "Sandwiches",
+      "serving": "1 item",
+      "calories": 730,
+      "protein_g": 23,
+      "carbs_g": 67,
+      "fat_g": 41,
+      "fiber_g": 3
+    },
+    {
+      "name": "Classic Tender Wrap",
+      "category": "Wraps",
+      "serving": "1 item",
+      "calories": 480,
+      "protein_g": 19,
+      "carbs_g": 31,
+      "fat_g": 32,
+      "fiber_g": 2
+    },
+    {
+      "name": "Spicy Tender Wrap",
+      "category": "Wraps",
+      "serving": "1 item",
+      "calories": 480,
+      "protein_g": 19,
+      "carbs_g": 32,
+      "fat_g": 31,
+      "fiber_g": 2
+    },
+    {
+      "name": "Classic Tender Blackened Ranch Wrap",
+      "category": "Wraps",
+      "serving": "1 item",
+      "calories": 430,
+      "protein_g": 19,
+      "carbs_g": 32,
+      "fat_g": 25,
+      "fiber_g": 2
+    },
+    {
+      "name": "Biscuit",
+      "category": "Signature Sides",
+      "serving": "1 item",
+      "calories": 230,
+      "protein_g": 3,
+      "carbs_g": 24,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cajun Fries (Regular)",
+      "category": "Signature Sides",
+      "serving": "regular",
+      "calories": 270,
+      "protein_g": 3,
+      "carbs_g": 31,
+      "fat_g": 15,
+      "fiber_g": 3
+    },
+    {
+      "name": "Cajun Fries (Large)",
+      "category": "Signature Sides",
+      "serving": "large",
+      "calories": 740,
+      "protein_g": 9,
+      "carbs_g": 86,
+      "fat_g": 41,
+      "fiber_g": 8
+    },
+    {
+      "name": "Homestyle Mac & Cheese (Regular)",
+      "category": "Signature Sides",
+      "serving": "regular",
+      "calories": 280,
+      "protein_g": 11,
+      "carbs_g": 16,
+      "fat_g": 20,
+      "fiber_g": 0
+    },
+    {
+      "name": "Homestyle Mac & Cheese (Large)",
+      "category": "Signature Sides",
+      "serving": "large",
+      "calories": 850,
+      "protein_g": 33,
+      "carbs_g": 48,
+      "fat_g": 63,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mashed Potatoes With Cajun Gravy (Regular)",
+      "category": "Signature Sides",
+      "serving": "regular",
+      "calories": 110,
+      "protein_g": 3,
+      "carbs_g": 13,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mashed Potatoes With Cajun Gravy (Large)",
+      "category": "Signature Sides",
+      "serving": "large",
+      "calories": 310,
+      "protein_g": 7,
+      "carbs_g": 39,
+      "fat_g": 14,
+      "fiber_g": 4
+    },
+    {
+      "name": "Red Beans & Rice (Regular)",
+      "category": "Signature Sides",
+      "serving": "regular",
+      "calories": 260,
+      "protein_g": 7,
+      "carbs_g": 29,
+      "fat_g": 16,
+      "fiber_g": 6
+    },
+    {
+      "name": "Red Beans & Rice (Large)",
+      "category": "Signature Sides",
+      "serving": "large",
+      "calories": 640,
+      "protein_g": 18,
+      "carbs_g": 73,
+      "fat_g": 40,
+      "fiber_g": 13
+    },
+    {
+      "name": "Coleslaw (Regular)",
+      "category": "Signature Sides",
+      "serving": "regular",
+      "calories": 160,
+      "protein_g": 1,
+      "carbs_g": 12,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Coleslaw (Large)",
+      "category": "Signature Sides",
+      "serving": "large",
+      "calories": 480,
+      "protein_g": 3,
+      "carbs_g": 37,
+      "fat_g": 37,
+      "fiber_g": 6
+    },
+    {
+      "name": "Cajun Rice (Regular)",
+      "category": "Signature Sides",
+      "serving": "regular",
+      "calories": 230,
+      "protein_g": 9,
+      "carbs_g": 27,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cajun Rice (Large)",
+      "category": "Signature Sides",
+      "serving": "large",
+      "calories": 780,
+      "protein_g": 31,
+      "carbs_g": 107,
+      "fat_g": 26,
+      "fiber_g": 4
+    },
+    {
+      "name": "Cajun Gravy (Regular)",
+      "category": "Signature Sides",
+      "serving": "regular",
+      "calories": 160,
+      "protein_g": 10,
+      "carbs_g": 2,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Jalapeño",
+      "category": "Signature Sides",
+      "serving": "1 item",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bayou Buffalo",
+      "category": "Signature Dipping Sauces",
+      "serving": "1 cup",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "BoldBQ",
+      "category": "Signature Dipping Sauces",
+      "serving": "1 cup",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 14,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blackened Ranch",
+      "category": "Signature Dipping Sauces",
+      "serving": "1 cup",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buttermilk Ranch",
+      "category": "Signature Dipping Sauces",
+      "serving": "1 cup",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mardi Gras Mustard",
+      "category": "Signature Dipping Sauces",
+      "serving": "1 cup",
+      "calories": 90,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sweet Heat",
+      "category": "Signature Dipping Sauces",
+      "serving": "1 cup",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 19,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wild Honey Mustard",
+      "category": "Signature Dipping Sauces",
+      "serving": "1 cup",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cocktail Sauce",
+      "category": "Signature Dipping Sauces",
+      "serving": "1 cup",
+      "calories": 35,
+      "protein_g": 1,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chicken Biscuit",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 490,
+      "protein_g": 17,
+      "carbs_g": 47,
+      "fat_g": 26,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sausage Biscuit",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 540,
+      "protein_g": 13,
+      "carbs_g": 41,
+      "fat_g": 36,
+      "fiber_g": 1
+    },
+    {
+      "name": "Egg Biscuit",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 510,
+      "protein_g": 13,
+      "carbs_g": 41,
+      "fat_g": 29,
+      "fiber_g": 1
+    },
+    {
+      "name": "Egg & Sausage Biscuit",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 690,
+      "protein_g": 20,
+      "carbs_g": 43,
+      "fat_g": 45,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bacon Biscuit",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 400,
+      "protein_g": 8,
+      "carbs_g": 37,
+      "fat_g": 25,
+      "fiber_g": 3
+    },
+    {
+      "name": "Sausage & Gravy Biscuit",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 510,
+      "protein_g": 10,
+      "carbs_g": 42,
+      "fat_g": 33,
+      "fiber_g": 3
+    },
+    {
+      "name": "Hash Rounds",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 360,
+      "protein_g": 3,
+      "carbs_g": 41,
+      "fat_g": 20,
+      "fiber_g": 4
+    },
+    {
+      "name": "Coffee",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Orange Juice",
+      "category": "Breakfast",
+      "serving": "1 item",
+      "calories": 140,
+      "protein_g": 2,
+      "carbs_g": 33,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coke (Regular)",
+      "category": "Beverages",
+      "serving": "regular",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke (Regular)",
+      "category": "Beverages",
+      "serving": "regular",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite (Regular)",
+      "category": "Beverages",
+      "serving": "regular",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 61,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Strawberry (Regular)",
+      "category": "Beverages",
+      "serving": "regular",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 72,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Orange (Regular)",
+      "category": "Beverages",
+      "serving": "regular",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 66,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mountain Dew (Regular)",
+      "category": "Beverages",
+      "serving": "regular",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 73,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi (Regular)",
+      "category": "Beverages",
+      "serving": "regular",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 69,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Pepsi (Regular)",
+      "category": "Beverages",
+      "serving": "regular",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper (Regular)",
+      "category": "Beverages",
+      "serving": "regular",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Lemonade (Regular)",
+      "category": "Beverages",
+      "serving": "regular",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweetened Tea (Regular)",
+      "category": "Beverages",
+      "serving": "regular",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea (Regular)",
+      "category": "Beverages",
+      "serving": "regular",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chilled Premium Lemonade (Regular)",
+      "category": "Beverages",
+      "serving": "regular",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 79,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Frozen Premium Lemonade (Regular)",
+      "category": "Beverages",
+      "serving": "regular",
+      "calories": 430,
+      "protein_g": 0,
+      "carbs_g": 111,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cinnamon Apple Pie",
+      "category": "Desserts",
+      "serving": "1 item",
+      "calories": 280,
+      "protein_g": 3,
+      "carbs_g": 35,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Strawberry & Cream Cheese Pie",
+      "category": "Desserts",
+      "serving": "1 item",
+      "calories": 300,
+      "protein_g": 4,
+      "carbs_g": 34,
+      "fat_g": 17,
+      "fiber_g": 1
+    }
+  ]
+}

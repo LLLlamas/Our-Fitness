@@ -1,0 +1,649 @@
+{
+  "chain": "Noodles & Company",
+  "slug": "noodles-and-company",
+  "aliases": [
+    "noodles & company",
+    "noodles and company",
+    "noodles & co",
+    "noodles and co",
+    "noodles",
+    "noodles co"
+  ],
+  "kind": "fast-casual",
+  "source_url": "https://noodles.mymenuhd.com/MyMenu/Nutrition",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Official Noodles & Company nutrition chart (MyMenu, linked from noodles.com/nutrition), standard preparation. Values published as \"< 1\"/\"< 5\" recorded as 0. Pulled Pork BBQ Mac (Small) lists 2240 calories-from-fat, an evident typo in the source (not used).",
+  "items": [
+    {
+      "name": "Basil Pesto Cavatappi",
+      "category": "Culinary Classics",
+      "serving": "Regular",
+      "calories": 840,
+      "protein_g": 23,
+      "carbs_g": 101,
+      "fat_g": 39,
+      "fiber_g": 9
+    },
+    {
+      "name": "Basil Pesto Cavatappi",
+      "category": "Culinary Classics",
+      "serving": "Small",
+      "calories": 420,
+      "protein_g": 12,
+      "carbs_g": 51,
+      "fat_g": 20,
+      "fiber_g": 5
+    },
+    {
+      "name": "Buttery Parmesan Noodles",
+      "category": "Culinary Classics",
+      "serving": "Regular",
+      "calories": 760,
+      "protein_g": 22,
+      "carbs_g": 98,
+      "fat_g": 35,
+      "fiber_g": 4
+    },
+    {
+      "name": "Buttery Parmesan Noodles",
+      "category": "Culinary Classics",
+      "serving": "Small",
+      "calories": 380,
+      "protein_g": 11,
+      "carbs_g": 49,
+      "fat_g": 18,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cheese Tortelloni in Roasted Garlic Cream Sauce",
+      "category": "Culinary Classics",
+      "serving": "Regular",
+      "calories": 770,
+      "protein_g": 36,
+      "carbs_g": 72,
+      "fat_g": 38,
+      "fiber_g": 5
+    },
+    {
+      "name": "Roasted Garlic Cream Tortelloni",
+      "category": "Culinary Classics",
+      "serving": "Small",
+      "calories": 380,
+      "protein_g": 18,
+      "carbs_g": 36,
+      "fat_g": 19,
+      "fiber_g": 3
+    },
+    {
+      "name": "Japanese Pan Noodles",
+      "category": "Culinary Classics",
+      "serving": "Regular",
+      "calories": 640,
+      "protein_g": 20,
+      "carbs_g": 114,
+      "fat_g": 12,
+      "fiber_g": 6
+    },
+    {
+      "name": "Japanese Pan Noodles",
+      "category": "Culinary Classics",
+      "serving": "Small",
+      "calories": 320,
+      "protein_g": 10,
+      "carbs_g": 57,
+      "fat_g": 6,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pad Thai",
+      "category": "Culinary Classics",
+      "serving": "Regular",
+      "calories": 1040,
+      "protein_g": 20,
+      "carbs_g": 143,
+      "fat_g": 42,
+      "fiber_g": 4
+    },
+    {
+      "name": "Pad Thai",
+      "category": "Culinary Classics",
+      "serving": "Small",
+      "calories": 520,
+      "protein_g": 10,
+      "carbs_g": 72,
+      "fat_g": 21,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pasta Fresca",
+      "category": "Culinary Classics",
+      "serving": "Regular",
+      "calories": 640,
+      "protein_g": 20,
+      "carbs_g": 101,
+      "fat_g": 18,
+      "fiber_g": 8
+    },
+    {
+      "name": "Pasta Fresca",
+      "category": "Culinary Classics",
+      "serving": "Small",
+      "calories": 320,
+      "protein_g": 10,
+      "carbs_g": 50,
+      "fat_g": 9,
+      "fiber_g": 4
+    },
+    {
+      "name": "Basil Pesto Cavatappi with Chicken",
+      "category": "Chef-Curated with Protein",
+      "serving": "Regular",
+      "calories": 990,
+      "protein_g": 50,
+      "carbs_g": 101,
+      "fat_g": 43,
+      "fiber_g": 10
+    },
+    {
+      "name": "Basil Pesto Cavatappi with Chicken",
+      "category": "Chef-Curated with Protein",
+      "serving": "Small",
+      "calories": 570,
+      "protein_g": 39,
+      "carbs_g": 51,
+      "fat_g": 24,
+      "fiber_g": 5
+    },
+    {
+      "name": "Buttery Parmesan Noodles with Chicken",
+      "category": "Chef-Curated with Protein",
+      "serving": "Regular",
+      "calories": 910,
+      "protein_g": 49,
+      "carbs_g": 98,
+      "fat_g": 39,
+      "fiber_g": 5
+    },
+    {
+      "name": "Buttery Parmesan Noodles with Chicken",
+      "category": "Chef-Curated with Protein",
+      "serving": "Small",
+      "calories": 530,
+      "protein_g": 38,
+      "carbs_g": 49,
+      "fat_g": 22,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cajun Shrimp Fettucine",
+      "category": "Chef-Curated with Protein",
+      "serving": "Regular",
+      "calories": 1050,
+      "protein_g": 37,
+      "carbs_g": 98,
+      "fat_g": 57,
+      "fiber_g": 9
+    },
+    {
+      "name": "Cajun Shrimp Fettucine",
+      "category": "Chef-Curated with Protein",
+      "serving": "Small",
+      "calories": 550,
+      "protein_g": 23,
+      "carbs_g": 49,
+      "fat_g": 30,
+      "fiber_g": 4
+    },
+    {
+      "name": "Chicken Parmesan",
+      "category": "Chef-Curated with Protein",
+      "serving": "1 serving",
+      "calories": 940,
+      "protein_g": 51,
+      "carbs_g": 115,
+      "fat_g": 32,
+      "fiber_g": 8
+    },
+    {
+      "name": "Crispy Chicken Bacon Alfredo",
+      "category": "Chef-Curated with Protein",
+      "serving": "Regular",
+      "calories": 1150,
+      "protein_g": 50,
+      "carbs_g": 105,
+      "fat_g": 59,
+      "fiber_g": 10
+    },
+    {
+      "name": "Crispy Chicken Bacon Alfredo",
+      "category": "Chef-Curated with Protein",
+      "serving": "Small",
+      "calories": 680,
+      "protein_g": 36,
+      "carbs_g": 57,
+      "fat_g": 35,
+      "fiber_g": 5
+    },
+    {
+      "name": "Japanese Pan Noodles with Chicken",
+      "category": "Chef-Curated with Protein",
+      "serving": "Regular",
+      "calories": 780,
+      "protein_g": 47,
+      "carbs_g": 115,
+      "fat_g": 16,
+      "fiber_g": 7
+    },
+    {
+      "name": "Japanese Pan Noodles with Chicken",
+      "category": "Chef-Curated with Protein",
+      "serving": "Small",
+      "calories": 460,
+      "protein_g": 37,
+      "carbs_g": 58,
+      "fat_g": 10,
+      "fiber_g": 4
+    },
+    {
+      "name": "Lemon Garlic Shrimp Scampi",
+      "category": "Chef-Curated with Protein",
+      "serving": "Regular",
+      "calories": 1050,
+      "protein_g": 32,
+      "carbs_g": 102,
+      "fat_g": 59,
+      "fiber_g": 10
+    },
+    {
+      "name": "Lemon Garlic Shrimp Scampi",
+      "category": "Chef-Curated with Protein",
+      "serving": "Small",
+      "calories": 550,
+      "protein_g": 21,
+      "carbs_g": 51,
+      "fat_g": 30,
+      "fiber_g": 5
+    },
+    {
+      "name": "Pasta Fresca with Chicken",
+      "category": "Chef-Curated with Protein",
+      "serving": "Regular",
+      "calories": 790,
+      "protein_g": 47,
+      "carbs_g": 101,
+      "fat_g": 22,
+      "fiber_g": 9
+    },
+    {
+      "name": "Pasta Fresca with Chicken",
+      "category": "Chef-Curated with Protein",
+      "serving": "Small",
+      "calories": 460,
+      "protein_g": 37,
+      "carbs_g": 51,
+      "fat_g": 13,
+      "fiber_g": 5
+    },
+    {
+      "name": "Rigatoni Rosa with Parmesan Chicken",
+      "category": "Chef-Curated with Protein",
+      "serving": "Regular",
+      "calories": 900,
+      "protein_g": 45,
+      "carbs_g": 113,
+      "fat_g": 31,
+      "fiber_g": 13
+    },
+    {
+      "name": "Rigatoni Rosa with Parmesan Chicken",
+      "category": "Chef-Curated with Protein",
+      "serving": "Small",
+      "calories": 550,
+      "protein_g": 34,
+      "carbs_g": 61,
+      "fat_g": 20,
+      "fiber_g": 7
+    },
+    {
+      "name": "Roasted Garlic Cream Tortelloni with Chicken",
+      "category": "Chef-Curated with Protein",
+      "serving": "Regular",
+      "calories": 920,
+      "protein_g": 63,
+      "carbs_g": 72,
+      "fat_g": 42,
+      "fiber_g": 6
+    },
+    {
+      "name": "Roasted Garlic Cream Tortelloni with Chicken",
+      "category": "Chef-Curated with Protein",
+      "serving": "Small",
+      "calories": 530,
+      "protein_g": 45,
+      "carbs_g": 36,
+      "fat_g": 23,
+      "fiber_g": 3
+    },
+    {
+      "name": "Spaghetti & Meatballs",
+      "category": "Chef-Curated with Protein",
+      "serving": "Regular",
+      "calories": 960,
+      "protein_g": 34,
+      "carbs_g": 102,
+      "fat_g": 46,
+      "fiber_g": 3
+    },
+    {
+      "name": "Spaghetti & Meatballs",
+      "category": "Chef-Curated with Protein",
+      "serving": "Small",
+      "calories": 670,
+      "protein_g": 25,
+      "carbs_g": 53,
+      "fat_g": 38,
+      "fiber_g": 2
+    },
+    {
+      "name": "Buffalo Chicken Ranch Mac",
+      "category": "Mac & Cheese",
+      "serving": "Regular",
+      "calories": 1380,
+      "protein_g": 66,
+      "carbs_g": 136,
+      "fat_g": 64,
+      "fiber_g": 7
+    },
+    {
+      "name": "Buffalo Chicken Ranch Mac",
+      "category": "Mac & Cheese",
+      "serving": "Small",
+      "calories": 790,
+      "protein_g": 44,
+      "carbs_g": 72,
+      "fat_g": 36,
+      "fiber_g": 4
+    },
+    {
+      "name": "Creamy Cheddar Mac",
+      "category": "Mac & Cheese",
+      "serving": "Regular",
+      "calories": 1050,
+      "protein_g": 46,
+      "carbs_g": 120,
+      "fat_g": 43,
+      "fiber_g": 5
+    },
+    {
+      "name": "Creamy Cheddar Mac",
+      "category": "Mac & Cheese",
+      "serving": "Small",
+      "calories": 520,
+      "protein_g": 23,
+      "carbs_g": 60,
+      "fat_g": 22,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pulled Pork BBQ Mac",
+      "category": "Mac & Cheese",
+      "serving": "Regular",
+      "calories": 1240,
+      "protein_g": 63,
+      "carbs_g": 137,
+      "fat_g": 49,
+      "fiber_g": 6
+    },
+    {
+      "name": "Pulled Pork BBQ Mac",
+      "category": "Mac & Cheese",
+      "serving": "Small",
+      "calories": 690,
+      "protein_g": 41,
+      "carbs_g": 69,
+      "fat_g": 27,
+      "fiber_g": 3
+    },
+    {
+      "name": "Gochujang Ramen Carbonara",
+      "category": "Ramen",
+      "serving": "Regular",
+      "calories": 880,
+      "protein_g": 25,
+      "carbs_g": 117,
+      "fat_g": 40,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gochujang Ramen Carbonara",
+      "category": "Ramen",
+      "serving": "Small",
+      "calories": 450,
+      "protein_g": 13,
+      "carbs_g": 59,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sesame Soy Steak Ramen",
+      "category": "Ramen",
+      "serving": "Regular",
+      "calories": 1050,
+      "protein_g": 30,
+      "carbs_g": 140,
+      "fat_g": 39,
+      "fiber_g": 3
+    },
+    {
+      "name": "Sesame Soy Steak Ramen",
+      "category": "Ramen",
+      "serving": "Small",
+      "calories": 600,
+      "protein_g": 22,
+      "carbs_g": 71,
+      "fat_g": 24,
+      "fiber_g": 1
+    },
+    {
+      "name": "Spicy Korean Steak Ramen",
+      "category": "Ramen",
+      "serving": "Regular",
+      "calories": 960,
+      "protein_g": 31,
+      "carbs_g": 150,
+      "fat_g": 25,
+      "fiber_g": 3
+    },
+    {
+      "name": "Spicy Korean Steak Ramen",
+      "category": "Ramen",
+      "serving": "Small",
+      "calories": 550,
+      "protein_g": 23,
+      "carbs_g": 76,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chicken Caesar Salad",
+      "category": "Salad and Soup",
+      "serving": "Regular",
+      "calories": 680,
+      "protein_g": 41,
+      "carbs_g": 18,
+      "fat_g": 50,
+      "fiber_g": 3
+    },
+    {
+      "name": "Chicken Noodle Soup",
+      "category": "Salad and Soup",
+      "serving": "Regular",
+      "calories": 360,
+      "protein_g": 30,
+      "carbs_g": 41,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mediterranean Chicken Salad",
+      "category": "Salad and Soup",
+      "serving": "Regular",
+      "calories": 430,
+      "protein_g": 36,
+      "carbs_g": 34,
+      "fat_g": 17,
+      "fiber_g": 3
+    },
+    {
+      "name": "Baguette",
+      "category": "Sides",
+      "serving": "Side",
+      "calories": 170,
+      "protein_g": 7,
+      "carbs_g": 33,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caesar Salad",
+      "category": "Sides",
+      "serving": "Side",
+      "calories": 230,
+      "protein_g": 7,
+      "carbs_g": 7,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cheesy Garlic Bread",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 660,
+      "protein_g": 21,
+      "carbs_g": 78,
+      "fat_g": 30,
+      "fiber_g": 3
+    },
+    {
+      "name": "Cheesy Garlic Bread",
+      "category": "Sides",
+      "serving": "Small",
+      "calories": 390,
+      "protein_g": 12,
+      "carbs_g": 46,
+      "fat_g": 18,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chicken Noodle Soup",
+      "category": "Sides",
+      "serving": "Side",
+      "calories": 120,
+      "protein_g": 13,
+      "carbs_g": 11,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Creamy Cheddar Mac",
+      "category": "Sides",
+      "serving": "Side",
+      "calories": 260,
+      "protein_g": 11,
+      "carbs_g": 30,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Garden Salad",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 70,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Korean BBQ Meatballs",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 440,
+      "protein_g": 16,
+      "carbs_g": 16,
+      "fat_g": 34,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemon Parmesan Broccoli",
+      "category": "Sides",
+      "serving": "Side",
+      "calories": 140,
+      "protein_g": 3,
+      "carbs_g": 4,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Potstickers",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 330,
+      "protein_g": 14,
+      "carbs_g": 47,
+      "fat_g": 8,
+      "fiber_g": 2
+    },
+    {
+      "name": "Potstickers",
+      "category": "Sides",
+      "serving": "Small",
+      "calories": 220,
+      "protein_g": 8,
+      "carbs_g": 35,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kids Buttered Noodles",
+      "category": "Kids Meals",
+      "serving": "1 serving",
+      "calories": 380,
+      "protein_g": 11,
+      "carbs_g": 49,
+      "fat_g": 18,
+      "fiber_g": 2
+    },
+    {
+      "name": "Kids Creamy Cheddar Mac",
+      "category": "Kids Meals",
+      "serving": "1 serving",
+      "calories": 520,
+      "protein_g": 23,
+      "carbs_g": 60,
+      "fat_g": 22,
+      "fiber_g": 3
+    },
+    {
+      "name": "Kids Grilled Chicken",
+      "category": "Kids Meals",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 27,
+      "carbs_g": 3,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kids Spaghetti & Meatballs",
+      "category": "Kids Meals",
+      "serving": "1 serving",
+      "calories": 450,
+      "protein_g": 16,
+      "carbs_g": 50,
+      "fat_g": 21,
+      "fiber_g": 2
+    }
+  ]
+}

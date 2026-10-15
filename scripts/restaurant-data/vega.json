@@ -1,0 +1,68 @@
+{
+  "chain": "Vega",
+  "slug": "vega",
+  "aliases": [
+    "vega",
+    "vega protein",
+    "vega sport",
+    "vega performance protein",
+    "vega essential protein"
+  ],
+  "kind": "supplement",
+  "source_url": "https://myvega.com/products/vega-protein-recovery-premium-protein",
+  "source_kind": "official",
+  "retrieved": "2026-10-15",
+  "notes": "Supplement/Nutrition Facts table images (…NFT…) on myvega.com product pages: vega-protein-recovery-premium-protein (Vanilla, Chocolate 29 oz), vega®-performance-protein-creatine (Chocolate), vega-essential-protein (Chocolate, Vanilla 32.5 oz). Vega Sport is now sold as Performance Protein + Recovery.",
+  "items": [
+    {
+      "name": "Performance Protein + Recovery, Vanilla",
+      "category": "Plant Protein",
+      "serving": "1 scoop (41 g)",
+      "calories": 170,
+      "protein_g": 30,
+      "carbs_g": 4,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Performance Protein + Recovery, Chocolate",
+      "category": "Plant Protein",
+      "serving": "1 scoop (44 g)",
+      "calories": 180,
+      "protein_g": 30,
+      "carbs_g": 6,
+      "fat_g": 3.5,
+      "fiber_g": 2
+    },
+    {
+      "name": "Performance Protein + Creatine, Chocolate",
+      "category": "Plant Protein",
+      "serving": "1 scoop (51 g)",
+      "calories": 190,
+      "protein_g": 30,
+      "carbs_g": 9,
+      "fat_g": 4,
+      "fiber_g": 2
+    },
+    {
+      "name": "Essential Protein, Creamy Chocolate",
+      "category": "Plant Protein",
+      "serving": "2 scoops (46 g)",
+      "calories": 170,
+      "protein_g": 25,
+      "carbs_g": 13,
+      "fat_g": 4,
+      "fiber_g": 4
+    },
+    {
+      "name": "Essential Protein, Creamy Vanilla",
+      "category": "Plant Protein",
+      "serving": "2 scoops (46 g)",
+      "calories": 170,
+      "protein_g": 25,
+      "carbs_g": 14,
+      "fat_g": 3,
+      "fiber_g": 3
+    }
+  ]
+}

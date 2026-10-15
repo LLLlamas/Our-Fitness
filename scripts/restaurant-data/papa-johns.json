@@ -1,0 +1,4039 @@
+{
+  "chain": "Papa John's",
+  "slug": "papa-johns",
+  "aliases": [
+    "papa john's",
+    "papa johns",
+    "papajohns",
+    "papa john",
+    "papa jons",
+    "pj pizza"
+  ],
+  "kind": "pizza",
+  "source_url": "https://www.papajohns.com/company/nutritional-details/index.html",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Official US nutritional details pages on papajohns.com (pizzas, papadias, sandwiches, wings, sides, desserts, dipping sauces, extras, crust/cheese/sauce/toppings), read in a browser (site blocks plain HTTP clients). Pizzas are per slice; size/crust in the name. The guide lists Epic Stuffed, Thin and Gluten Free columns without a size. Ingredient rows are per slice for build-your-own. Items marked 'no longer available', zero-calorie vegetable toppings, drinks, and Papa Bites/Garlic Knots (carbs printed with an 'mg' unit) were omitted; one Fiery Buffalo Chicken Epic Stuffed value printed as '40mg' carbs was dropped. Fiber shown as '--' recorded as 0.",
+  "items": [
+    {
+      "name": "Cheese Pizza - Pizza for One Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (4 per pizza)",
+      "calories": 200,
+      "protein_g": 8,
+      "carbs_g": 25,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cheese Pizza - Small Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (6 per pizza)",
+      "calories": 180,
+      "protein_g": 7,
+      "carbs_g": 25,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cheese Pizza - Medium Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 210,
+      "protein_g": 8,
+      "carbs_g": 27,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cheese Pizza - Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 290,
+      "protein_g": 11,
+      "carbs_g": 38,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cheese Pizza - Extra Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (10 per pizza)",
+      "calories": 300,
+      "protein_g": 11,
+      "carbs_g": 40,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cheese Pizza - Epic Stuffed Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 360,
+      "protein_g": 15,
+      "carbs_g": 40,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cheese Pizza - Thin Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 210,
+      "protein_g": 8,
+      "carbs_g": 20,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cheese Pizza - Gluten Free Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 290,
+      "protein_g": 10,
+      "carbs_g": 36,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pepperoni Pizza - Pizza for One Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (4 per pizza)",
+      "calories": 220,
+      "protein_g": 8,
+      "carbs_g": 25,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pepperoni Pizza - Small Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (6 per pizza)",
+      "calories": 210,
+      "protein_g": 8,
+      "carbs_g": 25,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pepperoni Pizza - Medium Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 230,
+      "protein_g": 8,
+      "carbs_g": 26,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pepperoni Pizza - Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 320,
+      "protein_g": 12,
+      "carbs_g": 38,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pepperoni Pizza - Extra Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (10 per pizza)",
+      "calories": 330,
+      "protein_g": 12,
+      "carbs_g": 40,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pepperoni Pizza - Epic Stuffed Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 390,
+      "protein_g": 16,
+      "carbs_g": 40,
+      "fat_g": 17,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pepperoni Pizza - Thin Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 250,
+      "protein_g": 9,
+      "carbs_g": 20,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pepperoni Pizza - Gluten Free Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 340,
+      "protein_g": 12,
+      "carbs_g": 36,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sausage Pizza - Pizza for One Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (4 per pizza)",
+      "calories": 230,
+      "protein_g": 8,
+      "carbs_g": 25,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sausage Pizza - Small Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (6 per pizza)",
+      "calories": 220,
+      "protein_g": 8,
+      "carbs_g": 25,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sausage Pizza - Medium Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 240,
+      "protein_g": 8,
+      "carbs_g": 27,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sausage Pizza - Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 330,
+      "protein_g": 12,
+      "carbs_g": 38,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sausage Pizza - Extra Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (10 per pizza)",
+      "calories": 340,
+      "protein_g": 12,
+      "carbs_g": 40,
+      "fat_g": 15,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sausage Pizza - Epic Stuffed Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 400,
+      "protein_g": 16,
+      "carbs_g": 40,
+      "fat_g": 19,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sausage Pizza - Thin Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 260,
+      "protein_g": 9,
+      "carbs_g": 20,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sausage Pizza - Gluten Free Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 340,
+      "protein_g": 11,
+      "carbs_g": 36,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bbq Chicken Bacon - Pizza for One Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (4 per pizza)",
+      "calories": 240,
+      "protein_g": 12,
+      "carbs_g": 30,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bbq Chicken Bacon - Small Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (6 per pizza)",
+      "calories": 230,
+      "protein_g": 10,
+      "carbs_g": 30,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bbq Chicken Bacon - Medium Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 240,
+      "protein_g": 11,
+      "carbs_g": 32,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bbq Chicken Bacon - Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 340,
+      "protein_g": 16,
+      "carbs_g": 45,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bbq Chicken Bacon - Extra Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (10 per pizza)",
+      "calories": 360,
+      "protein_g": 16,
+      "carbs_g": 48,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bbq Chicken Bacon - Epic Stuffed Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 400,
+      "protein_g": 20,
+      "carbs_g": 45,
+      "fat_g": 15,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bbq Chicken Bacon - Thin Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 270,
+      "protein_g": 13,
+      "carbs_g": 27,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bbq Chicken Bacon - Gluten Free Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 340,
+      "protein_g": 13,
+      "carbs_g": 42,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Butter Chicken - Pizza for One Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (4 per pizza)",
+      "calories": 210,
+      "protein_g": 11,
+      "carbs_g": 26,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Chicken - Small Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (6 per pizza)",
+      "calories": 200,
+      "protein_g": 11,
+      "carbs_g": 26,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Chicken - Medium Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 280,
+      "protein_g": 15,
+      "carbs_g": 36,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Chicken - Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 300,
+      "protein_g": 16,
+      "carbs_g": 38,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Chicken - Extra Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (10 per pizza)",
+      "calories": 310,
+      "protein_g": 16,
+      "carbs_g": 41,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Butter Chicken - Epic Stuffed Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 370,
+      "protein_g": 23,
+      "carbs_g": 39,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Chicken - Thin Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 220,
+      "protein_g": 14,
+      "carbs_g": 20,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Butter Chicken - Gluten Free Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 130,
+      "protein_g": 7,
+      "carbs_g": 14,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Extra Cheesy Alfredo - Pizza for One Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (4 per pizza)",
+      "calories": 220,
+      "protein_g": 9,
+      "carbs_g": 24,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Extra Cheesy Alfredo - Small Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (6 per pizza)",
+      "calories": 210,
+      "protein_g": 9,
+      "carbs_g": 25,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Extra Cheesy Alfredo - Medium Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 230,
+      "protein_g": 10,
+      "carbs_g": 26,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Extra Cheesy Alfredo - Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 320,
+      "protein_g": 13,
+      "carbs_g": 37,
+      "fat_g": 13,
+      "fiber_g": 1
+    },
+    {
+      "name": "Extra Cheesy Alfredo - Extra Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (10 per pizza)",
+      "calories": 330,
+      "protein_g": 13,
+      "carbs_g": 39,
+      "fat_g": 13,
+      "fiber_g": 1
+    },
+    {
+      "name": "Extra Cheesy Alfredo - Epic Stuffed Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 390,
+      "protein_g": 18,
+      "carbs_g": 39,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Extra Cheesy Alfredo - Thin Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 260,
+      "protein_g": 11,
+      "carbs_g": 19,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Extra Cheesy Alfredo - Gluten Free Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 180,
+      "protein_g": 7,
+      "carbs_g": 18,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Fiery Buffalo Chicken - Pizza for One Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (4 per pizza)",
+      "calories": 230,
+      "protein_g": 12,
+      "carbs_g": 26,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Fiery Buffalo Chicken - Small Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (6 per pizza)",
+      "calories": 220,
+      "protein_g": 10,
+      "carbs_g": 26,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Fiery Buffalo Chicken - Medium Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 230,
+      "protein_g": 11,
+      "carbs_g": 27,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Fiery Buffalo Chicken - Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 330,
+      "protein_g": 16,
+      "carbs_g": 38,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Fiery Buffalo Chicken - Extra Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (10 per pizza)",
+      "calories": 350,
+      "protein_g": 16,
+      "carbs_g": 40,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Fiery Buffalo Chicken - Thin Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 260,
+      "protein_g": 13,
+      "carbs_g": 20,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Fiery Buffalo Chicken - Gluten Free Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 160,
+      "protein_g": 8,
+      "carbs_g": 16,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Fresh Spinach & Tomato Alfredo - Pizza for One Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (4 per pizza)",
+      "calories": 190,
+      "protein_g": 7,
+      "carbs_g": 26,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Fresh Spinach & Tomato Alfredo - Small Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (6 per pizza)",
+      "calories": 190,
+      "protein_g": 7,
+      "carbs_g": 26,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Fresh Spinach & Tomato Alfredo - Medium Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 200,
+      "protein_g": 7,
+      "carbs_g": 27,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Fresh Spinach & Tomato Alfredo - Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 280,
+      "protein_g": 10,
+      "carbs_g": 39,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Fresh Spinach & Tomato Alfredo - Extra Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (10 per pizza)",
+      "calories": 300,
+      "protein_g": 11,
+      "carbs_g": 41,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Fresh Spinach & Tomato Alfredo - Epic Stuffed Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 350,
+      "protein_g": 15,
+      "carbs_g": 39,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Fresh Spinach & Tomato Alfredo - Thin Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 210,
+      "protein_g": 8,
+      "carbs_g": 21,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Fresh Spinach & Tomato Alfredo - Gluten Free Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 280,
+      "protein_g": 10,
+      "carbs_g": 37,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Garden Fresh - Pizza for One Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (4 per pizza)",
+      "calories": 190,
+      "protein_g": 7,
+      "carbs_g": 26,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Garden Fresh - Small Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (6 per pizza)",
+      "calories": 190,
+      "protein_g": 7,
+      "carbs_g": 26,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Garden Fresh - Medium Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 200,
+      "protein_g": 7,
+      "carbs_g": 27,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Garden Fresh - Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 280,
+      "protein_g": 10,
+      "carbs_g": 39,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Garden Fresh - Extra Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (10 per pizza)",
+      "calories": 300,
+      "protein_g": 11,
+      "carbs_g": 41,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Garden Fresh - Epic Stuffed Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 350,
+      "protein_g": 15,
+      "carbs_g": 41,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Garden Fresh - Thin Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 210,
+      "protein_g": 8,
+      "carbs_g": 21,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Garden Fresh - Gluten Free Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 280,
+      "protein_g": 10,
+      "carbs_g": 37,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Meatball Pepperoni - Pizza for One Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (4 per pizza)",
+      "calories": 240,
+      "protein_g": 10,
+      "carbs_g": 26,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Meatball Pepperoni - Small Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (6 per pizza)",
+      "calories": 230,
+      "protein_g": 10,
+      "carbs_g": 26,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Meatball Pepperoni - Medium Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 240,
+      "protein_g": 10,
+      "carbs_g": 27,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Meatball Pepperoni - Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 360,
+      "protein_g": 15,
+      "carbs_g": 38,
+      "fat_g": 15,
+      "fiber_g": 2
+    },
+    {
+      "name": "Meatball Pepperoni - Extra Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (10 per pizza)",
+      "calories": 370,
+      "protein_g": 15,
+      "carbs_g": 41,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Meatball Pepperoni - Epic Stuffed Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 430,
+      "protein_g": 19,
+      "carbs_g": 41,
+      "fat_g": 20,
+      "fiber_g": 2
+    },
+    {
+      "name": "Meatball Pepperoni - Thin Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 280,
+      "protein_g": 12,
+      "carbs_g": 20,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Meatball Pepperoni - Gluten Free Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 180,
+      "protein_g": 8,
+      "carbs_g": 16,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pepperoni, Sausage & Six Cheese - Pizza for One Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (4 per pizza)",
+      "calories": 280,
+      "protein_g": 11,
+      "carbs_g": 24,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pepperoni, Sausage & Six Cheese - Small Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (6 per pizza)",
+      "calories": 260,
+      "protein_g": 11,
+      "carbs_g": 24,
+      "fat_g": 13,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pepperoni, Sausage & Six Cheese - Medium Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 280,
+      "protein_g": 11,
+      "carbs_g": 25,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pepperoni, Sausage & Six Cheese - Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 390,
+      "protein_g": 16,
+      "carbs_g": 36,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pepperoni, Sausage & Six Cheese - Extra Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (10 per pizza)",
+      "calories": 410,
+      "protein_g": 16,
+      "carbs_g": 38,
+      "fat_g": 21,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pepperoni, Sausage & Six Cheese - Epic Stuffed Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 480,
+      "protein_g": 20,
+      "carbs_g": 40,
+      "fat_g": 26,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pepperoni, Sausage & Six Cheese - Thin Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 320,
+      "protein_g": 13,
+      "carbs_g": 18,
+      "fat_g": 22,
+      "fiber_g": 0
+    },
+    {
+      "name": "Philly Cheesesteak Pizza - Pizza for One Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (4 per pizza)",
+      "calories": 230,
+      "protein_g": 12,
+      "carbs_g": 26,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Philly Cheesesteak Pizza - Small Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (6 per pizza)",
+      "calories": 220,
+      "protein_g": 10,
+      "carbs_g": 26,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Philly Cheesesteak Pizza - Medium Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 230,
+      "protein_g": 11,
+      "carbs_g": 27,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Philly Cheesesteak Pizza - Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 330,
+      "protein_g": 16,
+      "carbs_g": 38,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Philly Cheesesteak Pizza - Extra Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (10 per pizza)",
+      "calories": 350,
+      "protein_g": 16,
+      "carbs_g": 40,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Philly Cheesesteak Pizza - Epic Stuffed Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 430,
+      "protein_g": 19,
+      "carbs_g": 40,
+      "fat_g": 21,
+      "fiber_g": 2
+    },
+    {
+      "name": "Philly Cheesesteak Pizza - Thin Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 260,
+      "protein_g": 13,
+      "carbs_g": 20,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Philly Cheesesteak Pizza - Gluten Free Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 160,
+      "protein_g": 8,
+      "carbs_g": 16,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Super Hawaiian - Pizza for One Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (4 per pizza)",
+      "calories": 230,
+      "protein_g": 10,
+      "carbs_g": 27,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Super Hawaiian - Small Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (6 per pizza)",
+      "calories": 230,
+      "protein_g": 10,
+      "carbs_g": 27,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Super Hawaiian - Medium Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 230,
+      "protein_g": 10,
+      "carbs_g": 28,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Super Hawaiian - Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 340,
+      "protein_g": 15,
+      "carbs_g": 40,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Super Hawaiian - Extra Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (10 per pizza)",
+      "calories": 360,
+      "protein_g": 16,
+      "carbs_g": 42,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Super Hawaiian - Epic Stuffed Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 400,
+      "protein_g": 19,
+      "carbs_g": 42,
+      "fat_g": 17,
+      "fiber_g": 2
+    },
+    {
+      "name": "Super Hawaiian - Thin Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 260,
+      "protein_g": 12,
+      "carbs_g": 22,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Super Hawaiian - Gluten Free Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 170,
+      "protein_g": 8,
+      "carbs_g": 17,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "The Meats - Pizza for One Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (4 per pizza)",
+      "calories": 260,
+      "protein_g": 11,
+      "carbs_g": 26,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "The Meats - Small Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (6 per pizza)",
+      "calories": 250,
+      "protein_g": 10,
+      "carbs_g": 26,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "The Meats - Medium Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 260,
+      "protein_g": 11,
+      "carbs_g": 27,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "The Meats - Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 380,
+      "protein_g": 15,
+      "carbs_g": 38,
+      "fat_g": 17,
+      "fiber_g": 2
+    },
+    {
+      "name": "The Meats - Extra Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (10 per pizza)",
+      "calories": 410,
+      "protein_g": 17,
+      "carbs_g": 41,
+      "fat_g": 19,
+      "fiber_g": 2
+    },
+    {
+      "name": "The Meats - Epic Stuffed Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 440,
+      "protein_g": 20,
+      "carbs_g": 40,
+      "fat_g": 22,
+      "fiber_g": 2
+    },
+    {
+      "name": "The Meats - Thin Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 300,
+      "protein_g": 13,
+      "carbs_g": 20,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "The Meats - Gluten Free Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 340,
+      "protein_g": 13,
+      "carbs_g": 36,
+      "fat_g": 15,
+      "fiber_g": 2
+    },
+    {
+      "name": "The Works - Pizza for One Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (4 per pizza)",
+      "calories": 230,
+      "protein_g": 9,
+      "carbs_g": 26,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "The Works - Small Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (6 per pizza)",
+      "calories": 230,
+      "protein_g": 9,
+      "carbs_g": 26,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "The Works - Medium Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 230,
+      "protein_g": 9,
+      "carbs_g": 27,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "The Works - Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 340,
+      "protein_g": 13,
+      "carbs_g": 39,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "The Works - Extra Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (10 per pizza)",
+      "calories": 360,
+      "protein_g": 14,
+      "carbs_g": 41,
+      "fat_g": 15,
+      "fiber_g": 2
+    },
+    {
+      "name": "The Works - Epic Stuffed Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 410,
+      "protein_g": 18,
+      "carbs_g": 41,
+      "fat_g": 19,
+      "fiber_g": 2
+    },
+    {
+      "name": "The Works - Pan Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice",
+      "calories": 290,
+      "protein_g": 14,
+      "carbs_g": 25,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "The Works - Thin Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 270,
+      "protein_g": 11,
+      "carbs_g": 21,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "The Works - Gluten Free Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 320,
+      "protein_g": 12,
+      "carbs_g": 37,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Tuscan Six Cheese - Pizza for One Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (4 per pizza)",
+      "calories": 220,
+      "protein_g": 10,
+      "carbs_g": 25,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Tuscan Six Cheese - Small Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (6 per pizza)",
+      "calories": 220,
+      "protein_g": 9,
+      "carbs_g": 26,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Tuscan Six Cheese - Medium Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 230,
+      "protein_g": 10,
+      "carbs_g": 27,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Tuscan Six Cheese - Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 320,
+      "protein_g": 14,
+      "carbs_g": 38,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Tuscan Six Cheese - Extra Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (10 per pizza)",
+      "calories": 330,
+      "protein_g": 14,
+      "carbs_g": 40,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Tuscan Six Cheese - Epic Stuffed Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 390,
+      "protein_g": 18,
+      "carbs_g": 40,
+      "fat_g": 17,
+      "fiber_g": 2
+    },
+    {
+      "name": "Tuscan Six Cheese - Thin Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 250,
+      "protein_g": 11,
+      "carbs_g": 20,
+      "fat_g": 13,
+      "fiber_g": 1
+    },
+    {
+      "name": "Tuscan Six Cheese - Gluten Free Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 310,
+      "protein_g": 12,
+      "carbs_g": 36,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Ultimate Pepperoni - Pizza for One Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (4 per pizza)",
+      "calories": 250,
+      "protein_g": 10,
+      "carbs_g": 26,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Ultimate Pepperoni - Small Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (6 per pizza)",
+      "calories": 240,
+      "protein_g": 9,
+      "carbs_g": 26,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Ultimate Pepperoni - Medium Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 250,
+      "protein_g": 10,
+      "carbs_g": 27,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Ultimate Pepperoni - Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 360,
+      "protein_g": 14,
+      "carbs_g": 38,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Ultimate Pepperoni - Extra Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (10 per pizza)",
+      "calories": 370,
+      "protein_g": 14,
+      "carbs_g": 40,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Ultimate Pepperoni - Epic Stuffed Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 410,
+      "protein_g": 17,
+      "carbs_g": 40,
+      "fat_g": 20,
+      "fiber_g": 2
+    },
+    {
+      "name": "Ultimate Pepperoni - Thin Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 290,
+      "protein_g": 12,
+      "carbs_g": 20,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Ultimate Pepperoni - Gluten Free Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 180,
+      "protein_g": 7,
+      "carbs_g": 16,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Zesty Italian Trio - Pizza for One Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (4 per pizza)",
+      "calories": 250,
+      "protein_g": 10,
+      "carbs_g": 25,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Zesty Italian Trio - Small Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (6 per pizza)",
+      "calories": 240,
+      "protein_g": 9,
+      "carbs_g": 25,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Zesty Italian Trio - Medium Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 260,
+      "protein_g": 10,
+      "carbs_g": 27,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Zesty Italian Trio - Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 370,
+      "protein_g": 14,
+      "carbs_g": 38,
+      "fat_g": 17,
+      "fiber_g": 2
+    },
+    {
+      "name": "Zesty Italian Trio - Extra Large Original Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (10 per pizza)",
+      "calories": 390,
+      "protein_g": 15,
+      "carbs_g": 40,
+      "fat_g": 18,
+      "fiber_g": 2
+    },
+    {
+      "name": "Zesty Italian Trio - Epic Stuffed Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 440,
+      "protein_g": 19,
+      "carbs_g": 41,
+      "fat_g": 22,
+      "fiber_g": 2
+    },
+    {
+      "name": "Zesty Italian Trio - Thin Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 300,
+      "protein_g": 12,
+      "carbs_g": 20,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "Zesty Italian Trio - Gluten Free Crust",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice (8 per pizza)",
+      "calories": 180,
+      "protein_g": 7,
+      "carbs_g": 16,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Epic Pepperoni Stuffed Crust Pizza - Cheese Only",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice",
+      "calories": 380,
+      "protein_g": 16,
+      "carbs_g": 39,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Epic Pepperoni Stuffed Crust Pizza - Pepperoni Only",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice",
+      "calories": 410,
+      "protein_g": 17,
+      "carbs_g": 39,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Epic Pepperoni Stuffed Crust Pizza - Sausage Only",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice",
+      "calories": 430,
+      "protein_g": 17,
+      "carbs_g": 39,
+      "fat_g": 22,
+      "fiber_g": 0
+    },
+    {
+      "name": "Garlic Epic Stuffed Crust Pizza",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice",
+      "calories": 370,
+      "protein_g": 16,
+      "carbs_g": 39,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Heart Shaped Pizza (Thin Crust)",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice",
+      "calories": 170,
+      "protein_g": 6,
+      "carbs_g": 19,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "New York Style Pizza",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice",
+      "calories": 310,
+      "protein_g": 12,
+      "carbs_g": 40,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pan Crust Pizza",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice",
+      "calories": 350,
+      "protein_g": 17,
+      "carbs_g": 27,
+      "fat_g": 20,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shaq-a-Roni (Original Crust)",
+      "category": "Specialty Pizzas",
+      "serving": "1 slice",
+      "calories": 390,
+      "protein_g": 15,
+      "carbs_g": 39,
+      "fat_g": 18,
+      "fiber_g": 2
+    },
+    {
+      "name": "Crust (dough only) - Pizza for One Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 120,
+      "protein_g": 3,
+      "carbs_g": 23,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Crust (dough only) - Small Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 130,
+      "protein_g": 4,
+      "carbs_g": 23,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Crust (dough only) - Medium Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 130,
+      "protein_g": 4,
+      "carbs_g": 24,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Crust (dough only) - Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 190,
+      "protein_g": 5,
+      "carbs_g": 34,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Crust (dough only) - Extra Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 200,
+      "protein_g": 6,
+      "carbs_g": 36,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Crust (dough only) - Thin Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 110,
+      "protein_g": 3,
+      "carbs_g": 16,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Crust (dough only) - Gluten Free Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 90,
+      "protein_g": 2,
+      "carbs_g": 17,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cheese - Pizza for One Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 50,
+      "protein_g": 3,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheese - Small Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 45,
+      "protein_g": 3,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheese - Medium Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 50,
+      "protein_g": 3,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheese - Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 70,
+      "protein_g": 4,
+      "carbs_g": 1,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheese - Extra Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 70,
+      "protein_g": 4,
+      "carbs_g": 1,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheese - Thin Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 70,
+      "protein_g": 4,
+      "carbs_g": 1,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheese - Gluten Free Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 45,
+      "protein_g": 3,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Light Cheese - Pizza for One Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 40,
+      "protein_g": 2,
+      "carbs_g": 1,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Light Cheese - Small Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 35,
+      "protein_g": 2,
+      "carbs_g": 1,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Light Cheese - Medium Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 35,
+      "protein_g": 2,
+      "carbs_g": 1,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Light Cheese - Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 50,
+      "protein_g": 3,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Light Cheese - Extra Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 50,
+      "protein_g": 3,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Light Cheese - Thin Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 50,
+      "protein_g": 3,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Light Cheese - Gluten Free Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 35,
+      "protein_g": 2,
+      "carbs_g": 1,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Extra Cheese - Pizza for One Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 70,
+      "protein_g": 4,
+      "carbs_g": 1,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Extra Cheese - Small Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 60,
+      "protein_g": 4,
+      "carbs_g": 1,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Extra Cheese - Medium Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 70,
+      "protein_g": 4,
+      "carbs_g": 1,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Extra Cheese - Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 90,
+      "protein_g": 5,
+      "carbs_g": 2,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Extra Cheese - Extra Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 80,
+      "protein_g": 5,
+      "carbs_g": 2,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Extra Cheese - Thin Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 90,
+      "protein_g": 5,
+      "carbs_g": 2,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Extra Cheese - Gluten Free Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 60,
+      "protein_g": 4,
+      "carbs_g": 1,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Original Sauce - Pizza for One Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Original Sauce - Small Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Original Sauce - Medium Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Original Sauce - Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Original Sauce - Extra Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Original Sauce - Thin Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Original Sauce - Gluten Free Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "BBQ Sauce (pizza base) - Pizza for One Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "BBQ Sauce (pizza base) - Small Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "BBQ Sauce (pizza base) - Medium Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "BBQ Sauce (pizza base) - Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 8,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "BBQ Sauce (pizza base) - Extra Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "BBQ Sauce (pizza base) - Thin Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 8,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "BBQ Sauce (pizza base) - Gluten Free Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ranch Sauce (pizza base) - Pizza for One Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ranch Sauce (pizza base) - Small Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ranch Sauce (pizza base) - Medium Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ranch Sauce (pizza base) - Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ranch Sauce (pizza base) - Extra Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ranch Sauce (pizza base) - Thin Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ranch Sauce (pizza base) - Gluten Free Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Alfredo Sauce (pizza base) - Pizza for One Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Alfredo Sauce (pizza base) - Small Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Alfredo Sauce (pizza base) - Medium Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Alfredo Sauce (pizza base) - Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Alfredo Sauce (pizza base) - Extra Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Alfredo Sauce (pizza base) - Thin Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Alfredo Sauce (pizza base) - Gluten Free Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon (topping) - Pizza for One Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 35,
+      "protein_g": 2,
+      "carbs_g": 1,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon (topping) - Small Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 35,
+      "protein_g": 2,
+      "carbs_g": 1,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon (topping) - Medium Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 35,
+      "protein_g": 2,
+      "carbs_g": 1,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon (topping) - Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 50,
+      "protein_g": 3,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon (topping) - Extra Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 50,
+      "protein_g": 3,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon (topping) - Thin Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 50,
+      "protein_g": 3,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon (topping) - Gluten Free Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 35,
+      "protein_g": 2,
+      "carbs_g": 1,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beef (topping) - Pizza for One Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beef (topping) - Small Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 30,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beef (topping) - Medium Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 30,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beef (topping) - Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 40,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beef (topping) - Extra Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 40,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beef (topping) - Thin Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 40,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beef (topping) - Gluten Free Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 30,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Olives (topping) - Pizza for One Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Olives (topping) - Small Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Olives (topping) - Medium Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Olives (topping) - Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Olives (topping) - Extra Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Olives (topping) - Thin Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Olives (topping) - Gluten Free Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Canadian Bacon (topping) - Pizza for One Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 10,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Canadian Bacon (topping) - Small Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 10,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Canadian Bacon (topping) - Medium Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 15,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Canadian Bacon (topping) - Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 20,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Canadian Bacon (topping) - Extra Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 20,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Canadian Bacon (topping) - Thin Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 20,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Canadian Bacon (topping) - Gluten Free Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 10,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken (topping) - Pizza for One Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 20,
+      "protein_g": 4,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken (topping) - Small Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 15,
+      "protein_g": 3,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken (topping) - Medium Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 15,
+      "protein_g": 4,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken (topping) - Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 20,
+      "protein_g": 5,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken (topping) - Extra Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 20,
+      "protein_g": 5,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken (topping) - Thin Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 20,
+      "protein_g": 5,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken (topping) - Gluten Free Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 15,
+      "protein_g": 3,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Crispy Cuppy Pepperoni (topping) - Pizza for One Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Crispy Cuppy Pepperoni (topping) - Small Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Crispy Cuppy Pepperoni (topping) - Medium Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Crispy Cuppy Pepperoni (topping) - Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 35,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Crispy Cuppy Pepperoni (topping) - Extra Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 35,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Crispy Cuppy Pepperoni (topping) - Thin Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 35,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Crispy Cuppy Pepperoni (topping) - Gluten Free Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Italian Sausage (topping) - Pizza for One Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 40,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Italian Sausage (topping) - Small Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 35,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Italian Sausage (topping) - Medium Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 40,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Italian Sausage (topping) - Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 50,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Italian Sausage (topping) - Extra Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 50,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Italian Sausage (topping) - Thin Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 50,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Italian Sausage (topping) - Gluten Free Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 35,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Meatball (topping) - Pizza for One Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Meatball (topping) - Small Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 25,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Meatball (topping) - Medium Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 25,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Meatball (topping) - Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 40,
+      "protein_g": 2,
+      "carbs_g": 1,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Meatball (topping) - Extra Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 40,
+      "protein_g": 3,
+      "carbs_g": 1,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Meatball (topping) - Thin Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 40,
+      "protein_g": 2,
+      "carbs_g": 1,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Meatball (topping) - Gluten Free Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 25,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepperoni (topping) - Pizza for One Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 40,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepperoni (topping) - Small Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 30,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepperoni (topping) - Medium Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 35,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepperoni (topping) - Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 50,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepperoni (topping) - Extra Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 50,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepperoni (topping) - Thin Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 50,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepperoni (topping) - Gluten Free Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 30,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pineapple (topping) - Pizza for One Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pineapple (topping) - Small Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pineapple (topping) - Medium Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pineapple (topping) - Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 10,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pineapple (topping) - Extra Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 10,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pineapple (topping) - Thin Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 10,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pineapple (topping) - Gluten Free Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salami (topping) - Pizza for One Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salami (topping) - Small Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salami (topping) - Medium Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 35,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salami (topping) - Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 40,
+      "protein_g": 2,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salami (topping) - Extra Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 45,
+      "protein_g": 2,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salami (topping) - Thin Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 40,
+      "protein_g": 2,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salami (topping) - Gluten Free Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sausage (topping) - Pizza for One Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 45,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sausage (topping) - Small Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 40,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sausage (topping) - Medium Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 45,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sausage (topping) - Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 60,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sausage (topping) - Extra Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 60,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sausage (topping) - Thin Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 60,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sausage (topping) - Gluten Free Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 40,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Steak (topping) - Pizza for One Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 25,
+      "protein_g": 3,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Steak (topping) - Small Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 35,
+      "protein_g": 3,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Steak (topping) - Medium Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 40,
+      "protein_g": 4,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Steak (topping) - Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 50,
+      "protein_g": 5,
+      "carbs_g": 1,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Steak (topping) - Extra Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 50,
+      "protein_g": 5,
+      "carbs_g": 1,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Steak (topping) - Thin Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 50,
+      "protein_g": 5,
+      "carbs_g": 1,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Steak (topping) - Gluten Free Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 35,
+      "protein_g": 3,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Three Cheese Blend (topping) - Pizza for One Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Three Cheese Blend (topping) - Small Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Three Cheese Blend (topping) - Medium Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 20,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Three Cheese Blend (topping) - Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 25,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Three Cheese Blend (topping) - Extra Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 25,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Three Cheese Blend (topping) - Thin Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 25,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Three Cheese Blend (topping) - Gluten Free Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Parmesan/Romano (topping) - Pizza for One Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Parmesan/Romano (topping) - Small Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Parmesan/Romano (topping) - Medium Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Parmesan/Romano (topping) - Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 20,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Parmesan/Romano (topping) - Extra Large Original Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 20,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Parmesan/Romano (topping) - Thin Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 20,
+      "protein_g": 2,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Parmesan/Romano (topping) - Gluten Free Crust",
+      "category": "Pizza Ingredients (per slice)",
+      "serving": "1 slice",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Philly Cheesesteak Papadia",
+      "category": "Papadias",
+      "serving": "1 papadia",
+      "calories": 810,
+      "protein_g": 40,
+      "carbs_g": 80,
+      "fat_g": 35,
+      "fiber_g": 4
+    },
+    {
+      "name": "Grilled BBQ Chicken & Bacon Papadia",
+      "category": "Papadias",
+      "serving": "1 papadia",
+      "calories": 840,
+      "protein_g": 60,
+      "carbs_g": 85,
+      "fat_g": 28,
+      "fiber_g": 4
+    },
+    {
+      "name": "Grilled Buffalo Chicken Papadia",
+      "category": "Papadias",
+      "serving": "1 papadia",
+      "calories": 920,
+      "protein_g": 63,
+      "carbs_g": 80,
+      "fat_g": 39,
+      "fiber_g": 4
+    },
+    {
+      "name": "Meatball Pepperoni Papadia",
+      "category": "Papadias",
+      "serving": "1 papadia",
+      "calories": 940,
+      "protein_g": 42,
+      "carbs_g": 79,
+      "fat_g": 49,
+      "fiber_g": 4
+    },
+    {
+      "name": "Italian Papadia",
+      "category": "Papadias",
+      "serving": "1 papadia",
+      "calories": 940,
+      "protein_g": 38,
+      "carbs_g": 76,
+      "fat_g": 53,
+      "fiber_g": 4
+    },
+    {
+      "name": "Philly Cheesesteak Oven-Toasted Sandwich",
+      "category": "Sandwiches",
+      "serving": "1 sandwich",
+      "calories": 790,
+      "protein_g": 39,
+      "carbs_g": 73,
+      "fat_g": 37,
+      "fiber_g": 1
+    },
+    {
+      "name": "Italian Chicken Bacon Ranch Oven-Toasted Sandwich",
+      "category": "Sandwiches",
+      "serving": "1 sandwich",
+      "calories": 780,
+      "protein_g": 52,
+      "carbs_g": 71,
+      "fat_g": 34,
+      "fiber_g": 0
+    },
+    {
+      "name": "Steak & Mushroom Oven-Toasted Sandwich",
+      "category": "Sandwiches",
+      "serving": "1 sandwich",
+      "calories": 820,
+      "protein_g": 41,
+      "carbs_g": 74,
+      "fat_g": 41,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheesesticks (10\")",
+      "category": "Sides",
+      "serving": "1 stick (14 per order)",
+      "calories": 90,
+      "protein_g": 3,
+      "carbs_g": 10,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheesesticks (12\")",
+      "category": "Sides",
+      "serving": "1 stick (16 per order)",
+      "calories": 110,
+      "protein_g": 4,
+      "carbs_g": 13,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bacon Cheesesticks (10\")",
+      "category": "Sides",
+      "serving": "1 stick (14 per order)",
+      "calories": 110,
+      "protein_g": 4,
+      "carbs_g": 11,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon Cheesesticks (12\")",
+      "category": "Sides",
+      "serving": "1 stick (16 per order)",
+      "calories": 130,
+      "protein_g": 5,
+      "carbs_g": 13,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cheesy Garlic Bread (12\")",
+      "category": "Sides",
+      "serving": "1 stick (44 g)",
+      "calories": 140,
+      "protein_g": 6,
+      "carbs_g": 12,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tuscan 6-Cheese Cheesesticks (10\")",
+      "category": "Sides",
+      "serving": "1 stick (14 per order)",
+      "calories": 110,
+      "protein_g": 4,
+      "carbs_g": 11,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tuscan 6-Cheese Cheesesticks (12\")",
+      "category": "Sides",
+      "serving": "1 stick (16 per order)",
+      "calories": 130,
+      "protein_g": 5,
+      "carbs_g": 13,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breadsticks (12\")",
+      "category": "Sides",
+      "serving": "1 stick (8 per order)",
+      "calories": 130,
+      "protein_g": 4,
+      "carbs_g": 24,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Breadsticks (14\")",
+      "category": "Sides",
+      "serving": "1 stick (10 per order)",
+      "calories": 150,
+      "protein_g": 4,
+      "carbs_g": 27,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Garlic Parmesan Breadsticks (12\")",
+      "category": "Sides",
+      "serving": "1 stick (8 per order)",
+      "calories": 160,
+      "protein_g": 4,
+      "carbs_g": 24,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Garlic Parmesan Breadsticks (14\")",
+      "category": "Sides",
+      "serving": "1 stick (10 per order)",
+      "calories": 170,
+      "protein_g": 4,
+      "carbs_g": 27,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Salted Caramel Blondie",
+      "category": "Desserts",
+      "serving": "1 slice (8 per order)",
+      "calories": 200,
+      "protein_g": 2,
+      "carbs_g": 26,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Chip Cookie",
+      "category": "Desserts",
+      "serving": "1 slice (8 per order)",
+      "calories": 190,
+      "protein_g": 2,
+      "carbs_g": 26,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cinnamon Pullaparts",
+      "category": "Desserts",
+      "serving": "1 tray",
+      "calories": 1960,
+      "protein_g": 19,
+      "carbs_g": 264,
+      "fat_g": 94,
+      "fiber_g": 8
+    },
+    {
+      "name": "Double Chocolate Chip Brownie",
+      "category": "Desserts",
+      "serving": "1 square (9 per order)",
+      "calories": 240,
+      "protein_g": 2,
+      "carbs_g": 34,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "OREO Cookie Papa Bites",
+      "category": "Desserts",
+      "serving": "1 Papa Bite (8 per order)",
+      "calories": 80,
+      "protein_g": 2,
+      "carbs_g": 13,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheesy Burger Sauce",
+      "category": "Dipping Sauces",
+      "serving": "1 cup",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Doritos Cool Ranch Sauce",
+      "category": "Dipping Sauces",
+      "serving": "1 cup",
+      "calories": 180,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Special Zesty Sauce",
+      "category": "Dipping Sauces",
+      "serving": "1 cup",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pizza Sauce",
+      "category": "Dipping Sauces",
+      "serving": "1 cup",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheese Sauce",
+      "category": "Dipping Sauces",
+      "serving": "1 cup",
+      "calories": 40,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey Mustard",
+      "category": "Dipping Sauces",
+      "serving": "1 cup",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "BBQ Sauce",
+      "category": "Dipping Sauces",
+      "serving": "1 cup",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buffalo Sauce",
+      "category": "Dipping Sauces",
+      "serving": "1 cup",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 1,
+      "fiber_g": 1
+    },
+    {
+      "name": "Ranch Sauce",
+      "category": "Dipping Sauces",
+      "serving": "1 cup",
+      "calories": 100,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blue Cheese",
+      "category": "Dipping Sauces",
+      "serving": "1 cup",
+      "calories": 160,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cream Cheese Icing",
+      "category": "Dipping Sauces",
+      "serving": "1 cup",
+      "calories": 150,
+      "protein_g": 1,
+      "carbs_g": 32,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Rootin' Tootin' Ranch",
+      "category": "Dipping Sauces",
+      "serving": "1 cup",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Creamy Garlic Parm Dip Cup",
+      "category": "Dipping Sauces",
+      "serving": "1 cup",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Garlic Hot Honey Dip Cup",
+      "category": "Dipping Sauces",
+      "serving": "1 cup",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Roasted Garlic Parm Dip Cup",
+      "category": "Dipping Sauces",
+      "serving": "1 cup",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Parmesan Cheese",
+      "category": "Extras",
+      "serving": "1 packet",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Special Seasonings",
+      "category": "Extras",
+      "serving": "1 packet",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Anchovies",
+      "category": "Extras",
+      "serving": "1 serving",
+      "calories": 30,
+      "protein_g": 4,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsauced Boneless Wings",
+      "category": "Wings",
+      "serving": "10 wings",
+      "calories": 590,
+      "protein_g": 49,
+      "carbs_g": 41,
+      "fat_g": 26,
+      "fiber_g": 2
+    },
+    {
+      "name": "Unsauced Boneless Wings",
+      "category": "Wings",
+      "serving": "15 wings",
+      "calories": 890,
+      "protein_g": 74,
+      "carbs_g": 62,
+      "fat_g": 38,
+      "fiber_g": 2
+    },
+    {
+      "name": "Unsauced Boneless Wings",
+      "category": "Wings",
+      "serving": "30 wings",
+      "calories": 1910,
+      "protein_g": 159,
+      "carbs_g": 133,
+      "fat_g": 83,
+      "fiber_g": 5
+    },
+    {
+      "name": "Garlic Parmesan Boneless Wings",
+      "category": "Wings",
+      "serving": "10 wings",
+      "calories": 680,
+      "protein_g": 50,
+      "carbs_g": 42,
+      "fat_g": 35,
+      "fiber_g": 2
+    },
+    {
+      "name": "Garlic Parmesan Boneless Wings",
+      "category": "Wings",
+      "serving": "15 wings",
+      "calories": 1070,
+      "protein_g": 76,
+      "carbs_g": 63,
+      "fat_g": 58,
+      "fiber_g": 2
+    },
+    {
+      "name": "Garlic Parmesan Boneless Wings",
+      "category": "Wings",
+      "serving": "30 wings",
+      "calories": 2170,
+      "protein_g": 151,
+      "carbs_g": 126,
+      "fat_g": 119,
+      "fiber_g": 5
+    },
+    {
+      "name": "Hot Lemon Pepper Boneless Wings",
+      "category": "Wings",
+      "serving": "10 wings",
+      "calories": 600,
+      "protein_g": 47,
+      "carbs_g": 43,
+      "fat_g": 27,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hot Lemon Pepper Boneless Wings",
+      "category": "Wings",
+      "serving": "15 wings",
+      "calories": 950,
+      "protein_g": 75,
+      "carbs_g": 68,
+      "fat_g": 43,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hot Lemon Pepper Boneless Wings",
+      "category": "Wings",
+      "serving": "30 wings",
+      "calories": 1810,
+      "protein_g": 142,
+      "carbs_g": 128,
+      "fat_g": 82,
+      "fiber_g": 5
+    },
+    {
+      "name": "Buffalo Boneless Wings",
+      "category": "Wings",
+      "serving": "10 wings",
+      "calories": 630,
+      "protein_g": 50,
+      "carbs_g": 44,
+      "fat_g": 29,
+      "fiber_g": 2
+    },
+    {
+      "name": "Buffalo Boneless Wings",
+      "category": "Wings",
+      "serving": "15 wings",
+      "calories": 1110,
+      "protein_g": 87,
+      "carbs_g": 77,
+      "fat_g": 50,
+      "fiber_g": 3
+    },
+    {
+      "name": "Buffalo Boneless Wings",
+      "category": "Wings",
+      "serving": "30 wings",
+      "calories": 1890,
+      "protein_g": 149,
+      "carbs_g": 132,
+      "fat_g": 85,
+      "fiber_g": 1
+    },
+    {
+      "name": "BBQ Boneless Wings",
+      "category": "Wings",
+      "serving": "10 wings",
+      "calories": 640,
+      "protein_g": 49,
+      "carbs_g": 54,
+      "fat_g": 26,
+      "fiber_g": 1
+    },
+    {
+      "name": "BBQ Boneless Wings",
+      "category": "Wings",
+      "serving": "15 wings",
+      "calories": 1130,
+      "protein_g": 85,
+      "carbs_g": 99,
+      "fat_g": 44,
+      "fiber_g": 3
+    },
+    {
+      "name": "BBQ Boneless Wings",
+      "category": "Wings",
+      "serving": "30 wings",
+      "calories": 1920,
+      "protein_g": 148,
+      "carbs_g": 160,
+      "fat_g": 77,
+      "fiber_g": 5
+    },
+    {
+      "name": "Honey Chipotle Boneless Wings",
+      "category": "Wings",
+      "serving": "10 wings",
+      "calories": 630,
+      "protein_g": 49,
+      "carbs_g": 52,
+      "fat_g": 26,
+      "fiber_g": 2
+    },
+    {
+      "name": "Honey Chipotle Boneless Wings",
+      "category": "Wings",
+      "serving": "15 wings",
+      "calories": 990,
+      "protein_g": 74,
+      "carbs_g": 86,
+      "fat_g": 38,
+      "fiber_g": 2
+    },
+    {
+      "name": "Honey Chipotle Boneless Wings",
+      "category": "Wings",
+      "serving": "30 wings",
+      "calories": 1940,
+      "protein_g": 148,
+      "carbs_g": 164,
+      "fat_g": 77,
+      "fiber_g": 5
+    },
+    {
+      "name": "Unsauced Roasted Wings",
+      "category": "Wings",
+      "serving": "8 wings",
+      "calories": 810,
+      "protein_g": 66,
+      "carbs_g": 4,
+      "fat_g": 57,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsauced Roasted Wings",
+      "category": "Wings",
+      "serving": "16 wings",
+      "calories": 1620,
+      "protein_g": 133,
+      "carbs_g": 8,
+      "fat_g": 113,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsauced Roasted Wings",
+      "category": "Wings",
+      "serving": "24 wings",
+      "calories": 2430,
+      "protein_g": 199,
+      "carbs_g": 12,
+      "fat_g": 170,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsauced Roasted Wings",
+      "category": "Wings",
+      "serving": "32 wings",
+      "calories": 3240,
+      "protein_g": 265,
+      "carbs_g": 16,
+      "fat_g": 226,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsauced Roasted Wings",
+      "category": "Wings",
+      "serving": "50 wings",
+      "calories": 5060,
+      "protein_g": 415,
+      "carbs_g": 25,
+      "fat_g": 353,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buffalo Wings",
+      "category": "Wings",
+      "serving": "8 wings",
+      "calories": 840,
+      "protein_g": 67,
+      "carbs_g": 8,
+      "fat_g": 58,
+      "fiber_g": 1
+    },
+    {
+      "name": "Buffalo Wings",
+      "category": "Wings",
+      "serving": "16 wings",
+      "calories": 1670,
+      "protein_g": 133,
+      "carbs_g": 16,
+      "fat_g": 115,
+      "fiber_g": 2
+    },
+    {
+      "name": "Buffalo Wings",
+      "category": "Wings",
+      "serving": "24 wings",
+      "calories": 2510,
+      "protein_g": 200,
+      "carbs_g": 24,
+      "fat_g": 173,
+      "fiber_g": 3
+    },
+    {
+      "name": "Buffalo Wings",
+      "category": "Wings",
+      "serving": "32 wings",
+      "calories": 3340,
+      "protein_g": 267,
+      "carbs_g": 33,
+      "fat_g": 231,
+      "fiber_g": 4
+    },
+    {
+      "name": "Buffalo Wings",
+      "category": "Wings",
+      "serving": "50 wings",
+      "calories": 5220,
+      "protein_g": 417,
+      "carbs_g": 51,
+      "fat_g": 360,
+      "fiber_g": 6
+    },
+    {
+      "name": "BBQ Wings",
+      "category": "Wings",
+      "serving": "8 wings",
+      "calories": 880,
+      "protein_g": 67,
+      "carbs_g": 20,
+      "fat_g": 57,
+      "fiber_g": 1
+    },
+    {
+      "name": "BBQ Wings",
+      "category": "Wings",
+      "serving": "16 wings",
+      "calories": 1750,
+      "protein_g": 134,
+      "carbs_g": 40,
+      "fat_g": 114,
+      "fiber_g": 1
+    },
+    {
+      "name": "BBQ Wings",
+      "category": "Wings",
+      "serving": "24 wings",
+      "calories": 2630,
+      "protein_g": 200,
+      "carbs_g": 60,
+      "fat_g": 170,
+      "fiber_g": 2
+    },
+    {
+      "name": "BBQ Wings",
+      "category": "Wings",
+      "serving": "32 wings",
+      "calories": 3500,
+      "protein_g": 267,
+      "carbs_g": 80,
+      "fat_g": 227,
+      "fiber_g": 2
+    },
+    {
+      "name": "BBQ Wings",
+      "category": "Wings",
+      "serving": "50 wings",
+      "calories": 5470,
+      "protein_g": 418,
+      "carbs_g": 125,
+      "fat_g": 355,
+      "fiber_g": 4
+    },
+    {
+      "name": "Garlic Parmesan Wings",
+      "category": "Wings",
+      "serving": "8 wings",
+      "calories": 1040,
+      "protein_g": 68,
+      "carbs_g": 6,
+      "fat_g": 81,
+      "fiber_g": 0
+    },
+    {
+      "name": "Garlic Parmesan Wings",
+      "category": "Wings",
+      "serving": "16 wings",
+      "calories": 2080,
+      "protein_g": 137,
+      "carbs_g": 11,
+      "fat_g": 162,
+      "fiber_g": 1
+    },
+    {
+      "name": "Garlic Parmesan Wings",
+      "category": "Wings",
+      "serving": "24 wings",
+      "calories": 3120,
+      "protein_g": 205,
+      "carbs_g": 17,
+      "fat_g": 243,
+      "fiber_g": 1
+    },
+    {
+      "name": "Garlic Parmesan Wings",
+      "category": "Wings",
+      "serving": "32 wings",
+      "calories": 4160,
+      "protein_g": 273,
+      "carbs_g": 23,
+      "fat_g": 324,
+      "fiber_g": 1
+    },
+    {
+      "name": "Garlic Parmesan Wings",
+      "category": "Wings",
+      "serving": "50 wings",
+      "calories": 6500,
+      "protein_g": 427,
+      "carbs_g": 35,
+      "fat_g": 507,
+      "fiber_g": 2
+    },
+    {
+      "name": "Honey Chipotle Wings",
+      "category": "Wings",
+      "serving": "8 wings",
+      "calories": 900,
+      "protein_g": 67,
+      "carbs_g": 27,
+      "fat_g": 57,
+      "fiber_g": 1
+    },
+    {
+      "name": "Honey Chipotle Wings",
+      "category": "Wings",
+      "serving": "16 wings",
+      "calories": 1800,
+      "protein_g": 133,
+      "carbs_g": 55,
+      "fat_g": 113,
+      "fiber_g": 1
+    },
+    {
+      "name": "Honey Chipotle Wings",
+      "category": "Wings",
+      "serving": "24 wings",
+      "calories": 2710,
+      "protein_g": 200,
+      "carbs_g": 82,
+      "fat_g": 170,
+      "fiber_g": 2
+    },
+    {
+      "name": "Honey Chipotle Wings",
+      "category": "Wings",
+      "serving": "32 wings",
+      "calories": 3610,
+      "protein_g": 267,
+      "carbs_g": 109,
+      "fat_g": 227,
+      "fiber_g": 2
+    },
+    {
+      "name": "Honey Chipotle Wings",
+      "category": "Wings",
+      "serving": "50 wings",
+      "calories": 5640,
+      "protein_g": 417,
+      "carbs_g": 171,
+      "fat_g": 354,
+      "fiber_g": 4
+    },
+    {
+      "name": "Hot Lemon Pepper Wings",
+      "category": "Wings",
+      "serving": "8 wings",
+      "calories": 960,
+      "protein_g": 75,
+      "carbs_g": 8,
+      "fat_g": 67,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Lemon Pepper Wings",
+      "category": "Wings",
+      "serving": "16 wings",
+      "calories": 1910,
+      "protein_g": 151,
+      "carbs_g": 17,
+      "fat_g": 134,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Lemon Pepper Wings",
+      "category": "Wings",
+      "serving": "24 wings",
+      "calories": 2870,
+      "protein_g": 226,
+      "carbs_g": 25,
+      "fat_g": 201,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Lemon Pepper Wings",
+      "category": "Wings",
+      "serving": "32 wings",
+      "calories": 3830,
+      "protein_g": 302,
+      "carbs_g": 33,
+      "fat_g": 268,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Lemon Pepper Wings",
+      "category": "Wings",
+      "serving": "50 wings",
+      "calories": 5980,
+      "protein_g": 472,
+      "carbs_g": 52,
+      "fat_g": 419,
+      "fiber_g": 0
+    }
+  ]
+}

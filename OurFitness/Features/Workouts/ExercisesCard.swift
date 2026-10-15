@@ -183,26 +183,12 @@ struct ExercisesCard: View {
         .sheet(item: $activeHistory) { ex in
             SetHistorySheet(profile: profile, exercise: ex)
         }
-        .confirmationDialog(
-            "Delete \(pendingDelete?.name ?? "exercise")?",
-            isPresented: Binding(
-                get: { pendingDelete != nil },
-                set: { if !$0 { pendingDelete = nil } }
-            ),
-            titleVisibility: .visible,
-            presenting: pendingDelete
-        ) { ex in
-            Button("Delete exercise and all its sets", role: .destructive) { deleteExercise(ex) }
-            Button("Cancel", role: .cancel) {}
-        } message: { _ in
-            Text("This removes the exercise and every set logged for it.")
-        }
     }
 
-    /// Press-and-hold on a row body: a light tick at the threshold (no toast
-    /// fires here), then the confirmation.
+    /// Press-and-hold on a row body: one strong warning haptic the moment the
+    /// hold is recognised (no toast fires here), then the confirmation.
     private func requestDelete(_ ex: ExerciseDTO) {
-        Haptics.tap()
+        Haptics.warn()
         pendingDelete = ex
     }
 
@@ -339,6 +325,27 @@ struct ExercisesCard: View {
             }
         }
         .padding(.vertical, 4)
+        // Attached per row (one is ever presented — it keys off
+        // `pendingDelete`) so the iOS 26 popover points at the row being
+        // deleted, not at the whole card.
+        .confirmationDialog(
+            "Delete \(ex.name)?",
+            isPresented: Binding(
+                get: { pendingDelete?.id == ex.id },
+                set: { if !$0 { pendingDelete = nil } }
+            ),
+            titleVisibility: .visible
+        ) {
+            // Clear explicitly: once the row is gone its dialog binding may never
+            // be written back, and a stale `pendingDelete` swallows every row tap.
+            Button("Delete exercise and all its sets", role: .destructive) {
+                pendingDelete = nil
+                deleteExercise(ex)
+            }
+            Button("Cancel", role: .cancel) { pendingDelete = nil }
+        } message: {
+            Text("This removes the exercise and every set logged for it.")
+        }
     }
 
     /// Row-body tap. Swallowed while a delete confirmation is up: the hold that

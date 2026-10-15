@@ -1,0 +1,2379 @@
+{
+  "chain": "Jersey Mike's",
+  "slug": "jersey-mikes",
+  "aliases": [
+    "jersey mikes",
+    "jersey mike's",
+    "jersey mike",
+    "jerseymikes",
+    "jersey mikes subs",
+    "jm subs"
+  ],
+  "kind": "deli",
+  "source_url": "https://www.jerseymikes.com/menu/nutrition",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Read from jerseymikes.com's own nutrition calculator data (subs.jerseymikes.com/nutrition/data and /nutrition/<product>/<size>). Each figure is the sum of the item's default ('D') ingredients, which is exactly the 'Totals' row the site computes before any customization; values rounded to whole numbers here. Catering and kids' items as listed by the site; items with no default ingredients skipped.",
+  "items": [
+    {
+      "name": "#2 Jersey Shore's Favorite",
+      "category": "Cold Subs",
+      "serving": "1 mini sub",
+      "calories": 480,
+      "protein_g": 22,
+      "carbs_g": 45,
+      "fat_g": 24,
+      "fiber_g": 3
+    },
+    {
+      "name": "#2 Jersey Shore's Favorite",
+      "category": "Cold Subs",
+      "serving": "1 regular sub",
+      "calories": 824,
+      "protein_g": 39,
+      "carbs_g": 69,
+      "fat_g": 44,
+      "fiber_g": 4
+    },
+    {
+      "name": "#2 Jersey Shore's Favorite",
+      "category": "Cold Subs",
+      "serving": "1 giant sub",
+      "calories": 1554,
+      "protein_g": 68,
+      "carbs_g": 134,
+      "fat_g": 84,
+      "fiber_g": 8
+    },
+    {
+      "name": "#2 Jersey Shore's Favorite (Wrap)",
+      "category": "Cold Subs",
+      "serving": "1 wrap",
+      "calories": 805,
+      "protein_g": 36,
+      "carbs_g": 58,
+      "fat_g": 49,
+      "fiber_g": 4
+    },
+    {
+      "name": "#2 Jersey Shore's Favorite (Bowl)",
+      "category": "Cold Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 515,
+      "protein_g": 28,
+      "carbs_g": 10,
+      "fat_g": 41,
+      "fiber_g": 2
+    },
+    {
+      "name": "#3 Ham and Provolone",
+      "category": "Cold Subs",
+      "serving": "1 mini sub",
+      "calories": 483,
+      "protein_g": 23,
+      "carbs_g": 44,
+      "fat_g": 24,
+      "fiber_g": 3
+    },
+    {
+      "name": "#3 Ham and Provolone",
+      "category": "Cold Subs",
+      "serving": "1 regular sub",
+      "calories": 817,
+      "protein_g": 38,
+      "carbs_g": 68,
+      "fat_g": 44,
+      "fiber_g": 4
+    },
+    {
+      "name": "#3 Ham and Provolone",
+      "category": "Cold Subs",
+      "serving": "1 giant sub",
+      "calories": 1550,
+      "protein_g": 68,
+      "carbs_g": 133,
+      "fat_g": 84,
+      "fiber_g": 8
+    },
+    {
+      "name": "#3 Ham and Provolone (Wrap)",
+      "category": "Cold Subs",
+      "serving": "1 wrap",
+      "calories": 798,
+      "protein_g": 35,
+      "carbs_g": 57,
+      "fat_g": 49,
+      "fiber_g": 4
+    },
+    {
+      "name": "#3 Ham and Provolone (Bowl)",
+      "category": "Cold Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 508,
+      "protein_g": 27,
+      "carbs_g": 9,
+      "fat_g": 41,
+      "fiber_g": 2
+    },
+    {
+      "name": "#14 The Veggie",
+      "category": "Cold Subs",
+      "serving": "1 mini sub",
+      "calories": 568,
+      "protein_g": 24,
+      "carbs_g": 45,
+      "fat_g": 33,
+      "fiber_g": 3
+    },
+    {
+      "name": "#14 The Veggie",
+      "category": "Cold Subs",
+      "serving": "1 regular sub",
+      "calories": 954,
+      "protein_g": 39,
+      "carbs_g": 69,
+      "fat_g": 59,
+      "fiber_g": 5
+    },
+    {
+      "name": "#14 The Veggie",
+      "category": "Cold Subs",
+      "serving": "1 giant sub",
+      "calories": 1896,
+      "protein_g": 78,
+      "carbs_g": 135,
+      "fat_g": 117,
+      "fiber_g": 9
+    },
+    {
+      "name": "#14 The Veggie (Wrap)",
+      "category": "Cold Subs",
+      "serving": "1 wrap",
+      "calories": 935,
+      "protein_g": 36,
+      "carbs_g": 58,
+      "fat_g": 64,
+      "fiber_g": 5
+    },
+    {
+      "name": "#14 The Veggie (Bowl)",
+      "category": "Cold Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 645,
+      "protein_g": 28,
+      "carbs_g": 10,
+      "fat_g": 56,
+      "fiber_g": 3
+    },
+    {
+      "name": "#5 The Super Sub",
+      "category": "Cold Subs",
+      "serving": "1 mini sub",
+      "calories": 505,
+      "protein_g": 26,
+      "carbs_g": 46,
+      "fat_g": 25,
+      "fiber_g": 3
+    },
+    {
+      "name": "#5 The Super Sub",
+      "category": "Cold Subs",
+      "serving": "1 regular sub",
+      "calories": 837,
+      "protein_g": 42,
+      "carbs_g": 70,
+      "fat_g": 44,
+      "fiber_g": 4
+    },
+    {
+      "name": "#5 The Super Sub",
+      "category": "Cold Subs",
+      "serving": "1 giant sub",
+      "calories": 1585,
+      "protein_g": 74,
+      "carbs_g": 137,
+      "fat_g": 84,
+      "fiber_g": 8
+    },
+    {
+      "name": "#5 The Super Sub (Wrap)",
+      "category": "Cold Subs",
+      "serving": "1 wrap",
+      "calories": 819,
+      "protein_g": 38,
+      "carbs_g": 59,
+      "fat_g": 49,
+      "fiber_g": 4
+    },
+    {
+      "name": "#5 The Super Sub (Bowl)",
+      "category": "Cold Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 529,
+      "protein_g": 30,
+      "carbs_g": 11,
+      "fat_g": 41,
+      "fiber_g": 2
+    },
+    {
+      "name": "#7 Turkey and Provolone",
+      "category": "Cold Subs",
+      "serving": "1 mini sub",
+      "calories": 482,
+      "protein_g": 26,
+      "carbs_g": 44,
+      "fat_g": 23,
+      "fiber_g": 3
+    },
+    {
+      "name": "#7 Turkey and Provolone",
+      "category": "Cold Subs",
+      "serving": "1 regular sub",
+      "calories": 817,
+      "protein_g": 45,
+      "carbs_g": 66,
+      "fat_g": 41,
+      "fiber_g": 4
+    },
+    {
+      "name": "#7 Turkey and Provolone",
+      "category": "Cold Subs",
+      "serving": "1 giant sub",
+      "calories": 1550,
+      "protein_g": 80,
+      "carbs_g": 131,
+      "fat_g": 79,
+      "fiber_g": 8
+    },
+    {
+      "name": "#7 Turkey and Provolone (Wrap)",
+      "category": "Cold Subs",
+      "serving": "1 wrap",
+      "calories": 780,
+      "protein_g": 38,
+      "carbs_g": 56,
+      "fat_g": 46,
+      "fiber_g": 4
+    },
+    {
+      "name": "#7 Turkey and Provolone (Bowl)",
+      "category": "Cold Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 490,
+      "protein_g": 30,
+      "carbs_g": 8,
+      "fat_g": 38,
+      "fiber_g": 2
+    },
+    {
+      "name": "#10 Tuna Fish",
+      "category": "Cold Subs",
+      "serving": "1 mini sub",
+      "calories": 628,
+      "protein_g": 20,
+      "carbs_g": 44,
+      "fat_g": 42,
+      "fiber_g": 3
+    },
+    {
+      "name": "#10 Tuna Fish",
+      "category": "Cold Subs",
+      "serving": "1 regular sub",
+      "calories": 1062,
+      "protein_g": 33,
+      "carbs_g": 67,
+      "fat_g": 75,
+      "fiber_g": 5
+    },
+    {
+      "name": "#10 Tuna Fish",
+      "category": "Cold Subs",
+      "serving": "1 giant sub",
+      "calories": 2029,
+      "protein_g": 62,
+      "carbs_g": 132,
+      "fat_g": 141,
+      "fiber_g": 9
+    },
+    {
+      "name": "#10 Tuna Fish (Wrap)",
+      "category": "Cold Subs",
+      "serving": "1 wrap",
+      "calories": 1043,
+      "protein_g": 29,
+      "carbs_g": 56,
+      "fat_g": 80,
+      "fiber_g": 4
+    },
+    {
+      "name": "#10 Tuna Fish (Bowl)",
+      "category": "Cold Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 753,
+      "protein_g": 21,
+      "carbs_g": 8,
+      "fat_g": 72,
+      "fiber_g": 2
+    },
+    {
+      "name": "#6  Roast Beef and Provolone",
+      "category": "Cold Subs",
+      "serving": "1 mini sub",
+      "calories": 563,
+      "protein_g": 38,
+      "carbs_g": 43,
+      "fat_g": 26,
+      "fiber_g": 3
+    },
+    {
+      "name": "#6  Roast Beef and Provolone",
+      "category": "Cold Subs",
+      "serving": "1 regular sub",
+      "calories": 913,
+      "protein_g": 57,
+      "carbs_g": 66,
+      "fat_g": 46,
+      "fiber_g": 4
+    },
+    {
+      "name": "#6  Roast Beef and Provolone",
+      "category": "Cold Subs",
+      "serving": "1 giant sub",
+      "calories": 1776,
+      "protein_g": 110,
+      "carbs_g": 130,
+      "fat_g": 89,
+      "fiber_g": 8
+    },
+    {
+      "name": "#6  Roast Beef and Provolone (Wrap)",
+      "category": "Cold Subs",
+      "serving": "1 wrap",
+      "calories": 895,
+      "protein_g": 53,
+      "carbs_g": 55,
+      "fat_g": 51,
+      "fiber_g": 4
+    },
+    {
+      "name": "#6  Roast Beef and Provolone (Bowl)",
+      "category": "Cold Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 605,
+      "protein_g": 45,
+      "carbs_g": 7,
+      "fat_g": 43,
+      "fiber_g": 2
+    },
+    {
+      "name": "#13 The Original Italian",
+      "category": "Cold Subs",
+      "serving": "1 mini sub",
+      "calories": 574,
+      "protein_g": 29,
+      "carbs_g": 46,
+      "fat_g": 30,
+      "fiber_g": 3
+    },
+    {
+      "name": "#13 The Original Italian",
+      "category": "Cold Subs",
+      "serving": "1 regular sub",
+      "calories": 956,
+      "protein_g": 47,
+      "carbs_g": 71,
+      "fat_g": 55,
+      "fiber_g": 4
+    },
+    {
+      "name": "#13 The Original Italian",
+      "category": "Cold Subs",
+      "serving": "1 giant sub",
+      "calories": 1816,
+      "protein_g": 84,
+      "carbs_g": 139,
+      "fat_g": 104,
+      "fiber_g": 8
+    },
+    {
+      "name": "#13 The Original Italian (Wrap)",
+      "category": "Cold Subs",
+      "serving": "1 wrap",
+      "calories": 937,
+      "protein_g": 43,
+      "carbs_g": 60,
+      "fat_g": 60,
+      "fiber_g": 4
+    },
+    {
+      "name": "#13 The Original Italian (Bowl)",
+      "category": "Cold Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 647,
+      "protein_g": 35,
+      "carbs_g": 12,
+      "fat_g": 52,
+      "fiber_g": 2
+    },
+    {
+      "name": "#8 Club Sub",
+      "category": "Cold Subs",
+      "serving": "1 mini sub",
+      "calories": 665,
+      "protein_g": 31,
+      "carbs_g": 45,
+      "fat_g": 41,
+      "fiber_g": 3
+    },
+    {
+      "name": "#8 Club Sub",
+      "category": "Cold Subs",
+      "serving": "1 regular sub",
+      "calories": 1163,
+      "protein_g": 50,
+      "carbs_g": 68,
+      "fat_g": 78,
+      "fiber_g": 4
+    },
+    {
+      "name": "#8 Club Sub",
+      "category": "Cold Subs",
+      "serving": "1 giant sub",
+      "calories": 2221,
+      "protein_g": 87,
+      "carbs_g": 134,
+      "fat_g": 151,
+      "fiber_g": 8
+    },
+    {
+      "name": "#8 Club Sub (Wrap)",
+      "category": "Cold Subs",
+      "serving": "1 wrap",
+      "calories": 1126,
+      "protein_g": 44,
+      "carbs_g": 57,
+      "fat_g": 82,
+      "fiber_g": 4
+    },
+    {
+      "name": "#8 Club Sub (Bowl)",
+      "category": "Cold Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 836,
+      "protein_g": 36,
+      "carbs_g": 9,
+      "fat_g": 74,
+      "fiber_g": 2
+    },
+    {
+      "name": "#9 Club Supreme",
+      "category": "Cold Subs",
+      "serving": "1 mini sub",
+      "calories": 685,
+      "protein_g": 36,
+      "carbs_g": 44,
+      "fat_g": 41,
+      "fiber_g": 3
+    },
+    {
+      "name": "#9 Club Supreme",
+      "category": "Cold Subs",
+      "serving": "1 regular sub",
+      "calories": 1191,
+      "protein_g": 59,
+      "carbs_g": 67,
+      "fat_g": 77,
+      "fiber_g": 4
+    },
+    {
+      "name": "#9 Club Supreme",
+      "category": "Cold Subs",
+      "serving": "1 giant sub",
+      "calories": 2267,
+      "protein_g": 101,
+      "carbs_g": 131,
+      "fat_g": 149,
+      "fiber_g": 8
+    },
+    {
+      "name": "#9 Club Supreme (Wrap)",
+      "category": "Cold Subs",
+      "serving": "1 wrap",
+      "calories": 1172,
+      "protein_g": 56,
+      "carbs_g": 56,
+      "fat_g": 82,
+      "fiber_g": 4
+    },
+    {
+      "name": "#9 Club Supreme (Bowl)",
+      "category": "Cold Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 882,
+      "protein_g": 48,
+      "carbs_g": 8,
+      "fat_g": 74,
+      "fiber_g": 2
+    },
+    {
+      "name": "#1 BLT",
+      "category": "Cold Subs",
+      "serving": "1 mini sub",
+      "calories": 481,
+      "protein_g": 19,
+      "carbs_g": 42,
+      "fat_g": 27,
+      "fiber_g": 3
+    },
+    {
+      "name": "#1 BLT",
+      "category": "Cold Subs",
+      "serving": "1 regular sub",
+      "calories": 788,
+      "protein_g": 29,
+      "carbs_g": 64,
+      "fat_g": 48,
+      "fiber_g": 4
+    },
+    {
+      "name": "#1 BLT",
+      "category": "Cold Subs",
+      "serving": "1 giant sub",
+      "calories": 1569,
+      "protein_g": 57,
+      "carbs_g": 127,
+      "fat_g": 95,
+      "fiber_g": 8
+    },
+    {
+      "name": "#1 BLT (Wrap)",
+      "category": "Cold Subs",
+      "serving": "1 wrap",
+      "calories": 776,
+      "protein_g": 25,
+      "carbs_g": 55,
+      "fat_g": 53,
+      "fiber_g": 4
+    },
+    {
+      "name": "#1 BLT (Bowl)",
+      "category": "Cold Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 478,
+      "protein_g": 17,
+      "carbs_g": 5,
+      "fat_g": 45,
+      "fiber_g": 2
+    },
+    {
+      "name": "#4 The Number Four",
+      "category": "Cold Subs",
+      "serving": "1 mini sub",
+      "calories": 480,
+      "protein_g": 23,
+      "carbs_g": 46,
+      "fat_g": 23,
+      "fiber_g": 3
+    },
+    {
+      "name": "#4 The Number Four",
+      "category": "Cold Subs",
+      "serving": "1 regular sub",
+      "calories": 806,
+      "protein_g": 37,
+      "carbs_g": 70,
+      "fat_g": 43,
+      "fiber_g": 4
+    },
+    {
+      "name": "#4 The Number Four",
+      "category": "Cold Subs",
+      "serving": "1 giant sub",
+      "calories": 1531,
+      "protein_g": 66,
+      "carbs_g": 137,
+      "fat_g": 81,
+      "fiber_g": 8
+    },
+    {
+      "name": "#4 The Number Four (Wrap)",
+      "category": "Cold Subs",
+      "serving": "1 wrap",
+      "calories": 787,
+      "protein_g": 34,
+      "carbs_g": 59,
+      "fat_g": 48,
+      "fiber_g": 4
+    },
+    {
+      "name": "#4 The Number Four (Bowl)",
+      "category": "Cold Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 497,
+      "protein_g": 26,
+      "carbs_g": 11,
+      "fat_g": 40,
+      "fiber_g": 2
+    },
+    {
+      "name": "#11 Stickball Special",
+      "category": "Cold Subs",
+      "serving": "1 mini sub",
+      "calories": 506,
+      "protein_g": 22,
+      "carbs_g": 44,
+      "fat_g": 27,
+      "fiber_g": 3
+    },
+    {
+      "name": "#11 Stickball Special",
+      "category": "Cold Subs",
+      "serving": "1 regular sub",
+      "calories": 887,
+      "protein_g": 39,
+      "carbs_g": 68,
+      "fat_g": 51,
+      "fiber_g": 4
+    },
+    {
+      "name": "#11 Stickball Special",
+      "category": "Cold Subs",
+      "serving": "1 giant sub",
+      "calories": 1667,
+      "protein_g": 69,
+      "carbs_g": 134,
+      "fat_g": 96,
+      "fiber_g": 8
+    },
+    {
+      "name": "#11 Stickball Special (Wrap)",
+      "category": "Cold Subs",
+      "serving": "1 wrap",
+      "calories": 869,
+      "protein_g": 36,
+      "carbs_g": 58,
+      "fat_g": 56,
+      "fiber_g": 4
+    },
+    {
+      "name": "#11 Stickball Special (Bowl)",
+      "category": "Cold Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 579,
+      "protein_g": 28,
+      "carbs_g": 10,
+      "fat_g": 48,
+      "fiber_g": 2
+    },
+    {
+      "name": "#12 Cancro Special",
+      "category": "Cold Subs",
+      "serving": "1 mini sub",
+      "calories": 557,
+      "protein_g": 33,
+      "carbs_g": 44,
+      "fat_g": 27,
+      "fiber_g": 3
+    },
+    {
+      "name": "#12 Cancro Special",
+      "category": "Cold Subs",
+      "serving": "1 regular sub",
+      "calories": 966,
+      "protein_g": 59,
+      "carbs_g": 66,
+      "fat_g": 51,
+      "fiber_g": 4
+    },
+    {
+      "name": "#12 Cancro Special",
+      "category": "Cold Subs",
+      "serving": "1 giant sub",
+      "calories": 1807,
+      "protein_g": 102,
+      "carbs_g": 130,
+      "fat_g": 96,
+      "fiber_g": 8
+    },
+    {
+      "name": "#12 Cancro Special (Wrap)",
+      "category": "Cold Subs",
+      "serving": "1 wrap",
+      "calories": 948,
+      "protein_g": 55,
+      "carbs_g": 56,
+      "fat_g": 56,
+      "fiber_g": 4
+    },
+    {
+      "name": "#12 Cancro Special (Bowl)",
+      "category": "Cold Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 658,
+      "protein_g": 47,
+      "carbs_g": 8,
+      "fat_g": 48,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chipotle Turkey Sub",
+      "category": "Cold Subs",
+      "serving": "1 mini sub",
+      "calories": 627,
+      "protein_g": 26,
+      "carbs_g": 45,
+      "fat_g": 39,
+      "fiber_g": 3
+    },
+    {
+      "name": "Chipotle Turkey Sub",
+      "category": "Cold Subs",
+      "serving": "1 regular sub",
+      "calories": 1089,
+      "protein_g": 42,
+      "carbs_g": 68,
+      "fat_g": 73,
+      "fiber_g": 4
+    },
+    {
+      "name": "Chipotle Turkey Sub",
+      "category": "Cold Subs",
+      "serving": "1 giant sub",
+      "calories": 2129,
+      "protein_g": 81,
+      "carbs_g": 134,
+      "fat_g": 143,
+      "fiber_g": 8
+    },
+    {
+      "name": "Chipotle Turkey Sub (Wrap)",
+      "category": "Cold Subs",
+      "serving": "1 wrap",
+      "calories": 1072,
+      "protein_g": 38,
+      "carbs_g": 57,
+      "fat_g": 78,
+      "fiber_g": 4
+    },
+    {
+      "name": "Chipotle Turkey Sub (Bowl)",
+      "category": "Cold Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 782,
+      "protein_g": 30,
+      "carbs_g": 9,
+      "fat_g": 70,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pepperoni & Cheese",
+      "category": "Cold Subs",
+      "serving": "1 mini sub",
+      "calories": 608,
+      "protein_g": 21,
+      "carbs_g": 45,
+      "fat_g": 38,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pepperoni & Cheese",
+      "category": "Cold Subs",
+      "serving": "1 regular sub",
+      "calories": 1004,
+      "protein_g": 33,
+      "carbs_g": 69,
+      "fat_g": 67,
+      "fiber_g": 5
+    },
+    {
+      "name": "Pepperoni & Cheese",
+      "category": "Cold Subs",
+      "serving": "1 giant sub",
+      "calories": 1861,
+      "protein_g": 60,
+      "carbs_g": 134,
+      "fat_g": 121,
+      "fiber_g": 9
+    },
+    {
+      "name": "Pepperoni & Cheese (Wrap)",
+      "category": "Cold Subs",
+      "serving": "1 wrap",
+      "calories": 990,
+      "protein_g": 30,
+      "carbs_g": 58,
+      "fat_g": 72,
+      "fiber_g": 4
+    },
+    {
+      "name": "Pepperoni & Cheese (Bowl)",
+      "category": "Cold Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 700,
+      "protein_g": 22,
+      "carbs_g": 10,
+      "fat_g": 64,
+      "fiber_g": 2
+    },
+    {
+      "name": "Salami and Cheese",
+      "category": "Cold Subs",
+      "serving": "1 mini sub",
+      "calories": 648,
+      "protein_g": 24,
+      "carbs_g": 45,
+      "fat_g": 41,
+      "fiber_g": 3
+    },
+    {
+      "name": "Salami and Cheese",
+      "category": "Cold Subs",
+      "serving": "1 regular sub",
+      "calories": 1038,
+      "protein_g": 36,
+      "carbs_g": 69,
+      "fat_g": 69,
+      "fiber_g": 4
+    },
+    {
+      "name": "Salami and Cheese",
+      "category": "Cold Subs",
+      "serving": "1 giant sub",
+      "calories": 1984,
+      "protein_g": 68,
+      "carbs_g": 135,
+      "fat_g": 130,
+      "fiber_g": 8
+    },
+    {
+      "name": "California Club Sub",
+      "category": "Cold Subs",
+      "serving": "1 mini sub",
+      "calories": 555,
+      "protein_g": 29,
+      "carbs_g": 46,
+      "fat_g": 29,
+      "fiber_g": 5
+    },
+    {
+      "name": "California Club Sub",
+      "category": "Cold Subs",
+      "serving": "1 regular sub",
+      "calories": 978,
+      "protein_g": 52,
+      "carbs_g": 71,
+      "fat_g": 55,
+      "fiber_g": 8
+    },
+    {
+      "name": "California Club Sub",
+      "category": "Cold Subs",
+      "serving": "1 giant sub",
+      "calories": 1862,
+      "protein_g": 92,
+      "carbs_g": 140,
+      "fat_g": 106,
+      "fiber_g": 16
+    },
+    {
+      "name": "California Club Sub (Wrap)",
+      "category": "Cold Subs",
+      "serving": "1 wrap",
+      "calories": 959,
+      "protein_g": 48,
+      "carbs_g": 61,
+      "fat_g": 60,
+      "fiber_g": 8
+    },
+    {
+      "name": "California Club Sub (Bowl)",
+      "category": "Cold Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 669,
+      "protein_g": 40,
+      "carbs_g": 13,
+      "fat_g": 52,
+      "fiber_g": 6
+    },
+    {
+      "name": "Turkey Club Sub",
+      "category": "Cold Subs",
+      "serving": "1 mini sub",
+      "calories": 645,
+      "protein_g": 29,
+      "carbs_g": 44,
+      "fat_g": 40,
+      "fiber_g": 3
+    },
+    {
+      "name": "Turkey Club Sub",
+      "category": "Cold Subs",
+      "serving": "1 regular sub",
+      "calories": 1128,
+      "protein_g": 47,
+      "carbs_g": 67,
+      "fat_g": 76,
+      "fiber_g": 4
+    },
+    {
+      "name": "Turkey Club Sub",
+      "category": "Cold Subs",
+      "serving": "1 giant sub",
+      "calories": 2198,
+      "protein_g": 89,
+      "carbs_g": 132,
+      "fat_g": 148,
+      "fiber_g": 8
+    },
+    {
+      "name": "Turkey Club Sub (Wrap)",
+      "category": "Cold Subs",
+      "serving": "1 wrap",
+      "calories": 1109,
+      "protein_g": 43,
+      "carbs_g": 57,
+      "fat_g": 81,
+      "fiber_g": 4
+    },
+    {
+      "name": "Turkey Club Sub (Bowl)",
+      "category": "Cold Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 819,
+      "protein_g": 35,
+      "carbs_g": 9,
+      "fat_g": 73,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mike's Hot Italian",
+      "category": "Hot Subs",
+      "serving": "1 regular sub",
+      "calories": 716,
+      "protein_g": 43,
+      "carbs_g": 71,
+      "fat_g": 29,
+      "fiber_g": 5
+    },
+    {
+      "name": "Mike's Hot Italian",
+      "category": "Hot Subs",
+      "serving": "1 giant sub",
+      "calories": 1433,
+      "protein_g": 85,
+      "carbs_g": 143,
+      "fat_g": 59,
+      "fiber_g": 10
+    },
+    {
+      "name": "Mike's Hot Italian (Bowl)",
+      "category": "Hot Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 408,
+      "protein_g": 31,
+      "carbs_g": 13,
+      "fat_g": 26,
+      "fiber_g": 3
+    },
+    {
+      "name": "#16 Mike's Chicken Philly",
+      "category": "Hot Subs",
+      "serving": "1 regular sub",
+      "calories": 684,
+      "protein_g": 48,
+      "carbs_g": 73,
+      "fat_g": 22,
+      "fiber_g": 3
+    },
+    {
+      "name": "#16 Mike's Chicken Philly",
+      "category": "Hot Subs",
+      "serving": "1 giant sub",
+      "calories": 1368,
+      "protein_g": 97,
+      "carbs_g": 146,
+      "fat_g": 43,
+      "fiber_g": 6
+    },
+    {
+      "name": "#16 Mike's Chicken Philly (Wrap)",
+      "category": "Hot Subs",
+      "serving": "1 wrap",
+      "calories": 665,
+      "protein_g": 45,
+      "carbs_g": 62,
+      "fat_g": 27,
+      "fiber_g": 3
+    },
+    {
+      "name": "#16 Mike's Chicken Philly (Bowl)",
+      "category": "Hot Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 375,
+      "protein_g": 37,
+      "carbs_g": 14,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "#42 Chipotle Chicken Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 regular sub",
+      "calories": 973,
+      "protein_g": 49,
+      "carbs_g": 75,
+      "fat_g": 53,
+      "fiber_g": 3
+    },
+    {
+      "name": "#42 Chipotle Chicken Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 giant sub",
+      "calories": 1947,
+      "protein_g": 98,
+      "carbs_g": 149,
+      "fat_g": 107,
+      "fiber_g": 7
+    },
+    {
+      "name": "#42 Chipotle Chicken Cheese Steak (Wrap)",
+      "category": "Hot Subs",
+      "serving": "1 wrap",
+      "calories": 955,
+      "protein_g": 45,
+      "carbs_g": 64,
+      "fat_g": 58,
+      "fiber_g": 3
+    },
+    {
+      "name": "#42 Chipotle Chicken Cheese Steak (Bowl)",
+      "category": "Hot Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 665,
+      "protein_g": 37,
+      "carbs_g": 16,
+      "fat_g": 50,
+      "fiber_g": 1
+    },
+    {
+      "name": "#55 Big Kahuna Chicken Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 regular sub",
+      "calories": 741,
+      "protein_g": 51,
+      "carbs_g": 75,
+      "fat_g": 26,
+      "fiber_g": 4
+    },
+    {
+      "name": "#55 Big Kahuna Chicken Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 giant sub",
+      "calories": 1483,
+      "protein_g": 102,
+      "carbs_g": 150,
+      "fat_g": 52,
+      "fiber_g": 7
+    },
+    {
+      "name": "#55 Big Kahuna Chicken Cheese Steak (Wrap)",
+      "category": "Hot Subs",
+      "serving": "1 wrap",
+      "calories": 720,
+      "protein_g": 47,
+      "carbs_g": 64,
+      "fat_g": 31,
+      "fiber_g": 3
+    },
+    {
+      "name": "#55 Big Kahuna Chicken Cheese Steak (Bowl)",
+      "category": "Hot Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 430,
+      "protein_g": 39,
+      "carbs_g": 16,
+      "fat_g": 23,
+      "fiber_g": 1
+    },
+    {
+      "name": "#26 Bacon Ranch Chicken Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 regular sub",
+      "calories": 924,
+      "protein_g": 55,
+      "carbs_g": 71,
+      "fat_g": 47,
+      "fiber_g": 4
+    },
+    {
+      "name": "#26 Bacon Ranch Chicken Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 giant sub",
+      "calories": 1844,
+      "protein_g": 110,
+      "carbs_g": 142,
+      "fat_g": 94,
+      "fiber_g": 7
+    },
+    {
+      "name": "#26 Bacon Ranch Chicken Cheese Steak (Wrap)",
+      "category": "Hot Subs",
+      "serving": "1 wrap",
+      "calories": 905,
+      "protein_g": 51,
+      "carbs_g": 61,
+      "fat_g": 52,
+      "fiber_g": 3
+    },
+    {
+      "name": "#26 Bacon Ranch Chicken Cheese Steak (Bowl)",
+      "category": "Hot Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 615,
+      "protein_g": 43,
+      "carbs_g": 13,
+      "fat_g": 44,
+      "fiber_g": 1
+    },
+    {
+      "name": "#31 California Chicken Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 regular sub",
+      "calories": 932,
+      "protein_g": 49,
+      "carbs_g": 70,
+      "fat_g": 51,
+      "fiber_g": 4
+    },
+    {
+      "name": "#31 California Chicken Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 giant sub",
+      "calories": 1860,
+      "protein_g": 98,
+      "carbs_g": 139,
+      "fat_g": 102,
+      "fiber_g": 7
+    },
+    {
+      "name": "#31 California Chicken Cheese Steak (Wrap)",
+      "category": "Hot Subs",
+      "serving": "1 wrap",
+      "calories": 913,
+      "protein_g": 46,
+      "carbs_g": 59,
+      "fat_g": 56,
+      "fiber_g": 3
+    },
+    {
+      "name": "#31 California Chicken Cheese Steak (Bowl)",
+      "category": "Hot Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 623,
+      "protein_g": 38,
+      "carbs_g": 11,
+      "fat_g": 48,
+      "fiber_g": 1
+    },
+    {
+      "name": "#44 Buffalo Chicken Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 regular sub",
+      "calories": 894,
+      "protein_g": 50,
+      "carbs_g": 73,
+      "fat_g": 44,
+      "fiber_g": 4
+    },
+    {
+      "name": "#44 Buffalo Chicken Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 giant sub",
+      "calories": 1785,
+      "protein_g": 100,
+      "carbs_g": 145,
+      "fat_g": 89,
+      "fiber_g": 8
+    },
+    {
+      "name": "#44 Buffalo Chicken Cheese Steak (Wrap)",
+      "category": "Hot Subs",
+      "serving": "1 wrap",
+      "calories": 876,
+      "protein_g": 47,
+      "carbs_g": 62,
+      "fat_g": 50,
+      "fiber_g": 4
+    },
+    {
+      "name": "#44 Buffalo Chicken Cheese Steak (Bowl)",
+      "category": "Hot Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 586,
+      "protein_g": 39,
+      "carbs_g": 14,
+      "fat_g": 42,
+      "fiber_g": 2
+    },
+    {
+      "name": "#17 Mike's Famous Philly",
+      "category": "Hot Subs",
+      "serving": "1 regular sub",
+      "calories": 748,
+      "protein_g": 46,
+      "carbs_g": 74,
+      "fat_g": 30,
+      "fiber_g": 3
+    },
+    {
+      "name": "#17 Mike's Famous Philly",
+      "category": "Hot Subs",
+      "serving": "1 giant sub",
+      "calories": 1497,
+      "protein_g": 92,
+      "carbs_g": 148,
+      "fat_g": 61,
+      "fiber_g": 6
+    },
+    {
+      "name": "#17 Mike's Famous Philly (Wrap)",
+      "category": "Hot Subs",
+      "serving": "1 wrap",
+      "calories": 730,
+      "protein_g": 42,
+      "carbs_g": 63,
+      "fat_g": 35,
+      "fiber_g": 3
+    },
+    {
+      "name": "#17 Mike's Famous Philly (Bowl)",
+      "category": "Hot Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 440,
+      "protein_g": 34,
+      "carbs_g": 15,
+      "fat_g": 27,
+      "fiber_g": 1
+    },
+    {
+      "name": "#43 Chipotle Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 regular sub",
+      "calories": 1038,
+      "protein_g": 46,
+      "carbs_g": 76,
+      "fat_g": 62,
+      "fiber_g": 3
+    },
+    {
+      "name": "#43 Chipotle Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 giant sub",
+      "calories": 2076,
+      "protein_g": 93,
+      "carbs_g": 151,
+      "fat_g": 124,
+      "fiber_g": 7
+    },
+    {
+      "name": "#43 Chipotle Cheese Steak (Wrap)",
+      "category": "Hot Subs",
+      "serving": "1 wrap",
+      "calories": 1019,
+      "protein_g": 43,
+      "carbs_g": 65,
+      "fat_g": 67,
+      "fiber_g": 3
+    },
+    {
+      "name": "#43 Chipotle Cheese Steak (Bowl)",
+      "category": "Hot Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 729,
+      "protein_g": 35,
+      "carbs_g": 17,
+      "fat_g": 59,
+      "fiber_g": 1
+    },
+    {
+      "name": "#56 Big Kahuna Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 regular sub",
+      "calories": 803,
+      "protein_g": 49,
+      "carbs_g": 76,
+      "fat_g": 35,
+      "fiber_g": 4
+    },
+    {
+      "name": "#56 Big Kahuna Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 giant sub",
+      "calories": 1609,
+      "protein_g": 97,
+      "carbs_g": 152,
+      "fat_g": 69,
+      "fiber_g": 7
+    },
+    {
+      "name": "#56 Big Kahuna Cheese Steak (Wrap)",
+      "category": "Hot Subs",
+      "serving": "1 wrap",
+      "calories": 784,
+      "protein_g": 45,
+      "carbs_g": 65,
+      "fat_g": 40,
+      "fiber_g": 3
+    },
+    {
+      "name": "#56 Big Kahuna Cheese Steak (Bowl)",
+      "category": "Hot Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 494,
+      "protein_g": 37,
+      "carbs_g": 17,
+      "fat_g": 32,
+      "fiber_g": 1
+    },
+    {
+      "name": "#20 Grilled Pastrami Reuben",
+      "category": "Hot Subs",
+      "serving": "1 regular sub",
+      "calories": 721,
+      "protein_g": 42,
+      "carbs_g": 74,
+      "fat_g": 30,
+      "fiber_g": 5
+    },
+    {
+      "name": "#20 Grilled Pastrami Reuben",
+      "category": "Hot Subs",
+      "serving": "1 giant sub",
+      "calories": 1381,
+      "protein_g": 83,
+      "carbs_g": 147,
+      "fat_g": 53,
+      "fiber_g": 11
+    },
+    {
+      "name": "#20 Grilled Pastrami Reuben (Bowl)",
+      "category": "Hot Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 413,
+      "protein_g": 30,
+      "carbs_g": 16,
+      "fat_g": 27,
+      "fiber_g": 3
+    },
+    {
+      "name": "Teriyaki Chicken Sub",
+      "category": "Hot Subs",
+      "serving": "1 regular sub",
+      "calories": 684,
+      "protein_g": 48,
+      "carbs_g": 73,
+      "fat_g": 22,
+      "fiber_g": 3
+    },
+    {
+      "name": "Teriyaki Chicken Sub",
+      "category": "Hot Subs",
+      "serving": "1 giant sub",
+      "calories": 1368,
+      "protein_g": 97,
+      "carbs_g": 146,
+      "fat_g": 43,
+      "fiber_g": 6
+    },
+    {
+      "name": "Teriyaki Chicken Sub (Wrap)",
+      "category": "Hot Subs",
+      "serving": "1 wrap",
+      "calories": 665,
+      "protein_g": 45,
+      "carbs_g": 62,
+      "fat_g": 27,
+      "fiber_g": 3
+    },
+    {
+      "name": "Teriyaki Chicken Sub (Bowl)",
+      "category": "Hot Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 375,
+      "protein_g": 37,
+      "carbs_g": 14,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "#19 BBQ Beef",
+      "category": "Hot Subs",
+      "serving": "1 regular sub",
+      "calories": 708,
+      "protein_g": 60,
+      "carbs_g": 87,
+      "fat_g": 11,
+      "fiber_g": 4
+    },
+    {
+      "name": "#19 BBQ Beef",
+      "category": "Hot Subs",
+      "serving": "1 giant sub",
+      "calories": 1292,
+      "protein_g": 107,
+      "carbs_g": 163,
+      "fat_g": 20,
+      "fiber_g": 7
+    },
+    {
+      "name": "#19 BBQ Beef (Wrap)",
+      "category": "Hot Subs",
+      "serving": "1 wrap",
+      "calories": 689,
+      "protein_g": 56,
+      "carbs_g": 77,
+      "fat_g": 16,
+      "fiber_g": 3
+    },
+    {
+      "name": "#19 BBQ Beef (Bowl)",
+      "category": "Hot Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 399,
+      "protein_g": 48,
+      "carbs_g": 29,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "#17 Halal Steak Philly",
+      "category": "Hot Subs",
+      "serving": "1 regular sub",
+      "calories": 756,
+      "protein_g": 42,
+      "carbs_g": 69,
+      "fat_g": 31,
+      "fiber_g": 3
+    },
+    {
+      "name": "#17 Halal Steak Philly",
+      "category": "Hot Subs",
+      "serving": "1 giant sub",
+      "calories": 1513,
+      "protein_g": 84,
+      "carbs_g": 139,
+      "fat_g": 62,
+      "fiber_g": 6
+    },
+    {
+      "name": "#17 Halal Steak Philly (Wrap)",
+      "category": "Hot Subs",
+      "serving": "1 wrap",
+      "calories": 738,
+      "protein_g": 39,
+      "carbs_g": 59,
+      "fat_g": 36,
+      "fiber_g": 3
+    },
+    {
+      "name": "#17 Halal Steak Philly (Bowl)",
+      "category": "Hot Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 448,
+      "protein_g": 31,
+      "carbs_g": 11,
+      "fat_g": 28,
+      "fiber_g": 1
+    },
+    {
+      "name": "#43 Halal Chipotle Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 regular sub",
+      "calories": 1046,
+      "protein_g": 43,
+      "carbs_g": 71,
+      "fat_g": 63,
+      "fiber_g": 3
+    },
+    {
+      "name": "#43 Halal Chipotle Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 giant sub",
+      "calories": 2091,
+      "protein_g": 85,
+      "carbs_g": 142,
+      "fat_g": 125,
+      "fiber_g": 7
+    },
+    {
+      "name": "#43 Halal Chipotle Cheese Steak (Wrap)",
+      "category": "Hot Subs",
+      "serving": "1 wrap",
+      "calories": 1027,
+      "protein_g": 39,
+      "carbs_g": 60,
+      "fat_g": 68,
+      "fiber_g": 3
+    },
+    {
+      "name": "#43 Halal Chipotle Cheese Steak (Bowl)",
+      "category": "Hot Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 737,
+      "protein_g": 31,
+      "carbs_g": 12,
+      "fat_g": 60,
+      "fiber_g": 1
+    },
+    {
+      "name": "#56 Halal Big Kahuna Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 regular sub",
+      "calories": 811,
+      "protein_g": 45,
+      "carbs_g": 71,
+      "fat_g": 35,
+      "fiber_g": 4
+    },
+    {
+      "name": "#56 Halal Big Kahuna Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 giant sub",
+      "calories": 1625,
+      "protein_g": 90,
+      "carbs_g": 143,
+      "fat_g": 71,
+      "fiber_g": 7
+    },
+    {
+      "name": "#56 Halal Big Kahuna Cheese Steak (Wrap)",
+      "category": "Hot Subs",
+      "serving": "1 wrap",
+      "calories": 792,
+      "protein_g": 41,
+      "carbs_g": 60,
+      "fat_g": 41,
+      "fiber_g": 3
+    },
+    {
+      "name": "#56 Halal Big Kahuna Cheese Steak (Bowl)",
+      "category": "Hot Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 502,
+      "protein_g": 33,
+      "carbs_g": 12,
+      "fat_g": 33,
+      "fiber_g": 1
+    },
+    {
+      "name": "#16 Halal Chicken Philly",
+      "category": "Hot Subs",
+      "serving": "1 regular sub",
+      "calories": 661,
+      "protein_g": 48,
+      "carbs_g": 69,
+      "fat_g": 20,
+      "fiber_g": 3
+    },
+    {
+      "name": "#16 Halal Chicken Philly",
+      "category": "Hot Subs",
+      "serving": "1 giant sub",
+      "calories": 1322,
+      "protein_g": 97,
+      "carbs_g": 139,
+      "fat_g": 40,
+      "fiber_g": 6
+    },
+    {
+      "name": "#16 Halal Chicken Philly (Wrap)",
+      "category": "Hot Subs",
+      "serving": "1 wrap",
+      "calories": 642,
+      "protein_g": 45,
+      "carbs_g": 59,
+      "fat_g": 25,
+      "fiber_g": 3
+    },
+    {
+      "name": "#16 Halal Chicken Philly (Bowl)",
+      "category": "Hot Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 352,
+      "protein_g": 37,
+      "carbs_g": 11,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "#42 Halal Chipotle Chicken Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 regular sub",
+      "calories": 951,
+      "protein_g": 49,
+      "carbs_g": 71,
+      "fat_g": 52,
+      "fiber_g": 3
+    },
+    {
+      "name": "#42 Halal Chipotle Chicken Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 giant sub",
+      "calories": 1901,
+      "protein_g": 98,
+      "carbs_g": 142,
+      "fat_g": 104,
+      "fiber_g": 7
+    },
+    {
+      "name": "#42 Halal Chipotle Chicken Cheese Steak (Wrap)",
+      "category": "Hot Subs",
+      "serving": "1 wrap",
+      "calories": 932,
+      "protein_g": 45,
+      "carbs_g": 60,
+      "fat_g": 57,
+      "fiber_g": 3
+    },
+    {
+      "name": "#42 Halal Chipotle Chicken Cheese Steak (Bowl)",
+      "category": "Hot Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 642,
+      "protein_g": 37,
+      "carbs_g": 12,
+      "fat_g": 49,
+      "fiber_g": 1
+    },
+    {
+      "name": "#55 Halal Big Kahuna Chicken Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 regular sub",
+      "calories": 719,
+      "protein_g": 51,
+      "carbs_g": 72,
+      "fat_g": 25,
+      "fiber_g": 4
+    },
+    {
+      "name": "#55 Halal Big Kahuna Chicken Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 giant sub",
+      "calories": 1437,
+      "protein_g": 103,
+      "carbs_g": 143,
+      "fat_g": 49,
+      "fiber_g": 7
+    },
+    {
+      "name": "#55 Halal Big Kahuna Chicken Cheese Steak (Wrap)",
+      "category": "Hot Subs",
+      "serving": "1 wrap",
+      "calories": 697,
+      "protein_g": 48,
+      "carbs_g": 60,
+      "fat_g": 30,
+      "fiber_g": 3
+    },
+    {
+      "name": "#55 Halal Big Kahuna Chicken Cheese Steak (Bowl)",
+      "category": "Hot Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 407,
+      "protein_g": 40,
+      "carbs_g": 12,
+      "fat_g": 22,
+      "fiber_g": 1
+    },
+    {
+      "name": "#44 Halal Buffalo Chicken Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 regular sub",
+      "calories": 872,
+      "protein_g": 50,
+      "carbs_g": 69,
+      "fat_g": 43,
+      "fiber_g": 4
+    },
+    {
+      "name": "#44 Halal Buffalo Chicken Cheese Steak",
+      "category": "Hot Subs",
+      "serving": "1 giant sub",
+      "calories": 1740,
+      "protein_g": 101,
+      "carbs_g": 138,
+      "fat_g": 86,
+      "fiber_g": 8
+    },
+    {
+      "name": "#44 Halal Buffalo Chicken Cheese Steak (Wrap)",
+      "category": "Hot Subs",
+      "serving": "1 wrap",
+      "calories": 853,
+      "protein_g": 47,
+      "carbs_g": 59,
+      "fat_g": 48,
+      "fiber_g": 4
+    },
+    {
+      "name": "#44 Halal Buffalo Chicken Cheese Steak (Bowl)",
+      "category": "Hot Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 563,
+      "protein_g": 39,
+      "carbs_g": 11,
+      "fat_g": 40,
+      "fiber_g": 2
+    },
+    {
+      "name": "#31 Halal Chicken California",
+      "category": "Hot Subs",
+      "serving": "1 regular sub",
+      "calories": 909,
+      "protein_g": 49,
+      "carbs_g": 66,
+      "fat_g": 49,
+      "fiber_g": 4
+    },
+    {
+      "name": "#31 Halal Chicken California",
+      "category": "Hot Subs",
+      "serving": "1 giant sub",
+      "calories": 1815,
+      "protein_g": 98,
+      "carbs_g": 132,
+      "fat_g": 98,
+      "fiber_g": 7
+    },
+    {
+      "name": "#31 Halal Chicken California (Wrap)",
+      "category": "Hot Subs",
+      "serving": "1 wrap",
+      "calories": 890,
+      "protein_g": 46,
+      "carbs_g": 56,
+      "fat_g": 54,
+      "fiber_g": 3
+    },
+    {
+      "name": "#31 Halal Chicken California (Bowl)",
+      "category": "Hot Subs",
+      "serving": "1 bowl (Sub in a Tub)",
+      "calories": 600,
+      "protein_g": 38,
+      "carbs_g": 8,
+      "fat_g": 46,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chips (Regular)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 regular",
+      "calories": 240,
+      "protein_g": 3,
+      "carbs_g": 23,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Fountain Drink (Regular)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 regular",
+      "calories": 279,
+      "protein_g": 0,
+      "carbs_g": 76,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fountain Drink (Giant)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 giant",
+      "calories": 405,
+      "protein_g": 0,
+      "carbs_g": 110,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bottled Water (20 oz)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 20 oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Soda Bottle (20 oz)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 20 oz",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 69,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Soda Bottle (2 Liter)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 2 liter",
+      "calories": 845,
+      "protein_g": 0,
+      "carbs_g": 231,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Chopped Pepper Relish (16 oz)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 16 oz",
+      "calories": 66,
+      "protein_g": 2,
+      "carbs_g": 14,
+      "fat_g": 0,
+      "fiber_g": 5
+    },
+    {
+      "name": "Celsius (12 oz)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 12 oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gatorade (20 oz)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 20 oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 36,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sobe Drink (20 oz)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 20 oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sobe Drink (Each)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 each",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "AMP Energy Drink (Each)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 each",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Stubborn Soda (12 oz Can)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 12 oz can",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Life WTR (20 oz)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 20 oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pure Leaf Tea (18.5 oz)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 18.5 oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 38,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Juice (Regular)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 regular",
+      "calories": 210,
+      "protein_g": 3,
+      "carbs_g": 51,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cookie (Regular)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 regular",
+      "calories": 280,
+      "protein_g": 3,
+      "carbs_g": 37,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cookie (Three Pack)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 three pack",
+      "calories": 840,
+      "protein_g": 9,
+      "carbs_g": 111,
+      "fat_g": 42,
+      "fiber_g": 6
+    },
+    {
+      "name": "Cookie (GF SnickerDoodle)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 gf snickerdoodle",
+      "calories": 210,
+      "protein_g": 1,
+      "carbs_g": 34,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cookie (Mini Pack)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 mini pack",
+      "calories": 770,
+      "protein_g": 8,
+      "carbs_g": 102,
+      "fat_g": 38,
+      "fiber_g": 6
+    },
+    {
+      "name": "GF Snickerdoodle (Regular)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 regular",
+      "calories": 210,
+      "protein_g": 1,
+      "carbs_g": 34,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brownie (Regular)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 regular",
+      "calories": 500,
+      "protein_g": 5,
+      "carbs_g": 62,
+      "fat_g": 28,
+      "fiber_g": 3
+    },
+    {
+      "name": "Tastykake (Regular)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 regular",
+      "calories": 220,
+      "protein_g": 2,
+      "carbs_g": 39,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "French Fries (6 oz)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 6 oz",
+      "calories": 372,
+      "protein_g": 4,
+      "carbs_g": 40,
+      "fat_g": 23,
+      "fiber_g": 2
+    },
+    {
+      "name": "French Fries (5 oz)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 5 oz",
+      "calories": 310,
+      "protein_g": 3,
+      "carbs_g": 34,
+      "fat_g": 19,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bubly (16 oz Can)",
+      "category": "Sides, Drinks, & Desserts",
+      "serving": "1 16 oz can",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweetened Iced Tea (Gallon)",
+      "category": "Catering",
+      "serving": "1 gallon",
+      "calories": 1317,
+      "protein_g": 0,
+      "carbs_g": 340,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweetened Iced Tea (Gallon)",
+      "category": "Catering",
+      "serving": "1 gallon",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade (Gallon)",
+      "category": "Catering",
+      "serving": "1 gallon",
+      "calories": 1920,
+      "protein_g": 0,
+      "carbs_g": 496,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "#1 Porkroll, Egg and Cheese",
+      "category": "Breakfast",
+      "serving": "1 mini sub",
+      "calories": 614,
+      "protein_g": 30,
+      "carbs_g": 43,
+      "fat_g": 36,
+      "fiber_g": 2
+    },
+    {
+      "name": "#1 Porkroll, Egg and Cheese",
+      "category": "Breakfast",
+      "serving": "1 regular sub",
+      "calories": 838,
+      "protein_g": 40,
+      "carbs_g": 64,
+      "fat_g": 48,
+      "fiber_g": 2
+    },
+    {
+      "name": "#2 Bacon, Egg and Cheese",
+      "category": "Breakfast",
+      "serving": "1 mini sub",
+      "calories": 484,
+      "protein_g": 27,
+      "carbs_g": 41,
+      "fat_g": 24,
+      "fiber_g": 2
+    },
+    {
+      "name": "#2 Bacon, Egg and Cheese",
+      "category": "Breakfast",
+      "serving": "1 regular sub",
+      "calories": 672,
+      "protein_g": 35,
+      "carbs_g": 62,
+      "fat_g": 32,
+      "fiber_g": 2
+    },
+    {
+      "name": "#3 Sausage, Egg and Cheese",
+      "category": "Breakfast",
+      "serving": "1 mini sub",
+      "calories": 852,
+      "protein_g": 33,
+      "carbs_g": 41,
+      "fat_g": 60,
+      "fiber_g": 2
+    },
+    {
+      "name": "#3 Sausage, Egg and Cheese",
+      "category": "Breakfast",
+      "serving": "1 regular sub",
+      "calories": 1124,
+      "protein_g": 43,
+      "carbs_g": 62,
+      "fat_g": 77,
+      "fiber_g": 2
+    },
+    {
+      "name": "#4 Ham, Egg and Cheese",
+      "category": "Breakfast",
+      "serving": "1 mini sub",
+      "calories": 460,
+      "protein_g": 30,
+      "carbs_g": 43,
+      "fat_g": 19,
+      "fiber_g": 2
+    },
+    {
+      "name": "#4 Ham, Egg and Cheese",
+      "category": "Breakfast",
+      "serving": "1 regular sub",
+      "calories": 635,
+      "protein_g": 39,
+      "carbs_g": 64,
+      "fat_g": 25,
+      "fiber_g": 2
+    },
+    {
+      "name": "#5 Steak, Egg and Cheese",
+      "category": "Breakfast",
+      "serving": "1 mini sub",
+      "calories": 513,
+      "protein_g": 40,
+      "carbs_g": 41,
+      "fat_g": 20,
+      "fiber_g": 2
+    },
+    {
+      "name": "#5 Steak, Egg and Cheese",
+      "category": "Breakfast",
+      "serving": "1 regular sub",
+      "calories": 706,
+      "protein_g": 53,
+      "carbs_g": 62,
+      "fat_g": 26,
+      "fiber_g": 2
+    },
+    {
+      "name": "#7 Bacon, Egg, Cheese, Peppers and Mushrooms",
+      "category": "Breakfast",
+      "serving": "1 regular sub",
+      "calories": 662,
+      "protein_g": 37,
+      "carbs_g": 61,
+      "fat_g": 30,
+      "fiber_g": 2
+    },
+    {
+      "name": "#8 Cheese, Ham, Bacon, Peppers and Mushrooms",
+      "category": "Breakfast",
+      "serving": "1 regular sub",
+      "calories": 701,
+      "protein_g": 43,
+      "carbs_g": 62,
+      "fat_g": 31,
+      "fiber_g": 2
+    },
+    {
+      "name": "Egg and Cheese",
+      "category": "Breakfast",
+      "serving": "1 mini sub",
+      "calories": 452,
+      "protein_g": 23,
+      "carbs_g": 42,
+      "fat_g": 21,
+      "fiber_g": 2
+    },
+    {
+      "name": "#54 Big Kahuna Hot Veggie (Regular)",
+      "category": "Miscellaneous",
+      "serving": "1 regular",
+      "calories": 715,
+      "protein_g": 39,
+      "carbs_g": 67,
+      "fat_g": 33,
+      "fiber_g": 5
+    },
+    {
+      "name": "#87 Teriyaki Chicken (Regular)",
+      "category": "Miscellaneous",
+      "serving": "1 regular",
+      "calories": 605,
+      "protein_g": 46,
+      "carbs_g": 65,
+      "fat_g": 17,
+      "fiber_g": 3
+    },
+    {
+      "name": "#88 Teriyaki Steak (Regular)",
+      "category": "Miscellaneous",
+      "serving": "1 regular",
+      "calories": 1945,
+      "protein_g": 178,
+      "carbs_g": 89,
+      "fat_g": 97,
+      "fiber_g": 3
+    },
+    {
+      "name": "#6 Halal Roast Beef and Provolone (Mini)",
+      "category": "Miscellaneous",
+      "serving": "1 mini",
+      "calories": 508,
+      "protein_g": 29,
+      "carbs_g": 46,
+      "fat_g": 24,
+      "fiber_g": 3
+    },
+    {
+      "name": "#6 Halal Roast Beef and Provolone (Regular)",
+      "category": "Miscellaneous",
+      "serving": "1 regular",
+      "calories": 831,
+      "protein_g": 44,
+      "carbs_g": 70,
+      "fat_g": 43,
+      "fiber_g": 4
+    },
+    {
+      "name": "#6 Halal Roast Beef and Provolone (Giant)",
+      "category": "Miscellaneous",
+      "serving": "1 giant",
+      "calories": 1612,
+      "protein_g": 85,
+      "carbs_g": 138,
+      "fat_g": 83,
+      "fiber_g": 8
+    },
+    {
+      "name": "#7 Halal Turkey Breast and Provolone (Mini)",
+      "category": "Miscellaneous",
+      "serving": "1 mini",
+      "calories": 480,
+      "protein_g": 25,
+      "carbs_g": 47,
+      "fat_g": 22,
+      "fiber_g": 3
+    },
+    {
+      "name": "#7 Halal Turkey Breast and Provolone (Regular)",
+      "category": "Miscellaneous",
+      "serving": "1 regular",
+      "calories": 796,
+      "protein_g": 39,
+      "carbs_g": 71,
+      "fat_g": 40,
+      "fiber_g": 4
+    },
+    {
+      "name": "#7 Halal Turkey Breast and Provolone (Giant)",
+      "category": "Miscellaneous",
+      "serving": "1 giant",
+      "calories": 1543,
+      "protein_g": 76,
+      "carbs_g": 140,
+      "fat_g": 77,
+      "fiber_g": 8
+    },
+    {
+      "name": "#9 Halal Club Supreme (Mini)",
+      "category": "Miscellaneous",
+      "serving": "1 mini",
+      "calories": 672,
+      "protein_g": 33,
+      "carbs_g": 48,
+      "fat_g": 40,
+      "fiber_g": 3
+    },
+    {
+      "name": "#9 Halal Club Supreme (Regular)",
+      "category": "Miscellaneous",
+      "serving": "1 regular",
+      "calories": 1182,
+      "protein_g": 56,
+      "carbs_g": 75,
+      "fat_g": 75,
+      "fiber_g": 4
+    },
+    {
+      "name": "#9 Halal Club Supreme (Giant)",
+      "category": "Miscellaneous",
+      "serving": "1 giant",
+      "calories": 2263,
+      "protein_g": 98,
+      "carbs_g": 145,
+      "fat_g": 147,
+      "fiber_g": 8
+    },
+    {
+      "name": "Halal Sliced Buffalo Chicken Sub (Mini)",
+      "category": "Miscellaneous",
+      "serving": "1 mini",
+      "calories": 503,
+      "protein_g": 27,
+      "carbs_g": 46,
+      "fat_g": 23,
+      "fiber_g": 3
+    },
+    {
+      "name": "Halal Sliced Buffalo Chicken Sub (Regular)",
+      "category": "Miscellaneous",
+      "serving": "1 regular",
+      "calories": 834,
+      "protein_g": 43,
+      "carbs_g": 69,
+      "fat_g": 41,
+      "fiber_g": 4
+    },
+    {
+      "name": "Halal Sliced Buffalo Chicken Sub (Giant)",
+      "category": "Miscellaneous",
+      "serving": "1 giant",
+      "calories": 1619,
+      "protein_g": 84,
+      "carbs_g": 137,
+      "fat_g": 79,
+      "fiber_g": 8
+    },
+    {
+      "name": "Kid's Drink (12 oz)",
+      "category": "Kid's Items",
+      "serving": "1 12 oz",
+      "calories": 152,
+      "protein_g": 0,
+      "carbs_g": 41,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kid's Sub Ham (Kids)",
+      "category": "Kid's Items",
+      "serving": "1 kids",
+      "calories": 237,
+      "protein_g": 14,
+      "carbs_g": 33,
+      "fat_g": 6,
+      "fiber_g": 2
+    },
+    {
+      "name": "Kid's Sub Turkey (Kids)",
+      "category": "Kid's Items",
+      "serving": "1 kids",
+      "calories": 241,
+      "protein_g": 17,
+      "carbs_g": 32,
+      "fat_g": 5,
+      "fiber_g": 2
+    },
+    {
+      "name": "Kid's Sub Salami (Kids)",
+      "category": "Kid's Items",
+      "serving": "1 kids",
+      "calories": 265,
+      "protein_g": 12,
+      "carbs_g": 33,
+      "fat_g": 10,
+      "fiber_g": 2
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "chain": "RXBAR",
+  "slug": "rxbar",
+  "aliases": [
+    "rxbar",
+    "rx bar",
+    "rxbars",
+    "rx bars"
+  ],
+  "kind": "supplement",
+  "source_url": "https://shop.rxbar.com/shop/protein-bars.html",
+  "source_kind": "official",
+  "retrieved": "2026-10-15",
+  "notes": "Text Nutrition Facts on RXBAR's official store shop.rxbar.com/shop/<product>.html (e.g. chocolate-sea-salt-box-of-12-bars, rxbar-high-protein-vanilla-peanut-butter, nut-butter-oat-protein-bar-peanut-butter-dark-chocolate). www.rxbar.com product pages returned 404/405.",
+  "items": [
+    {
+      "name": "Protein Bar, Chocolate Sea Salt",
+      "category": "Bars",
+      "serving": "1 bar (52 g)",
+      "calories": 200,
+      "protein_g": 12,
+      "carbs_g": 23,
+      "fat_g": 8,
+      "fiber_g": 5
+    },
+    {
+      "name": "Protein Bar, Blueberry",
+      "category": "Bars",
+      "serving": "1 bar (52 g)",
+      "calories": 180,
+      "protein_g": 12,
+      "carbs_g": 24,
+      "fat_g": 6,
+      "fiber_g": 6
+    },
+    {
+      "name": "Protein Bar, Coconut Chocolate",
+      "category": "Bars",
+      "serving": "1 bar (52 g)",
+      "calories": 200,
+      "protein_g": 12,
+      "carbs_g": 23,
+      "fat_g": 8,
+      "fiber_g": 5
+    },
+    {
+      "name": "Protein Bar, Peanut Butter Chocolate",
+      "category": "Bars",
+      "serving": "1 bar (52 g)",
+      "calories": 210,
+      "protein_g": 12,
+      "carbs_g": 23,
+      "fat_g": 9,
+      "fiber_g": 4
+    },
+    {
+      "name": "Protein Bar, Peanut Butter",
+      "category": "Bars",
+      "serving": "1 bar (52 g)",
+      "calories": 190,
+      "protein_g": 12,
+      "carbs_g": 24,
+      "fat_g": 7,
+      "fiber_g": 4
+    },
+    {
+      "name": "Protein Bar, Vanilla Almond",
+      "category": "Bars",
+      "serving": "1 bar (52 g)",
+      "calories": 190,
+      "protein_g": 12,
+      "carbs_g": 24,
+      "fat_g": 7,
+      "fiber_g": 5
+    },
+    {
+      "name": "Protein Bar, Strawberry",
+      "category": "Bars",
+      "serving": "1 bar (52 g)",
+      "calories": 190,
+      "protein_g": 12,
+      "carbs_g": 24,
+      "fat_g": 7,
+      "fiber_g": 6
+    },
+    {
+      "name": "High Protein Bar, Vanilla Peanut Butter",
+      "category": "Bars",
+      "serving": "1 bar (60 g)",
+      "calories": 270,
+      "protein_g": 18,
+      "carbs_g": 21,
+      "fat_g": 13,
+      "fiber_g": 4
+    },
+    {
+      "name": "Nut Butter & Oat Protein Bar, Dark Chocolate Peanut Butter",
+      "category": "Bars",
+      "serving": "1 bar (55 g)",
+      "calories": 230,
+      "protein_g": 10,
+      "carbs_g": 28,
+      "fat_g": 9,
+      "fiber_g": 4
+    },
+    {
+      "name": "Nut Butter & Oat Protein Bar, Honey Cinnamon Peanut Butter",
+      "category": "Bars",
+      "serving": "1 bar (55 g)",
+      "calories": 220,
+      "protein_g": 10,
+      "carbs_g": 29,
+      "fat_g": 8,
+      "fiber_g": 4
+    }
+  ]
+}

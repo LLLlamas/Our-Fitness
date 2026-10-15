@@ -1,0 +1,70 @@
+{
+  "chain": "BSN",
+  "slug": "bsn",
+  "aliases": [
+    "bsn",
+    "syntha-6",
+    "syntha 6",
+    "syntha6",
+    "true-mass",
+    "true mass",
+    "truemass"
+  ],
+  "kind": "supplement",
+  "source_url": "https://www.gobsn.com/products/syntha-6-protein",
+  "source_kind": "official",
+  "retrieved": "2026-10-15",
+  "notes": "Nutrition Facts panel images (…-NFP.png) on gobsn.com (BSN's official US store): /products/syntha-6-protein and /products/true-mass. True-Mass 1200, Syntha-6 Isolate and Protein Crisp pages show no readable facts panel (Protein Crisp's page gives only a 230-240 cal range), so they are omitted.",
+  "items": [
+    {
+      "name": "Syntha-6, Chocolate Milkshake",
+      "category": "Protein Blend",
+      "serving": "1 scoop (47 g)",
+      "calories": 190,
+      "protein_g": 22,
+      "carbs_g": 14,
+      "fat_g": 5,
+      "fiber_g": 6
+    },
+    {
+      "name": "Syntha-6, Vanilla Ice Cream",
+      "category": "Protein Blend",
+      "serving": "1 scoop (47 g)",
+      "calories": 190,
+      "protein_g": 22,
+      "carbs_g": 15,
+      "fat_g": 5,
+      "fiber_g": 6
+    },
+    {
+      "name": "Syntha-6, Cookies and Cream",
+      "category": "Protein Blend",
+      "serving": "1 scoop (47 g)",
+      "calories": 200,
+      "protein_g": 22,
+      "carbs_g": 14,
+      "fat_g": 5,
+      "fiber_g": 8
+    },
+    {
+      "name": "True-Mass, Chocolate Milkshake",
+      "category": "Mass Gainer",
+      "serving": "3 rounded scoops (165 g)",
+      "calories": 690,
+      "protein_g": 47,
+      "carbs_g": 87,
+      "fat_g": 17,
+      "fiber_g": 5
+    },
+    {
+      "name": "True-Mass, Vanilla Ice Cream",
+      "category": "Mass Gainer",
+      "serving": "3 rounded scoops (165 g)",
+      "calories": 690,
+      "protein_g": 50,
+      "carbs_g": 85,
+      "fat_g": 16,
+      "fiber_g": 4
+    }
+  ]
+}

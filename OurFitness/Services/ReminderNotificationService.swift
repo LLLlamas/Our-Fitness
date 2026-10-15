@@ -589,6 +589,14 @@ final class AppNotificationDelegate: NSObject, UNUserNotificationCenterDelegate 
         let actionId = response.actionIdentifier
         Task { @MainActor in
             defer { completionHandler() }
+            // Meal-logging nudges (MealReminderService) carry no action
+            // buttons; a body tap opens the Meals tab.
+            if MealReminderService.isMealIdentifier(requestId) {
+                if actionId == UNNotificationDefaultActionIdentifier {
+                    NotificationCenter.default.post(name: .openMealsTab, object: nil)
+                }
+                return
+            }
             guard let container,
                   let reminderId = ReminderNotificationService.reminderId(fromIdentifier: requestId)
             else { return }
@@ -614,7 +622,9 @@ final class AppNotificationDelegate: NSObject, UNUserNotificationCenterDelegate 
 
     /// Only reminder notifications bannered in foreground; every other
     /// notification (e.g. the live-session end ping) keeps today's behavior of
-    /// no delegate handling it, so it stays silent in foreground.
+    /// no delegate handling it, so it stays silent in foreground. That includes
+    /// meal-logging nudges ("mealLog.*") on purpose: with the app open, the
+    /// in-app meal toast already covers it, so a banner would double-nag.
     nonisolated func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification,

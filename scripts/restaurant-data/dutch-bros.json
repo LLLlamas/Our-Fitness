@@ -1,0 +1,8358 @@
+{
+  "chain": "Dutch Bros",
+  "slug": "dutch-bros",
+  "aliases": [
+    "dutch bros",
+    "dutch brothers",
+    "dutchbros",
+    "dutch bro",
+    "dutch bros coffee"
+  ],
+  "kind": "coffee",
+  "source_url": "https://www.dutchbros.com/website/menu/nutritional-guide.pdf",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Official Dutch Bros Coffee Nutritional Guide PDF linked from dutchbros.com/menu. Drinks as built by the guide (default milk/recipe); size ounces not stated in the guide. '<1' values recorded as 0. Dropped rows whose columns are visibly shifted in the source (saturated fat greater than total fat, or zero carbs on a sweet drink): Pumpkin Pie Spice Breve (Hot) large; Pumpkin Pie Spice Breve (Hot) medium; Pumpkin Pie Spice Breve (Hot) small; Pumpkin Pie Spice Breve (Iced) large; Pumpkin Pie Spice Breve (Iced) medium; Pumpkin Pie Spice Breve (Iced) small. Atwater outliers (kept as published): Passion Watermelon Myst (Iced) [medium] (80 cal vs Atwater 108); Tropical Myst (Iced) [medium] (80 cal vs Atwater 112); OG Gummy Bear Myst (Iced) [medium] (80 cal vs Atwater 104).",
+  "items": [
+    {
+      "name": "911 (Hot)",
+      "category": "Dutch Faves",
+      "serving": "large",
+      "calories": 630,
+      "protein_g": 14,
+      "carbs_g": 62,
+      "fat_g": 37,
+      "fiber_g": 2
+    },
+    {
+      "name": "911 (Hot)",
+      "category": "Dutch Faves",
+      "serving": "medium",
+      "calories": 490,
+      "protein_g": 10,
+      "carbs_g": 58,
+      "fat_g": 25,
+      "fiber_g": 2
+    },
+    {
+      "name": "911 (Hot)",
+      "category": "Dutch Faves",
+      "serving": "small",
+      "calories": 350,
+      "protein_g": 6,
+      "carbs_g": 54,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "911 (Iced)",
+      "category": "Dutch Faves",
+      "serving": "large",
+      "calories": 490,
+      "protein_g": 10,
+      "carbs_g": 58,
+      "fat_g": 25,
+      "fiber_g": 2
+    },
+    {
+      "name": "911 (Iced)",
+      "category": "Dutch Faves",
+      "serving": "medium",
+      "calories": 350,
+      "protein_g": 6,
+      "carbs_g": 54,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "911 (Iced)",
+      "category": "Dutch Faves",
+      "serving": "small",
+      "calories": 280,
+      "protein_g": 4,
+      "carbs_g": 52,
+      "fat_g": 7,
+      "fiber_g": 2
+    },
+    {
+      "name": "Annihilator (Hot)",
+      "category": "Dutch Faves",
+      "serving": "large",
+      "calories": 640,
+      "protein_g": 17,
+      "carbs_g": 40,
+      "fat_g": 46,
+      "fiber_g": 1
+    },
+    {
+      "name": "Annihilator (Hot)",
+      "category": "Dutch Faves",
+      "serving": "medium",
+      "calories": 560,
+      "protein_g": 14,
+      "carbs_g": 36,
+      "fat_g": 39,
+      "fiber_g": 1
+    },
+    {
+      "name": "Annihilator (Hot)",
+      "category": "Dutch Faves",
+      "serving": "small",
+      "calories": 420,
+      "protein_g": 10,
+      "carbs_g": 32,
+      "fat_g": 27,
+      "fiber_g": 1
+    },
+    {
+      "name": "Annihilator (Iced)",
+      "category": "Dutch Faves",
+      "serving": "large",
+      "calories": 500,
+      "protein_g": 12,
+      "carbs_g": 36,
+      "fat_g": 34,
+      "fiber_g": 1
+    },
+    {
+      "name": "Annihilator (Iced)",
+      "category": "Dutch Faves",
+      "serving": "medium",
+      "calories": 420,
+      "protein_g": 10,
+      "carbs_g": 32,
+      "fat_g": 27,
+      "fiber_g": 1
+    },
+    {
+      "name": "Annihilator (Iced)",
+      "category": "Dutch Faves",
+      "serving": "small",
+      "calories": 280,
+      "protein_g": 6,
+      "carbs_g": 28,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramelizer (Hot)",
+      "category": "Dutch Faves",
+      "serving": "large",
+      "calories": 590,
+      "protein_g": 18,
+      "carbs_g": 93,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramelizer (Hot)",
+      "category": "Dutch Faves",
+      "serving": "medium",
+      "calories": 520,
+      "protein_g": 15,
+      "carbs_g": 83,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramelizer (Hot)",
+      "category": "Dutch Faves",
+      "serving": "small",
+      "calories": 400,
+      "protein_g": 11,
+      "carbs_g": 67,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramelizer (Iced)",
+      "category": "Dutch Faves",
+      "serving": "large",
+      "calories": 470,
+      "protein_g": 14,
+      "carbs_g": 76,
+      "fat_g": 13,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramelizer (Iced)",
+      "category": "Dutch Faves",
+      "serving": "medium",
+      "calories": 400,
+      "protein_g": 11,
+      "carbs_g": 67,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramelizer (Iced)",
+      "category": "Dutch Faves",
+      "serving": "small",
+      "calories": 280,
+      "protein_g": 6,
+      "carbs_g": 50,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramelizer Cold Brew Toasted",
+      "category": "Dutch Faves",
+      "serving": "large",
+      "calories": 200,
+      "protein_g": 4,
+      "carbs_g": 40,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramelizer Cold Brew Toasted",
+      "category": "Dutch Faves",
+      "serving": "medium",
+      "calories": 190,
+      "protein_g": 3,
+      "carbs_g": 39,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramelizer Cold Brew Toasted",
+      "category": "Dutch Faves",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 3,
+      "carbs_g": 38,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramelizer Cold Brew (Iced)",
+      "category": "Dutch Faves",
+      "serving": "large",
+      "calories": 200,
+      "protein_g": 3,
+      "carbs_g": 40,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramelizer Cold Brew (Iced)",
+      "category": "Dutch Faves",
+      "serving": "medium",
+      "calories": 190,
+      "protein_g": 3,
+      "carbs_g": 39,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramelizer Cold Brew (Iced)",
+      "category": "Dutch Faves",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 3,
+      "carbs_g": 38,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramelizer Nitro Cold Brew (Iced)",
+      "category": "Dutch Faves",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 3,
+      "carbs_g": 39,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cocomo (Hot)",
+      "category": "Dutch Faves",
+      "serving": "large",
+      "calories": 560,
+      "protein_g": 18,
+      "carbs_g": 88,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cocomo (Hot)",
+      "category": "Dutch Faves",
+      "serving": "medium",
+      "calories": 490,
+      "protein_g": 15,
+      "carbs_g": 78,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cocomo (Hot)",
+      "category": "Dutch Faves",
+      "serving": "small",
+      "calories": 370,
+      "protein_g": 11,
+      "carbs_g": 61,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cocomo (Iced)",
+      "category": "Dutch Faves",
+      "serving": "large",
+      "calories": 440,
+      "protein_g": 14,
+      "carbs_g": 71,
+      "fat_g": 13,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cocomo (Iced)",
+      "category": "Dutch Faves",
+      "serving": "medium",
+      "calories": 370,
+      "protein_g": 11,
+      "carbs_g": 61,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cocomo (Iced)",
+      "category": "Dutch Faves",
+      "serving": "small",
+      "calories": 250,
+      "protein_g": 6,
+      "carbs_g": 45,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Double Torture (Hot)",
+      "category": "Dutch Faves",
+      "serving": "large",
+      "calories": 500,
+      "protein_g": 17,
+      "carbs_g": 78,
+      "fat_g": 15,
+      "fiber_g": 2
+    },
+    {
+      "name": "Double Torture (Hot)",
+      "category": "Dutch Faves",
+      "serving": "medium",
+      "calories": 430,
+      "protein_g": 14,
+      "carbs_g": 68,
+      "fat_g": 13,
+      "fiber_g": 1
+    },
+    {
+      "name": "Double Torture (Hot)",
+      "category": "Dutch Faves",
+      "serving": "small",
+      "calories": 310,
+      "protein_g": 9,
+      "carbs_g": 52,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Double Torture (Iced)",
+      "category": "Dutch Faves",
+      "serving": "large",
+      "calories": 380,
+      "protein_g": 12,
+      "carbs_g": 62,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Double Torture (Iced)",
+      "category": "Dutch Faves",
+      "serving": "medium",
+      "calories": 310,
+      "protein_g": 9,
+      "carbs_g": 52,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Double Torture (Iced)",
+      "category": "Dutch Faves",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 5,
+      "carbs_g": 35,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Golden Eagle (Hot)",
+      "category": "Dutch Faves",
+      "serving": "large",
+      "calories": 650,
+      "protein_g": 17,
+      "carbs_g": 42,
+      "fat_g": 46,
+      "fiber_g": 1
+    },
+    {
+      "name": "Golden Eagle (Hot)",
+      "category": "Dutch Faves",
+      "serving": "medium",
+      "calories": 570,
+      "protein_g": 14,
+      "carbs_g": 39,
+      "fat_g": 39,
+      "fiber_g": 1
+    },
+    {
+      "name": "Golden Eagle (Hot)",
+      "category": "Dutch Faves",
+      "serving": "small",
+      "calories": 430,
+      "protein_g": 10,
+      "carbs_g": 34,
+      "fat_g": 27,
+      "fiber_g": 1
+    },
+    {
+      "name": "Golden Eagle (Iced)",
+      "category": "Dutch Faves",
+      "serving": "large",
+      "calories": 540,
+      "protein_g": 12,
+      "carbs_g": 46,
+      "fat_g": 34,
+      "fiber_g": 1
+    },
+    {
+      "name": "Golden Eagle (Iced)",
+      "category": "Dutch Faves",
+      "serving": "medium",
+      "calories": 460,
+      "protein_g": 10,
+      "carbs_g": 43,
+      "fat_g": 27,
+      "fiber_g": 1
+    },
+    {
+      "name": "Golden Eagle (Iced)",
+      "category": "Dutch Faves",
+      "serving": "small",
+      "calories": 320,
+      "protein_g": 6,
+      "carbs_g": 39,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Golden Eagle Cold Brew (Iced)",
+      "category": "Dutch Faves",
+      "serving": "large",
+      "calories": 260,
+      "protein_g": 3,
+      "carbs_g": 48,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Golden Eagle Cold Brew (Iced)",
+      "category": "Dutch Faves",
+      "serving": "medium",
+      "calories": 260,
+      "protein_g": 3,
+      "carbs_g": 47,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Golden Eagle Cold Brew (Iced)",
+      "category": "Dutch Faves",
+      "serving": "small",
+      "calories": 250,
+      "protein_g": 2,
+      "carbs_g": 46,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Golden Eagle Cold Brew Toasted",
+      "category": "Dutch Faves",
+      "serving": "large",
+      "calories": 270,
+      "protein_g": 3,
+      "carbs_g": 49,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Golden Eagle Cold Brew Toasted",
+      "category": "Dutch Faves",
+      "serving": "medium",
+      "calories": 260,
+      "protein_g": 3,
+      "carbs_g": 48,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Golden Eagle Cold Brew Toasted",
+      "category": "Dutch Faves",
+      "serving": "small",
+      "calories": 260,
+      "protein_g": 3,
+      "carbs_g": 47,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Golden Eagle Nitro Cold Brew (Iced)",
+      "category": "Dutch Faves",
+      "serving": "1 serving",
+      "calories": 260,
+      "protein_g": 3,
+      "carbs_g": 47,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kicker (Iced)",
+      "category": "Dutch Faves",
+      "serving": "large",
+      "calories": 500,
+      "protein_g": 12,
+      "carbs_g": 37,
+      "fat_g": 34,
+      "fiber_g": 1
+    },
+    {
+      "name": "Kicker (Iced)",
+      "category": "Dutch Faves",
+      "serving": "medium",
+      "calories": 420,
+      "protein_g": 10,
+      "carbs_g": 33,
+      "fat_g": 27,
+      "fiber_g": 1
+    },
+    {
+      "name": "Kicker (Iced)",
+      "category": "Dutch Faves",
+      "serving": "small",
+      "calories": 280,
+      "protein_g": 6,
+      "carbs_g": 29,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Kicker (Hot)",
+      "category": "Dutch Faves",
+      "serving": "large",
+      "calories": 710,
+      "protein_g": 17,
+      "carbs_g": 46,
+      "fat_g": 50,
+      "fiber_g": 1
+    },
+    {
+      "name": "Kicker (Hot)",
+      "category": "Dutch Faves",
+      "serving": "medium",
+      "calories": 610,
+      "protein_g": 14,
+      "carbs_g": 41,
+      "fat_g": 43,
+      "fiber_g": 1
+    },
+    {
+      "name": "Kicker (Hot)",
+      "category": "Dutch Faves",
+      "serving": "small",
+      "calories": 450,
+      "protein_g": 10,
+      "carbs_g": 35,
+      "fat_g": 30,
+      "fiber_g": 1
+    },
+    {
+      "name": "White Chocolate Mocha (Hot)",
+      "category": "Dutch Faves",
+      "serving": "large",
+      "calories": 650,
+      "protein_g": 19,
+      "carbs_g": 95,
+      "fat_g": 22,
+      "fiber_g": 1
+    },
+    {
+      "name": "White Chocolate Mocha (Hot)",
+      "category": "Dutch Faves",
+      "serving": "medium",
+      "calories": 560,
+      "protein_g": 17,
+      "carbs_g": 84,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "White Chocolate Mocha (Hot)",
+      "category": "Dutch Faves",
+      "serving": "small",
+      "calories": 420,
+      "protein_g": 12,
+      "carbs_g": 66,
+      "fat_g": 13,
+      "fiber_g": 1
+    },
+    {
+      "name": "White Chocolate Mocha (Iced)",
+      "category": "Dutch Faves",
+      "serving": "large",
+      "calories": 530,
+      "protein_g": 15,
+      "carbs_g": 79,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "White Chocolate Mocha (Iced)",
+      "category": "Dutch Faves",
+      "serving": "medium",
+      "calories": 440,
+      "protein_g": 12,
+      "carbs_g": 68,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "White Chocolate Mocha (Iced)",
+      "category": "Dutch Faves",
+      "serving": "small",
+      "calories": 300,
+      "protein_g": 8,
+      "carbs_g": 50,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "911 Zero Sugar Added (Hot)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "large",
+      "calories": 490,
+      "protein_g": 15,
+      "carbs_g": 19,
+      "fat_g": 40,
+      "fiber_g": 2
+    },
+    {
+      "name": "911 Zero Sugar Added (Hot)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "medium",
+      "calories": 350,
+      "protein_g": 11,
+      "carbs_g": 15,
+      "fat_g": 28,
+      "fiber_g": 2
+    },
+    {
+      "name": "911 Zero Sugar Added (Hot)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "small",
+      "calories": 210,
+      "protein_g": 7,
+      "carbs_g": 11,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "911 Zero Sugar Added (Iced)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "large",
+      "calories": 350,
+      "protein_g": 11,
+      "carbs_g": 15,
+      "fat_g": 28,
+      "fiber_g": 2
+    },
+    {
+      "name": "911 Zero Sugar Added (Iced)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "medium",
+      "calories": 210,
+      "protein_g": 7,
+      "carbs_g": 11,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "911 Zero Sugar Added (Iced)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "small",
+      "calories": 70,
+      "protein_g": 3,
+      "carbs_g": 7,
+      "fat_g": 4,
+      "fiber_g": 2
+    },
+    {
+      "name": "Annihilator Zero Sugar Added (Hot)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "large",
+      "calories": 550,
+      "protein_g": 17,
+      "carbs_g": 19,
+      "fat_g": 46,
+      "fiber_g": 1
+    },
+    {
+      "name": "Annihilator Zero Sugar Added (Hot)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "medium",
+      "calories": 470,
+      "protein_g": 14,
+      "carbs_g": 16,
+      "fat_g": 39,
+      "fiber_g": 0
+    },
+    {
+      "name": "Annihilator Zero Sugar Added (Hot)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "small",
+      "calories": 330,
+      "protein_g": 10,
+      "carbs_g": 12,
+      "fat_g": 27,
+      "fiber_g": 0
+    },
+    {
+      "name": "Annihilator Zero Sugar Added (Iced)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "large",
+      "calories": 410,
+      "protein_g": 12,
+      "carbs_g": 15,
+      "fat_g": 34,
+      "fiber_g": 1
+    },
+    {
+      "name": "Annihilator Zero Sugar Added (Iced)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "medium",
+      "calories": 330,
+      "protein_g": 10,
+      "carbs_g": 12,
+      "fat_g": 27,
+      "fiber_g": 0
+    },
+    {
+      "name": "Annihilator Zero Sugar Added (Iced)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 6,
+      "carbs_g": 8,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramelizer Zero Sugar Added (Hot)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "large",
+      "calories": 660,
+      "protein_g": 17,
+      "carbs_g": 52,
+      "fat_g": 45,
+      "fiber_g": 6
+    },
+    {
+      "name": "Caramelizer Zero Sugar Added (Hot)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "medium",
+      "calories": 570,
+      "protein_g": 14,
+      "carbs_g": 48,
+      "fat_g": 39,
+      "fiber_g": 5
+    },
+    {
+      "name": "Caramelizer Zero Sugar Added (Hot)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "small",
+      "calories": 430,
+      "protein_g": 10,
+      "carbs_g": 44,
+      "fat_g": 27,
+      "fiber_g": 5
+    },
+    {
+      "name": "Caramelizer Zero Sugar Added (Iced)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "large",
+      "calories": 510,
+      "protein_g": 13,
+      "carbs_g": 48,
+      "fat_g": 33,
+      "fiber_g": 6
+    },
+    {
+      "name": "Caramelizer Zero Sugar Added (Iced)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "medium",
+      "calories": 430,
+      "protein_g": 10,
+      "carbs_g": 44,
+      "fat_g": 27,
+      "fiber_g": 5
+    },
+    {
+      "name": "Caramelizer Zero Sugar Added (Iced)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "small",
+      "calories": 290,
+      "protein_g": 6,
+      "carbs_g": 40,
+      "fat_g": 14,
+      "fiber_g": 5
+    },
+    {
+      "name": "Cocomo Zero Sugar Added (Hot)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "large",
+      "calories": 570,
+      "protein_g": 16,
+      "carbs_g": 32,
+      "fat_g": 43,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cocomo Zero Sugar Added (Hot)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "medium",
+      "calories": 490,
+      "protein_g": 14,
+      "carbs_g": 28,
+      "fat_g": 36,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cocomo Zero Sugar Added (Hot)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "small",
+      "calories": 350,
+      "protein_g": 10,
+      "carbs_g": 24,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cocomo Zero Sugar Added (Iced)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "large",
+      "calories": 430,
+      "protein_g": 12,
+      "carbs_g": 28,
+      "fat_g": 31,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cocomo Zero Sugar Added (Iced)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "medium",
+      "calories": 350,
+      "protein_g": 10,
+      "carbs_g": 24,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cocomo Zero Sugar Added (Iced)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "small",
+      "calories": 210,
+      "protein_g": 6,
+      "carbs_g": 20,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Torture Zero Sugar Added (Hot)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "large",
+      "calories": 510,
+      "protein_g": 15,
+      "carbs_g": 32,
+      "fat_g": 37,
+      "fiber_g": 2
+    },
+    {
+      "name": "Double Torture Zero Sugar Added (Hot)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "medium",
+      "calories": 430,
+      "protein_g": 12,
+      "carbs_g": 28,
+      "fat_g": 31,
+      "fiber_g": 1
+    },
+    {
+      "name": "Double Torture Zero Sugar Added (Hot)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "small",
+      "calories": 290,
+      "protein_g": 8,
+      "carbs_g": 24,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Double Torture Zero Sugar Added (Iced)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "large",
+      "calories": 370,
+      "protein_g": 11,
+      "carbs_g": 28,
+      "fat_g": 25,
+      "fiber_g": 2
+    },
+    {
+      "name": "Double Torture Zero Sugar Added (Iced)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "medium",
+      "calories": 290,
+      "protein_g": 8,
+      "carbs_g": 24,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Double Torture Zero Sugar Added (Iced)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "small",
+      "calories": 150,
+      "protein_g": 4,
+      "carbs_g": 20,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Golden Eagle Zero Sugar Added (Hot)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "large",
+      "calories": 600,
+      "protein_g": 16,
+      "carbs_g": 37,
+      "fat_g": 45,
+      "fiber_g": 6
+    },
+    {
+      "name": "Golden Eagle Zero Sugar Added (Hot)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "medium",
+      "calories": 520,
+      "protein_g": 13,
+      "carbs_g": 33,
+      "fat_g": 39,
+      "fiber_g": 5
+    },
+    {
+      "name": "Golden Eagle Zero Sugar Added (Hot)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "small",
+      "calories": 370,
+      "protein_g": 9,
+      "carbs_g": 29,
+      "fat_g": 27,
+      "fiber_g": 5
+    },
+    {
+      "name": "Golden Eagle Zero Sugar Added (Iced)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "large",
+      "calories": 460,
+      "protein_g": 12,
+      "carbs_g": 33,
+      "fat_g": 33,
+      "fiber_g": 6
+    },
+    {
+      "name": "Golden Eagle Zero Sugar Added (Iced)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "medium",
+      "calories": 370,
+      "protein_g": 9,
+      "carbs_g": 29,
+      "fat_g": 27,
+      "fiber_g": 5
+    },
+    {
+      "name": "Golden Eagle Zero Sugar Added (Iced)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "small",
+      "calories": 230,
+      "protein_g": 5,
+      "carbs_g": 25,
+      "fat_g": 14,
+      "fiber_g": 5
+    },
+    {
+      "name": "Kicker Zero Sugar Added (Hot)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "large",
+      "calories": 550,
+      "protein_g": 17,
+      "carbs_g": 19,
+      "fat_g": 46,
+      "fiber_g": 1
+    },
+    {
+      "name": "Kicker Zero Sugar Added (Hot)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "medium",
+      "calories": 470,
+      "protein_g": 14,
+      "carbs_g": 16,
+      "fat_g": 39,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kicker Zero Sugar Added (Hot)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "small",
+      "calories": 330,
+      "protein_g": 10,
+      "carbs_g": 12,
+      "fat_g": 27,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kicker Zero Sugar Added (Iced)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "large",
+      "calories": 410,
+      "protein_g": 12,
+      "carbs_g": 15,
+      "fat_g": 34,
+      "fiber_g": 1
+    },
+    {
+      "name": "Kicker Zero Sugar Added (Iced)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "medium",
+      "calories": 330,
+      "protein_g": 10,
+      "carbs_g": 12,
+      "fat_g": 27,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kicker Zero Sugar Added (Iced)",
+      "category": "Zero Sugar Added Dutch Faves",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 6,
+      "carbs_g": 8,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Americano (Hot)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Americano (Hot)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Americano (Hot)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Americano (Iced)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Americano (Iced)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Americano (Iced)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Americano w/ Cream (Hot)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 80,
+      "protein_g": 3,
+      "carbs_g": 4,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Americano w/ Cream (Hot)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 80,
+      "protein_g": 3,
+      "carbs_g": 4,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Americano w/ Cream (Hot)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 3,
+      "carbs_g": 4,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Americano w/ Cream (Iced)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 80,
+      "protein_g": 3,
+      "carbs_g": 4,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Americano w/ Cream (Iced)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 80,
+      "protein_g": 3,
+      "carbs_g": 4,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Americano w/ Cream (Iced)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 3,
+      "carbs_g": 4,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Latte (Hot)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 300,
+      "protein_g": 21,
+      "carbs_g": 33,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Latte (Hot)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 260,
+      "protein_g": 18,
+      "carbs_g": 28,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Latte (Hot)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 13,
+      "carbs_g": 20,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Latte (Iced)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 230,
+      "protein_g": 16,
+      "carbs_g": 26,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Latte (Iced)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 190,
+      "protein_g": 13,
+      "carbs_g": 20,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Latte (Iced)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 120,
+      "protein_g": 8,
+      "carbs_g": 13,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramel Latte (Hot)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 400,
+      "protein_g": 20,
+      "carbs_g": 59,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramel Latte (Hot)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 360,
+      "protein_g": 17,
+      "carbs_g": 54,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramel Latte (Hot)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 290,
+      "protein_g": 12,
+      "carbs_g": 46,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramel Latte (Iced)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 330,
+      "protein_g": 15,
+      "carbs_g": 52,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramel Latte (Iced)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 290,
+      "protein_g": 12,
+      "carbs_g": 46,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramel Latte (Iced)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 220,
+      "protein_g": 7,
+      "carbs_g": 39,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hazelnut Latte (Hot)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 360,
+      "protein_g": 20,
+      "carbs_g": 51,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hazelnut Latte (Hot)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 320,
+      "protein_g": 17,
+      "carbs_g": 46,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hazelnut Latte (Hot)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 250,
+      "protein_g": 12,
+      "carbs_g": 38,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hazelnut Latte (Iced)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 290,
+      "protein_g": 15,
+      "carbs_g": 43,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hazelnut Latte (Iced)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 250,
+      "protein_g": 12,
+      "carbs_g": 38,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hazelnut Latte (Iced)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 7,
+      "carbs_g": 31,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Salted Caramel Latte (Hot)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 380,
+      "protein_g": 20,
+      "carbs_g": 56,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Salted Caramel Latte (Hot)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 340,
+      "protein_g": 17,
+      "carbs_g": 51,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Salted Caramel Latte (Hot)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 270,
+      "protein_g": 12,
+      "carbs_g": 43,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Salted Caramel Latte (Iced)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 310,
+      "protein_g": 15,
+      "carbs_g": 48,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Salted Caramel Latte (Iced)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 270,
+      "protein_g": 12,
+      "carbs_g": 43,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Salted Caramel Latte (Iced)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 200,
+      "protein_g": 7,
+      "carbs_g": 36,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Latte (Hot)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 360,
+      "protein_g": 20,
+      "carbs_g": 51,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Latte (Hot)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 320,
+      "protein_g": 17,
+      "carbs_g": 46,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Latte (Hot)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 250,
+      "protein_g": 12,
+      "carbs_g": 38,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Latte (Iced)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 290,
+      "protein_g": 15,
+      "carbs_g": 43,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Latte (Iced)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 250,
+      "protein_g": 12,
+      "carbs_g": 38,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Latte (Iced)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 7,
+      "carbs_g": 31,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "White Chocolate Latte (Hot)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 390,
+      "protein_g": 21,
+      "carbs_g": 58,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "White Chocolate Latte (Hot)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 350,
+      "protein_g": 18,
+      "carbs_g": 52,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "White Chocolate Latte (Hot)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 280,
+      "protein_g": 13,
+      "carbs_g": 45,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "White Chocolate Latte (Iced)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 320,
+      "protein_g": 16,
+      "carbs_g": 50,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "White Chocolate Latte (Iced)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 280,
+      "protein_g": 13,
+      "carbs_g": 45,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "White Chocolate Latte (Iced)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 210,
+      "protein_g": 8,
+      "carbs_g": 37,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Oat Milk Latte (Hot)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 380,
+      "protein_g": 9,
+      "carbs_g": 48,
+      "fat_g": 16,
+      "fiber_g": 3
+    },
+    {
+      "name": "Oat Milk Latte (Hot)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 320,
+      "protein_g": 8,
+      "carbs_g": 41,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Oat Milk Latte (Hot)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 230,
+      "protein_g": 6,
+      "carbs_g": 30,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Oat Milk Latte (Iced)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 290,
+      "protein_g": 7,
+      "carbs_g": 37,
+      "fat_g": 12,
+      "fiber_g": 3
+    },
+    {
+      "name": "Oat Milk Latte (Iced)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 230,
+      "protein_g": 6,
+      "carbs_g": 30,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Oat Milk Latte (Iced)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 140,
+      "protein_g": 4,
+      "carbs_g": 19,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mocha (Hot)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 500,
+      "protein_g": 19,
+      "carbs_g": 69,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mocha (Hot)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 430,
+      "protein_g": 16,
+      "carbs_g": 59,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mocha (Hot)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 310,
+      "protein_g": 12,
+      "carbs_g": 43,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mocha (Iced)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 380,
+      "protein_g": 15,
+      "carbs_g": 53,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mocha (Iced)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 310,
+      "protein_g": 12,
+      "carbs_g": 43,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mocha (Iced)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 7,
+      "carbs_g": 26,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Dark Chocolate Mocha (Hot)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 570,
+      "protein_g": 18,
+      "carbs_g": 91,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Dark Chocolate Mocha (Hot)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 500,
+      "protein_g": 15,
+      "carbs_g": 81,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Dark Chocolate Mocha (Hot)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 380,
+      "protein_g": 11,
+      "carbs_g": 65,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Dark Chocolate Mocha (Iced)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 450,
+      "protein_g": 14,
+      "carbs_g": 74,
+      "fat_g": 13,
+      "fiber_g": 1
+    },
+    {
+      "name": "Dark Chocolate Mocha (Iced)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 380,
+      "protein_g": 11,
+      "carbs_g": 65,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Dark Chocolate Mocha (Iced)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 260,
+      "protein_g": 6,
+      "carbs_g": 48,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Salted Caramel Mocha (Hot)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 570,
+      "protein_g": 18,
+      "carbs_g": 90,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Salted Caramel Mocha (Hot)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 500,
+      "protein_g": 15,
+      "carbs_g": 80,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Salted Caramel Mocha (Hot)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 380,
+      "protein_g": 11,
+      "carbs_g": 63,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Salted Caramel Mocha (Iced)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 450,
+      "protein_g": 14,
+      "carbs_g": 73,
+      "fat_g": 13,
+      "fiber_g": 1
+    },
+    {
+      "name": "Salted Caramel Mocha (Iced)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 380,
+      "protein_g": 11,
+      "carbs_g": 63,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Salted Caramel Mocha (Iced)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 260,
+      "protein_g": 6,
+      "carbs_g": 47,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Mocha (Hot)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 550,
+      "protein_g": 18,
+      "carbs_g": 85,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Mocha (Hot)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 480,
+      "protein_g": 15,
+      "carbs_g": 75,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Mocha (Hot)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 360,
+      "protein_g": 11,
+      "carbs_g": 58,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Mocha (Iced)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 430,
+      "protein_g": 14,
+      "carbs_g": 68,
+      "fat_g": 13,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Mocha (Iced)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 360,
+      "protein_g": 11,
+      "carbs_g": 58,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Mocha (Iced)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 240,
+      "protein_g": 6,
+      "carbs_g": 42,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Zero Sugar Added Mocha (Hot)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 630,
+      "protein_g": 17,
+      "carbs_g": 47,
+      "fat_g": 43,
+      "fiber_g": 1
+    },
+    {
+      "name": "Zero Sugar Added Mocha (Hot)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 550,
+      "protein_g": 15,
+      "carbs_g": 43,
+      "fat_g": 36,
+      "fiber_g": 1
+    },
+    {
+      "name": "Zero Sugar Added Mocha (Hot)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 410,
+      "protein_g": 11,
+      "carbs_g": 39,
+      "fat_g": 24,
+      "fiber_g": 1
+    },
+    {
+      "name": "Zero Sugar Added Mocha (Iced)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 490,
+      "protein_g": 13,
+      "carbs_g": 43,
+      "fat_g": 31,
+      "fiber_g": 1
+    },
+    {
+      "name": "Zero Sugar Added Mocha (Iced)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 410,
+      "protein_g": 11,
+      "carbs_g": 39,
+      "fat_g": 24,
+      "fiber_g": 1
+    },
+    {
+      "name": "Zero Sugar Added Mocha (Iced)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 270,
+      "protein_g": 7,
+      "carbs_g": 35,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cold Brew (Iced)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew (Iced)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew (Iced)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew w/ Cream (Iced)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 90,
+      "protein_g": 3,
+      "carbs_g": 6,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew w/ Cream (Iced)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 80,
+      "protein_g": 3,
+      "carbs_g": 5,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew w/ Cream (Iced)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 3,
+      "carbs_g": 4,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew w/ Sweet Cream (Iced)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 140,
+      "protein_g": 2,
+      "carbs_g": 28,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew w/ Sweet Cream (Iced)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 140,
+      "protein_g": 2,
+      "carbs_g": 27,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew w/ Sweet Cream (Iced)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 130,
+      "protein_g": 1,
+      "carbs_g": 26,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew w/ Soft Top (Iced)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 120,
+      "protein_g": 2,
+      "carbs_g": 10,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew w/ Soft Top (Iced)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 110,
+      "protein_g": 1,
+      "carbs_g": 9,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew w/ Soft Top (Iced)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 110,
+      "protein_g": 1,
+      "carbs_g": 8,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Campin' Cold Brew (Iced)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 290,
+      "protein_g": 4,
+      "carbs_g": 47,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Campin' Cold Brew (Iced)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 280,
+      "protein_g": 3,
+      "carbs_g": 46,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Campin' Cold Brew (Iced)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 280,
+      "protein_g": 3,
+      "carbs_g": 45,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Campin' Nitro Cold Brew (Iced)",
+      "category": "Coffee Classics",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 4,
+      "carbs_g": 47,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hazelnut Cold Brew w/Cream (Iced)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 170,
+      "protein_g": 3,
+      "carbs_g": 25,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hazelnut Cold Brew w/Cream (Iced)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 160,
+      "protein_g": 3,
+      "carbs_g": 24,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hazelnut Cold Brew w/Cream (Iced)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 160,
+      "protein_g": 2,
+      "carbs_g": 23,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Cold Brew w/Cream (Iced)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 190,
+      "protein_g": 2,
+      "carbs_g": 29,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Cold Brew w/Cream (Iced)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 190,
+      "protein_g": 1,
+      "carbs_g": 28,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Cold Brew w/Cream (Iced)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 1,
+      "carbs_g": 27,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Nitro Cold Brew (Iced)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Chocolate Lavender Breve Cold Brew (Iced)",
+      "category": "Coffee Classics",
+      "serving": "large",
+      "calories": 190,
+      "protein_g": 4,
+      "carbs_g": 30,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Chocolate Lavender Breve Cold Brew (Iced)",
+      "category": "Coffee Classics",
+      "serving": "medium",
+      "calories": 180,
+      "protein_g": 3,
+      "carbs_g": 29,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Chocolate Lavender Breve Cold Brew (Iced)",
+      "category": "Coffee Classics",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 3,
+      "carbs_g": 28,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Golden Eagle Protein Latte (Hot)",
+      "category": "Protein Coffee",
+      "serving": "large",
+      "calories": 470,
+      "protein_g": 39,
+      "carbs_g": 57,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Golden Eagle Protein Latte (Hot)",
+      "category": "Protein Coffee",
+      "serving": "medium",
+      "calories": 420,
+      "protein_g": 33,
+      "carbs_g": 53,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Golden Eagle Protein Latte (Hot)",
+      "category": "Protein Coffee",
+      "serving": "small",
+      "calories": 330,
+      "protein_g": 23,
+      "carbs_g": 47,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Golden Eagle Protein Latte (Iced)",
+      "category": "Protein Coffee",
+      "serving": "large",
+      "calories": 380,
+      "protein_g": 29,
+      "carbs_g": 52,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Golden Eagle Protein Latte (Iced)",
+      "category": "Protein Coffee",
+      "serving": "medium",
+      "calories": 330,
+      "protein_g": 23,
+      "carbs_g": 47,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Golden Eagle Protein Latte (Iced)",
+      "category": "Protein Coffee",
+      "serving": "small",
+      "calories": 250,
+      "protein_g": 13,
+      "carbs_g": 41,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hopscotch Protein Latte (Hot)",
+      "category": "Protein Coffee",
+      "serving": "large",
+      "calories": 490,
+      "protein_g": 39,
+      "carbs_g": 60,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hopscotch Protein Latte (Hot)",
+      "category": "Protein Coffee",
+      "serving": "medium",
+      "calories": 430,
+      "protein_g": 33,
+      "carbs_g": 56,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hopscotch Protein Latte (Hot)",
+      "category": "Protein Coffee",
+      "serving": "small",
+      "calories": 350,
+      "protein_g": 23,
+      "carbs_g": 50,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hopscotch Protein Latte (Iced)",
+      "category": "Protein Coffee",
+      "serving": "large",
+      "calories": 400,
+      "protein_g": 29,
+      "carbs_g": 54,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hopscotch Protein Latte (Iced)",
+      "category": "Protein Coffee",
+      "serving": "medium",
+      "calories": 350,
+      "protein_g": 23,
+      "carbs_g": 50,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hopscotch Protein Latte (Iced)",
+      "category": "Protein Coffee",
+      "serving": "small",
+      "calories": 260,
+      "protein_g": 13,
+      "carbs_g": 44,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hopscotch Zero Sugar Added Protein Latte (Hot)",
+      "category": "Protein Coffee",
+      "serving": "large",
+      "calories": 430,
+      "protein_g": 37,
+      "carbs_g": 49,
+      "fat_g": 12,
+      "fiber_g": 7
+    },
+    {
+      "name": "Hopscotch Zero Sugar Added Protein Latte (Hot)",
+      "category": "Protein Coffee",
+      "serving": "medium",
+      "calories": 370,
+      "protein_g": 31,
+      "carbs_g": 45,
+      "fat_g": 10,
+      "fiber_g": 7
+    },
+    {
+      "name": "Hopscotch Zero Sugar Added Protein Latte (Hot)",
+      "category": "Protein Coffee",
+      "serving": "small",
+      "calories": 290,
+      "protein_g": 21,
+      "carbs_g": 39,
+      "fat_g": 8,
+      "fiber_g": 7
+    },
+    {
+      "name": "Hopscotch Zero Sugar Added Protein Latte (Iced)",
+      "category": "Protein Coffee",
+      "serving": "large",
+      "calories": 340,
+      "protein_g": 27,
+      "carbs_g": 44,
+      "fat_g": 9,
+      "fiber_g": 7
+    },
+    {
+      "name": "Hopscotch Zero Sugar Added Protein Latte (Iced)",
+      "category": "Protein Coffee",
+      "serving": "medium",
+      "calories": 290,
+      "protein_g": 21,
+      "carbs_g": 39,
+      "fat_g": 8,
+      "fiber_g": 7
+    },
+    {
+      "name": "Hopscotch Zero Sugar Added Protein Latte (Iced)",
+      "category": "Protein Coffee",
+      "serving": "small",
+      "calories": 200,
+      "protein_g": 11,
+      "carbs_g": 33,
+      "fat_g": 5,
+      "fiber_g": 7
+    },
+    {
+      "name": "Hopscotch Protein Mocha (Hot)",
+      "category": "Protein Coffee",
+      "serving": "large",
+      "calories": 480,
+      "protein_g": 39,
+      "carbs_g": 60,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hopscotch Protein Mocha (Hot)",
+      "category": "Protein Coffee",
+      "serving": "medium",
+      "calories": 430,
+      "protein_g": 33,
+      "carbs_g": 55,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hopscotch Protein Mocha (Hot)",
+      "category": "Protein Coffee",
+      "serving": "small",
+      "calories": 340,
+      "protein_g": 23,
+      "carbs_g": 49,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hopscotch Protein Mocha (Iced)",
+      "category": "Protein Coffee",
+      "serving": "large",
+      "calories": 400,
+      "protein_g": 29,
+      "carbs_g": 54,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hopscotch Protein Mocha (Iced)",
+      "category": "Protein Coffee",
+      "serving": "medium",
+      "calories": 340,
+      "protein_g": 23,
+      "carbs_g": 49,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hopscotch Protein Mocha (Iced)",
+      "category": "Protein Coffee",
+      "serving": "small",
+      "calories": 260,
+      "protein_g": 13,
+      "carbs_g": 43,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hopscotch Zero Sugar Added Protein Mocha (Hot)",
+      "category": "Protein Coffee",
+      "serving": "large",
+      "calories": 440,
+      "protein_g": 37,
+      "carbs_g": 53,
+      "fat_g": 11,
+      "fiber_g": 6
+    },
+    {
+      "name": "Hopscotch Zero Sugar Added Protein Mocha (Hot)",
+      "category": "Protein Coffee",
+      "serving": "medium",
+      "calories": 380,
+      "protein_g": 32,
+      "carbs_g": 48,
+      "fat_g": 9,
+      "fiber_g": 5
+    },
+    {
+      "name": "Hopscotch Zero Sugar Added Protein Mocha (Hot)",
+      "category": "Protein Coffee",
+      "serving": "small",
+      "calories": 300,
+      "protein_g": 22,
+      "carbs_g": 42,
+      "fat_g": 7,
+      "fiber_g": 5
+    },
+    {
+      "name": "Hopscotch Zero Sugar Added Protein Mocha (Iced)",
+      "category": "Protein Coffee",
+      "serving": "large",
+      "calories": 350,
+      "protein_g": 27,
+      "carbs_g": 47,
+      "fat_g": 8,
+      "fiber_g": 6
+    },
+    {
+      "name": "Hopscotch Zero Sugar Added Protein Mocha (Iced)",
+      "category": "Protein Coffee",
+      "serving": "medium",
+      "calories": 300,
+      "protein_g": 22,
+      "carbs_g": 42,
+      "fat_g": 7,
+      "fiber_g": 5
+    },
+    {
+      "name": "Hopscotch Zero Sugar Added Protein Mocha (Iced)",
+      "category": "Protein Coffee",
+      "serving": "small",
+      "calories": 210,
+      "protein_g": 12,
+      "carbs_g": 36,
+      "fat_g": 4,
+      "fiber_g": 5
+    },
+    {
+      "name": "Vanilla Protein Latte (Hot)",
+      "category": "Protein Coffee",
+      "serving": "large",
+      "calories": 420,
+      "protein_g": 39,
+      "carbs_g": 45,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Protein Latte (Hot)",
+      "category": "Protein Coffee",
+      "serving": "medium",
+      "calories": 370,
+      "protein_g": 33,
+      "carbs_g": 41,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Protein Latte (Hot)",
+      "category": "Protein Coffee",
+      "serving": "small",
+      "calories": 280,
+      "protein_g": 23,
+      "carbs_g": 35,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Protein Latte (Iced)",
+      "category": "Protein Coffee",
+      "serving": "large",
+      "calories": 340,
+      "protein_g": 29,
+      "carbs_g": 39,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Protein Latte (Iced)",
+      "category": "Protein Coffee",
+      "serving": "medium",
+      "calories": 280,
+      "protein_g": 23,
+      "carbs_g": 35,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Protein Latte (Iced)",
+      "category": "Protein Coffee",
+      "serving": "small",
+      "calories": 200,
+      "protein_g": 13,
+      "carbs_g": 29,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Zero Sugar Added Protein Latte (Hot)",
+      "category": "Protein Coffee",
+      "serving": "large",
+      "calories": 340,
+      "protein_g": 39,
+      "carbs_g": 25,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Zero Sugar Added Protein Latte (Hot)",
+      "category": "Protein Coffee",
+      "serving": "medium",
+      "calories": 290,
+      "protein_g": 33,
+      "carbs_g": 21,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Zero Sugar Added Protein Latte (Hot)",
+      "category": "Protein Coffee",
+      "serving": "small",
+      "calories": 200,
+      "protein_g": 23,
+      "carbs_g": 15,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Zero Sugar Added Protein Latte (Iced)",
+      "category": "Protein Coffee",
+      "serving": "large",
+      "calories": 260,
+      "protein_g": 29,
+      "carbs_g": 19,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Zero Sugar Added Protein Latte (Iced)",
+      "category": "Protein Coffee",
+      "serving": "medium",
+      "calories": 200,
+      "protein_g": 23,
+      "carbs_g": 15,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Vanilla Zero Sugar Added Protein Latte (Iced)",
+      "category": "Protein Coffee",
+      "serving": "small",
+      "calories": 120,
+      "protein_g": 13,
+      "carbs_g": 9,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Protein Latte (Hot)",
+      "category": "Protein Coffee",
+      "serving": "large",
+      "calories": 360,
+      "protein_g": 42,
+      "carbs_g": 27,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Protein Latte (Hot)",
+      "category": "Protein Coffee",
+      "serving": "medium",
+      "calories": 310,
+      "protein_g": 36,
+      "carbs_g": 22,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Protein Latte (Hot)",
+      "category": "Protein Coffee",
+      "serving": "small",
+      "calories": 220,
+      "protein_g": 26,
+      "carbs_g": 16,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Protein Latte (Iced)",
+      "category": "Protein Coffee",
+      "serving": "large",
+      "calories": 280,
+      "protein_g": 32,
+      "carbs_g": 21,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Protein Latte (Iced)",
+      "category": "Protein Coffee",
+      "serving": "medium",
+      "calories": 220,
+      "protein_g": 26,
+      "carbs_g": 16,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Protein Latte (Iced)",
+      "category": "Protein Coffee",
+      "serving": "small",
+      "calories": 140,
+      "protein_g": 16,
+      "carbs_g": 10,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Plain Blended Rebel",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 400,
+      "protein_g": 3,
+      "carbs_g": 104,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Plain Blended Rebel",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 300,
+      "protein_g": 2,
+      "carbs_g": 78,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Plain Blended Rebel",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 200,
+      "protein_g": 1,
+      "carbs_g": 52,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Aftershock Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 570,
+      "protein_g": 2,
+      "carbs_g": 145,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Aftershock Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 410,
+      "protein_g": 2,
+      "carbs_g": 105,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Aftershock Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 260,
+      "protein_g": 1,
+      "carbs_g": 66,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Aftershock Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 370,
+      "protein_g": 2,
+      "carbs_g": 92,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Aftershock Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 240,
+      "protein_g": 1,
+      "carbs_g": 59,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Aftershock Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 1,
+      "carbs_g": 47,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dragon Slayer Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 670,
+      "protein_g": 2,
+      "carbs_g": 171,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dragon Slayer Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 510,
+      "protein_g": 2,
+      "carbs_g": 129,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dragon Slayer Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 340,
+      "protein_g": 1,
+      "carbs_g": 87,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dragon Slayer Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 460,
+      "protein_g": 2,
+      "carbs_g": 117,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dragon Slayer Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 330,
+      "protein_g": 1,
+      "carbs_g": 80,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dragon Slayer Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 280,
+      "protein_g": 1,
+      "carbs_g": 69,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 570,
+      "protein_g": 2,
+      "carbs_g": 144,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 430,
+      "protein_g": 2,
+      "carbs_g": 109,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 260,
+      "protein_g": 1,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 380,
+      "protein_g": 2,
+      "carbs_g": 96,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 240,
+      "protein_g": 1,
+      "carbs_g": 61,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 200,
+      "protein_g": 1,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dino Egg Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 680,
+      "protein_g": 3,
+      "carbs_g": 174,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dino Egg Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 520,
+      "protein_g": 2,
+      "carbs_g": 132,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dino Egg Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 350,
+      "protein_g": 2,
+      "carbs_g": 89,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dino Egg Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 470,
+      "protein_g": 2,
+      "carbs_g": 119,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dino Egg Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 330,
+      "protein_g": 2,
+      "carbs_g": 83,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dino Egg Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 290,
+      "protein_g": 1,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 580,
+      "protein_g": 2,
+      "carbs_g": 147,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 420,
+      "protein_g": 2,
+      "carbs_g": 107,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 260,
+      "protein_g": 1,
+      "carbs_g": 66,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 380,
+      "protein_g": 2,
+      "carbs_g": 94,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 240,
+      "protein_g": 1,
+      "carbs_g": 60,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 1,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hyperchrome Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 570,
+      "protein_g": 2,
+      "carbs_g": 147,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hyperchrome Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 410,
+      "protein_g": 2,
+      "carbs_g": 106,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hyperchrome Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 260,
+      "protein_g": 1,
+      "carbs_g": 66,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hyperchrome Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 370,
+      "protein_g": 2,
+      "carbs_g": 94,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hyperchrome Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 240,
+      "protein_g": 1,
+      "carbs_g": 59,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hyperchrome Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 1,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Midnight Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 560,
+      "protein_g": 2,
+      "carbs_g": 141,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Midnight Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 410,
+      "protein_g": 2,
+      "carbs_g": 103,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Midnight Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 250,
+      "protein_g": 1,
+      "carbs_g": 64,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Midnight Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 380,
+      "protein_g": 2,
+      "carbs_g": 93,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Midnight Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 240,
+      "protein_g": 1,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Midnight Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 1,
+      "carbs_g": 47,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "OG Gummy Bear Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 560,
+      "protein_g": 2,
+      "carbs_g": 142,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "OG Gummy Bear Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 410,
+      "protein_g": 2,
+      "carbs_g": 104,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "OG Gummy Bear Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 250,
+      "protein_g": 1,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "OG Gummy Bear Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 370,
+      "protein_g": 2,
+      "carbs_g": 91,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "OG Gummy Bear Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 230,
+      "protein_g": 1,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "OG Gummy Bear Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 1,
+      "carbs_g": 47,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 590,
+      "protein_g": 2,
+      "carbs_g": 148,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 430,
+      "protein_g": 2,
+      "carbs_g": 108,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 260,
+      "protein_g": 1,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 390,
+      "protein_g": 2,
+      "carbs_g": 95,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 240,
+      "protein_g": 1,
+      "carbs_g": 60,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 200,
+      "protein_g": 1,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 620,
+      "protein_g": 2,
+      "carbs_g": 156,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 450,
+      "protein_g": 2,
+      "carbs_g": 112,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 270,
+      "protein_g": 1,
+      "carbs_g": 69,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 410,
+      "protein_g": 2,
+      "carbs_g": 100,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 250,
+      "protein_g": 1,
+      "carbs_g": 63,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 210,
+      "protein_g": 1,
+      "carbs_g": 51,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Ring Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 710,
+      "protein_g": 4,
+      "carbs_g": 176,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Ring Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 540,
+      "protein_g": 3,
+      "carbs_g": 134,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Ring Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 370,
+      "protein_g": 2,
+      "carbs_g": 92,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Ring Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 490,
+      "protein_g": 3,
+      "carbs_g": 121,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Ring Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 350,
+      "protein_g": 2,
+      "carbs_g": 85,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Ring Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 300,
+      "protein_g": 2,
+      "carbs_g": 74,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shark Attack Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 660,
+      "protein_g": 2,
+      "carbs_g": 168,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shark Attack Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 500,
+      "protein_g": 2,
+      "carbs_g": 126,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shark Attack Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 340,
+      "protein_g": 1,
+      "carbs_g": 85,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shark Attack Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 460,
+      "protein_g": 2,
+      "carbs_g": 113,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shark Attack Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 320,
+      "protein_g": 1,
+      "carbs_g": 79,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shark Attack Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 270,
+      "protein_g": 1,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 560,
+      "protein_g": 2,
+      "carbs_g": 144,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 410,
+      "protein_g": 2,
+      "carbs_g": 105,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 250,
+      "protein_g": 1,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 370,
+      "protein_g": 2,
+      "carbs_g": 92,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 230,
+      "protein_g": 1,
+      "carbs_g": 59,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 1,
+      "carbs_g": 47,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Watermelon Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 560,
+      "protein_g": 2,
+      "carbs_g": 144,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Watermelon Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 410,
+      "protein_g": 2,
+      "carbs_g": 105,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Watermelon Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 250,
+      "protein_g": 1,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Watermelon Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 370,
+      "protein_g": 2,
+      "carbs_g": 92,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Watermelon Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 230,
+      "protein_g": 1,
+      "carbs_g": 59,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Watermelon Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 1,
+      "carbs_g": 47,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tigers Blood Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 580,
+      "protein_g": 2,
+      "carbs_g": 148,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tigers Blood Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 420,
+      "protein_g": 2,
+      "carbs_g": 108,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tigers Blood Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 260,
+      "protein_g": 1,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tigers Blood Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 380,
+      "protein_g": 2,
+      "carbs_g": 95,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tigers Blood Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 240,
+      "protein_g": 1,
+      "carbs_g": 60,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tigers Blood Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 1,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vampire Slayer Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 560,
+      "protein_g": 2,
+      "carbs_g": 142,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vampire Slayer Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 410,
+      "protein_g": 2,
+      "carbs_g": 104,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vampire Slayer Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 250,
+      "protein_g": 1,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vampire Slayer Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 300,
+      "protein_g": 2,
+      "carbs_g": 75,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vampire Slayer Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 240,
+      "protein_g": 1,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vampire Slayer Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 1,
+      "carbs_g": 47,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Strawberry Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Strawberry Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Strawberry Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Strawberry Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 15,
+      "protein_g": 2,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Strawberry Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Strawberry Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Double Rainbro Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Double Rainbro Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Double Rainbro Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Double Rainbro Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 15,
+      "protein_g": 2,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Double Rainbro Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Double Rainbro Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Pink Flamingo Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 110,
+      "protein_g": 1,
+      "carbs_g": 18,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Pink Flamingo Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 90,
+      "protein_g": 1,
+      "carbs_g": 13,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Pink Flamingo Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 9,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Pink Flamingo Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 70,
+      "protein_g": 2,
+      "carbs_g": 10,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Pink Flamingo Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 35,
+      "protein_g": 1,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Pink Flamingo Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 35,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Tigers Blood Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Tigers Blood Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Tigers Blood Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Tigers Blood Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 15,
+      "protein_g": 2,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Tigers Blood Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Tigers Blood Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Peach Vanilla Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Peach Vanilla Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Peach Vanilla Rebel (Blended)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 5,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Peach Vanilla Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "large",
+      "calories": 15,
+      "protein_g": 2,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Peach Vanilla Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "medium",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Peach Vanilla Rebel (Iced)",
+      "category": "Rebel Energy Drinks",
+      "serving": "small",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Watermelon Myst (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Watermelon Myst (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "medium",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 27,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Watermelon Myst (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "large",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 47,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime Myst (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "small",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime Myst (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "medium",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Lime Myst (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "large",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Firestorm™ Myst (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "small",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Firestorm™ Myst (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "medium",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 27,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Firestorm™ Myst (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "large",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 47,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Myst (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 23,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Myst (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "medium",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 28,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Myst (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "large",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 51,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shark Attack™ Myst (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "small",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shark Attack™ Myst (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "medium",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 47,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shark Attack™ Myst (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "large",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 70,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "OG Gummy Bear Myst (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "OG Gummy Bear Myst (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "medium",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "OG Gummy Bear Myst (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "large",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Myst w/ Sugar Free Strawberry Vanilla (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "small",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Myst w/ Sugar Free Strawberry Vanilla (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "medium",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Myst w/ Sugar Free Strawberry Vanilla (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "large",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 17,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Myst w/ Sugar Free Peach (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "small",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 7,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Myst w/ Sugar Free Peach (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "medium",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Myst w/ Sugar Free Peach (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "large",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 18,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Myst w/ Sugar Free Rose City (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "small",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Myst w/ Sugar Free Rose City (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "medium",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Myst w/ Sugar Free Rose City (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "large",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 18,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Myst w/ Sugar Free Raspberry (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "small",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Myst w/ Sugar Free Raspberry (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "medium",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Myst w/ Sugar Free Raspberry (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "large",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 17,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Plain Myst (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "small",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Plain Myst (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "medium",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Plain Myst (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "large",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 8,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Poppin' Boba Fire Lizard Rebel (Blended)",
+      "category": "Myst Energy Refresher",
+      "serving": "large",
+      "calories": 630,
+      "protein_g": 2,
+      "carbs_g": 162,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Poppin' Boba Fire Lizard Rebel (Blended)",
+      "category": "Myst Energy Refresher",
+      "serving": "medium",
+      "calories": 470,
+      "protein_g": 2,
+      "carbs_g": 121,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Poppin' Boba Fire Lizard Rebel (Blended)",
+      "category": "Myst Energy Refresher",
+      "serving": "small",
+      "calories": 320,
+      "protein_g": 1,
+      "carbs_g": 81,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Poppin' Boba Fire Lizard Rebel (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "large",
+      "calories": 430,
+      "protein_g": 2,
+      "carbs_g": 109,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Poppin' Boba Fire Lizard Rebel (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "medium",
+      "calories": 300,
+      "protein_g": 1,
+      "carbs_g": 75,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Poppin' Boba Fire Lizard Rebel (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "small",
+      "calories": 250,
+      "protein_g": 1,
+      "carbs_g": 63,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Poppin' Boba Berry Lemonade (Blended)",
+      "category": "Myst Energy Refresher",
+      "serving": "large",
+      "calories": 670,
+      "protein_g": 0,
+      "carbs_g": 162,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Poppin' Boba Berry Lemonade (Blended)",
+      "category": "Myst Energy Refresher",
+      "serving": "medium",
+      "calories": 530,
+      "protein_g": 0,
+      "carbs_g": 128,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Poppin' Boba Berry Lemonade (Blended)",
+      "category": "Myst Energy Refresher",
+      "serving": "small",
+      "calories": 390,
+      "protein_g": 0,
+      "carbs_g": 94,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Poppin' Boba Berry Lemonade (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "large",
+      "calories": 350,
+      "protein_g": 0,
+      "carbs_g": 84,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Poppin' Boba Berry Lemonade (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "medium",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Poppin' Boba Berry Lemonade (Iced)",
+      "category": "Myst Energy Refresher",
+      "serving": "small",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 57,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Not So Hot",
+      "category": "Dutch Cocoa",
+      "serving": "kids",
+      "calories": 330,
+      "protein_g": 11,
+      "carbs_g": 43,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dutch Cocoa (Hot)",
+      "category": "Dutch Cocoa",
+      "serving": "large",
+      "calories": 670,
+      "protein_g": 22,
+      "carbs_g": 87,
+      "fat_g": 27,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dutch Cocoa (Hot)",
+      "category": "Dutch Cocoa",
+      "serving": "medium",
+      "calories": 530,
+      "protein_g": 18,
+      "carbs_g": 70,
+      "fat_g": 22,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dutch Cocoa (Hot)",
+      "category": "Dutch Cocoa",
+      "serving": "small",
+      "calories": 390,
+      "protein_g": 13,
+      "carbs_g": 52,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Cocoa (Hot)",
+      "category": "Dutch Cocoa",
+      "serving": "kids",
+      "calories": 420,
+      "protein_g": 10,
+      "carbs_g": 67,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Cocoa (Hot)",
+      "category": "Dutch Cocoa",
+      "serving": "large",
+      "calories": 720,
+      "protein_g": 21,
+      "carbs_g": 109,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Cocoa (Hot)",
+      "category": "Dutch Cocoa",
+      "serving": "medium",
+      "calories": 600,
+      "protein_g": 17,
+      "carbs_g": 92,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Cocoa (Hot)",
+      "category": "Dutch Cocoa",
+      "serving": "small",
+      "calories": 480,
+      "protein_g": 12,
+      "carbs_g": 76,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Chocolate Cocoa (Hot)",
+      "category": "Dutch Cocoa",
+      "serving": "kids",
+      "calories": 400,
+      "protein_g": 10,
+      "carbs_g": 65,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Chocolate Cocoa (Hot)",
+      "category": "Dutch Cocoa",
+      "serving": "large",
+      "calories": 700,
+      "protein_g": 21,
+      "carbs_g": 107,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Chocolate Cocoa (Hot)",
+      "category": "Dutch Cocoa",
+      "serving": "medium",
+      "calories": 580,
+      "protein_g": 17,
+      "carbs_g": 90,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Chocolate Cocoa (Hot)",
+      "category": "Dutch Cocoa",
+      "serving": "small",
+      "calories": 460,
+      "protein_g": 12,
+      "carbs_g": 74,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Cocoa (Hot)",
+      "category": "Dutch Cocoa",
+      "serving": "large",
+      "calories": 680,
+      "protein_g": 21,
+      "carbs_g": 100,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Cocoa (Hot)",
+      "category": "Dutch Cocoa",
+      "serving": "medium",
+      "calories": 560,
+      "protein_g": 17,
+      "carbs_g": 84,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Cocoa (Hot)",
+      "category": "Dutch Cocoa",
+      "serving": "small",
+      "calories": 440,
+      "protein_g": 12,
+      "carbs_g": 67,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Chocolate Cocoa (Hot)",
+      "category": "Dutch Cocoa",
+      "serving": "large",
+      "calories": 710,
+      "protein_g": 23,
+      "carbs_g": 106,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Chocolate Cocoa (Hot)",
+      "category": "Dutch Cocoa",
+      "serving": "medium",
+      "calories": 590,
+      "protein_g": 18,
+      "carbs_g": 89,
+      "fat_g": 20,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Chocolate Cocoa (Hot)",
+      "category": "Dutch Cocoa",
+      "serving": "small",
+      "calories": 470,
+      "protein_g": 14,
+      "carbs_g": 73,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Chocolate Cocoa (Hot)",
+      "category": "Dutch Cocoa",
+      "serving": "kids",
+      "calories": 410,
+      "protein_g": 11,
+      "carbs_g": 66,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Added Cocoa (Hot)",
+      "category": "Dutch Cocoa",
+      "serving": "large",
+      "calories": 750,
+      "protein_g": 20,
+      "carbs_g": 48,
+      "fat_g": 54,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Added Cocoa (Hot)",
+      "category": "Dutch Cocoa",
+      "serving": "medium",
+      "calories": 610,
+      "protein_g": 16,
+      "carbs_g": 44,
+      "fat_g": 42,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Added Cocoa (Hot)",
+      "category": "Dutch Cocoa",
+      "serving": "small",
+      "calories": 470,
+      "protein_g": 12,
+      "carbs_g": 40,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chai (Hot)",
+      "category": "Chai",
+      "serving": "large",
+      "calories": 390,
+      "protein_g": 12,
+      "carbs_g": 70,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chai (Hot)",
+      "category": "Chai",
+      "serving": "medium",
+      "calories": 310,
+      "protein_g": 10,
+      "carbs_g": 56,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chai (Hot)",
+      "category": "Chai",
+      "serving": "small",
+      "calories": 230,
+      "protein_g": 7,
+      "carbs_g": 42,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chai (Iced)",
+      "category": "Chai",
+      "serving": "large",
+      "calories": 310,
+      "protein_g": 10,
+      "carbs_g": 56,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chai (Iced)",
+      "category": "Chai",
+      "serving": "medium",
+      "calories": 230,
+      "protein_g": 7,
+      "carbs_g": 42,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chai (Iced)",
+      "category": "Chai",
+      "serving": "small",
+      "calories": 160,
+      "protein_g": 5,
+      "carbs_g": 28,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Golden Eagle Chai (Hot)",
+      "category": "Chai",
+      "serving": "large",
+      "calories": 670,
+      "protein_g": 10,
+      "carbs_g": 90,
+      "fat_g": 29,
+      "fiber_g": 0
+    },
+    {
+      "name": "Golden Eagle Chai (Hot)",
+      "category": "Chai",
+      "serving": "medium",
+      "calories": 550,
+      "protein_g": 8,
+      "carbs_g": 78,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Golden Eagle Chai (Hot)",
+      "category": "Chai",
+      "serving": "small",
+      "calories": 440,
+      "protein_g": 6,
+      "carbs_g": 66,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Golden Eagle Chai (Iced)",
+      "category": "Chai",
+      "serving": "large",
+      "calories": 550,
+      "protein_g": 8,
+      "carbs_g": 78,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Golden Eagle Chai (Iced)",
+      "category": "Chai",
+      "serving": "medium",
+      "calories": 440,
+      "protein_g": 6,
+      "carbs_g": 66,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Golden Eagle Chai (Iced)",
+      "category": "Chai",
+      "serving": "small",
+      "calories": 330,
+      "protein_g": 4,
+      "carbs_g": 53,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Horchata Chai (Hot)",
+      "category": "Chai",
+      "serving": "large",
+      "calories": 470,
+      "protein_g": 12,
+      "carbs_g": 90,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Horchata Chai (Hot)",
+      "category": "Chai",
+      "serving": "medium",
+      "calories": 390,
+      "protein_g": 10,
+      "carbs_g": 76,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Horchata Chai (Hot)",
+      "category": "Chai",
+      "serving": "small",
+      "calories": 320,
+      "protein_g": 7,
+      "carbs_g": 62,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Horchata Chai (Iced)",
+      "category": "Chai",
+      "serving": "large",
+      "calories": 390,
+      "protein_g": 10,
+      "carbs_g": 76,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Horchata Chai (Iced)",
+      "category": "Chai",
+      "serving": "medium",
+      "calories": 320,
+      "protein_g": 7,
+      "carbs_g": 62,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Horchata Chai (Iced)",
+      "category": "Chai",
+      "serving": "small",
+      "calories": 240,
+      "protein_g": 5,
+      "carbs_g": 49,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Horchata Chai (Iced)",
+      "category": "Chai",
+      "serving": "large",
+      "calories": 390,
+      "protein_g": 10,
+      "carbs_g": 75,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Horchata Chai (Iced)",
+      "category": "Chai",
+      "serving": "medium",
+      "calories": 310,
+      "protein_g": 7,
+      "carbs_g": 62,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Horchata Chai (Iced)",
+      "category": "Chai",
+      "serving": "small",
+      "calories": 230,
+      "protein_g": 5,
+      "carbs_g": 48,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Chocolate Chai (Hot)",
+      "category": "Chai",
+      "serving": "large",
+      "calories": 480,
+      "protein_g": 13,
+      "carbs_g": 93,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Chocolate Chai (Hot)",
+      "category": "Chai",
+      "serving": "medium",
+      "calories": 400,
+      "protein_g": 10,
+      "carbs_g": 79,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Chocolate Chai (Hot)",
+      "category": "Chai",
+      "serving": "small",
+      "calories": 320,
+      "protein_g": 8,
+      "carbs_g": 65,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Chocolate Chai (Iced)",
+      "category": "Chai",
+      "serving": "large",
+      "calories": 400,
+      "protein_g": 10,
+      "carbs_g": 79,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Chocolate Chai (Iced)",
+      "category": "Chai",
+      "serving": "medium",
+      "calories": 320,
+      "protein_g": 8,
+      "carbs_g": 65,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Chocolate Chai (Iced)",
+      "category": "Chai",
+      "serving": "small",
+      "calories": 250,
+      "protein_g": 5,
+      "carbs_g": 51,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Chai (Hot)",
+      "category": "Chai",
+      "serving": "large",
+      "calories": 490,
+      "protein_g": 12,
+      "carbs_g": 89,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Chai (Hot)",
+      "category": "Chai",
+      "serving": "medium",
+      "calories": 410,
+      "protein_g": 9,
+      "carbs_g": 75,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Chai (Hot)",
+      "category": "Chai",
+      "serving": "small",
+      "calories": 330,
+      "protein_g": 7,
+      "carbs_g": 61,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Chai (Iced)",
+      "category": "Chai",
+      "serving": "large",
+      "calories": 450,
+      "protein_g": 9,
+      "carbs_g": 78,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Chai (Iced)",
+      "category": "Chai",
+      "serving": "medium",
+      "calories": 350,
+      "protein_g": 7,
+      "carbs_g": 63,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Chai (Iced)",
+      "category": "Chai",
+      "serving": "small",
+      "calories": 270,
+      "protein_g": 4,
+      "carbs_g": 49,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "9-1-1 (Blended)",
+      "category": "Blended Freeze",
+      "serving": "large",
+      "calories": 820,
+      "protein_g": 22,
+      "carbs_g": 133,
+      "fat_g": 22,
+      "fiber_g": 1
+    },
+    {
+      "name": "9-1-1 (Blended)",
+      "category": "Blended Freeze",
+      "serving": "medium",
+      "calories": 620,
+      "protein_g": 16,
+      "carbs_g": 103,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "9-1-1 (Blended)",
+      "category": "Blended Freeze",
+      "serving": "small",
+      "calories": 420,
+      "protein_g": 10,
+      "carbs_g": 73,
+      "fat_g": 10,
+      "fiber_g": 1
+    },
+    {
+      "name": "Annihilator (Blended)",
+      "category": "Blended Freeze",
+      "serving": "large",
+      "calories": 820,
+      "protein_g": 25,
+      "carbs_g": 127,
+      "fat_g": 24,
+      "fiber_g": 1
+    },
+    {
+      "name": "Annihilator (Blended)",
+      "category": "Blended Freeze",
+      "serving": "medium",
+      "calories": 630,
+      "protein_g": 19,
+      "carbs_g": 100,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Annihilator (Blended)",
+      "category": "Blended Freeze",
+      "serving": "small",
+      "calories": 440,
+      "protein_g": 12,
+      "carbs_g": 73,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Caramelizer (Blended)",
+      "category": "Blended Freeze",
+      "serving": "large",
+      "calories": 900,
+      "protein_g": 24,
+      "carbs_g": 145,
+      "fat_g": 24,
+      "fiber_g": 4
+    },
+    {
+      "name": "Caramelizer (Blended)",
+      "category": "Blended Freeze",
+      "serving": "medium",
+      "calories": 700,
+      "protein_g": 18,
+      "carbs_g": 115,
+      "fat_g": 18,
+      "fiber_g": 3
+    },
+    {
+      "name": "Caramelizer (Blended)",
+      "category": "Blended Freeze",
+      "serving": "small",
+      "calories": 500,
+      "protein_g": 12,
+      "carbs_g": 85,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cocomo (Blended)",
+      "category": "Blended Freeze",
+      "serving": "large",
+      "calories": 840,
+      "protein_g": 26,
+      "carbs_g": 129,
+      "fat_g": 24,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cocomo (Blended)",
+      "category": "Blended Freeze",
+      "serving": "medium",
+      "calories": 650,
+      "protein_g": 19,
+      "carbs_g": 102,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cocomo (Blended)",
+      "category": "Blended Freeze",
+      "serving": "small",
+      "calories": 460,
+      "protein_g": 13,
+      "carbs_g": 75,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Double Torture (Blended)",
+      "category": "Blended Freeze",
+      "serving": "large",
+      "calories": 830,
+      "protein_g": 23,
+      "carbs_g": 134,
+      "fat_g": 23,
+      "fiber_g": 1
+    },
+    {
+      "name": "Double Torture (Blended)",
+      "category": "Blended Freeze",
+      "serving": "medium",
+      "calories": 630,
+      "protein_g": 17,
+      "carbs_g": 104,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Double Torture (Blended)",
+      "category": "Blended Freeze",
+      "serving": "small",
+      "calories": 430,
+      "protein_g": 11,
+      "carbs_g": 74,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Golden Eagle (Blended)",
+      "category": "Blended Freeze",
+      "serving": "large",
+      "calories": 900,
+      "protein_g": 23,
+      "carbs_g": 148,
+      "fat_g": 23,
+      "fiber_g": 4
+    },
+    {
+      "name": "Golden Eagle (Blended)",
+      "category": "Blended Freeze",
+      "serving": "medium",
+      "calories": 700,
+      "protein_g": 17,
+      "carbs_g": 118,
+      "fat_g": 17,
+      "fiber_g": 3
+    },
+    {
+      "name": "Golden Eagle (Blended)",
+      "category": "Blended Freeze",
+      "serving": "small",
+      "calories": 500,
+      "protein_g": 11,
+      "carbs_g": 88,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Kicker (Blended)",
+      "category": "Blended Freeze",
+      "serving": "large",
+      "calories": 820,
+      "protein_g": 25,
+      "carbs_g": 128,
+      "fat_g": 24,
+      "fiber_g": 1
+    },
+    {
+      "name": "Kicker (Blended)",
+      "category": "Blended Freeze",
+      "serving": "medium",
+      "calories": 630,
+      "protein_g": 19,
+      "carbs_g": 101,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Kicker (Blended)",
+      "category": "Blended Freeze",
+      "serving": "small",
+      "calories": 440,
+      "protein_g": 12,
+      "carbs_g": 74,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Campin' Freeze (Blended)",
+      "category": "Blended Freeze",
+      "serving": "large",
+      "calories": 1000,
+      "protein_g": 25,
+      "carbs_g": 153,
+      "fat_g": 32,
+      "fiber_g": 4
+    },
+    {
+      "name": "Campin' Freeze (Blended)",
+      "category": "Blended Freeze",
+      "serving": "medium",
+      "calories": 800,
+      "protein_g": 19,
+      "carbs_g": 123,
+      "fat_g": 26,
+      "fiber_g": 3
+    },
+    {
+      "name": "Campin' Freeze (Blended)",
+      "category": "Blended Freeze",
+      "serving": "small",
+      "calories": 600,
+      "protein_g": 13,
+      "carbs_g": 93,
+      "fat_g": 20,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mocha Freeze (Blended)",
+      "category": "Blended Freeze",
+      "serving": "large",
+      "calories": 880,
+      "protein_g": 25,
+      "carbs_g": 125,
+      "fat_g": 29,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mocha Freeze (Blended)",
+      "category": "Blended Freeze",
+      "serving": "medium",
+      "calories": 660,
+      "protein_g": 19,
+      "carbs_g": 94,
+      "fat_g": 22,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mocha Freeze (Blended)",
+      "category": "Blended Freeze",
+      "serving": "small",
+      "calories": 460,
+      "protein_g": 13,
+      "carbs_g": 64,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Chocolate Mocha (Blended)",
+      "category": "Blended Freeze",
+      "serving": "large",
+      "calories": 960,
+      "protein_g": 25,
+      "carbs_g": 147,
+      "fat_g": 29,
+      "fiber_g": 4
+    },
+    {
+      "name": "White Chocolate Mocha (Blended)",
+      "category": "Blended Freeze",
+      "serving": "medium",
+      "calories": 750,
+      "protein_g": 19,
+      "carbs_g": 116,
+      "fat_g": 22,
+      "fiber_g": 3
+    },
+    {
+      "name": "White Chocolate Mocha (Blended)",
+      "category": "Blended Freeze",
+      "serving": "small",
+      "calories": 530,
+      "protein_g": 13,
+      "carbs_g": 85,
+      "fat_g": 15,
+      "fiber_g": 2
+    },
+    {
+      "name": "White Chocolate Lavender Freeze (Blended)",
+      "category": "Blended Freeze",
+      "serving": "large",
+      "calories": 870,
+      "protein_g": 24,
+      "carbs_g": 141,
+      "fat_g": 23,
+      "fiber_g": 4
+    },
+    {
+      "name": "White Chocolate Lavender Freeze (Blended)",
+      "category": "Blended Freeze",
+      "serving": "medium",
+      "calories": 670,
+      "protein_g": 18,
+      "carbs_g": 111,
+      "fat_g": 17,
+      "fiber_g": 3
+    },
+    {
+      "name": "White Chocolate Lavender Freeze (Blended)",
+      "category": "Blended Freeze",
+      "serving": "small",
+      "calories": 470,
+      "protein_g": 12,
+      "carbs_g": 81,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Picture Perfect Freeze (Blended)",
+      "category": "Blended Freeze",
+      "serving": "large",
+      "calories": 950,
+      "protein_g": 24,
+      "carbs_g": 156,
+      "fat_g": 24,
+      "fiber_g": 4
+    },
+    {
+      "name": "Picture Perfect Freeze (Blended)",
+      "category": "Blended Freeze",
+      "serving": "medium",
+      "calories": 750,
+      "protein_g": 18,
+      "carbs_g": 126,
+      "fat_g": 18,
+      "fiber_g": 3
+    },
+    {
+      "name": "Picture Perfect Freeze (Blended)",
+      "category": "Blended Freeze",
+      "serving": "small",
+      "calories": 550,
+      "protein_g": 12,
+      "carbs_g": 96,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Picture Perfect Freeze w/ Whip (Blended)",
+      "category": "Blended Freeze",
+      "serving": "large",
+      "calories": 890,
+      "protein_g": 24,
+      "carbs_g": 139,
+      "fat_g": 25,
+      "fiber_g": 4
+    },
+    {
+      "name": "Picture Perfect Freeze w/ Whip (Blended)",
+      "category": "Blended Freeze",
+      "serving": "medium",
+      "calories": 680,
+      "protein_g": 18,
+      "carbs_g": 108,
+      "fat_g": 19,
+      "fiber_g": 3
+    },
+    {
+      "name": "Picture Perfect Freeze w/ Whip (Blended)",
+      "category": "Blended Freeze",
+      "serving": "small",
+      "calories": 480,
+      "protein_g": 12,
+      "carbs_g": 78,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Birthday Cake Shake (Blended)",
+      "category": "Shakes",
+      "serving": "large",
+      "calories": 960,
+      "protein_g": 16,
+      "carbs_g": 184,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Birthday Cake Shake (Blended)",
+      "category": "Shakes",
+      "serving": "medium",
+      "calories": 730,
+      "protein_g": 12,
+      "carbs_g": 140,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Birthday Cake Shake (Blended)",
+      "category": "Shakes",
+      "serving": "small",
+      "calories": 520,
+      "protein_g": 8,
+      "carbs_g": 97,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Birthday Cake Shake (Blended)",
+      "category": "Shakes",
+      "serving": "kids",
+      "calories": 330,
+      "protein_g": 5,
+      "carbs_g": 58,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cotton Candy Shake (Blended)",
+      "category": "Shakes",
+      "serving": "large",
+      "calories": 900,
+      "protein_g": 17,
+      "carbs_g": 179,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cotton Candy Shake (Blended)",
+      "category": "Shakes",
+      "serving": "medium",
+      "calories": 680,
+      "protein_g": 13,
+      "carbs_g": 135,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cotton Candy Shake (Blended)",
+      "category": "Shakes",
+      "serving": "small",
+      "calories": 450,
+      "protein_g": 9,
+      "carbs_g": 90,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cotton Candy Shake (Blended)",
+      "category": "Shakes",
+      "serving": "kids",
+      "calories": 270,
+      "protein_g": 6,
+      "carbs_g": 52,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ninja Shake (Blended)",
+      "category": "Shakes",
+      "serving": "large",
+      "calories": 900,
+      "protein_g": 17,
+      "carbs_g": 179,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ninja Shake (Blended)",
+      "category": "Shakes",
+      "serving": "medium",
+      "calories": 680,
+      "protein_g": 13,
+      "carbs_g": 135,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ninja Shake (Blended)",
+      "category": "Shakes",
+      "serving": "small",
+      "calories": 450,
+      "protein_g": 9,
+      "carbs_g": 90,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ninja Shake (Blended)",
+      "category": "Shakes",
+      "serving": "kids",
+      "calories": 270,
+      "protein_g": 6,
+      "carbs_g": 52,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Shake (Blended)",
+      "category": "Shakes",
+      "serving": "kids",
+      "calories": 250,
+      "protein_g": 5,
+      "carbs_g": 47,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Shake (Blended)",
+      "category": "Shakes",
+      "serving": "large",
+      "calories": 820,
+      "protein_g": 15,
+      "carbs_g": 160,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Shake (Blended)",
+      "category": "Shakes",
+      "serving": "medium",
+      "calories": 610,
+      "protein_g": 12,
+      "carbs_g": 120,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Shake (Blended)",
+      "category": "Shakes",
+      "serving": "small",
+      "calories": 410,
+      "protein_g": 8,
+      "carbs_g": 80,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake (Blended)",
+      "category": "Shakes",
+      "serving": "large",
+      "calories": 900,
+      "protein_g": 15,
+      "carbs_g": 185,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake (Blended)",
+      "category": "Shakes",
+      "serving": "medium",
+      "calories": 680,
+      "protein_g": 12,
+      "carbs_g": 139,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake (Blended)",
+      "category": "Shakes",
+      "serving": "small",
+      "calories": 450,
+      "protein_g": 8,
+      "carbs_g": 92,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Shake (Blended)",
+      "category": "Shakes",
+      "serving": "kids",
+      "calories": 270,
+      "protein_g": 5,
+      "carbs_g": 53,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake (Blended)",
+      "category": "Shakes",
+      "serving": "large",
+      "calories": 820,
+      "protein_g": 15,
+      "carbs_g": 160,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake (Blended)",
+      "category": "Shakes",
+      "serving": "medium",
+      "calories": 610,
+      "protein_g": 12,
+      "carbs_g": 120,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake (Blended)",
+      "category": "Shakes",
+      "serving": "small",
+      "calories": 410,
+      "protein_g": 8,
+      "carbs_g": 80,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Shake (Blended)",
+      "category": "Shakes",
+      "serving": "kids",
+      "calories": 250,
+      "protein_g": 5,
+      "carbs_g": 47,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Chocolate Shake (Blended)",
+      "category": "Shakes",
+      "serving": "kids",
+      "calories": 310,
+      "protein_g": 6,
+      "carbs_g": 55,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Chocolate Shake (Blended)",
+      "category": "Shakes",
+      "serving": "large",
+      "calories": 1010,
+      "protein_g": 20,
+      "carbs_g": 188,
+      "fat_g": 20,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Chocolate Shake (Blended)",
+      "category": "Shakes",
+      "serving": "medium",
+      "calories": 760,
+      "protein_g": 15,
+      "carbs_g": 141,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Chocolate Shake (Blended)",
+      "category": "Shakes",
+      "serving": "small",
+      "calories": 520,
+      "protein_g": 10,
+      "carbs_g": 95,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Milk (Iced)",
+      "category": "Shakes",
+      "serving": "large",
+      "calories": 480,
+      "protein_g": 18,
+      "carbs_g": 66,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Milk (Iced)",
+      "category": "Shakes",
+      "serving": "medium",
+      "calories": 360,
+      "protein_g": 13,
+      "carbs_g": 49,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Milk (Iced)",
+      "category": "Shakes",
+      "serving": "small",
+      "calories": 240,
+      "protein_g": 9,
+      "carbs_g": 33,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Milk (Iced)",
+      "category": "Shakes",
+      "serving": "kids",
+      "calories": 150,
+      "protein_g": 6,
+      "carbs_g": 21,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cookie Chocolate Milk (Iced)",
+      "category": "Shakes",
+      "serving": "kids",
+      "calories": 220,
+      "protein_g": 5,
+      "carbs_g": 41,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cookie Chocolate Milk (Iced)",
+      "category": "Shakes",
+      "serving": "large",
+      "calories": 550,
+      "protein_g": 17,
+      "carbs_g": 86,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cookie Chocolate Milk (Iced)",
+      "category": "Shakes",
+      "serving": "medium",
+      "calories": 430,
+      "protein_g": 13,
+      "carbs_g": 69,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cookie Chocolate Milk (Iced)",
+      "category": "Shakes",
+      "serving": "small",
+      "calories": 310,
+      "protein_g": 8,
+      "carbs_g": 53,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Banana Bread Chocolate Milk (Iced)",
+      "category": "Shakes",
+      "serving": "large",
+      "calories": 530,
+      "protein_g": 17,
+      "carbs_g": 81,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Banana Bread Chocolate Milk (Iced)",
+      "category": "Shakes",
+      "serving": "medium",
+      "calories": 410,
+      "protein_g": 12,
+      "carbs_g": 65,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Banana Bread Chocolate Milk (Iced)",
+      "category": "Shakes",
+      "serving": "small",
+      "calories": 290,
+      "protein_g": 8,
+      "carbs_g": 48,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Banana Bread Chocolate Milk (Iced)",
+      "category": "Shakes",
+      "serving": "kids",
+      "calories": 200,
+      "protein_g": 4,
+      "carbs_g": 36,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Chocolate Milk (Iced)",
+      "category": "Shakes",
+      "serving": "large",
+      "calories": 530,
+      "protein_g": 17,
+      "carbs_g": 82,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Chocolate Milk (Iced)",
+      "category": "Shakes",
+      "serving": "medium",
+      "calories": 410,
+      "protein_g": 12,
+      "carbs_g": 65,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Chocolate Milk (Iced)",
+      "category": "Shakes",
+      "serving": "small",
+      "calories": 290,
+      "protein_g": 8,
+      "carbs_g": 49,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Chocolate Milk (Iced)",
+      "category": "Shakes",
+      "serving": "kids",
+      "calories": 200,
+      "protein_g": 4,
+      "carbs_g": 36,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Snickerdoodle Chocolate Milk (Iced)",
+      "category": "Shakes",
+      "serving": "large",
+      "calories": 550,
+      "protein_g": 17,
+      "carbs_g": 85,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Snickerdoodle Chocolate Milk (Iced)",
+      "category": "Shakes",
+      "serving": "medium",
+      "calories": 430,
+      "protein_g": 13,
+      "carbs_g": 69,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Snickerdoodle Chocolate Milk (Iced)",
+      "category": "Shakes",
+      "serving": "small",
+      "calories": 310,
+      "protein_g": 8,
+      "carbs_g": 52,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Snickerdoodle Chocolate Milk (Iced)",
+      "category": "Shakes",
+      "serving": "kids",
+      "calories": 220,
+      "protein_g": 5,
+      "carbs_g": 40,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blue Raspberry Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "large",
+      "calories": 350,
+      "protein_g": 0,
+      "carbs_g": 91,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blue Raspberry Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "medium",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 68,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blue Raspberry Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blue Raspberry Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "kids",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 23,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "large",
+      "calories": 340,
+      "protein_g": 0,
+      "carbs_g": 83,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "medium",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 62,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "small",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 41,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "kids",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "large",
+      "calories": 340,
+      "protein_g": 0,
+      "carbs_g": 87,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "medium",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "small",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "kids",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "large",
+      "calories": 350,
+      "protein_g": 0,
+      "carbs_g": 88,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "medium",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 66,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "kids",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "OG Gummy Bear Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "kids",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 19,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "OG Gummy Bear Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "large",
+      "calories": 320,
+      "protein_g": 0,
+      "carbs_g": 77,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "OG Gummy Bear Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "medium",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "OG Gummy Bear Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "small",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 38,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "large",
+      "calories": 350,
+      "protein_g": 0,
+      "carbs_g": 85,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "medium",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 64,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "kids",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "large",
+      "calories": 320,
+      "protein_g": 0,
+      "carbs_g": 79,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "medium",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 59,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "small",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "kids",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "large",
+      "calories": 390,
+      "protein_g": 0,
+      "carbs_g": 95,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "medium",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "small",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 47,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "kids",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "large",
+      "calories": 320,
+      "protein_g": 0,
+      "carbs_g": 79,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "medium",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 59,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "small",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "kids",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Watermelon Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "large",
+      "calories": 320,
+      "protein_g": 0,
+      "carbs_g": 79,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Watermelon Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "medium",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 59,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Watermelon Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "small",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Watermelon Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "kids",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Strawberry Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "large",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Strawberry Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "medium",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Strawberry Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "small",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Strawberry Soda (Iced)",
+      "category": "Sparkling Soda",
+      "serving": "kids",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "large",
+      "calories": 610,
+      "protein_g": 0,
+      "carbs_g": 149,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "medium",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 115,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "small",
+      "calories": 330,
+      "protein_g": 0,
+      "carbs_g": 81,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "kids",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 55,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "large",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "medium",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 57,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "kids",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "large",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 72,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "medium",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "large",
+      "calories": 610,
+      "protein_g": 0,
+      "carbs_g": 150,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "medium",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 115,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "small",
+      "calories": 330,
+      "protein_g": 0,
+      "carbs_g": 81,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "large",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 72,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "medium",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 59,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "large",
+      "calories": 620,
+      "protein_g": 0,
+      "carbs_g": 150,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "medium",
+      "calories": 480,
+      "protein_g": 0,
+      "carbs_g": 116,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "small",
+      "calories": 340,
+      "protein_g": 0,
+      "carbs_g": 82,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "large",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "medium",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "small",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "kids",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "large",
+      "calories": 620,
+      "protein_g": 0,
+      "carbs_g": 149,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "medium",
+      "calories": 480,
+      "protein_g": 0,
+      "carbs_g": 115,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "small",
+      "calories": 340,
+      "protein_g": 0,
+      "carbs_g": 81,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "kids",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 55,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "large",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 70,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "medium",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 56,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "large",
+      "calories": 610,
+      "protein_g": 0,
+      "carbs_g": 148,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "medium",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 114,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "small",
+      "calories": 330,
+      "protein_g": 0,
+      "carbs_g": 80,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "large",
+      "calories": 630,
+      "protein_g": 0,
+      "carbs_g": 152,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "medium",
+      "calories": 490,
+      "protein_g": 0,
+      "carbs_g": 118,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "small",
+      "calories": 350,
+      "protein_g": 0,
+      "carbs_g": 83,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "large",
+      "calories": 310,
+      "protein_g": 0,
+      "carbs_g": 74,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "medium",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 60,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "small",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 47,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "large",
+      "calories": 610,
+      "protein_g": 0,
+      "carbs_g": 148,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "medium",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 114,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "small",
+      "calories": 330,
+      "protein_g": 0,
+      "carbs_g": 80,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "large",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 70,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "medium",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 56,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Lavender Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "large",
+      "calories": 610,
+      "protein_g": 0,
+      "carbs_g": 150,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Lavender Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "medium",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 115,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Lavender Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "small",
+      "calories": 330,
+      "protein_g": 0,
+      "carbs_g": 81,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Lavender Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "large",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Lavender Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "medium",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Lavender Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tigers Blood Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "large",
+      "calories": 610,
+      "protein_g": 0,
+      "carbs_g": 149,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tigers Blood Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "medium",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 115,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tigers Blood Lemonade (Blended)",
+      "category": "Lemonade",
+      "serving": "small",
+      "calories": 330,
+      "protein_g": 0,
+      "carbs_g": 81,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tigers Blood Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "large",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tigers Blood Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "medium",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tigers Blood Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "OG Gummy Bear Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "large",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 69,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "OG Gummy Bear Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "medium",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 56,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "OG Gummy Bear Lemonade (Iced)",
+      "category": "Lemonade",
+      "serving": "small",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dragon Slayer Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 350,
+      "protein_g": 0,
+      "carbs_g": 87,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dragon Slayer Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 64,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dragon Slayer Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 41,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 66,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 66,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Rainbro Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Eclipse Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 350,
+      "protein_g": 0,
+      "carbs_g": 86,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Eclipse Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 64,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Eclipse Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Marmalade Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 62,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Marmalade Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 41,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Marmalade Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 64,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 64,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Palm Beach Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 59,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 59,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Passion Fruit Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 47,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 47,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Peach Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 59,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 59,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea (Iced)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea (Iced)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea (Iced)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 17,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 62,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 41,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 62,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 41,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Electric Berry Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Strawberry Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Strawberry Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Strawberry Black Tea (Iced)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Strawberry Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Strawberry Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Strawberry Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Strawberry Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Strawberry Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Strawberry Green Tea (Iced)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Strawberry Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Strawberry Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Sugar Strawberry Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ceylon Tea (Hot)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ceylon Tea (Hot)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ceylon Tea (Hot)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cinnamon Spice Tea (Hot)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cinnamon Spice Tea (Hot)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cinnamon Spice Tea (Hot)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Earl Grey Tea (Hot)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Earl Grey Tea (Hot)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Earl Grey Tea (Hot)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Green Tea (Hot)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Paris Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "large",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Paris Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "medium",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Paris Black Tea (Hot)",
+      "category": "Tea",
+      "serving": "small",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Green Apple Smoothie (Blended)",
+      "category": "Smoothie",
+      "serving": "large",
+      "calories": 730,
+      "protein_g": 1,
+      "carbs_g": 175,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Green Apple Smoothie (Blended)",
+      "category": "Smoothie",
+      "serving": "medium",
+      "calories": 550,
+      "protein_g": 1,
+      "carbs_g": 131,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Green Apple Smoothie (Blended)",
+      "category": "Smoothie",
+      "serving": "small",
+      "calories": 360,
+      "protein_g": 0,
+      "carbs_g": 88,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Green Apple Smoothie (Blended)",
+      "category": "Smoothie",
+      "serving": "kids",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 55,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mango Smoothie (Blended)",
+      "category": "Smoothie",
+      "serving": "large",
+      "calories": 720,
+      "protein_g": 1,
+      "carbs_g": 177,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango Smoothie (Blended)",
+      "category": "Smoothie",
+      "serving": "medium",
+      "calories": 540,
+      "protein_g": 0,
+      "carbs_g": 133,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango Smoothie (Blended)",
+      "category": "Smoothie",
+      "serving": "small",
+      "calories": 360,
+      "protein_g": 0,
+      "carbs_g": 89,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango Smoothie (Blended)",
+      "category": "Smoothie",
+      "serving": "kids",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 55,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Smoothie (Blended)",
+      "category": "Smoothie",
+      "serving": "large",
+      "calories": 610,
+      "protein_g": 1,
+      "carbs_g": 148,
+      "fat_g": 0,
+      "fiber_g": 10
+    },
+    {
+      "name": "Strawberry Smoothie (Blended)",
+      "category": "Smoothie",
+      "serving": "medium",
+      "calories": 450,
+      "protein_g": 1,
+      "carbs_g": 111,
+      "fat_g": 0,
+      "fiber_g": 8
+    },
+    {
+      "name": "Strawberry Smoothie (Blended)",
+      "category": "Smoothie",
+      "serving": "small",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 74,
+      "fat_g": 0,
+      "fiber_g": 5
+    },
+    {
+      "name": "Strawberry Smoothie (Blended)",
+      "category": "Smoothie",
+      "serving": "kids",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Soft Top",
+      "category": "Toppings",
+      "serving": "2 scoops",
+      "calories": 100,
+      "protein_g": 1,
+      "carbs_g": 6,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Drizzle Hashtag",
+      "category": "Toppings",
+      "serving": "1 drizzle",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dark Chocolate Drizzle Hashtag",
+      "category": "Toppings",
+      "serving": "1 drizzle",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Chocolate Drizzle Hashtag",
+      "category": "Toppings",
+      "serving": "1 drizzle",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Private Reserve Espresso Dub Shot",
+      "category": "Espresso",
+      "serving": "1 dub shot",
+      "calories": 10,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "White Coffee Espresso Dub Shot",
+      "category": "Espresso",
+      "serving": "1 dub shot",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Banana Bread",
+      "category": "Eats n' Sweets",
+      "serving": "1 item",
+      "calories": 330,
+      "protein_g": 4,
+      "carbs_g": 44,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Blueberry Muffin",
+      "category": "Eats n' Sweets",
+      "serving": "1 item",
+      "calories": 410,
+      "protein_g": 5,
+      "carbs_g": 60,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chocolate Chip Muffin Top",
+      "category": "Eats n' Sweets",
+      "serving": "1 item",
+      "calories": 520,
+      "protein_g": 6,
+      "carbs_g": 77,
+      "fat_g": 23,
+      "fiber_g": 2
+    },
+    {
+      "name": "Coffee Cake",
+      "category": "Eats n' Sweets",
+      "serving": "1 item",
+      "calories": 490,
+      "protein_g": 5,
+      "carbs_g": 59,
+      "fat_g": 26,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cookie Dough Cake Pop",
+      "category": "Eats n' Sweets",
+      "serving": "1 item",
+      "calories": 130,
+      "protein_g": 2,
+      "carbs_g": 20,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Maple Waffle",
+      "category": "Eats n' Sweets",
+      "serving": "1 item",
+      "calories": 300,
+      "protein_g": 4,
+      "carbs_g": 38,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Egg, Bacon and Cheese Sandwich",
+      "category": "Eats n' Sweets",
+      "serving": "1 item",
+      "calories": 170,
+      "protein_g": 8,
+      "carbs_g": 14,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sausage, Egg and Cheese Sandwich",
+      "category": "Eats n' Sweets",
+      "serving": "1 item",
+      "calories": 260,
+      "protein_g": 10,
+      "carbs_g": 15,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chorizo, Egg and Hot Pepper Cheese Wrap",
+      "category": "Eats n' Sweets",
+      "serving": "1 item",
+      "calories": 440,
+      "protein_g": 15,
+      "carbs_g": 34,
+      "fat_g": 27,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cheesy Hash Brown Duo",
+      "category": "Eats n' Sweets",
+      "serving": "1 item",
+      "calories": 190,
+      "protein_g": 9,
+      "carbs_g": 14,
+      "fat_g": 12,
+      "fiber_g": 1
+    }
+  ]
+}

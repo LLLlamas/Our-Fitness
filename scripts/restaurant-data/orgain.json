@@ -1,0 +1,96 @@
+{
+  "chain": "Orgain",
+  "slug": "orgain",
+  "aliases": [
+    "orgain",
+    "orgain protein",
+    "orgain shake"
+  ],
+  "kind": "supplement",
+  "source_url": "https://orgain.com/products/organic-protein-plant-based-protein-powder",
+  "source_kind": "official",
+  "retrieved": "2026-10-15",
+  "notes": "Nutrition Facts panel images (…-NFP-LOI…) on orgain.com product pages: organic-protein-plant-based-protein-powder, organic-protein-plant-based-protein-powder-vanilla-bean, grass-fed-whey-protein-powder, 30g-protein-shake-chocolate-fudge, 30g-protein-shake-vanilla-bean (panel is the single-carton Costco tetra label), 20g-clean-protein-shake, organic-protein-bar-peanut-butter-chocolate-chunk, organic-protein-bar. Atwater outlier left as published: Plant Creamy Chocolate Fudge (150 cal vs ~185 Atwater; 7 g fiber counted in carbs). Grass Fed Whey carbs include 5 g erythritol.",
+  "items": [
+    {
+      "name": "Organic Protein Plant Based Protein Powder, Creamy Chocolate Fudge",
+      "category": "Plant Protein",
+      "serving": "2 scoops (46 g)",
+      "calories": 150,
+      "protein_g": 21,
+      "carbs_g": 15,
+      "fat_g": 4.5,
+      "fiber_g": 7
+    },
+    {
+      "name": "Organic Protein Plant Based Protein Powder, Vanilla Bean",
+      "category": "Plant Protein",
+      "serving": "2 scoops (46 g)",
+      "calories": 150,
+      "protein_g": 21,
+      "carbs_g": 15,
+      "fat_g": 3.5,
+      "fiber_g": 4
+    },
+    {
+      "name": "Grass Fed Whey Protein Powder, Creamy Chocolate Fudge",
+      "category": "Whey Protein",
+      "serving": "2 scoops (41 g)",
+      "calories": 130,
+      "protein_g": 21,
+      "carbs_g": 11,
+      "fat_g": 3,
+      "fiber_g": 2
+    },
+    {
+      "name": "30g Protein Shake, Chocolate Fudge",
+      "category": "Ready-to-Drink",
+      "serving": "1 carton (330 mL)",
+      "calories": 160,
+      "protein_g": 30,
+      "carbs_g": 7,
+      "fat_g": 3,
+      "fiber_g": 2
+    },
+    {
+      "name": "30g Protein Shake, Vanilla Bean",
+      "category": "Ready-to-Drink",
+      "serving": "1 carton (330 mL)",
+      "calories": 160,
+      "protein_g": 30,
+      "carbs_g": 4,
+      "fat_g": 3,
+      "fiber_g": 2
+    },
+    {
+      "name": "20g Clean Protein Shake, Creamy Chocolate Fudge",
+      "category": "Ready-to-Drink",
+      "serving": "1 carton (330 mL)",
+      "calories": 130,
+      "protein_g": 20,
+      "carbs_g": 11,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Organic Protein Bar, Peanut Butter Chocolate Chunk",
+      "category": "Bars",
+      "serving": "1 bar (40 g)",
+      "calories": 160,
+      "protein_g": 10,
+      "carbs_g": 18,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Organic Protein Bar, Chocolate Brownie",
+      "category": "Bars",
+      "serving": "1 bar (40 g)",
+      "calories": 160,
+      "protein_g": 10,
+      "carbs_g": 18,
+      "fat_g": 6,
+      "fiber_g": 2
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "chain": "Isopure",
+  "slug": "isopure",
+  "aliases": [
+    "isopure",
+    "iso pure",
+    "isopure zero carb",
+    "isopure low carb"
+  ],
+  "kind": "supplement",
+  "source_url": "https://www.theisopurecompany.com/products/flavored-protein-powder",
+  "source_kind": "official",
+  "retrieved": "2026-10-15",
+  "notes": "Nutrition Facts panel images on theisopurecompany.com product pages: flavored-protein-powder (Zero Carb Creamy Vanilla, Cookies & Cream; Low Carb Dutch Chocolate), unflavored-protein-powder, 32-gram-protein-drink, plant-based-protein-powder. Fiber 0 where the label says not significant or '<1g' (Low Carb Dutch Chocolate, Plant Vanilla).",
+  "items": [
+    {
+      "name": "Zero Carb Whey Isolate, Creamy Vanilla",
+      "category": "Whey Protein",
+      "serving": "1 scoop (31 g)",
+      "calories": 110,
+      "protein_g": 25,
+      "carbs_g": 0,
+      "fat_g": 0.5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Carb Whey Isolate, Cookies & Cream",
+      "category": "Whey Protein",
+      "serving": "1 scoop (31 g)",
+      "calories": 110,
+      "protein_g": 25,
+      "carbs_g": 0,
+      "fat_g": 0.5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Zero Carb Whey Isolate, Unflavored",
+      "category": "Whey Protein",
+      "serving": "1 scoop (29 g)",
+      "calories": 100,
+      "protein_g": 25,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Low Carb Whey Isolate, Dutch Chocolate",
+      "category": "Whey Protein",
+      "serving": "1 scoop (33 g)",
+      "calories": 110,
+      "protein_g": 25,
+      "carbs_g": 1,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "32G Protein Drink, Alpine Punch",
+      "category": "Ready-to-Drink",
+      "serving": "1 bottle (500 mL)",
+      "calories": 130,
+      "protein_g": 32,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "32G Protein Drink, Blue Raspberry",
+      "category": "Ready-to-Drink",
+      "serving": "1 bottle (500 mL)",
+      "calories": 130,
+      "protein_g": 32,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Plant Protein, Chocolate",
+      "category": "Plant Protein",
+      "serving": "1 scoop (31 g)",
+      "calories": 120,
+      "protein_g": 20,
+      "carbs_g": 5,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Plant Protein, Vanilla",
+      "category": "Plant Protein",
+      "serving": "1 scoop (28 g)",
+      "calories": 110,
+      "protein_g": 20,
+      "carbs_g": 3,
+      "fat_g": 1.5,
+      "fiber_g": 0
+    }
+  ]
+}

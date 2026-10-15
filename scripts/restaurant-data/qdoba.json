@@ -1,0 +1,1438 @@
+{
+  "chain": "Qdoba",
+  "slug": "qdoba",
+  "aliases": [
+    "qdoba",
+    "qdoba mexican eats",
+    "qdoba mexican grill",
+    "quedoba",
+    "qudoba"
+  ],
+  "kind": "fast-casual",
+  "source_url": "https://assets.ctfassets.net/0tc4847zqy12/bQFJBCmsAk4ww4qzdfAOm/10ad09aaf097d3e9fb10fc4c62af52c3/Nutrition_9.1.26.pdf",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Official \"Nutrition Facts 2026\" PDF (9.1.26) linked from the qdoba.com footer (\"Nutritional Guide\"). Build-your-own: sum tortilla + rice + beans + protein + toppings from \"Ingredients for Entrées\". Entrée calorie-range rows (mini bowls, tacos, menu-board ranges) omitted. Some CANADA-only rows are labelled as such. Atwater outliers (>20%, left as published): Seasoned Potatoes (2 oz.) (57 g (2 oz)): 100 cal vs 52 Atwater; Sour Cream, (1 oz.) (28 g (1 oz)): 50 cal vs 61 Atwater; Quesabirria Burrito (569 g): 980 cal vs 1535 Atwater; Quesabirria Quesadilla (456 g): 1080 cal vs 1631 Atwater; Sour Cream (1 oz.) (28 g (1 oz)): 50 cal vs 61 Atwater",
+  "items": [
+    {
+      "name": "Bacon (Select Locations) (1 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "28 g (1 oz)",
+      "calories": 120,
+      "protein_g": 9,
+      "carbs_g": 1,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon (Select Locations) (2 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "57 g (2 oz)",
+      "calories": 230,
+      "protein_g": 19,
+      "carbs_g": 2,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Beans (4 oz.) (v)",
+      "category": "Ingredients for Entrées",
+      "serving": "113 g (4 oz)",
+      "calories": 140,
+      "protein_g": 9,
+      "carbs_g": 24,
+      "fat_g": 1,
+      "fiber_g": 14
+    },
+    {
+      "name": "Brisket Birria (3.5 oz)",
+      "category": "Ingredients for Entrées",
+      "serving": "99 g (3.5 oz)",
+      "calories": 140,
+      "protein_g": 15,
+      "carbs_g": 3,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chile Crema (1 oz)",
+      "category": "Ingredients for Entrées",
+      "serving": "28 g (1 oz)",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chile Corn Salsa (1 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "28 g (1 oz)",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chopped Cilantro (.12 oz )",
+      "category": "Ingredients for Entrées",
+      "serving": "3 g",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chorizo (1.5 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "43 g (1.5 oz)",
+      "calories": 130,
+      "protein_g": 7,
+      "carbs_g": 2,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chorizo (3.0 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "85 g (3.0 oz)",
+      "calories": 260,
+      "protein_g": 14,
+      "carbs_g": 5,
+      "fat_g": 20,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cilantro Lime Rice (4 oz.) (v)",
+      "category": "Ingredients for Entrées",
+      "serving": "113 g (4 oz)",
+      "calories": 190,
+      "protein_g": 3,
+      "carbs_g": 38,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Citrus Vinaigrette (1.5 oz.) (CANADA)",
+      "category": "Ingredients for Entrées",
+      "serving": "43 g (1.5 oz)",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Citrus Vinaigrette (1.5 oz.) (US)",
+      "category": "Ingredients for Entrées",
+      "serving": "43 g (1.5 oz)",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 7,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cotija Cheese (.25 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "7 g (.25 oz)",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 0,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Crispy Taco Shell",
+      "category": "Ingredients for Entrées",
+      "serving": "13 g",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 8,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Crunchy Tortilla Shell",
+      "category": "Ingredients for Entrées",
+      "serving": "73 g",
+      "calories": 390,
+      "protein_g": 7,
+      "carbs_g": 41,
+      "fat_g": 22,
+      "fiber_g": 0
+    },
+    {
+      "name": "Eggs (6 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "170 g (6 oz)",
+      "calories": 230,
+      "protein_g": 19,
+      "carbs_g": 2,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fajita Veggies (2 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "57 g (2 oz)",
+      "calories": 40,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Flour Tortilla (5.5\")",
+      "category": "Ingredients for Entrées",
+      "serving": "24 g (5.5\")",
+      "calories": 70,
+      "protein_g": 2,
+      "carbs_g": 12,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Flour Tortilla (10\")",
+      "category": "Ingredients for Entrées",
+      "serving": "71 g (10\")",
+      "calories": 210,
+      "protein_g": 6,
+      "carbs_g": 36,
+      "fat_g": 5,
+      "fiber_g": 2
+    },
+    {
+      "name": "Flour Tortilla (12.5\")",
+      "category": "Ingredients for Entrées",
+      "serving": "102 g (12.5\")",
+      "calories": 300,
+      "protein_g": 8,
+      "carbs_g": 52,
+      "fat_g": 7,
+      "fiber_g": 3
+    },
+    {
+      "name": "Grilled Adobo Chicken (3.5 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "99 g (3.5 oz)",
+      "calories": 190,
+      "protein_g": 19,
+      "carbs_g": 2,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Grilled Steak (3.5 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "99 g (3.5 oz)",
+      "calories": 360,
+      "protein_g": 20,
+      "carbs_g": 5,
+      "fat_g": 28,
+      "fiber_g": 1
+    },
+    {
+      "name": "Ground Beef (3.5 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "99 g (3.5 oz)",
+      "calories": 180,
+      "protein_g": 16,
+      "carbs_g": 4,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Habanero Salsa (1 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "28 g (1 oz)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Hand Crafted Guacamole (2 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "57 g (2 oz)",
+      "calories": 80,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 8,
+      "fiber_g": 4
+    },
+    {
+      "name": "Hand Crafted Guacamole (4 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "113 g (4 oz)",
+      "calories": 170,
+      "protein_g": 2,
+      "carbs_g": 9,
+      "fat_g": 15,
+      "fiber_g": 7
+    },
+    {
+      "name": "Picante Ranch Dressing (1.5 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "43 g (1.5 oz)",
+      "calories": 80,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pickled Jalapenos (1 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "28 g (1 oz)",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pickled Red Onion (0.8 oz)",
+      "category": "Ingredients for Entrées",
+      "serving": "23 g (0.8 oz)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pico de Gallo (1 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "28 g (1 oz)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pinto Beans (4 oz.) (v)",
+      "category": "Ingredients for Entrées",
+      "serving": "113 g (4 oz)",
+      "calories": 130,
+      "protein_g": 8,
+      "carbs_g": 23,
+      "fat_g": 1,
+      "fiber_g": 14
+    },
+    {
+      "name": "Plant-Based Impossible (3.1 oz.) *select locations only*",
+      "category": "Ingredients for Entrées",
+      "serving": "88 g (3.1 oz)",
+      "calories": 170,
+      "protein_g": 13,
+      "carbs_g": 8,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pork Carnitas (3.5 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "99 g (3.5 oz)",
+      "calories": 110,
+      "protein_g": 14,
+      "carbs_g": 0,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Queso Diablo (2 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "57 g (2 oz)",
+      "calories": 90,
+      "protein_g": 2,
+      "carbs_g": 3,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Queso Diablo (4 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "113 g (4 oz)",
+      "calories": 180,
+      "protein_g": 5,
+      "carbs_g": 6,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Roasted Tomato Salsa (1 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "28 g (1 oz)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Romaine Lettuce (0.25 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "7 g (0.25 oz)",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Romaine Lettuce for Salad (3.5 oz)",
+      "category": "Ingredients for Entrées",
+      "serving": "99 g (3.5 oz)",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Salsa Roja (1 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "28 g (1 oz)",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Salsa Verde (1 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "28 g (1 oz)",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Seasoned Brown Rice (4 oz.) (v)",
+      "category": "Ingredients for Entrées",
+      "serving": "113 g (4 oz)",
+      "calories": 170,
+      "protein_g": 4,
+      "carbs_g": 36,
+      "fat_g": 2,
+      "fiber_g": 2
+    },
+    {
+      "name": "Seasoned Potatoes (2 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "57 g (2 oz)",
+      "calories": 100,
+      "protein_g": 1,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Shredded Cheese (1.0 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "28 g (1.0 oz)",
+      "calories": 110,
+      "protein_g": 7,
+      "carbs_g": 1,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sour Cream, (1 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "28 g (1 oz)",
+      "calories": 50,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Three Cheese Queso (2 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "57 g (2 oz)",
+      "calories": 80,
+      "protein_g": 3,
+      "carbs_g": 3,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Three Cheese Queso (4 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "113 g (4 oz)",
+      "calories": 170,
+      "protein_g": 6,
+      "carbs_g": 5,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tortilla Chips (4 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "113 g (4 oz)",
+      "calories": 560,
+      "protein_g": 7,
+      "carbs_g": 75,
+      "fat_g": 26,
+      "fiber_g": 9
+    },
+    {
+      "name": "Tortilla Strips (0.5 oz.)",
+      "category": "Ingredients for Entrées",
+      "serving": "14 g (0.5 oz)",
+      "calories": 70,
+      "protein_g": 1,
+      "carbs_g": 8,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chicken Queso Bowl",
+      "category": "Signature Eats",
+      "serving": "468 g",
+      "calories": 750,
+      "protein_g": 43,
+      "carbs_g": 74,
+      "fat_g": 33,
+      "fiber_g": 16
+    },
+    {
+      "name": "Chicken Queso Burrito",
+      "category": "Signature Eats",
+      "serving": "569 g",
+      "calories": 1050,
+      "protein_g": 51,
+      "carbs_g": 126,
+      "fat_g": 40,
+      "fiber_g": 19
+    },
+    {
+      "name": "Cholula Hot & Sweet Chicken Bowl",
+      "category": "Signature Eats",
+      "serving": "418 g",
+      "calories": 610,
+      "protein_g": 31,
+      "carbs_g": 77,
+      "fat_g": 20,
+      "fiber_g": 15
+    },
+    {
+      "name": "Cholula Hot & Sweet Chicken Burrito",
+      "category": "Signature Eats",
+      "serving": "520 g",
+      "calories": 910,
+      "protein_g": 39,
+      "carbs_g": 130,
+      "fat_g": 27,
+      "fiber_g": 19
+    },
+    {
+      "name": "Citrus Lime Chicken Salad",
+      "category": "Signature Eats",
+      "serving": "421 g",
+      "calories": 540,
+      "protein_g": 31,
+      "carbs_g": 49,
+      "fat_g": 26,
+      "fiber_g": 16
+    },
+    {
+      "name": "Double Protein Bowl - Chicken",
+      "category": "Signature Eats",
+      "serving": "546 g",
+      "calories": 700,
+      "protein_g": 51,
+      "carbs_g": 41,
+      "fat_g": 38,
+      "fiber_g": 20
+    },
+    {
+      "name": "Double Protein Bowl - Steak",
+      "category": "Signature Eats",
+      "serving": "553 g",
+      "calories": 1040,
+      "protein_g": 52,
+      "carbs_g": 47,
+      "fat_g": 72,
+      "fiber_g": 20
+    },
+    {
+      "name": "Fajita Vegan Bowl",
+      "category": "Signature Eats",
+      "serving": "482 g",
+      "calories": 530,
+      "protein_g": 17,
+      "carbs_g": 79,
+      "fat_g": 17,
+      "fiber_g": 22
+    },
+    {
+      "name": "Impossible Taco Salad *select locations only*",
+      "category": "Signature Eats",
+      "serving": "400 g",
+      "calories": 520,
+      "protein_g": 31,
+      "carbs_g": 46,
+      "fat_g": 23,
+      "fiber_g": 18
+    },
+    {
+      "name": "Keto Bowl - Brisket Birria",
+      "category": "Signature Eats",
+      "serving": "340 g",
+      "calories": 370,
+      "protein_g": 25,
+      "carbs_g": 13,
+      "fat_g": 25,
+      "fiber_g": 7
+    },
+    {
+      "name": "Keto Bowl - Chicken",
+      "category": "Signature Eats",
+      "serving": "340 g",
+      "calories": 400,
+      "protein_g": 33,
+      "carbs_g": 11,
+      "fat_g": 26,
+      "fiber_g": 7
+    },
+    {
+      "name": "Keto Bowl - Steak",
+      "category": "Signature Eats",
+      "serving": "340 g",
+      "calories": 490,
+      "protein_g": 25,
+      "carbs_g": 13,
+      "fat_g": 38,
+      "fiber_g": 7
+    },
+    {
+      "name": "Southwest Steak Burrito",
+      "category": "Signature Eats",
+      "serving": "498 g",
+      "calories": 1220,
+      "protein_g": 43,
+      "carbs_g": 134,
+      "fat_g": 58,
+      "fiber_g": 19
+    },
+    {
+      "name": "Street Style Chicken Tacos (3) Flour",
+      "category": "Signature Eats",
+      "serving": "311 g",
+      "calories": 550,
+      "protein_g": 29,
+      "carbs_g": 46,
+      "fat_g": 28,
+      "fiber_g": 8
+    },
+    {
+      "name": "Street Style Pork Carnitas Tacos (3) Flour",
+      "category": "Signature Eats",
+      "serving": "238 g",
+      "calories": 370,
+      "protein_g": 23,
+      "carbs_g": 38,
+      "fat_g": 13,
+      "fiber_g": 4
+    },
+    {
+      "name": "Apple Sauce, Natural",
+      "category": "Ingredients for Kids Items",
+      "serving": "111 g",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 13,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Black Beans (2 oz.)",
+      "category": "Ingredients for Kids Items",
+      "serving": "57 g (2 oz)",
+      "calories": 70,
+      "protein_g": 5,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 7
+    },
+    {
+      "name": "Cilantro Lime Rice (2 oz.)",
+      "category": "Ingredients for Kids Items",
+      "serving": "57 g (2 oz)",
+      "calories": 90,
+      "protein_g": 2,
+      "carbs_g": 19,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Grilled Chicken (1.75 oz.)",
+      "category": "Ingredients for Kids Items",
+      "serving": "50 g (1.75 oz)",
+      "calories": 90,
+      "protein_g": 10,
+      "carbs_g": 1,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Grilled Steak (1.75 oz.)",
+      "category": "Ingredients for Kids Items",
+      "serving": "50 g (1.75 oz)",
+      "calories": 180,
+      "protein_g": 10,
+      "carbs_g": 2,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hand Smashed Guac (1 oz.)",
+      "category": "Ingredients for Kids Items",
+      "serving": "28 g (1 oz)",
+      "calories": 40,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 4,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pinto Beans (2 oz.)",
+      "category": "Ingredients for Kids Items",
+      "serving": "57 g (2 oz)",
+      "calories": 70,
+      "protein_g": 4,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 7
+    },
+    {
+      "name": "Pork Carnitas (2 oz.)",
+      "category": "Ingredients for Kids Items",
+      "serving": "57 g (2 oz)",
+      "calories": 60,
+      "protein_g": 8,
+      "carbs_g": 0,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Seasoned Brown Rice (2 oz.)",
+      "category": "Ingredients for Kids Items",
+      "serving": "57 g (2 oz)",
+      "calories": 90,
+      "protein_g": 2,
+      "carbs_g": 18,
+      "fat_g": 1,
+      "fiber_g": 1
+    },
+    {
+      "name": "Shredded Cheese (0.5 oz.)",
+      "category": "Ingredients for Kids Items",
+      "serving": "14 g (0.5 oz)",
+      "calories": 60,
+      "protein_g": 3,
+      "carbs_g": 0,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sour Cream (1 oz.)",
+      "category": "Ingredients for Kids Items",
+      "serving": "28 g (1 oz)",
+      "calories": 50,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Three Cheese Queso (1 oz.)",
+      "category": "Ingredients for Kids Items",
+      "serving": "28 g (1 oz)",
+      "calories": 40,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tortilla Chips (2 oz.)",
+      "category": "Ingredients for Kids Items",
+      "serving": "57 g (2 oz)",
+      "calories": 280,
+      "protein_g": 3,
+      "carbs_g": 37,
+      "fat_g": 13,
+      "fiber_g": 5
+    },
+    {
+      "name": "Side (black beans w/ cheese)",
+      "category": "Ingredients for Kids Items",
+      "serving": "77 g",
+      "calories": 150,
+      "protein_g": 9,
+      "carbs_g": 13,
+      "fat_g": 7,
+      "fiber_g": 7
+    },
+    {
+      "name": "Barq's Root Beer (Reg)",
+      "category": "Fountain Beverages",
+      "serving": "20 fl oz",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 73,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Barq's Root Beer (Lrg)",
+      "category": "Fountain Beverages",
+      "serving": "30 fl oz",
+      "calories": 430,
+      "protein_g": 0,
+      "carbs_g": 110,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caffeine Free Diet Coke (Reg)",
+      "category": "Fountain Beverages",
+      "serving": "20 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caffeine Free Diet Coke (Lrg)",
+      "category": "Fountain Beverages",
+      "serving": "30 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Coca-Cola (Reg)",
+      "category": "Fountain Beverages",
+      "serving": "20 fl oz",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 69,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cherry Coca-Cola (Lrg)",
+      "category": "Fountain Beverages",
+      "serving": "30 fl oz",
+      "calories": 400,
+      "protein_g": 0,
+      "carbs_g": 104,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola Zero (Reg)",
+      "category": "Fountain Beverages",
+      "serving": "20 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola Zero (Lrg)",
+      "category": "Fountain Beverages",
+      "serving": "30 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola (Reg)",
+      "category": "Fountain Beverages",
+      "serving": "20 fl oz",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca-Cola (Lrg)",
+      "category": "Fountain Beverages",
+      "serving": "30 fl oz",
+      "calories": 360,
+      "protein_g": 0,
+      "carbs_g": 100,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke (Reg)",
+      "category": "Fountain Beverages",
+      "serving": "20 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke (Lrg)",
+      "category": "Fountain Beverages",
+      "serving": "30 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Dr. Pepper (Reg)",
+      "category": "Fountain Beverages",
+      "serving": "20 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Dr. Pepper (Lrg)",
+      "category": "Fountain Beverages",
+      "serving": "30 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr. Peppers (Reg)",
+      "category": "Fountain Beverages",
+      "serving": "20 fl oz",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr. Peppers (Lrg)",
+      "category": "Fountain Beverages",
+      "serving": "30 fl oz",
+      "calories": 390,
+      "protein_g": 0,
+      "carbs_g": 100,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Orange (Reg)",
+      "category": "Fountain Beverages",
+      "serving": "20 fl oz",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 73,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fanta Orange (Lrg)",
+      "category": "Fountain Beverages",
+      "serving": "30 fl oz",
+      "calories": 410,
+      "protein_g": 0,
+      "carbs_g": 110,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Flashin Fruit Punch (Reg)",
+      "category": "Fountain Beverages",
+      "serving": "20 fl oz",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 74,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hi-C Flashin Fruit Punch (Lrg)",
+      "category": "Fountain Beverages",
+      "serving": "30 fl oz",
+      "calories": 400,
+      "protein_g": 0,
+      "carbs_g": 111,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello (Reg)",
+      "category": "Fountain Beverages",
+      "serving": "20 fl oz",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 78,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mello Yello (Lrg)",
+      "category": "Fountain Beverages",
+      "serving": "30 fl oz",
+      "calories": 440,
+      "protein_g": 0,
+      "carbs_g": 117,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Lemonade(HFCS) Reg",
+      "category": "Fountain Beverages",
+      "serving": "20 fl oz",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 72,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Lemonade(HFCS) Lrg",
+      "category": "Fountain Beverages",
+      "serving": "30 fl oz",
+      "calories": 410,
+      "protein_g": 0,
+      "carbs_g": 109,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Light Lemonade (Reg)",
+      "category": "Fountain Beverages",
+      "serving": "20 fl oz",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Light Lemonade (Lrg)",
+      "category": "Fountain Beverages",
+      "serving": "30 fl oz",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 15,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Mountain Berry Blast (Reg)",
+      "category": "Fountain Beverages",
+      "serving": "20 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "POWERade Mountain Berry Blast (Lrg)",
+      "category": "Fountain Beverages",
+      "serving": "30 fl oz",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 53,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gold Peak Classic Blend Tea (Reg)",
+      "category": "Fountain Beverages",
+      "serving": "20 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gold Peak Classic Blend Tea (Lrg)",
+      "category": "Fountain Beverages",
+      "serving": "30 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gold Peak Southern Tea (Reg)",
+      "category": "Fountain Beverages",
+      "serving": "20 fl oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gold Peak Southern Tea (Lrg)",
+      "category": "Fountain Beverages",
+      "serving": "30 fl oz",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 69,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gold Peak Classic Sweet Tea (Reg)",
+      "category": "Fountain Beverages",
+      "serving": "20 fl oz",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 41,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gold Peak Classic Sweet Tea (Lrg)",
+      "category": "Fountain Beverages",
+      "serving": "30 fl oz",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 61,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite (Reg)",
+      "category": "Fountain Beverages",
+      "serving": "20 fl oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sprite (Lrg)",
+      "category": "Fountain Beverages",
+      "serving": "30 fl oz",
+      "calories": 400,
+      "protein_g": 0,
+      "carbs_g": 101,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dasani Water (16.9 fl. oz.)",
+      "category": "Bottled Beverages",
+      "serving": "16.9 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca Cola (20 fl. oz.)",
+      "category": "Bottled Beverages",
+      "serving": "20 fl oz",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Coke (20 fl. oz.)",
+      "category": "Bottled Beverages",
+      "serving": "20 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gold Peak Black Ice Tea, Unsweetened (16.9 fl. oz.)",
+      "category": "Bottled Beverages",
+      "serving": "16.9 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gold Peak Green Tea (16.9 fl. oz.)",
+      "category": "Bottled Beverages",
+      "serving": "16.9 fl oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 38,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gold Peak Peach Ice Tea (16.9 fl. oz.)",
+      "category": "Bottled Beverages",
+      "serving": "16.9 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Gold Peak Raspberry Ice Tea (16.9 fl. oz.)",
+      "category": "Bottled Beverages",
+      "serving": "16.9 fl oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 48,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honest Apple Juice Box (6 fl. oz.)",
+      "category": "Bottled Beverages",
+      "serving": "6 fl oz",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jarritos Lime (12.5 fl.oz)",
+      "category": "Bottled Beverages",
+      "serving": "12.5 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jarritos Mandarian (12.5 fl.oz)",
+      "category": "Bottled Beverages",
+      "serving": "12.5 fl oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 36,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jarritos Pineapple (12.5 fl. oz)",
+      "category": "Bottled Beverages",
+      "serving": "12.5 fl oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jarritos Strawberry (12.5fl. oz)",
+      "category": "Bottled Beverages",
+      "serving": "12.5 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mexican Coke (12 fl. Oz)",
+      "category": "Bottled Beverages",
+      "serving": "12 fl oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Minute Maid Kid's Apple Juice Box (6 fl. oz.)",
+      "category": "Bottled Beverages",
+      "serving": "6 fl oz",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Oasis 100% Apple Juice (CANADA)",
+      "category": "Bottled Beverages",
+      "serving": "6 fl oz",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Oasis 100% Apple Juice (CANADA)",
+      "category": "Bottled Beverages",
+      "serving": "10 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 31,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Simply Orange Juice (11.5 fl. oz.)",
+      "category": "Bottled Beverages",
+      "serving": "11.5 fl oz",
+      "calories": 160,
+      "protein_g": 2,
+      "carbs_g": 37,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vitamin Water Power C (20 fl. oz.)",
+      "category": "Bottled Beverages",
+      "serving": "16.9 fl oz",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 27,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vitamin Water XXX (20 fl. oz.)",
+      "category": "Bottled Beverages",
+      "serving": "16.9 fl oz",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vitamin Water Zero Squeezed Lemonade (20 fl. oz.)",
+      "category": "Bottled Beverages",
+      "serving": "16.9 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Milk, Chocolate lowfat 1% (7 fl. oz.)/ CA Standards",
+      "category": "Bottled Beverages",
+      "serving": "7 fl oz",
+      "calories": 140,
+      "protein_g": 8,
+      "carbs_g": 22,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Milk, Chocolate lowfat 1% (8 fl. oz.)/ Fed Standards",
+      "category": "Bottled Beverages",
+      "serving": "8 fl oz",
+      "calories": 160,
+      "protein_g": 9,
+      "carbs_g": 25,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Milk, White lowfat 1% (7 fl. oz.)/ CA Standards",
+      "category": "Bottled Beverages",
+      "serving": "7 fl oz",
+      "calories": 90,
+      "protein_g": 7,
+      "carbs_g": 11,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Milk, White lowfat 1% (8 fl. oz.)/ Fed Standards",
+      "category": "Bottled Beverages",
+      "serving": "8 fl oz",
+      "calories": 100,
+      "protein_g": 8,
+      "carbs_g": 12,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Double Chocolate Brownie (CANADA)",
+      "category": "Dessert",
+      "serving": "72 g",
+      "calories": 320,
+      "protein_g": 4,
+      "carbs_g": 38,
+      "fat_g": 17,
+      "fiber_g": 3
+    },
+    {
+      "name": "Double Chocolate Brownie (US)",
+      "category": "Dessert",
+      "serving": "91 g",
+      "calories": 390,
+      "protein_g": 6,
+      "carbs_g": 49,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Chunk Cookie (US)",
+      "category": "Dessert",
+      "serving": "57 g",
+      "calories": 250,
+      "protein_g": 3,
+      "carbs_g": 33,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Chunk Cookie (CANADA)",
+      "category": "Dessert",
+      "serving": "57 g",
+      "calories": 250,
+      "protein_g": 3,
+      "carbs_g": 34,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "Churro bites (CANADA only)",
+      "category": "Dessert",
+      "serving": "100 g",
+      "calories": 390,
+      "protein_g": 3,
+      "carbs_g": 41,
+      "fat_g": 24,
+      "fiber_g": 1
+    }
+  ]
+}

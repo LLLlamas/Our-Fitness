@@ -1,0 +1,48 @@
+{
+  "chain": "Ghost",
+  "slug": "ghost",
+  "aliases": [
+    "ghost",
+    "ghost protein",
+    "ghost whey",
+    "ghost vegan",
+    "ghost lifestyle"
+  ],
+  "kind": "supplement",
+  "source_url": "https://www.ghostlifestyle.com/products/ghost-whey-chocolate-chip-cookies",
+  "source_kind": "official",
+  "retrieved": "2026-10-15",
+  "notes": "Nutrition Facts panel images (GHOST_Whey_ChocolateChipCookies_NFP, GHOST_Whey_CocoaPuffs_NFP, GHOST_Vegan_ChocolateChipCookies_NFP) on ghostlifestyle.com product pages ghost-whey-chocolate-chip-cookies, ghost-whey-x-cocoa-puffs-cocoa-puffs-cereal-milk and ghost-vegan-v2-chocolate-chip-cookies.",
+  "items": [
+    {
+      "name": "Whey Protein, Chocolate Chip Cookies",
+      "category": "Whey Protein",
+      "serving": "1 rounded scoop (39 g)",
+      "calories": 150,
+      "protein_g": 25,
+      "carbs_g": 6,
+      "fat_g": 2.5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Whey Protein x Cocoa Puffs, Cocoa Puffs Cereal Milk",
+      "category": "Whey Protein",
+      "serving": "1 rounded scoop (35 g)",
+      "calories": 130,
+      "protein_g": 25,
+      "carbs_g": 3,
+      "fat_g": 1.5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vegan Protein, Chocolate Chip Cookies",
+      "category": "Plant Protein",
+      "serving": "1 rounded scoop (47.5 g)",
+      "calories": 170,
+      "protein_g": 25,
+      "carbs_g": 11,
+      "fat_g": 3,
+      "fiber_g": 3
+    }
+  ]
+}

@@ -1,0 +1,2439 @@
+{
+  "chain": "Denny's",
+  "slug": "dennys",
+  "aliases": [
+    "dennys",
+    "denny's",
+    "dennies",
+    "denny",
+    "dennys diner",
+    "grand slam"
+  ],
+  "kind": "casual-dining",
+  "source_url": "https://www.dennys.com/nutrition",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Official Denny's Nutrition Guides (Core Menu, April 2026) linked from dennys.com/nutrition (files served from Denny's media CDN: media-platform.cdn4dd.com/.../de85c691-....pdf and .../a673d924-....pdf). Entrées exclude add-on sides/condiments unless named. Two-size rows (e.g. dressings 1.5/3 oz, soups bowl/cup, toast with/without margarine) split into separate items. Range rows (fountain soft drinks for kids) skipped. Atwater outliers (kept as published): Sautéed Mushrooms [1 oz] (50 cal vs Atwater 62). Re-verified 2026-10-15 in Chrome: dennys.com/nutrition links the Core Menu guide (redirects to the same de85c691 PDF); all 242 core rows were checked against it and matched. The 13 rows taken from the separate Limited Time Offer guide (a673d924) were removed.",
+  "items": [
+    {
+      "name": "55+ Country-Fried Steak w/ gravy & dinner bread (add side choices)",
+      "category": "Core Menu",
+      "serving": "8 oz",
+      "calories": 580,
+      "protein_g": 21,
+      "carbs_g": 53,
+      "fat_g": 32,
+      "fiber_g": 2
+    },
+    {
+      "name": "55+ Omelette w/ hash browns & white toast",
+      "category": "Core Menu",
+      "serving": "16 oz",
+      "calories": 930,
+      "protein_g": 39,
+      "carbs_g": 61,
+      "fat_g": 57,
+      "fiber_g": 2
+    },
+    {
+      "name": "55+ Scrambled Eggs & Cheddar Breakfast",
+      "category": "Core Menu",
+      "serving": "17 oz",
+      "calories": 1040,
+      "protein_g": 46,
+      "carbs_g": 80,
+      "fat_g": 58,
+      "fiber_g": 2
+    },
+    {
+      "name": "55+ Starter™ (add egg & meat choices)",
+      "category": "Core Menu",
+      "serving": "7 oz",
+      "calories": 420,
+      "protein_g": 7,
+      "carbs_g": 54,
+      "fat_g": 18,
+      "fiber_g": 1
+    },
+    {
+      "name": "55+ Wild Alaska Salmon w/ dinner bread (add side choices)",
+      "category": "Core Menu",
+      "serving": "9 oz",
+      "calories": 540,
+      "protein_g": 37,
+      "carbs_g": 27,
+      "fat_g": 31,
+      "fiber_g": 1
+    },
+    {
+      "name": "Balsamic Vinaigrette, Low-Fat",
+      "category": "Condiments",
+      "serving": "1.5 oz",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 11,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Balsamic Vinaigrette, Low-Fat",
+      "category": "Condiments",
+      "serving": "3 oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 23,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "BBQ Sauce",
+      "category": "Condiments",
+      "serving": "1.5 oz",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 23,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blue Cheese Dressing",
+      "category": "Condiments",
+      "serving": "1.5 oz",
+      "calories": 150,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blue Cheese Dressing",
+      "category": "Condiments",
+      "serving": "3 oz",
+      "calories": 310,
+      "protein_g": 3,
+      "carbs_g": 3,
+      "fat_g": 32,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bourbon Sauce",
+      "category": "Condiments",
+      "serving": "1 oz",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brown Gravy",
+      "category": "Condiments",
+      "serving": "1 oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buffalo Sauce",
+      "category": "Condiments",
+      "serving": "1.5 oz",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Country Gravy",
+      "category": "Condiments",
+      "serving": "1 oz",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cream Cheese Icing",
+      "category": "Condiments",
+      "serving": "1.5 oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 28,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Creamer - French Vanilla",
+      "category": "Condiments",
+      "serving": "13 ml",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Croutons",
+      "category": "Condiments",
+      "serving": "0.5 oz",
+      "calories": 70,
+      "protein_g": 2,
+      "carbs_g": 11,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diner Q Sauce",
+      "category": "Condiments",
+      "serving": "1.5 oz",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey Mustard Dressing",
+      "category": "Condiments",
+      "serving": "1.5 oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 12,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey Mustard Dressing",
+      "category": "Condiments",
+      "serving": "3 oz",
+      "calories": 370,
+      "protein_g": 1,
+      "carbs_g": 24,
+      "fat_g": 31,
+      "fiber_g": 0
+    },
+    {
+      "name": "Maple-Flavored Syrup",
+      "category": "Condiments",
+      "serving": "2 oz",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 54,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Maple-Flavored Syrup, Sugar-Free",
+      "category": "Condiments",
+      "serving": "2 oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pico de Gallo",
+      "category": "Condiments",
+      "serving": "2 oz",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Ranch Dressing",
+      "category": "Condiments",
+      "serving": "1.5 oz",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ranch Dressing",
+      "category": "Condiments",
+      "serving": "3 oz",
+      "calories": 390,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 42,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sour Cream",
+      "category": "Condiments",
+      "serving": "1 oz",
+      "calories": 45,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tomato Sauce",
+      "category": "Condiments",
+      "serving": "1.5 oz",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Whipped Margarine",
+      "category": "Condiments",
+      "serving": "0.5 oz",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon Strips",
+      "category": "Kids’ Entrées",
+      "serving": "2 pieces",
+      "calories": 130,
+      "protein_g": 12,
+      "carbs_g": 1,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon Strip & Sausage Link",
+      "category": "Kids’ Entrées",
+      "serving": "1 each",
+      "calories": 150,
+      "protein_g": 9,
+      "carbs_g": 1,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Egg, Boiled (1)",
+      "category": "Kids’ Entrées",
+      "serving": "2 oz",
+      "calories": 60,
+      "protein_g": 6,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Egg, Fried / Basted (1)",
+      "category": "Kids’ Entrées",
+      "serving": "2 oz",
+      "calories": 90,
+      "protein_g": 6,
+      "carbs_g": 0,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Egg, Scrambled (1)",
+      "category": "Kids’ Entrées",
+      "serving": "2 oz",
+      "calories": 110,
+      "protein_g": 7,
+      "carbs_g": 1,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Egg White (1)",
+      "category": "Kids’ Entrées",
+      "serving": "2 oz",
+      "calories": 40,
+      "protein_g": 7,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hash Browns",
+      "category": "Kids’ Entrées",
+      "serving": "2 oz",
+      "calories": 90,
+      "protein_g": 1,
+      "carbs_g": 11,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sausage Links",
+      "category": "Kids’ Entrées",
+      "serving": "2 pieces",
+      "calories": 160,
+      "protein_g": 5,
+      "carbs_g": 1,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Silver Dollar Pancakes",
+      "category": "Kids’ Entrées",
+      "serving": "3 pieces",
+      "calories": 190,
+      "protein_g": 4,
+      "carbs_g": 29,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Toast, White, w/ margarine",
+      "category": "Kids’ Entrées",
+      "serving": "1 serving",
+      "calories": 120,
+      "protein_g": 3,
+      "carbs_g": 15,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Turkey Bacon Strips",
+      "category": "Kids’ Entrées",
+      "serving": "2 pieces",
+      "calories": 70,
+      "protein_g": 7,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jr. Grand Slam® (add egg choice)",
+      "category": "Kids’ Entrées",
+      "serving": "5 oz",
+      "calories": 340,
+      "protein_g": 12,
+      "carbs_g": 30,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "Jr. Birthday Cake Pancakes (add side)",
+      "category": "Kids’ Entrées",
+      "serving": "3 pieces",
+      "calories": 270,
+      "protein_g": 5,
+      "carbs_g": 51,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Jr. Cheeseburger (add side)",
+      "category": "Kids’ Entrées",
+      "serving": "6 oz",
+      "calories": 470,
+      "protein_g": 27,
+      "carbs_g": 34,
+      "fat_g": 25,
+      "fiber_g": 1
+    },
+    {
+      "name": "Jr. Chocolate Chip Pancakes (add side)",
+      "category": "Kids’ Entrées",
+      "serving": "3 pieces",
+      "calories": 220,
+      "protein_g": 5,
+      "carbs_g": 38,
+      "fat_g": 6,
+      "fiber_g": 2
+    },
+    {
+      "name": "Jr. French Toast",
+      "category": "Kids’ Entrées",
+      "serving": "2 pieces",
+      "calories": 360,
+      "protein_g": 15,
+      "carbs_g": 47,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Jr. Grand Slam® w/ egg whites, turkey bacon, hash browns & Minute Maid® apple juice",
+      "category": "Kids’ Entrées",
+      "serving": "17 oz",
+      "calories": 330,
+      "protein_g": 15,
+      "carbs_g": 48,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Jr. Grand Slam® w/ scrambled egg, turkey bacon, grapes & Minute Maid® apple juice",
+      "category": "Kids’ Entrées",
+      "serving": "17 oz",
+      "calories": 380,
+      "protein_g": 15,
+      "carbs_g": 51,
+      "fat_g": 13,
+      "fiber_g": 1
+    },
+    {
+      "name": "Jr. Mac & Cheese (add side)",
+      "category": "Kids’ Entrées",
+      "serving": "7 oz",
+      "calories": 300,
+      "protein_g": 10,
+      "carbs_g": 44,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Jr. Premium Chicken Tenders (add dipping sauce & side)",
+      "category": "Kids’ Entrées",
+      "serving": "2 pieces",
+      "calories": 270,
+      "protein_g": 18,
+      "carbs_g": 15,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Add a Chicken Tender",
+      "category": "Kids’ Entrées",
+      "serving": "1 serving",
+      "calories": 140,
+      "protein_g": 9,
+      "carbs_g": 8,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Jr. Spaghetti",
+      "category": "Kids’ Entrées",
+      "serving": "8 oz",
+      "calories": 250,
+      "protein_g": 8,
+      "carbs_g": 48,
+      "fat_g": 4,
+      "fiber_g": 3
+    },
+    {
+      "name": "Jr. Waffle Slam® (add egg & meat choices)",
+      "category": "Kids’ Entrées",
+      "serving": "1 serving",
+      "calories": 450,
+      "protein_g": 5,
+      "carbs_g": 48,
+      "fat_g": 26,
+      "fiber_g": 2
+    },
+    {
+      "name": "Fresh Banana Slices",
+      "category": "Kids’ Sides",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 1,
+      "carbs_g": 27,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Broccoli",
+      "category": "Kids’ Sides",
+      "serving": "4 oz",
+      "calories": 35,
+      "protein_g": 3,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Grapes",
+      "category": "Kids’ Sides",
+      "serving": "3 oz",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 14,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Jr. Garden Salad (add dressing choice)",
+      "category": "Kids’ Sides",
+      "serving": "3 oz",
+      "calories": 80,
+      "protein_g": 2,
+      "carbs_g": 13,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Jr. Ice Cream: Chocolate",
+      "category": "Kids’ Desserts",
+      "serving": "4 oz",
+      "calories": 270,
+      "protein_g": 5,
+      "carbs_g": 30,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jr. Ice Cream: Strawberry",
+      "category": "Kids’ Desserts",
+      "serving": "4 oz",
+      "calories": 230,
+      "protein_g": 3,
+      "carbs_g": 32,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jr. Ice Cream: Vanilla",
+      "category": "Kids’ Desserts",
+      "serving": "4 oz",
+      "calories": 250,
+      "protein_g": 3,
+      "carbs_g": 27,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jr. Milk Shake: Chocolate",
+      "category": "Kids’ Desserts",
+      "serving": "12 oz",
+      "calories": 680,
+      "protein_g": 12,
+      "carbs_g": 89,
+      "fat_g": 32,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jr. Milk Shake: OREO® Blender Blaster™",
+      "category": "Kids’ Desserts",
+      "serving": "12 oz",
+      "calories": 760,
+      "protein_g": 11,
+      "carbs_g": 90,
+      "fat_g": 41,
+      "fiber_g": 1
+    },
+    {
+      "name": "Jr. Milk Shake: Strawberry",
+      "category": "Kids’ Desserts",
+      "serving": "12 oz",
+      "calories": 550,
+      "protein_g": 9,
+      "carbs_g": 77,
+      "fat_g": 26,
+      "fiber_g": 1
+    },
+    {
+      "name": "Jr. Milk Shake: Vanilla",
+      "category": "Kids’ Desserts",
+      "serving": "12 oz",
+      "calories": 620,
+      "protein_g": 9,
+      "carbs_g": 78,
+      "fat_g": 32,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brownie Sundae with OREO® Pieces",
+      "category": "Desserts",
+      "serving": "10 oz",
+      "calories": 900,
+      "protein_g": 9,
+      "carbs_g": 144,
+      "fat_g": 33,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cookie Dough Lover’s Pie",
+      "category": "Desserts",
+      "serving": "8 oz",
+      "calories": 710,
+      "protein_g": 8,
+      "carbs_g": 98,
+      "fat_g": 34,
+      "fiber_g": 2
+    },
+    {
+      "name": "New York Style Cheesecake Plain",
+      "category": "Desserts",
+      "serving": "5 oz",
+      "calories": 490,
+      "protein_g": 9,
+      "carbs_g": 42,
+      "fat_g": 32,
+      "fiber_g": 1
+    },
+    {
+      "name": "New York Style Cheesecake w/ Strawberry Topping & Whipped Cream",
+      "category": "Desserts",
+      "serving": "7 oz",
+      "calories": 560,
+      "protein_g": 9,
+      "carbs_g": 57,
+      "fat_g": 33,
+      "fiber_g": 1
+    },
+    {
+      "name": "Oven-Baked Caramel Apple Pie Crisp",
+      "category": "Desserts",
+      "serving": "14 oz",
+      "calories": 880,
+      "protein_g": 9,
+      "carbs_g": 147,
+      "fat_g": 28,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Milk (reduced fat)",
+      "category": "Drinks & Shakes",
+      "serving": "15 oz",
+      "calories": 290,
+      "protein_g": 16,
+      "carbs_g": 46,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee",
+      "category": "Drinks & Shakes",
+      "serving": "8 oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee, Salted Caramel Cold Brew",
+      "category": "Drinks & Shakes",
+      "serving": "11 oz",
+      "calories": 410,
+      "protein_g": 9,
+      "carbs_g": 72,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coffee, Sweet & Creamy Cold Brew",
+      "category": "Drinks & Shakes",
+      "serving": "10 oz",
+      "calories": 210,
+      "protein_g": 9,
+      "carbs_g": 35,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "FUZE® Raspberry Tea",
+      "category": "Drinks & Shakes",
+      "serving": "12 oz",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 28,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Chocolate",
+      "category": "Drinks & Shakes",
+      "serving": "8 oz",
+      "calories": 230,
+      "protein_g": 3,
+      "carbs_g": 47,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Tea / Herbal Tea",
+      "category": "Drinks & Shakes",
+      "serving": "8 oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea (Unsweet)",
+      "category": "Drinks & Shakes",
+      "serving": "12 oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Tea (Sweet)",
+      "category": "Drinks & Shakes",
+      "serving": "12 oz",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 40,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Juices: Apple",
+      "category": "Drinks & Shakes",
+      "serving": "15 oz",
+      "calories": 210,
+      "protein_g": 1,
+      "carbs_g": 52,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Juices: Orange",
+      "category": "Drinks & Shakes",
+      "serving": "15 oz",
+      "calories": 210,
+      "protein_g": 3,
+      "carbs_g": 51,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade",
+      "category": "Drinks & Shakes",
+      "serving": "12 oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 40,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "2% Milk",
+      "category": "Drinks & Shakes",
+      "serving": "15 oz",
+      "calories": 230,
+      "protein_g": 15,
+      "carbs_g": 22,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Milk Shakes: Chocolate",
+      "category": "Drinks & Shakes",
+      "serving": "12 oz",
+      "calories": 680,
+      "protein_g": 12,
+      "carbs_g": 89,
+      "fat_g": 32,
+      "fiber_g": 0
+    },
+    {
+      "name": "Milk Shakes: OREO®",
+      "category": "Drinks & Shakes",
+      "serving": "12 oz",
+      "calories": 760,
+      "protein_g": 11,
+      "carbs_g": 90,
+      "fat_g": 41,
+      "fiber_g": 1
+    },
+    {
+      "name": "Milk Shakes: Strawberry",
+      "category": "Drinks & Shakes",
+      "serving": "12 oz",
+      "calories": 550,
+      "protein_g": 9,
+      "carbs_g": 77,
+      "fat_g": 26,
+      "fiber_g": 1
+    },
+    {
+      "name": "Milk Shakes: Vanilla",
+      "category": "Drinks & Shakes",
+      "serving": "12 oz",
+      "calories": 620,
+      "protein_g": 9,
+      "carbs_g": 78,
+      "fat_g": 32,
+      "fiber_g": 0
+    },
+    {
+      "name": "Soft Drinks: Barq’s Root Beer®",
+      "category": "Drinks & Shakes",
+      "serving": "12 oz",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 55,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Soft Drinks: Coca-Cola®",
+      "category": "Drinks & Shakes",
+      "serving": "12 oz",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Soft Drinks: Coca-Cola® Zero Sugar",
+      "category": "Drinks & Shakes",
+      "serving": "12 oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Soft Drinks: Diet Coke®",
+      "category": "Drinks & Shakes",
+      "serving": "12 oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Soft Drinks: Dr Pepper®",
+      "category": "Drinks & Shakes",
+      "serving": "12 oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Soft Drinks: Fanta® Orange",
+      "category": "Drinks & Shakes",
+      "serving": "12 oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 52,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Soft Drinks: Hi-C® Fruit Punch",
+      "category": "Drinks & Shakes",
+      "serving": "12 oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 52,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Soft Drinks: Mello Yello",
+      "category": "Drinks & Shakes",
+      "serving": "12 oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Soft Drinks: Sprite®",
+      "category": "Drinks & Shakes",
+      "serving": "12 oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 47,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Soft Drinks: Vanilla Flavor Shot",
+      "category": "Drinks & Shakes",
+      "serving": "1 oz",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Lemonade",
+      "category": "Drinks & Shakes",
+      "serving": "12 oz",
+      "calories": 180,
+      "protein_g": 1,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Apple Juice",
+      "category": "Kids’ Drinks",
+      "serving": "10 oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Milk (reduced fat)",
+      "category": "Kids’ Drinks",
+      "serving": "10 oz",
+      "calories": 190,
+      "protein_g": 11,
+      "carbs_g": 31,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemonade",
+      "category": "Kids’ Drinks",
+      "serving": "8 oz",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "2% Milk",
+      "category": "Kids’ Drinks",
+      "serving": "10 oz",
+      "calories": 150,
+      "protein_g": 10,
+      "carbs_g": 15,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Orange Juice",
+      "category": "Kids’ Drinks",
+      "serving": "10 oz",
+      "calories": 140,
+      "protein_g": 2,
+      "carbs_g": 34,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buttermilk Biscuit",
+      "category": "Build Your Own Grand Slam®",
+      "serving": "1 serving",
+      "calories": 230,
+      "protein_g": 3,
+      "carbs_g": 26,
+      "fat_g": 13,
+      "fiber_g": 1
+    },
+    {
+      "name": "Eggs, Boiled (2)",
+      "category": "Build Your Own Grand Slam®",
+      "serving": "4 oz",
+      "calories": 130,
+      "protein_g": 11,
+      "carbs_g": 1,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Eggs, Fried / Basted (2)",
+      "category": "Build Your Own Grand Slam®",
+      "serving": "4 oz",
+      "calories": 190,
+      "protein_g": 11,
+      "carbs_g": 1,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Eggs, Scrambled (2)",
+      "category": "Build Your Own Grand Slam®",
+      "serving": "4 oz",
+      "calories": 220,
+      "protein_g": 14,
+      "carbs_g": 1,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Egg Whites (2)",
+      "category": "Build Your Own Grand Slam®",
+      "serving": "4 oz",
+      "calories": 80,
+      "protein_g": 13,
+      "carbs_g": 1,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "English Muffin w/o margarine",
+      "category": "Build Your Own Grand Slam®",
+      "serving": "1 serving",
+      "calories": 140,
+      "protein_g": 5,
+      "carbs_g": 29,
+      "fat_g": 1,
+      "fiber_g": 1
+    },
+    {
+      "name": "English Muffin w/ margarine",
+      "category": "Build Your Own Grand Slam®",
+      "serving": "1 serving",
+      "calories": 190,
+      "protein_g": 5,
+      "carbs_g": 29,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Grilled Ham Slice",
+      "category": "Build Your Own Grand Slam®",
+      "serving": "3 oz",
+      "calories": 120,
+      "protein_g": 14,
+      "carbs_g": 7,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hash Browns",
+      "category": "Build Your Own Grand Slam®",
+      "serving": "5 oz",
+      "calories": 180,
+      "protein_g": 1,
+      "carbs_g": 24,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Pancakes, Buttermilk",
+      "category": "Build Your Own Grand Slam®",
+      "serving": "2 pieces",
+      "calories": 450,
+      "protein_g": 10,
+      "carbs_g": 77,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pancakes, Hearty 9-Grain",
+      "category": "Build Your Own Grand Slam®",
+      "serving": "2 pieces",
+      "calories": 730,
+      "protein_g": 14,
+      "carbs_g": 142,
+      "fat_g": 11,
+      "fiber_g": 8
+    },
+    {
+      "name": "Seasonal Fruit",
+      "category": "Build Your Own Grand Slam®",
+      "serving": "6 oz",
+      "calories": 100,
+      "protein_g": 1,
+      "carbs_g": 25,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Toast, White, w/o margarine",
+      "category": "Build Your Own Grand Slam®",
+      "serving": "2 pieces",
+      "calories": 160,
+      "protein_g": 5,
+      "carbs_g": 31,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Toast, White, w/ margarine",
+      "category": "Build Your Own Grand Slam®",
+      "serving": "2 pieces",
+      "calories": 240,
+      "protein_g": 5,
+      "carbs_g": 31,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "All-American Slam® w/ hash browns & white toast",
+      "category": "Signature Slams®",
+      "serving": "18 oz",
+      "calories": 1200,
+      "protein_g": 55,
+      "carbs_g": 58,
+      "fat_g": 81,
+      "fiber_g": 1
+    },
+    {
+      "name": "Fit Slam®",
+      "category": "Signature Slams®",
+      "serving": "15 oz",
+      "calories": 450,
+      "protein_g": 27,
+      "carbs_g": 59,
+      "fat_g": 12,
+      "fiber_g": 5
+    },
+    {
+      "name": "French Toast Slam® (add egg choice)",
+      "category": "Signature Slams®",
+      "serving": "9 oz",
+      "calories": 810,
+      "protein_g": 29,
+      "carbs_g": 72,
+      "fat_g": 45,
+      "fiber_g": 3
+    },
+    {
+      "name": "Lumberjack Slam® w/ hash browns & white toast (add egg choice)",
+      "category": "Signature Slams®",
+      "serving": "21 oz",
+      "calories": 1260,
+      "protein_g": 48,
+      "carbs_g": 136,
+      "fat_g": 57,
+      "fiber_g": 3
+    },
+    {
+      "name": "Original Grand Slam® (add egg choice)",
+      "category": "Signature Slams®",
+      "serving": "11 oz",
+      "calories": 740,
+      "protein_g": 27,
+      "carbs_g": 79,
+      "fat_g": 34,
+      "fiber_g": 2
+    },
+    {
+      "name": "Berry Stuffed French Toast Slam® (add egg choice)",
+      "category": "Signature Slams®",
+      "serving": "18 oz",
+      "calories": 1240,
+      "protein_g": 39,
+      "carbs_g": 136,
+      "fat_g": 61,
+      "fiber_g": 6
+    },
+    {
+      "name": "Berry Stuffed French Toast À La Carte",
+      "category": "Signature Slams®",
+      "serving": "16 oz",
+      "calories": 950,
+      "protein_g": 22,
+      "carbs_g": 134,
+      "fat_g": 37,
+      "fiber_g": 6
+    },
+    {
+      "name": "Berry Waffle Slam® (add egg choice)",
+      "category": "Signature Slams®",
+      "serving": "12 oz",
+      "calories": 1200,
+      "protein_g": 28,
+      "carbs_g": 118,
+      "fat_g": 68,
+      "fiber_g": 6
+    },
+    {
+      "name": "Berry Waffles a la carte",
+      "category": "Signature Slams®",
+      "serving": "2 pieces",
+      "calories": 900,
+      "protein_g": 11,
+      "carbs_g": 112,
+      "fat_g": 45,
+      "fiber_g": 6
+    },
+    {
+      "name": "Waffle Slam® (add egg choice)",
+      "category": "Signature Slams®",
+      "serving": "9 oz",
+      "calories": 1160,
+      "protein_g": 27,
+      "carbs_g": 97,
+      "fat_g": 72,
+      "fiber_g": 4
+    },
+    {
+      "name": "Choconana Pancake Slam® (add hash browns, egg & meat choices)",
+      "category": "Pancakes Slams®",
+      "serving": "2 pieces",
+      "calories": 840,
+      "protein_g": 15,
+      "carbs_g": 149,
+      "fat_g": 25,
+      "fiber_g": 9
+    },
+    {
+      "name": "Cinnamon Roll Pancake Slam® w/ cream cheese icing (add hash browns, egg & meat choices)",
+      "category": "Pancakes Slams®",
+      "serving": "2 pieces",
+      "calories": 1100,
+      "protein_g": 10,
+      "carbs_g": 207,
+      "fat_g": 26,
+      "fiber_g": 4
+    },
+    {
+      "name": "Double Berry Banana Pancake Slam® (add hash browns, egg & meat choices)",
+      "category": "Pancakes Slams®",
+      "serving": "2 pieces",
+      "calories": 490,
+      "protein_g": 11,
+      "carbs_g": 97,
+      "fat_g": 7,
+      "fiber_g": 6
+    },
+    {
+      "name": "Hearty 9-Grain Pancake Slam® (add hash browns, egg & meat choices)",
+      "category": "Pancakes Slams®",
+      "serving": "2 pieces",
+      "calories": 730,
+      "protein_g": 14,
+      "carbs_g": 142,
+      "fat_g": 11,
+      "fiber_g": 8
+    },
+    {
+      "name": "Plant Based Slam®",
+      "category": "Pancakes Slams®",
+      "serving": "23 oz",
+      "calories": 1000,
+      "protein_g": 17,
+      "carbs_g": 191,
+      "fat_g": 19,
+      "fiber_g": 12
+    },
+    {
+      "name": "Berry Vanilla One Crepe Breakfast w/ hash browns (add egg & meat choices)",
+      "category": "French Crepes",
+      "serving": "10 oz",
+      "calories": 440,
+      "protein_g": 5,
+      "carbs_g": 60,
+      "fat_g": 20,
+      "fiber_g": 3
+    },
+    {
+      "name": "Berry Vanilla Two Crepe Breakfast w/ hash browns (add egg & meat choices)",
+      "category": "French Crepes",
+      "serving": "16 oz",
+      "calories": 710,
+      "protein_g": 9,
+      "carbs_g": 96,
+      "fat_g": 32,
+      "fiber_g": 5
+    },
+    {
+      "name": "Berry Vanilla Two Crepes À La Carte",
+      "category": "French Crepes",
+      "serving": "12 oz",
+      "calories": 530,
+      "protein_g": 7,
+      "carbs_g": 73,
+      "fat_g": 24,
+      "fiber_g": 4
+    },
+    {
+      "name": "Loaded Veggie Omelette w/ hash browns & white toast",
+      "category": "Omelettes",
+      "serving": "19 oz",
+      "calories": 920,
+      "protein_g": 36,
+      "carbs_g": 63,
+      "fat_g": 56,
+      "fiber_g": 3
+    },
+    {
+      "name": "Mile High Denver Omelette w/ hash browns & white toast",
+      "category": "Omelettes",
+      "serving": "19 oz",
+      "calories": 1090,
+      "protein_g": 51,
+      "carbs_g": 69,
+      "fat_g": 67,
+      "fiber_g": 2
+    },
+    {
+      "name": "Moons Over My Hammy® Omelette w/ hash browns & white toast",
+      "category": "Omelettes",
+      "serving": "19 oz",
+      "calories": 1080,
+      "protein_g": 52,
+      "carbs_g": 64,
+      "fat_g": 67,
+      "fiber_g": 1
+    },
+    {
+      "name": "Philly Cheesesteak Omelette w/ hash browns & white toast",
+      "category": "Omelettes",
+      "serving": "21 oz",
+      "calories": 1120,
+      "protein_g": 60,
+      "carbs_g": 62,
+      "fat_g": 68,
+      "fiber_g": 2
+    },
+    {
+      "name": "Ultimate Omelette® w/ hash browns & white toast",
+      "category": "Omelettes",
+      "serving": "21 oz",
+      "calories": 1150,
+      "protein_g": 46,
+      "carbs_g": 63,
+      "fat_g": 77,
+      "fiber_g": 3
+    },
+    {
+      "name": "American Cheese",
+      "category": "Build Your Own Omelette",
+      "serving": "1 slice",
+      "calories": 80,
+      "protein_g": 4,
+      "carbs_g": 1,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon",
+      "category": "Build Your Own Omelette",
+      "serving": "2 slices",
+      "calories": 130,
+      "protein_g": 12,
+      "carbs_g": 1,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramelized Onions",
+      "category": "Build Your Own Omelette",
+      "serving": "1 oz",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cheddar Cheese",
+      "category": "Build Your Own Omelette",
+      "serving": "1 oz",
+      "calories": 80,
+      "protein_g": 5,
+      "carbs_g": 0,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chorizo Sausage",
+      "category": "Build Your Own Omelette",
+      "serving": "3 oz",
+      "calories": 330,
+      "protein_g": 17,
+      "carbs_g": 4,
+      "fat_g": 27,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fire-Roasted Bell Peppers & Onions",
+      "category": "Build Your Own Omelette",
+      "serving": "2 oz",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Fresh Avocado",
+      "category": "Build Your Own Omelette",
+      "serving": "1 serving",
+      "calories": 90,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 8,
+      "fiber_g": 4
+    },
+    {
+      "name": "Fresh Spinach",
+      "category": "Build Your Own Omelette",
+      "serving": "0.5 oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ham",
+      "category": "Build Your Own Omelette",
+      "serving": "3 oz",
+      "calories": 120,
+      "protein_g": 14,
+      "carbs_g": 7,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jalapeños",
+      "category": "Build Your Own Omelette",
+      "serving": "1 oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Omelette, Egg White, Plain",
+      "category": "Build Your Own Omelette",
+      "serving": "7 oz",
+      "calories": 110,
+      "protein_g": 20,
+      "carbs_g": 1,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Omelette, Plain",
+      "category": "Build Your Own Omelette",
+      "serving": "7 oz",
+      "calories": 340,
+      "protein_g": 21,
+      "carbs_g": 2,
+      "fat_g": 26,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepper Jack Queso",
+      "category": "Build Your Own Omelette",
+      "serving": "2 oz",
+      "calories": 100,
+      "protein_g": 3,
+      "carbs_g": 5,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sausage",
+      "category": "Build Your Own Omelette",
+      "serving": "1.5 oz",
+      "calories": 180,
+      "protein_g": 6,
+      "carbs_g": 0,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sautéed Mushrooms",
+      "category": "Build Your Own Omelette",
+      "serving": "1 oz",
+      "calories": 50,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Swiss Cheese",
+      "category": "Build Your Own Omelette",
+      "serving": "1 slice",
+      "calories": 80,
+      "protein_g": 6,
+      "carbs_g": 0,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tomatoes",
+      "category": "Build Your Own Omelette",
+      "serving": "2 oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Turkey Bacon Strips",
+      "category": "Build Your Own Omelette",
+      "serving": "2 slices",
+      "calories": 70,
+      "protein_g": 7,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Country-Fried Steak & Eggs w/ gravy, hash browns & white toast (add egg choice)",
+      "category": "Signature Breakfasts",
+      "serving": "14 oz",
+      "calories": 810,
+      "protein_g": 22,
+      "carbs_g": 82,
+      "fat_g": 43,
+      "fiber_g": 2
+    },
+    {
+      "name": "Moons Over My Hammy® w/ hash browns",
+      "category": "Signature Breakfasts",
+      "serving": "17 oz",
+      "calories": 960,
+      "protein_g": 45,
+      "carbs_g": 68,
+      "fat_g": 55,
+      "fiber_g": 3
+    },
+    {
+      "name": "Santa Fe Sizzlin’ Skillet (add egg choice)",
+      "category": "Signature Breakfasts",
+      "serving": "12 oz",
+      "calories": 770,
+      "protein_g": 27,
+      "carbs_g": 38,
+      "fat_g": 58,
+      "fiber_g": 4
+    },
+    {
+      "name": "Sirloin Steak & Eggs w/ hash browns & white toast (add egg choice)",
+      "category": "Signature Breakfasts",
+      "serving": "16 oz",
+      "calories": 770,
+      "protein_g": 50,
+      "carbs_g": 56,
+      "fat_g": 36,
+      "fiber_g": 1
+    },
+    {
+      "name": "T-Bone Steak & Eggs w/ hash browns & white toast (add egg choice)",
+      "category": "Signature Breakfasts",
+      "serving": "18 oz",
+      "calories": 910,
+      "protein_g": 59,
+      "carbs_g": 55,
+      "fat_g": 49,
+      "fiber_g": 1
+    },
+    {
+      "name": "Grand Slamwich® w/ hash browns",
+      "category": "Signature Breakfasts",
+      "serving": "18 oz",
+      "calories": 1220,
+      "protein_g": 55,
+      "carbs_g": 71,
+      "fat_g": 78,
+      "fiber_g": 3
+    },
+    {
+      "name": "Bacon Strips",
+      "category": "À La Carte Sides",
+      "serving": "4 pieces",
+      "calories": 260,
+      "protein_g": 25,
+      "carbs_g": 2,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Biscuit & Gravy",
+      "category": "À La Carte Sides",
+      "serving": "5 oz",
+      "calories": 320,
+      "protein_g": 5,
+      "carbs_g": 31,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Buttermilk Biscuits",
+      "category": "À La Carte Sides",
+      "serving": "2 pieces",
+      "calories": 450,
+      "protein_g": 6,
+      "carbs_g": 52,
+      "fat_g": 26,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cheddar Cheese Hash Browns",
+      "category": "À La Carte Sides",
+      "serving": "5 oz",
+      "calories": 250,
+      "protein_g": 6,
+      "carbs_g": 24,
+      "fat_g": 14,
+      "fiber_g": 1
+    },
+    {
+      "name": "Red-Skinned Potatoes",
+      "category": "À La Carte Sides",
+      "serving": "5 oz",
+      "calories": 250,
+      "protein_g": 4,
+      "carbs_g": 30,
+      "fat_g": 13,
+      "fiber_g": 3
+    },
+    {
+      "name": "Sausage Links",
+      "category": "À La Carte Sides",
+      "serving": "4 pieces",
+      "calories": 320,
+      "protein_g": 10,
+      "carbs_g": 2,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Slices of French Toast",
+      "category": "À La Carte Sides",
+      "serving": "2 pieces",
+      "calories": 360,
+      "protein_g": 15,
+      "carbs_g": 47,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Stack of Buttermilk Pancakes",
+      "category": "À La Carte Sides",
+      "serving": "2 pieces",
+      "calories": 450,
+      "protein_g": 10,
+      "carbs_g": 77,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Tortillas, Flour (3)",
+      "category": "À La Carte Sides",
+      "serving": "3 pieces",
+      "calories": 250,
+      "protein_g": 6,
+      "carbs_g": 42,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Turkey Bacon Strips (4)",
+      "category": "À La Carte Sides",
+      "serving": "4 pieces",
+      "calories": 140,
+      "protein_g": 15,
+      "carbs_g": 2,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Waffle",
+      "category": "À La Carte Sides",
+      "serving": "1 serving",
+      "calories": 450,
+      "protein_g": 5,
+      "carbs_g": 48,
+      "fat_g": 26,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chicken Noodle Soup - bowl",
+      "category": "Soups",
+      "serving": "12 oz",
+      "calories": 390,
+      "protein_g": 21,
+      "carbs_g": 43,
+      "fat_g": 15,
+      "fiber_g": 2
+    },
+    {
+      "name": "Chicken Noodle Soup - cup",
+      "category": "Soups",
+      "serving": "8 oz",
+      "calories": 260,
+      "protein_g": 14,
+      "carbs_g": 28,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "Loaded Baked Potato Soup - bowl",
+      "category": "Soups",
+      "serving": "12 oz",
+      "calories": 470,
+      "protein_g": 14,
+      "carbs_g": 35,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Loaded Baked Potato Soup - cup",
+      "category": "Soups",
+      "serving": "8 oz",
+      "calories": 360,
+      "protein_g": 12,
+      "carbs_g": 24,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cobb Salad (add dressing choice)",
+      "category": "Salads",
+      "serving": "14 oz",
+      "calories": 480,
+      "protein_g": 28,
+      "carbs_g": 25,
+      "fat_g": 31,
+      "fiber_g": 7
+    },
+    {
+      "name": "House Salad (add dressing choice)",
+      "category": "Salads",
+      "serving": "10 oz",
+      "calories": 190,
+      "protein_g": 9,
+      "carbs_g": 19,
+      "fat_g": 9,
+      "fiber_g": 3
+    },
+    {
+      "name": "Crispy Fried Chicken",
+      "category": "Salad Add-Ons",
+      "serving": "5 oz",
+      "calories": 410,
+      "protein_g": 27,
+      "carbs_g": 23,
+      "fat_g": 24,
+      "fiber_g": 2
+    },
+    {
+      "name": "Grilled Chicken Breast",
+      "category": "Salad Add-Ons",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 29,
+      "carbs_g": 1,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wild-caught Alaska Salmon",
+      "category": "Salad Add-Ons",
+      "serving": "7 oz",
+      "calories": 350,
+      "protein_g": 32,
+      "carbs_g": 1,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bone-In Wings with BBQ Sauce (add dipping sauce choice)",
+      "category": "Starters",
+      "serving": "8 pieces",
+      "calories": 640,
+      "protein_g": 46,
+      "carbs_g": 39,
+      "fat_g": 31,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bone-In Wings with BBQ Sauce (add dipping sauce choice)",
+      "category": "Starters",
+      "serving": "16 pieces",
+      "calories": 1290,
+      "protein_g": 91,
+      "carbs_g": 77,
+      "fat_g": 63,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bone-In Wings with Buffalo Sauce (add dipping sauce choice)",
+      "category": "Starters",
+      "serving": "8 pieces",
+      "calories": 670,
+      "protein_g": 46,
+      "carbs_g": 10,
+      "fat_g": 47,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bone-In Wings with Buffalo Sauce (add dipping sauce choice)",
+      "category": "Starters",
+      "serving": "16 pieces",
+      "calories": 1330,
+      "protein_g": 91,
+      "carbs_g": 19,
+      "fat_g": 94,
+      "fiber_g": 1
+    },
+    {
+      "name": "Boneless Chicken Wings w/ BBQ Sauce (add dipping sauce choice)",
+      "category": "Starters",
+      "serving": "8 pieces",
+      "calories": 740,
+      "protein_g": 34,
+      "carbs_g": 71,
+      "fat_g": 36,
+      "fiber_g": 4
+    },
+    {
+      "name": "Boneless Chicken Wings w/ BBQ Sauce (add dipping sauce choice)",
+      "category": "Starters",
+      "serving": "16 pieces",
+      "calories": 1490,
+      "protein_g": 69,
+      "carbs_g": 141,
+      "fat_g": 72,
+      "fiber_g": 9
+    },
+    {
+      "name": "Boneless Chicken Wings w/ Buffalo Sauce (add dipping sauce choice)",
+      "category": "Starters",
+      "serving": "8 pieces",
+      "calories": 770,
+      "protein_g": 34,
+      "carbs_g": 42,
+      "fat_g": 52,
+      "fiber_g": 4
+    },
+    {
+      "name": "Boneless Chicken Wings w/ Buffalo Sauce (add dipping sauce choice)",
+      "category": "Starters",
+      "serving": "16 pieces",
+      "calories": 1530,
+      "protein_g": 69,
+      "carbs_g": 83,
+      "fat_g": 103,
+      "fiber_g": 9
+    },
+    {
+      "name": "Diner Dipper: Bone-In Buffalo Wings (add dipping sauce choice)",
+      "category": "Starters",
+      "serving": "4 pieces",
+      "calories": 330,
+      "protein_g": 23,
+      "carbs_g": 5,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diner Dipper: Boneless Buffalo Wings (add dipping sauce choice)",
+      "category": "Starters",
+      "serving": "6 pieces",
+      "calories": 570,
+      "protein_g": 26,
+      "carbs_g": 31,
+      "fat_g": 39,
+      "fiber_g": 3
+    },
+    {
+      "name": "Diner Dipper: Cheesy Bacon Ranch Sliders (add dipping sauce choice)",
+      "category": "Starters",
+      "serving": "2 pieces",
+      "calories": 910,
+      "protein_g": 41,
+      "carbs_g": 44,
+      "fat_g": 63,
+      "fiber_g": 1
+    },
+    {
+      "name": "Diner Dipper: Chicken Tenders (add dipping sauce choice)",
+      "category": "Starters",
+      "serving": "2 pieces",
+      "calories": 270,
+      "protein_g": 18,
+      "carbs_g": 15,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Diner Dipper: MozzillasTM (add sauce choice)",
+      "category": "Starters",
+      "serving": "2 pieces",
+      "calories": 640,
+      "protein_g": 25,
+      "carbs_g": 70,
+      "fat_g": 29,
+      "fiber_g": 2
+    },
+    {
+      "name": "Diner Dipper: Onion Rings (add dipping sauce choice)",
+      "category": "Starters",
+      "serving": "5 oz",
+      "calories": 400,
+      "protein_g": 4,
+      "carbs_g": 35,
+      "fat_g": 27,
+      "fiber_g": 3
+    },
+    {
+      "name": "Diner Dipper: Seasoned Fries (add dipping sauce choice)",
+      "category": "Starters",
+      "serving": "5.5 oz",
+      "calories": 490,
+      "protein_g": 7,
+      "carbs_g": 57,
+      "fat_g": 26,
+      "fiber_g": 8
+    },
+    {
+      "name": "Diner Dipper: Wavy-Cut Fries (add dipping sauce choice)",
+      "category": "Starters",
+      "serving": "5 oz",
+      "calories": 400,
+      "protein_g": 4,
+      "carbs_g": 46,
+      "fat_g": 22,
+      "fiber_g": 4
+    },
+    {
+      "name": "Maple Stuffed Donut Holes",
+      "category": "Starters",
+      "serving": "4 pieces",
+      "calories": 760,
+      "protein_g": 5,
+      "carbs_g": 98,
+      "fat_g": 38,
+      "fiber_g": 0
+    },
+    {
+      "name": "Maple Stuffed Donut Holes",
+      "category": "Starters",
+      "serving": "10 pieces",
+      "calories": 1750,
+      "protein_g": 11,
+      "carbs_g": 221,
+      "fat_g": 89,
+      "fiber_g": 0
+    },
+    {
+      "name": "MozzillasTM (add sauce choice)",
+      "category": "Starters",
+      "serving": "4 pieces",
+      "calories": 1280,
+      "protein_g": 50,
+      "carbs_g": 140,
+      "fat_g": 58,
+      "fiber_g": 4
+    },
+    {
+      "name": "Premium Chicken Tenders (add sauce choice)",
+      "category": "Starters",
+      "serving": "5 pieces",
+      "calories": 680,
+      "protein_g": 45,
+      "carbs_g": 38,
+      "fat_g": 40,
+      "fiber_g": 3
+    },
+    {
+      "name": "Zesty Nachos",
+      "category": "Starters",
+      "serving": "25 oz",
+      "calories": 1660,
+      "protein_g": 44,
+      "carbs_g": 170,
+      "fat_g": 106,
+      "fiber_g": 11
+    },
+    {
+      "name": "Zesty Nachos (Half Order)",
+      "category": "Starters",
+      "serving": "15 oz",
+      "calories": 870,
+      "protein_g": 25,
+      "carbs_g": 69,
+      "fat_g": 55,
+      "fiber_g": 6
+    },
+    {
+      "name": "Cali Club Sandwich (add side choice)",
+      "category": "Melts & Handhelds",
+      "serving": "14 oz",
+      "calories": 840,
+      "protein_g": 49,
+      "carbs_g": 56,
+      "fat_g": 48,
+      "fiber_g": 9
+    },
+    {
+      "name": "Crispy Chicken Bacon Ranch Sandwich (add side choice)",
+      "category": "Melts & Handhelds",
+      "serving": "19 oz",
+      "calories": 1160,
+      "protein_g": 58,
+      "carbs_g": 67,
+      "fat_g": 74,
+      "fiber_g": 6
+    },
+    {
+      "name": "BBQ Bacon Chicken Sandwich (add side choice)",
+      "category": "Melts & Handhelds",
+      "serving": "14 oz",
+      "calories": 760,
+      "protein_g": 55,
+      "carbs_g": 69,
+      "fat_g": 31,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pot Roast Melt (add side choice)",
+      "category": "Melts & Handhelds",
+      "serving": "11 oz",
+      "calories": 770,
+      "protein_g": 57,
+      "carbs_g": 44,
+      "fat_g": 42,
+      "fiber_g": 2
+    },
+    {
+      "name": "Super Bird® (add side choice)",
+      "category": "Melts & Handhelds",
+      "serving": "11 oz",
+      "calories": 680,
+      "protein_g": 47,
+      "carbs_g": 47,
+      "fat_g": 34,
+      "fiber_g": 2
+    },
+    {
+      "name": "Beer-Battered Onion Rings",
+      "category": "À La Carte Sides",
+      "serving": "5 oz",
+      "calories": 400,
+      "protein_g": 4,
+      "carbs_g": 35,
+      "fat_g": 27,
+      "fiber_g": 3
+    },
+    {
+      "name": "Garden Side Salad (add dressing choice)",
+      "category": "À La Carte Sides",
+      "serving": "7 oz",
+      "calories": 170,
+      "protein_g": 8,
+      "carbs_g": 16,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Seasoned Fries",
+      "category": "À La Carte Sides",
+      "serving": "5.5 oz",
+      "calories": 490,
+      "protein_g": 7,
+      "carbs_g": 57,
+      "fat_g": 26,
+      "fiber_g": 8
+    },
+    {
+      "name": "Wavy-Cut Fries",
+      "category": "À La Carte Sides",
+      "serving": "5 oz",
+      "calories": 400,
+      "protein_g": 4,
+      "carbs_g": 46,
+      "fat_g": 22,
+      "fiber_g": 4
+    },
+    {
+      "name": "Bacon Avocado Cheeseburger (add side choice)",
+      "category": "Burgers",
+      "serving": "14 oz",
+      "calories": 1010,
+      "protein_g": 54,
+      "carbs_g": 43,
+      "fat_g": 70,
+      "fiber_g": 6
+    },
+    {
+      "name": "Double Bacon Avocado Cheeseburger (add side choice)",
+      "category": "Burgers",
+      "serving": "19 oz",
+      "calories": 1450,
+      "protein_g": 88,
+      "carbs_g": 43,
+      "fat_g": 105,
+      "fiber_g": 6
+    },
+    {
+      "name": "Bourbon Bacon Burger (add side choice)",
+      "category": "Burgers",
+      "serving": "14 oz",
+      "calories": 870,
+      "protein_g": 54,
+      "carbs_g": 51,
+      "fat_g": 51,
+      "fiber_g": 3
+    },
+    {
+      "name": "Double Bourbon Bacon Burger (add side choice)",
+      "category": "Burgers",
+      "serving": "19 oz",
+      "calories": 1320,
+      "protein_g": 88,
+      "carbs_g": 51,
+      "fat_g": 86,
+      "fiber_g": 3
+    },
+    {
+      "name": "Cheesy Bacon Ranch Sliders (add side choice)",
+      "category": "Burgers",
+      "serving": "14 oz",
+      "calories": 1360,
+      "protein_g": 61,
+      "carbs_g": 65,
+      "fat_g": 94,
+      "fiber_g": 2
+    },
+    {
+      "name": "Double Cheeseburger (add cheese & side choices)",
+      "category": "Burgers",
+      "serving": "14 oz",
+      "calories": 920,
+      "protein_g": 65,
+      "carbs_g": 37,
+      "fat_g": 57,
+      "fiber_g": 2
+    },
+    {
+      "name": "Single Cheeseburger (add cheese & side choices)",
+      "category": "Burgers",
+      "serving": "10 oz",
+      "calories": 560,
+      "protein_g": 36,
+      "carbs_g": 37,
+      "fat_g": 30,
+      "fiber_g": 2
+    },
+    {
+      "name": "Dr. Praeger’s® Veggie Patty",
+      "category": "Burgers",
+      "serving": "1 serving",
+      "calories": 210,
+      "protein_g": 8,
+      "carbs_g": 25,
+      "fat_g": 9,
+      "fiber_g": 14
+    },
+    {
+      "name": "Grilled Seasoned Chicken Breast",
+      "category": "Burgers",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 29,
+      "carbs_g": 1,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Slamburger™ (add egg & side choices)",
+      "category": "Burgers",
+      "serving": "10 oz",
+      "calories": 830,
+      "protein_g": 52,
+      "carbs_g": 46,
+      "fat_g": 49,
+      "fiber_g": 2
+    },
+    {
+      "name": "Double Slamburger™ (add egg & side choices)",
+      "category": "Burgers",
+      "serving": "15 oz",
+      "calories": 1270,
+      "protein_g": 85,
+      "carbs_g": 48,
+      "fat_g": 83,
+      "fiber_g": 2
+    },
+    {
+      "name": "Triple Juicy Burger (add side choice)",
+      "category": "Burgers",
+      "serving": "19 oz",
+      "calories": 1510,
+      "protein_g": 98,
+      "carbs_g": 44,
+      "fat_g": 105,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bourbon Chicken Sizzlin’ Skillet",
+      "category": "Dinners",
+      "serving": "21 oz",
+      "calories": 840,
+      "protein_g": 65,
+      "carbs_g": 69,
+      "fat_g": 35,
+      "fiber_g": 7
+    },
+    {
+      "name": "Country-Fried Steak w/ gravy & dinner bread (add side choices)",
+      "category": "Dinners",
+      "serving": "14 oz",
+      "calories": 960,
+      "protein_g": 35,
+      "carbs_g": 78,
+      "fat_g": 56,
+      "fiber_g": 3
+    },
+    {
+      "name": "Crazy Spicy Sizzlin’ Skillet (add optional egg choice)",
+      "category": "Dinners",
+      "serving": "20 oz",
+      "calories": 1040,
+      "protein_g": 59,
+      "carbs_g": 48,
+      "fat_g": 69,
+      "fiber_g": 5
+    },
+    {
+      "name": "Fried Fish Platter with dinner bread (add side choices)",
+      "category": "Dinners",
+      "serving": "13 oz",
+      "calories": 900,
+      "protein_g": 33,
+      "carbs_g": 68,
+      "fat_g": 55,
+      "fiber_g": 1
+    },
+    {
+      "name": "Smokehouse Mac ‘N’ Cheese SkilletTM",
+      "category": "Dinners",
+      "serving": "17 oz",
+      "calories": 990,
+      "protein_g": 64,
+      "carbs_g": 63,
+      "fat_g": 54,
+      "fiber_g": 3
+    },
+    {
+      "name": "Plate Lickin’ Chicken Fried Chicken w/ dinner bread (add side choices)",
+      "category": "Dinners",
+      "serving": "16 oz",
+      "calories": 1070,
+      "protein_g": 60,
+      "carbs_g": 68,
+      "fat_g": 62,
+      "fiber_g": 6
+    },
+    {
+      "name": "Premium Chicken Tenders w/ dinner bread (add side & sauce choices)",
+      "category": "Dinners",
+      "serving": "10 oz",
+      "calories": 860,
+      "protein_g": 51,
+      "carbs_g": 63,
+      "fat_g": 47,
+      "fiber_g": 3
+    },
+    {
+      "name": "Sirloin Steak w/ dinner bread (add side choices)",
+      "category": "Dinners",
+      "serving": "10 oz",
+      "calories": 530,
+      "protein_g": 49,
+      "carbs_g": 27,
+      "fat_g": 25,
+      "fiber_g": 1
+    },
+    {
+      "name": "Spaghetti & Meatballs w/ dinner bread",
+      "category": "Dinners",
+      "serving": "22 oz",
+      "calories": 1200,
+      "protein_g": 49,
+      "carbs_g": 125,
+      "fat_g": 58,
+      "fiber_g": 6
+    },
+    {
+      "name": "Add a meatball",
+      "category": "Dinners",
+      "serving": "1 each",
+      "calories": 170,
+      "protein_g": 9,
+      "carbs_g": 3,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spaghetti & Meatballs refill",
+      "category": "Dinners",
+      "serving": "10 oz",
+      "calories": 450,
+      "protein_g": 19,
+      "carbs_g": 51,
+      "fat_g": 20,
+      "fiber_g": 3
+    },
+    {
+      "name": "T-Bone Steak w/ dinner bread (add side choices)",
+      "category": "Dinners",
+      "serving": "13 oz",
+      "calories": 680,
+      "protein_g": 57,
+      "carbs_g": 26,
+      "fat_g": 38,
+      "fiber_g": 1
+    },
+    {
+      "name": "Wild Alaska Salmon w/ dinner bread (add side choices)",
+      "category": "Dinners",
+      "serving": "9 oz",
+      "calories": 540,
+      "protein_g": 37,
+      "carbs_g": 27,
+      "fat_g": 31,
+      "fiber_g": 1
+    },
+    {
+      "name": "Garlic Toast / Dinner Bread",
+      "category": "Dinner Sides",
+      "serving": "2 pc",
+      "calories": 190,
+      "protein_g": 6,
+      "carbs_g": 25,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mac ‘N Cheese",
+      "category": "Dinner Sides",
+      "serving": "4 oz",
+      "calories": 240,
+      "protein_g": 11,
+      "carbs_g": 15,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Red Rustic Mashed PotatoesTM (add optional gravy choice)",
+      "category": "Dinner Sides",
+      "serving": "1 serving",
+      "calories": 250,
+      "protein_g": 5,
+      "carbs_g": 32,
+      "fat_g": 11,
+      "fiber_g": 8
+    },
+    {
+      "name": "Sweet Corn",
+      "category": "Dinner Sides",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 7,
+      "carbs_g": 33,
+      "fat_g": 15,
+      "fiber_g": 9
+    },
+    {
+      "name": "Whole Grain Rice",
+      "category": "Dinner Sides",
+      "serving": "5 oz",
+      "calories": 240,
+      "protein_g": 6,
+      "carbs_g": 48,
+      "fat_g": 2,
+      "fiber_g": 5
+    }
+  ]
+}

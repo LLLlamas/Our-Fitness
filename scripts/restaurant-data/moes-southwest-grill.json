@@ -1,0 +1,859 @@
+{
+  "chain": "Moe's Southwest Grill",
+  "slug": "moes-southwest-grill",
+  "aliases": [
+    "moe's",
+    "moes",
+    "moes southwest grill",
+    "moe's southwest grill",
+    "moes southwest",
+    "moe's southwest"
+  ],
+  "kind": "fast-casual",
+  "source_url": "https://assets.ctfassets.net/zqt8tllj2cy0/229Bgcvw5c0RwcUkhyghXG/d3722a14b4b1dd925316a8936200f5bd/MOES_1906368_Nutrition_Chart_2026_R4.pdf",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Official 2026 ingredient nutrition chart linked from moes.com/nutrition. Build-your-own: sum tortilla + rice + beans + protein + toppings. Protein sizes per guide: Small = tacos/kids, Medium = burrito/bowls/salads/nachos/quesadillas/stacks, Double = double protein. Atwater outliers (>20%, left as published): Guac (Add-On): 60 cal vs 74 Atwater",
+  "items": [
+    {
+      "name": "Tortilla Chips",
+      "category": "Tortilla Chips",
+      "serving": "Side",
+      "calories": 350,
+      "protein_g": 5,
+      "carbs_g": 45,
+      "fat_g": 18,
+      "fiber_g": 3
+    },
+    {
+      "name": "Tortilla Chips",
+      "category": "Tortilla Chips",
+      "serving": "Cup",
+      "calories": 700,
+      "protein_g": 10,
+      "carbs_g": 90,
+      "fat_g": 36,
+      "fiber_g": 5
+    },
+    {
+      "name": "Tortilla Chips",
+      "category": "Tortilla Chips",
+      "serving": "Bowl",
+      "calories": 1050,
+      "protein_g": 15,
+      "carbs_g": 135,
+      "fat_g": 54,
+      "fiber_g": 8
+    },
+    {
+      "name": "Adobo Chicken",
+      "category": "Proteins",
+      "serving": "Small (Tacos, Kids)",
+      "calories": 50,
+      "protein_g": 7,
+      "carbs_g": 1,
+      "fat_g": 2,
+      "fiber_g": 1
+    },
+    {
+      "name": "Adobo Chicken",
+      "category": "Proteins",
+      "serving": "Medium",
+      "calories": 100,
+      "protein_g": 14,
+      "carbs_g": 1,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Adobo Chicken",
+      "category": "Proteins",
+      "serving": "Double",
+      "calories": 200,
+      "protein_g": 28,
+      "carbs_g": 2,
+      "fat_g": 10,
+      "fiber_g": 2
+    },
+    {
+      "name": "White Meat Chicken",
+      "category": "Proteins",
+      "serving": "Small",
+      "calories": 55,
+      "protein_g": 9,
+      "carbs_g": 2,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "White Meat Chicken",
+      "category": "Proteins",
+      "serving": "Medium",
+      "calories": 110,
+      "protein_g": 18,
+      "carbs_g": 3,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "White Meat Chicken",
+      "category": "Proteins",
+      "serving": "Double",
+      "calories": 220,
+      "protein_g": 36,
+      "carbs_g": 6,
+      "fat_g": 6,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hand Cut Steak",
+      "category": "Proteins",
+      "serving": "Small",
+      "calories": 65,
+      "protein_g": 6,
+      "carbs_g": 2,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hand Cut Steak",
+      "category": "Proteins",
+      "serving": "Medium",
+      "calories": 130,
+      "protein_g": 11,
+      "carbs_g": 4,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hand Cut Steak",
+      "category": "Proteins",
+      "serving": "Double",
+      "calories": 260,
+      "protein_g": 22,
+      "carbs_g": 8,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ground Beef",
+      "category": "Proteins",
+      "serving": "Small",
+      "calories": 75,
+      "protein_g": 5,
+      "carbs_g": 3,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Ground Beef",
+      "category": "Proteins",
+      "serving": "Medium",
+      "calories": 150,
+      "protein_g": 10,
+      "carbs_g": 5,
+      "fat_g": 9,
+      "fiber_g": 2
+    },
+    {
+      "name": "Ground Beef",
+      "category": "Proteins",
+      "serving": "Double",
+      "calories": 300,
+      "protein_g": 20,
+      "carbs_g": 10,
+      "fat_g": 18,
+      "fiber_g": 4
+    },
+    {
+      "name": "Tofu",
+      "category": "Proteins",
+      "serving": "Small",
+      "calories": 55,
+      "protein_g": 5,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Tofu",
+      "category": "Proteins",
+      "serving": "Medium",
+      "calories": 110,
+      "protein_g": 9,
+      "carbs_g": 2,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Tofu",
+      "category": "Proteins",
+      "serving": "Large",
+      "calories": 220,
+      "protein_g": 18,
+      "carbs_g": 4,
+      "fat_g": 14,
+      "fiber_g": 2
+    },
+    {
+      "name": "Queso",
+      "category": "Queso",
+      "serving": "Side",
+      "calories": 200,
+      "protein_g": 8,
+      "carbs_g": 5,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Queso",
+      "category": "Queso",
+      "serving": "Cup",
+      "calories": 410,
+      "protein_g": 17,
+      "carbs_g": 11,
+      "fat_g": 32,
+      "fiber_g": 0
+    },
+    {
+      "name": "Queso",
+      "category": "Queso",
+      "serving": "Bowl",
+      "calories": 750,
+      "protein_g": 31,
+      "carbs_g": 20,
+      "fat_g": 59,
+      "fiber_g": 0
+    },
+    {
+      "name": "Queso",
+      "category": "Queso",
+      "serving": "Add-On",
+      "calories": 130,
+      "protein_g": 5,
+      "carbs_g": 3,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Queso",
+      "category": "Queso",
+      "serving": "Add-On, Small",
+      "calories": 50,
+      "protein_g": 2,
+      "carbs_g": 1,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Guac",
+      "category": "Guac",
+      "serving": "Side",
+      "calories": 110,
+      "protein_g": 2,
+      "carbs_g": 7,
+      "fat_g": 10,
+      "fiber_g": 5
+    },
+    {
+      "name": "Guac",
+      "category": "Guac",
+      "serving": "Cup",
+      "calories": 250,
+      "protein_g": 3,
+      "carbs_g": 15,
+      "fat_g": 22,
+      "fiber_g": 10
+    },
+    {
+      "name": "Guac",
+      "category": "Guac",
+      "serving": "Bowl",
+      "calories": 410,
+      "protein_g": 6,
+      "carbs_g": 26,
+      "fat_g": 36,
+      "fiber_g": 17
+    },
+    {
+      "name": "Guac",
+      "category": "Guac",
+      "serving": "Add-On",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 6,
+      "fiber_g": 3
+    },
+    {
+      "name": "Guac",
+      "category": "Guac",
+      "serving": "Add-On, Small",
+      "calories": 40,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 4,
+      "fiber_g": 2
+    },
+    {
+      "name": "Seasoned Rice",
+      "category": "Seasoned Rice",
+      "serving": "Ingredient for Jr. Burrito",
+      "calories": 94,
+      "protein_g": 2,
+      "carbs_g": 18,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Seasoned Rice",
+      "category": "Seasoned Rice",
+      "serving": "Ingredient for Burrito",
+      "calories": 150,
+      "protein_g": 3,
+      "carbs_g": 27,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Seasoned Rice",
+      "category": "Seasoned Rice",
+      "serving": "Cup and Burrito Bowl",
+      "calories": 300,
+      "protein_g": 6,
+      "carbs_g": 54,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Seasoned Rice",
+      "category": "Seasoned Rice",
+      "serving": "Bowl",
+      "calories": 500,
+      "protein_g": 10,
+      "carbs_g": 90,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cilantro Lime Rice",
+      "category": "Cilantro Lime Rice",
+      "serving": "Ingredient for Jr. Burrito",
+      "calories": 93,
+      "protein_g": 2,
+      "carbs_g": 18,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cilantro Lime Rice",
+      "category": "Cilantro Lime Rice",
+      "serving": "Ingredient for Burrito",
+      "calories": 140,
+      "protein_g": 3,
+      "carbs_g": 27,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cilantro Lime Rice",
+      "category": "Cilantro Lime Rice",
+      "serving": "Cup and Burrito Bowl",
+      "calories": 280,
+      "protein_g": 6,
+      "carbs_g": 54,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cilantro Lime Rice",
+      "category": "Cilantro Lime Rice",
+      "serving": "Bowl",
+      "calories": 470,
+      "protein_g": 10,
+      "carbs_g": 90,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Black Beans",
+      "category": "Black Beans",
+      "serving": "Jr. ingredient portion / taco",
+      "calories": 30,
+      "protein_g": 2,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Black Beans",
+      "category": "Black Beans",
+      "serving": "Ingredient portion for Burrito Bowl, Nacho, Quesadilla, Stack",
+      "calories": 60,
+      "protein_g": 3,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Black Beans",
+      "category": "Black Beans",
+      "serving": "Cup",
+      "calories": 120,
+      "protein_g": 6,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 6
+    },
+    {
+      "name": "Black Beans",
+      "category": "Black Beans",
+      "serving": "Bowl",
+      "calories": 220,
+      "protein_g": 10,
+      "carbs_g": 40,
+      "fat_g": 0,
+      "fiber_g": 10
+    },
+    {
+      "name": "Pinto Beans",
+      "category": "Pinto Beans",
+      "serving": "Jr. ingredient portion / taco",
+      "calories": 30,
+      "protein_g": 2,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pinto Beans",
+      "category": "Pinto Beans",
+      "serving": "Ingredient for Burrito, Bowl Nacho, Quesadilla, Stack",
+      "calories": 60,
+      "protein_g": 3,
+      "carbs_g": 12,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pinto Beans",
+      "category": "Pinto Beans",
+      "serving": "Cup",
+      "calories": 120,
+      "protein_g": 6,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 6
+    },
+    {
+      "name": "Pinto Beans",
+      "category": "Pinto Beans",
+      "serving": "Bowl",
+      "calories": 200,
+      "protein_g": 10,
+      "carbs_g": 40,
+      "fat_g": 0,
+      "fiber_g": 10
+    },
+    {
+      "name": "Grilled Onions and Peppers",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Roasted Corn Salsa",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 80,
+      "protein_g": 1,
+      "carbs_g": 9,
+      "fat_g": 4,
+      "fiber_g": 2
+    },
+    {
+      "name": "Oaxaca Cheese",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 130,
+      "protein_g": 10,
+      "carbs_g": 2,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "New Pico",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Guac",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 80,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 7,
+      "fiber_g": 3
+    },
+    {
+      "name": "Sour Cream",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 60,
+      "protein_g": 1,
+      "carbs_g": 1,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Romaine Lettuce",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Onions",
+      "category": "Fresh Ingredients",
+      "serving": "Diced",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jalapenos",
+      "category": "Fresh Ingredients",
+      "serving": "Pickled",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Jalapenos",
+      "category": "Fresh Ingredients",
+      "serving": "Fresh",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Black Olives",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 40,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Moe’s Sauce",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 110,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Poblano Crema",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 40,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chili Lime Sauce",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hard Rock",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chipotle Ranch",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 140,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "SW Vin",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "House-Made Salsa",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tomatillo Salsa",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "12” Flour Tortilla",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 310,
+      "protein_g": 8,
+      "carbs_g": 51,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "8” Flour Tortilla",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 100,
+      "protein_g": 2,
+      "carbs_g": 17,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "6” Flour Tortilla",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 70,
+      "protein_g": 2,
+      "carbs_g": 11,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "6” Crispy Corn Tortilla/Stack Shell",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 40,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tortilla Chips",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 140,
+      "protein_g": 2,
+      "carbs_g": 18,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Bacon",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 180,
+      "protein_g": 17,
+      "carbs_g": 0,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Potatoes",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 200,
+      "protein_g": 3,
+      "carbs_g": 29,
+      "fat_g": 8,
+      "fiber_g": 3
+    },
+    {
+      "name": "Chocolate Chunk Cookie",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 170,
+      "protein_g": 2,
+      "carbs_g": 23,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Spicy Red Salsa",
+      "category": "Fresh Ingredients",
+      "serving": "1 portion",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coca Cola Zero",
+      "category": "Drinks",
+      "serving": "Kids",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Coca Cola Zero",
+      "category": "Drinks",
+      "serving": "Regular",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Coca Cola Zero",
+      "category": "Drinks",
+      "serving": "Large",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sprite",
+      "category": "Drinks",
+      "serving": "Kids",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 36,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sprite",
+      "category": "Drinks",
+      "serving": "Regular",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sprite",
+      "category": "Drinks",
+      "serving": "Large",
+      "calories": 340,
+      "protein_g": 0,
+      "carbs_g": 91,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Diet Coke",
+      "category": "Drinks",
+      "serving": "Kids",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Diet Coke",
+      "category": "Drinks",
+      "serving": "Regular",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Diet Coke",
+      "category": "Drinks",
+      "serving": "Large",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Coca-Cola",
+      "category": "Drinks",
+      "serving": "Kids",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Coca-Cola",
+      "category": "Drinks",
+      "serving": "Regular",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 52,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Coca-Cola",
+      "category": "Drinks",
+      "serving": "Large",
+      "calories": 360,
+      "protein_g": 0,
+      "carbs_g": 97,
+      "fat_g": 0,
+      "fiber_g": 1
+    }
+  ]
+}

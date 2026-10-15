@@ -1,0 +1,1858 @@
+{
+  "chain": "KFC",
+  "slug": "kfc",
+  "aliases": [
+    "kfc",
+    "kentucky fried chicken",
+    "kentucky",
+    "k f c",
+    "kentucky fried"
+  ],
+  "kind": "fast-food",
+  "source_url": "https://www.nutritionix.com/kfc/nutrition-calculator/premium",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Read from KFC's official nutrition calculator (hosted by Nutritionix, linked from kfc.com/nutrition; \"Last Updated 10/02/2026\") via its published data file; spot-checked against the calculator label (Macaroni & Cheese: 140 cal, 6 g fat, 17 g carbs, 5 g protein). Chicken is per piece; Original Recipe Tenders and Kentucky Fried Nuggets are per single piece as the calculator lists them. A few values the data file stores unrounded (e.g. Biscuit, Cornbread Muffin, Southern Iced Tea) were rounded to integers. Not included: multi-component builds the calculator sums at runtime (Famous Bowl, Twister, Snacker, side salads, Cheese Curd Snack Box, Country Fried Steak with gravy), Spicy Zinger Mayo and Supergirl promo sauces, Limited Time Offers, and test/preview items. Re-verified 2026-10-15 in Chrome against the Nutritionix Interactive Nutrition Menu grid that kfc.com/full-nutrition-guide links (nutritionix.com/kfc/menu/premium): 12 rows corrected to the grid's per-item figures (Biscuit, Cheese Curds, Cornbread Muffin, Apple Turnover, Mini Chocolate Chip Cake, Southern Iced Tea x4, Country Fried Steak, Gizzards, Livers) because the calculator data file stores some of them per 100 g or unrounded; \"<1 g\" fiber recorded as 0. Sweet Tea, Unsweet Tea and Hot Sauce Packet appear only in the calculator (kfc.com/nutrition) and match it.",
+  "items": [
+    {
+      "name": "Original Recipe Chicken Breast",
+      "category": "World Famous Chicken",
+      "serving": "1 piece",
+      "calories": 390,
+      "protein_g": 39,
+      "carbs_g": 11,
+      "fat_g": 21,
+      "fiber_g": 2
+    },
+    {
+      "name": "Original Recipe Chicken Drumstick",
+      "category": "World Famous Chicken",
+      "serving": "1 piece",
+      "calories": 130,
+      "protein_g": 12,
+      "carbs_g": 4,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Original Recipe Chicken Thigh",
+      "category": "World Famous Chicken",
+      "serving": "1 piece",
+      "calories": 280,
+      "protein_g": 19,
+      "carbs_g": 8,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "Original Recipe Chicken Whole Wing",
+      "category": "World Famous Chicken",
+      "serving": "1 piece",
+      "calories": 130,
+      "protein_g": 10,
+      "carbs_g": 3,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Extra Crispy Chicken Breast",
+      "category": "World Famous Chicken",
+      "serving": "1 piece",
+      "calories": 530,
+      "protein_g": 35,
+      "carbs_g": 18,
+      "fat_g": 35,
+      "fiber_g": 0
+    },
+    {
+      "name": "Extra Crispy Chicken Drumstick",
+      "category": "World Famous Chicken",
+      "serving": "1 piece",
+      "calories": 170,
+      "protein_g": 10,
+      "carbs_g": 5,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Extra Crispy Chicken Thigh",
+      "category": "World Famous Chicken",
+      "serving": "1 piece",
+      "calories": 330,
+      "protein_g": 22,
+      "carbs_g": 9,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Extra Crispy Chicken Whole Wing",
+      "category": "World Famous Chicken",
+      "serving": "1 piece",
+      "calories": 170,
+      "protein_g": 10,
+      "carbs_g": 5,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Spicy Crispy Chicken Breast",
+      "category": "World Famous Chicken",
+      "serving": "1 piece",
+      "calories": 350,
+      "protein_g": 30,
+      "carbs_g": 11,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Spicy Crispy Chicken Drumstick",
+      "category": "World Famous Chicken",
+      "serving": "1 piece",
+      "calories": 130,
+      "protein_g": 9,
+      "carbs_g": 5,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Spicy Crispy Chicken Thigh",
+      "category": "World Famous Chicken",
+      "serving": "1 piece",
+      "calories": 270,
+      "protein_g": 13,
+      "carbs_g": 10,
+      "fat_g": 20,
+      "fiber_g": 1
+    },
+    {
+      "name": "Spicy Crispy Chicken Whole Wing",
+      "category": "World Famous Chicken",
+      "serving": "1 piece",
+      "calories": 120,
+      "protein_g": 7,
+      "carbs_g": 5,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kentucky Grilled Chicken Breast",
+      "category": "World Famous Chicken",
+      "serving": "1 piece",
+      "calories": 210,
+      "protein_g": 38,
+      "carbs_g": 0,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kentucky Grilled Chicken Drumstick",
+      "category": "World Famous Chicken",
+      "serving": "1 piece",
+      "calories": 80,
+      "protein_g": 11,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kentucky Grilled Chicken Thigh",
+      "category": "World Famous Chicken",
+      "serving": "1 piece",
+      "calories": 150,
+      "protein_g": 17,
+      "carbs_g": 0,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kentucky Grilled Chicken Whole Wing",
+      "category": "World Famous Chicken",
+      "serving": "1 piece",
+      "calories": 70,
+      "protein_g": 9,
+      "carbs_g": 0,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kentucky Fried Nuggets (1 nugget)",
+      "category": "World Famous Chicken",
+      "serving": "1 nugget",
+      "calories": 35,
+      "protein_g": 3,
+      "carbs_g": 1,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Original Recipe Tender (1 tender)",
+      "category": "World Famous Chicken",
+      "serving": "1 tender",
+      "calories": 170,
+      "protein_g": 11,
+      "carbs_g": 20,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "BBQ Baked Beans",
+      "category": "Homestyle Sides",
+      "serving": "1 side",
+      "calories": 190,
+      "protein_g": 11,
+      "carbs_g": 34,
+      "fat_g": 1,
+      "fiber_g": 7
+    },
+    {
+      "name": "BBQ Baked Beans (Family)",
+      "category": "Homestyle Sides",
+      "serving": "1 family side",
+      "calories": 830,
+      "protein_g": 47,
+      "carbs_g": 148,
+      "fat_g": 5,
+      "fiber_g": 31
+    },
+    {
+      "name": "Biscuit",
+      "category": "Homestyle Sides",
+      "serving": "1 side",
+      "calories": 180,
+      "protein_g": 4,
+      "carbs_g": 22,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Cheese Curds",
+      "category": "Homestyle Sides",
+      "serving": "1 side",
+      "calories": 350,
+      "protein_g": 17,
+      "carbs_g": 17,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Coleslaw",
+      "category": "Homestyle Sides",
+      "serving": "1 side",
+      "calories": 170,
+      "protein_g": 1,
+      "carbs_g": 14,
+      "fat_g": 12,
+      "fiber_g": 4
+    },
+    {
+      "name": "Coleslaw (Family)",
+      "category": "Homestyle Sides",
+      "serving": "1 family side",
+      "calories": 640,
+      "protein_g": 4,
+      "carbs_g": 54,
+      "fat_g": 46,
+      "fiber_g": 14
+    },
+    {
+      "name": "Corn on the Cob",
+      "category": "Homestyle Sides",
+      "serving": "1 side",
+      "calories": 70,
+      "protein_g": 2,
+      "carbs_g": 17,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Corn on the Cob (Family)",
+      "category": "Homestyle Sides",
+      "serving": "1 family side",
+      "calories": 280,
+      "protein_g": 9,
+      "carbs_g": 67,
+      "fat_g": 2,
+      "fiber_g": 8
+    },
+    {
+      "name": "Green Beans",
+      "category": "Homestyle Sides",
+      "serving": "1 side",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Green Beans (Family)",
+      "category": "Homestyle Sides",
+      "serving": "1 family side",
+      "calories": 80,
+      "protein_g": 4,
+      "carbs_g": 15,
+      "fat_g": 0,
+      "fiber_g": 9
+    },
+    {
+      "name": "Cornbread Muffin",
+      "category": "Homestyle Sides",
+      "serving": "1 side",
+      "calories": 210,
+      "protein_g": 3,
+      "carbs_g": 28,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Macaroni & Cheese",
+      "category": "Homestyle Sides",
+      "serving": "1 side",
+      "calories": 140,
+      "protein_g": 5,
+      "carbs_g": 17,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Macaroni & Cheese (Family)",
+      "category": "Homestyle Sides",
+      "serving": "1 family side",
+      "calories": 540,
+      "protein_g": 18,
+      "carbs_g": 66,
+      "fat_g": 23,
+      "fiber_g": 5
+    },
+    {
+      "name": "Mashed Potatoes",
+      "category": "Homestyle Sides",
+      "serving": "1 side",
+      "calories": 110,
+      "protein_g": 2,
+      "carbs_g": 17,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mashed Potatoes (Family)",
+      "category": "Homestyle Sides",
+      "serving": "1 family side",
+      "calories": 460,
+      "protein_g": 9,
+      "carbs_g": 72,
+      "fat_g": 15,
+      "fiber_g": 6
+    },
+    {
+      "name": "Mashed Potatoes With Gravy",
+      "category": "Homestyle Sides",
+      "serving": "1 side",
+      "calories": 130,
+      "protein_g": 3,
+      "carbs_g": 20,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mashed Potatoes With Gravy (Family)",
+      "category": "Homestyle Sides",
+      "serving": "1 family side",
+      "calories": 590,
+      "protein_g": 12,
+      "carbs_g": 88,
+      "fat_g": 21,
+      "fiber_g": 6
+    },
+    {
+      "name": "Secret Recipe Fries",
+      "category": "Homestyle Sides",
+      "serving": "1 side",
+      "calories": 320,
+      "protein_g": 5,
+      "carbs_g": 41,
+      "fat_g": 15,
+      "fiber_g": 3
+    },
+    {
+      "name": "Secret Recipe Fries (Family)",
+      "category": "Homestyle Sides",
+      "serving": "1 family side",
+      "calories": 840,
+      "protein_g": 13,
+      "carbs_g": 108,
+      "fat_g": 40,
+      "fiber_g": 9
+    },
+    {
+      "name": "Sweet Kernel Corn",
+      "category": "Homestyle Sides",
+      "serving": "1 side",
+      "calories": 70,
+      "protein_g": 2,
+      "carbs_g": 16,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Sweet Kernel Corn (Family)",
+      "category": "Homestyle Sides",
+      "serving": "1 family side",
+      "calories": 280,
+      "protein_g": 10,
+      "carbs_g": 67,
+      "fat_g": 2,
+      "fiber_g": 7
+    },
+    {
+      "name": "Classic Chicken Sandwich",
+      "category": "Sandwiches",
+      "serving": "1 serving",
+      "calories": 650,
+      "protein_g": 34,
+      "carbs_g": 49,
+      "fat_g": 35,
+      "fiber_g": 1
+    },
+    {
+      "name": "Spicy Chicken Sandwich",
+      "category": "Sandwiches",
+      "serving": "1 serving",
+      "calories": 620,
+      "protein_g": 34,
+      "carbs_g": 49,
+      "fat_g": 33,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chicken Pot Pie",
+      "category": "Pot Pie & KFC Famous Bowls",
+      "serving": "1 serving",
+      "calories": 720,
+      "protein_g": 26,
+      "carbs_g": 60,
+      "fat_g": 41,
+      "fiber_g": 7
+    },
+    {
+      "name": "Apple Turnover",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 230,
+      "protein_g": 2,
+      "carbs_g": 32,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Café Valley Chocolate Chip Cake (1 Slice)",
+      "category": "Desserts",
+      "serving": "1 Slice",
+      "calories": 300,
+      "protein_g": 4,
+      "carbs_g": 39,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "Café Valley Mini Chocolate Chip Cake",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 300,
+      "protein_g": 3,
+      "carbs_g": 49,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chocolate Chunk Cookie",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 190,
+      "protein_g": 2,
+      "carbs_g": 26,
+      "fat_g": 9,
+      "fiber_g": 1
+    },
+    {
+      "name": "Café Valley Lemon Cake (1 Slice)",
+      "category": "Desserts",
+      "serving": "1 Slice",
+      "calories": 220,
+      "protein_g": 2,
+      "carbs_g": 30,
+      "fat_g": 10,
+      "fiber_g": 0
+    },
+    {
+      "name": "Café Valley Mini Lemon Cake",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 300,
+      "protein_g": 3,
+      "carbs_g": 43,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "BBQ - Dipping Sauce Cup",
+      "category": "Dipping Sauces & Condiments",
+      "serving": "1 serving",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buffalo Ranch - Dipping Sauce Cup",
+      "category": "Dipping Sauces & Condiments",
+      "serving": "1 serving",
+      "calories": 120,
+      "protein_g": 1,
+      "carbs_g": 2,
+      "fat_g": 13,
+      "fiber_g": 0
+    },
+    {
+      "name": "Colonel's Buttery Spread",
+      "category": "Dipping Sauces & Condiments",
+      "serving": "1 serving",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Comeback Sauce - Dipping Sauce Cup",
+      "category": "Dipping Sauces & Condiments",
+      "serving": "1 serving",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Grape Jelly Packet",
+      "category": "Dipping Sauces & Condiments",
+      "serving": "1 serving",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey Mustard - Dipping Sauce Cup",
+      "category": "Dipping Sauces & Condiments",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 6,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Honey Sauce Packet",
+      "category": "Dipping Sauces & Condiments",
+      "serving": "1 serving",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 8,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Sauce Packet",
+      "category": "Dipping Sauces & Condiments",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ketchup",
+      "category": "Dipping Sauces & Condiments",
+      "serving": "1 serving",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 8,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "KFC Sauce - Dipping Sauce Cup",
+      "category": "Dipping Sauces & Condiments",
+      "serving": "1 serving",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lemon Juice Packet",
+      "category": "Dipping Sauces & Condiments",
+      "serving": "1 serving",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ranch - Dipping Sauce Cup",
+      "category": "Dipping Sauces & Condiments",
+      "serving": "1 serving",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 14,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sticky Chicky Sweet n' Sour Dipping Sauce Cup",
+      "category": "Dipping Sauces & Condiments",
+      "serving": "1 serving",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 11,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Jam Packet",
+      "category": "Dipping Sauces & Condiments",
+      "serving": "1 serving",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kentucky Fried Chicken Nuggets Kids Meal",
+      "category": "Kids Meal",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 17,
+      "carbs_g": 7,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Original Recipe Tenders Kids Meal",
+      "category": "Kids Meal",
+      "serving": "1 serving",
+      "calories": 350,
+      "protein_g": 21,
+      "carbs_g": 39,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 59,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 73,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 430,
+      "protein_g": 0,
+      "carbs_g": 110,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sweet Tea (64 fl oz)",
+      "category": "Beverages",
+      "serving": "64 fl oz",
+      "calories": 910,
+      "protein_g": 0,
+      "carbs_g": 235,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweet Tea (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweet Tea (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweet Tea (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweet Tea (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Unsweet Tea (64 fl oz)",
+      "category": "Beverages",
+      "serving": "64 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "7UP (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 35,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Code Red Mountain Dew (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Dr Pepper (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Mountain Dew (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Pepsi Wild Cherry Pepsi (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Brisk Lemon Tea (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Brisk No Calorie Peach Iced Green Tea (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Brisk Raspberry Tea (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Brisk Sweet Iced Tea (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Brisk Unsweetened No Lemon Iced Tea (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Manzanita Sol (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Miranda Strawberry (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mountain Dew (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 44,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mug Root Beer (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 41,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Zero Sugar (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sobe Lifewater Yumberry Pomegranate (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Southern Iced Tea (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 210,
+      "protein_g": 1,
+      "carbs_g": 51,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Starry (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Fruit Punch (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Light Lemonade (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Pink Lemonade (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 40,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Twister Orange (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wild Cherry Pepsi (12 fl oz)",
+      "category": "Beverages",
+      "serving": "12 fl oz",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 42,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "7UP (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 46,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Code Red Mountain Dew (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 62,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Dr Pepper (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Mountain Dew (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Pepsi Wild Cherry Pepsi (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 52,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Brisk Lemon Tea (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 29,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Brisk No Calorie Peach Iced Green Tea (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Brisk Raspberry Tea (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 100,
+      "protein_g": 0,
+      "carbs_g": 26,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Brisk Sweet Iced Tea (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 29,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Brisk Unsweetened No Lemon Iced Tea (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Manzanita Sol (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 57,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Miranda Strawberry (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mountain Dew (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 59,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mug Root Beer (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 52,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 55,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Zero Sugar (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sobe Lifewater Yumberry Pomegranate (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Southern Iced Tea (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 280,
+      "protein_g": 2,
+      "carbs_g": 69,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Starry (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 52,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Fruit Punch (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 60,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Light Lemonade (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Pink Lemonade (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 53,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Twister Orange (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 61,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wild Cherry Pepsi (16 fl oz)",
+      "category": "Beverages",
+      "serving": "16 fl oz",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 56,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "7UP (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 58,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Code Red Mountain Dew (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 77,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Dr Pepper (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Mountain Dew (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Pepsi Wild Cherry Pepsi (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Brisk Lemon Tea (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 36,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Brisk No Calorie Peach Iced Green Tea (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Brisk Raspberry Tea (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 33,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Brisk Sweet Iced Tea (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 36,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Brisk Unsweetened No Lemon Iced Tea (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Manzanita Sol (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 71,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Miranda Strawberry (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 73,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "MNT DEW Sweet Lightning (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 32,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mountain Dew (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 73,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mug Root Beer (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 69,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Zero Sugar (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sobe Lifewater Yumberry Pomegranate (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Southern Iced Tea (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 350,
+      "protein_g": 2,
+      "carbs_g": 86,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Starry (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Fruit Punch (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 75,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Lemonade (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Light Lemonade (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Pink Lemonade (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 67,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Twister Orange (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 76,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wild Cherry Pepsi (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 70,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "7UP (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 350,
+      "protein_g": 0,
+      "carbs_g": 87,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Code Red Mountain Dew (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 430,
+      "protein_g": 0,
+      "carbs_g": 116,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Dr Pepper (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Mountain Dew (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Pepsi Wild Cherry Pepsi (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 360,
+      "protein_g": 0,
+      "carbs_g": 98,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Brisk Lemon Tea (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 55,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Brisk No Calorie Peach Iced Green Tea (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Brisk Raspberry Tea (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 49,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Brisk Sweet Iced Tea (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 54,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Brisk Unsweetened No Lemon Iced Tea (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Manzanita Sol (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 400,
+      "protein_g": 0,
+      "carbs_g": 106,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Miranda Strawberry (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 410,
+      "protein_g": 0,
+      "carbs_g": 109,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mountain Dew (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 410,
+      "protein_g": 0,
+      "carbs_g": 110,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mug Root Beer (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 360,
+      "protein_g": 0,
+      "carbs_g": 98,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 380,
+      "protein_g": 0,
+      "carbs_g": 104,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Zero Sugar (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Sobe Lifewater Yumberry Pomegranate (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Southern Iced Tea (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 530,
+      "protein_g": 4,
+      "carbs_g": 128,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Starry (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 370,
+      "protein_g": 0,
+      "carbs_g": 97,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Fruit Punch (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 420,
+      "protein_g": 0,
+      "carbs_g": 113,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Lemonade (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 390,
+      "protein_g": 0,
+      "carbs_g": 100,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Light Lemonade (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Pink Lemonade (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 390,
+      "protein_g": 0,
+      "carbs_g": 100,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Twister Orange (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 430,
+      "protein_g": 0,
+      "carbs_g": 115,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wild Cherry Pepsi (30 fl oz)",
+      "category": "Beverages",
+      "serving": "30 fl oz",
+      "calories": 390,
+      "protein_g": 0,
+      "carbs_g": 105,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Classic Lemonade (1/2 Gallon)",
+      "category": "Beverages",
+      "serving": "1/2 Gallon",
+      "calories": 880,
+      "protein_g": 0,
+      "carbs_g": 234,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Classic Lemonade (20 fl oz)",
+      "category": "Beverages",
+      "serving": "20 fl oz",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chocolate Milk 1%",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 150,
+      "protein_g": 7,
+      "carbs_g": 26,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Milk 1%",
+      "category": "Beverages",
+      "serving": "1 serving",
+      "calories": 90,
+      "protein_g": 7,
+      "carbs_g": 10,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Country Fried Steak without Peppered White Gravy",
+      "category": "Regional Menu Items",
+      "serving": "1 serving",
+      "calories": 360,
+      "protein_g": 13,
+      "carbs_g": 22,
+      "fat_g": 24,
+      "fiber_g": 2
+    },
+    {
+      "name": "Gizzards",
+      "category": "Regional Menu Items",
+      "serving": "1 serving",
+      "calories": 300,
+      "protein_g": 20,
+      "carbs_g": 18,
+      "fat_g": 16,
+      "fiber_g": 0
+    },
+    {
+      "name": "Livers",
+      "category": "Regional Menu Items",
+      "serving": "1 serving",
+      "calories": 230,
+      "protein_g": 17,
+      "carbs_g": 12,
+      "fat_g": 13,
+      "fiber_g": 0
+    }
+  ]
+}

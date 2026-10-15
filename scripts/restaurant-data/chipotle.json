@@ -1,0 +1,358 @@
+{
+  "chain": "Chipotle",
+  "slug": "chipotle",
+  "aliases": [
+    "chipotle",
+    "chipolte",
+    "chipotle mexican grill",
+    "chipotle grill",
+    "chiptole"
+  ],
+  "kind": "fast-casual",
+  "source_url": "https://www.chipotle.com/content/dam/chipotle/menu/nutrition/US-Nutrition-Facts-Paper-Menu-3-2025.pdf",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Official Chipotle US Nutrition Facts (paper menu PDF, March 2025, chipotle.com). Audit 2026-10-15: the original source (the chipotle.com nutrition calculator) could not be read back, so only rows present in this official PDF are kept, with the PDF's portions and figures. '<1' fiber recorded as 0.",
+  "items": [
+    {
+      "name": "Chicken",
+      "category": "Proteins",
+      "serving": "4 oz",
+      "calories": 180,
+      "protein_g": 32,
+      "carbs_g": 0,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Steak",
+      "category": "Proteins",
+      "serving": "4 oz",
+      "calories": 150,
+      "protein_g": 21,
+      "carbs_g": 1,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Carnitas",
+      "category": "Proteins",
+      "serving": "4 oz",
+      "calories": 210,
+      "protein_g": 23,
+      "carbs_g": 0,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Beef Barbacoa",
+      "category": "Proteins",
+      "serving": "4 oz",
+      "calories": 170,
+      "protein_g": 24,
+      "carbs_g": 2,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sofritas",
+      "category": "Proteins",
+      "serving": "4 oz",
+      "calories": 150,
+      "protein_g": 8,
+      "carbs_g": 9,
+      "fat_g": 10,
+      "fiber_g": 3
+    },
+    {
+      "name": "Burrito Tortilla",
+      "category": "Tortillas",
+      "serving": "1 tortilla",
+      "calories": 320,
+      "protein_g": 8,
+      "carbs_g": 50,
+      "fat_g": 9,
+      "fiber_g": 3
+    },
+    {
+      "name": "Soft Flour Tortilla",
+      "category": "Tortillas",
+      "serving": "1 taco tortilla",
+      "calories": 80,
+      "protein_g": 2,
+      "carbs_g": 13,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Crispy Corn Tortilla",
+      "category": "Tortillas",
+      "serving": "1 tortilla",
+      "calories": 70,
+      "protein_g": 1,
+      "carbs_g": 10,
+      "fat_g": 3,
+      "fiber_g": 1
+    },
+    {
+      "name": "White Rice",
+      "category": "Rice",
+      "serving": "4 oz",
+      "calories": 210,
+      "protein_g": 4,
+      "carbs_g": 40,
+      "fat_g": 4,
+      "fiber_g": 1
+    },
+    {
+      "name": "Brown Rice",
+      "category": "Rice",
+      "serving": "4 oz",
+      "calories": 210,
+      "protein_g": 4,
+      "carbs_g": 36,
+      "fat_g": 6,
+      "fiber_g": 2
+    },
+    {
+      "name": "Black Beans",
+      "category": "Beans",
+      "serving": "4 oz",
+      "calories": 130,
+      "protein_g": 8,
+      "carbs_g": 22,
+      "fat_g": 2,
+      "fiber_g": 7
+    },
+    {
+      "name": "Pinto Beans",
+      "category": "Beans",
+      "serving": "4 oz",
+      "calories": 130,
+      "protein_g": 8,
+      "carbs_g": 21,
+      "fat_g": 2,
+      "fiber_g": 8
+    },
+    {
+      "name": "Cheese",
+      "category": "Toppings",
+      "serving": "1 oz",
+      "calories": 110,
+      "protein_g": 6,
+      "carbs_g": 1,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Romaine Lettuce",
+      "category": "Toppings",
+      "serving": "1 oz",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Guacamole",
+      "category": "Toppings",
+      "serving": "4 oz",
+      "calories": 230,
+      "protein_g": 2,
+      "carbs_g": 8,
+      "fat_g": 22,
+      "fiber_g": 6
+    },
+    {
+      "name": "Fajita Veggies",
+      "category": "Toppings",
+      "serving": "2 oz",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Fresh Tomato Salsa",
+      "category": "Toppings",
+      "serving": "4 oz",
+      "calories": 25,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Roasted Chili-Corn Salsa",
+      "category": "Toppings",
+      "serving": "4 oz",
+      "calories": 80,
+      "protein_g": 3,
+      "carbs_g": 16,
+      "fat_g": 2,
+      "fiber_g": 3
+    },
+    {
+      "name": "Tomatillo-Green Chili Salsa",
+      "category": "Toppings",
+      "serving": "2 fl oz",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tomatillo-Red Chili Salsa",
+      "category": "Toppings",
+      "serving": "2 fl oz",
+      "calories": 30,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Sour Cream",
+      "category": "Toppings",
+      "serving": "2 oz",
+      "calories": 110,
+      "protein_g": 2,
+      "carbs_g": 2,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Queso Blanco",
+      "category": "Toppings",
+      "serving": "2 oz",
+      "calories": 120,
+      "protein_g": 5,
+      "carbs_g": 4,
+      "fat_g": 9,
+      "fiber_g": 0
+    },
+    {
+      "name": "Chipotle-Honey Vinaigrette",
+      "category": "Toppings",
+      "serving": "2 fl oz",
+      "calories": 220,
+      "protein_g": 1,
+      "carbs_g": 18,
+      "fat_g": 16,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chips",
+      "category": "Chips & Sides",
+      "serving": "4 oz",
+      "calories": 540,
+      "protein_g": 7,
+      "carbs_g": 73,
+      "fat_g": 25,
+      "fiber_g": 7
+    },
+    {
+      "name": "Large Chips",
+      "category": "Chips & Sides",
+      "serving": "6 oz",
+      "calories": 810,
+      "protein_g": 11,
+      "carbs_g": 110,
+      "fat_g": 38,
+      "fiber_g": 11
+    },
+    {
+      "name": "Side of Guacamole",
+      "category": "Chips & Sides",
+      "serving": "4 oz",
+      "calories": 230,
+      "protein_g": 2,
+      "carbs_g": 8,
+      "fat_g": 22,
+      "fiber_g": 6
+    },
+    {
+      "name": "Large Side of Guacamole",
+      "category": "Chips & Sides",
+      "serving": "8 oz",
+      "calories": 460,
+      "protein_g": 4,
+      "carbs_g": 16,
+      "fat_g": 44,
+      "fiber_g": 12
+    },
+    {
+      "name": "Side of Queso Blanco",
+      "category": "Chips & Sides",
+      "serving": "4 oz",
+      "calories": 240,
+      "protein_g": 10,
+      "carbs_g": 7,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Side of Queso Blanco",
+      "category": "Chips & Sides",
+      "serving": "8 oz",
+      "calories": 480,
+      "protein_g": 20,
+      "carbs_g": 14,
+      "fat_g": 37,
+      "fiber_g": 0
+    },
+    {
+      "name": "Side of Chicken",
+      "category": "Chips & Sides",
+      "serving": "4 oz",
+      "calories": 180,
+      "protein_g": 32,
+      "carbs_g": 0,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Side of Steak",
+      "category": "Chips & Sides",
+      "serving": "4 oz",
+      "calories": 150,
+      "protein_g": 21,
+      "carbs_g": 1,
+      "fat_g": 6,
+      "fiber_g": 1
+    },
+    {
+      "name": "Side of Carnitas",
+      "category": "Chips & Sides",
+      "serving": "4 oz",
+      "calories": 210,
+      "protein_g": 23,
+      "carbs_g": 0,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Side of Beef Barbacoa",
+      "category": "Chips & Sides",
+      "serving": "4 oz",
+      "calories": 170,
+      "protein_g": 24,
+      "carbs_g": 2,
+      "fat_g": 7,
+      "fiber_g": 1
+    },
+    {
+      "name": "Side of Sofritas",
+      "category": "Chips & Sides",
+      "serving": "4 oz",
+      "calories": 150,
+      "protein_g": 8,
+      "carbs_g": 9,
+      "fat_g": 10,
+      "fiber_g": 3
+    }
+  ]
+}

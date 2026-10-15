@@ -1,0 +1,78 @@
+{
+  "chain": "Fairlife Core Power",
+  "slug": "fairlife-core-power",
+  "aliases": [
+    "core power",
+    "corepower",
+    "fairlife core power",
+    "fairlife",
+    "core power elite"
+  ],
+  "kind": "supplement",
+  "source_url": "https://fairlife.com/core-power/",
+  "source_kind": "official",
+  "retrieved": "2026-10-15",
+  "notes": "Text Nutritional Facts on each fairlife.com/core-power/<product>/ page (chocolate-protein-shake, vanilla-protein-shake, strawberry-banana-protein-shake, chocolate-protein-shake-42g, vanilla-protein-shake-42g, strawberry-protein-shake-42g). Bottle = 14 fl oz (414 mL).",
+  "items": [
+    {
+      "name": "Core Power 26g Protein Shake, Chocolate",
+      "category": "Ready-to-Drink",
+      "serving": "1 bottle (14 fl oz)",
+      "calories": 170,
+      "protein_g": 26,
+      "carbs_g": 8,
+      "fat_g": 4.5,
+      "fiber_g": 2
+    },
+    {
+      "name": "Core Power 26g Protein Shake, Vanilla",
+      "category": "Ready-to-Drink",
+      "serving": "1 bottle (14 fl oz)",
+      "calories": 170,
+      "protein_g": 26,
+      "carbs_g": 6,
+      "fat_g": 4.5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Core Power 26g Protein Shake, Strawberry Banana",
+      "category": "Ready-to-Drink",
+      "serving": "1 bottle (14 fl oz)",
+      "calories": 170,
+      "protein_g": 26,
+      "carbs_g": 7,
+      "fat_g": 4.5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Core Power Elite 42g Protein Shake, Chocolate",
+      "category": "Ready-to-Drink",
+      "serving": "1 bottle (414 mL)",
+      "calories": 230,
+      "protein_g": 42,
+      "carbs_g": 9,
+      "fat_g": 3.5,
+      "fiber_g": 2
+    },
+    {
+      "name": "Core Power Elite 42g Protein Shake, Vanilla",
+      "category": "Ready-to-Drink",
+      "serving": "1 bottle (414 mL)",
+      "calories": 230,
+      "protein_g": 42,
+      "carbs_g": 8,
+      "fat_g": 3.5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Core Power Elite 42g Protein Shake, Strawberry",
+      "category": "Ready-to-Drink",
+      "serving": "1 bottle (414 mL)",
+      "calories": 230,
+      "protein_g": 42,
+      "carbs_g": 8,
+      "fat_g": 3.5,
+      "fiber_g": 0
+    }
+  ]
+}

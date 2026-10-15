@@ -20,6 +20,7 @@ struct SettingsView: View {
     @AppStorage("nudge.stall.enabled") private var stallNudgeEnabled: Bool = true
     @AppStorage("reminders.enabled") private var remindersEnabled: Bool = true
     @AppStorage private var reminderHour: Int
+    @AppStorage private var mealRemindersEnabled: Bool
 
     init(profile: ProfileDTO, health: HealthKitService) {
         self.profile = profile
@@ -27,6 +28,11 @@ struct SettingsView: View {
         _reminderHour = AppStorage(
             wrappedValue: ReminderNotificationService.defaultPreferredHour,
             "reminderHour.\(profile.id.uuidString)"
+        )
+        // Opt-in: default OFF. Same key MealReminderService reads.
+        _mealRemindersEnabled = AppStorage(
+            wrappedValue: false,
+            MealReminderService.enabledKey(for: profile.id)
         )
     }
 
@@ -153,10 +159,16 @@ struct SettingsView: View {
     private var remindersSection: some View {
         VStack(spacing: 1) {
             nudgeToggleRow(
-                label: "Meal logging reminder",
+                label: "In-app meal nudge",
                 detail: "Nudges you to log meals if you haven't by mid-day or evening.",
                 isOn: $mealNudgeEnabled,
                 isFirst: true, isLast: false
+            )
+            nudgeToggleRow(
+                label: "Meal logging reminders",
+                detail: mealRemindersCaption,
+                isOn: $mealRemindersEnabled,
+                isFirst: false, isLast: false
             )
             nudgeToggleRow(
                 label: "Water reminder",
@@ -200,6 +212,37 @@ struct SettingsView: View {
         .onChange(of: reminderHour) { _, _ in
             Task { await ReminderNotificationService.reconcile(ctx, userId: profile.id) }
         }
+        .onChange(of: mealRemindersEnabled) { _, enabled in
+            guard enabled else {
+                MealReminderService.cancelAll()
+                return
+            }
+            // The toggle is the explicit user action — the only place meal
+            // reminders may ask for notification permission.
+            Task {
+                let allowed = await MealReminderService.enable(ctx, userId: profile.id)
+                if !allowed {
+                    toasts.show(Toast(title: "Notifications are off",
+                                      detail: "Allow notifications for Our Fitness in iOS Settings to get meal reminders.",
+                                      accent: .info, symbol: "bell.slash"))
+                }
+            }
+        }
+    }
+
+    /// Off: what the feature does. On: the learned times, or that it's still
+    /// learning — never invented default times.
+    private var mealRemindersCaption: String {
+        let intro = "A notification about an hour after you usually log breakfast, lunch or dinner, if it isn't logged yet."
+        guard mealRemindersEnabled else { return intro }
+        let learned = MealReminderService.learnedTimes(ctx, userId: profile.id)
+        guard !learned.isEmpty else {
+            return intro + " Still learning your routine — once a meal is logged on \(MealLogPattern.minDays) different days, its reminder starts."
+        }
+        let times = learned
+            .map { "\($0.slot.label) \(MedicationPattern.clockLabel(minuteOfDay: $0.minuteOfDay))" }
+            .joined(separator: " · ")
+        return intro + " Usual times: \(times)."
     }
 
     @ViewBuilder

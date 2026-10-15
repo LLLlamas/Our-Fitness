@@ -1,0 +1,839 @@
+{
+  "chain": "Little Caesars",
+  "slug": "little-caesars",
+  "aliases": [
+    "little caesars",
+    "little caesar",
+    "little ceasars",
+    "little caesers",
+    "littlecaesars",
+    "lc pizza"
+  ],
+  "kind": "pizza",
+  "source_url": "https://littlecaesars.com/static/usnutritionguide.pdf",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Official US nutrition guide PDF (prepared by MenuTrinfo), linked \"Download PDF\" from littlecaesars.com/en-us/menu/nutrition. Pizza values are published per WHOLE pizza (no per-slice figures in the guide); serving says so. Custom-pizza topping rows are the amount added to a whole pizza (highest topping count) - add to the Base Pizza row. Two pretzel/Fanceroni rows printed without numbers and calorie-range meal combos were omitted. Ranch dip as printed (sodium 48, sugar 32) looks like a source typo; macros used as published. Atwater outliers (>20%, left as published): Mild Banana Peppers (per whole large round pizza (topping: highest count)): 50 cal vs 28 Atwater",
+  "items": [
+    {
+      "name": "Pepperoni (Large Extramostbestest)",
+      "category": "Large Extramostbestest Pizzas",
+      "serving": "1 whole large pizza",
+      "calories": 2500,
+      "protein_g": 122,
+      "carbs_g": 252,
+      "fat_g": 113,
+      "fiber_g": 13
+    },
+    {
+      "name": "Cheese (Large Extramostbestest)",
+      "category": "Large Extramostbestest Pizzas",
+      "serving": "1 whole large pizza",
+      "calories": 2220,
+      "protein_g": 117,
+      "carbs_g": 252,
+      "fat_g": 84,
+      "fiber_g": 13
+    },
+    {
+      "name": "Italian Sausage (Large Extramostbestest)",
+      "category": "Large Extramostbestest Pizzas",
+      "serving": "1 whole large pizza",
+      "calories": 2660,
+      "protein_g": 129,
+      "carbs_g": 252,
+      "fat_g": 128,
+      "fiber_g": 13
+    },
+    {
+      "name": "5 Meat Feast (Large)",
+      "category": "Large Specialty Pizzas",
+      "serving": "1 whole large pizza",
+      "calories": 2830,
+      "protein_g": 139,
+      "carbs_g": 252,
+      "fat_g": 142,
+      "fiber_g": 13
+    },
+    {
+      "name": "Ultimate Supreme (Large)",
+      "category": "Large Specialty Pizzas",
+      "serving": "1 whole large pizza",
+      "calories": 2500,
+      "protein_g": 118,
+      "carbs_g": 259,
+      "fat_g": 112,
+      "fiber_g": 15
+    },
+    {
+      "name": "3 Meat Treat (Large)",
+      "category": "Large Specialty Pizzas",
+      "serving": "1 whole large pizza",
+      "calories": 2860,
+      "protein_g": 135,
+      "carbs_g": 252,
+      "fat_g": 147,
+      "fiber_g": 13
+    },
+    {
+      "name": "Hula Hawaiian (Large)",
+      "category": "Large Specialty Pizzas",
+      "serving": "1 whole large pizza",
+      "calories": 2180,
+      "protein_g": 121,
+      "carbs_g": 272,
+      "fat_g": 70,
+      "fiber_g": 13
+    },
+    {
+      "name": "Veggie (Large)",
+      "category": "Large Specialty Pizzas",
+      "serving": "1 whole large pizza",
+      "calories": 2240,
+      "protein_g": 100,
+      "carbs_g": 266,
+      "fat_g": 84,
+      "fiber_g": 20
+    },
+    {
+      "name": "Slices-N-Stix (Large)",
+      "category": "Large Specialty Pizzas",
+      "serving": "1 whole large pizza",
+      "calories": 2300,
+      "protein_g": 107,
+      "carbs_g": 253,
+      "fat_g": 97,
+      "fiber_g": 13
+    },
+    {
+      "name": "Slices-N-Stix Bacon (Large)",
+      "category": "Large Specialty Pizzas",
+      "serving": "1 whole large pizza",
+      "calories": 2980,
+      "protein_g": 116,
+      "carbs_g": 252,
+      "fat_g": 115,
+      "fiber_g": 13
+    },
+    {
+      "name": "Slices-N-Stix Jalapeño (Large)",
+      "category": "Large Specialty Pizzas",
+      "serving": "1 whole large pizza",
+      "calories": 2330,
+      "protein_g": 107,
+      "carbs_g": 255,
+      "fat_g": 99,
+      "fiber_g": 15
+    },
+    {
+      "name": "Stuffed Crust Pepperoni (Large)",
+      "category": "Large Specialty Pizzas",
+      "serving": "1 whole large pizza",
+      "calories": 2980,
+      "protein_g": 144,
+      "carbs_g": 259,
+      "fat_g": 153,
+      "fiber_g": 13
+    },
+    {
+      "name": "Pretzel Crust Pizza with Pizza Sauce (Large)",
+      "category": "Large Specialty Pizzas",
+      "serving": "1 whole large pizza",
+      "calories": 2080,
+      "protein_g": 91,
+      "carbs_g": 240,
+      "fat_g": 85,
+      "fiber_g": 11
+    },
+    {
+      "name": "Cheese Pretzel Crust Pizza with Cheese Sauce (Large)",
+      "category": "Large Specialty Pizzas",
+      "serving": "1 whole large pizza",
+      "calories": 1940,
+      "protein_g": 85,
+      "carbs_g": 243,
+      "fat_g": 71,
+      "fiber_g": 9
+    },
+    {
+      "name": "Pretzel Crust Pizza with Cheese Sauce (Large)",
+      "category": "Large Specialty Pizzas",
+      "serving": "1 whole large pizza",
+      "calories": 2190,
+      "protein_g": 94,
+      "carbs_g": 244,
+      "fat_g": 93,
+      "fiber_g": 9
+    },
+    {
+      "name": "Pepperoni (Large Classic)",
+      "category": "Large Classic Pizzas",
+      "serving": "1 whole large pizza",
+      "calories": 2300,
+      "protein_g": 109,
+      "carbs_g": 250,
+      "fat_g": 97,
+      "fiber_g": 13
+    },
+    {
+      "name": "Cheese (Large Classic)",
+      "category": "Large Classic Pizzas",
+      "serving": "1 whole large pizza",
+      "calories": 1950,
+      "protein_g": 95,
+      "carbs_g": 248,
+      "fat_g": 65,
+      "fiber_g": 12
+    },
+    {
+      "name": "Italian Sausage (Large Classic)",
+      "category": "Large Classic Pizzas",
+      "serving": "1 whole large pizza",
+      "calories": 2270,
+      "protein_g": 111,
+      "carbs_g": 255,
+      "fat_g": 91,
+      "fiber_g": 13
+    },
+    {
+      "name": "Pepperoni (Detroit-Style Deep Dish)",
+      "category": "Detroit-Style Deep Dish Pizzas",
+      "serving": "1 whole Detroit-style deep dish pizza",
+      "calories": 2770,
+      "protein_g": 129,
+      "carbs_g": 319,
+      "fat_g": 111,
+      "fiber_g": 16
+    },
+    {
+      "name": "Cheese (Detroit-Style Deep Dish)",
+      "category": "Detroit-Style Deep Dish Pizzas",
+      "serving": "1 whole Detroit-style deep dish pizza",
+      "calories": 2500,
+      "protein_g": 118,
+      "carbs_g": 317,
+      "fat_g": 85,
+      "fiber_g": 16
+    },
+    {
+      "name": "Italian Sausage (Detroit-Style Deep Dish)",
+      "category": "Detroit-Style Deep Dish Pizzas",
+      "serving": "1 whole Detroit-style deep dish pizza",
+      "calories": 2820,
+      "protein_g": 133,
+      "carbs_g": 319,
+      "fat_g": 114,
+      "fiber_g": 16
+    },
+    {
+      "name": "Ultimate Supreme (Detroit-Style Deep Dish)",
+      "category": "Detroit-Style Deep Dish Pizzas Specialty",
+      "serving": "1 whole Detroit-style deep dish pizza",
+      "calories": 3050,
+      "protein_g": 141,
+      "carbs_g": 332,
+      "fat_g": 130,
+      "fiber_g": 20
+    },
+    {
+      "name": "3 Meat Treat (Detroit-Style Deep Dish)",
+      "category": "Detroit-Style Deep Dish Pizzas Specialty",
+      "serving": "1 whole Detroit-style deep dish pizza",
+      "calories": 3480,
+      "protein_g": 159,
+      "carbs_g": 321,
+      "fat_g": 175,
+      "fiber_g": 16
+    },
+    {
+      "name": "Hula Hawaiian (Detroit-Style Deep Dish)",
+      "category": "Detroit-Style Deep Dish Pizzas Specialty",
+      "serving": "1 whole Detroit-style deep dish pizza",
+      "calories": 2690,
+      "protein_g": 137,
+      "carbs_g": 341,
+      "fat_g": 88,
+      "fiber_g": 17
+    },
+    {
+      "name": "Veggie (Detroit-Style Deep Dish)",
+      "category": "Detroit-Style Deep Dish Pizzas Specialty",
+      "serving": "1 whole Detroit-style deep dish pizza",
+      "calories": 2730,
+      "protein_g": 123,
+      "carbs_g": 333,
+      "fat_g": 99,
+      "fiber_g": 22
+    },
+    {
+      "name": "5 Meat Feast (Detroit-Style Deep Dish)",
+      "category": "Detroit-Style Deep Dish Pizzas Specialty",
+      "serving": "1 whole Detroit-style deep dish pizza",
+      "calories": 3500,
+      "protein_g": 171,
+      "carbs_g": 322,
+      "fat_g": 172,
+      "fiber_g": 16
+    },
+    {
+      "name": "Crazy Combo",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 840,
+      "protein_g": 26,
+      "carbs_g": 135,
+      "fat_g": 22,
+      "fiber_g": 6
+    },
+    {
+      "name": "Crazy Bread (8 bread sticks)",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 800,
+      "protein_g": 25,
+      "carbs_g": 128,
+      "fat_g": 22,
+      "fiber_g": 5
+    },
+    {
+      "name": "Crazy Sauce (1 sauce cup)",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 30,
+      "protein_g": 1,
+      "carbs_g": 7,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Italian Cheese Bread (10 bread sticks)",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 1340,
+      "protein_g": 59,
+      "carbs_g": 156,
+      "fat_g": 54,
+      "fiber_g": 7
+    },
+    {
+      "name": "Pepperoni Cheese Bread (10 bread sticks)",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 1520,
+      "protein_g": 66,
+      "carbs_g": 155,
+      "fat_g": 71,
+      "fiber_g": 7
+    },
+    {
+      "name": "Zesty Cheese Bread (10 bread sticks) — at participating locations",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 1490,
+      "protein_g": 55,
+      "carbs_g": 158,
+      "fat_g": 71,
+      "fiber_g": 7
+    },
+    {
+      "name": "Stuffed Crazy Bread (3 bread sticks & Crazy Sauce)",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 980,
+      "protein_g": 36,
+      "carbs_g": 126,
+      "fat_g": 38,
+      "fiber_g": 6
+    },
+    {
+      "name": "Pepperoni Crazy Puffs",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 680,
+      "protein_g": 34,
+      "carbs_g": 56,
+      "fat_g": 36,
+      "fiber_g": 3
+    },
+    {
+      "name": "4 Cheese Crazy Puffs",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 580,
+      "protein_g": 30,
+      "carbs_g": 56,
+      "fat_g": 26,
+      "fiber_g": 3
+    },
+    {
+      "name": "Cookie Dough Brownie made with M&M’S MINIS Chocolate Candies (full package)",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 840,
+      "protein_g": 12,
+      "carbs_g": 96,
+      "fat_g": 44,
+      "fiber_g": 4
+    },
+    {
+      "name": "Cookie Dough Brownie made with TWIX Cookie Bar Pieces (full package)",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 800,
+      "protein_g": 8,
+      "carbs_g": 120,
+      "fat_g": 44,
+      "fiber_g": 4
+    },
+    {
+      "name": "Oven Roasted",
+      "category": "Caesar Wings",
+      "serving": "1 serving",
+      "calories": 510,
+      "protein_g": 47,
+      "carbs_g": 3,
+      "fat_g": 35,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buffalo",
+      "category": "Caesar Wings",
+      "serving": "1 serving",
+      "calories": 520,
+      "protein_g": 47,
+      "carbs_g": 7,
+      "fat_g": 35,
+      "fiber_g": 0
+    },
+    {
+      "name": "BBQ",
+      "category": "Caesar Wings",
+      "serving": "1 serving",
+      "calories": 620,
+      "protein_g": 48,
+      "carbs_g": 32,
+      "fat_g": 35,
+      "fiber_g": 0
+    },
+    {
+      "name": "Garlic Parmesan",
+      "category": "Caesar Wings",
+      "serving": "1 serving",
+      "calories": 670,
+      "protein_g": 49,
+      "carbs_g": 5,
+      "fat_g": 51,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheezy Jalapeño",
+      "category": "Caesar Dips",
+      "serving": "1 container",
+      "calories": 210,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Ranch",
+      "category": "Caesar Dips",
+      "serving": "1 container",
+      "calories": 230,
+      "protein_g": 2,
+      "carbs_g": 4,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Buffalo Ranch",
+      "category": "Caesar Dips",
+      "serving": "1 container",
+      "calories": 230,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 23,
+      "fiber_g": 0
+    },
+    {
+      "name": "Butter Garlic Flavor",
+      "category": "Caesar Dips",
+      "serving": "1 container",
+      "calories": 370,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 42,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheddar Cheese Sauce — at participating locations",
+      "category": "Caesar Dips",
+      "serving": "1 container",
+      "calories": 110,
+      "protein_g": 4,
+      "carbs_g": 7,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepperoni (Thin Crust)",
+      "category": "Thin Crust Pizzas",
+      "serving": "1 whole thin crust pizza",
+      "calories": 2130,
+      "protein_g": 94,
+      "carbs_g": 148,
+      "fat_g": 128,
+      "fiber_g": 9
+    },
+    {
+      "name": "Cheese (Thin Crust)",
+      "category": "Thin Crust Pizzas",
+      "serving": "1 whole thin crust pizza",
+      "calories": 1980,
+      "protein_g": 99,
+      "carbs_g": 150,
+      "fat_g": 109,
+      "fiber_g": 10
+    },
+    {
+      "name": "Add Stuffed Crust to any round pizza",
+      "category": "Make It Stuffed Crust",
+      "serving": "added to 1 whole pizza",
+      "calories": 560,
+      "protein_g": 29,
+      "carbs_g": 8,
+      "fat_g": 46,
+      "fiber_g": 0
+    },
+    {
+      "name": "Add Stuffed Crust to any Detroit-Style Deep Dish",
+      "category": "Make It Stuffed Crust",
+      "serving": "added to 1 whole pizza",
+      "calories": 530,
+      "protein_g": 33,
+      "carbs_g": 9,
+      "fat_g": 40,
+      "fiber_g": 0
+    },
+    {
+      "name": "Base Pizza",
+      "category": "Custom Round Pizzas (add to base pizza)",
+      "serving": "per whole large round pizza (topping: highest count)",
+      "calories": 1950,
+      "protein_g": 95,
+      "carbs_g": 248,
+      "fat_g": 65,
+      "fiber_g": 12
+    },
+    {
+      "name": "Pepperoni",
+      "category": "Custom Round Pizzas (add to base pizza)",
+      "serving": "per whole large round pizza (topping: highest count)",
+      "calories": 350,
+      "protein_g": 13,
+      "carbs_g": 2,
+      "fat_g": 32,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon",
+      "category": "Custom Round Pizzas (add to base pizza)",
+      "serving": "per whole large round pizza (topping: highest count)",
+      "calories": 380,
+      "protein_g": 16,
+      "carbs_g": 0,
+      "fat_g": 35,
+      "fiber_g": 0
+    },
+    {
+      "name": "Seasoned Beef",
+      "category": "Custom Round Pizzas (add to base pizza)",
+      "serving": "per whole large round pizza (topping: highest count)",
+      "calories": 330,
+      "protein_g": 16,
+      "carbs_g": 1,
+      "fat_g": 28,
+      "fiber_g": 0
+    },
+    {
+      "name": "Italian Sausage",
+      "category": "Custom Round Pizzas (add to base pizza)",
+      "serving": "per whole large round pizza (topping: highest count)",
+      "calories": 430,
+      "protein_g": 19,
+      "carbs_g": 2,
+      "fat_g": 38,
+      "fiber_g": 0
+    },
+    {
+      "name": "Smoky Ham",
+      "category": "Custom Round Pizzas (add to base pizza)",
+      "serving": "per whole large round pizza (topping: highest count)",
+      "calories": 140,
+      "protein_g": 26,
+      "carbs_g": 3,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Green Peppers",
+      "category": "Custom Round Pizzas (add to base pizza)",
+      "serving": "per whole large round pizza (topping: highest count)",
+      "calories": 20,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Onions",
+      "category": "Custom Round Pizzas (add to base pizza)",
+      "serving": "per whole large round pizza (topping: highest count)",
+      "calories": 35,
+      "protein_g": 1,
+      "carbs_g": 8,
+      "fat_g": 0,
+      "fiber_g": 2
+    },
+    {
+      "name": "Mushrooms, canned",
+      "category": "Custom Round Pizzas (add to base pizza)",
+      "serving": "per whole large round pizza (topping: highest count)",
+      "calories": 40,
+      "protein_g": 2,
+      "carbs_g": 7,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Mushrooms, fresh",
+      "category": "Custom Round Pizzas (add to base pizza)",
+      "serving": "per whole large round pizza (topping: highest count)",
+      "calories": 35,
+      "protein_g": 5,
+      "carbs_g": 5,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Black Olives",
+      "category": "Custom Round Pizzas (add to base pizza)",
+      "serving": "per whole large round pizza (topping: highest count)",
+      "calories": 280,
+      "protein_g": 1,
+      "carbs_g": 4,
+      "fat_g": 24,
+      "fiber_g": 4
+    },
+    {
+      "name": "Jalapeño Peppers",
+      "category": "Custom Round Pizzas (add to base pizza)",
+      "serving": "per whole large round pizza (topping: highest count)",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 6,
+      "fiber_g": 4
+    },
+    {
+      "name": "Mild Banana Peppers",
+      "category": "Custom Round Pizzas (add to base pizza)",
+      "serving": "per whole large round pizza (topping: highest count)",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 7,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pineapple",
+      "category": "Custom Round Pizzas (add to base pizza)",
+      "serving": "per whole large round pizza (topping: highest count)",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Extra Cheese",
+      "category": "Custom Round Pizzas (add to base pizza)",
+      "serving": "per whole large round pizza (topping: highest count)",
+      "calories": 270,
+      "protein_g": 21,
+      "carbs_g": 4,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fresh Mozzarella",
+      "category": "Custom Round Pizzas (add to base pizza)",
+      "serving": "per whole large round pizza (topping: highest count)",
+      "calories": 200,
+      "protein_g": 15,
+      "carbs_g": 2,
+      "fat_g": 15,
+      "fiber_g": 0
+    },
+    {
+      "name": "Base Pizza",
+      "category": "Custom Detroit-Style Deep Dish (add to base pizza)",
+      "serving": "per whole deep dish pizza (topping: highest count)",
+      "calories": 2500,
+      "protein_g": 118,
+      "carbs_g": 317,
+      "fat_g": 85,
+      "fiber_g": 16
+    },
+    {
+      "name": "Pepperoni",
+      "category": "Custom Detroit-Style Deep Dish (add to base pizza)",
+      "serving": "per whole deep dish pizza (topping: highest count)",
+      "calories": 280,
+      "protein_g": 11,
+      "carbs_g": 2,
+      "fat_g": 26,
+      "fiber_g": 0
+    },
+    {
+      "name": "Bacon",
+      "category": "Custom Detroit-Style Deep Dish (add to base pizza)",
+      "serving": "per whole deep dish pizza (topping: highest count)",
+      "calories": 380,
+      "protein_g": 16,
+      "carbs_g": 0,
+      "fat_g": 35,
+      "fiber_g": 0
+    },
+    {
+      "name": "Seasoned Beef",
+      "category": "Custom Detroit-Style Deep Dish (add to base pizza)",
+      "serving": "per whole deep dish pizza (topping: highest count)",
+      "calories": 250,
+      "protein_g": 12,
+      "carbs_g": 1,
+      "fat_g": 22,
+      "fiber_g": 0
+    },
+    {
+      "name": "Italian Sausage",
+      "category": "Custom Detroit-Style Deep Dish (add to base pizza)",
+      "serving": "per whole deep dish pizza (topping: highest count)",
+      "calories": 330,
+      "protein_g": 15,
+      "carbs_g": 2,
+      "fat_g": 29,
+      "fiber_g": 0
+    },
+    {
+      "name": "Smoky Ham",
+      "category": "Custom Detroit-Style Deep Dish (add to base pizza)",
+      "serving": "per whole deep dish pizza (topping: highest count)",
+      "calories": 110,
+      "protein_g": 19,
+      "carbs_g": 2,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Green Peppers",
+      "category": "Custom Detroit-Style Deep Dish (add to base pizza)",
+      "serving": "per whole deep dish pizza (topping: highest count)",
+      "calories": 15,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Onions",
+      "category": "Custom Detroit-Style Deep Dish (add to base pizza)",
+      "serving": "per whole deep dish pizza (topping: highest count)",
+      "calories": 25,
+      "protein_g": 1,
+      "carbs_g": 6,
+      "fat_g": 0,
+      "fiber_g": 1
+    },
+    {
+      "name": "Mushrooms, canned",
+      "category": "Custom Detroit-Style Deep Dish (add to base pizza)",
+      "serving": "per whole deep dish pizza (topping: highest count)",
+      "calories": 40,
+      "protein_g": 2,
+      "carbs_g": 7,
+      "fat_g": 0,
+      "fiber_g": 3
+    },
+    {
+      "name": "Mushrooms, fresh",
+      "category": "Custom Detroit-Style Deep Dish (add to base pizza)",
+      "serving": "per whole deep dish pizza (topping: highest count)",
+      "calories": 35,
+      "protein_g": 5,
+      "carbs_g": 5,
+      "fat_g": 1,
+      "fiber_g": 2
+    },
+    {
+      "name": "Black Olives",
+      "category": "Custom Detroit-Style Deep Dish (add to base pizza)",
+      "serving": "per whole deep dish pizza (topping: highest count)",
+      "calories": 210,
+      "protein_g": 1,
+      "carbs_g": 3,
+      "fat_g": 17,
+      "fiber_g": 3
+    },
+    {
+      "name": "Jalapeño Peppers",
+      "category": "Custom Detroit-Style Deep Dish (add to base pizza)",
+      "serving": "per whole deep dish pizza (topping: highest count)",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 3,
+      "fat_g": 5,
+      "fiber_g": 3
+    },
+    {
+      "name": "Mild Banana Peppers",
+      "category": "Custom Detroit-Style Deep Dish (add to base pizza)",
+      "serving": "per whole deep dish pizza (topping: highest count)",
+      "calories": 35,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pineapple",
+      "category": "Custom Detroit-Style Deep Dish (add to base pizza)",
+      "serving": "per whole deep dish pizza (topping: highest count)",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 22,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Extra Cheese",
+      "category": "Custom Detroit-Style Deep Dish (add to base pizza)",
+      "serving": "per whole deep dish pizza (topping: highest count)",
+      "calories": 270,
+      "protein_g": 21,
+      "carbs_g": 4,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fresh Mozzarella",
+      "category": "Custom Detroit-Style Deep Dish (add to base pizza)",
+      "serving": "per whole deep dish pizza (topping: highest count)",
+      "calories": 200,
+      "protein_g": 15,
+      "carbs_g": 2,
+      "fat_g": 15,
+      "fiber_g": 0
+    }
+  ]
+}

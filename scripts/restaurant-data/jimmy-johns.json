@@ -1,0 +1,849 @@
+{
+  "chain": "Jimmy John's",
+  "slug": "jimmy-johns",
+  "aliases": [
+    "jimmy johns",
+    "jimmy john's",
+    "jimmyjohns",
+    "jj",
+    "jimmy john",
+    "jimmy jons"
+  ],
+  "kind": "deli",
+  "source_url": "https://www.nutritionix.com/jimmy-johns/menu/premium",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Nutritionix-hosted restaurant nutrition calculator (last updated 10/13/2026). jimmyjohns.com links its 'Nutrition & Allergen Guide' to restaurant.nutritionix.com/jimmy-johns (verified in the site's JS bundle). Atwater outliers (kept as published): Raspberry Pink Velvet Cookie [1 serving] (410 cal vs Atwater 244).",
+  "items": [
+    {
+      "name": "Chicken Bacon Ranch (8\")",
+      "category": "Toasted Sandwiches",
+      "serving": "8\"",
+      "calories": 920,
+      "protein_g": 46,
+      "carbs_g": 73,
+      "fat_g": 48,
+      "fiber_g": 4
+    },
+    {
+      "name": "Chicken Bacon Ranch (16\")",
+      "category": "Toasted Sandwiches",
+      "serving": "16\"",
+      "calories": 1840,
+      "protein_g": 92,
+      "carbs_g": 146,
+      "fat_g": 96,
+      "fiber_g": 8
+    },
+    {
+      "name": "Ham & Three Cheese Melt (8\")",
+      "category": "Toasted Sandwiches",
+      "serving": "8\"",
+      "calories": 990,
+      "protein_g": 59,
+      "carbs_g": 73,
+      "fat_g": 51,
+      "fiber_g": 3
+    },
+    {
+      "name": "Ham & Three Cheese Melt (16\")",
+      "category": "Toasted Sandwiches",
+      "serving": "16\"",
+      "calories": 1990,
+      "protein_g": 119,
+      "carbs_g": 145,
+      "fat_g": 102,
+      "fiber_g": 6
+    },
+    {
+      "name": "Roast Beef & Cheddar (8\")",
+      "category": "Toasted Sandwiches",
+      "serving": "8\"",
+      "calories": 1140,
+      "protein_g": 59,
+      "carbs_g": 88,
+      "fat_g": 61,
+      "fiber_g": 5
+    },
+    {
+      "name": "Roast Beef & Cheddar (16\")",
+      "category": "Toasted Sandwiches",
+      "serving": "16\"",
+      "calories": 2280,
+      "protein_g": 117,
+      "carbs_g": 177,
+      "fat_g": 121,
+      "fiber_g": 10
+    },
+    {
+      "name": "Ultimate Italian (8\")",
+      "category": "Toasted Sandwiches",
+      "serving": "8\"",
+      "calories": 1100,
+      "protein_g": 69,
+      "carbs_g": 81,
+      "fat_g": 55,
+      "fiber_g": 5
+    },
+    {
+      "name": "Ultimate Italian (16\")",
+      "category": "Toasted Sandwiches",
+      "serving": "16\"",
+      "calories": 2200,
+      "protein_g": 138,
+      "carbs_g": 162,
+      "fat_g": 110,
+      "fiber_g": 9
+    },
+    {
+      "name": "Chicken Caesar Wrap",
+      "category": "Wraps",
+      "serving": "1 serving",
+      "calories": 890,
+      "protein_g": 36,
+      "carbs_g": 74,
+      "fat_g": 50,
+      "fiber_g": 3
+    },
+    {
+      "name": "Kickin' Ranch® Chicken Wrap",
+      "category": "Wraps",
+      "serving": "1 serving",
+      "calories": 810,
+      "protein_g": 36,
+      "carbs_g": 56,
+      "fat_g": 49,
+      "fiber_g": 4
+    },
+    {
+      "name": "Tuscan Italian Wrap",
+      "category": "Wraps",
+      "serving": "1 serving",
+      "calories": 860,
+      "protein_g": 44,
+      "carbs_g": 60,
+      "fat_g": 50,
+      "fiber_g": 4
+    },
+    {
+      "name": "#7 Spicy East Coast Italian (8\")",
+      "category": "Favorites",
+      "serving": "8\"",
+      "calories": 990,
+      "protein_g": 52,
+      "carbs_g": 77,
+      "fat_g": 52,
+      "fiber_g": 5
+    },
+    {
+      "name": "#7 Spicy East Coast Italian (16\")",
+      "category": "Favorites",
+      "serving": "16\"",
+      "calories": 1970,
+      "protein_g": 103,
+      "carbs_g": 154,
+      "fat_g": 104,
+      "fiber_g": 10
+    },
+    {
+      "name": "#8 Billy Club® (8\")",
+      "category": "Favorites",
+      "serving": "8\"",
+      "calories": 810,
+      "protein_g": 50,
+      "carbs_g": 72,
+      "fat_g": 34,
+      "fiber_g": 4
+    },
+    {
+      "name": "#8 Billy Club® (16\")",
+      "category": "Favorites",
+      "serving": "16\"",
+      "calories": 1620,
+      "protein_g": 101,
+      "carbs_g": 145,
+      "fat_g": 69,
+      "fiber_g": 8
+    },
+    {
+      "name": "#9 Italian Night Club® (8\")",
+      "category": "Favorites",
+      "serving": "8\"",
+      "calories": 910,
+      "protein_g": 49,
+      "carbs_g": 77,
+      "fat_g": 44,
+      "fiber_g": 4
+    },
+    {
+      "name": "#9 Italian Night Club® (16\")",
+      "category": "Favorites",
+      "serving": "16\"",
+      "calories": 1810,
+      "protein_g": 97,
+      "carbs_g": 153,
+      "fat_g": 89,
+      "fiber_g": 9
+    },
+    {
+      "name": "#10 Hunter's Club® (8\")",
+      "category": "Favorites",
+      "serving": "8\"",
+      "calories": 820,
+      "protein_g": 55,
+      "carbs_g": 70,
+      "fat_g": 36,
+      "fiber_g": 4
+    },
+    {
+      "name": "#10 Hunter's Club® (16\")",
+      "category": "Favorites",
+      "serving": "16\"",
+      "calories": 1650,
+      "protein_g": 109,
+      "carbs_g": 139,
+      "fat_g": 71,
+      "fiber_g": 7
+    },
+    {
+      "name": "#11 Country Club® (8\")",
+      "category": "Favorites",
+      "serving": "8\"",
+      "calories": 780,
+      "protein_g": 48,
+      "carbs_g": 73,
+      "fat_g": 32,
+      "fiber_g": 4
+    },
+    {
+      "name": "#11 Country Club® (16\")",
+      "category": "Favorites",
+      "serving": "16\"",
+      "calories": 1550,
+      "protein_g": 96,
+      "carbs_g": 145,
+      "fat_g": 64,
+      "fiber_g": 7
+    },
+    {
+      "name": "#12 Beach Club® (8\")",
+      "category": "Favorites",
+      "serving": "8\"",
+      "calories": 850,
+      "protein_g": 46,
+      "carbs_g": 72,
+      "fat_g": 41,
+      "fiber_g": 5
+    },
+    {
+      "name": "#12 Beach Club® (16\")",
+      "category": "Favorites",
+      "serving": "16\"",
+      "calories": 1700,
+      "protein_g": 91,
+      "carbs_g": 145,
+      "fat_g": 82,
+      "fiber_g": 10
+    },
+    {
+      "name": "#13 Jimmy Cubano® (8\")",
+      "category": "Favorites",
+      "serving": "8\"",
+      "calories": 840,
+      "protein_g": 43,
+      "carbs_g": 71,
+      "fat_g": 40,
+      "fiber_g": 3
+    },
+    {
+      "name": "#13 Jimmy Cubano® (16\")",
+      "category": "Favorites",
+      "serving": "16\"",
+      "calories": 1660,
+      "protein_g": 85,
+      "carbs_g": 142,
+      "fat_g": 81,
+      "fiber_g": 6
+    },
+    {
+      "name": "#14 Bootlegger Club® (8\")",
+      "category": "Favorites",
+      "serving": "8\"",
+      "calories": 680,
+      "protein_g": 44,
+      "carbs_g": 69,
+      "fat_g": 25,
+      "fiber_g": 4
+    },
+    {
+      "name": "#14 Bootlegger Club® (16\")",
+      "category": "Favorites",
+      "serving": "16\"",
+      "calories": 1370,
+      "protein_g": 89,
+      "carbs_g": 139,
+      "fat_g": 49,
+      "fiber_g": 7
+    },
+    {
+      "name": "#15 Club Tuna® (8\")",
+      "category": "Favorites",
+      "serving": "8\"",
+      "calories": 840,
+      "protein_g": 42,
+      "carbs_g": 74,
+      "fat_g": 42,
+      "fiber_g": 5
+    },
+    {
+      "name": "#15 Club Tuna® (16\")",
+      "category": "Favorites",
+      "serving": "16\"",
+      "calories": 1690,
+      "protein_g": 83,
+      "carbs_g": 148,
+      "fat_g": 84,
+      "fiber_g": 9
+    },
+    {
+      "name": "#16 Club Lulu® (8\")",
+      "category": "Favorites",
+      "serving": "8\"",
+      "calories": 690,
+      "protein_g": 35,
+      "carbs_g": 71,
+      "fat_g": 28,
+      "fiber_g": 4
+    },
+    {
+      "name": "#16 Club Lulu® (16\")",
+      "category": "Favorites",
+      "serving": "16\"",
+      "calories": 1370,
+      "protein_g": 70,
+      "carbs_g": 141,
+      "fat_g": 57,
+      "fiber_g": 7
+    },
+    {
+      "name": "#17 Ultimate Porker™ (8\")",
+      "category": "Favorites",
+      "serving": "8\"",
+      "calories": 690,
+      "protein_g": 33,
+      "carbs_g": 73,
+      "fat_g": 29,
+      "fiber_g": 4
+    },
+    {
+      "name": "#17 Ultimate Porker™ (16\")",
+      "category": "Favorites",
+      "serving": "16\"",
+      "calories": 1380,
+      "protein_g": 65,
+      "carbs_g": 145,
+      "fat_g": 58,
+      "fiber_g": 7
+    },
+    {
+      "name": "J.J.B.L.T.® (8\")",
+      "category": "Favorites",
+      "serving": "8\"",
+      "calories": 710,
+      "protein_g": 28,
+      "carbs_g": 71,
+      "fat_g": 34,
+      "fiber_g": 4
+    },
+    {
+      "name": "J.J.B.L.T.® (16\")",
+      "category": "Favorites",
+      "serving": "16\"",
+      "calories": 1420,
+      "protein_g": 56,
+      "carbs_g": 142,
+      "fat_g": 68,
+      "fiber_g": 7
+    },
+    {
+      "name": "#1 The Pepe® (8\")",
+      "category": "Originals",
+      "serving": "8\"",
+      "calories": 590,
+      "protein_g": 30,
+      "carbs_g": 50,
+      "fat_g": 30,
+      "fiber_g": 3
+    },
+    {
+      "name": "#1 The Pepe® (16\")",
+      "category": "Originals",
+      "serving": "16\"",
+      "calories": 1180,
+      "protein_g": 59,
+      "carbs_g": 99,
+      "fat_g": 60,
+      "fiber_g": 6
+    },
+    {
+      "name": "#2 Big John® (8\")",
+      "category": "Originals",
+      "serving": "8\"",
+      "calories": 500,
+      "protein_g": 26,
+      "carbs_g": 46,
+      "fat_g": 23,
+      "fiber_g": 3
+    },
+    {
+      "name": "#2 Big John® (16\")",
+      "category": "Originals",
+      "serving": "16\"",
+      "calories": 990,
+      "protein_g": 51,
+      "carbs_g": 93,
+      "fat_g": 45,
+      "fiber_g": 6
+    },
+    {
+      "name": "#3 Totally Tuna® (8\")",
+      "category": "Originals",
+      "serving": "8\"",
+      "calories": 490,
+      "protein_g": 20,
+      "carbs_g": 50,
+      "fat_g": 23,
+      "fiber_g": 4
+    },
+    {
+      "name": "#3 Totally Tuna®(16\")",
+      "category": "Originals",
+      "serving": "16\"",
+      "calories": 990,
+      "protein_g": 40,
+      "carbs_g": 101,
+      "fat_g": 46,
+      "fiber_g": 8
+    },
+    {
+      "name": "#4 Turkey Tom® (8\")",
+      "category": "Originals",
+      "serving": "8\"",
+      "calories": 470,
+      "protein_g": 24,
+      "carbs_g": 47,
+      "fat_g": 20,
+      "fiber_g": 3
+    },
+    {
+      "name": "#4 Turkey Tom® (16\")",
+      "category": "Originals",
+      "serving": "16\"",
+      "calories": 940,
+      "protein_g": 48,
+      "carbs_g": 94,
+      "fat_g": 41,
+      "fiber_g": 6
+    },
+    {
+      "name": "#5 Vito® (8\")",
+      "category": "Originals",
+      "serving": "8\"",
+      "calories": 550,
+      "protein_g": 33,
+      "carbs_g": 51,
+      "fat_g": 24,
+      "fiber_g": 4
+    },
+    {
+      "name": "#5 Vito® (16\")",
+      "category": "Originals",
+      "serving": "16\"",
+      "calories": 1110,
+      "protein_g": 65,
+      "carbs_g": 103,
+      "fat_g": 48,
+      "fiber_g": 7
+    },
+    {
+      "name": "#6 The Veggie® (8\")",
+      "category": "Originals",
+      "serving": "8\"",
+      "calories": 660,
+      "protein_g": 27,
+      "carbs_g": 49,
+      "fat_g": 39,
+      "fiber_g": 4
+    },
+    {
+      "name": "#6 The Veggie® (16\")",
+      "category": "Originals",
+      "serving": "16\"",
+      "calories": 1330,
+      "protein_g": 54,
+      "carbs_g": 99,
+      "fat_g": 79,
+      "fiber_g": 8
+    },
+    {
+      "name": "#1 The Pepe® (Little John - 6.5\")",
+      "category": "Little Johns",
+      "serving": "6.5\"",
+      "calories": 300,
+      "protein_g": 15,
+      "carbs_g": 25,
+      "fat_g": 15,
+      "fiber_g": 1
+    },
+    {
+      "name": "#2 Big John® (Little John - 6.5\")",
+      "category": "Little Johns",
+      "serving": "6.5\"",
+      "calories": 250,
+      "protein_g": 13,
+      "carbs_g": 23,
+      "fat_g": 12,
+      "fiber_g": 1
+    },
+    {
+      "name": "#3 Totally Tuna® (Little John - 6.5\")",
+      "category": "Little Johns",
+      "serving": "6.5\"",
+      "calories": 250,
+      "protein_g": 10,
+      "carbs_g": 25,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "#4 Turkey Tom® (Little John - 6.5\")",
+      "category": "Little Johns",
+      "serving": "6.5\"",
+      "calories": 240,
+      "protein_g": 12,
+      "carbs_g": 24,
+      "fat_g": 11,
+      "fiber_g": 1
+    },
+    {
+      "name": "#5 Vito® (Little John - 6.5\")",
+      "category": "Little Johns",
+      "serving": "6.5\"",
+      "calories": 280,
+      "protein_g": 16,
+      "carbs_g": 26,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "#6 The Veggie® (Little John - 6.5\")",
+      "category": "Little Johns",
+      "serving": "6.5\"",
+      "calories": 340,
+      "protein_g": 14,
+      "carbs_g": 25,
+      "fat_g": 20,
+      "fiber_g": 2
+    },
+    {
+      "name": "The J.J. Gargantuan® (8\")",
+      "category": "Gargantuan",
+      "serving": "8\"",
+      "calories": 1070,
+      "protein_g": 79,
+      "carbs_g": 78,
+      "fat_g": 48,
+      "fiber_g": 4
+    },
+    {
+      "name": "The J.J. Gargantuan® (16\")",
+      "category": "Gargantuan",
+      "serving": "16\"",
+      "calories": 2130,
+      "protein_g": 158,
+      "carbs_g": 156,
+      "fat_g": 97,
+      "fiber_g": 9
+    },
+    {
+      "name": "Slim 1 - Ham & Provolone (8\")",
+      "category": "Plain Slims®",
+      "serving": "8\"",
+      "calories": 530,
+      "protein_g": 33,
+      "carbs_g": 68,
+      "fat_g": 13,
+      "fiber_g": 3
+    },
+    {
+      "name": "Slim 1 - Ham & Provolone (16\")",
+      "category": "Plain Slims®",
+      "serving": "16\"",
+      "calories": 1060,
+      "protein_g": 66,
+      "carbs_g": 136,
+      "fat_g": 26,
+      "fiber_g": 5
+    },
+    {
+      "name": "Slim 2 - Roast Beef (8\")",
+      "category": "Plain Slims®",
+      "serving": "8\"",
+      "calories": 440,
+      "protein_g": 29,
+      "carbs_g": 65,
+      "fat_g": 6,
+      "fiber_g": 3
+    },
+    {
+      "name": "Slim 2 - Roast Beef (16\")",
+      "category": "Plain Slims®",
+      "serving": "16\"",
+      "calories": 870,
+      "protein_g": 58,
+      "carbs_g": 130,
+      "fat_g": 12,
+      "fiber_g": 5
+    },
+    {
+      "name": "Slim 3 - Tuna Salad (8\")",
+      "category": "Plain Slims®",
+      "serving": "8\"",
+      "calories": 590,
+      "protein_g": 24,
+      "carbs_g": 69,
+      "fat_g": 24,
+      "fiber_g": 3
+    },
+    {
+      "name": "Slim 3 - Tuna Salad (16\")",
+      "category": "Plain Slims®",
+      "serving": "16\"",
+      "calories": 1190,
+      "protein_g": 47,
+      "carbs_g": 138,
+      "fat_g": 48,
+      "fiber_g": 7
+    },
+    {
+      "name": "Slim 4 - Turkey (8\")",
+      "category": "Plain Slims®",
+      "serving": "8\"",
+      "calories": 410,
+      "protein_g": 27,
+      "carbs_g": 65,
+      "fat_g": 4,
+      "fiber_g": 3
+    },
+    {
+      "name": "Slim 4 - Turkey (16\")",
+      "category": "Plain Slims®",
+      "serving": "16\"",
+      "calories": 820,
+      "protein_g": 55,
+      "carbs_g": 131,
+      "fat_g": 7,
+      "fiber_g": 5
+    },
+    {
+      "name": "Slim 5 - Salami, Capocollo & Provolone (8\")",
+      "category": "Plain Slims®",
+      "serving": "8\"",
+      "calories": 610,
+      "protein_g": 36,
+      "carbs_g": 68,
+      "fat_g": 21,
+      "fiber_g": 3
+    },
+    {
+      "name": "Slim 5 - Salami, Capocollo & Provolone (16\")",
+      "category": "Plain Slims®",
+      "serving": "16\"",
+      "calories": 1220,
+      "protein_g": 72,
+      "carbs_g": 136,
+      "fat_g": 41,
+      "fiber_g": 5
+    },
+    {
+      "name": "Slim 6 - Provolone (8\")",
+      "category": "Plain Slims®",
+      "serving": "8\"",
+      "calories": 580,
+      "protein_g": 30,
+      "carbs_g": 66,
+      "fat_g": 20,
+      "fiber_g": 3
+    },
+    {
+      "name": "Slim 6 - Provolone (16\")",
+      "category": "Plain Slims®",
+      "serving": "16\"",
+      "calories": 1150,
+      "protein_g": 60,
+      "carbs_g": 132,
+      "fat_g": 41,
+      "fiber_g": 5
+    },
+    {
+      "name": "Chocolate Chip Cookie",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 410,
+      "protein_g": 4,
+      "carbs_g": 56,
+      "fat_g": 19,
+      "fiber_g": 1
+    },
+    {
+      "name": "Fudge Chocolate Brownie",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 350,
+      "protein_g": 4,
+      "carbs_g": 46,
+      "fat_g": 19,
+      "fiber_g": 2
+    },
+    {
+      "name": "Oatmeal Raisin Cookie",
+      "category": "Desserts",
+      "serving": "1 serving",
+      "calories": 370,
+      "protein_g": 5,
+      "carbs_g": 58,
+      "fat_g": 13,
+      "fiber_g": 3
+    },
+    {
+      "name": "Avocado Spread",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 7,
+      "fiber_g": 3
+    },
+    {
+      "name": "BBQ Chips",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 3,
+      "carbs_g": 34,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "French Bread",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 690,
+      "protein_g": 26,
+      "carbs_g": 129,
+      "fat_g": 6,
+      "fiber_g": 5
+    },
+    {
+      "name": "Homestyle Potato Salad",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 250,
+      "protein_g": 3,
+      "carbs_g": 30,
+      "fat_g": 12,
+      "fiber_g": 2
+    },
+    {
+      "name": "Homestyle Ranch, Large",
+      "category": "Sides",
+      "serving": "1 large",
+      "calories": 590,
+      "protein_g": 2,
+      "carbs_g": 4,
+      "fat_g": 63,
+      "fiber_g": 0
+    },
+    {
+      "name": "Homestyle Ranch, Small",
+      "category": "Sides",
+      "serving": "1 small",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 1,
+      "fat_g": 17,
+      "fiber_g": 0
+    },
+    {
+      "name": "Jalapeño Chips",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 3,
+      "carbs_g": 33,
+      "fat_g": 17,
+      "fiber_g": 2
+    },
+    {
+      "name": "Jimmy Pickle®",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kickin' Ranch®, Large",
+      "category": "Sides",
+      "serving": "1 large",
+      "calories": 690,
+      "protein_g": 3,
+      "carbs_g": 7,
+      "fat_g": 72,
+      "fiber_g": 0
+    },
+    {
+      "name": "Kickin' Ranch®, Small",
+      "category": "Sides",
+      "serving": "1 small",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pesto Bowtie Pasta Salad",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 250,
+      "protein_g": 6,
+      "carbs_g": 19,
+      "fat_g": 17,
+      "fiber_g": 1
+    },
+    {
+      "name": "Regular Chips",
+      "category": "Sides",
+      "serving": "1 regular",
+      "calories": 300,
+      "protein_g": 3,
+      "carbs_g": 33,
+      "fat_g": 18,
+      "fiber_g": 2
+    },
+    {
+      "name": "Salt & Vinegar Chips",
+      "category": "Sides",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 3,
+      "carbs_g": 33,
+      "fat_g": 17,
+      "fiber_g": 2
+    }
+  ]
+}

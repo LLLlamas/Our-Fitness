@@ -1,0 +1,3019 @@
+{
+  "chain": "Taco Bell",
+  "slug": "taco-bell",
+  "aliases": [
+    "taco bell",
+    "tacobell",
+    "tbell",
+    "t bell",
+    "taco bel",
+    "tacobel"
+  ],
+  "kind": "fast-food",
+  "source_url": "https://www.nutritionix.com/taco-bell/menu/premium",
+  "source_kind": "official",
+  "retrieved": "2026-10-14",
+  "notes": "Data is the brand's Nutritionix Interactive Nutrition Menu (premium grid), which tacobell.com/nutrition/info links/embeds as its official nutrition menu. Serving = one menu item as listed. The 200-row Cantina Beer, Wine and Spirits section (Cantina locations only) was omitted. Atwater outliers (>20%, left as published): Prosecco Sparkling Wine (350 mL) (1 serving): 280 cal vs 36 Atwater; Red Wine (6.3 fl oz) (1 serving): 160 cal vs 20 Atwater; Rum (80 proof) (1 serving): 70 cal vs 0 Atwater; Tequila (80 proof) (1 serving): 70 cal vs 0 Atwater; Vodka (80 proof) (1 serving): 70 cal vs 0 Atwater; Red Sangria - LV (1 serving): 330 cal vs 112 Atwater; Rum (80 proof) - Double - LV (1 serving): 250 cal vs 0 Atwater; Rum (80 proof) - Single - LV (1 serving): 120 cal vs 0 Atwater; Tequila (80 proof) - Double - LV (1 serving): 250 cal vs 0 Atwater; Tequila (80 proof) - Single - LV (1 serving): 120 cal vs 0 Atwater; Vodka (80 proof) - Double - LV (1 serving): 250 cal vs 0 Atwater; Vodka (80 proof) - Single - LV (1 serving): 120 cal vs 0 Atwater; Whiskey (80 proof) - Double - LV (1 serving): 250 cal vs 0 Atwater; Whiskey (80 proof) - Single - LV (1 serving): 120 cal vs 0 Atwater; Mtn Dew Baja Blast Zero Sugar Dirty Soda (20 oz) (1 serving): 60 cal vs 45 Atwater; ...",
+  "items": [
+    {
+      "name": "Avocado Salsa Verde Packet",
+      "category": "Cantina Chicken Menu",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 5,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cantina Chicken Bowl",
+      "category": "Cantina Chicken Menu",
+      "serving": "1 serving",
+      "calories": 580,
+      "protein_g": 26,
+      "carbs_g": 55,
+      "fat_g": 29,
+      "fiber_g": 11
+    },
+    {
+      "name": "Cantina Chicken Burrito",
+      "category": "Cantina Chicken Menu",
+      "serving": "1 serving",
+      "calories": 530,
+      "protein_g": 24,
+      "carbs_g": 44,
+      "fat_g": 28,
+      "fiber_g": 5
+    },
+    {
+      "name": "Cantina Chicken Crispy Taco",
+      "category": "Cantina Chicken Menu",
+      "serving": "1 serving",
+      "calories": 270,
+      "protein_g": 15,
+      "carbs_g": 19,
+      "fat_g": 15,
+      "fiber_g": 4
+    },
+    {
+      "name": "Cantina Chicken Rolled Quesadilla",
+      "category": "Cantina Chicken Menu",
+      "serving": "1 serving",
+      "calories": 570,
+      "protein_g": 33,
+      "carbs_g": 46,
+      "fat_g": 28,
+      "fiber_g": 5
+    },
+    {
+      "name": "Cantina Chicken Soft Taco",
+      "category": "Cantina Chicken Menu",
+      "serving": "1 serving",
+      "calories": 210,
+      "protein_g": 12,
+      "carbs_g": 19,
+      "fat_g": 10,
+      "fiber_g": 3
+    },
+    {
+      "name": "Black Bean Chalupa Supreme (V)",
+      "category": "Tacos",
+      "serving": "1 serving",
+      "calories": 340,
+      "protein_g": 10,
+      "carbs_g": 36,
+      "fat_g": 17,
+      "fiber_g": 7
+    },
+    {
+      "name": "Chalupa Supreme - Beef",
+      "category": "Tacos",
+      "serving": "1 serving",
+      "calories": 350,
+      "protein_g": 12,
+      "carbs_g": 32,
+      "fat_g": 20,
+      "fiber_g": 4
+    },
+    {
+      "name": "Chalupa Supreme - Chicken",
+      "category": "Tacos",
+      "serving": "1 serving",
+      "calories": 330,
+      "protein_g": 15,
+      "carbs_g": 30,
+      "fat_g": 17,
+      "fiber_g": 3
+    },
+    {
+      "name": "Chalupa Supreme - Steak",
+      "category": "Tacos",
+      "serving": "1 serving",
+      "calories": 340,
+      "protein_g": 15,
+      "carbs_g": 30,
+      "fat_g": 18,
+      "fiber_g": 3
+    },
+    {
+      "name": "Cheesy Gordita Crunch",
+      "category": "Tacos",
+      "serving": "1 serving",
+      "calories": 480,
+      "protein_g": 20,
+      "carbs_g": 44,
+      "fat_g": 26,
+      "fiber_g": 6
+    },
+    {
+      "name": "Crunchy Taco",
+      "category": "Tacos",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 7,
+      "carbs_g": 13,
+      "fat_g": 9,
+      "fiber_g": 3
+    },
+    {
+      "name": "Crunchy Taco Supreme",
+      "category": "Tacos",
+      "serving": "1 serving",
+      "calories": 190,
+      "protein_g": 8,
+      "carbs_g": 16,
+      "fat_g": 10,
+      "fiber_g": 3
+    },
+    {
+      "name": "Doritos Cheesy Gordita Crunch - Nacho Cheese",
+      "category": "Tacos",
+      "serving": "1 serving",
+      "calories": 480,
+      "protein_g": 20,
+      "carbs_g": 43,
+      "fat_g": 26,
+      "fiber_g": 5
+    },
+    {
+      "name": "Double Stacked Taco",
+      "category": "Tacos",
+      "serving": "1 serving",
+      "calories": 320,
+      "protein_g": 10,
+      "carbs_g": 34,
+      "fat_g": 16,
+      "fiber_g": 4
+    },
+    {
+      "name": "Nacho Cheese Doritos Locos Taco",
+      "category": "Tacos",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 7,
+      "carbs_g": 13,
+      "fat_g": 10,
+      "fiber_g": 3
+    },
+    {
+      "name": "Nacho Cheese Doritos Locos Taco Supreme",
+      "category": "Tacos",
+      "serving": "1 serving",
+      "calories": 190,
+      "protein_g": 8,
+      "carbs_g": 15,
+      "fat_g": 11,
+      "fiber_g": 3
+    },
+    {
+      "name": "Soft Taco - Beef",
+      "category": "Tacos",
+      "serving": "1 serving",
+      "calories": 180,
+      "protein_g": 9,
+      "carbs_g": 18,
+      "fat_g": 8,
+      "fiber_g": 3
+    },
+    {
+      "name": "Soft Taco - Chicken",
+      "category": "Tacos",
+      "serving": "1 serving",
+      "calories": 160,
+      "protein_g": 12,
+      "carbs_g": 16,
+      "fat_g": 5,
+      "fiber_g": 1
+    },
+    {
+      "name": "Soft Taco Supreme - Beef",
+      "category": "Tacos",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 9,
+      "carbs_g": 21,
+      "fat_g": 9,
+      "fiber_g": 3
+    },
+    {
+      "name": "Soft Taco Supreme - Chicken",
+      "category": "Tacos",
+      "serving": "1 serving",
+      "calories": 180,
+      "protein_g": 12,
+      "carbs_g": 19,
+      "fat_g": 6,
+      "fiber_g": 2
+    },
+    {
+      "name": "Spicy Potato Soft Taco (V)",
+      "category": "Tacos",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 5,
+      "carbs_g": 28,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bean Burrito (V)",
+      "category": "Burritos",
+      "serving": "1 serving",
+      "calories": 360,
+      "protein_g": 13,
+      "carbs_g": 54,
+      "fat_g": 10,
+      "fiber_g": 8
+    },
+    {
+      "name": "Beefy 5-Layer Burrito",
+      "category": "Burritos",
+      "serving": "1 serving",
+      "calories": 490,
+      "protein_g": 17,
+      "carbs_g": 65,
+      "fat_g": 18,
+      "fiber_g": 7
+    },
+    {
+      "name": "Black Bean Grilled Cheese Burrito",
+      "category": "Burritos",
+      "serving": "1 serving",
+      "calories": 680,
+      "protein_g": 23,
+      "carbs_g": 72,
+      "fat_g": 33,
+      "fiber_g": 9
+    },
+    {
+      "name": "Burrito Supreme - Beef",
+      "category": "Burritos",
+      "serving": "1 serving",
+      "calories": 390,
+      "protein_g": 16,
+      "carbs_g": 52,
+      "fat_g": 14,
+      "fiber_g": 8
+    },
+    {
+      "name": "Burrito Supreme - Chicken",
+      "category": "Burritos",
+      "serving": "1 serving",
+      "calories": 370,
+      "protein_g": 19,
+      "carbs_g": 49,
+      "fat_g": 11,
+      "fiber_g": 6
+    },
+    {
+      "name": "Burrito Supreme - Steak",
+      "category": "Burritos",
+      "serving": "1 serving",
+      "calories": 380,
+      "protein_g": 19,
+      "carbs_g": 50,
+      "fat_g": 12,
+      "fiber_g": 6
+    },
+    {
+      "name": "Cheesy Bean & Rice Burrito (V)",
+      "category": "Burritos",
+      "serving": "1 serving",
+      "calories": 400,
+      "protein_g": 9,
+      "carbs_g": 56,
+      "fat_g": 16,
+      "fiber_g": 6
+    },
+    {
+      "name": "Cheesy Double Beef Burrito",
+      "category": "Burritos",
+      "serving": "1 serving",
+      "calories": 560,
+      "protein_g": 20,
+      "carbs_g": 64,
+      "fat_g": 25,
+      "fiber_g": 7
+    },
+    {
+      "name": "Chicken Enchilada Burrito",
+      "category": "Burritos",
+      "serving": "1 serving",
+      "calories": 370,
+      "protein_g": 18,
+      "carbs_g": 50,
+      "fat_g": 11,
+      "fiber_g": 4
+    },
+    {
+      "name": "Chili Cheese Burrito (regional)",
+      "category": "Burritos",
+      "serving": "1 serving",
+      "calories": 380,
+      "protein_g": 15,
+      "carbs_g": 41,
+      "fat_g": 17,
+      "fiber_g": 4
+    },
+    {
+      "name": "Grilled Cheese Burrito",
+      "category": "Burritos",
+      "serving": "1 serving",
+      "calories": 690,
+      "protein_g": 25,
+      "carbs_g": 68,
+      "fat_g": 36,
+      "fiber_g": 7
+    },
+    {
+      "name": "Grilled Cheese Burrito - Chicken",
+      "category": "Burritos",
+      "serving": "1 serving",
+      "calories": 670,
+      "protein_g": 28,
+      "carbs_g": 66,
+      "fat_g": 33,
+      "fiber_g": 6
+    },
+    {
+      "name": "Grilled Cheese Burrito - Steak",
+      "category": "Burritos",
+      "serving": "1 serving",
+      "calories": 680,
+      "protein_g": 28,
+      "carbs_g": 66,
+      "fat_g": 34,
+      "fiber_g": 6
+    },
+    {
+      "name": "Chips and Nacho Cheese Sauce (V)",
+      "category": "Nachos",
+      "serving": "1 serving",
+      "calories": 220,
+      "protein_g": 3,
+      "carbs_g": 24,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Loaded Beef Nachos",
+      "category": "Nachos",
+      "serving": "1 serving",
+      "calories": 440,
+      "protein_g": 12,
+      "carbs_g": 45,
+      "fat_g": 24,
+      "fiber_g": 9
+    },
+    {
+      "name": "Nachos BellGrande - Beef",
+      "category": "Nachos",
+      "serving": "1 serving",
+      "calories": 730,
+      "protein_g": 17,
+      "carbs_g": 81,
+      "fat_g": 38,
+      "fiber_g": 13
+    },
+    {
+      "name": "Nachos BellGrande - Chicken",
+      "category": "Nachos",
+      "serving": "1 serving",
+      "calories": 710,
+      "protein_g": 20,
+      "carbs_g": 79,
+      "fat_g": 35,
+      "fiber_g": 12
+    },
+    {
+      "name": "Nachos BellGrande - Steak",
+      "category": "Nachos",
+      "serving": "1 serving",
+      "calories": 720,
+      "protein_g": 20,
+      "carbs_g": 79,
+      "fat_g": 36,
+      "fiber_g": 12
+    },
+    {
+      "name": "Quesadilla - Cheese (V)",
+      "category": "Quesadillas",
+      "serving": "1 serving",
+      "calories": 440,
+      "protein_g": 18,
+      "carbs_g": 43,
+      "fat_g": 22,
+      "fiber_g": 4
+    },
+    {
+      "name": "Quesadilla - Chicken",
+      "category": "Quesadillas",
+      "serving": "1 serving",
+      "calories": 490,
+      "protein_g": 26,
+      "carbs_g": 44,
+      "fat_g": 23,
+      "fiber_g": 4
+    },
+    {
+      "name": "Quesadilla - Steak",
+      "category": "Quesadillas",
+      "serving": "1 serving",
+      "calories": 500,
+      "protein_g": 26,
+      "carbs_g": 44,
+      "fat_g": 24,
+      "fiber_g": 4
+    },
+    {
+      "name": "3-Cheese Chicken Flatbread Melt",
+      "category": "Specialties",
+      "serving": "1 serving",
+      "calories": 320,
+      "protein_g": 20,
+      "carbs_g": 30,
+      "fat_g": 14,
+      "fiber_g": 3
+    },
+    {
+      "name": "Black Bean Crunchwrap Supreme (V)",
+      "category": "Specialties",
+      "serving": "1 serving",
+      "calories": 520,
+      "protein_g": 13,
+      "carbs_g": 78,
+      "fat_g": 17,
+      "fiber_g": 8
+    },
+    {
+      "name": "Cheesy Roll Up (V)",
+      "category": "Specialties",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 8,
+      "carbs_g": 18,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Crunchwrap Supreme",
+      "category": "Specialties",
+      "serving": "1 serving",
+      "calories": 530,
+      "protein_g": 15,
+      "carbs_g": 74,
+      "fat_g": 20,
+      "fiber_g": 6
+    },
+    {
+      "name": "Mexican Pizza",
+      "category": "Specialties",
+      "serving": "1 serving",
+      "calories": 530,
+      "protein_g": 19,
+      "carbs_g": 51,
+      "fat_g": 27,
+      "fiber_g": 8
+    },
+    {
+      "name": "Stacker",
+      "category": "Specialties",
+      "serving": "1 serving",
+      "calories": 390,
+      "protein_g": 17,
+      "carbs_g": 43,
+      "fat_g": 17,
+      "fiber_g": 4
+    },
+    {
+      "name": "Veggie Mexican Pizza (V)",
+      "category": "Specialties",
+      "serving": "1 serving",
+      "calories": 460,
+      "protein_g": 14,
+      "carbs_g": 48,
+      "fat_g": 23,
+      "fiber_g": 7
+    },
+    {
+      "name": "Black Beans & Rice (V)",
+      "category": "Sides & Sweets",
+      "serving": "1 serving",
+      "calories": 160,
+      "protein_g": 4,
+      "carbs_g": 25,
+      "fat_g": 5,
+      "fiber_g": 5
+    },
+    {
+      "name": "Black Beans (V)",
+      "category": "Sides & Sweets",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 3,
+      "carbs_g": 7,
+      "fat_g": 2,
+      "fiber_g": 4
+    },
+    {
+      "name": "Cheesy Fiesta Potatoes (V)",
+      "category": "Sides & Sweets",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 3,
+      "carbs_g": 29,
+      "fat_g": 12,
+      "fiber_g": 3
+    },
+    {
+      "name": "Cinnabon Delights (2 Pk) (V)",
+      "category": "Sides & Sweets",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 2,
+      "carbs_g": 15,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cinnabon Delights (12 Pk - Serves 4) (V)",
+      "category": "Sides & Sweets",
+      "serving": "1 serving",
+      "calories": 1010,
+      "protein_g": 11,
+      "carbs_g": 88,
+      "fat_g": 68,
+      "fiber_g": 5
+    },
+    {
+      "name": "Cinnamon Twists (V)",
+      "category": "Sides & Sweets",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 2,
+      "carbs_g": 27,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diablo Sauce Packet (V)",
+      "category": "Sides & Sweets",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Fire Sauce Packet (V)",
+      "category": "Sides & Sweets",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Sauce Packet (V)",
+      "category": "Sides & Sweets",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Large Nacho Fries",
+      "category": "Sides & Sweets",
+      "serving": "1 serving",
+      "calories": 500,
+      "protein_g": 6,
+      "carbs_g": 52,
+      "fat_g": 29,
+      "fiber_g": 5
+    },
+    {
+      "name": "Mild Sauce Packet (V)",
+      "category": "Sides & Sweets",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Nacho Fries",
+      "category": "Sides & Sweets",
+      "serving": "1 serving",
+      "calories": 350,
+      "protein_g": 4,
+      "carbs_g": 36,
+      "fat_g": 21,
+      "fiber_g": 3
+    },
+    {
+      "name": "Pintos N Cheese (V)",
+      "category": "Sides & Sweets",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 9,
+      "carbs_g": 19,
+      "fat_g": 6,
+      "fiber_g": 7
+    },
+    {
+      "name": "Blue Raspberry Freeze (16 oz)",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 30,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Blue Raspberry Freeze (20 oz)",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 38,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cinnabon Delights Coffee - Hot",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 160,
+      "protein_g": 1,
+      "carbs_g": 34,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cinnabon Delights Coffee - Iced",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 160,
+      "protein_g": 1,
+      "carbs_g": 34,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hot Coffee with Creamer",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 8,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Iced Coffee with Creamer",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 8,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lowfat Milk - CA (Regional)",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 100,
+      "protein_g": 9,
+      "carbs_g": 13,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lowfat Milk - Federal (Regional)",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 80,
+      "protein_g": 7,
+      "carbs_g": 10,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Baja Blast Freeze (16 oz)",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 150,
+      "protein_g": 0,
+      "carbs_g": 41,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Baja Blast Freeze (20 oz)",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 51,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Orange Juice",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 140,
+      "protein_g": 2,
+      "carbs_g": 33,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Premium Roast Coffee - Hot",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Premium Roast Coffee - Iced",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Water",
+      "category": "Drinks",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Dulce Churro Chiller (16 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 560,
+      "protein_g": 8,
+      "carbs_g": 86,
+      "fat_g": 22,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Dulce Churro Chiller (20 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 760,
+      "protein_g": 11,
+      "carbs_g": 116,
+      "fat_g": 29,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Dulce Cream Cold Brew (16 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 140,
+      "protein_g": 1,
+      "carbs_g": 18,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Caramel Dulce Cream Cold Brew (20 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 150,
+      "protein_g": 2,
+      "carbs_g": 18,
+      "fat_g": 8,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cinnabon Caramel Coffee - Hot",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 2,
+      "carbs_g": 42,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cinnabon Caramel Coffee - Iced (16 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 3,
+      "carbs_g": 43,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cinnabon Caramel Coffee - Iced (20 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 4,
+      "carbs_g": 44,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cinnabon Caramel Latte Chiller (16 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 480,
+      "protein_g": 6,
+      "carbs_g": 70,
+      "fat_g": 18,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cinnabon Caramel Latte Chiller (19 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 620,
+      "protein_g": 9,
+      "carbs_g": 89,
+      "fat_g": 25,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew - Black (16 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cold Brew - Black (20 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dragonfruit Berry Agua Refresca",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 180,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dragonfruit Berry Limonada",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 57,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dragonfruit Strawberry Limonada",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 56,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango Peach Agua Refresca",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mango Peach Limonada",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 56,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mexican Chocolate Churro Chiller (16 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 500,
+      "protein_g": 8,
+      "carbs_g": 71,
+      "fat_g": 21,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mexican Chocolate Churro Chiller (20 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 660,
+      "protein_g": 10,
+      "carbs_g": 94,
+      "fat_g": 28,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mexican Mocha Coffee - Hot",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 2,
+      "carbs_g": 34,
+      "fat_g": 3,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mexican Mocha Coffee - Iced (16 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 4,
+      "carbs_g": 41,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mexican Mocha Coffee - Iced (20 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 310,
+      "protein_g": 4,
+      "carbs_g": 46,
+      "fat_g": 12,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mexican Mocha Latte Chiller (16 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 480,
+      "protein_g": 7,
+      "carbs_g": 68,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mexican Mocha Latte Chiller (20 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 620,
+      "protein_g": 9,
+      "carbs_g": 87,
+      "fat_g": 26,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pineapple Lime Rockstar Refresca",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 14,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pink Lemonade Frost (16 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 48,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pink Lemonade Frost (20 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 280,
+      "protein_g": 1,
+      "carbs_g": 67,
+      "fat_g": 4,
+      "fiber_g": 0
+    },
+    {
+      "name": "Purple Velvet Cream Cold Brew (16 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 120,
+      "protein_g": 1,
+      "carbs_g": 13,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Purple Velvet Cream Cold Brew (20 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 120,
+      "protein_g": 1,
+      "carbs_g": 13,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Lime Refresca Freeze (16 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 51,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Lime Refresca Freeze (20 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 61,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Matcha Chiller (16 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 590,
+      "protein_g": 7,
+      "carbs_g": 87,
+      "fat_g": 24,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Matcha Chiller (20 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 780,
+      "protein_g": 10,
+      "carbs_g": 117,
+      "fat_g": 30,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Passionfruit Agua Refresca",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 43,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Strawberry Passionfruit Limonada",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 56,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropical Punch Rockstar Refresca",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Cream Cold Brew (16 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 90,
+      "protein_g": 1,
+      "carbs_g": 7,
+      "fat_g": 7,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Cream Cold Brew (20 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 140,
+      "protein_g": 1,
+      "carbs_g": 10,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Crema Coffee - Hot",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 2,
+      "carbs_g": 21,
+      "fat_g": 2,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Crema Coffee - Iced (16 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 3,
+      "carbs_g": 31,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Crema Coffee - Iced (20 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 250,
+      "protein_g": 3,
+      "carbs_g": 32,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Crema Latte Chiller (16 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 430,
+      "protein_g": 6,
+      "carbs_g": 59,
+      "fat_g": 19,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vanilla Crema Latte Chiller (20 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 580,
+      "protein_g": 9,
+      "carbs_g": 77,
+      "fat_g": 26,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wild Strawberry Churro Chiller (16 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 510,
+      "protein_g": 7,
+      "carbs_g": 77,
+      "fat_g": 20,
+      "fiber_g": 0
+    },
+    {
+      "name": "Wild Strawberry Churro Chiller (20 oz)",
+      "category": "Live Mas Cafe",
+      "serving": "1 serving",
+      "calories": 680,
+      "protein_g": 10,
+      "carbs_g": 102,
+      "fat_g": 27,
+      "fiber_g": 0
+    },
+    {
+      "name": "3-Cheese Chicken Flatbread Melt - Value Menu",
+      "category": "Luxe Value Menu",
+      "serving": "1 serving",
+      "calories": 320,
+      "protein_g": 20,
+      "carbs_g": 30,
+      "fat_g": 14,
+      "fiber_g": 3
+    },
+    {
+      "name": "Avocado Ranch Chicken Stacker",
+      "category": "Luxe Value Menu",
+      "serving": "1 serving",
+      "calories": 350,
+      "protein_g": 16,
+      "carbs_g": 40,
+      "fat_g": 15,
+      "fiber_g": 3
+    },
+    {
+      "name": "Beefy Potato Loaded Griller",
+      "category": "Luxe Value Menu",
+      "serving": "1 serving",
+      "calories": 480,
+      "protein_g": 12,
+      "carbs_g": 56,
+      "fat_g": 23,
+      "fiber_g": 5
+    },
+    {
+      "name": "Cheesy Bean & Rice Burrito - Value Menu",
+      "category": "Luxe Value Menu",
+      "serving": "1 serving",
+      "calories": 400,
+      "protein_g": 9,
+      "carbs_g": 56,
+      "fat_g": 16,
+      "fiber_g": 6
+    },
+    {
+      "name": "Cheesy Double Beef Burrito - Value Menu",
+      "category": "Luxe Value Menu",
+      "serving": "1 serving",
+      "calories": 560,
+      "protein_g": 20,
+      "carbs_g": 64,
+      "fat_g": 25,
+      "fiber_g": 7
+    },
+    {
+      "name": "Cheesy Fiesta Potatoes - Value Menu",
+      "category": "Luxe Value Menu",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 3,
+      "carbs_g": 29,
+      "fat_g": 12,
+      "fiber_g": 3
+    },
+    {
+      "name": "Cheesy Roll Up - Value Menu",
+      "category": "Luxe Value Menu",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 8,
+      "carbs_g": 18,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chicken Enchilada Burrito - Value Menu",
+      "category": "Luxe Value Menu",
+      "serving": "1 serving",
+      "calories": 370,
+      "protein_g": 18,
+      "carbs_g": 50,
+      "fat_g": 11,
+      "fiber_g": 4
+    },
+    {
+      "name": "Chips and Nacho Supreme Dip",
+      "category": "Luxe Value Menu",
+      "serving": "1 serving",
+      "calories": 360,
+      "protein_g": 10,
+      "carbs_g": 37,
+      "fat_g": 19,
+      "fiber_g": 7
+    },
+    {
+      "name": "Double Stacked Taco - Value Menu",
+      "category": "Luxe Value Menu",
+      "serving": "1 serving",
+      "calories": 320,
+      "protein_g": 10,
+      "carbs_g": 34,
+      "fat_g": 16,
+      "fiber_g": 4
+    },
+    {
+      "name": "Loaded Beef Nachos - Value Menu",
+      "category": "Luxe Value Menu",
+      "serving": "1 serving",
+      "calories": 440,
+      "protein_g": 12,
+      "carbs_g": 45,
+      "fat_g": 24,
+      "fiber_g": 9
+    },
+    {
+      "name": "Mini Taco Salad",
+      "category": "Luxe Value Menu",
+      "serving": "1 serving",
+      "calories": 280,
+      "protein_g": 9,
+      "carbs_g": 27,
+      "fat_g": 15,
+      "fiber_g": 6
+    },
+    {
+      "name": "Spicy Potato Soft Taco - Value Menu",
+      "category": "Luxe Value Menu",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 5,
+      "carbs_g": 28,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Bean Burrito",
+      "category": "Veggie Cravings",
+      "serving": "1 serving",
+      "calories": 360,
+      "protein_g": 13,
+      "carbs_g": 54,
+      "fat_g": 10,
+      "fiber_g": 8
+    },
+    {
+      "name": "Black Bean Chalupa Supreme",
+      "category": "Veggie Cravings",
+      "serving": "1 serving",
+      "calories": 340,
+      "protein_g": 10,
+      "carbs_g": 36,
+      "fat_g": 17,
+      "fiber_g": 7
+    },
+    {
+      "name": "Black Bean Crunchwrap Supreme",
+      "category": "Veggie Cravings",
+      "serving": "1 serving",
+      "calories": 520,
+      "protein_g": 13,
+      "carbs_g": 78,
+      "fat_g": 17,
+      "fiber_g": 8
+    },
+    {
+      "name": "Black Beans",
+      "category": "Veggie Cravings",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 3,
+      "carbs_g": 7,
+      "fat_g": 2,
+      "fiber_g": 4
+    },
+    {
+      "name": "Black Beans & Rice",
+      "category": "Veggie Cravings",
+      "serving": "1 serving",
+      "calories": 160,
+      "protein_g": 4,
+      "carbs_g": 25,
+      "fat_g": 5,
+      "fiber_g": 5
+    },
+    {
+      "name": "Cheese Quesadilla",
+      "category": "Veggie Cravings",
+      "serving": "1 serving",
+      "calories": 440,
+      "protein_g": 18,
+      "carbs_g": 43,
+      "fat_g": 22,
+      "fiber_g": 4
+    },
+    {
+      "name": "Cheesy Bean & Rice Burrito",
+      "category": "Veggie Cravings",
+      "serving": "1 serving",
+      "calories": 400,
+      "protein_g": 9,
+      "carbs_g": 56,
+      "fat_g": 16,
+      "fiber_g": 6
+    },
+    {
+      "name": "Cheesy Fiesta Potatoes",
+      "category": "Veggie Cravings",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 3,
+      "carbs_g": 29,
+      "fat_g": 12,
+      "fiber_g": 3
+    },
+    {
+      "name": "Cheesy Roll Up",
+      "category": "Veggie Cravings",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 8,
+      "carbs_g": 18,
+      "fat_g": 8,
+      "fiber_g": 1
+    },
+    {
+      "name": "Chips and Nacho Cheese Sauce",
+      "category": "Veggie Cravings",
+      "serving": "1 serving",
+      "calories": 220,
+      "protein_g": 3,
+      "carbs_g": 24,
+      "fat_g": 13,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cinnabon Delights (2 Pack)",
+      "category": "Veggie Cravings",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 2,
+      "carbs_g": 15,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cinnabon Delights (12 Pack - Serves 4)",
+      "category": "Veggie Cravings",
+      "serving": "1 serving",
+      "calories": 1010,
+      "protein_g": 11,
+      "carbs_g": 88,
+      "fat_g": 68,
+      "fiber_g": 5
+    },
+    {
+      "name": "Cinnamon Twists",
+      "category": "Veggie Cravings",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 2,
+      "carbs_g": 27,
+      "fat_g": 6,
+      "fiber_g": 0
+    },
+    {
+      "name": "Hash Brown",
+      "category": "Veggie Cravings",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 2,
+      "carbs_g": 14,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Pintos N Cheese",
+      "category": "Veggie Cravings",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 9,
+      "carbs_g": 19,
+      "fat_g": 6,
+      "fiber_g": 7
+    },
+    {
+      "name": "Spicy Potato Soft Taco",
+      "category": "Veggie Cravings",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 5,
+      "carbs_g": 28,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Veggie Bowl",
+      "category": "Veggie Cravings",
+      "serving": "1 serving",
+      "calories": 510,
+      "protein_g": 13,
+      "carbs_g": 60,
+      "fat_g": 25,
+      "fiber_g": 13
+    },
+    {
+      "name": "Veggie Mexican Pizza",
+      "category": "Veggie Cravings",
+      "serving": "1 serving",
+      "calories": 460,
+      "protein_g": 14,
+      "carbs_g": 48,
+      "fat_g": 23,
+      "fiber_g": 7
+    },
+    {
+      "name": "Breakfast California Crunchwrap - Bacon",
+      "category": "Breakfast (Regional)",
+      "serving": "1 serving",
+      "calories": 640,
+      "protein_g": 21,
+      "carbs_g": 54,
+      "fat_g": 37,
+      "fiber_g": 5
+    },
+    {
+      "name": "Breakfast California Crunchwrap - Sausage",
+      "category": "Breakfast (Regional)",
+      "serving": "1 serving",
+      "calories": 700,
+      "protein_g": 20,
+      "carbs_g": 54,
+      "fat_g": 44,
+      "fiber_g": 5
+    },
+    {
+      "name": "Breakfast Crunchwrap - Bacon",
+      "category": "Breakfast (Regional)",
+      "serving": "1 serving",
+      "calories": 660,
+      "protein_g": 21,
+      "carbs_g": 54,
+      "fat_g": 40,
+      "fiber_g": 5
+    },
+    {
+      "name": "Breakfast Crunchwrap - Sausage Patty",
+      "category": "Breakfast (Regional)",
+      "serving": "1 serving",
+      "calories": 740,
+      "protein_g": 21,
+      "carbs_g": 55,
+      "fat_g": 49,
+      "fiber_g": 5
+    },
+    {
+      "name": "Breakfast Crunchwrap - Steak",
+      "category": "Breakfast (Regional)",
+      "serving": "1 serving",
+      "calories": 650,
+      "protein_g": 24,
+      "carbs_g": 55,
+      "fat_g": 38,
+      "fiber_g": 5
+    },
+    {
+      "name": "Breakfast Quesadilla - Bacon",
+      "category": "Breakfast (Regional)",
+      "serving": "1 serving",
+      "calories": 500,
+      "protein_g": 25,
+      "carbs_g": 42,
+      "fat_g": 26,
+      "fiber_g": 3
+    },
+    {
+      "name": "Breakfast Quesadilla - Sausage",
+      "category": "Breakfast (Regional)",
+      "serving": "1 serving",
+      "calories": 500,
+      "protein_g": 23,
+      "carbs_g": 42,
+      "fat_g": 27,
+      "fiber_g": 3
+    },
+    {
+      "name": "Breakfast Quesadilla - Steak",
+      "category": "Breakfast (Regional)",
+      "serving": "1 serving",
+      "calories": 500,
+      "protein_g": 28,
+      "carbs_g": 43,
+      "fat_g": 23,
+      "fiber_g": 3
+    },
+    {
+      "name": "Breakfast Salsa Packet (V)",
+      "category": "Breakfast (Regional)",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cheesy Toasted Breakfast Burrito - Bacon",
+      "category": "Breakfast (Regional)",
+      "serving": "1 serving",
+      "calories": 350,
+      "protein_g": 13,
+      "carbs_g": 38,
+      "fat_g": 16,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cheesy Toasted Breakfast Burrito - Fiesta Potato (V)",
+      "category": "Breakfast (Regional)",
+      "serving": "1 serving",
+      "calories": 340,
+      "protein_g": 9,
+      "carbs_g": 44,
+      "fat_g": 14,
+      "fiber_g": 3
+    },
+    {
+      "name": "Cheesy Toasted Breakfast Burrito - Sausage",
+      "category": "Breakfast (Regional)",
+      "serving": "1 serving",
+      "calories": 350,
+      "protein_g": 10,
+      "carbs_g": 38,
+      "fat_g": 17,
+      "fiber_g": 2
+    },
+    {
+      "name": "Cinnabon Delights (2 Pack) (V)",
+      "category": "Breakfast (Regional)",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 2,
+      "carbs_g": 15,
+      "fat_g": 11,
+      "fiber_g": 0
+    },
+    {
+      "name": "Cinnabon Delights (12 Pack - Serves 4) (V)",
+      "category": "Breakfast (Regional)",
+      "serving": "1 serving",
+      "calories": 1010,
+      "protein_g": 11,
+      "carbs_g": 88,
+      "fat_g": 68,
+      "fiber_g": 5
+    },
+    {
+      "name": "Grande Toasted Breakfast Burrito - Bacon",
+      "category": "Breakfast (Regional)",
+      "serving": "1 serving",
+      "calories": 570,
+      "protein_g": 23,
+      "carbs_g": 52,
+      "fat_g": 29,
+      "fiber_g": 4
+    },
+    {
+      "name": "Grande Toasted Breakfast Burrito - Sausage",
+      "category": "Breakfast (Regional)",
+      "serving": "1 serving",
+      "calories": 570,
+      "protein_g": 21,
+      "carbs_g": 52,
+      "fat_g": 30,
+      "fiber_g": 4
+    },
+    {
+      "name": "Grande Toasted Breakfast Burrito - Steak",
+      "category": "Breakfast (Regional)",
+      "serving": "1 serving",
+      "calories": 560,
+      "protein_g": 26,
+      "carbs_g": 53,
+      "fat_g": 27,
+      "fiber_g": 4
+    },
+    {
+      "name": "Hash Brown (V)",
+      "category": "Breakfast (Regional)",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 2,
+      "carbs_g": 14,
+      "fat_g": 11,
+      "fiber_g": 2
+    },
+    {
+      "name": "Hash Brown Toasted Breakfast Burrito - Bacon",
+      "category": "Breakfast (Regional)",
+      "serving": "1 serving",
+      "calories": 580,
+      "protein_g": 20,
+      "carbs_g": 53,
+      "fat_g": 31,
+      "fiber_g": 4
+    },
+    {
+      "name": "Hash Brown Toasted Breakfast Burrito - Sausage",
+      "category": "Breakfast (Regional)",
+      "serving": "1 serving",
+      "calories": 580,
+      "protein_g": 18,
+      "carbs_g": 53,
+      "fat_g": 32,
+      "fiber_g": 4
+    },
+    {
+      "name": "Hash Brown Toasted Breakfast Burrito - Steak",
+      "category": "Breakfast (Regional)",
+      "serving": "1 serving",
+      "calories": 570,
+      "protein_g": 24,
+      "carbs_g": 54,
+      "fat_g": 29,
+      "fiber_g": 4
+    },
+    {
+      "name": "Vanilla Creamer",
+      "category": "Breakfast (Regional)",
+      "serving": "1 serving",
+      "calories": 20,
+      "protein_g": 0,
+      "carbs_g": 4,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mad Tasty Grapefruit Sparkling Water",
+      "category": "Cantina Menu",
+      "serving": "1 serving",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mad Tasty Unicorn Tears Sparkling Water",
+      "category": "Cantina Menu",
+      "serving": "1 serving",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mad Tasty Watermelon Kiwi Sparkling Water",
+      "category": "Cantina Menu",
+      "serving": "1 serving",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 2,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mad Tasty Yuzu Citrus Sparkling Water",
+      "category": "Cantina Menu",
+      "serving": "1 serving",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Prosecco Sparkling Wine (350 mL)",
+      "category": "Cantina Menu",
+      "serving": "1 serving",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Red Wine (6.3 fl oz)",
+      "category": "Cantina Menu",
+      "serving": "1 serving",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 5,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Rum (80 proof)",
+      "category": "Cantina Menu",
+      "serving": "1 serving",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tequila (80 proof)",
+      "category": "Cantina Menu",
+      "serving": "1 serving",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vodka (80 proof)",
+      "category": "Cantina Menu",
+      "serving": "1 serving",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Baja Blast Freeze (32 oz)",
+      "category": "Las Vegas Cantina Menu",
+      "serving": "1 serving",
+      "calories": 310,
+      "protein_g": 0,
+      "carbs_g": 82,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Red Sangria - LV",
+      "category": "Las Vegas Cantina Menu",
+      "serving": "1 serving",
+      "calories": 330,
+      "protein_g": 0,
+      "carbs_g": 28,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Rum (80 proof) - Double - LV",
+      "category": "Las Vegas Cantina Menu",
+      "serving": "1 serving",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Rum (80 proof) - Single - LV",
+      "category": "Las Vegas Cantina Menu",
+      "serving": "1 serving",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tequila (80 proof) - Double - LV",
+      "category": "Las Vegas Cantina Menu",
+      "serving": "1 serving",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tequila (80 proof) - Single - LV",
+      "category": "Las Vegas Cantina Menu",
+      "serving": "1 serving",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vodka (80 proof) - Double - LV",
+      "category": "Las Vegas Cantina Menu",
+      "serving": "1 serving",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Vodka (80 proof) - Single - LV",
+      "category": "Las Vegas Cantina Menu",
+      "serving": "1 serving",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Whiskey (80 proof) - Double - LV",
+      "category": "Las Vegas Cantina Menu",
+      "serving": "1 serving",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Whiskey (80 proof) - Single - LV",
+      "category": "Las Vegas Cantina Menu",
+      "serving": "1 serving",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brisk Dragon Paradise Sparkling Dirty Iced Tea (16 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 26,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brisk Dragon Paradise Sparkling Dirty Iced Tea (20 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 29,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brisk Dragon Paradise Sparkling Dirty Iced Tea (30 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brisk Mango Fiesta Dirty Iced Tea (16 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 140,
+      "protein_g": 0,
+      "carbs_g": 33,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brisk Mango Fiesta Dirty Iced Tea (20 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 160,
+      "protein_g": 0,
+      "carbs_g": 39,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brisk Mango Fiesta Dirty Iced Tea (30 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 54,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Dr Pepper Dirty Soda (16 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Dr Pepper Dirty Soda (20 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Dr Pepper Dirty Soda (30 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Pepsi Dirty Soda (16 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Pepsi Dirty Soda (20 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Pepsi Dirty Soda (30 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper Dirty Soda (16 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 61,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper Dirty Soda (20 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 74,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper Dirty Soda (30 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 400,
+      "protein_g": 0,
+      "carbs_g": 107,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Baja Blast Dirty Soda (16 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 68,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Baja Blast Dirty Soda (20 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 320,
+      "protein_g": 0,
+      "carbs_g": 83,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Baja Blast Dirty Soda (30 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 460,
+      "protein_g": 0,
+      "carbs_g": 120,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Baja Blast Dirty Soda Freeze (16 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 48,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Baja Blast Dirty Soda Freeze (20 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 230,
+      "protein_g": 0,
+      "carbs_g": 59,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Baja Blast Zero Sugar Dirty Soda (16 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Baja Blast Zero Sugar Dirty Soda (20 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Baja Blast Zero Sugar Dirty Soda (30 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Baja Midnight Dirty Soda (16 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 68,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Baja Midnight Dirty Soda (20 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 330,
+      "protein_g": 0,
+      "carbs_g": 83,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Baja Midnight Dirty Soda (30 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 120,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Dirty Soda (16 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 270,
+      "protein_g": 0,
+      "carbs_g": 68,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Dirty Soda (20 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 330,
+      "protein_g": 0,
+      "carbs_g": 82,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Dirty Soda (30 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 470,
+      "protein_g": 0,
+      "carbs_g": 119,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Zero Sugar Dirty Soda (16 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Zero Sugar Dirty Soda (20 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Zero Sugar Dirty Soda (30 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mug Root Beer Dirty Soda (16 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 60,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mug Root Beer Dirty Soda (20 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 73,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mug Root Beer Dirty Soda (30 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 410,
+      "protein_g": 0,
+      "carbs_g": 105,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Dirty Soda (16 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 64,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Dirty Soda (20 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 300,
+      "protein_g": 0,
+      "carbs_g": 78,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Dirty Soda (30 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 430,
+      "protein_g": 0,
+      "carbs_g": 113,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Wild Cherry Dirty Soda (16 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 65,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Wild Cherry Dirty Soda (20 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 310,
+      "protein_g": 0,
+      "carbs_g": 80,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Wild Cherry Dirty Soda (30 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 440,
+      "protein_g": 0,
+      "carbs_g": 115,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Zero Sugar Dirty Soda (16 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Zero Sugar Dirty Soda (20 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 9,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Zero Sugar Dirty Soda (30 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Starry Dirty Soda (16 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 61,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Starry Dirty Soda (20 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 290,
+      "protein_g": 0,
+      "carbs_g": 74,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Starry Dirty Soda (30 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 410,
+      "protein_g": 0,
+      "carbs_g": 106,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Dirty Lemonade (16 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 25,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Dirty Lemonade (20 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 130,
+      "protein_g": 0,
+      "carbs_g": 30,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Dirty Lemonade (30 oz)",
+      "category": "Dirty Sodas",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 40,
+      "fat_g": 1,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brisk Dragon Paradise Sparkling Iced Tea (16 fl oz)",
+      "category": "Fountain Beverages (16 oz)",
+      "serving": "1 serving",
+      "calories": 60,
+      "protein_g": 0,
+      "carbs_g": 17,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brisk Mango Iced Tea (16 fl oz)",
+      "category": "Fountain Beverages (16 oz)",
+      "serving": "1 serving",
+      "calories": 90,
+      "protein_g": 0,
+      "carbs_g": 24,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Dr Pepper (16 fl oz)",
+      "category": "Fountain Beverages (16 oz)",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Pepsi (16 fl oz)",
+      "category": "Fountain Beverages (16 oz)",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper (16 fl oz)",
+      "category": "Fountain Beverages (16 oz)",
+      "serving": "1 serving",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 52,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "G2 - Fruit Punch (16 fl oz)",
+      "category": "Fountain Beverages (16 oz)",
+      "serving": "1 serving",
+      "calories": 45,
+      "protein_g": 0,
+      "carbs_g": 10,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Unsweetened Iced Tea (16 fl oz)",
+      "category": "Fountain Beverages (16 oz)",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Midnight Mtn Dew Baja Blast (16 fl oz)",
+      "category": "Fountain Beverages (16 oz)",
+      "serving": "1 serving",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 59,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew (16 fl oz)",
+      "category": "Fountain Beverages (16 oz)",
+      "serving": "1 serving",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 59,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Baja Blast (16 fl oz)",
+      "category": "Fountain Beverages (16 oz)",
+      "serving": "1 serving",
+      "calories": 220,
+      "protein_g": 0,
+      "carbs_g": 59,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Baja Blast&trade Midnight Zero Sugar (16 oz)",
+      "category": "Fountain Beverages (16 oz)",
+      "serving": "1 serving",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Baja Blast Zero Sugar (16 fl oz)",
+      "category": "Fountain Beverages (16 oz)",
+      "serving": "1 serving",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Zero Sugar (16 fl oz)",
+      "category": "Fountain Beverages (16 oz)",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mug Root Beer (16 fl oz)",
+      "category": "Fountain Beverages (16 oz)",
+      "serving": "1 serving",
+      "calories": 190,
+      "protein_g": 0,
+      "carbs_g": 51,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi (16 fl oz)",
+      "category": "Fountain Beverages (16 oz)",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 55,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Wild Cherry (16 fl oz)",
+      "category": "Fountain Beverages (16 oz)",
+      "serving": "1 serving",
+      "calories": 210,
+      "protein_g": 0,
+      "carbs_g": 56,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Zero Sugar (16 fl oz)",
+      "category": "Fountain Beverages (16 oz)",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Starry (16 fl oz)",
+      "category": "Fountain Beverages (16 oz)",
+      "serving": "1 serving",
+      "calories": 200,
+      "protein_g": 0,
+      "carbs_g": 52,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Original Lemonade (16 oz)",
+      "category": "Fountain Beverages (16 oz)",
+      "serving": "1 serving",
+      "calories": 70,
+      "protein_g": 0,
+      "carbs_g": 16,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brisk Dragon Paradise Sparkling Iced Tea (20 fl oz)",
+      "category": "Fountain Beverages (20 oz)",
+      "serving": "1 serving",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 20,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brisk Mango Iced Tea (20 fl oz)",
+      "category": "Fountain Beverages (20 oz)",
+      "serving": "1 serving",
+      "calories": 110,
+      "protein_g": 0,
+      "carbs_g": 30,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Dr Pepper (20 fl oz)",
+      "category": "Fountain Beverages (20 oz)",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Pepsi (20 fl oz)",
+      "category": "Fountain Beverages (20 oz)",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper (20 fl oz)",
+      "category": "Fountain Beverages (20 oz)",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "G2 - Fruit Punch (20 fl oz)",
+      "category": "Fountain Beverages (20 oz)",
+      "serving": "1 serving",
+      "calories": 50,
+      "protein_g": 0,
+      "carbs_g": 13,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Unsweetened Iced Tea (20 fl oz)",
+      "category": "Fountain Beverages (20 oz)",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Midnight Mtn Dew Baja Blast (20 fl oz)",
+      "category": "Fountain Beverages (20 oz)",
+      "serving": "1 serving",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 74,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew (20 fl oz)",
+      "category": "Fountain Beverages (20 oz)",
+      "serving": "1 serving",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 73,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Baja Blast (20 fl oz)",
+      "category": "Fountain Beverages (20 oz)",
+      "serving": "1 serving",
+      "calories": 280,
+      "protein_g": 0,
+      "carbs_g": 74,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Baja Blast&trade Midnight Zero Sugar (20 oz)",
+      "category": "Fountain Beverages (20 oz)",
+      "serving": "1 serving",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Baja Blast Zero Sugar (20 fl oz)",
+      "category": "Fountain Beverages (20 oz)",
+      "serving": "1 serving",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Zero Sugar (20 fl oz)",
+      "category": "Fountain Beverages (20 oz)",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mug Root Beer (20 fl oz)",
+      "category": "Fountain Beverages (20 oz)",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 64,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi (20 fl oz)",
+      "category": "Fountain Beverages (20 oz)",
+      "serving": "1 serving",
+      "calories": 250,
+      "protein_g": 0,
+      "carbs_g": 69,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Wild Cherry (20 fl oz)",
+      "category": "Fountain Beverages (20 oz)",
+      "serving": "1 serving",
+      "calories": 260,
+      "protein_g": 0,
+      "carbs_g": 70,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Zero Sugar (20 fl oz)",
+      "category": "Fountain Beverages (20 oz)",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Starry (20 fl oz)",
+      "category": "Fountain Beverages (20 oz)",
+      "serving": "1 serving",
+      "calories": 240,
+      "protein_g": 0,
+      "carbs_g": 65,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Original Lemonade (20 oz)",
+      "category": "Fountain Beverages (20 oz)",
+      "serving": "1 serving",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 21,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brisk Dragon Paradise Sparkling Iced Tea (30 fl oz)",
+      "category": "Fountain Beverages (30 oz)",
+      "serving": "1 serving",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 30,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Brisk Mango Iced Tea (30 fl oz)",
+      "category": "Fountain Beverages (30 oz)",
+      "serving": "1 serving",
+      "calories": 170,
+      "protein_g": 0,
+      "carbs_g": 45,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Dr Pepper (30 fl oz)",
+      "category": "Fountain Beverages (30 oz)",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Diet Pepsi (30 fl oz)",
+      "category": "Fountain Beverages (30 oz)",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Dr Pepper (30 fl oz)",
+      "category": "Fountain Beverages (30 oz)",
+      "serving": "1 serving",
+      "calories": 360,
+      "protein_g": 0,
+      "carbs_g": 98,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "G2 - Fruit Punch (30 fl oz)",
+      "category": "Fountain Beverages (30 oz)",
+      "serving": "1 serving",
+      "calories": 80,
+      "protein_g": 0,
+      "carbs_g": 19,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Lipton Unsweetened Iced Tea (30 fl oz)",
+      "category": "Fountain Beverages (30 oz)",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Midnight Mtn Dew Baja Blast (30 fl oz)",
+      "category": "Fountain Beverages (30 oz)",
+      "serving": "1 serving",
+      "calories": 420,
+      "protein_g": 0,
+      "carbs_g": 111,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew (30 fl oz)",
+      "category": "Fountain Beverages (30 oz)",
+      "serving": "1 serving",
+      "calories": 420,
+      "protein_g": 0,
+      "carbs_g": 110,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Baja Blast (30 fl oz)",
+      "category": "Fountain Beverages (30 oz)",
+      "serving": "1 serving",
+      "calories": 420,
+      "protein_g": 0,
+      "carbs_g": 111,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Baja Blast&trade Midnight Zero Sugar (30 oz)",
+      "category": "Fountain Beverages (30 oz)",
+      "serving": "1 serving",
+      "calories": 10,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Baja Blast Zero Sugar (30 fl oz)",
+      "category": "Fountain Beverages (30 oz)",
+      "serving": "1 serving",
+      "calories": 15,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mtn Dew Zero Sugar (30 fl oz)",
+      "category": "Fountain Beverages (30 oz)",
+      "serving": "1 serving",
+      "calories": 5,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Mug Root Beer (30 fl oz)",
+      "category": "Fountain Beverages (30 oz)",
+      "serving": "1 serving",
+      "calories": 360,
+      "protein_g": 0,
+      "carbs_g": 96,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi (30 fl oz)",
+      "category": "Fountain Beverages (30 oz)",
+      "serving": "1 serving",
+      "calories": 380,
+      "protein_g": 0,
+      "carbs_g": 103,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Wild Cherry (30 fl oz)",
+      "category": "Fountain Beverages (30 oz)",
+      "serving": "1 serving",
+      "calories": 390,
+      "protein_g": 0,
+      "carbs_g": 106,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Pepsi Zero Sugar (30 fl oz)",
+      "category": "Fountain Beverages (30 oz)",
+      "serving": "1 serving",
+      "calories": 0,
+      "protein_g": 0,
+      "carbs_g": 0,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Starry (30 fl oz)",
+      "category": "Fountain Beverages (30 oz)",
+      "serving": "1 serving",
+      "calories": 370,
+      "protein_g": 0,
+      "carbs_g": 97,
+      "fat_g": 0,
+      "fiber_g": 0
+    },
+    {
+      "name": "Tropicana Original Lemonade (30oz)",
+      "category": "Fountain Beverages (30 oz)",
+      "serving": "1 serving",
+      "calories": 120,
+      "protein_g": 0,
+      "carbs_g": 31,
+      "fat_g": 0,
+      "fiber_g": 0
+    }
+  ]
+}
