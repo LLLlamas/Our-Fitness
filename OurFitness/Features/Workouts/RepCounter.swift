@@ -410,14 +410,14 @@ private struct IsometricTimerView: View {
                         pickedSeconds = secs
                         Haptics.selection()
                     } label: {
-                        Text(shortDurationLabel(secs))
+                        Text(formattedHoldDuration(secs))
                     }
                     .tactile(.pill, fill: pickedSeconds == secs ? theme.accent : nil)
                 }
             }
             Picker("Duration", selection: $pickedSeconds) {
                 ForEach(Array(stride(from: 5, through: 300, by: 5)), id: \.self) { s in
-                    Text(shortDurationLabel(s)).tag(s)
+                    Text(formattedHoldDuration(s)).tag(s)
                 }
             }
             .pickerStyle(.wheel)
@@ -511,15 +511,9 @@ private struct IsometricTimerView: View {
         guard Repos.addSet(ctx, dto) else { return }
         toasts.show(Toast(
             title: "Hold logged",
-            detail: "\(shortDurationLabel(secs)) · ~\(Int(kcal)) cal",
+            detail: "\(formattedHoldDuration(secs)) · ~\(Int(kcal)) cal",
             accent: .win,
             symbol: "checkmark.seal.fill"
         ))
-    }
-
-    private func shortDurationLabel(_ s: Int) -> String {
-        if s < 60 { return "\(s)s" }
-        let m = s / 60; let r = s % 60
-        return r > 0 ? "\(m)m \(r)s" : "\(m)m"
     }
 }

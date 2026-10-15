@@ -23,7 +23,8 @@ struct AddFoodSheet: View {
     let targetDate: String
     /// Called for entries built by the describe/manual form. Foods logged via
     /// MealIngredientDetailSheet are saved by that sheet directly.
-    let onSave: (FoodLogEntryDTO) -> Void
+    /// Returns whether the parent's write committed; the sheet only dismisses on true.
+    let onSave: (FoodLogEntryDTO) -> Bool
 
     @Environment(\.modelContext) private var ctx
     @Environment(\.theme) private var theme
@@ -41,7 +42,7 @@ struct AddFoodSheet: View {
     @State private var describeText: String?
     @FocusState private var searchFocused: Bool
 
-    init(profile: ProfileDTO, targetDate: String, onSave: @escaping (FoodLogEntryDTO) -> Void) {
+    init(profile: ProfileDTO, targetDate: String, onSave: @escaping (FoodLogEntryDTO) -> Bool) {
         self.profile = profile
         self.targetDate = targetDate
         self.onSave = onSave
@@ -166,25 +167,12 @@ struct AddFoodSheet: View {
             }
             .navigationDestination(item: $describeText) { text in
                 DescribeMealForm(profile: profile, targetDate: targetDate, initialText: text) { dto in
-                    onSave(dto)
-                    dismiss()
+                    if onSave(dto) { dismiss() }
                 }
             }
         }
-        // Debounce the USDA scan off the hot render path: each keystroke restarts this
-        // task (cancelling the prior one); only after a short pause does the heavy
-        // search run, so typing never rescans 15–20k entries synchronously in `body`.
-        .task(id: query) {
-            let q = query
-            if q.trimmingCharacters(in: .whitespaces).isEmpty {
-                displayedResults = defaultOrdered(logModels.map(\.snapshot))
-                return
-            }
-            try? await Task.sleep(nanoseconds: 180_000_000)   // 180 ms
-            guard !Task.isCancelled else { return }
-            let results = await FoodSearch.combined(matching: q)
-            guard !Task.isCancelled else { return }
-            displayedResults = results
+        .debouncedFoodSearch(query: query, results: $displayedResults) {
+            defaultOrdered(logModels.map(\.snapshot))
         }
         .presentationDetents([.large])
         .presentationBackground(theme.bg)
@@ -373,31 +361,89 @@ struct AddFoodSheet: View {
         let ids = favoriteIds
         LazyVStack(spacing: 8) {
             ForEach(displayedResults, id: \.id) { food in
-                PressableCard(action: {
+                FoodResultRow(
+                    food: food,
+                    isFavorite: ids.contains(food.id),
+                    onToggleFavorite: { toggleFavorite(food.id) }
+                ) {
                     mealToLog = QuickMealLog(name: food.name, emoji: "🍽️", ingredients: ingredients(for: food))
-                }) {
-                    HStack(alignment: .top, spacing: 12) {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(food.name)
-                                .font(.system(size: 15, weight: .semibold))
-                                .foregroundStyle(theme.text)
-                            Text(food.servingLabel)
-                                .font(.caption).foregroundStyle(theme.dim)
-                            Text("\(food.calories) cal · \(food.proteinG)g pro · \(food.carbsG)g carbs · \(food.fatG)g fat")
-                                .font(.system(.caption2, design: .monospaced))
-                                .foregroundStyle(theme.accent)
-                        }
-                        Spacer(minLength: 0)
-                        Button {
-                            toggleFavorite(food.id)
-                        } label: {
-                            Image(systemName: ids.contains(food.id) ? "heart.fill" : "heart")
-                                .foregroundStyle(ids.contains(food.id) ? theme.accent : theme.dim)
-                                .font(.system(size: 16))
-                        }
-                        .tactile(.ghost)
-                        .accessibilityLabel(ids.contains(food.id) ? "Remove \(food.name) from favorites" : "Add \(food.name) to favorites")
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Shared food search (AddFoodSheet + IngredientFoodSearchSheet)
+
+extension View {
+    /// The one debounced food search: each keystroke restarts the task
+    /// (cancelling the prior one), and only after a 180 ms pause does
+    /// `FoodSearch.combined` (curated + the USDA FTS5 scan, off the main thread)
+    /// run — so typing never rescans 15–20k entries synchronously in `body`.
+    /// A blank query shows `emptyResults()` immediately.
+    func debouncedFoodSearch(
+        query: String,
+        results: Binding<[CommonFood]>,
+        emptyResults: @escaping () -> [CommonFood]
+    ) -> some View {
+        modifier(DebouncedFoodSearch(query: query, results: results, emptyResults: emptyResults))
+    }
+}
+
+private struct DebouncedFoodSearch: ViewModifier {
+    let query: String
+    @Binding var results: [CommonFood]
+    let emptyResults: () -> [CommonFood]
+
+    func body(content: Content) -> some View {
+        content.task(id: query) {
+            let q = query
+            if q.trimmingCharacters(in: .whitespaces).isEmpty {
+                results = emptyResults()
+                return
+            }
+            try? await Task.sleep(nanoseconds: 180_000_000)   // 180 ms
+            guard !Task.isCancelled else { return }
+            let found = await FoodSearch.combined(matching: q)
+            guard !Task.isCancelled else { return }
+            results = found
+        }
+    }
+}
+
+/// One food in a search / library list: name, serving, macros. The heart shows
+/// only when the caller passes `onToggleFavorite` (AddFoodSheet does; the
+/// ingredient picker doesn't).
+struct FoodResultRow: View {
+    let food: CommonFood
+    var isFavorite: Bool = false
+    var onToggleFavorite: (() -> Void)? = nil
+    let onTap: () -> Void
+
+    @Environment(\.theme) private var theme
+
+    var body: some View {
+        PressableCard(action: onTap) {
+            HStack(alignment: .top, spacing: 12) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(food.name)
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(theme.text)
+                    Text(food.servingLabel)
+                        .font(.caption).foregroundStyle(theme.dim)
+                    Text("\(food.calories) cal · \(food.proteinG)g pro · \(food.carbsG)g carbs · \(food.fatG)g fat")
+                        .font(.system(.caption2, design: .monospaced))
+                        .foregroundStyle(theme.accent)
+                }
+                Spacer(minLength: 0)
+                if let onToggleFavorite {
+                    Button(action: onToggleFavorite) {
+                        Image(systemName: isFavorite ? "heart.fill" : "heart")
+                            .foregroundStyle(isFavorite ? theme.accent : theme.dim)
+                            .font(.system(size: 16))
                     }
+                    .tactile(.ghost)
+                    .accessibilityLabel(isFavorite ? "Remove \(food.name) from favorites" : "Add \(food.name) to favorites")
                 }
             }
         }
@@ -410,7 +456,9 @@ struct AddFoodSheet: View {
 /// curated foods; on open/submit the full USDA DB (and Apple Intelligence when
 /// available) refines the parse. Numbers always come from the food database —
 /// the model only splits the sentence into items. Empty `initialText` = manual entry.
-private struct DescribeMealForm: View {
+/// Also the camera label scanner's type-it-instead screen (`CameraFoodLogSheet`),
+/// so there is one free-text meal logger.
+struct DescribeMealForm: View {
     let profile: ProfileDTO
     let targetDate: String
     let initialText: String
@@ -422,7 +470,7 @@ private struct DescribeMealForm: View {
     @State private var parseResult: FoodParser.ParseResult? = nil
     @State private var parsedWithAI = false
     @State private var aiParsing = false
-    @State private var slot: Slot = .lunch
+    @State private var slot: Slot
     @State private var showManual = true
     @State private var didSeed = false
 
@@ -433,6 +481,15 @@ private struct DescribeMealForm: View {
 
     private enum Field: Hashable { case input, cal, protein, carbs, fat }
     @FocusState private var focused: Field?
+
+    init(profile: ProfileDTO, targetDate: String, initialText: String,
+         slot: Slot = .lunch, onSave: @escaping (FoodLogEntryDTO) -> Void) {
+        self.profile = profile
+        self.targetDate = targetDate
+        self.initialText = initialText
+        self.onSave = onSave
+        _slot = State(initialValue: slot)
+    }
 
     private var resolvedPerServing: PerServing {
         if showManual {
@@ -672,9 +729,9 @@ private struct DescribeMealForm: View {
                 let ps = resolvedPerServing
                 HStack(spacing: 8) {
                     MacroChip(label: "Cal", value: ps.calories)
-                    MacroChip(label: "Protein", value: ps.proteinG)
-                    MacroChip(label: "Carbs", value: ps.carbsG)
-                    MacroChip(label: "Fat", value: ps.fatG)
+                    MacroChip(label: "Protein", value: ps.proteinG, unit: "g")
+                    MacroChip(label: "Carbs", value: ps.carbsG, unit: "g")
+                    MacroChip(label: "Fat", value: ps.fatG, unit: "g")
                 }
             }
         }
@@ -685,14 +742,7 @@ private struct DescribeMealForm: View {
         VStack(alignment: .leading, spacing: 6) {
             Text("Slot".uppercased())
                 .font(.caption).tracking(2).foregroundStyle(theme.dim)
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    ForEach([Slot.breakfast, .lunch, .snack, .dinner, .postWorkout], id: \.self) { s in
-                        Button { slot = s } label: { Text(s.label) }
-                            .tactile(.pill, fill: slot == s ? theme.accent : nil)
-                    }
-                }
-            }
+            SlotPicker(selection: $slot)
         }
     }
 

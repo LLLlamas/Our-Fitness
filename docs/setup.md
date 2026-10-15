@@ -236,7 +236,7 @@ After the first install, every subsequent TestFlight upload appears automaticall
 
 ## Replacing the placeholder app icon
 
-The compile workflow generates a basic orange-on-black "OF" icon if none is present. To replace it:
+The shipped icon is committed artwork (light palette: cream background, deep-sage glyph, terracotta bell — the watch uses the same file). If it is ever missing, the compile workflow generates a placeholder "OF" icon in the same palette (`scripts/generate-icon.swift`). To replace it:
 
 - Make a flat 1024×1024 PNG (no alpha, no rounded corners — Apple rounds for you)
 - Drop it at `OurFitness/Assets.xcassets/AppIcon.appiconset/icon.png`

@@ -2,9 +2,10 @@
 // Generates a 1024×1024 App Store icon at the path passed as argv[1].
 // Pure Swift + CoreGraphics — no external tools, works on any macOS with Xcode.
 //
-// Background: warm dark.
-// Wordmark: "OF" in heavy SF, accent orange.
-// Subtle warm radial glow from the bottom (depth, not flair).
+// CI placeholder only — the shipped icon is committed artwork. Colours mirror
+// Theme.standard so a placeholder build still looks like the app.
+// Background: warm cream. Wordmark: "OF" in heavy SF, deep sage.
+// Subtle sage radial glow from the bottom (depth, not flair).
 // Thin accent bar beneath the wordmark (a quiet nod to the progress bars in the app).
 // No alpha channel — App Store requirement.
 
@@ -21,13 +22,12 @@ let outPath: String = CommandLine.arguments.count > 1
     ? CommandLine.arguments[1]
     : "icon.png"
 
-// MARK: - Palette (the shipped icon's orange palette — predates the single
-// Theme.standard sage/terracotta palette; recolouring the icon is a separate call)
+// MARK: - Palette (mirrors Theme.standard in OurFitness/Services/Theme.swift)
 
-let bg          = CGColor(red: 0.078, green: 0.063, blue: 0.055, alpha: 1.0)   // warm near-black
-let accent      = CGColor(red: 1.000, green: 0.420, blue: 0.137, alpha: 1.0)   // icon orange
-let glow        = CGColor(red: 1.000, green: 0.420, blue: 0.137, alpha: 0.22)  // accent, soft
-let clearAccent = CGColor(red: 1.000, green: 0.420, blue: 0.137, alpha: 0.0)
+let bg          = CGColor(red: 0.969, green: 0.953, blue: 0.925, alpha: 1.0)   // Theme.bg cream
+let accent      = CGColor(red: 0.302, green: 0.541, blue: 0.243, alpha: 1.0)   // Theme.ok deep sage
+let glow        = CGColor(red: 0.498, green: 0.631, blue: 0.447, alpha: 0.22)  // Theme.accent, soft
+let clearAccent = CGColor(red: 0.498, green: 0.631, blue: 0.447, alpha: 0.0)
 
 // MARK: - Context (opaque, no alpha → App Store compliant)
 
@@ -71,7 +71,7 @@ let attrString = NSAttributedString(
     string: "OF",
     attributes: [
         .font: font,
-        .foregroundColor: NSColor(cgColor: accent) ?? .orange,
+        .foregroundColor: NSColor(cgColor: accent) ?? .systemGreen,
     ]
 )
 let line = CTLineCreateWithAttributedString(attrString)

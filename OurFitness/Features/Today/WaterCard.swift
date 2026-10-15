@@ -90,7 +90,8 @@ struct WaterCard: View {
                 ProgressBar(
                     value: Units.volumeValue(flOz: todayOz, system: unitSystem),
                     target: Units.volumeValue(flOz: goalFlOz, system: unitSystem),
-                    label: "Water",
+                    // The card header already says WATER; the bar row names the day.
+                    label: "Today",
                     unit: " \(Units.volumeUnit(unitSystem))"
                 )
 

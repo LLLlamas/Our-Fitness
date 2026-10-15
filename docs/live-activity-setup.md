@@ -160,7 +160,10 @@ works).
   running timer), copied by hand from `Theme.standard` in
   `OurFitness/Services/Theme.swift` because the widget target doesn't compile
   `Theme`. The app has one palette for everyone, so if `Theme.standard`'s accents
-  change, update `LSPalette` to match.
+  change, update `LSPalette` to match. The Lock Screen banner itself is light to
+  match the app (`lockBackground` = `Theme.bg` cream, `lockText` / `lockDim`); the
+  Dynamic Island is always system black, so it keeps the adaptive primary/secondary
+  text colours.
 - **iOS version SDK:** the ActivityKit API surface (`Activity.request`,
   `ActivityConfiguration`, `DynamicIsland`) compiles only against a recent SDK.
   Build on the same Xcode 26 / iOS 26 SDK the rest of the app uses.

@@ -15,7 +15,7 @@
 // invent macros. The @Generable prompt enforces this constraint.
 //
 // Graceful degradation:
-//   • DataScanner unavailable → skip to fallback text-entry screen
+//   • DataScanner unavailable → skip to the describe form (AddFoodSheet's DescribeMealForm)
 //   • iOS < 26 / no Apple Intelligence → Vision OCR + regex extraction only
 //   • Any error → user-facing message, retry available
 
@@ -169,7 +169,7 @@ private enum ScannerPhase {
 struct CameraFoodLogSheet: View {
     let profile: ProfileDTO
     let slot: Slot
-    let onLog: (FoodLogEntryDTO) -> Void
+    let onLog: (FoodLogEntryDTO) -> Bool   // true = parent write committed; dismiss only then
 
     @Environment(\.theme) private var theme
     @Environment(\.dismiss) private var dismiss
@@ -332,7 +332,7 @@ struct CameraFoodLogSheet: View {
     private func confirmingView(label: ConfirmedLabel, quantity: Double) -> some View {
         ConfirmationView(
             label: label, quantity: quantity, slot: slot, profile: profile,
-            onLog: { entry in onLog(entry); dismiss() },
+            onLog: { entry in if onLog(entry) { dismiss() } },
             onRescan: {
                 capturedText = ""; lastSeenText = ""; isStable = false
                 phase = .scanning
@@ -340,11 +340,28 @@ struct CameraFoodLogSheet: View {
         )
     }
 
+    /// Type-it-instead path: the same describe form AddFoodSheet pushes (curated
+    /// parse per keystroke, full-DB / AI parse on open, manual macros), so a
+    /// fallback can't save a 0-cal "Unknown food".
     private func fallbackView(initialText: String) -> some View {
-        FallbackEntryView(
-            initialText: initialText, slot: slot, profile: profile,
-            onLog: { entry in onLog(entry); dismiss() }
-        )
+        VStack(spacing: 0) {
+            HStack(spacing: 8) {
+                Image(systemName: "camera.slash").font(.caption).foregroundStyle(theme.dim)
+                Text("Camera scanner unavailable. Type what you ate instead.")
+                    .font(.caption).foregroundStyle(theme.dim)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(12)
+            .background(theme.card2, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .padding(.horizontal, 20)
+            .padding(.top, 12)
+
+            DescribeMealForm(
+                profile: profile, targetDate: Dates.dayKey(),
+                initialText: initialText, slot: slot,
+                onSave: { entry in if onLog(entry) { dismiss() } }
+            )
+        }
     }
 
     private func errorView(message: String) -> some View {
@@ -804,106 +821,5 @@ private struct ConfirmationView: View {
             servings: qty,
             perServing: draft.toPerServing()
         )
-    }
-}
-
-// MARK: - Fallback: manual text entry
-
-private struct FallbackEntryView: View {
-    let initialText: String
-    let slot: Slot
-    let profile: ProfileDTO
-    let onLog: (FoodLogEntryDTO) -> Void
-
-    @Environment(\.theme) private var theme
-    @State private var text: String
-    @State private var parseResult: FoodParser.ParseResult? = nil
-    @State private var qty: Double = 1.0
-    @FocusState private var textFocused: Bool
-
-    init(initialText: String, slot: Slot, profile: ProfileDTO,
-         onLog: @escaping (FoodLogEntryDTO) -> Void) {
-        self.initialText = initialText
-        self.slot = slot; self.profile = profile; self.onLog = onLog
-        _text = State(initialValue: initialText)
-    }
-
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                HStack(spacing: 8) {
-                    Image(systemName: "camera.slash").font(.caption).foregroundStyle(theme.dim)
-                    Text("Camera scanner unavailable. Type what you ate instead.")
-                        .font(.caption).foregroundStyle(theme.dim)
-                }
-                .padding(12)
-                .background(theme.card2, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("What did you eat?")
-                        .font(.system(size: 10)).tracking(1.5).foregroundStyle(theme.dim)
-                    TextField("e.g. Greek yogurt, banana, coffee",
-                              text: $text, axis: .vertical)
-                        .lineLimit(3, reservesSpace: true)
-                        .font(.body).foregroundStyle(theme.text)
-                        .padding(12)
-                        .background(theme.card, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-                        .focused($textFocused)
-                        .onChange(of: text) { _, v in parseResult = FoodParser.parse(text: v) }
-                }
-
-                if let result = parseResult, result.hasMatches {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Matched")
-                            .font(.system(size: 10)).tracking(1.5).foregroundStyle(theme.dim)
-                        ForEach(result.recognized, id: \.food.id) { item in
-                            HStack {
-                                Text(item.description).font(.subheadline).foregroundStyle(theme.text)
-                                Spacer()
-                                Text("\(item.scaledCalories) cal")
-                                    .font(.caption.monospacedDigit()).foregroundStyle(theme.dim)
-                            }
-                        }
-                        Divider().background(theme.line)
-                        HStack {
-                            Text("Total").font(.subheadline.weight(.semibold)).foregroundStyle(theme.text)
-                            Spacer()
-                            Text("\(result.totalPerServing.calories) cal · \(result.totalPerServing.proteinG)g protein")
-                                .font(.caption.monospacedDigit()).foregroundStyle(theme.accent)
-                        }
-                    }
-                    .padding(16)
-                    .background(theme.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-                }
-
-                Button("Log") { logFallback() }
-                    .tactile(.primary, fullWidth: true)
-                    .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-            }
-            .padding(20)
-        }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") { textFocused = false }
-            }
-        }
-        .onAppear {
-            if !initialText.isEmpty { parseResult = FoodParser.parse(text: initialText) }
-        }
-    }
-
-    private func logFallback() {
-        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        let result = FoodParser.parse(text: trimmed, includeDatabase: true)
-        let entry = FoodLogEntryDTO(
-            userId: profile.id,
-            date: Dates.dayKey(),
-            slot: slot,
-            customName: result.hasMatches ? result.bestName : (trimmed.isEmpty ? "Unknown food" : trimmed),
-            servings: 1.0,
-            perServing: result.hasMatches ? result.totalPerServing : .zero
-        )
-        onLog(entry)
     }
 }

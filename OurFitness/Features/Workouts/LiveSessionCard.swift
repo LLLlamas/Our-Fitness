@@ -485,8 +485,12 @@ private struct LiveSessionRunner: View {
 
 // MARK: - Recent sessions
 
-/// Compact list of today's and yesterday's live sessions. Older sessions live in
-/// Progress so Today/Train stays focused on the current loop.
+/// THE today/yesterday session list on Train — live/logged activity sessions AND
+/// Pilates sessions in one list, newest first. Pilates is stored as its own
+/// `PilatesSessionDTO` (no MET, burn derived on read), so each row carries its
+/// kind and the edit/delete write goes to the matching repo call. `PilatesCard`
+/// keeps only its ring/streak/goal + "Log Pilates" entry; don't give it a list
+/// back. Older sessions live in Progress so Train stays focused on the current loop.
 private struct RecentActivitySessions: View {
     let profile: ProfileDTO
     let refreshToken: UUID
@@ -496,7 +500,48 @@ private struct RecentActivitySessions: View {
     @EnvironmentObject private var toasts: ToastCenter
 
     @Query private var models: [ActivitySessionModel]
-    @State private var editing: ActivitySessionDTO?
+    @Query private var pilatesModels: [PilatesSessionModel]
+    @State private var editing: RecentSession?
+
+    /// One row of the merged list. A live Pilates session is written ONLY as a
+    /// `PilatesSessionDTO` (`Repos.completeLiveSession`), never also as an
+    /// activity session, so the two sources don't overlap.
+    private enum RecentSession: Identifiable {
+        case activity(ActivitySessionDTO)
+        case pilates(PilatesSessionDTO)
+
+        var id: UUID {
+            switch self {
+            case .activity(let s): return s.id
+            case .pilates(let s): return s.id
+            }
+        }
+        var date: Date {
+            switch self {
+            case .activity(let s): return s.date
+            case .pilates(let s): return s.date
+            }
+        }
+        var durationMinutes: Int {
+            switch self {
+            case .activity(let s): return s.durationMinutes
+            case .pilates(let s): return s.durationMinutes
+            }
+        }
+        var activityName: String {
+            switch self {
+            case .activity(let s): return s.activityName
+            case .pilates: return "Pilates"
+            }
+        }
+        var symbol: String {
+            switch self {
+            case .activity(let s):
+                return ActivityCatalog.activity(id: s.activityId)?.symbol ?? "figure.mixed.cardio"
+            case .pilates: return "figure.pilates"
+            }
+        }
+    }
 
     init(profile: ProfileDTO, refreshToken: UUID) {
         self.profile = profile
@@ -507,10 +552,22 @@ private struct RecentActivitySessions: View {
             filter: #Predicate<ActivitySessionModel> { $0.profileId == uid && $0.date >= cutoff },
             sort: \.date, order: .reverse
         )
+        _pilatesModels = Query(
+            filter: #Predicate<PilatesSessionModel> { $0.profileId == uid && $0.date >= cutoff },
+            sort: \.date, order: .reverse
+        )
     }
 
-    private var sessions: [ActivitySessionDTO] {
-        Array(models.map(\.snapshot).filter { Dates.isTodayOrYesterday($0.date) }.prefix(5))
+    /// Up to five of each kind (the cap each list had before they merged), then
+    /// interleaved newest first.
+    private var sessions: [RecentSession] {
+        let activities = models.map(\.snapshot)
+            .filter { Dates.isTodayOrYesterday($0.date) }
+            .prefix(5).map(RecentSession.activity)
+        let pilates = pilatesModels.map(\.snapshot)
+            .filter { Dates.isTodayOrYesterday($0.date) }
+            .prefix(5).map(RecentSession.pilates)
+        return (activities + pilates).sorted { $0.date > $1.date }
     }
 
     var body: some View {
@@ -525,42 +582,94 @@ private struct RecentActivitySessions: View {
             .sheet(item: $editing) { session in
                 EditDurationSheet(
                     activityName: session.activityName,
-                    symbol: ActivityCatalog.activity(id: session.activityId)?.symbol ?? "figure.mixed.cardio",
+                    symbol: session.symbol,
                     initialMinutes: session.durationMinutes,
-                    calories: { minutes in
-                        Int(CalorieEstimator.caloriesForActivity(
-                            met: session.met, minutes: Double(minutes), bodyWeightLb: profile.weightLb
-                        ).rounded())
-                    },
+                    calories: { minutes in calories(session, minutes: minutes) },
                     onSave: { minutes in saveDuration(session, minutes: minutes) }
                 )
             }
         }
     }
 
-    /// Writes the corrected duration (which recomputes the stored estimate from
-    /// the session's MET) and reports success so the sheet only closes on a save
-    /// that actually landed.
-    private func saveDuration(_ s: ActivitySessionDTO, minutes: Int) -> Bool {
-        guard Repos.updateActivitySession(
-            ctx, id: s.id, durationMinutes: minutes, bodyWeightLb: profile.weightLb
-        ) else { return false }
-        let cal = Int(CalorieEstimator.caloriesForActivity(
-            met: s.met, minutes: Double(minutes), bodyWeightLb: profile.weightLb
-        ).rounded())
+    /// Burn for `minutes` of this session. An activity session carries its own
+    /// MET; a Pilates session stores none, so it goes through the Pilates estimator.
+    private func calories(_ session: RecentSession, minutes: Int) -> Int {
+        switch session {
+        case .activity(let s):
+            return Int(CalorieEstimator.caloriesForActivity(
+                met: s.met, minutes: Double(minutes), bodyWeightLb: profile.weightLb
+            ).rounded())
+        case .pilates:
+            return Int(CalorieEstimator.caloriesForPilates(
+                minutes: Double(minutes), bodyWeightLb: profile.weightLb
+            ).rounded())
+        }
+    }
+
+    /// Writes the corrected duration and reports success so the sheet only closes
+    /// on a save that actually landed. An activity session recomputes its stored
+    /// estimate from its MET; a Pilates session stores only the duration.
+    private func saveDuration(_ session: RecentSession, minutes: Int) -> Bool {
+        let saved: Bool
+        let finalMinutes: Int
+        switch session {
+        case .activity(let s):
+            finalMinutes = minutes
+            saved = Repos.updateActivitySession(
+                ctx, id: s.id, durationMinutes: minutes, bodyWeightLb: profile.weightLb
+            )
+        case .pilates(let s):
+            var updated = s
+            updated.durationMinutes = max(1, minutes)
+            finalMinutes = updated.durationMinutes
+            saved = Repos.updatePilatesSession(ctx, updated)
+        }
+        guard saved else { return false }
+        let cal = calories(session, minutes: finalMinutes)
         toasts.show(Toast(
             title: "Duration updated",
-            detail: "\(s.activityName) · \(minutes) min · ~\(cal) cal",
+            detail: "\(session.activityName) · \(finalMinutes) min · ~\(cal) cal",
             accent: .win, symbol: "checkmark.seal.fill"
         ), for: 2.4)
         return true
     }
 
+    private func delete(_ session: RecentSession) {
+        let deleted: Bool
+        switch session {
+        case .activity(let s): deleted = Repos.deleteActivitySession(ctx, id: s.id)
+        case .pilates(let s): deleted = Repos.deletePilatesSession(ctx, id: s.id)
+        }
+        guard deleted else { return }
+        toasts.show(Toast(title: "Session removed", detail: session.activityName,
+                          accent: .warn, symbol: "trash.fill"))
+    }
+
+    /// Activity sessions show their stored estimate; Pilates derives it on read.
+    private func displayCalories(_ session: RecentSession) -> Int? {
+        switch session {
+        case .activity(let s):
+            guard let c = s.caloriesEst, c > 0 else { return nil }
+            return Int(c.rounded())
+        case .pilates(let s):
+            let c = calories(session, minutes: s.durationMinutes)
+            return c > 0 ? c : nil
+        }
+    }
+
+    private func subtitle(_ session: RecentSession) -> String {
+        var parts = ["\(session.durationMinutes) min"]
+        if case .pilates(let s) = session, let focus = s.focusAreas.first {
+            parts.append(focus.label)
+        }
+        parts.append(Dates.formatTimeAgo(session.date))
+        return parts.joined(separator: " · ")
+    }
+
     @ViewBuilder
-    private func sessionRow(_ s: ActivitySessionDTO) -> some View {
-        let symbol = ActivityCatalog.activity(id: s.activityId)?.symbol ?? "figure.mixed.cardio"
+    private func sessionRow(_ s: RecentSession) -> some View {
         HStack(spacing: 10) {
-            Image(systemName: symbol)
+            Image(systemName: s.symbol)
                 .font(.system(size: 16))
                 .foregroundStyle(theme.accent)
                 .frame(width: 24)
@@ -568,12 +677,12 @@ private struct RecentActivitySessions: View {
                 Text(s.activityName)
                     .font(.system(size: 15, weight: .medium))
                     .foregroundStyle(theme.text)
-                Text("\(s.durationMinutes) min · \(Dates.formatTimeAgo(s.date))")
+                Text(subtitle(s))
                     .font(.caption).foregroundStyle(theme.dim)
             }
             Spacer()
-            if let c = s.caloriesEst, c > 0 {
-                Text("~\(Int(c.rounded())) cal")
+            if let c = displayCalories(s) {
+                Text("~\(c) cal")
                     .font(.system(.footnote, design: .monospaced))
                     .foregroundStyle(theme.accent)
             }
@@ -584,11 +693,7 @@ private struct RecentActivitySessions: View {
             }
             .tactile(.ghost)
             .accessibilityLabel("Edit \(s.activityName) duration")
-            Button(role: .destructive) {
-                guard Repos.deleteActivitySession(ctx, id: s.id) else { return }
-                toasts.show(Toast(title: "Session removed", detail: s.activityName,
-                                  accent: .warn, symbol: "trash.fill"))
-            } label: {
+            Button(role: .destructive) { delete(s) } label: {
                 Image(systemName: "trash").foregroundStyle(theme.warn)
             }
             .tactile(.ghost)
@@ -604,11 +709,7 @@ private struct RecentActivitySessions: View {
             } label: {
                 Label("Edit duration", systemImage: "pencil")
             }
-            Button(role: .destructive) {
-                guard Repos.deleteActivitySession(ctx, id: s.id) else { return }
-                toasts.show(Toast(title: "Session removed", detail: s.activityName,
-                                  accent: .warn, symbol: "trash.fill"))
-            } label: {
+            Button(role: .destructive) { delete(s) } label: {
                 Label("Delete session", systemImage: "trash")
             }
         }
@@ -687,8 +788,8 @@ private struct SessionActivityHeader: View {
 // MARK: - Edit session duration
 
 /// Retroactively correct a logged session's duration — the ONE duration editor,
-/// shared by live activity sessions (above) and Pilates
-/// (`PilatesCard.swift`). Don't add a second one.
+/// used by `RecentActivitySessions` (above) for both activity and Pilates
+/// sessions. Don't add a second one.
 ///
 /// The caller owns the calorie preview and the write, because the two models
 /// differ: an activity session stores its own MET and needs its `caloriesEst`

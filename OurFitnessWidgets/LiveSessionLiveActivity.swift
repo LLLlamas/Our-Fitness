@@ -29,6 +29,11 @@ private enum LSPalette {
     static let accent2 = Color(red: 0.788, green: 0.482, blue: 0.353)  // terracotta — running timer
     static let text = Color.primary
     static let dim = Color.secondary
+    // Lock Screen banner matches the app's light palette (Theme.bg / text / dim).
+    // The Dynamic Island is always black, so it keeps the adaptive text colours above.
+    static let lockBackground = Color(red: 0.969, green: 0.953, blue: 0.925)
+    static let lockText = Color(red: 0.102, green: 0.086, blue: 0.078)
+    static let lockDim = Color(red: 0.478, green: 0.451, blue: 0.408)
 }
 
 @available(iOS 16.2, *)
@@ -38,7 +43,7 @@ struct LiveSessionLiveActivity: Widget {
             // Lock Screen / banner presentation.
             LockScreenLiveSessionView(context: context)
                 .padding(16)
-                .activityBackgroundTint(Color.black.opacity(0.35))
+                .activityBackgroundTint(LSPalette.lockBackground)
                 .activitySystemActionForegroundColor(LSPalette.accent)
         } dynamicIsland: { context in
             DynamicIsland {
@@ -106,11 +111,11 @@ private struct LockScreenLiveSessionView: View {
             VStack(alignment: .leading, spacing: 3) {
                 Text(context.attributes.activityName)
                     .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(LSPalette.text)
+                    .foregroundStyle(LSPalette.lockText)
                     .lineLimit(1)
                 Text("Live session · \(context.state.expectedMinutes) min planned")
                     .font(.caption)
-                    .foregroundStyle(LSPalette.dim)
+                    .foregroundStyle(LSPalette.lockDim)
                     .lineLimit(1)
             }
 

@@ -114,24 +114,30 @@ public final class ToastCenter: ObservableObject {
 
     // Time-based nudge toasts — fired from TodayView's periodic timer.
     // Each method calls the engine and only shows a toast when the engine
-    // returns a non-nil message (avoids spamming during quiet periods).
+    // returns a non-nil message (avoids spamming during quiet periods). Returns
+    // whether a toast was shown, so the caller can advance its once-per-hour
+    // guard only on a real nudge — never pre-check the engine at the call site.
 
-    public func mealNudge(mealsLoggedToday: Int, hourOfDay: Int, fitnessGoal: FitnessGoal) {
+    @discardableResult
+    public func mealNudge(mealsLoggedToday: Int, hourOfDay: Int, fitnessGoal: FitnessGoal) -> Bool {
         guard let msg = EncouragementEngine.mealLoggingNudge(
             mealsLoggedToday: mealsLoggedToday,
             hourOfDay: hourOfDay,
             fitnessGoal: fitnessGoal
-        ) else { return }
+        ) else { return false }
         show(msg, accent: .info)
+        return true
     }
 
-    public func waterReminder(currentOz: Double, goalOz: Double, hourOfDay: Int) {
+    @discardableResult
+    public func waterReminder(currentOz: Double, goalOz: Double, hourOfDay: Int) -> Bool {
         guard let msg = EncouragementEngine.waterNudge(
             currentOz: currentOz,
             goalOz: goalOz,
             hourOfDay: hourOfDay
-        ) else { return }
+        ) else { return false }
         show(msg, accent: .info)
+        return true
     }
 
     // Stall nudge — a once-per-day "keep going" prompt when the user has gone quiet

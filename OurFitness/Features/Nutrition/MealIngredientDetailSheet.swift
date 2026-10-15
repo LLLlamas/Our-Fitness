@@ -110,18 +110,7 @@ struct MealIngredientDetailSheet: View {
                 .multilineTextAlignment(.center)
                 .foregroundStyle(theme.text)
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    ForEach(Slot.allCases, id: \.self) { s in
-                        Button {
-                            slot = s
-                        } label: {
-                            Text(s.label)
-                        }
-                        .tactile(.pill, fill: slot == s ? theme.accent : nil)
-                    }
-                }
-            }
+            SlotPicker(selection: $slot)
         }
     }
 
@@ -164,10 +153,10 @@ struct MealIngredientDetailSheet: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             } else {
                 HStack(spacing: 10) {
-                    MealMacroChip(label: "cal", value: totals.calories)
-                    MealMacroChip(label: "protein", value: totals.proteinG, unit: "g")
-                    MealMacroChip(label: "carbs", value: totals.carbsG, unit: "g")
-                    MealMacroChip(label: "fat", value: totals.fatG, unit: "g")
+                    MacroChip(label: "Cal", value: totals.calories)
+                    MacroChip(label: "Protein", value: totals.proteinG, unit: "g")
+                    MacroChip(label: "Carbs", value: totals.carbsG, unit: "g")
+                    MacroChip(label: "Fat", value: totals.fatG, unit: "g")
                 }
             }
         }
@@ -249,9 +238,32 @@ struct MealIngredientDetailSheet: View {
     }
 }
 
+// MARK: - Slot picker
+
+/// Horizontal meal-slot pills — the one slot picker, over every `Slot` case.
+/// Used by this sheet's header and by `DescribeMealForm` in AddFoodSheet.
+struct SlotPicker: View {
+    @Binding var selection: Slot
+
+    @Environment(\.theme) private var theme
+
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(Slot.allCases, id: \.self) { s in
+                    Button { selection = s } label: { Text(s.label) }
+                        .tactile(.pill, fill: selection == s ? theme.accent : nil)
+                }
+            }
+        }
+    }
+}
+
 // MARK: - Macro chip
 
-private struct MealMacroChip: View {
+/// Compact macro readout cell — the one definition, used by this sheet's totals
+/// and by `DescribeMealForm`'s parsed-macro readout in AddFoodSheet.
+struct MacroChip: View {
     let label: String
     let value: Int
     var unit: String = ""
@@ -389,19 +401,10 @@ struct IngredientFoodSearchSheet: View {
                 ScrollView {
                     LazyVStack(spacing: 8) {
                         ForEach(searchResults) { food in
-                            PressableCard {
+                            FoodResultRow(food: food) {
                                 ingredients.append(MealIngredient.from(food, quantity: 1.0))
                                 Haptics.bump()
                                 dismiss()
-                            } content: {
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text(food.name)
-                                        .font(.callout)
-                                        .foregroundStyle(theme.text)
-                                    Text("\(food.servingLabel) · \(food.calories) cal · \(food.proteinG)g protein")
-                                        .font(.caption)
-                                        .foregroundStyle(theme.dim)
-                                }
                             }
                         }
                     }
@@ -430,22 +433,10 @@ struct IngredientFoodSearchSheet: View {
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
         .presentationBackground(theme.bg)
-        // Debounce the USDA FTS5 scan off the main thread — mirrors AddFoodSheet.
-        // Empty query shows curated-only immediately; non-empty waits 180 ms then
-        // suspends the main actor while the SQLite query runs on the background queue.
-        .task(id: query) {
-            let q = query.lowercased().trimmingCharacters(in: .whitespaces)
-            if q.isEmpty {
-                searchResults = Array(CommonFoods.all.prefix(30))
-                return
-            }
-            try? await Task.sleep(nanoseconds: 180_000_000)
-            guard !Task.isCancelled else { return }
-
-            let results = await FoodSearch.combined(matching: q)
-
-            guard !Task.isCancelled else { return }
-            searchResults = results
+        // Same debounced search as AddFoodSheet; a blank query shows the first
+        // 30 curated foods.
+        .debouncedFoodSearch(query: query, results: $searchResults) {
+            Array(CommonFoods.all.prefix(30))
         }
         .onAppear { searchFocused = true }
         .sheet(isPresented: $showManual) {

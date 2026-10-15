@@ -281,29 +281,20 @@ struct TodayView: View {
 
         let mealCount = todaysLogs.count
 
-        // Meal nudge — ask the engine first so we only advance the guard when a
-        // message would actually fire. This avoids marking the hour "used" during
-        // quiet periods (e.g. before 11 AM) when the engine returns nil.
+        // Meal nudge — the wrapper asks the engine once and reports whether it
+        // showed, so the guard advances only when a message actually fired. This
+        // avoids marking the hour "used" during quiet periods (e.g. before 11 AM)
+        // when the engine returns nil.
         if mealNudgeEnabled,
            hour != lastMealNudgeHour,
-           EncouragementEngine.mealLoggingNudge(
-               mealsLoggedToday: mealCount,
-               hourOfDay: hour,
-               fitnessGoal: profile.fitnessGoal
-           ) != nil {
-            toasts.mealNudge(mealsLoggedToday: mealCount, hourOfDay: hour, fitnessGoal: profile.fitnessGoal)
+           toasts.mealNudge(mealsLoggedToday: mealCount, hourOfDay: hour, fitnessGoal: profile.fitnessGoal) {
             lastMealNudgeHour = hour
         }
 
         // Water nudge — same pattern; separate hour guard from meal nudge.
         if waterNudgeEnabled,
            hour != lastWaterNudgeHour,
-           EncouragementEngine.waterNudge(
-               currentOz: todayWaterOz,
-               goalOz: waterGoalFlOz,
-               hourOfDay: hour
-           ) != nil {
-            toasts.waterReminder(currentOz: todayWaterOz, goalOz: waterGoalFlOz, hourOfDay: hour)
+           toasts.waterReminder(currentOz: todayWaterOz, goalOz: waterGoalFlOz, hourOfDay: hour) {
             lastWaterNudgeHour = hour
         }
 

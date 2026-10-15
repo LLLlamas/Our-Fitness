@@ -3,7 +3,8 @@
 // - Progress ring: sessions this week / weekly goal (editable — tap "/" in ring)
 // - "Log Pilates" PressableCard → the shared `LogPastSessionSheet` preselected to
 //   Pilates (duration, day, focus chips, notes) — the one manual logging form
-// - Today/yesterday sessions strip with calorie estimates
+// - Today/yesterday sessions are NOT listed here: they sit in the one Train list,
+//   `RecentActivitySessions` (LiveSessionCard.swift), with edit/delete
 // - Weekly streak indicator (no streak-shame)
 // - Info sheet: muscles worked + post-session nutrition hint
 
@@ -13,15 +14,12 @@ import SwiftData
 struct PilatesCard: View {
     let profile: ProfileDTO
 
-    @Environment(\.modelContext) private var ctx
     @Environment(\.theme) private var theme
-    @EnvironmentObject private var toasts: ToastCenter
 
     @Query private var sessionModels: [PilatesSessionModel]
     @State private var showLogSheet = false
     @State private var showGoalPicker = false
     @State private var pickerGoal: Int = 3
-    @State private var editing: PilatesSessionDTO?
 
     @AppStorage private var weeklyGoalRaw: Int
 
@@ -65,7 +63,6 @@ struct PilatesCard: View {
             PressableCard(action: { showLogSheet = true }) {
                 logCTA
             }
-            recentStrip
         }
         // One manual session form app-wide: this opens the shared log sheet
         // (LiveSessionCard.swift) preselected to Pilates, which collects duration,
@@ -75,22 +72,6 @@ struct PilatesCard: View {
         }
         .sheet(isPresented: $showGoalPicker) {
             goalPickerSheet
-        }
-        // Shared duration editor (LiveSessionCard.swift) — one sheet for both
-        // session kinds. A Pilates session stores no calorie figure, so the burn
-        // follows the new duration without a recompute.
-        .sheet(item: $editing) { session in
-            EditDurationSheet(
-                activityName: "Pilates",
-                symbol: "figure.pilates",
-                initialMinutes: session.durationMinutes,
-                calories: { minutes in
-                    Int(CalorieEstimator.caloriesForPilates(
-                        minutes: Double(minutes), bodyWeightLb: profile.weightLb
-                    ).rounded())
-                },
-                onSave: { minutes in saveDuration(session, minutes: minutes) }
-            )
         }
     }
 
@@ -153,75 +134,6 @@ struct PilatesCard: View {
                     .font(.caption).foregroundStyle(theme.dim)
             }
             Spacer(minLength: 0)
-        }
-    }
-
-    private func deleteSession(_ session: PilatesSessionDTO) {
-        guard Repos.deletePilatesSession(ctx, id: session.id) else { return }
-        toasts.show(Toast(title: "Session removed", detail: "Pilates session deleted.",
-                          accent: .warn, symbol: "trash.fill"))
-    }
-
-    /// Correct a logged session's length — "it was 45 minutes, not 30". Returns
-    /// false on a failed write so the sheet stays open.
-    private func saveDuration(_ session: PilatesSessionDTO, minutes: Int) -> Bool {
-        var updated = session
-        updated.durationMinutes = max(1, minutes)
-        guard Repos.updatePilatesSession(ctx, updated) else { return false }
-        let cal = Int(CalorieEstimator.caloriesForPilates(
-            minutes: Double(updated.durationMinutes), bodyWeightLb: profile.weightLb
-        ).rounded())
-        toasts.show(Toast(
-            title: "Duration updated",
-            detail: "Pilates · \(updated.durationMinutes) min · ~\(cal) cal",
-            accent: .win, symbol: "checkmark.seal.fill"
-        ), for: 2.4)
-        return true
-    }
-
-    @ViewBuilder
-    private var recentStrip: some View {
-        let recent = Array(sessions.filter { Dates.isTodayOrYesterday($0.date) }.prefix(5))
-        if !recent.isEmpty {
-            VStack(alignment: .leading, spacing: 6) {
-                Text("Today & yesterday")
-                    .font(.caption).tracking(2).textCase(.uppercase)
-                    .foregroundStyle(theme.dim)
-                ForEach(recent) { s in
-                    HStack {
-                        Text(Dates.formatTimeAgo(s.date))
-                            .font(.caption)
-                            .foregroundStyle(theme.text)
-                        Spacer()
-                        if let focus = s.focusAreas.first {
-                            Text(focus.label.uppercased())
-                                .font(.system(size: 9, weight: .medium)).tracking(2)
-                                .foregroundStyle(theme.dim)
-                        }
-                        let cal = CalorieEstimator.caloriesForPilates(
-                            minutes: Double(s.durationMinutes),
-                            bodyWeightLb: profile.weightLb
-                        )
-                        Text("\(s.durationMinutes) min · ~\(Int(cal)) cal")
-                            .font(.system(.caption, design: .monospaced))
-                            .foregroundStyle(theme.accent2)
-                        Button { editing = s } label: {
-                            Image(systemName: "pencil")
-                                .font(.system(size: 12))
-                                .foregroundStyle(theme.accent2)
-                        }
-                        .tactile(.ghost)
-                        .accessibilityLabel("Edit this pilates session's duration")
-                        Button(role: .destructive) { deleteSession(s) } label: {
-                            Image(systemName: "trash")
-                                .font(.system(size: 12))
-                                .foregroundStyle(theme.warn)
-                        }
-                        .tactile(.ghost)
-                        .accessibilityLabel("Delete this pilates session")
-                    }
-                }
-            }
         }
     }
 

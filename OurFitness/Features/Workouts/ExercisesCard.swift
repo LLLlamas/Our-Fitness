@@ -5,8 +5,11 @@
 // Each row picks its controls from the exercise's SHAPE, never from the goal:
 //   • isometric            → tap opens the hold timer
 //   • tracks per-set weight → tap opens the rep counter (with its weight field)
-//   • one-tap loggable      → inline +1 (or +1 min) with undo-last; tapping the
-//                             row still opens the rep counter for bigger sets
+//   • one-tap loggable      → inline +1 (or +1 min) with undo; tapping the
+//                             row still opens the rep counter for bigger sets.
+//                             Undo removes only a set THIS +1 created (tracked
+//                             in view state) — never a rep-counter set; those
+//                             are edited/deleted via the clock → SetHistorySheet
 // Every row also carries the clock (→ SetHistorySheet, the one set editor and
 // the one confirmed delete-exercise path) and ⓘ (→ ExerciseInfoSheet).
 //
@@ -34,6 +37,9 @@ struct ExercisesCard: View {
     @State private var activeHistory: ExerciseDTO?
     @State private var ringGlow: Bool = false
     @State private var reveal: CGFloat = 0
+    /// Set ids the inline +1 wrote this session, per exercise, newest last —
+    /// the only sets the row's undo may remove.
+    @State private var quickLoggedSetIds: [String: [UUID]] = [:]
 
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
@@ -297,7 +303,7 @@ struct ExercisesCard: View {
                 .accessibilityHidden(true)
 
                 if ex.isOneTapLoggable {
-                    quickLogControls(ex, todaySets: stats.todaySets)
+                    quickLogControls(ex)
                 }
             }
         }
@@ -311,9 +317,9 @@ struct ExercisesCard: View {
     }
 
     @ViewBuilder
-    private func quickLogControls(_ ex: ExerciseDTO, todaySets: Int) -> some View {
+    private func quickLogControls(_ ex: ExerciseDTO) -> some View {
         HStack(spacing: 6) {
-            if todaySets > 0 {
+            if undoableQuickLogId(for: ex) != nil {
                 Button { undoLastSet(for: ex) } label: {
                     Image(systemName: "arrow.uturn.backward")
                         .font(.system(size: 13))
@@ -384,6 +390,7 @@ struct ExercisesCard: View {
             caloriesEst: cal
         )
         guard Repos.addSet(ctx, dto) else { return }
+        quickLoggedSetIds[exercise.id, default: []].append(dto.id)
         Task { @MainActor in
             ringGlow = true
             try? await Task.sleep(nanoseconds: 450_000_000)
@@ -402,13 +409,21 @@ struct ExercisesCard: View {
         ))
     }
 
-    private func undoLastSet(for exercise: ExerciseDTO) {
-        let exId = exercise.id
+    /// Newest +1 set for this exercise that still exists today. Sets deleted
+    /// in SetHistorySheet (or yesterday's, after midnight) are skipped.
+    private func undoableQuickLogId(for exercise: ExerciseDTO) -> UUID? {
+        guard let ids = quickLoggedSetIds[exercise.id], !ids.isEmpty else { return nil }
         let todayStart = Calendar.current.startOfDay(for: Date())
-        // Query is oldest-first and already profile-scoped; take today's newest.
-        guard let latest = setModels.last(where: { $0.exerciseId == exId && $0.timestamp >= todayStart })
-        else { return }
-        guard Repos.deleteSet(ctx, id: latest.id) else { return }
+        let live = Set(setModels.lazy
+            .filter { $0.exerciseId == exercise.id && $0.timestamp >= todayStart }
+            .map(\.id))
+        return ids.last(where: { live.contains($0) })
+    }
+
+    private func undoLastSet(for exercise: ExerciseDTO) {
+        guard let id = undoableQuickLogId(for: exercise) else { return }
+        guard Repos.deleteSet(ctx, id: id) else { return }
+        quickLoggedSetIds[exercise.id]?.removeAll { $0 == id }
         toasts.show(Toast(title: "Undone", detail: "\(exercise.name) · last log removed",
                           accent: .warn, symbol: "arrow.uturn.backward"))
     }
