@@ -22,17 +22,26 @@ final class TabSmokeTests: XCTestCase {
     /// Fresh install lands on onboarding. Fill the one required field and
     /// continue, so the tabs are reachable.
     private func completeOnboardingIfPresent(_ app: XCUIApplication) {
-        let createButton = app.buttons["Create profile"]
+        // Primary buttons render their label uppercased, so match case-insensitively.
+        let createButton = app.buttons.matching(NSPredicate(format: "label ==[c] %@", "Create profile")).firstMatch
         guard createButton.waitForExistence(timeout: 10) else { return }   // already onboarded
 
         let nameField = app.textFields["e.g. Lorenzo"]
         if nameField.waitForExistence(timeout: 5) {
             nameField.tap()
-            nameField.typeText("Test")
+            _ = app.keyboards.firstMatch.waitForExistence(timeout: 3)
+            nameField.typeText("Test\n")   // return dismisses the keyboard covering the button
         }
-        // The button sits below the fold on smaller devices.
-        if !createButton.isHittable { app.swipeUp() }
+        // Let the keyboard finish dismissing, then bring the button (below the
+        // fold on every current iPhone) into view.
+        _ = app.keyboards.firstMatch.waitForNonExistence(timeout: 3)
+        app.swipeUp()
         createButton.tap()
+
+        // Second onboarding step: Connect Apple Health. Skip it — the smoke test
+        // must never trigger a HealthKit authorization sheet.
+        let skip = app.buttons.matching(NSPredicate(format: "label ==[c] %@", "Skip for now")).firstMatch
+        if skip.waitForExistence(timeout: 5) { skip.tap() }
     }
 
     func test_every_tab_opens_without_crashing() {

@@ -9,6 +9,22 @@ correction to health data is worse than an open question. Anything that could no
 be verified from the repository is listed as an open question rather than
 "fixed".
 
+> **Update, Oct 2026 (Build/Circuit merge).** This audit was written while the app
+> had two modes. The modes are now merged: one app, and a per-user goal (Build muscle /
+> Lose weight) that only changes targets. The heart-health targets that were
+> Circuit-only — fiber floor, sodium / added-sugar / saturated-fat caps — now apply to
+> **every** profile (`Targets.HeartHealth`), so the open questions about them below
+> affect everyone, not just people trying to lose weight. No number in this file was
+> changed by the merge. "Circuit" below means what is now the Lose-weight goal, or,
+> for the micros, everyone.
+>
+> One calorie figure *did* move: per-set burn is now chosen by exercise shape
+> (`CalorieEstimator.caloriesForSet`), not by mode. A user-added movement with **no
+> load** that used to be logged in Circuit mode (flat 3.5 MET at 3 s/rep) now gets
+> the `ExerciseInfo` MET and tempo for its name or category, the same as a lift.
+> Sets logged before the merge keep their stored figure until edited; new logs,
+> edits and the watch all agree. No MET value was added or changed.
+
 ---
 
 ## Fixed
@@ -43,7 +59,7 @@ Under-counting once is better than counting twice.
 
 Also lower: the Move card's estimate and training total, the steps card's
 "~N cal burned", Progress energy balance and training history, live-session and
-rep-counter calories, Circuit quick-log calories, and the step/rep projections.
+rep-counter calories, Circuit quick-log calories (now the shared exercise list's one-tap +1), and the step/rep projections.
 
 ### Two consequences worth knowing
 
@@ -88,16 +104,16 @@ actual guideline in hand.
 3. **Body-fat category thresholds.** See above: no confirmed primary source.
 4. **Added-sugar cap** is a flat 25 g for everyone; the AHA limits are sex-specific. The cited paper (Te Morenga 2012) is about sugar and body weight, not a gram cap.
 5. **Fiber floor** is a flat 35 g and carries no citation, while its companion saturated-fat cap *is* calorie-scaled. The IOM AIs are sex-specific.
-6. **Saturated-fat cap**: implemented at the DGA 10% of calories. For a mode whose purpose is fixing cardiovascular markers, the AHA's 5–6% may be the right target instead.
+6. **Saturated-fat cap**: implemented at the DGA 10% of calories. This was raised for the old Circuit mode, whose purpose was fixing cardiovascular markers, where the AHA's 5–6% may be the right target instead. The cap now applies to everyone, so the question is now also whether one universal figure fits both goals.
 7. **Sodium target** of 1,500 mg is attributed to a DASH-Sodium arm that should be checked.
 8. **Strength-training calories are probably much too low.** Session calories use the activity's MET × time-under-tension only, but the Compendium's resistance values describe a whole session *including rest* — which is what the cited measurements captured. A real 20-set session is ~600 s of tension, so "Training Only" may understate a genuine strength session by roughly 5×. Fixing this means either modelling rest time or choosing a per-set MET that matches tension-only, and it would change the app's headline training number. Deliberately left alone.
-9. **Build surplus vs the promise made to the user.** The target adds 500 cal/day (≈1 lb/week) while the rationale copy says "about a quarter to half a pound a week" (≈125–250 cal). The spec sanctions 400–600, so the code, the copy and the spec don't agree. Product decision.
+9. **Build-muscle surplus vs the promise made to the user.** The target adds 500 cal/day (≈1 lb/week) while the rationale copy says "about a quarter to half a pound a week" (≈125–250 cal). The spec sanctions 400–600, so the code, the copy and the spec don't agree. Product decision.
 10. **Ainsworth MET values** in `ActivityCatalog` and `ExerciseInfo` are plausible and self-labelled, but no MET was checked against the Compendium itself. `ExerciseInfo` claims every value comes from Ainsworth while the isometric holds are openly derived, since the Compendium has no code for them.
 
 ---
 
 ## Known gaps that are not bugs
 
-- **Sodium, added sugar and saturated fat are only available for foods logged from a scanned nutrition label.** The curated database has no fields for them. Until it does, the Circuit heart-health card can only ever report on part of the day.
+- **Sodium, added sugar and saturated fat are only available for foods logged from a scanned nutrition label.** The curated database has no fields for them. Until it does, the heart-health card (now shown to everyone) can only ever report on part of the day.
 - **Lab markers (LDL, HDL, total cholesterol, A1c, fasting glucose) are manual-entry only** and cannot come from Apple Health. This is by design, not an omission.
 - **`HealthMarkerKind.triglycerides`** has range support but no tracker, no card and no way to enter it.

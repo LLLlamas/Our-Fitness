@@ -4,6 +4,8 @@
 
 **Status:** Historical research and original design spec. Nutrition logging, database-backed food matching, ingredient editing, templates, suggestions, and trends now exist. Goals/preferences, grocery generation, and other proposals below are not a current implementation checklist. Consult [CLAUDE.md](../CLAUDE.md) and the code for shipped behavior; preserve this document’s original reasoning.
 
+**Goal note (Oct 2026):** this spec was written for the old **Build** mode (gain lean mass). The Build/Circuit modes are now merged into one app with a per-user goal; this document informs the **Build muscle** goal (`FitnessGoal.gain`), whose live numbers are in `Domain/Targets.swift` → `GoalRules` (currently TDEE + 500, 1.0 g/lb protein, 27% fat). Heart-health micro targets now apply to every profile.
+
 ---
 
 ## 1. Product Concept

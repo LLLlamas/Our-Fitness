@@ -1,11 +1,16 @@
 # Health-Tracking UI & Readability Refresh — Implementation Plan
 
+> **Historical (written when the app had Build and Circuit modes).** Since Oct 2026
+> the modes are merged: one light-theme app where every surface is the same for
+> everyone, and a per-user goal (Build muscle / Lose weight) that only changes
+> targets. [CLAUDE.md](../CLAUDE.md) is authoritative.
+>
 > **Status:** Historical implementation spec, researched and scoped 2026-06-01.
 > The dated implementation record below reports all seven workstreams complete;
 > [CLAUDE.md](../CLAUDE.md) and current code take precedence for present behavior.
 >
 > **Stale file names (14 Oct 2026):** `StepsCardioCard` was merged into
-> `Features/Today/StepsCard.swift` (one mode-aware card for both modes);
+> `Features/Today/StepsCard.swift` (now one ring card, the same for everyone);
 > `CardioLogCard` was deleted as unreachable — cardio is logged via
 > `LogPastSessionSheet` on the Train tab. Read every `StepsCardioCard`
 > reference below as `Features/Today/StepsCard.swift`.

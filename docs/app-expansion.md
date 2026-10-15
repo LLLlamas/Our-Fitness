@@ -1,7 +1,10 @@
 # App Expansion — From TestFlight Circle to App Store
 
 > Status: **Phase 1 implemented** (single profile per install, at-will mode switching,
-> per-profile `@Query` isolation). Phases 2 (iCloud/CloudKit sync) and 3 (store polish)
+> per-profile `@Query` isolation). **Oct 2026:** the Build/Circuit modes have since been
+> merged — one light-theme app where every surface is the same, plus a per-user goal
+> (Build muscle / Lose weight) that only changes targets. The mode-switch design in 1B
+> shipped and was then superseded; see the note there. CLAUDE.md is authoritative. Phases 2 (iCloud/CloudKit sync) and 3 (store polish)
 > are still planned. Captures the decisions and the work needed to take Our-Fitness from
 > a shared-device TestFlight build to a per-user App Store release. Companion to
 > [CLAUDE.md](CLAUDE.md).
@@ -23,7 +26,7 @@ following them across their own devices.** This doc plans that shift.
 | Question | Decision |
 |---|---|
 | Per-user data model | **iCloud per-person** — SwiftData + CloudKit *private* database. Data syncs across that person's own devices. A backend is allowed if a feature needs one, but nothing here requires one, so we don't add one. |
-| Mode switching | **Changeable at will, with a confirm step.** Switching Build↔Circuit recomputes targets and shows a confirmation sheet first. All logs are kept. |
+| Mode switching | **Changeable at will, with a confirm step.** Switching Build↔Circuit recomputes targets and shows a confirmation sheet first. All logs are kept. *(Still holds for the goal that replaced modes — see 1B.)* |
 | Profiles per install | **One profile per install.** Drop the multi-profile switcher. The device is one person. |
 
 ### The good news — most of this already exists
@@ -74,6 +77,17 @@ Remove the shared-device switcher; keep first-launch creation.
 > That keeps the door open and makes the CloudKit migration cleaner.
 
 ### 1B. Make mode changeable at will (recompute + confirm)
+
+> **Shipped, then superseded (Oct 2026).** Modes no longer exist. The current switch is
+> the **goal**: Settings → Goal row → `GoalSwitchSheet` (`Features/Settings/SettingsView.swift`)
+> previews old → new targets straight from `Targets.compute(fitnessGoal:vitals:)`, and
+> Confirm calls `Repos.updateGoal`, which writes the goal's raw value to the legacy
+> `modeRaw` column and recomputes `targetsJSON` — and **never seeds anything**. The caller
+> guards the write before showing the "Goal: …" toast. There is no theme flip and no Train
+> content change: every tab and card is the same for both goals. `updateMode`,
+> `seedCircuitExercises`, `.themed(profile.mode)` and the Train-tab bounce described below
+> are gone; the three starter parenting movements are now seeded for **every** new profile
+> in `Repos.createProfile`. The original plan follows as history.
 
 Today mode is chosen once in `ProfileCreationView` and shown read-only in Settings
 (`Features/Settings/SettingsView.swift:42` → `labeled("Mode", profile.mode.displayName)`).
@@ -178,15 +192,16 @@ current models violate.
   shared). No third-party SDKs, no tracking → straightforward.
 - **No Sign in with Apple needed**: iCloud private DB is keyed to the user's Apple ID by
   the system; there is no app-level account, so the SiwA requirement doesn't trigger.
-- **Marketing surface**: app name, subtitle, screenshots for both Build (warm dark) and
-  Circuit (warm light) palettes, App Store description framing the two modes.
+- **Marketing surface**: app name, subtitle, screenshots of the single light palette,
+  App Store description framing the two goals (Build muscle / Lose weight). *(Originally
+  planned as Build warm-dark + Circuit warm-light screenshots; modes are gone.)*
 - **`ITSAppUsesNonExemptEncryption`** declared (see [[ios_signing_traps]]).
 
 ---
 
 ## Suggested sequencing
 
-1. **Phase 1** as one PR (single-profile + mode switching + isolation fixes) — shippable
+1. **Phase 1** as one PR (single-profile + mode switching — now goal switching + isolation fixes) — shippable
    to the existing TestFlight circle immediately, no schema/entitlement churn.
 2. **Phase 2** as a dedicated PR (next unshipped schema + CloudKit + entitlements) — the risky one;
    test sync on two physical devices before merging.
@@ -199,10 +214,11 @@ current models violate.
 **Phase 1**
 - Build and test locally first — see [setup.md](setup.md#local-development-primary-workflow); CI is a clean-room confirmation. Build: `bundle exec fastlane ios compile` (or push → `compile.yml`). Domain tests: `bundle exec fastlane ios tests`.
 - Run on simulator (`/run`): first launch → create profile → confirm only that profile's
-  data shows. In Settings, switch Build→Circuit: confirm the sheet previews the target
-  change, theme flips light/dark, Train changes its mode-specific content, Circuit cardio appears in Today, and
-  targets on Today reflect the new mode. Both modes retain Today / Meals / Train / Reminders / Progress.
-- Regression: log food / a workout / body weight, switch mode, confirm logs persist.
+  data shows. In Settings, switch goal (Build muscle → Lose weight): confirm the sheet
+  previews the target change and targets on Today/Meals reflect the new goal, while the
+  theme and every tab's content stay the same. *(Superseded check: it originally verified
+  a light/dark theme flip and mode-specific Train content.)*
+- Regression: log food / a workout / body weight, switch goal, confirm logs persist.
 
 **Phase 2**
 - Two simulators/devices signed into the **same** iCloud account: create data on A,

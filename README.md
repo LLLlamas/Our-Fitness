@@ -1,21 +1,25 @@
 # Our Fitness
 
-A native iOS fitness app for two modes: **Build** (gain mass, fuel hoops) and **Circuit** (drop weight, fix cardiovascular markers). SwiftUI, SwiftData, Apple Health integration — no backend, no subscription.
+A native iOS fitness app: log meals, training, steps, water and reminders in one place, with targets tuned to your goal — **Build muscle** or **Lose weight**. SwiftUI, SwiftData, Apple Health integration — no backend, no subscription.
 
 Show up, log honestly, let the numbers tell the truth.
 
 ---
 
-## Modes
+## Goals
 
-| | Build | Circuit |
+Every screen is the same for everyone. Your goal only changes the numbers (calorie, protein and fat targets, the default step goal) and gently tilts suggestions and encouragement copy. Values from `OurFitness/Domain/Targets.swift`:
+
+| | Build muscle | Lose weight |
 |---|---|---|
-| Calories | TDEE + 400–600 surplus | TDEE − 300–500 deficit |
-| Protein | ~1 g/lb | 1.0–1.2 g/lb |
-| Steps/day | 8,000 | 10,000 |
-| Focus | Strength, rep/set tracking, isometric holds | Parenting movement, Pilates, steps, cardio markers |
+| Calories | TDEE + 500 | TDEE − 400 |
+| Protein | 1.0 g/lb | 1.1 g/lb |
+| Fat | 27% of calories | 28% of calories |
+| Default steps/day | 8,000 | 10,000 |
 
-One profile per install; mode is changeable in Settings. The app stores data locally and syncs selected snapshots and photos to a paired Apple Watch, which caches them locally. Apple Health access and notification/Lock Screen surfaces also handle selected data. See the [privacy and security account](docs/privacy-security.md) for the current data flows and limitations.
+Heart-health targets apply to everyone: fiber ≥ 35 g, sodium ≤ 1,500 mg, added sugar ≤ 25 g, saturated fat ≤ 10% of calories.
+
+One profile per install; the goal is changeable in Settings. The app stores data locally and syncs selected snapshots and photos to a paired Apple Watch, which caches them locally. Apple Health access and notification/Lock Screen surfaces also handle selected data. See the [privacy and security account](docs/privacy-security.md) for the current data flows and limitations.
 
 ---
 
@@ -42,12 +46,13 @@ CLI: `bundle exec fastlane ios compile` (build) / `bundle exec fastlane ios test
 - [docs/ci-history.md](docs/ci-history.md) — incident narratives behind every CI rule
 - [docs/live-activity-setup.md](docs/live-activity-setup.md) — Live Activity / widget signing checklist
 - [docs/RepCheck.md](docs/RepCheck.md) — friction-free logging UX
-- [docs/nutrition-plan-research.md](docs/nutrition-plan-research.md) — Build nutrition spec
+- [docs/nutrition-plan-research.md](docs/nutrition-plan-research.md) — original nutrition spec (written for the old Build mode; now informs the Build muscle goal)
 - [docs/medication-reminders-plan.md](docs/medication-reminders-plan.md) — medication logging spec, with the notification wording rules it ships under
 
 ### Audit maintenance
 
-See [the active handoff](docs/audit-handoff.md) for remediation status and verified
-checks, and [privacy/security](docs/privacy-security.md) for current data flows
-and remaining release/privacy work. The scheme runs both the hostless Domain
+[docs/next-audit-scope.md](docs/next-audit-scope.md) is the open backlog;
+[docs/audit-handoff.md](docs/audit-handoff.md) is the historical record of the
+September 2026 remediation. See [privacy/security](docs/privacy-security.md) for
+current data flows and remaining release/privacy work. The scheme runs both the hostless Domain
 suite and a separate persistence/session regression suite.

@@ -276,16 +276,17 @@ private struct RepCounterView: View {
         guard Repos.addSet(ctx, dto) else { return }
         setsLogged += 1
 
-        // The projection's math is per-rep, so it only speaks for rep sets.
-        lastProjection = isMinutes ? nil : EncouragementEngine.repProjection(
-            exercise: exercise,
-            repsLogged: reps,
-            totalCaloriesToday: caloriesTodayBefore,
-            bodyWeightLb: profile.weightLb
+        // Same figure the set was stored with, so the strip matches the toast.
+        lastProjection = EncouragementEngine.repProjection(
+            setCalories: kcal,
+            totalCaloriesToday: caloriesTodayBefore
         )
 
-        // Weekly volume milestone — fires only at defined set counts.
-        if let milestone = EncouragementEngine.workoutSetMessage(
+        // Weekly volume milestone — fires only at defined set counts. Its copy is
+        // hypertrophy volume, so it only speaks for unloaded rep sets: not a minute of
+        // carrying, and not a fixed-load movement counted in one-tap +1 rows.
+        let countsAsVolume = !isMinutes && exercise.loadLb == nil
+        if countsAsVolume, let milestone = EncouragementEngine.workoutSetMessage(
             exercise: exercise,
             repsJustLogged: reps,
             totalSetsThisWeekForMuscle: weekCountAfter

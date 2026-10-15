@@ -1,9 +1,15 @@
 # Encouragement System — Design Plan
 
+> **Historical (written when the app had Build and Circuit modes).** Since Oct 2026
+> the modes are merged: one light-theme app where every surface is the same for
+> everyone, and a per-user goal (Build muscle / Lose weight) that only changes
+> targets. [CLAUDE.md](../CLAUDE.md) is authoritative.
+>
 > Status: Partially implemented. `EncouragementEngine`, `EncouragementMessage`, `ToastCenter` hooks, and `ProjectionBar` exist; notification scheduling and the larger sheet system remain future work.
 >
 > **Stale file names (14 Oct 2026):** `StepsCardioCard` no longer exists — the two
-> steps cards were merged into one mode-aware `Features/Today/StepsCard.swift`.
+> steps cards were merged into `Features/Today/StepsCard.swift`, now one ring card
+> that is the same for everyone.
 > Read every `StepsCardioCard` reference below as that file.
 
 ---

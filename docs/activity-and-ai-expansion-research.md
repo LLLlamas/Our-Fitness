@@ -1,5 +1,10 @@
 # Expanding exercises, activities & food detection — research + proposal
 
+> **Historical (written when the app had Build and Circuit modes).** Since Oct 2026
+> the modes are merged: one light-theme app where every surface is the same for
+> everyone, and a per-user goal (Build muscle / Lose weight) that only changes
+> targets. [CLAUDE.md](../CLAUDE.md) is authoritative.
+>
 > **Stale file names (14 Oct 2026):** `CardioLogCard` was deleted — it had been
 > unreachable, and it estimated every cardio type at 3.5 MET. Logging a finished
 > activity now goes through `LogPastSessionSheet` (Train tab), which writes

@@ -211,6 +211,10 @@ private struct GlareSweep: View {
             }
         }
         .clipped()
+        // Decorative only. The gradient parks at −1.4× the width; left in the
+        // accessibility tree, that off-screen layer inflated every primary button's
+        // frame (VoiceOver focus box, and UI-test taps landed beside the button).
+        .accessibilityHidden(true)
     }
 }
 

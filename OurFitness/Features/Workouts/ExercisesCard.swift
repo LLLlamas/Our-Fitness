@@ -344,8 +344,9 @@ struct ExercisesCard: View {
                 .foregroundStyle(hasValue ? theme.text : theme.dim)
                 .contentTransition(.numericText())
                 .animation(.spring(response: 0.3, dampingFraction: 0.7), value: ex.isIsometric ? holdSec : reps)
-            if ex.isIsometric, reps > 0 {
+            if ex.isIsometric, holdSec > 0, reps > 0 {
                 // A hold row stores reps = 1, so the rep total is the hold count.
+                // (holdSec > 0 skips legacy minute-logged rows on an isometric.)
                 Text("\(reps) hold\(reps == 1 ? "" : "s")")
                     .font(.system(size: 10, design: .monospaced))
                     .foregroundStyle(theme.accent)

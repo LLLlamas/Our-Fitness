@@ -74,13 +74,19 @@ final class EncouragementEngineTests: XCTestCase {
     // MARK: - Projections
 
     func testRepProjection_nonNil_for180lb() {
-        let p = EncouragementEngine.repProjection(
-            exercise: pullUpExercise(), repsLogged: 10,
-            totalCaloriesToday: 0, bodyWeightLb: 180)
+        let setCalories = CalorieEstimator.caloriesForSet(
+            exercise: pullUpExercise(), reps: 10, holdSeconds: nil, bodyWeightLb: 180)
+        let p = EncouragementEngine.repProjection(setCalories: setCalories, totalCaloriesToday: 0)
         XCTAssertNotNil(p)
         XCTAssertTrue(p?.contains("cal") ?? false)
         // No kcal in user-facing copy.
         XCTAssertFalse(p?.contains("kcal") ?? true)
+    }
+
+    func testRepProjection_reportsTheStoredSetFigure() {
+        let p = EncouragementEngine.repProjection(setCalories: 12.4, totalCaloriesToday: 30)
+        XCTAssertEqual(p, "~12 cal this set · 42 cal total today")
+        XCTAssertNil(EncouragementEngine.repProjection(setCalories: 0.6, totalCaloriesToday: 30))
     }
 
     func testStepProjection_zeroRemaining_returnsNil() {

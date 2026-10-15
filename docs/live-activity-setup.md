@@ -156,8 +156,11 @@ works).
   push-token updates), so no APNs / push entitlement is involved.
 - **Theme:** the widget can't read the app's `theme` environment, so the Live
   Activity uses a small static palette (`OurFitnessWidgets/LiveSessionLiveActivity.swift`
-  → `LSPalette`). Adjust there if you want it tuned per mode (would require
-  passing a color hint through `LiveSessionAttributes`).
+  → `LSPalette`): sage `accent` (icons, keyline) and terracotta `accent2` (the
+  running timer), copied by hand from `Theme.standard` in
+  `OurFitness/Services/Theme.swift` because the widget target doesn't compile
+  `Theme`. The app has one palette for everyone, so if `Theme.standard`'s accents
+  change, update `LSPalette` to match.
 - **iOS version SDK:** the ActivityKit API surface (`Activity.request`,
   `ActivityConfiguration`, `DynamicIsland`) compiles only against a recent SDK.
   Build on the same Xcode 26 / iOS 26 SDK the rest of the app uses.

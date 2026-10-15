@@ -1,11 +1,15 @@
 # Our-Fitness — agent guide
 
-Native iOS / SwiftUI app (App Store target). One profile per install. Two modes:
+Native iOS / SwiftUI app (App Store target). One profile per install, one light-theme app (`Theme.standard`) where every surface is the same for everyone.
 
-- **Build** — gain lean mass. Picky-eater hardgainer + basketball. Calorie surplus, hypertrophy (6–12 reps), nut-free allergen lock.
-- **Circuit** — drop weight, fix heart-health markers (cholesterol, BP, blood sugar). Steps + cardio + Pilates + parenting movements; fibre-forward, low-sodium. No allergens.
+Each profile has a **fitness goal** (`FitnessGoal`), switchable in Settings:
 
-> `Mode.circuit` is the Swift symbol; its SwiftData raw value stays `"reset"` for back-compat (needs a schema migration to change). All UI copy says "Circuit".
+- **Build muscle** (`.gain`) — calorie surplus, 1.0 g/lb protein, 8,000 default steps.
+- **Lose weight** (`.lose`) — calorie deficit, 1.1 g/lb protein, 10,000 default steps.
+
+The goal only changes target numbers (`Domain/Targets.swift` → `GoalRules`) and soft ranking/copy tilts. Heart-health targets (fiber floor; sodium, added-sugar, saturated-fat caps) apply to everyone (`Targets.HeartHealth`). There are no modes any more — never show, hide or restyle a card based on the goal.
+
+> Persisted raw values are pinned to the retired mode names: `.gain` = `"build"`, `.lose` = `"reset"` (column `ProfileModel.modeRaw`), and the watch wire key is still `mode`. Bump a schema version before changing either. `ProfileDTO.restrictions` (allergens) is honoured by the meal rankers, but no UI sets it today — there is no allergen lock in the app.
 
 **`CLAUDE.md` is the source of truth** — codebase map, the "Where to touch" routing table, calorie math, design rules, schema, and CI specifics. Read it first; this file is only the non-negotiable guardrails.
 
@@ -16,8 +20,9 @@ Native iOS / SwiftUI app (App Store target). One profile per install. Two modes:
 3. Per-profile `@Query` must predicate-scope (`#Predicate { $0.userId == uid }`) — never `.filter` client-side.
 4. Phone HealthKit access only via `Services/HealthKitService.swift`; the watch owns workout sessions in `OurFitnessWatch/WatchWorkoutSession.swift`. Authorization is only from an explicit Connect flow on the phone or Start-workout action on the watch, never a lifecycle callback. Preserve the correlation-type crash guard: phone read/write sets contain quantity types; the watch additionally requests `HKObjectType.workoutType()` for workout writes.
 5. `.swift` filenames unique in the target; all `@Model` classes live in `Data/PersistenceModels.swift`.
-6. Append-only logs; derived figures (daily/weekly/streak) are never stored. DTOs in `Domain/Models.swift`, `@Model` in `Data/PersistenceModels.swift` with `snapshot` adapters, CRUD in `Data/Repositories/Repositories.swift`.
-7. Never hardcode kcal — `MET × bodyWeightKg × hours` (`Domain/CalorieEstimator.swift`). Food/exercise numbers are real (USDA / reference), never model-invented.
+6. Append-only logs; derived figures (daily/weekly/streak) are never stored. DTOs in `Domain/Models.swift`, `@Model` in `Data/PersistenceModels.swift` with `snapshot` adapters, CRUD in `Data/Repositories/Repositories.swift`. Every `Repos` write returns success; callers `guard` it before dismissing, toasting or celebrating.
+7. Never hardcode kcal — `(MET − 1) × bodyWeightKg × hours`, written once in `Domain/CalorieEstimator.swift` (net of resting; see CLAUDE.md → Calorie math). Food/exercise numbers are real (USDA / reference), never model-invented.
+8. One surface per job — find the existing card/sheet/row and extend it rather than adding a second (CLAUDE.md hard rule 8).
 
 ## Milestone documentation
 
@@ -43,7 +48,7 @@ Everything else: `CLAUDE.md`. Incident history + setup: `docs/`.
 
 ## Usage limits and handoffs
 
-Keep `docs/audit-handoff.md` current during active remediation. Before usage runs
+During active remediation keep a handoff checkpoint current (`docs/audit-handoff.md` is the now-historical 2026-09-14 one; the open backlog is `docs/next-audit-scope.md`). Before usage runs
 low or work pauses, checkpoint completed and incomplete edits, exact next steps,
 validation results, pending decisions, and pre-existing user changes. Update the
 checkpoint after each milestone; never label unbuilt/untested edits complete.

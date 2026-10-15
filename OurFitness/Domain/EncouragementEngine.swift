@@ -103,17 +103,14 @@ public enum EncouragementEngine {
 
     // MARK: - Projections
 
-    /// Inline projection shown below an exercise card after a set. Returns
-    /// nil for trivial estimates so the strip stays meaningful.
+    /// Inline projection shown below the rep counter after a set. Takes the
+    /// figure the set was actually stored with (`CalorieEstimator.caloriesForSet`)
+    /// so the strip can never disagree with the toast or the day's total.
+    /// Returns nil for trivial estimates so the strip stays meaningful.
     public static func repProjection(
-        exercise: ExerciseDTO,
-        repsLogged: Int,
-        totalCaloriesToday: Double,
-        bodyWeightLb: Double
+        setCalories calsBurned: Double,
+        totalCaloriesToday: Double
     ) -> String? {
-        let calsBurned = CalorieEstimator.caloriesForReps(
-            reps: repsLogged, exercise: exercise, bodyWeightLb: bodyWeightLb
-        )
         guard calsBurned > 1.0 else { return nil }
         return "~\(Int(calsBurned)) cal this set · \(Int(totalCaloriesToday + calsBurned)) cal total today"
     }

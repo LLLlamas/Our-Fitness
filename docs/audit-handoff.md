@@ -1,5 +1,10 @@
 # Audit remediation handoff — 2026-09-14
 
+> **Historical (written when the app had Build and Circuit modes).** Since Oct 2026
+> the modes are merged: one light-theme app where every surface is the same for
+> everyone, and a per-user goal (Build muscle / Lose weight) that only changes
+> targets. [CLAUDE.md](../CLAUDE.md) is authoritative.
+>
 > **HISTORICAL RECORD — superseded 14 Oct 2026.** Everything below describes the
 > state of a session a month ago, including a TestFlight release that is no
 > longer the current one. It is kept because its decisions explain how the
