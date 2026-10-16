@@ -359,6 +359,7 @@ Testing convention going forward: simulator checks run on the iPhone 17 Pro (`-d
 - [docs/live-activity-setup.md](docs/live-activity-setup.md) — widget signing checklist
 - [docs/watch-app-setup.md](docs/watch-app-setup.md) — watch companion app signing checklist
 - [docs/medication-reminders-plan.md](docs/medication-reminders-plan.md) — medication logging spec (the feature as shipped; safety wording rules in §12/§16 are binding)
+- [docs/progress-tracking-plan.md](docs/progress-tracking-plan.md) — PLAN (not built): strength/muscle progress, "last time / try" targets, like-for-like PRs, per-muscle weekly sets, plateau nudges; lists the data fixes it needs first (stamp fixed loads on sets, `Repos.updateExercise`, actual hold time, `StrengthProgress.gainLb` never negative). Its research numbers are unverified — check before shipping copy
 - [docs/health-data-audit.md](docs/health-data-audit.md) — **read before changing any health/fitness number.** What was wrong and fixed, what is verified correct, and the open sourcing questions that must not be "fixed" without checking the actual guideline
 
 > `docs/encouragement-system-plan.md`, `health-tracking-ui-plan.md`, and `activity-and-ai-expansion-research.md` are dated design specs / research — forward-looking or only partly shipped. This file and the code are authoritative when they disagree.
