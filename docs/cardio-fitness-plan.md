@@ -29,6 +29,8 @@ Source: [`HKQuantityTypeIdentifier.vo2Max`](https://developer.apple.com/document
 - It is a **sub-maximal prediction** from the heart-rate response. People on heart-rate-lowering medication can set a switch in the Health app for a better estimate.
 - **Accuracy (search summaries, not opened):** validation studies found a mean absolute percentage error around 13–16% against lab tests, with poor test–retest agreement in one ([Series 7 study](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11325102/), [2025 study](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12080799/)). So the copy says a change of a point or two is noise and the multi-month trend is what counts.
 
+- **Which watches (search summaries of Apple's white paper and compatibility table, not opened):** the estimate needs a **Series 3 or later** (SE and Ultra too); the original, Series 1 and Series 2 don't make one. Our companion watch app targets **watchOS 10.0**, which Apple lists as Series 4 or later (Series 3 tops out at watchOS 8.8.1). VO₂ max reaches the phone app through Apple Health, so **the companion app is not needed for it**.
+
 Other Health types worth knowing (Apple docs, opened): `heartRateRecoveryOneMinute` (iOS 16+, drop in heart rate one minute after a workout) and `walkingHeartRateAverage` (iOS 11+; Apple **rewrites today's and yesterday's samples** as the day goes on, so only read days at least 2 days old).
 
 ## 3. Three kinds of signal
@@ -73,7 +75,7 @@ Spell out acronyms; "VO₂ max" with a short plain gloss ("how well your body us
 
 ## 7. Open questions (need the owner)
 
-1. **Do you have an Apple Watch?** Without one there is no VO₂ max (an iPhone cannot estimate it). The plan then reduces to cardio minutes + resting heart rate.
+1. **Which watch exactly?** (iPhone Watch app → General → About → Model Name.) *Series 4 or later:* everything in this plan works, companion app included. *Series 3:* VO₂ max works through Health, but the companion app can't install (needs watchOS 10) and whether it pairs with your iPhone's iOS depends on Apple's [compatibility table](https://support.apple.com/HT213653). *Series 2 or older:* no VO₂ max; the plan reduces to cardio minutes plus whatever heart-rate data Health has.
 2. **"Felt dizzy" note:** an optional one-tap flag at the end of a session, saved with the session, so the history can be shown to a clinician. Not in the plan unless you want it; it must never be read as a medical signal.
 3. **Cardio minutes: Progress only, or also on StepsCard?** Recommended: Progress only.
 4. **Heart-rate recovery and walking heart rate:** add later as the "response" tier, or skip?
