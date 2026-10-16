@@ -9,6 +9,9 @@
 > 2. **All history, not this week.** Every comparison and "last time" reads the exercise's full history, not the current Monday week.
 > 3. **Show decreases.** Comparisons may say "fewer reps than Tue" or "than last week"; that's information, not failure.
 > 4. **Fixed loads are editable.** The baby's weight (any fixed-load exercise) can be updated, and history keeps the weight each rep was done at.
+> 5. **Both comparison views:** "vs last time" and "vs same day last week" are shown side by side.
+> 6. **Progress tracker = reps this week**, with notes based on the amount (§3.5).
+> 7. **Exact weight matches** — 50 lb and 52.5 lb are different weights; no rounding buckets.
 >
 > **Evidence caveat.** The research behind §7 could not open primary papers (journal
 > hosts were unreachable from the research sandbox). Figures are from search summaries or
@@ -42,7 +45,7 @@ Plank       · Tue Oct 14   →  longest hold 50 s · total 2 min 10 s
 Carried Baby· Tue Oct 14   →  30 lb × 12 min
 ```
 
-- **Weight key:** the row's `weightLb`, rounded to the nearest 0.5 lb so 49.99 and 50 match; nil means "no weight" (bodyweight).
+- **Weight key:** the row's exact `weightLb` (owner decision: exact matches, no rounding buckets); nil means "no weight" (bodyweight). Entry is typed, so to keep exact matching honest the weight field pre-fills the last weight used (§3.2) and the history view lists each distinct weight on its own line.
 - **Day** = `Dates.dayKey`; **week** = Monday ISO week (`Dates.startOfISOWeek`), the app-wide definitions.
 - Holds and duration exercises have no reps; their unit is seconds/minutes (longest hold and total time for holds, total minutes for duration). The same day/week folding applies.
 - Everything is **derived on read** from the append-only rows, so editing or back-filling a row updates every comparison automatically. Nothing new is stored except the per-row load (§3.1).
@@ -76,8 +79,16 @@ RepHistory.compare(_ a: Tally, to b: Tally) -> Comparison
 
 In `RepCounterView` (and the hold timer), under the exercise name:
 
-- **`Last time · Tue Oct 14: 30 reps @ 50 lb`**: the most recent earlier day this exercise was done, from full history, at the weight now in the field. If that weight wasn't done last time, show the last day's top line plus the last day that weight *was* done ("50 lb: 26 reps on Oct 2").
-- **Running tally today** (in the existing `ProjectionBar` strip): **`Today 18 / 30 reps @ 50 lb`**. After each log: "12 to match Tuesday", then "+2 vs Tuesday" once passed.
+Two reference lines, both from full history, at the weight now in the field:
+
+```
+Last time · Tue Oct 14      30 reps @ 50 lb
+Last week · Wed Oct 8       26 reps @ 50 lb     (same weekday, 7 days ago)
+```
+
+- **Last time** = the most recent earlier day this exercise was done. **Last week** = the same weekday one week ago; if the exercise wasn't done that day, the line names the nearest day in that ISO week it was ("Last week · Thu Oct 9"), or reads "Last week · not logged".
+- If the weight in the field wasn't done on a reference day, that line shows the day's top weight instead plus the last day this weight *was* done ("50 lb: 26 reps on Oct 2").
+- **Running tally today** (in the existing `ProjectionBar` strip): **`Today 18 reps @ 50 lb · 12 to match last time · +2 vs last week`** — each delta flips from "N to match" to "+N" once passed.
 - The weight field pre-fills from the **last weight used for this exercise, ever** (not this week). The wheel keeps its current behaviour. Typing still wins.
 - Bodyweight: the same without the weight ("Last time: 42 reps"). Holds: "Last time: longest 50 s". Fixed load: "Last time: 24 reps @ 30 lb".
 
@@ -91,10 +102,10 @@ The per-exercise progress view is a `StatDetailSheet` host (never a bespoke shee
 
 Contents:
 - **Chart:** reps per day (or per week, a toggle) over all history. One series per weight, so the line steps when the weight changes (e.g. the baby gets heavier). Holds chart the longest hold; duration charts minutes.
-- **Compare:** a "Compare with" picker, defaulting to **last time**, with **last week** and **any day or week from history** (the days actually trained, like `MealHistoryList` lists only logged days). Rows read per weight:
-  - `50 lb   34 reps   +4 vs Tue Oct 14`
-  - `55 lb    8 reps   new weight`
-  - `45 lb    —        0 vs 12 on Oct 2`
+- **Compare:** two columns by default — **vs last time** and **vs same day last week** — plus a "Compare with" picker that swaps the second column for **any day or week from history** (the days actually trained, like `MealHistoryList` lists only logged days). Rows read per weight:
+  - `50 lb   34 reps   +4 vs last time (Tue)   +8 vs last week (Wed)`
+  - `55 lb    8 reps   new weight              new weight`
+  - `45 lb    —        — (12 on Oct 2)         —`
   - Decreases print plainly, "4 fewer than Tue Oct 14". Neutral colour, no red, no warning icon.
 - **Bests (all-time, per weight):** most reps in a day at each weight, heaviest weight ever, longest hold, most minutes. Derived on read.
 - **Day list:** every day trained, newest first: `Tue Oct 14 · 50 lb × 30 · 55 lb × 8`. Tapping a day opens `SetHistorySheet` on that day (the ONE editor), the same as `TrainingHistorySheet` rows do today.
@@ -116,7 +127,14 @@ Contents:
 
 ### 3.5 Replace the set-based pieces
 
-- **Progress › Training tracker:** "sets this week" (row count, inflated by +1 taps) becomes **reps this week** (sum of `reps` across rep exercises; holds/duration excluded), trend chip "+N vs last wk". This is one change in `TrainingHistory.setsInWeek` / `weeklySetCounts` → reps. The tracker title changes, while its persisted `StatKind` case keeps its raw value.
+- **Progress › Training tracker:** "sets this week" (row count, inflated by +1 taps) becomes **reps this week** (sum of `reps` across rep exercises; holds/duration excluded), trend chip "+N vs last wk". This is one change in `TrainingHistory.setsInWeek` / `weeklySetCounts` → reps. The tracker title changes, while its persisted `StatKind` case keeps its raw value. Its detail sheet (the existing `trainingVolumeDetail` `StatDetailSheet`) adds the per-exercise breakdown for the week.
+- **Notes based on the amount.** The tracker shows at most one note, chosen from the user's OWN history (honest, because it's arithmetic on their logs):
+  - *Approaching:* "40 reps to match last week" (shown once this week reaches ≥ 75% of last week's total).
+  - *Passed:* "+35 reps vs last week".
+  - *Best:* "Most reps in a week yet" (needs ≥ 3 earlier weeks with logs).
+  - *Back:* first logged week after a gap → "First week back — this is your new baseline", no comparison.
+  - The same note fires as one toast the first time it becomes true each week (AppStorage once-per-week key), after a successful write.
+- **Hypertrophy note — in the ⓘ, not as a claim on the number.** Research measures muscle-building work in **hard sets per muscle per week** (about 10+ is linked with more growth, with diminishing returns — Schoenfeld 2017; ACSM 2026 per secondary summaries, §7), across a wide rep range (~5–30) when sets are close to failure. A weekly *reps* total adds different muscles and effort levels together, so it **cannot** say whether a muscle got "enough". The ⓘ says so plainly and offers a rough, labelled translation: *"about 10 hard sets of 8–12 reps is roughly 80–120 reps per muscle per week"* — a derived rule of thumb, not a sourced threshold, and only shown per exercise in the detail sheet (one exercise ≈ one main muscle group), never as a toast or a green/red judgement. Verify the 10-sets figure against the papers before shipping, per the evidence caveat.
 - **Delete `workoutSetMessage`** and the rep counter's per-exercise weekly count (`setsThisWeekForMuscle`). The running tally in §3.2 replaces that feedback.
 - **`StallDetector`:** keep the gap nudge as is. A gentle "steady" nudge can be added later: an exercise done on ≥ 6 days over ≥ 4 weeks with no new per-weight best in 3 weeks. It never says "plateau" and never prescribes.
 
@@ -144,9 +162,10 @@ Contents:
 ## 6. Tests (hostless, pinned `now`, e.g. `2026-05-27T12:00:00Z`)
 
 - `RepHistoryTests`:
-  - Day/week folding per weight (0.5 lb rounding, nil = bodyweight).
+  - Day/week folding per exact weight (50 vs 52.5 stay separate; nil = bodyweight).
   - One-tap rows and rep-counter rows sum the same.
-  - Comparison deltas both ways, plus "new weight" / "not done".
+  - Comparison deltas both ways, plus "new weight" / "not done"; "same day last week" falls back to the nearest day in that ISO week, else "not logged".
+  - Weekly-reps notes: 75% approaching edge, passed, best-week guard (≥ 3 earlier weeks), first week back.
   - Holds (longest + total) and duration.
   - ISO week edges (Sunday night vs Monday).
 - `StrengthProgressTests`: `gainLb` can go negative.
@@ -175,8 +194,6 @@ How competitors show the same things (help-centre summaries):
 
 Reps-at-weight comparison is a familiar pattern. Our version drops set structure entirely and keeps the full history one tap away.
 
-## 8. Open questions
+## 8. Decisions log
 
-1. **Compare default:** "last time" (recommended) or "same day last week"?
-2. **Training tracker:** switch "sets this week" to "reps this week" (recommended, §3.5), or hide it?
-3. **Weight rounding:** 0.5 lb buckets (recommended) or exact match?
+All open questions are resolved (Oct 2026): both comparison views; reps-this-week tracker with own-history notes and an ⓘ hypertrophy explainer; exact weight matches. Next step when building: §3.1 data fixes, then §3.2.
