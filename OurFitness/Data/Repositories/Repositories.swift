@@ -250,6 +250,95 @@ public enum Repos {
         return dto
     }
 
+    /// Largest fixed load `updateExercise` accepts. Not a medical limit — it
+    /// exists so a fat-fingered 3000 is refused rather than stored.
+    public static let maxFixedLoadLb: Double = 1000
+
+    /// Edit an exercise's name and/or its fixed load (the baby grew). Pass only
+    /// what changed. Returns false, writing nothing, when the exercise is gone, the
+    /// name is blank after trimming, or `loadLb` is asked of an exercise that has
+    /// no fixed load, or is not a finite number in (0, `maxFixedLoadLb`]. Passing
+    /// neither is a successful no-op.
+    ///
+    /// **A new load applies only to rows logged afterwards.** Rows store the
+    /// load they were done at (`weightLb`), but one that predates the stamping
+    /// still has nil there and means "the exercise's load". So, in the SAME
+    /// transaction and before the new value lands, every nil-weight non-hold row
+    /// of this exercise is stamped with the OLD load — history is never re-read at
+    /// the new weight, and a failed save rolls both back together.
+    @discardableResult
+    public static func updateExercise(
+        _ ctx: ModelContext, id: String, name: String? = nil, loadLb newLoad: Double? = nil
+    ) -> Bool {
+        RepositoryWrite.perform(ctx) {
+            let exDesc = FetchDescriptor<ExerciseModel>(predicate: #Predicate { $0.id == id })
+            guard let model = try ctx.fetch(exDesc).first else { throw RepositoryWriteError.missingRecord }
+
+            // Validate everything before touching anything.
+            var trimmedName: String?
+            if let name {
+                let t = name.trimmingCharacters(in: .whitespacesAndNewlines)
+                guard !t.isEmpty else { throw ExerciseEditError.invalid }
+                trimmedName = t
+            }
+            if let newLoad {
+                guard model.loadLb != nil, newLoad.isFinite, newLoad > 0, newLoad <= maxFixedLoadLb
+                else { throw ExerciseEditError.invalid }
+            }
+
+            if let oldLoad = model.loadLb, let newLoad, newLoad != oldLoad {
+                try stampUnweightedRows(ctx, exerciseId: id, loadLb: oldLoad)
+                model.loadLb = newLoad
+            }
+            if let trimmedName, trimmedName != model.name { model.name = trimmedName }
+        }
+    }
+
+    private enum ExerciseEditError: Error { case invalid }
+
+    /// Stamps `loadLb` onto every non-hold row of the exercise that has no weight
+    /// yet. Call inside a `RepositoryWrite.perform` block — it does not save.
+    private static func stampUnweightedRows(_ ctx: ModelContext, exerciseId: String, loadLb: Double) throws {
+        let setDesc = FetchDescriptor<WorkoutSetModel>(predicate: #Predicate { $0.exerciseId == exerciseId })
+        for row in try ctx.fetch(setDesc) where row.weightLb == nil && row.holdSeconds == nil {
+            row.weightLb = loadLb
+        }
+    }
+
+    /// One-time launch backfill (called by `Seeder.seedAll`, behind a version
+    /// flag): stamps every non-hold, nil-weight row of every fixed-load exercise
+    /// with that exercise's current `loadLb`. Correct because, until
+    /// `updateExercise`, a load could not change. Idempotent on its own (a stamped
+    /// row is skipped), but the Seeder flag is what stops it ever running again
+    /// after a load has been edited. Rows of exercises with no `loadLb`, and holds,
+    /// are never touched.
+    @discardableResult
+    static func backfillFixedLoadWeights(_ ctx: ModelContext) -> Bool {
+        RepositoryWrite.perform(ctx) {
+            for exercise in try ctx.fetch(FetchDescriptor<ExerciseModel>()) {
+                guard let load = exercise.loadLb else { continue }
+                try stampUnweightedRows(ctx, exerciseId: exercise.id, loadLb: load)
+            }
+        }
+    }
+
+    /// UserDefaults flag for `backfillFixedLoadWeightsOnce`. Bump the suffix only
+    /// to deliberately re-run a corrected backfill.
+    static let fixedLoadBackfillKey = "backfill.fixedLoadWeights.v1"
+
+    /// What `Seeder.seedAll` calls. Runs `backfillFixedLoadWeights` once per
+    /// install: until `updateExercise` a load could not change, so stamping nil
+    /// rows with the current load was right then and is wrong afterwards. The flag
+    /// is what guarantees it never re-stamps anything at an edited load. Not set
+    /// when the save fails, so the next launch retries.
+    @discardableResult
+    static func backfillFixedLoadWeightsOnce(_ ctx: ModelContext, defaults: UserDefaults = .standard) -> Bool {
+        guard !defaults.bool(forKey: fixedLoadBackfillKey) else { return true }
+        guard backfillFixedLoadWeights(ctx) else { return false }
+        defaults.set(true, forKey: fixedLoadBackfillKey)
+        return true
+    }
+
     /// Deletes an exercise and cascade-deletes every set logged against it, so
     /// no orphaned WorkoutSetModel rows linger (they reference exerciseId by string).
     @discardableResult
@@ -367,6 +456,15 @@ public enum Repos {
         return (try? ctx.fetch(desc).map(\.snapshot)) ?? []
     }
 
+    /// This week vs last week reps (and the one own-history note) from the profile's
+    /// WHOLE set history, read fresh from the store so a set just written by
+    /// `addSet` is already in it. Used by the once-a-week toast after a logged set.
+    public static func weeklyReps(_ ctx: ModelContext, userId: UUID, now: Date = Date()) -> RepHistory.WeeklyReps {
+        let desc = FetchDescriptor<WorkoutSetModel>(predicate: #Predicate { $0.userId == userId })
+        let sets = (try? ctx.fetch(desc).map(\.snapshot)) ?? []
+        return RepHistory.weeklyReps(sets: sets, exercises: exercises(ctx, forProfile: userId), now: now)
+    }
+
     @discardableResult
     public static func deleteSet(_ ctx: ModelContext, id: UUID) -> Bool {
         RepositoryWrite.perform(ctx) {
@@ -412,13 +510,19 @@ public enum Repos {
 
             let newReps = max(1, reps)
             let newHold = holdSeconds.map { max(1, $0) }
+            // A fixed-load row keeps the load it was done at: the edit's weight
+            // if it gave one, else the row's stamped weight, else (a row from
+            // before stamping) the exercise's load. Priced at THAT load, never
+            // the exercise's current one — the baby may have grown since.
+            let rowLoad = exercise.fixedLoadLb(forRowWeight: weightLb ?? target.weightLb, holdSeconds: newHold)
             target.reps = newReps
-            target.weightLb = weightLb
+            target.weightLb = rowLoad ?? weightLb
             target.holdSeconds = newHold
             target.caloriesEst = setCaloriesEstimate(
                 exercise: exercise,
                 reps: newReps, holdSeconds: newHold,
-                bodyWeightLb: bodyWeightLb
+                bodyWeightLb: bodyWeightLb,
+                loadLb: rowLoad
             )
         }
     }
@@ -430,11 +534,16 @@ public enum Repos {
     /// between what the user is shown and what is written. Delegates to
     /// `CalorieEstimator.caloriesForSet`, which every logging surface also uses,
     /// so an edit lands on the number the original log would have produced.
+    ///
+    /// `loadLb` is the load the row was done at, for a fixed-load exercise whose
+    /// current load may have changed since (see `updateSet`); nil = the exercise's.
     public static func setCaloriesEstimate(
-        exercise: ExerciseDTO, reps: Int, holdSeconds: Int?, bodyWeightLb: Double
+        exercise: ExerciseDTO, reps: Int, holdSeconds: Int?, bodyWeightLb: Double,
+        loadLb: Double? = nil
     ) -> Double {
         CalorieEstimator.caloriesForSet(
-            exercise: exercise, reps: reps, holdSeconds: holdSeconds, bodyWeightLb: bodyWeightLb
+            exercise: exercise, reps: reps, holdSeconds: holdSeconds,
+            bodyWeightLb: bodyWeightLb, loadLb: loadLb
         )
     }
 

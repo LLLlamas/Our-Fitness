@@ -431,23 +431,41 @@ struct ExercisesCard: View {
     private func quickLog(_ exercise: ExerciseDTO) {
         // `reps` carries minutes for a duration exercise.
         let amount = 1
+        // A fixed-load movement stamps the load it is done at, so a later edit
+        // of the exercise's weight never re-reads this rep (nil for the rest).
+        let load = exercise.fixedLoadLb(forRowWeight: nil, holdSeconds: nil)
         let cal = Repos.setCaloriesEstimate(
             exercise: exercise, reps: amount, holdSeconds: nil,
-            bodyWeightLb: profile.weightLb
+            bodyWeightLb: profile.weightLb, loadLb: load
         )
         let dto = WorkoutSetDTO(
             userId: profile.id,
             exerciseId: exercise.id,
-            weightLb: nil,
+            weightLb: load,
             reps: amount,
             caloriesEst: cal
         )
+        // The exercise's whole history BEFORE this row (the card's own query only
+        // holds today + yesterday), so the new-best check doesn't depend on refresh timing.
+        let rowsBefore = Repos.setHistory(ctx, userId: profile.id, exerciseId: exercise.id, limit: 100_000)
         guard Repos.addSet(ctx, dto) else { return }
         quickLoggedSetIds[exercise.id, default: []].append(dto.id)
         Task { @MainActor in
             ringGlow = true
             try? await Task.sleep(nanoseconds: 450_000_000)
             ringGlow = false
+        }
+
+        // One toast: a new best, else the weekly-reps note (once per kind per week),
+        // else the plain "+1" confirmation.
+        let system = unitSystem
+        if let best = RepHistory.newBest(after: dto, exercise: exercise, rows: rowsBefore) {
+            toasts.newBest(best) { ProgressFormat.weight($0, system: system) }
+            return
+        }
+        if RepHistory.isRepExercise(exercise),
+           toasts.weeklyReps(Repos.weeklyReps(ctx, userId: profile.id), profileId: profile.id) {
+            return
         }
 
         let unit = exercise.kind == .duration

@@ -11,7 +11,7 @@ public enum StrengthProgress {
 
     /// Highest rep count an estimate is taken from.
     public static let maxReps = 12
-    /// "Gain" compares today's best with the best set from before this window.
+    /// "Gain" compares the best estimate inside this window with the best from before it.
     public static let windowDays = 28
 
     public struct Lift: Equatable, Identifiable, Sendable {
@@ -25,10 +25,18 @@ public enum StrengthProgress {
         public let bestReps: Int
         /// Best estimate from before the window; nil if the lift is newer than that or wasn't trained inside the window.
         public let previousMaxLb: Double?
+        /// Best estimate from inside the window; nil when the lift wasn't trained in it.
+        public let recentMaxLb: Double?
         public let lastTrained: Date
 
-        /// Change in the estimate over the window; nil when there is nothing older to compare to.
-        public var gainLb: Double? { previousMaxLb.map { estimatedMaxLb - $0 } }
+        /// Change over the window: the best estimate inside it minus the best from
+        /// before it. Negative when the recent best sits below the older one — a
+        /// decline reads as a decline, not "no change". Nil when there is nothing
+        /// older to compare to or nothing recent (newer lift / not trained in the window).
+        public var gainLb: Double? {
+            guard let previous = previousMaxLb, let recent = recentMaxLb else { return nil }
+            return recent - previous
+        }
     }
 
     public static func estimatedOneRepMax(weightLb: Double, reps: Int) -> Double {
@@ -60,12 +68,13 @@ public enum StrengthProgress {
                   let best = rows.max(by: { est($0) < est($1) }),
                   let last = rows.map(\.timestamp).max() else { return nil }
             // Nothing trained inside the window → no "change over 4 weeks" to claim.
-            let older = last >= cutoff ? rows.filter { $0.timestamp < cutoff }.map(est).max() : nil
+            let recent = rows.filter { $0.timestamp >= cutoff }.map(est).max()
+            let older = recent == nil ? nil : rows.filter { $0.timestamp < cutoff }.map(est).max()
             return Lift(
                 exerciseId: id, name: ex.name,
                 estimatedMaxLb: est(best),
                 bestWeightLb: best.weightLb ?? 0, bestReps: best.reps,
-                previousMaxLb: older, lastTrained: last
+                previousMaxLb: older, recentMaxLb: recent, lastTrained: last
             )
         }
         .sorted { ($0.lastTrained, $1.name) > ($1.lastTrained, $0.name) }

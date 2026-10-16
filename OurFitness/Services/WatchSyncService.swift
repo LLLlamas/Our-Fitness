@@ -194,7 +194,8 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
     /// reps field carries minutes), matching the card's per-row count exactly.
     /// Only exercises a single tap can record CORRECTLY.
     ///
-    /// `.logQuickSet` writes `weightLb: nil` and `reps: amount` — there is no
+    /// `.logQuickSet` writes `reps: amount` and no typed weight (only a fixed
+    /// exercise's own `loadLb`, stamped phone-side) — there is no
     /// weight input on the wrist and no hold timer. So:
     ///   • lifts that track a per-set weight (`ExerciseDTO.tracksPerSetWeight`:
     ///     compound/isolation rep work with no fixed load) are excluded. A
@@ -408,12 +409,17 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
             // (duration bills by the minute, rep exercises by the rep), so a
             // wrist log and a later phone edit store the same figure. Computed
             // here from the stored exercise, never sent over the wire.
+            // A fixed-load movement stamps the load it is done at (resolved here
+            // from the stored exercise, not the wire), so editing the exercise's
+            // weight later never re-reads a wrist log.
+            let load = exercise.fixedLoadLb(forRowWeight: nil, holdSeconds: nil)
             let cal = CalorieEstimator.caloriesForSet(
-                exercise: exercise, reps: amount, holdSeconds: nil, bodyWeightLb: profile.weightLb)
+                exercise: exercise, reps: amount, holdSeconds: nil,
+                bodyWeightLb: profile.weightLb, loadLb: load)
             // `date` (not now) so an action queued offline lands on the day it
             // was taken — which is also the day the watch already counted it on.
             guard Repos.addSet(ctx, WorkoutSetDTO(
-                userId: profile.id, exerciseId: exercise.id, weightLb: nil,
+                userId: profile.id, exerciseId: exercise.id, weightLb: load,
                 reps: amount, timestamp: date, caloriesEst: cal
             )) else { return }
             pushSnapshot(ctx, userId: profile.id)

@@ -91,9 +91,31 @@ public final class ToastCenter: ObservableObject {
         show(EncouragementEngine.stepMilestoneMessage(steps: steps), accent: .win)
     }
 
-    // Workout volume milestone — accent follows the message's tone
-    public func workoutMilestone(_ msg: EncouragementMessage) {
-        show(msg, accent: msg.tone == .impressed ? .win : .ok)
+    // Personal best — more reps (or minutes) at a weight, a heavier weight than ever,
+    // a longer hold. The engine owns the copy; the caller supplies unit formatting
+    // (`formatWeight` returns the weight WITH its unit). Callers fire it instead of
+    // the plain "Set saved" toast, only after a successful write, never for an edit
+    // or back-fill.
+    public func newBest(_ best: RepHistory.NewBest, formatWeight: (Double) -> String) {
+        show(EncouragementEngine.newBestMessage(best, formatWeight: formatWeight), accent: .win, for: 3.0)
+    }
+
+    // Weekly-reps note (approaching / passed / best week / first week back) — at most
+    // once per kind per ISO week, remembered in `weeklyRepsNote.<profile uuid>`
+    // (week key + kinds already shown). Returns whether it showed, so the caller
+    // falls back to its plain confirmation; the stored value advances only on a
+    // real toast. Callers fire it only after a successful write and never for a
+    // new best (that toast takes priority), an edit or a back-fill.
+    @discardableResult
+    public func weeklyReps(_ weekly: RepHistory.WeeklyReps, profileId: UUID, now: Date = Date(),
+                           defaults: UserDefaults = .standard) -> Bool {
+        let key = "weeklyRepsNote.\(profileId.uuidString)"
+        guard let msg = EncouragementEngine.weeklyRepsMessage(weekly),
+              let next = RepHistory.weeklyNoteAnnouncement(weekly, now: now, stored: defaults.string(forKey: key) ?? "")
+        else { return false }
+        defaults.set(next, forKey: key)
+        show(msg, accent: .win, for: 3.0)
+        return true
     }
 
     // Meal-logging streak milestone — self-gating: only shows at a milestone day.
