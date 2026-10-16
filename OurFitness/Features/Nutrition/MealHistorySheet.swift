@@ -134,6 +134,10 @@ struct MealHistorySheet: View {
             .scrollHapticTicks()
         }
         .presentationDetents([.large])
-        .presentationBackground(theme.bg)
+        // Every row here is a past day, so the sheet wears the same tint as the
+        // Meals tab does when one is selected.
+        .presentationBackground {
+            ZStack { theme.bg; theme.accent2.opacity(0.12) }
+        }
     }
 }

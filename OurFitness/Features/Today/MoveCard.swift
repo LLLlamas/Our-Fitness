@@ -4,17 +4,19 @@
 // burn figure here is activity-only — DailyBurn/CalorieEstimator subtract the
 // resting MET — which is what makes it comparable with Apple's active energy.
 //
-// Steps are NOT shown here. `StepsCard` is the one steps surface on Today — it
-// owns the count, the goal picker, the info sheet, the weekly strip and the
-// milestone toasts. This card only consumes the step count as burn input.
+// Steps sit at the TOP of this card: the caller passes the one `StepsCard`
+// (embedded, no chrome) through the `steps` slot. `StepsCard` still owns the
+// count, the goal picker, the info sheet, the weekly strip and the milestone
+// toasts; this card's own columns only consume the step count as burn input.
 
 import SwiftUI
 import SwiftData
 
-struct MoveCard: View {
+struct MoveCard<Steps: View>: View {
     let profile: ProfileDTO
     @ObservedObject var health: HealthKitService
     let refreshGeneration: Int
+    let steps: Steps
 
     @Environment(\.theme) private var theme
     @Environment(\.scenePhase) private var scenePhase
@@ -51,10 +53,12 @@ struct MoveCard: View {
 
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
-    init(profile: ProfileDTO, health: HealthKitService, refreshGeneration: Int = 0) {
+    init(profile: ProfileDTO, health: HealthKitService, refreshGeneration: Int = 0,
+         @ViewBuilder steps: () -> Steps) {
         self.profile = profile
         self._health = ObservedObject(wrappedValue: health)
         self.refreshGeneration = refreshGeneration
+        self.steps = steps()
         let uid = profile.id
         let todayKey = Dates.dayKey()
         let dayStart = Calendar.current.startOfDay(for: Date())
@@ -129,6 +133,10 @@ struct MoveCard: View {
                     .accessibilityLabel("About the Move estimate")
                     Spacer()
                 }
+
+                steps
+
+                Divider().background(theme.line)
 
                 // Row 1: Apple Total · Our Estimate · Training
                 HStack(alignment: .top, spacing: 0) {

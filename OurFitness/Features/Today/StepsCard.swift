@@ -1,4 +1,5 @@
-// Steps card — the one steps surface. Renders on Today only.
+// Steps card — the one steps surface. Renders on Today only, embedded at the
+// top of `MoveCard` once Health is connected (standalone before that).
 //
 // ProgressRing + projection + pace-vs-yesterday + 7-day strip + this-week
 // active energy / exercise minutes, a weekly streak chip, and milestone toasts.
@@ -33,6 +34,8 @@ struct StepsCard: View {
     /// nil = Health gave us nothing for the window; the stat hides rather than reading 0.
     let activeEnergyKcalThisWeek: Int?
     let exerciseMinutesThisWeek: Int?
+    /// Inside `MoveCard`: no card chrome of its own.
+    let embedded: Bool
 
     @Environment(\.theme) private var theme
     @EnvironmentObject private var toasts: ToastCenter
@@ -54,7 +57,8 @@ struct StepsCard: View {
         intradayToday: [Int] = [],
         intradayYesterday: [Int] = [],
         activeEnergyKcalThisWeek: Int? = nil,
-        exerciseMinutesThisWeek: Int? = nil
+        exerciseMinutesThisWeek: Int? = nil,
+        embedded: Bool = false
     ) {
         self.profile = profile
         self.steps = steps
@@ -64,6 +68,7 @@ struct StepsCard: View {
         self.intradayYesterday = intradayYesterday
         self.activeEnergyKcalThisWeek = activeEnergyKcalThisWeek
         self.exerciseMinutesThisWeek = exerciseMinutesThisWeek
+        self.embedded = embedded
         let uid = profile.id
         _customGoalRaw = AppStorage(wrappedValue: 0, StepsGoalPrefs.dailyKey(uid))
         _weeklyDaysGoalRaw = AppStorage(
@@ -87,29 +92,38 @@ struct StepsCard: View {
     /// Nothing from Health for today — the count reads as a dash, not a 0.
     private var hasData: Bool { profile.healthGranted && steps > 0 }
 
+    @ViewBuilder
+    private var content: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(alignment: .firstTextBaseline) {
+                Text(embedded ? "Steps" : "Steps & Cardio")
+                    .font(.system(size: 22, weight: .regular))
+                    .foregroundStyle(theme.text)
+                infoButton
+                Spacer()
+                StreakChip(weeks: streakWeeks, tint: theme.accent)
+            }
+
+            ringRow
+
+            if hasData, let projection = EncouragementEngine.stepProjection(
+                stepsToday: steps, goalSteps: goal, bodyWeightLb: profile.weightLb
+            ) {
+                ProjectionBar(text: projection)
+            }
+
+            paceLine
+            weeklyStrip
+            secondaryStats
+        }
+    }
+
     var body: some View {
-        Card(padding: 16) {
-            VStack(alignment: .leading, spacing: 16) {
-                HStack(alignment: .firstTextBaseline) {
-                    Text("Steps & Cardio")
-                        .font(.system(size: 22, weight: .regular))
-                        .foregroundStyle(theme.text)
-                    infoButton
-                    Spacer()
-                    StreakChip(weeks: streakWeeks, tint: theme.accent)
-                }
-
-                ringRow
-
-                if hasData, let projection = EncouragementEngine.stepProjection(
-                    stepsToday: steps, goalSteps: goal, bodyWeightLb: profile.weightLb
-                ) {
-                    ProjectionBar(text: projection)
-                }
-
-                paceLine
-                weeklyStrip
-                secondaryStats
+        Group {
+            if embedded {
+                content
+            } else {
+                Card(padding: 16) { content }
             }
         }
         .onChange(of: steps) { oldValue, newValue in

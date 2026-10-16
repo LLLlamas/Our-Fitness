@@ -185,7 +185,7 @@ private struct RepCounterView: View {
     @ViewBuilder
     private var weightField: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Weight lifted (\(Units.weightUnit(unitSystem)))")
+            Text("Weight (\(Units.weightUnit(unitSystem))) · optional")
                 .font(.caption).tracking(2).foregroundStyle(theme.dim)
             TextField("", text: $weightStr)
                 .keyboardType(.decimalPad)
@@ -195,6 +195,9 @@ private struct RepCounterView: View {
                 .foregroundStyle(theme.text)
                 .font(.system(.title3, design: .monospaced))
                 .focused($weightFocused)
+            Text("Dumbbells: the weight of one, not the pair. One-arm move? Log each arm as its own set. Leave blank for bodyweight.")
+                .font(.caption).foregroundStyle(theme.dim)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 

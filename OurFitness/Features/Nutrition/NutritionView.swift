@@ -23,6 +23,11 @@ struct NutritionView: View {
     @State private var showCameraLog = false
     @State private var showMoodSheet = false
     @State private var selectedDayKey: String = Dates.dayKey()
+    /// An add tapped while a past day is selected waits here for confirmation.
+    private enum PendingAdd { case food, mood }
+    @State private var pendingAdd: PendingAdd?
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var wasBackgrounded = false
     // Tracks the logging streak across log events so we only celebrate a milestone
     // at the moment it's crossed (set on appear; compared on each new log).
     @State private var lastLoggingStreak = 0
@@ -67,6 +72,12 @@ struct NutritionView: View {
         return Dates.formatShort(key)
     }
 
+    private var isPastDay: Bool { selectedDayKey != today }
+
+    /// The tint every past-day surface shares (page, selected pill, add button,
+    /// history sheet) so "not today" reads at a glance.
+    private var pastTint: Color { theme.accent2 }
+
     /// Day strip: the last 7 days, newest first. An older day picked from the
     /// calendar (or the weekly trend sheet) is appended so it shows as selected.
     private var recentDayKeys: [String] {
@@ -79,7 +90,7 @@ struct NutritionView: View {
     // selected day.
     @ViewBuilder
     private var moodMealButton: some View {
-        Button { showMoodSheet = true } label: {
+        Button { requestAdd(.mood) } label: {
             HStack(spacing: 10) {
                 Image(systemName: "wand.and.stars")
                     .font(.system(size: 15))
@@ -129,29 +140,19 @@ struct NutritionView: View {
                 }
 
                 daySelector(allLogs: allLogs)
-                totalsCard(totals: totals, mealLoggingStreak: mealLoggingStreak)
-                // `entries:` lets the card tell "no label data for these foods"
-                // apart from "you ate almost no sodium" — see MacroBudget.capCoverage.
-                HeartHealthCard(totals: totals, targets: profile.computedTargets,
-                                profile: profile, entries: selectedDayLogs)
-                weeklyNutritionCard(allLogs: allLogs)
-
-                moodMealButton
-
-                if selectedDayKey == today {
-                    smarterSwapsSection(allLogs: allLogs)
-                }
-
+                if isPastDay { pastDayBanner }
+                // Logging first: the two ways in, then the day's log. Rings and
+                // targets follow as the read-back.
                 HStack(spacing: 10) {
                     Button {
-                        showAddFood = true
+                        requestAdd(.food)
                     } label: {
                         HStack {
                             Image(systemName: "plus.circle.fill")
                             Text(selectedDayKey == today ? "Add food" : "Add to \(dayPillLabel(selectedDayKey))")
                         }
                     }
-                    .tactile(.primary, fullWidth: true)
+                    .tactile(.primary, fill: isPastDay ? pastTint : nil, fullWidth: true)
 
                     // Camera scanner always logs to today (CameraFoodLogSheet).
                     if selectedDayKey == today {
@@ -165,14 +166,64 @@ struct NutritionView: View {
                     }
                 }
 
+                moodMealButton
+
                 logList(selectedDayLogs: selectedDayLogs)
+
+                totalsCard(totals: totals, mealLoggingStreak: mealLoggingStreak)
+                // `entries:` lets the card tell "no label data for these foods"
+                // apart from "you ate almost no sodium" — see MacroBudget.capCoverage.
+                HeartHealthCard(totals: totals, targets: profile.computedTargets,
+                                profile: profile, entries: selectedDayLogs)
+                weeklyNutritionCard(allLogs: allLogs)
+
+                if selectedDayKey == today {
+                    smarterSwapsSection(allLogs: allLogs)
+                }
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 18)
             .scrollHapticTicks()
         }
-        .background(theme.bg.ignoresSafeArea())
-        .onAppear { lastLoggingStreak = mealLoggingStreak }
+        .background {
+            ZStack {
+                theme.bg
+                if isPastDay { pastTint.opacity(0.12) }
+            }
+            .ignoresSafeArea()
+            .animation(.easeInOut(duration: 0.25), value: isPastDay)
+        }
+        .onAppear {
+            lastLoggingStreak = mealLoggingStreak
+            // Coming back to the tab always lands on today.
+            returnToToday()
+        }
+        .onChange(of: scenePhase) { _, new in
+            // A fresh foreground is a fresh session: don't leave the log on a
+            // past day from hours ago. iOS goes background → inactive → active
+            // in two steps, so remember the background rather than pair phases.
+            if new == .background { wasBackgrounded = true }
+            if new == .active, wasBackgrounded {
+                wasBackgrounded = false
+                returnToToday()
+            }
+        }
+        .confirmationDialog(
+            "Add to \(dayPillLabel(selectedDayKey))?",
+            isPresented: Binding(get: { pendingAdd != nil }, set: { if !$0 { pendingAdd = nil } }),
+            titleVisibility: .visible
+        ) {
+            Button("Add to \(dayPillLabel(selectedDayKey))") { confirmPendingAdd() }
+            Button("Add to today instead") {
+                let kind = pendingAdd
+                returnToToday()
+                pendingAdd = nil
+                if let kind { open(kind) }
+            }
+            Button("Cancel", role: .cancel) { pendingAdd = nil }
+        } message: {
+            Text("You're on \(Dates.formatLong(selectedDayKey)), not today.")
+        }
         .onChange(of: allLogs.count) { oldCount, newCount in
             // Only react to new logs (not deletions), and only celebrate when the
             // streak actually advances to a milestone day.
@@ -347,7 +398,7 @@ struct NutritionView: View {
                                 }
                             }
                         }
-                        .tactile(.pill, fill: selectedDayKey == key ? theme.accent : nil)
+                        .tactile(.pill, fill: selectedDayKey == key ? (key == today ? theme.accent : pastTint) : nil)
                         .accessibilityLabel(loggedDays.contains(key) ? "\(dayPillLabel(key)), has entries" : dayPillLabel(key))
                     }
                 }
@@ -576,6 +627,59 @@ struct NutritionView: View {
             selectedDayKey = key
         }
         Haptics.selection()
+    }
+
+    /// Banner under the day strip while a past day is selected: says where new
+    /// food will land and offers the one-tap way back.
+    @ViewBuilder
+    private var pastDayBanner: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "clock.arrow.circlepath")
+                .foregroundStyle(pastTint)
+            Text("Viewing \(dayPillLabel(selectedDayKey)) — new food goes here")
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(theme.text)
+                .fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 0)
+            Button("Back to today") { returnToToday() }
+                .font(.system(size: 13, weight: .semibold))
+                .tactile(.pill)
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 10)
+        .background(pastTint.opacity(0.14))
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(pastTint, lineWidth: 1))
+        .transition(.opacity.combined(with: .move(edge: .top)))
+    }
+
+    /// Every way into logging goes through here: on today it opens straight away;
+    /// on a past day it asks first, so a log never lands on yesterday by habit.
+    private func requestAdd(_ kind: PendingAdd) {
+        if isPastDay { pendingAdd = kind } else { open(kind) }
+    }
+
+    private func confirmPendingAdd() {
+        guard let kind = pendingAdd else { return }
+        pendingAdd = nil
+        open(kind)
+    }
+
+    private func open(_ kind: PendingAdd) {
+        switch kind {
+        case .food: showAddFood = true
+        case .mood: showMoodSheet = true
+        }
+    }
+
+    /// Snap the selection back to today with a short toast. The toast carries the
+    /// haptic, so this doesn't go through `selectDay`. No-op when already on today.
+    private func returnToToday() {
+        guard isPastDay else { return }
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+            selectedDayKey = today
+        }
+        toasts.show(Toast(title: "Back to today", accent: .info, symbol: "arrow.uturn.backward"), for: 1.0)
     }
 
     // MARK: - Log list

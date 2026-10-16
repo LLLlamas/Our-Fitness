@@ -58,7 +58,7 @@ struct ExercisesCard: View {
             sort: \.name, order: .forward
         )
         // Today + yesterday: the rows show both days, older sets live in
-        // Progress › Training history.
+        // Training history (Train and Progress).
         let cutoff = Dates.startOfYesterday()
         _setModels = Query(
             filter: #Predicate<WorkoutSetModel> { $0.userId == uid && $0.timestamp >= cutoff },

@@ -26,6 +26,7 @@ struct WorkoutsView: View {
     @AppStorage private var sectionsRaw: String
 
     @State private var showGoalSheet = false
+    @State private var showHistory = false
     @State private var sectionPendingRemoval: TrainSection?
 
     init(profile: ProfileDTO) {
@@ -80,6 +81,8 @@ struct WorkoutsView: View {
                 // prompt rather than below it.
                 ExercisesCard(profile: profile)
 
+                historyButton
+
                 ForEach(enabledSections) { section in
                     Card { ActivitySectionCard(profile: profile, section: section) }
                         // Press-and-hold to remove; the confirmation lives on the
@@ -106,6 +109,9 @@ struct WorkoutsView: View {
             .scrollHapticTicks()
         }
         .background(theme.bg.ignoresSafeArea())
+        .sheet(isPresented: $showHistory) {
+            TrainingHistorySheet(profile: profile)
+        }
         .sheet(isPresented: $showGoalSheet) {
             WorkoutGoalSheet(profile: profile,
                              existingNames: Set(exerciseModels.map { $0.name.lowercased() }))
@@ -161,6 +167,36 @@ struct WorkoutsView: View {
         }
     }
 
+    /// Every past day's sets and sessions; tap an exercise there to fix or add
+    /// sets on that day (same `TrainingHistorySheet` Progress opens).
+    @ViewBuilder
+    private var historyButton: some View {
+        Button { showHistory = true } label: {
+            HStack(spacing: 10) {
+                Image(systemName: "clock.arrow.circlepath")
+                    .font(.system(size: 15))
+                    .foregroundStyle(theme.accent)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Training history")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(theme.text)
+                    Text("View past days · fix or add forgotten sets")
+                        .font(.caption).foregroundStyle(theme.dim)
+                }
+                Spacer(minLength: 0)
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(theme.dim)
+            }
+            .padding(14)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(theme.card)
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(theme.line, lineWidth: 1))
+        }
+        .tactile(.ghost)
+    }
+
     // "What do you want to work on?" — AI (or research-matcher fallback) suggests
     // exercises for a free-text goal, grounded in the curated ExerciseInfo library.
     @ViewBuilder
@@ -211,16 +247,17 @@ func formattedHoldDuration(_ seconds: Int) -> String {
 
 /// The ONE add-exercise sheet, one field set for everyone. The answers decide the
 /// exercise's shape — and so its logging controls — and the UI makes the invalid
-/// combinations impossible: an isometric hold hides weight, load and duration;
-/// tracking per-set weight (reps only) hides the fixed load.
+/// combinations impossible: an isometric hold hides weight, load and duration.
+/// There is no "tracks weight" switch — a rep-counted exercise with no fixed
+/// weight always logs through the rep counter, whose weight field is optional.
 struct AddExerciseSheet: View {
     /// What the sheet collected, already normalised to a valid shape. The caller
     /// owns the rep range and the `Repos.createExercise` call.
     struct Draft {
         var name: String
         var kind: ExerciseKind
-        /// Per-set weight lift (rep counter with a weight field). Never true
-        /// alongside `loadLb` or `isIsometric`.
+        /// Rep counter with an optional weight field. Derived, not asked: true for
+        /// a rep-counted, non-hold exercise with no fixed `loadLb`.
         var tracksWeight: Bool
         var isIsometric: Bool
         /// Fixed carried load (one-tap logging). Nil for a weight-tracked lift
@@ -235,7 +272,6 @@ struct AddExerciseSheet: View {
 
     @State private var name: String = ""
     @State private var kind: ExerciseKind = .reps
-    @State private var tracksWeight: Bool = false
     @State private var isIsometric: Bool = false
     @State private var loadRaw: String = ""
     @FocusState private var nameFocused: Bool
@@ -243,17 +279,19 @@ struct AddExerciseSheet: View {
 
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
-    /// Per-set weight only exists for a rep-counted, non-isometric exercise.
-    private var showsWeightToggle: Bool { !isIsometric && kind == .reps }
-    private var effectiveTracksWeight: Bool { showsWeightToggle && tracksWeight }
-    /// A fixed load is for one-tap movements: not a hold, not a weight-tracked lift.
-    private var showsLoad: Bool { !isIsometric && !effectiveTracksWeight }
+    /// A fixed weight is the optional shortcut: the same load every time, so it
+    /// logs with one tap. Not for a hold.
+    private var showsLoad: Bool { !isIsometric }
 
     private var loadLb: Double? {
         // Field is in the active unit; persist canonical lb.
         guard showsLoad, !loadRaw.isEmpty, let v = Double(loadRaw), v > 0 else { return nil }
         return Units.weightToLb(v, system: unitSystem)
     }
+
+    /// No fixed weight on a rep-counted exercise → the rep counter asks for one
+    /// each set (optional there too).
+    private var tracksWeight: Bool { !isIsometric && kind == .reps && loadLb == nil }
 
     private var canSave: Bool {
         !name.trimmingCharacters(in: .whitespaces).isEmpty
@@ -264,7 +302,7 @@ struct AddExerciseSheet: View {
             name: name.trimmingCharacters(in: .whitespaces),
             // A hold is stored as a duration exercise; only its sets carry seconds.
             kind: isIsometric ? .duration : kind,
-            tracksWeight: effectiveTracksWeight,
+            tracksWeight: tracksWeight,
             isIsometric: isIsometric,
             loadLb: loadLb
         )
@@ -311,21 +349,9 @@ struct AddExerciseSheet: View {
                     }
                 }
 
-                if showsWeightToggle {
-                    Toggle(isOn: $tracksWeight.animation(.spring(response: 0.3, dampingFraction: 0.8))) {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Tracks weight per set")
-                                .foregroundStyle(theme.text)
-                            Text("Shows a weight field when logging — for barbell and dumbbell lifts")
-                                .font(.caption).foregroundStyle(theme.dim)
-                        }
-                    }
-                    .tint(theme.accent)
-                }
-
                 if showsLoad {
                     VStack(alignment: .leading, spacing: 8) {
-                        fieldLabel("Load carried (\(Units.weightUnit(unitSystem))) · optional")
+                        fieldLabel("Fixed weight (\(Units.weightUnit(unitSystem))) · optional")
                         TextField(unitSystem == .metric ? "e.g. 14" : "e.g. 30", text: $loadRaw)
                             .keyboardType(.decimalPad)
                             .focused($loadFocused)
@@ -334,7 +360,9 @@ struct AddExerciseSheet: View {
                             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                             .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
                             .foregroundStyle(theme.text)
-                        Text("The same weight every time — a child, a stroller, a bag. Logs with one tap.")
+                        Text(kind == .reps
+                             ? "Leave blank for dumbbells, barbells or bodyweight — you'll enter the weight when you log each set. Fill it in only for one fixed weight (a child, a stroller, a bag) that logs with one tap."
+                             : "The same weight every time — a child, a stroller, a bag. Optional.")
                             .font(.caption).foregroundStyle(theme.dim)
                             .fixedSize(horizontal: false, vertical: true)
                     }
@@ -376,13 +404,16 @@ struct AddExerciseSheet: View {
 
 // MARK: - Set history + edit/delete sheet
 
-/// The ONE place a logged set is corrected or removed. Lists today's sets for an
-/// exercise (newest first); tap a row to edit it, trash to remove it, plus a
-/// destructive "delete exercise" action that cascade-removes its sets.
-/// Owns a profile+exercise-scoped @Query so the list refreshes as sets change.
+/// The ONE place a logged set is corrected, added after the fact or removed.
+/// Lists one day's sets for an exercise (newest first) with a 7-day strip to
+/// switch days; tap a row to edit it, trash to remove it, "Add a set" to log one
+/// the user forgot, plus a destructive "delete exercise" action that
+/// cascade-removes its sets. Owns a profile+exercise-scoped @Query so the list
+/// refreshes as sets change.
 ///
-/// Opened from the clock on every `ExercisesCard` row, so a mis-tapped +1 is
-/// fixable as easily as a lifted set. Don't add a second set-editing surface.
+/// Opened from the clock on every `ExercisesCard` row (on today) and from an
+/// exercise row in `TrainingHistorySheet` (on that row's day). Don't add a
+/// second set-editing surface.
 struct SetHistorySheet: View {
     let profile: ProfileDTO
     let exercise: ExerciseDTO
@@ -395,57 +426,99 @@ struct SetHistorySheet: View {
     @Query private var setModels: [WorkoutSetModel]
     @State private var confirmDeleteExercise = false
     @State private var editing: WorkoutSetDTO?
+    @State private var adding: WorkoutSetDTO?
+    @State private var selectedDayKey: String
+    /// The day the sheet opened on — kept in the strip even when it's older
+    /// than the last 7 days (opened from Training history).
+    private let initialDayKey: String
 
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
-    init(profile: ProfileDTO, exercise: ExerciseDTO) {
+    init(profile: ProfileDTO, exercise: ExerciseDTO, dayKey: String = Dates.dayKey()) {
         self.profile = profile
         self.exercise = exercise
+        self.initialDayKey = dayKey
+        _selectedDayKey = State(initialValue: dayKey)
         let uid = profile.id
         let exId = exercise.id
-        // Recent sets show the CURRENT DAY only — the full cross-day history lives
-        // in the Progress tab (Training history).
-        let dayStart = Calendar.current.startOfDay(for: Date())
+        // Bounded to the strip's window (last 7 days, or back to the opening day
+        // if older); the day itself is picked in Swift so switching days doesn't
+        // rebuild the query.
+        let cal = Calendar.current
+        let weekStart = cal.date(byAdding: .day, value: -6, to: cal.startOfDay(for: Date())) ?? Date()
+        let openedStart = Dates.date(fromDayKey: dayKey) ?? weekStart
+        let windowStart = min(weekStart, openedStart)
         _setModels = Query(
             filter: #Predicate<WorkoutSetModel> {
-                $0.userId == uid && $0.exerciseId == exId && $0.timestamp >= dayStart
+                $0.userId == uid && $0.exerciseId == exId && $0.timestamp >= windowStart
             },
             sort: \.timestamp, order: .reverse
         )
     }
 
-    private var sets: [WorkoutSetDTO] { setModels.map(\.snapshot) }
+    private var today: String { Dates.dayKey() }
+    private var isToday: Bool { selectedDayKey == today }
+    private var allSets: [WorkoutSetDTO] { setModels.map(\.snapshot) }
+
+    private func dayLabel(_ key: String) -> String {
+        if key == today { return "Today" }
+        let yesterday = Dates.dayKey(Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date())
+        if key == yesterday { return "Yesterday" }
+        return Dates.formatShort(key)
+    }
+
+    /// "today" / "yesterday" / "on Oct 12" — for sentences.
+    private func dayPhrase(_ key: String) -> String {
+        let label = dayLabel(key)
+        return key == today || label == "Yesterday" ? label.lowercased() : "on \(label)"
+    }
+
+    /// Last 7 days, newest first, plus the opening day when it's older.
+    private var dayKeys: [String] {
+        let week = Array(Dates.lastNDays(7).reversed())
+        return week.contains(initialDayKey) ? week : week + [initialDayKey]
+    }
 
     var body: some View {
+        let loggedDays = Set(allSets.map { Dates.dayKey($0.timestamp) })
+        let sets = allSets.filter { Dates.dayKey($0.timestamp) == selectedDayKey }
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(exercise.name)
                         .font(.system(size: 38, weight: .regular))
                         .foregroundStyle(theme.text)
-                    Text("Today sets")
+                    Text(isToday ? "Today's sets" : "Sets · \(Dates.formatLong(selectedDayKey))")
                         .font(.system(size: 10, weight: .medium)).tracking(2)
                         .textCase(.uppercase)
                         .foregroundStyle(theme.dim)
                 }
 
+                dayStrip(loggedDays: loggedDays)
+
                 if sets.isEmpty {
                     Card {
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text("No sets logged today.")
-                                .font(.callout).foregroundStyle(theme.text)
-                            Text("Tap the exercise to log it. Past days live in Progress › Training history.")
-                                .font(.caption).foregroundStyle(theme.dim)
-                        }
+                        Text("No sets logged \(dayPhrase(selectedDayKey)).")
+                            .font(.callout).foregroundStyle(theme.text)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 } else {
                     Text("Tap a set to fix it · trash to remove it")
                         .font(.caption).foregroundStyle(theme.dim)
                     ForEach(sets) { setRow($0) }
-                    Text("Showing today only. Earlier sessions are in Progress › Training history.")
-                        .font(.caption2).foregroundStyle(theme.dim)
-                        .padding(.top, 2)
                 }
+
+                // Forgot to log a set? Add it to the selected day.
+                Button { adding = newSetTemplate(daySets: sets) } label: {
+                    HStack {
+                        Image(systemName: "plus.circle.fill")
+                        Text(isToday ? "Add a set" : "Add a set to \(dayLabel(selectedDayKey))")
+                    }
+                }
+                .tactile(.primary, fullWidth: true)
+
+                Text("Older days are in Training history on the Train tab.")
+                    .font(.caption2).foregroundStyle(theme.dim)
 
                 Button(role: .destructive) {
                     confirmDeleteExercise = true
@@ -467,6 +540,9 @@ struct SetHistorySheet: View {
         .sheet(item: $editing) { s in
             EditSetSheet(profile: profile, exercise: exercise, loggedSet: s)
         }
+        .sheet(item: $adding) { s in
+            EditSetSheet(profile: profile, exercise: exercise, loggedSet: s, isNew: true)
+        }
         .confirmationDialog("Delete \(exercise.name)?",
                             isPresented: $confirmDeleteExercise,
                             titleVisibility: .visible) {
@@ -482,6 +558,64 @@ struct SetHistorySheet: View {
     }
 
     private let noun = "exercise"
+
+    @ViewBuilder
+    private func dayStrip(loggedDays: Set<String>) -> some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(dayKeys, id: \.self) { key in
+                    Button {
+                        guard key != selectedDayKey else { return }
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                            selectedDayKey = key
+                        }
+                        Haptics.selection()
+                    } label: {
+                        HStack(spacing: 5) {
+                            Text(dayLabel(key))
+                                .font(.system(size: 13, weight: .medium))
+                            if loggedDays.contains(key) && selectedDayKey != key {
+                                Circle().fill(theme.accent).frame(width: 5, height: 5)
+                            }
+                        }
+                    }
+                    .tactile(.pill, fill: selectedDayKey == key ? theme.accent : nil)
+                    .accessibilityLabel(loggedDays.contains(key) ? "\(dayLabel(key)), has sets" : dayLabel(key))
+                }
+            }
+        }
+    }
+
+    /// The set the add form starts from: the day's most recent set (or this
+    /// exercise's latest anywhere in the window), else 10 reps / 5 min / a 60s
+    /// hold — the same starting points the rep counter and hold timer use.
+    /// Timestamp: now for today; otherwise a minute after the day's last set,
+    /// or midday when the day has none.
+    private func newSetTemplate(daySets: [WorkoutSetDTO]) -> WorkoutSetDTO {
+        let base = daySets.first ?? allSets.first
+        let timestamp: Date
+        if isToday {
+            timestamp = Date()
+        } else if let last = daySets.first {
+            // Stay inside the selected day even after a 23:59 set.
+            let dayStart = Dates.date(fromDayKey: selectedDayKey) ?? last.timestamp
+            let dayEnd = Calendar.current.date(byAdding: .day, value: 1, to: dayStart)?
+                .addingTimeInterval(-1) ?? last.timestamp
+            timestamp = min(last.timestamp.addingTimeInterval(60), dayEnd)
+        } else {
+            let dayStart = Dates.date(fromDayKey: selectedDayKey) ?? Date()
+            timestamp = Calendar.current.date(byAdding: .hour, value: 12, to: dayStart) ?? dayStart
+        }
+        let defaultCount = exercise.kind == .duration ? 5 : 10
+        return WorkoutSetDTO(
+            userId: profile.id,
+            exerciseId: exercise.id,
+            weightLb: exercise.tracksPerSetWeight ? base?.weightLb : nil,
+            reps: exercise.isIsometric ? 1 : (base?.reps ?? defaultCount),
+            timestamp: timestamp,
+            holdSeconds: exercise.isIsometric ? (base?.holdSeconds ?? 60) : nil
+        )
+    }
 
     @ViewBuilder
     private func setRow(_ s: WorkoutSetDTO) -> some View {
@@ -552,8 +686,9 @@ struct SetHistorySheet: View {
 // MARK: - Edit a logged set
 
 /// Correct one already-logged set: reps (or minutes, or hold length) and the
-/// weight lifted. Opened by tapping a row in `SetHistorySheet` — the only set
-/// editor in the app.
+/// weight lifted — or, with `isNew`, log a forgotten set on a past day from a
+/// template `SetHistorySheet` builds. Opened only from `SetHistorySheet` — the
+/// only set editor in the app.
 ///
 /// The "≈ cal" readout comes from `Repos.setCaloriesEstimate`, the same function
 /// `Repos.updateSet` writes with, so the preview is exactly what gets stored —
@@ -562,6 +697,7 @@ private struct EditSetSheet: View {
     let profile: ProfileDTO
     let exercise: ExerciseDTO
     let loggedSet: WorkoutSetDTO
+    let isNew: Bool
 
     @Environment(\.modelContext) private var ctx
     @Environment(\.theme) private var theme
@@ -576,10 +712,11 @@ private struct EditSetSheet: View {
 
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
-    init(profile: ProfileDTO, exercise: ExerciseDTO, loggedSet: WorkoutSetDTO) {
+    init(profile: ProfileDTO, exercise: ExerciseDTO, loggedSet: WorkoutSetDTO, isNew: Bool = false) {
         self.profile = profile
         self.exercise = exercise
         self.loggedSet = loggedSet
+        self.isNew = isNew
         _reps = State(initialValue: max(1, loggedSet.reps))
         _holdSeconds = State(initialValue: max(5, loggedSet.holdSeconds ?? 60))
     }
@@ -616,13 +753,15 @@ private struct EditSetSheet: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Edit set".uppercased())
+                    Text((isNew ? "Add set" : "Edit set").uppercased())
                         .font(.system(size: 10, weight: .medium)).tracking(2)
                         .foregroundStyle(theme.dim)
                     Text(exercise.name)
                         .font(.system(size: 32, weight: .regular))
                         .foregroundStyle(theme.text)
-                    Text("Logged \(loggedSet.timestamp.formatted(date: .omitted, time: .shortened))")
+                    Text(isNew
+                         ? "For \(Dates.formatLong(Dates.dayKey(loggedSet.timestamp)))"
+                         : "Logged \(loggedSet.timestamp.formatted(date: Dates.dayKey(loggedSet.timestamp) == Dates.dayKey() ? .omitted : .abbreviated, time: .shortened))")
                         .font(.caption).foregroundStyle(theme.dim)
                 }
 
@@ -639,11 +778,13 @@ private struct EditSetSheet: View {
                     .contentTransition(.numericText())
                     .frame(maxWidth: .infinity)
 
-                Text("The calorie estimate is recalculated from the new numbers when you save.")
-                    .font(.caption2).foregroundStyle(theme.dim)
-                    .fixedSize(horizontal: false, vertical: true)
+                if !isNew {
+                    Text("The calorie estimate is recalculated from the new numbers when you save.")
+                        .font(.caption2).foregroundStyle(theme.dim)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
 
-                Button { save() } label: { Text("Save changes") }
+                Button { save() } label: { Text(isNew ? "Add set" : "Save changes") }
                     .tactile(.primary, fullWidth: true)
             }
             .padding(.horizontal, 20)
@@ -743,13 +884,25 @@ private struct EditSetSheet: View {
 
     private func save() {
         let newReps = isHold ? max(1, loggedSet.reps) : reps
-        guard Repos.updateSet(
-            ctx, id: loggedSet.id,
-            reps: newReps,
-            weightLb: showsWeight ? weightLb : nil,
-            holdSeconds: isHold ? holdSeconds : nil,
-            bodyWeightLb: profile.weightLb
-        ) else { return }
+        if isNew {
+            var dto = loggedSet
+            dto.reps = newReps
+            dto.weightLb = showsWeight ? weightLb : nil
+            dto.holdSeconds = isHold ? holdSeconds : nil
+            dto.caloriesEst = Repos.setCaloriesEstimate(
+                exercise: exercise, reps: newReps,
+                holdSeconds: dto.holdSeconds, bodyWeightLb: profile.weightLb
+            )
+            guard Repos.addSet(ctx, dto) else { return }
+        } else {
+            guard Repos.updateSet(
+                ctx, id: loggedSet.id,
+                reps: newReps,
+                weightLb: showsWeight ? weightLb : nil,
+                holdSeconds: isHold ? holdSeconds : nil,
+                bodyWeightLb: profile.weightLb
+            ) else { return }
+        }
 
         var detail = isHold
             ? "\(formattedHoldDuration(holdSeconds)) hold"
@@ -758,7 +911,7 @@ private struct EditSetSheet: View {
             detail += " · \(Units.formatWeightWithUnit(lb: w, system: unitSystem, decimals: 0))"
         }
         detail += " · ~\(estimatedCal) cal"
-        toasts.show(Toast(title: "Set updated", detail: detail,
+        toasts.show(Toast(title: isNew ? "Set added" : "Set updated", detail: detail,
                           accent: .win, symbol: "checkmark.seal.fill"), for: 2.4)
         dismiss()
     }

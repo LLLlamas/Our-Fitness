@@ -1,12 +1,13 @@
 // Today tab — single-screen daily overview.
 //
-// One layout for everyone: macro rings | move | water | steps | today's food log.
-// Strength, live sessions, Pilates, and the parenting movements live in the
-// Train tab.
+// One layout for everyone: move (with steps at its top) | macro rings |
+// today-vs-yesterday insights | water | today's food log. Strength, live
+// sessions, Pilates, and the parenting movements live in the Train tab.
 //
-// Everything here is a READOUT. Steps live in exactly one card (`StepsCard`) —
-// `MoveCard` deliberately shows none — and food logging lives only on the Meals
-// tab, so this tab presents no add/edit affordance for either.
+// Everything here is a READOUT. Steps live in exactly one card (`StepsCard`),
+// embedded at the top of `MoveCard` once Health is connected and standalone
+// before that; food logging lives only on the Meals tab, so this tab presents
+// no add/edit affordance for either.
 
 import SwiftUI
 import SwiftData
@@ -29,6 +30,9 @@ struct TodayView: View {
     @Query private var pilatesModels: [PilatesSessionModel]
     @Query private var bodyModels: [BodyMetricModel]
     @Query private var markerModels: [HealthMarkerModel]
+    // Yesterday + today only — "did you train" for DayInsights (sets and
+    // Pilates come from the 90-day queries above).
+    @Query private var activityModels: [ActivitySessionModel]
 
     // Real HealthKit figures for StepsCard's pace line and week stats — loaded in
     // refreshToday(). nil / empty means "Health gave us nothing", and the card
@@ -79,12 +83,17 @@ struct TodayView: View {
         self._health = ObservedObject(wrappedValue: health)
         let uid = profile.id
         let todayKey = Dates.dayKey()
-        // Bound to today. This tab renders one day — the day's macro totals,
-        // its food log, and the nudge counts — so loading the user's whole
-        // logging history to do it was pure cost, and cost that grew every day
-        // they used the app.
+        let yesterdayStart = Calendar.current.date(
+            byAdding: .day, value: -1, to: Calendar.current.startOfDay(for: Date())) ?? Date()
+        let yesterdayKey = Dates.dayKey(yesterdayStart)
+        // Bound to today + yesterday. This tab renders one day — the day's macro
+        // totals, its food log, and the nudge counts — plus yesterday's totals
+        // for DayInsights, so loading the user's whole logging history to do it
+        // was pure cost, and cost that grew every day they used the app.
         _logModels = Query(
-            filter: #Predicate<FoodLogEntryModel> { $0.userId == uid && $0.date == todayKey },
+            filter: #Predicate<FoodLogEntryModel> {
+                $0.userId == uid && ($0.date == todayKey || $0.date == yesterdayKey)
+            },
             sort: \.timestamp,
             order: .forward
         )
@@ -115,6 +124,9 @@ struct TodayView: View {
             filter: #Predicate<HealthMarkerModel> { $0.userId == uid },
             sort: \.date, order: .forward
         )
+        _activityModels = Query(
+            filter: #Predicate<ActivitySessionModel> { $0.profileId == uid && $0.date >= yesterdayStart }
+        )
         _macroFiredRaw = AppStorage(wrappedValue: "", "macroFired.\(uid.uuidString)")
         _macroFlagDayKey = AppStorage(wrappedValue: "", "macroFiredDay.\(uid.uuidString)")
         _customStepsGoalRaw = AppStorage(wrappedValue: 0, StepsGoalPrefs.dailyKey(uid))
@@ -131,8 +143,13 @@ struct TodayView: View {
         Water.total(waterModels.map(\.snapshot), on: today)
     }
 
-    /// Already today-only by predicate — no client-side date filter needed.
-    private var todaysLogs: [FoodLogEntryDTO] { logModels.map(\.snapshot) }
+    /// The predicate bounds the query to today + yesterday; this picks today.
+    private var todaysLogs: [FoodLogEntryDTO] {
+        logModels.lazy.filter { $0.date == today }.map(\.snapshot)
+    }
+    private var yesterdayKey: String {
+        Dates.dayKey(Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date())
+    }
     private var totals: DailyTotals { DailyTotals.totals(from: todaysLogs) }
 
     // Step data — StepsCard's ring, weekly strip and streak
@@ -154,6 +171,34 @@ struct TodayView: View {
         )
     }
 
+    /// Today vs yesterday, from what's already loaded here.
+    private var dayInsights: [DayInsights.Insight] {
+        let water = waterModels.map(\.snapshot)
+        let sets = setModels.map(\.snapshot)
+        let pilates = pilatesModels.map(\.snapshot)
+        let activities = activityModels.map(\.snapshot)
+        func day(_ key: String) -> DayInsights.Day {
+            let logs = logModels.lazy.filter { $0.date == key }.map(\.snapshot)
+            return DayInsights.Day(
+                totals: DailyTotals.totals(from: Array(logs)),
+                foodLogged: !logs.isEmpty,
+                steps: Steps.stepsForDay(allStepsForProfile, day: key),
+                waterFlOz: Water.total(water, on: key),
+                trained: sets.contains { Dates.dayKey($0.timestamp) == key }
+                    || pilates.contains { Dates.dayKey($0.date) == key }
+                    || activities.contains { Dates.dayKey($0.date) == key }
+            )
+        }
+        return DayInsights.compute(
+            today: day(today),
+            yesterday: day(yesterdayKey),
+            fitnessGoal: profile.fitnessGoal,
+            targets: profile.computedTargets,
+            stepsGoal: effectiveStepsGoal,
+            waterGoalFlOz: waterGoalFlOz
+        )
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
@@ -165,16 +210,21 @@ struct TodayView: View {
                     .font(.system(size: 56, weight: .regular))
                     .foregroundStyle(theme.text)
 
+                // Move (steps at its top) first, then the food rings.
+                if profile.healthGranted {
+                    MoveCard(profile: profile, health: health, refreshGeneration: healthRefreshGeneration) {
+                        stepsCard(embedded: true)
+                    }
+                } else {
+                    stepsCard(embedded: false)
+                }
+
                 MacroQuadGrid(totals: totals, targets: profile.computedTargets, profile: profile)
 
-                if profile.healthGranted {
-                    MoveCard(profile: profile, health: health, refreshGeneration: healthRefreshGeneration)
-                }
+                DayInsightsCard(insights: dayInsights)
 
                 WaterCard(profile: profile)
 
-                // Tail: the one StepsCard, then today's food log.
-                stepsCard
                 recentLogs
             }
             .padding(.horizontal, 20)
@@ -321,9 +371,9 @@ struct TodayView: View {
     // MARK: - Steps
 
     // The one steps card (ring + weekly strip + week-to-date Health stats).
-    // The only steps surface on Today — MoveCard shows none.
+    // The only steps surface on Today — embedded in MoveCard when Health is on.
     @ViewBuilder
-    private var stepsCard: some View {
+    private func stepsCard(embedded: Bool) -> some View {
         StepsCard(
             profile: profile,
             steps: todaysSteps,
@@ -332,7 +382,8 @@ struct TodayView: View {
             intradayToday: intradayStepsToday,
             intradayYesterday: intradayStepsYesterday,
             activeEnergyKcalThisWeek: activeEnergyCalThisWeek,
-            exerciseMinutesThisWeek: exerciseMinutesThisWeek
+            exerciseMinutesThisWeek: exerciseMinutesThisWeek,
+            embedded: embedded
         )
     }
 
