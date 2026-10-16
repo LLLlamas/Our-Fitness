@@ -53,8 +53,8 @@ inside the existing `com.ourfitness.app` app. This is just an App ID for signing
 
 ## Step 2 — Generate the widget's App Store provisioning profile
 
-Mirror exactly what we already do for the main app (CLAUDE.md → "TestFlight
-signing"). Because the widget has no managed capabilities, a `match`-generated
+Mirror exactly what we already do for the main app ([ci.md](ci.md) → "CI / TestFlight"
+signing). Because the widget has no managed capabilities, a `match`-generated
 profile would actually be fine here — but to keep the pipeline uniform with the
 app's manually-generated-profile flow, generate it by hand:
 
@@ -63,7 +63,7 @@ app's manually-generated-profile flow, generate it by hand:
 3. App ID: `com.ourfitness.app.widgets`.
 4. Certificate: the **same Apple Distribution certificate** the app uses (the one
    stored in the `Our-Fitness-Certs` match repo). Do not create a new cert — cert
-   slots are limited (CLAUDE.md).
+   slots are limited ([ci.md](ci.md)).
 5. Name it **`OurFitnessWidgets AppStore`** — this string must match
    `PROVISIONING_PROFILE_SPECIFIER` for the `OurFitnessWidgets` target in
    `project.yml`. If you choose a different name, update `project.yml` to match.

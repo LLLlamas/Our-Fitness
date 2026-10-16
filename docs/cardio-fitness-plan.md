@@ -1,5 +1,7 @@
 # Cardio fitness (VO₂ max): track it, build it slowly
 
+> **SHELVED (Oct 2026): the owner chose to drop VO₂ max for now.** Nothing here is scheduled or built; the content is kept as research for a possible later revisit, and its safety rules (§1) would still bind any future cardio feature.
+
 > **Status: PLAN, not built (Oct 2026).** CLAUDE.md and the code stay authoritative.
 > **Constraint from the owner:** they get dizzy easily, so everything starts slow and
 > the app must never push intensity. The safety rules in §1 are binding for any cardio

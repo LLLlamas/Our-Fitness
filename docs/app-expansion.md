@@ -4,10 +4,10 @@
 > per-profile `@Query` isolation). **Oct 2026:** the Build/Circuit modes have since been
 > merged — one light-theme app where every surface is the same, plus a per-user goal
 > (Build muscle / Lose weight) that only changes targets. The mode-switch design in 1B
-> shipped and was then superseded; see the note there. CLAUDE.md is authoritative. Phases 2 (iCloud/CloudKit sync) and 3 (store polish)
+> shipped and was then superseded; see the note there. [CLAUDE.md](../CLAUDE.md) is authoritative. Phases 2 (iCloud/CloudKit sync) and 3 (store polish)
 > are still planned. Captures the decisions and the work needed to take Our-Fitness from
 > a shared-device TestFlight build to a per-user App Store release. Companion to
-> [CLAUDE.md](CLAUDE.md).
+> [CLAUDE.md](../CLAUDE.md).
 
 ---
 

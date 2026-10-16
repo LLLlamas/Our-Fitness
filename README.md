@@ -39,20 +39,13 @@ CLI: `bundle exec fastlane ios compile` (build) / `bundle exec fastlane ios test
 
 ## Docs
 
-- [CLAUDE.md](CLAUDE.md) — architecture, codebase map, where-to-touch for every feature
-- [docs/privacy-security.md](docs/privacy-security.md) — current data flows, storage, privacy controls, and security limitations
-- [docs/watch-app-setup.md](docs/watch-app-setup.md) — watch features, signing, and device verification
-- [docs/setup.md](docs/setup.md) — one-time Apple/GitHub setup, CI workflows, TestFlight operations
-- [docs/ci-history.md](docs/ci-history.md) — incident narratives behind every CI rule
-- [docs/live-activity-setup.md](docs/live-activity-setup.md) — Live Activity / widget signing checklist
-- [docs/RepCheck.md](docs/RepCheck.md) — friction-free logging UX
-- [docs/nutrition-plan-research.md](docs/nutrition-plan-research.md) — original nutrition spec (written for the old Build mode; now informs the Build muscle goal)
-- [docs/medication-reminders-plan.md](docs/medication-reminders-plan.md) — medication logging spec, with the notification wording rules it ships under
+- [CLAUDE.md](CLAUDE.md) — architecture rules, codebase map and routing; start here
+- [docs/README.md](docs/README.md) — index of every doc with its status (living reference / plan / historical / shelved)
+- [docs/map/](docs/map) — per-area "where to touch" tables (workouts, nutrition, today, reminders + watch, progress, settings + health, UI components)
+- [docs/calorie-math.md](docs/calorie-math.md), [docs/data-model.md](docs/data-model.md), [docs/ci.md](docs/ci.md) — calorie formula, persistence rules, CI and signing
+- [docs/setup.md](docs/setup.md) — one-time Apple/GitHub setup and TestFlight operations
+- [docs/privacy-security.md](docs/privacy-security.md) — current data flows, storage, privacy controls and security limitations
+- [docs/watch-app-setup.md](docs/watch-app-setup.md) — watch features, signing and device verification
+- [docs/next-audit-scope.md](docs/next-audit-scope.md) — the open backlog (privacy controls, erase-local-data, measured performance)
 
-### Audit maintenance
-
-[docs/next-audit-scope.md](docs/next-audit-scope.md) is the open backlog;
-[docs/audit-handoff.md](docs/audit-handoff.md) is the historical record of the
-September 2026 remediation. See [privacy/security](docs/privacy-security.md) for
-current data flows and remaining release/privacy work. The scheme runs both the hostless Domain
-suite and a separate persistence/session regression suite.
+The scheme runs both the hostless Domain suite and a separate persistence/session regression suite.

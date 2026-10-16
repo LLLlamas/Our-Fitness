@@ -12,7 +12,8 @@ TestFlight release before starting another shipping milestone.
 - Design one explicit erase-local-data flow with a reviewable confirmation.
   Inventory current and legacy stores, profile defaults, AI/service caches,
   pending/delivered notifications, live sessions/activities, watch envelope and
-  thumbnails. Define an offline-watch tombstone so old queued actions cannot
+  thumbnails. Add the per-profile `weeklyRepsNote.<uuid>` UserDefaults key (weekly-reps
+  toast gate) and the one-time `backfill.fixedLoadWeights.v1` flag to the inventory. Define an offline-watch tombstone so old queued actions cannot
   recreate erased data. Never erase real user data to test the feature.
 - Clarify that app deletion does not remove original HealthKit data or backups.
   Verify OS storage protection/backup behavior on physical devices before making

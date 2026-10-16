@@ -195,7 +195,7 @@ the Apple-Health-vs-MET distinction (the current blurb goes *inside* the sheet).
   this as `Components/CalorieInfoSheet.swift` with both sections rather than a
   separate `MetInfoSheet.swift`.
 - The MET math facts to surface (do not invent kcal/rep): formula `kcal = MET ×
-  bodyWeightKg × hours`; sources/METs are tabulated in `CLAUDE.md` ("Calorie math")
+  bodyWeightKg × hours`; sources/METs are tabulated in [calorie-math.md](calorie-math.md)
   and `Domain/CalorieEstimator.swift` / `Domain/ExerciseInfo.swift`.
 
 **Acceptance:** Move card no longer shows the wall of text; an ⓘ opens a sheet that

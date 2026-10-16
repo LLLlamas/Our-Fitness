@@ -1,8 +1,34 @@
 # Progress tracking plan: reps at a weight, over all history
 
-> **Status: PLAN, not built (Oct 2026).** How the app tracks strength progress and
-> encourages doing more over time. Nothing here is implemented yet; CLAUDE.md and the
-> code stay authoritative for current behaviour.
+> **Status: IMPLEMENTED on branch `claude/awesome-dirac-rremd5` (Oct 2026), not yet compiled in Xcode.**
+> Sections 3.1 to 3.5 are in the code; the living description is in [map/workouts.md](map/workouts.md)
+> and [map/progress.md](map/progress.md) (code and those rows win over this plan wherever they differ).
+> Section 1 below is the pre-change snapshot, kept for the reasoning. Verification record:
+> [validation-log.md](validation-log.md).
+>
+> **Built**
+> - Pure engine `Domain/RepHistory.swift`: reps at an exact weight (0.01 lb canonical) by day and ISO week, last time, same day last week, comparisons, per-weight bests, new-best detection, weekly reps and its notes.
+> - Fixed loads: load stamped on every fixed-load row (rep counter, `ExercisesCard` +1, set back-fill, watch quick-set resolved phone-side), `Repos.updateExercise`, the Weight row in `ExerciseInfoSheet`, a one-time backfill (`backfill.fixedLoadWeights.v1`), `Repos.updateSet` re-pricing from the row's own stamped weight.
+> - Rep counter and hold timer read full history: Last time / Last week lines at the weight in the field, running tally, last-ever weight pre-fill; the hold stores the seconds actually held.
+> - `ExerciseProgressSheet` (chart, two comparison columns with a "compare with" picker, bests, day list) opened from the Strength card and from "Your progress" in the ⓘ sheet.
+> - New-best toast and a once-per-kind-per-week weekly-reps toast; `workoutSetMessage` and the per-exercise weekly count removed.
+> - Progress: Training tracker is "Weekly Reps" with own-history note, per-exercise split and ⓘ; Strength card lists every trained exercise and `gainLb` can go negative; `TrainingHistorySheet` rows read reps at weight.
+>
+> **Deliberately deferred**
+> - 3.6 body signals (strength-held-while-weight-drops, gain-rate band, tape-measure threshold).
+> - A `StallDetector` "steady" nudge (the gap nudge is unchanged).
+> - A wrist "last time" label (needs a new Optional wire field) and any new-best toast from watch logs.
+> - `Domain/Progression.swift` left untouched; VO2 max / the cardio plan is shelved.
+> - Celebrated-best AppStorage keys: not needed, a best is derived from the rows and gated by "already announced today"; the compare choice and chart granularity are `@State`. The only new persisted keys are `weeklyRepsNote.<uuid>` and `backfill.fixedLoadWeights.v1`.
+> - Behaviour change to know about: a hold no longer auto-logs when the countdown reaches the target; the user taps "Stop and log".
+>
+> **Unverified**
+> - Nothing that imports SwiftUI or SwiftData has been compiled or run (no Xcode in the build container): all of `Features/`, `Repositories.swift`, `Seeder.swift`, `ToastCenter.swift`, `WatchSyncService.swift`, and the 17 tests in `OurFitnessPersistenceTests/FixedLoadTests`.
+> - No simulator, device or watch check: sheet layouts (medium-detent reference block, comparison grid at 375 pt), the hold haptic and backgrounding mid-hold, toast order at runtime.
+> - The in-place upgrade of an existing store with nil-weight fixed-load rows (backfill + `updateExercise` stamping).
+> - Full-history fetches per rep save (`Repos.setHistory(limit: 100_000)`, `Repos.weeklyReps`) are not measured against a multi-year fixture.
+> - The "about 10 hard sets per muscle" research figure and the 80-120 reps rule of thumb in the Weekly Reps ⓘ are unchecked against the papers (§7 evidence caveat).
+> - Day arithmetic was tested only in a UTC container.
 >
 > **Decisions (owner, Oct 2026):**
 > 1. **No sets.** Progress is **reps, at what weight (if any)**. A day's reps for an exercise are summed per weight; set structure is ignored.
@@ -20,7 +46,7 @@
 
 ---
 
-## 1. What exists today (verified in code)
+## 1. What existed before this change (snapshot; superseded by the code)
 
 | Piece | What it does | Gap for this plan |
 |---|---|---|
@@ -196,4 +222,4 @@ Reps-at-weight comparison is a familiar pattern. Our version drops set structure
 
 ## 8. Decisions log
 
-All open questions are resolved (Oct 2026): both comparison views; reps-this-week tracker with own-history notes and an ⓘ hypertrophy explainer; exact weight matches. Next step when building: §3.1 data fixes, then §3.2.
+All open questions were resolved (Oct 2026): both comparison views; reps-this-week tracker with own-history notes and an ⓘ hypertrophy explainer; exact weight matches. Built in that order (§3.1 data fixes, then §3.2 to §3.5). Remaining: compile and verify on a Mac, then the deferred items in the banner.
