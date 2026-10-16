@@ -1,16 +1,19 @@
-# Progress tracking & progressive-overload plan
+# Progress tracking plan: reps at a weight, over all history
 
-> **Status: PLAN, not built (Oct 2026).** Research + design for tracking strength/muscle
-> progress and encouraging more reps/sets over time. Nothing here is implemented yet.
-> CLAUDE.md and the code stay authoritative for current behaviour.
+> **Status: PLAN, not built (Oct 2026).** How the app tracks strength progress and
+> encourages doing more over time. Nothing here is implemented yet; CLAUDE.md and the
+> code stay authoritative for current behaviour.
 >
-> **Evidence caveat — read before using any number.** The research pass behind this doc
-> could not open primary papers (journal hosts were unreachable from the research
-> sandbox and the search budget ran out). Every figure in §8 comes from search-engine
-> summaries of the named source or from recall, and is marked as such. Under the
-> [health-data-audit](health-data-audit.md) rule ("a confidently wrong figure is worse
-> than an open question"), **verify each number against its DOI before it reaches UI
-> copy or a `scienceLine`.** The design does not depend on any single figure being exact.
+> **Decisions (owner, Oct 2026):**
+> 1. **No sets.** Progress is **reps, at what weight (if any)**. A day's reps for an exercise are summed per weight; set structure is ignored.
+> 2. **All history, not this week.** Every comparison and "last time" reads the exercise's full history, not the current Monday week.
+> 3. **Show decreases.** Comparisons may say "fewer reps than Tue" or "than last week"; that's information, not failure.
+> 4. **Fixed loads are editable.** The baby's weight (any fixed-load exercise) can be updated, and history keeps the weight each rep was done at.
+>
+> **Evidence caveat.** The research behind §7 could not open primary papers (journal
+> hosts were unreachable from the research sandbox). Figures are from search summaries or
+> recall and are marked so. Per [health-data-audit](health-data-audit.md), verify any
+> number against its DOI before it reaches UI copy. The design depends on none of them.
 
 ---
 
@@ -18,197 +21,162 @@
 
 | Piece | What it does | Gap for this plan |
 |---|---|---|
-| `Domain/StrengthProgress.swift` → Strength card on Progress | Best Epley estimated max per loaded lift (sets of 1–12 reps), "+N lb · 4 wk" | Loaded lifts only. **`gainLb` can never be negative**: `estimatedMaxLb` is the all-time best and `previousMaxLb` a subset of the same rows, so a regressed lift reads "no change" and the "−" copy path is dead. Card isn't tappable: no chart or detail |
-| `Domain/Progression.swift` | linear / double-progression / RPE "next target" schemes | **Dead** (tests only). Reads one set (`history.first`), not a session; always +5 lb; a nil weight suggests "5 lb" for a bodyweight move |
-| `Domain/TrainingHistory.swift` | Weekly set-row counts (Progress › Training), day sessions | Counts **rows**, and every one-tap +1 is its own row. A 10-rep set of Lifted Baby counts as 10 "sets" |
-| `EncouragementEngine.workoutSetMessage` | Toast at 4/6/10/12 "sets this week for {muscle}" | Count is **per exercise**, labelled per muscle; reads "this muscle group" for user-added exercises (`muscleGroups` is `[]`); fires only on exact equality, so a jump past a threshold is skipped; "Elite volume" overclaims |
-| `RepCounterView` pre-fill | Silently pre-fills weight + wheel from this ISO week's last set | Query is limited to the current Monday week, so it's blank every Monday and for a lift trained once a week. No visible "last time" |
-| `StallDetector` | Once-a-day gap nudge (workout gap 5 d gain / 7 d lose) | Gaps only, never a performance plateau |
-| Tape trackers, weight trend | Shoulders/chest/arm/thigh/waist, weight | No change threshold, no "strength held while losing" reading |
+| `WorkoutSetDTO` rows | One row per log: `reps`, `weightLb?`, `holdSeconds?`, `timestamp`. The rep counter writes one row per "Save set"; the one-tap +1 writes one row per rep | None for reps: **summing `reps` per day per weight already works for both paths**. Fixed-load rows store `weightLb: nil` (the load lives on the exercise) |
+| `RepCounterView` pre-fill | Silently pre-fills weight + wheel from **this ISO week's** last row | Blank every Monday and for a lift done once a week; no visible "last time" |
+| `Domain/StrengthProgress.swift` → Strength card | Best Epley estimated max per weighted lift, "+N lb · 4 wk" | Weighted lifts only. **`gainLb` can never be negative** (all-time best vs a subset of the same rows), so a decline reads "no change". Not tappable; no history view |
+| `Domain/TrainingHistory.swift` | Day sessions for `TrainingHistorySheet`; weekly **row** counts for Progress › Training ("sets") | Counts rows, so ten baby +1 taps read as "10 sets". Rows carry no weight in the history list |
+| `EncouragementEngine.workoutSetMessage` | "N sets this week for {muscle}" toast | Set-based, and the count is per exercise, not per muscle. Removed by this plan |
+| `Domain/Progression.swift` | Set-based next-target schemes | Dead code (tests only). Not used by this plan; leave it (its enum is persisted) |
+| Fixed-load exercises | `ExerciseDTO.loadLb` (Lifted Baby 30 lb, …) | **No `Repos.updateExercise`**; changing the load means delete + recreate, which deletes all history |
+| `Repos.setHistory(userId:exerciseId:limit:)` | Exercise-scoped, newest-first fetch | Used only by the watch undo; the natural read for full history |
 
-Data facts that shape everything below:
+## 2. The model: reps at a weight
 
-- `WorkoutSetDTO` already has `weightLb?`, `reps`, `holdSeconds?`, `rpe?`, `notes?`, `workoutId?`. **No UI writes `rpe`, `notes` or `workoutId`**, so a "session" is a calendar day.
-- Fixed-load movements (Lifted Baby 30 lb, etc.) keep the load on `ExerciseDTO.loadLb` and write `weightLb: nil` on every set. **There is no `Repos.updateExercise`**: the only way to change the load is delete + recreate, which cascade-deletes history. So the growing baby can't be tracked at all today.
-- Holds record the **picked** duration, not the time actually held (cancel logs nothing; going past the target isn't recorded).
-- User-added exercises store `defaultRepRange` 8–12 (never read anywhere) and `muscleGroups []`. Muscles come from `ExerciseInfo.meta(for:)` at read time.
-- `Repos.setHistory(userId:exerciseId:limit:)` already exists: an exercise-scoped, newest-first fetch, used only by the watch undo.
+For each exercise and each day, fold the rows into **reps per weight**:
 
-## 2. Principles
+```
+Bench press · Tue Oct 14   →  50 lb × 30 reps · 55 lb × 8 reps
+Push-ups    · Tue Oct 14   →  bodyweight × 42 reps
+Lifted Baby · Tue Oct 14   →  30 lb × 24 reps        (load stamped per row, §3.1)
+Plank       · Tue Oct 14   →  longest hold 50 s · total 2 min 10 s
+Carried Baby· Tue Oct 14   →  30 lb × 12 min
+```
 
-1. **Derive on read, never store rollups.** PRs, bests, trends and per-muscle volume are computed from sets (append-only logs; sets can be edited and back-filled). The only persisted state is "already celebrated" keys in AppStorage, the `StepsCard` fired-milestone pattern.
-2. **Pick the metric by exercise shape, never by goal.** Use `tracksPerSetWeight` / `isOneTapLoggable` / `isIsometric` / `kind`. Both goals see the same surfaces; the goal only tilts copy and thresholds.
-3. **Compare like with like.** Celebrate "more reps at this weight" or "heavier than ever" (unambiguous). Show the estimated max as a trend, but never toast it alone: Epley is a noisy estimate, and mixing rep ranges or logging slips creates fake PRs.
-4. **Observation first, suggestion second, never prescription.** "Last time: 50 lb × 10, 10, 8" is always shown; "Try 11" is a suggestion; nothing auto-changes. (RepCheck: "observation over prescription"; StallDetector: "never prescribes".)
-5. **Extend the existing surfaces (hard rule 8).** RepCounter/ProjectionBar for in-flow feedback, `ExerciseInfoSheet` for per-exercise detail, the Strength card + `StatDetailSheet` for charts, `trainingVolumeDetail` for per-muscle volume, `StallDetector` for plateaus, `TrainingHistorySheet` for cross-day history. No new card, sheet or tab.
-6. **Honest, self-referenced, informational copy.** Compare to the user's own past only: no badges, points, leaderboards or social comparison (rejected in `encouragement-system-plan.md`). "Not logged", never "missed". No streak-loss messaging. Estimates say so. Never encourage pushing through pain.
+- **Weight key:** the row's `weightLb`, rounded to the nearest 0.5 lb so 49.99 and 50 match; nil means "no weight" (bodyweight).
+- **Day** = `Dates.dayKey`; **week** = Monday ISO week (`Dates.startOfISOWeek`), the app-wide definitions.
+- Holds and duration exercises have no reps; their unit is seconds/minutes (longest hold and total time for holds, total minutes for duration). The same day/week folding applies.
+- Everything is **derived on read** from the append-only rows, so editing or back-filling a row updates every comparison automatically. Nothing new is stored except the per-row load (§3.1).
 
-## 3. Progress metric per exercise shape
+One pure Domain type does this, e.g. `Domain/RepHistory.swift`:
 
-| Shape (predicate) | Example | "Last time" line | Best / PR types | Trend on Progress | Suggestion rule |
-|---|---|---|---|---|---|
-| Weighted lift (`tracksPerSetWeight`) | DB bench, squat | `Tue: 50 lb × 10, 10, 8` | Heaviest weight · most reps at ≥ a weight · estimated max (shown, not toasted) | Best estimated max per session (≤12-rep sets), top-set weight | Double progression in the exercise's rep range (§4.2) |
-| Bodyweight reps (`.bodyweight`, rep counter, no weight) | Pull-ups, push-ups | `Tue: 8, 7, 6` | Most reps in one set | Best set reps per session | +1 rep on the best set; at the top of range for 2 sessions → copy suggests a harder variation or added weight |
-| Isometric (`isIsometric`) | Plank, wall sit | `Tue: 45 s, 40 s` | Longest hold | Longest hold per session | +5 s on the best hold (heuristic, §8) |
-| Fixed-load reps (`isOneTapLoggable`, `loadLb`) | Lifted Baby | `Tue: 24 lifts · 30 lb` | Most lifts in a day at ≥ this load | Lifts per day + load step line | None automatic. Monthly "has the load changed?" prompt (§4.6) |
-| Duration (`kind == .duration`) | Carried Baby | `Tue: 12 min · 30 lb` | Longest day | Minutes per day | None |
-| Pilates / live sessions | — | (existing cards) | (existing ring/streak) | Sessions & minutes per week (existing) | None |
+```swift
+RepHistory.days(for exercise: ExerciseDTO, rows: [WorkoutSetDTO]) -> [DayTally]
+//  DayTally { dayKey, byWeight: [WeightKey: Int reps], totalReps, longestHoldSec?, totalSeconds? }
+RepHistory.weeks(...) -> [WeekTally]       // same, folded by ISO week
+RepHistory.compare(_ a: Tally, to b: Tally) -> Comparison
+//  per weight: reps delta (+/-), plus "new weight" / "weight not done"
+```
 
-## 4. Plan, in build order
+## 3. Plan, in build order
 
-Each phase ships on its own. Phase 0 is required first because every later phase reads its fixes.
+### 3.1 Data fixes (small, additive, no schema bump)
 
-### Phase 0: Data fixes (small, additive; no schema bump)
+1. **Stamp the load on fixed-load rows.** `ExercisesCard.quickLog`, the rep counter and duration paths for loaded movements, and the watch `.logQuickSet` write `weightLb = exercise.loadLb` (the column exists).
+   - A one-time Seeder backfill stamps existing nil-weight rows of `loadLb` exercises with the current `loadLb`. This is correct because the load could never change before step 2.
+   - Check `StrengthProgress` still excludes these rows (it filters on `tracksPerSetWeight`).
+2. **Edit the fixed weight: `Repos.updateExercise(id:name:loadLb:)`** (returns `Bool` via `RepositoryWrite`).
+   - UI: a "Weight" row in `ExerciseInfoSheet` (the ONE per-exercise sheet) for any exercise with `loadLb`, e.g. "Lifted Baby · 30 lb · Update". It uses the same weight-field idiom as the rep counter (numeric keyboard + Done).
+   - The new weight applies to rows logged **from now on**. History keeps the weight each rep was stamped with, so "24 reps @ 30 lb" in September and "24 reps @ 32 lb" in October both stay true.
+   - Calories already read the exercise's current `loadLb` at log time. **Fix `Repos.updateSet`'s recompute to use the row's stamped weight**, not the exercise's current load, so editing an old row doesn't re-price it at the new baby weight.
+3. **Record the time actually held.** `IsometricTimerView` logs elapsed seconds when stopped early and lets a hold run past the target; `holdSeconds` stores the real time.
+4. **Read full history.** Replace the rep counter's week-scoped query with a per-exercise, predicate-scoped full-history read (`Repos.setHistory` without the 50-row cap, or an equivalent `@Query` on `exerciseId`).
+5. **Fix `StrengthProgress.gainLb`** so a decline can show (compare the recent window's best with the best before it).
 
-1. **Stamp the load on fixed-load sets.** `ExercisesCard.quickLog`, the watch `.logQuickSet` and the rep-counter path for loaded movements write `weightLb = exercise.loadLb` (the column already exists). One-time Seeder backfill: stamp existing nil-weight sets of `loadLb` exercises with the current `loadLb`. That is correct because the load could never change before step 2 existed. Check that `StrengthProgress` still excludes these sets (it filters on `tracksPerSetWeight`, so it should) and that `EditSetSheet` now shows their weight (it shows a weight field whenever a set has one).
-2. **`Repos.updateExercise(id:name:loadLb:repRange:)`** (returns `Bool` via `RepositoryWrite`). Reached from `ExerciseInfoSheet` (the ONE per-exercise sheet). Changing the load affects future sets only, because history keeps its stamped loads. This alone unblocks the parent's growing-baby case.
-3. **Record actual hold time.** `IsometricTimerView`: Stop early → log the elapsed time; past the target → offer "keep going" and log the real total. Store the real seconds in `holdSeconds`.
-4. **Widen "last time" beyond the ISO week.** Replace the week-scoped pre-fill query with `Repos.setHistory` (bounded, e.g. last 90 days, `limit` ~50) and derive the last *session* (last day the exercise was trained, sets in timestamp order).
-5. **Cluster one-tap rows into sets on read.** In `TrainingHistory`, consecutive one-tap rows for the same exercise less than ~2 minutes apart (heuristic; tune) count as **one set** for volume. Raw rows stay as they are. This stops Lifted Baby taps dominating the weekly set count.
-6. **Fix `StrengthProgress.gainLb`.** Compare the best inside the window with the best before it (not all-time vs a subset), so a dip can read as a dip. Keep "nil when not trained in the window".
-7. **Fix `workoutSetMessage`.** Interim: label the count as the exercise ("4 sets of Bench this week"), fire on *crossing* a threshold rather than equality, and drop "Elite volume". Phase 4 replaces it with a true per-muscle count.
+### 3.2 "Last time" and a live comparison in the rep counter
 
-### Phase 1: "Last time" + "try" inside the rep counter (highest value, no new surface)
+In `RepCounterView` (and the hold timer), under the exercise name:
 
-- **Header line** under the exercise name in `RepCounterView` (and the hold timer): `Last time · Tue: 50 lb × 10, 10, 8`. Shown from the first repeat session.
-- **Suggestion** (from the second session on; first sessions are baseline): `Try 50 lb × 11`. The wheel and weight pre-fill to the suggestion instead of "this week's last set". Typing still wins, as now.
-- **Post-set feedback** in the existing `ProjectionBar` strip: `+1 rep vs last time` / `Matched last time` / nothing when lower (no negative messaging mid-session).
-- **The rep range becomes visible and editable** in `ExerciseInfoSheet` (`defaultRepRange`, which already exists and is never read). Default 8–12; the goal sheet already writes catalog ranges.
+- **`Last time · Tue Oct 14: 30 reps @ 50 lb`**: the most recent earlier day this exercise was done, from full history, at the weight now in the field. If that weight wasn't done last time, show the last day's top line plus the last day that weight *was* done ("50 lb: 26 reps on Oct 2").
+- **Running tally today** (in the existing `ProjectionBar` strip): **`Today 18 / 30 reps @ 50 lb`**. After each log: "12 to match Tuesday", then "+2 vs Tuesday" once passed.
+- The weight field pre-fills from the **last weight used for this exercise, ever** (not this week). The wheel keeps its current behaviour. Typing still wins.
+- Bodyweight: the same without the weight ("Last time: 42 reps"). Holds: "Last time: longest 50 s". Fixed load: "Last time: 24 reps @ 30 lb".
 
-#### 4.2 Suggestion engine: revive `Progression`, don't write a second one
+This is observation-only: no "try" targets and no weight-increase advice. Matching or passing the last day is the implicit goal, and the tally makes it visible.
 
-Rework `Progression.doubleProgression` (pure Domain, hostless-tested, pinned `now`) to take the **last session's sets**, not one set:
+### 3.3 History and comparisons per exercise
 
-- Input: last session's sets (in order), the rep range `[lo, hi]`, the increment (default 5 lb, the smallest common dumbbell/plate jump), the shape.
-- **All working sets reached `hi`** → suggest weight + increment at `lo` reps. Cap the jump at **≤10% of the current load** (ACSM 2009: +2–10% once 1–2 reps over target, §8). If the increment is over 10% (light dumbbells: 10 → 15 lb is +50%), suggest **more reps first** and say why ("Dumbbell jumps are big at this weight — add reps before weight").
-- **Otherwise** → same weight; +1 rep on the first set that was below `hi`.
-- **Nil weight** (bodyweight) → reps only, never invent a load (fixes today's "0 + 5 lb").
-- Never suggest a weight increase and a rep increase together. Never suggest anything after a gap of ≥ 3 weeks (Phase 5, comeback).
-- The NSCA "2-for-2" rule (beat the target by 2+ reps on the last set, two sessions running) is a stricter alternative trigger. Start with plain double progression: it needs no effort rating, and adding reps vs adding load gave similar hypertrophy in trained lifters (Plotkin 2022, §8).
-- **No RIR/RPE capture in v1.** It adds typing to a 2-tap flow, and people misjudge reps left by about one rep on average (Halperin 2022). `WorkoutSetDTO.rpe` stays available for later.
+The per-exercise progress view is a `StatDetailSheet` host (never a bespoke sheet), opened from:
+- the **Strength card** (made a `PressableCard`), widened to list every trained exercise, not just weighted lifts;
+- the **"Your progress"** row added to `ExerciseInfoSheet`.
 
-### Phase 2: PRs (derived on read, celebrated at log time)
+Contents:
+- **Chart:** reps per day (or per week, a toggle) over all history. One series per weight, so the line steps when the weight changes (e.g. the baby gets heavier). Holds chart the longest hold; duration charts minutes.
+- **Compare:** a "Compare with" picker, defaulting to **last time**, with **last week** and **any day or week from history** (the days actually trained, like `MealHistoryList` lists only logged days). Rows read per weight:
+  - `50 lb   34 reps   +4 vs Tue Oct 14`
+  - `55 lb    8 reps   new weight`
+  - `45 lb    —        0 vs 12 on Oct 2`
+  - Decreases print plainly, "4 fewer than Tue Oct 14". Neutral colour, no red, no warning icon.
+- **Bests (all-time, per weight):** most reps in a day at each weight, heaviest weight ever, longest hold, most minutes. Derived on read.
+- **Day list:** every day trained, newest first: `Tue Oct 14 · 50 lb × 30 · 55 lb × 8`. Tapping a day opens `SetHistorySheet` on that day (the ONE editor), the same as `TrainingHistorySheet` rows do today.
 
-- A pure `StrengthProgress.records(for:exerciseSets:)` lives beside `estimatedOneRepMax`, one function for every shape in §3.
-- **Celebrate only like-for-like PRs:** heaviest weight ever; more reps at ≥ a weight than ever; longest hold; most bodyweight reps in a set; most fixed-load lifts in a day at ≥ this load.
-- **Fake-PR guards:** no PR until the exercise has **≥ 2 earlier sessions** (first sessions are baseline); the estimated max never toasts; a PR set with a weight >25% above the previous best asks "Typo?" in the toast detail (still logged, still editable in `SetHistorySheet`).
-- **Toast precedence** (one toast at a time): PR (`ToastAccent.win`, already documented as "PR beaten" but unused) > volume milestone > "Set saved". Fire only after `guard Repos.addSet(...)` succeeds (hard rule 9).
-- **Dedupe:** compare against history *excluding* the new set at log time; editing or back-filling never toasts. Watch logs never toast; their PRs appear on Progress.
-- **Copy:** `New best: 55 lb × 8` / detail `Incline press — 1 more rep than your best at this weight.` No confetti, no badges.
+`TrainingHistorySheet` rows switch from "N sets · M reps" to the same reps-at-weight line (`50 lb × 30 · 55 lb × 8`), via one shared formatter, so the two lists read alike.
 
-### Phase 3: Per-exercise progress on Progress (extend the Strength card)
+**Performance:** full history per exercise is small (one exercise's rows), but Progress already recomputes over all sets every body pass. Fold per exercise once per data change (memoise on row count + newest timestamp). Measure with a multi-year fixture, per `next-audit-scope.md`.
 
-- Make `strengthCard` a `PressableCard`. Tapping a lift opens a **`StatDetailSheet` host** (never a bespoke sheet), with:
-  - Chart: best estimated max per session, 12 weeks (`chartOverride`). For bodyweight lifts: best-set reps; holds: longest hold; fixed-load: lifts per day with a load step line.
-  - Headline: current best + status chip (below).
-  - Footer: recent PRs, last 5 sessions (`W × R` top sets), "Estimated with Epley's formula — an estimate".
-- Widen the card beyond loaded lifts: one row per trained exercise of any shape, using that shape's metric. Hide rows not trained in 8 weeks.
-- **Status chip per exercise** (needs ≥ 4 sessions over ≥ 3 weeks, otherwise no chip):
-  - *Getting stronger*: last-4-week best beats the prior-4-week best by more than a noise band.
-  - *Holding steady*: within the band.
-  - *Dipped*: below the band.
-  - Band: about ±2.5% of the estimated max, because day-to-day 1RM variation is a few percent (median CV ~4%, Grgic 2020) and rep-based estimates add error. Tune it with real data before shipping.
-- `ExerciseInfoSheet` gains a compact **"Your progress"** section (last session, best, status) linking to the Progress detail. It stays read-only; edits stay in `SetHistorySheet`.
-- `TrainingHistorySheet` rows gain the top set (`50 lb × 10`) by extending `TrainingHistory.ExerciseLine`, so there is still one history list.
-- **Performance:** Progress already recomputes over all sets every body pass (flagged in the backlog). Compute per-exercise series once per data change (memoised on set count + latest timestamp) and measure with multi-year fixtures, per `next-audit-scope.md`.
+### 3.4 Celebrate bests, honestly
 
-### Phase 4: Weekly sets per muscle (replace the per-exercise milestone)
+- At log time (after `guard Repos.addSet(...)`, hard rule 9), if today's reps at a weight now exceed that weight's all-time best day, toast once: **`New best: 34 reps @ 50 lb`** with detail "4 more than your best day (Oct 2)". A heavier weight than ever gets **`Heaviest yet: 55 lb`**. Uses `ToastAccent.win` (documented as "PR beaten", unused today).
+- **Guards:**
+  - No "best" until the exercise has ≥ 2 earlier days; the first days are the baseline.
+  - Bests are per weight, so going heavier for fewer reps never reads as worse.
+  - Back-fills and edits never toast.
+  - Watch logs never toast (their bests still show in the history view).
+  - One toast at a time: best > "Set saved".
+- No badges, points or confetti (rejected in `encouragement-system-plan.md`).
 
-- **One normalised taxonomy**, about 10 groups (chest, back, shoulders, biceps, triceps, quads, hamstrings, glutes, calves, core). Map from `ExerciseInfo.meta(for:)` primary/secondary muscles through `ExerciseGoalMatcher.goalMuscleMap`, which is the closest existing taxonomy. This consolidates the five muscle-name sources rather than adding a sixth.
-- **Fractional counting:** a set counts 1 for each primary muscle and 0.5 for each secondary muscle. This scheme fit best in the largest dose-response meta-regression (Pelland 2025/26, §8).
-- **What counts as a set:** rep-counter sets, holds, and one-tap clusters (Phase 0.5). Duration minutes don't count. Warm-ups can't be told apart yet; accept that for v1.
-- **Surface:** the existing `trainingVolumeDetail` (`StatDetailSheet`) gains per-muscle bars for this ISO week against a soft reference line at about **10 sets/week**. Basis: graded dose-response, with ≥10 sets associated with more growth than fewer (Schoenfeld 2017; the 2026 ACSM stand per secondary summaries).
-  - Copy: "About 10+ weekly sets per muscle is linked with more growth. More helps less and less."
-  - No upper "target". No "elite". Same surface for both goals; lose-goal copy says volume helps *keep* muscle while losing weight.
-- **Toast:** fire once per muscle per week on crossing about 10 fractional sets ("Back: 10 sets this week"), replacing `workoutSetMessage`'s 4/6/10/12. Delete `RepCounterView.setsThisWeekForMuscle` (the second weekly counter) so `TrainingHistory` is the only one.
+### 3.5 Replace the set-based pieces
 
-### Phase 5: Plateau, comeback and consistency (StallDetector, once a day, one nudge)
+- **Progress › Training tracker:** "sets this week" (row count, inflated by +1 taps) becomes **reps this week** (sum of `reps` across rep exercises; holds/duration excluded), trend chip "+N vs last wk". This is one change in `TrainingHistory.setsInWeek` / `weeklySetCounts` → reps. The tracker title changes, while its persisted `StatKind` case keeps its raw value.
+- **Delete `workoutSetMessage`** and the rep counter's per-exercise weekly count (`setsThisWeekForMuscle`). The running tally in §3.2 replaces that feedback.
+- **`StallDetector`:** keep the gap nudge as is. A gentle "steady" nudge can be added later: an exercise done on ≥ 6 days over ≥ 4 weeks with no new per-weight best in 3 weeks. It never says "plateau" and never prescribes.
 
-- **Plateau:** an exercise with ≥ 6 sessions across ≥ 4 weeks and no like-for-like best in the last 3 weeks gets a new `Stall` case.
-  - Copy: "Bench has held steady for 3 weeks. Adding a rep before adding weight, or trying a different rep range, can restart progress."
-  - **No deload prescription.** Deloads are common practice, but the one RCT found a full week off *reduced* lower-body gains (Coleman 2024, §8).
-  - Reuse `Trends.weeksStalled`'s algorithm rather than adding a third flat-detector.
-- **Comeback:** trained before but not in ≥ 3 weeks. The rep counter shows "Welcome back — last time was 5 weeks ago" with no suggestion, and the first session back is baseline with no PRs. Strength is largely retained over short breaks and returns quickly (Bosquet 2013; Ogasawara/Halonen, §8), so don't auto-reduce the load. Just don't push.
-- **Consistency:** a weekly training streak (≥ 1 strength session per ISO week) through the existing `Movement` weekly-streak + `StreakChip` pattern. It is grace-based: a broken streak is never announced (broken streaks demotivate more than the miss warrants; Silverman & Barasch 2023).
+### 3.6 Body signals (optional, later)
 
-### 4.6 Fixed-load movements: the parent's progress story
+- **Lose goal:** a weekly observation when the weight trend is down while reps at a weight are holding or rising: "Your strength held while your weight dropped." An energy deficit blunts muscle gain more than strength (Murphy & Koehler 2022, §7), so this is a real progress signal for that goal.
+- **Gain goal:** a weight-gain-rate band is blocked on audit open question 9 (the +500 cal surplus vs the "quarter to half a pound a week" copy).
+- **Tape measures:** show a change only above ~0.5 in (an illustrative measurement-error threshold, not a sourced value).
 
-Once Phase 0 lands (stamped loads + `updateExercise`), the lose-goal user gets:
-- "Last time: 24 lifts · 30 lb".
-- A most-lifts-in-a-day PR.
-- A load step line on the chart as the baby grows.
-- A monthly prompt to update the load: about 0.2–0.5 kg/month after 6 months per WHO velocity (unverified), so the prompt never guesses the weight.
-- Pilates/live sessions keep their existing weekly ring + streak.
-- The Phase 6 "strength held while weight dropped" reading.
+## 4. Copy rules
 
-### Phase 6: Body signals (optional; resolve audit questions first)
+- Compare to the user's own history only. Neutral wording for both directions: "+4 vs Tue", "4 fewer than Tue".
+- First days are open ("see how it feels"); comparisons start from the second day.
+- "Not logged", never "missed". No streak-loss messages. Estimates say so (the Strength card's estimated max stays labelled).
+- The goal tilts tone only (gain: "building"; lose: "keeping your strength while you lose"). Same numbers and surfaces for both.
+- One safety line in the rep counter ⓘ: "If something hurts — not just burns — stop and lighten it."
 
-- **Gain goal:** weekly weight trend against a lean-gain band of about **0.25–0.5% of bodyweight per week** (Iraki/Helms 2019, §8). **Blocked by audit open question 9** (the +500 cal surplus ≈ 1 lb/week contradicts the "quarter to half a pound" copy). Resolve that first.
-- **Lose goal: the key progress signal is "strength held while weight dropped".** When the weight trend is down and lift statuses are *steady* or *stronger*, a weekly `DayInsights`-style observation says so. Energy deficits blunt lean-mass gain more than strength (Murphy & Koehler 2022), and resistance training preserves lean mass during dieting. This gives the lose-goal user a real progress story beyond the scale.
-- **Tape measures:** show a change only above about **0.5 in / 1 cm**. That is an illustrative minimum detectable change for self-measured girths, not a sourced value. Measure the same landmark, take two readings, every 2–4 weeks. Copy explains this in the tracker's ⓘ.
-- **Not building:** progress photos (no outcome evidence; body-checking risk), smart-scale lean mass (consumer BIA tracks individual change poorly), public strength standards (populations differ; social comparison is rejected).
+## 5. Data, schema, watch
 
-## 5. Encouragement copy rules (additions to EncouragementEngine's)
+- **No schema bump:** load stamping uses the existing `weightLb`; `updateExercise` edits existing columns; hold time uses `holdSeconds`.
+- **New AppStorage keys:** celebrated-best keys and the compare-picker choice. Add them to the erase-local-data inventory (`next-audit-scope.md`).
+- **Watch:** stamps the load on `.logQuickSet` (phone side, from the exercise id; no wire change). A wrist "last time" label would need a new Optional field on `QuickLogExercise`; it's out of scope.
+- **Domain placement:** `RepHistory.swift` and the `StrengthProgress` fix are phone-only Domain files, so they stay out of the watch source list (hard rule 7).
 
-- Self-referenced competence feedback ("1 more rep than last time"), not controlling language ("you must"). Autonomous motivation predicts adherence (SDT; Teixeira 2012).
-- First sessions are *open* ("see how it feels"); specific "+1 rep" targets come only once there's a baseline. Specific hard goals can backfire for novices (Swann 2021).
-- One message at a time, return nil at non-events, no daily-perfection framing, no shame for regressions or gaps.
-- Safety line in the rep counter ⓘ: "Progress comes from adding a rep or a little weight over weeks. If something hurts — not just burns — stop and lighten it." Never encourage training through pain. No suggested jump over 10%.
-- The goal tilts tone only. Gain: "building"; lose: "keeping your strength while you lose". Same numbers, same surfaces.
+## 6. Tests (hostless, pinned `now`, e.g. `2026-05-27T12:00:00Z`)
 
-## 6. Data, schema, watch
+- `RepHistoryTests`:
+  - Day/week folding per weight (0.5 lb rounding, nil = bodyweight).
+  - One-tap rows and rep-counter rows sum the same.
+  - Comparison deltas both ways, plus "new weight" / "not done".
+  - Holds (longest + total) and duration.
+  - ISO week edges (Sunday night vs Monday).
+- `StrengthProgressTests`: `gainLb` can go negative.
+- Bests: per-weight best day, the ≥ 2-day baseline guard, heaviest-ever.
+- Persistence:
+  - `updateExercise` success and rollback.
+  - The load-stamping backfill is idempotent and only touches nil-weight rows of `loadLb` exercises.
+  - `updateSet` re-prices from the row's stamped weight.
 
-- **No schema version bump.** `weightLb` stamping and actual hold seconds use existing columns. `updateExercise` edits existing columns. Any new optional column (e.g. a per-exercise `incrementLb`, if users need to override the 5 lb default) is additive, with no `.unique`, to stay CloudKit-ready (`app-expansion.md`).
-- **New AppStorage keys:** celebrated-PR keys, per-muscle weekly-toast keys, baby-load prompt date. Add them to the erase-local-data inventory (`next-audit-scope.md`).
-- **Watch:** optional "last time" on wrist quick-log rows needs a new **Optional** field on `QuickLogExercise` (synthesised Codable), so it's out of scope for v1. The wrist keeps sending ids only.
-- **Domain placement:** everything new lives in phone-only Domain files (`StrengthProgress`, `Progression`, `TrainingHistory`, a new `MuscleVolume.swift`). None of it goes in the watch source list (hard rule 7).
+## 7. Evidence (unverified by opening; check before copy)
 
-## 7. Tests (hostless, pinned `now` such as `2026-05-27T12:00:00Z`)
-
-- `ProgressionTests`: session-level double progression; 10% cap → reps-first; nil weight never yields a load; no suggestion after a ≥ 3-week gap.
-- `StrengthProgressTests`: like-for-like PR types per shape; ≥ 2-session baseline guard; estimated max never a PR; `gainLb` can go negative.
-- `TrainingHistoryTests`: one-tap clustering (taps 30 s apart = 1 set, 5 min apart = 2); stamped loads.
-- `MuscleVolumeTests`: fractional counting, taxonomy mapping for unknown names, ISO week boundaries.
-- `StallDetectorTests`: plateau edges (5 vs 6 sessions, 3-week window), comeback suppression.
-- Persistence: `updateExercise` failure rollback; backfill idempotency.
-
-## 8. Evidence table
-
-All entries are **unverified by opening** in this research pass. Verify against the DOI before shipping copy.
-
-| Claim used above | Source | Basis / confidence |
+| Claim | Source | Confidence |
 |---|---|---|
-| +2–10% load once 1–2 reps over target | ACSM Position Stand, *Progression Models in Resistance Training*, MSSE 2009;41(3):687–708 | Search summary + well known; high. The "two consecutive sessions" wording traces to the NSCA textbook (Baechle & Earle), not ACSM |
-| 2026 ACSM resistance-training stand replaces 2009: ≥2 sessions/wk per muscle group, about 10+ sets/muscle/wk for hypertrophy, adherence > exact variables | Currier et al., ACSM 2026 (137 reviews, >30,000 participants) | Secondary summaries only; medium. Exact figures **not** confirmed in the paper |
-| Graded volume dose-response; ≥10 sets/muscle/wk > fewer | Schoenfeld, Ogborn, Krieger, *J Sports Sci* 2017 | Abstract summary; high. **Note:** the app's current `scienceLine` cites this as *J Strength Cond Res*, likely a citation error to check |
-| Diminishing returns; fractional counting (indirect = 0.5) fits best | Pelland et al. 2025/26 meta-regression (67 studies) | Summary/preprint; medium |
-| Adding reps ≈ adding load for hypertrophy | Plotkin et al., *PeerJ* 2022 | Summary; high |
-| Similar hypertrophy across loads when near failure | Schoenfeld 2017/2021; Lopez 2021 | Summary; high |
-| People misjudge reps-in-reserve by about 1 rep | Halperin et al., *Sports Med* 2022 | Summary; high |
-| e1RM accuracy falls with reps; keep ≤10–12 | Reynolds 2006; LeSuer 1997; Strong caps at 12 | Summary; medium |
-| 1RM day-to-day variation of a few percent (median CV about 4%) | Grgic et al. 2020 review | Summary; medium |
-| Deload week off reduced lower-body gains | Coleman et al. 2024 RCT | Summary; medium |
-| Strength largely retained over short breaks; regained fast | Bosquet 2013; Ogasawara 2013; Halonen 2024 | Summary; medium |
-| Deficit blunts lean-mass gain more than strength | Murphy & Koehler 2022 | Recall; medium |
-| Lean-gain rate about 0.25–0.5% BW/week | Iraki, Helms et al. 2019 | **Recall only**; verify |
-| Broken streaks demotivate | Silverman & Barasch, *J Consumer Res* 2023 | Recall; low–medium |
-| Open goals may suit beginners | Swann et al. 2021 | Recall; medium |
-| WHO infant weight velocity: about 1 kg/mo (0–3 mo) falling to about 0.2 kg/mo (yr 2–3) | WHO Child Growth Standards | Recall; verify before any copy (copy should never state a baby's weight anyway) |
+| Adding reps at a weight builds muscle about as well as adding weight; strength slightly favours weight. This supports "reps at a weight" as the progress unit | Plotkin et al., *PeerJ* 2022 | Summary; high |
+| Muscle growth is similar across a wide range of loads when sets are hard. This supports tracking reps at whatever weight is used | Schoenfeld 2017/2021; Lopez 2021 | Summary; high |
+| Day-to-day performance varies a few percent. Don't over-read one day's dip, so show trends and per-weight bests | Grgic et al. 2020 (1RM reliability); rep counts vary more | Summary; medium |
+| Strength is largely kept over short breaks and comes back fast | Bosquet 2013; Ogasawara 2013; Halonen 2024 | Summary; medium |
+| An energy deficit blunts muscle gain more than strength | Murphy & Koehler 2022 | Recall; medium |
+| ACSM 2026 resistance-training stand: train each muscle group ≥ 2×/week; adherence matters more than exact variables | Currier et al., ACSM 2026 | Secondary summaries; medium |
+| Broken streaks demotivate more than the miss warrants | Silverman & Barasch 2023 | Recall; low–medium |
 
-How competitors handle the same features (help-centre summaries, medium–low confidence):
-- **Hevy:** a "previous" column with tap-to-copy; four PR types (heaviest, best estimated max, best set volume, best session volume); per-rep-count set records deliberately don't announce; a warm-up toggle recalculates PRs.
-- **Strong:** estimated max via Brzycki, from sets of ≤12 reps only.
-- **Hevy Trainer, Liftosaur:** double progression.
-- **Alpha Progression:** suggestions respect plate/dumbbell increments.
-- **Fitbod:** users complain of implausible auto-weights.
-- **RP Hypertrophy:** feedback prompts called tedious.
+How competitors show the same things (help-centre summaries):
+- **Hevy:** "previous" values per exercise.
+- **Strong:** per-rep-count records.
+- **Boostcamp:** "max reps at a weight" PRs.
 
-Our plan copies the cheap, trusted parts (previous line, like-for-like PRs, double progression, increment awareness) and skips the noisy ones (auto-weights from little data, per-session questionnaires, heat maps on unreliable muscle tagging).
+Reps-at-weight comparison is a familiar pattern. Our version drops set structure entirely and keeps the full history one tap away.
 
-## 9. Open decisions
+## 8. Open questions
 
-1. **Show "Try N" suggestions at all?** Recommended: yes, labelled as a suggestion, from the 2nd session. The always-on "Last time" line is the observation-only fallback if you'd rather not.
-2. **One-tap clustering window:** recommended 2 minutes; tune with real logs.
-3. **Baby-load prompt (§4.6):** a gentle monthly "Has Lifted Baby gotten heavier? Update the load" in `ExerciseInfoSheet` / the row, never a number guess. Recommended on.
-4. **Reps-in-reserve capture:** recommended not in v1.
-5. **Gain-rate band (Phase 6):** blocked on audit open question 9.
+1. **Compare default:** "last time" (recommended) or "same day last week"?
+2. **Training tracker:** switch "sets this week" to "reps this week" (recommended, §3.5), or hide it?
+3. **Weight rounding:** 0.5 lb buckets (recommended) or exact match?
