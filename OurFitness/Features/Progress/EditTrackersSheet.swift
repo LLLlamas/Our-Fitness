@@ -27,7 +27,7 @@ struct EditTrackersSheet: View {
                         .foregroundStyle(theme.dim)
                 }
 
-                Text("Progress starts with the metrics the app can fill in for you. Switch on anything you measure yourself — body fat, waist, lab results.")
+                Text("Progress starts with the metrics the app can fill in for you. Switch on anything you measure yourself — body fat, tape measurements, lab results.")
                     .font(.callout)
                     .foregroundStyle(theme.dim)
                     .fixedSize(horizontal: false, vertical: true)

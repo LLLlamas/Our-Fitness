@@ -329,6 +329,11 @@ public final class BodyMetricModel {
     public var bodyFatPct: Double?
     public var waistIn: Double?
     public var notes: String?
+    // Optional and additive — rows written before these existed read as nil.
+    public var shouldersIn: Double?
+    public var chestIn: Double?
+    public var armIn: Double?
+    public var thighIn: Double?
 
     public init(snapshot s: BodyMetricDTO) {
         self.id = s.id
@@ -338,12 +343,18 @@ public final class BodyMetricModel {
         self.bodyFatPct = s.bodyFatPct
         self.waistIn = s.waistIn
         self.notes = s.notes
+        self.shouldersIn = s.shouldersIn
+        self.chestIn = s.chestIn
+        self.armIn = s.armIn
+        self.thighIn = s.thighIn
     }
 
     public var snapshot: BodyMetricDTO {
         BodyMetricDTO(id: id, userId: userId, date: date,
                       weightLb: weightLb, bodyFatPct: bodyFatPct,
-                      waistIn: waistIn, notes: notes)
+                      waistIn: waistIn, notes: notes,
+                      shouldersIn: shouldersIn, chestIn: chestIn,
+                      armIn: armIn, thighIn: thighIn)
     }
 }
 

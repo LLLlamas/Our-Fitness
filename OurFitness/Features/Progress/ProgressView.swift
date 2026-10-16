@@ -15,6 +15,7 @@ struct ProgressTabView: View {
     @Query private var markerModels: [HealthMarkerModel]
     @Query private var stepModels: [StepCountModel]
     @Query private var setModels: [WorkoutSetModel]
+    @Query private var exerciseModels: [ExerciseModel]
     // Energy-balance card inputs. Scoped per-profile like everything else.
     @Query private var foodModels: [FoodLogEntryModel]
     @Query private var cardioModels: [CardioSessionModel]
@@ -55,6 +56,7 @@ struct ProgressTabView: View {
             filter: #Predicate<WorkoutSetModel> { $0.userId == uid },
             sort: \.timestamp, order: .forward
         )
+        _exerciseModels = Query(filter: #Predicate<ExerciseModel> { $0.profileId == uid })
         // Food uses userId; cardio/pilates/activities use profileId (mirrors MoveCard).
         _foodModels = Query(
             filter: #Predicate<FoodLogEntryModel> { $0.userId == uid },
@@ -181,13 +183,19 @@ struct ProgressTabView: View {
                     // value, so keep one quiet line pointing at the rest.
                     if visibleStats.count < StatKind.allCases.count {
                         Button { showEditTrackers = true } label: {
-                            Text("Add a tracker — body fat, waist, blood pressure, labs")
+                            Text("Add a tracker — body fat, tape measurements, blood pressure, labs")
                                 .font(.footnote)
                                 .foregroundStyle(theme.dim)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         .tactile(.ghost)
                     }
+                }
+
+                // Estimated max per loaded lift — only once a weighted set exists.
+                let lifts = StrengthProgress.lifts(sets: sets, exercises: exerciseModels.map(\.snapshot), now: Date())
+                if !lifts.isEmpty {
+                    strengthCard(lifts: lifts)
                 }
 
                 // Calorie intake vs activity burn — shown for every goal, but
@@ -228,6 +236,49 @@ struct ProgressTabView: View {
         .sheet(isPresented: $showTrainingHistory) {
             TrainingHistorySheet(profile: profile)
         }
+    }
+
+    // MARK: - Strength card
+
+    @ViewBuilder
+    private func strengthCard(lifts: [StrengthProgress.Lift]) -> some View {
+        Card {
+            VStack(alignment: .leading, spacing: 12) {
+                Label("Strength", systemImage: "figure.strengthtraining.traditional")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(theme.accent)
+                ForEach(lifts.prefix(5)) { lift in
+                    HStack(alignment: .firstTextBaseline) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(lift.name)
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundStyle(theme.text)
+                            Text("best set \(Units.formatWeight(lb: lift.bestWeightLb, system: unitSystem, decimals: 0)) × \(lift.bestReps)")
+                                .font(.caption).foregroundStyle(theme.dim)
+                        }
+                        Spacer()
+                        VStack(alignment: .trailing, spacing: 2) {
+                            Text("≈ " + Units.formatWeightWithUnit(lb: lift.estimatedMaxLb, system: unitSystem, decimals: 0))
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundStyle(theme.text)
+                            if let gain = lift.gainLb {
+                                Text(strengthGainLabel(gain))
+                                    .font(.caption)
+                                    .foregroundStyle(gain > 0 ? theme.ok : theme.dim)
+                            }
+                        }
+                    }
+                }
+                Text("Estimated one-rep max (Epley formula) from sets of 1–12 reps. Change is vs. before the last 4 weeks.")
+                    .font(.caption2).foregroundStyle(theme.dim)
+            }
+        }
+    }
+
+    private func strengthGainLabel(_ gainLb: Double) -> String {
+        let magnitude = Units.formatWeightWithUnit(lb: abs(gainLb), system: unitSystem, decimals: 0)
+        if magnitude.hasPrefix("0 ") { return "no change · 4 wk" }
+        return (gainLb > 0 ? "+" : "−") + magnitude + " · 4 wk"
     }
 
     // MARK: - Training history card
@@ -357,7 +408,7 @@ struct ProgressTabView: View {
             guard let w = body_.compactMap(\.weightLb).last else { return nil }
             let bmi = BodyComposition.bmi(weightLb: w, heightIn: profile.heightIn)
             return bmiIsHealthy(bmi) ? theme.ok : theme.warn
-        case .weight, .bodyFat, .waist, .stepsAvg, .trainingVolume:
+        case .weight, .bodyFat, .waist, .shoulders, .chest, .arm, .thigh, .stepsAvg, .trainingVolume:
             return nil
         }
         switch status {
@@ -408,8 +459,8 @@ struct ProgressTabView: View {
                     latestMarkerValue(mk, in: markers).map { TargetRationale.markerMeaning(kind: mk, value: $0, fitnessGoal: profile.fitnessGoal) }
                 },
                 onSave: { value in
-                    // Waist is entered in the active unit; convert back to canonical inches.
-                    let canonical = kind == .waist
+                    // Tape measurements are entered in the active unit; convert back to canonical inches.
+                    let canonical = kind.tapeIn != nil
                         ? Units.lengthToInches(value, system: unitSystem)
                         : value
                     save(kind: kind, value: canonical)
@@ -475,11 +526,12 @@ struct ProgressTabView: View {
             toasts.show(Toast(title: "Body fat logged",
                               detail: String(format: "%.1f %%", value),
                               accent: .ok, symbol: "scalemass.fill"))
-        case .waist:
-            guard Repos.addBody(ctx, BodyMetricDTO(
-                userId: profile.id, date: today, waistIn: value
-            )) else { return }
-            toasts.show(Toast(title: "Waist logged",
+        case .waist, .shoulders, .chest, .arm, .thigh:
+            guard let kp = kind.tapeIn else { return }
+            var dto = BodyMetricDTO(userId: profile.id, date: today)
+            dto[keyPath: kp] = value
+            guard Repos.addBody(ctx, dto) else { return }
+            toasts.show(Toast(title: "\(kind.title) logged",
                               detail: Units.formatLengthWithUnit(inches: value, system: unitSystem),
                               accent: .ok, symbol: "ruler"))
         case .restingHR, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
@@ -503,6 +555,8 @@ enum StatKind: String, CaseIterable, Identifiable {
     case weight, bodyFat, waist, bmi, restingHR, stepsAvg
     case trainingVolume
     case bp, ldl, hdl, totalCholesterol, a1c, fastingGlucose
+    // Tape measurements for frame size. Appended last: the enabled set is a persisted CSV of raw values.
+    case shoulders, chest, arm, thigh
 
     var id: String { rawValue }
 
@@ -511,6 +565,10 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .weight:           return "Weight"
         case .bodyFat:          return "Body Fat"
         case .waist:            return "Waist"
+        case .shoulders:        return "Shoulders"
+        case .chest:            return "Chest"
+        case .arm:              return "Arm"
+        case .thigh:            return "Thigh"
         case .bmi:              return "BMI"
         case .restingHR:        return "Resting HR"
         case .stepsAvg:         return "Steps · 7d avg"
@@ -528,7 +586,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         switch self {
         case .weight:           return Units.weightUnit(system)
         case .bodyFat:          return "% body fat"
-        case .waist:            return Units.lengthUnit(system)
+        case .waist, .shoulders, .chest, .arm, .thigh: return Units.lengthUnit(system)
         case .bmi:              return "BMI"
         case .restingHR:        return "bpm"
         case .stepsAvg:         return "steps"
@@ -544,10 +602,26 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .weight:           return "weight (\(Units.weightUnit(system)))"
         case .bodyFat:          return "body fat (%)"
         case .waist:            return "waist (\(Units.lengthUnit(system)))"
+        case .shoulders:        return "shoulders (\(Units.lengthUnit(system)))"
+        case .chest:            return "chest (\(Units.lengthUnit(system)))"
+        case .arm:              return "arm, flexed (\(Units.lengthUnit(system)))"
+        case .thigh:            return "thigh (\(Units.lengthUnit(system)))"
         case .restingHR:        return "resting HR (bpm)"
         case .ldl, .hdl, .totalCholesterol, .fastingGlucose: return "value (mg/dL)"
         case .a1c:              return "A1c (%)"
         case .bmi, .bp, .stepsAvg, .trainingVolume: return ""
+        }
+    }
+
+    /// Where a tape-measure tracker's value lives on `BodyMetricDTO` (canonical inches); nil for every other tracker.
+    var tapeIn: WritableKeyPath<BodyMetricDTO, Double?>? {
+        switch self {
+        case .waist:     return \.waistIn
+        case .shoulders: return \.shouldersIn
+        case .chest:     return \.chestIn
+        case .arm:       return \.armIn
+        case .thigh:     return \.thighIn
+        default:         return nil
         }
     }
 
@@ -584,7 +658,7 @@ enum StatKind: String, CaseIterable, Identifiable {
             // Derived from weight + profile height — the Weight card already
             // shows that number and a more useful lb/week trend.
             return false
-        case .bodyFat, .waist, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
+        case .bodyFat, .waist, .shoulders, .chest, .arm, .thigh, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
             // Equipment or a lab panel. Real metrics, but empty for most people.
             return false
         }
@@ -598,8 +672,9 @@ enum StatKind: String, CaseIterable, Identifiable {
             return body.contains { $0.weightLb != nil }
         case .bodyFat:
             return body.contains { $0.bodyFatPct != nil }
-        case .waist:
-            return body.contains { $0.waistIn != nil }
+        case .waist, .shoulders, .chest, .arm, .thigh:
+            guard let kp = tapeIn else { return false }
+            return body.contains { $0[keyPath: kp] != nil }
         case .bp:
             return markers.contains { $0.kind == .bpSystolic || $0.kind == .bpDiastolic }
         case .restingHR, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
@@ -624,8 +699,9 @@ enum StatKind: String, CaseIterable, Identifiable {
             return body.compactMap(\.weightLb).last.map { Units.formatWeight(lb: $0, system: system) }
         case .bodyFat:
             return body.compactMap(\.bodyFatPct).last.map { String(format: "%.1f%%", $0) }
-        case .waist:
-            return body.compactMap(\.waistIn).last.map { Units.formatLength(inches: $0, system: system) }
+        case .waist, .shoulders, .chest, .arm, .thigh:
+            guard let kp = tapeIn else { return nil }
+            return body.compactMap { $0[keyPath: kp] }.last.map { Units.formatLength(inches: $0, system: system) }
         case .bmi:
             guard let p = profile,
                   let w = body.compactMap(\.weightLb).last,
@@ -718,9 +794,10 @@ enum StatKind: String, CaseIterable, Identifiable {
             return body.compactMap { b in
                 b.bodyFatPct.map { Trends.Point(date: b.date, value: $0) }
             }
-        case .waist:
+        case .waist, .shoulders, .chest, .arm, .thigh:
+            guard let kp = tapeIn else { return [] }
             return body.compactMap { b in
-                b.waistIn.map { Trends.Point(date: b.date, value: system == .metric ? $0 * Units.cmPerInch : $0) }
+                b[keyPath: kp].map { Trends.Point(date: b.date, value: system == .metric ? $0 * Units.cmPerInch : $0) }
             }
         case .restingHR:
             return Trends.markerSeries(markers, kind: .restingHR)
@@ -764,9 +841,10 @@ enum StatKind: String, CaseIterable, Identifiable {
             .reversed()
             .prefix(10)
             .map { $0 }
-        case .waist:
+        case .waist, .shoulders, .chest, .arm, .thigh:
+            guard let kp = tapeIn else { return [] }
             return body.compactMap { b -> StatDetailEntry? in
-                guard let v = b.waistIn else { return nil }
+                guard let v = b[keyPath: kp] else { return nil }
                 return StatDetailEntry(id: b.id.uuidString, dateLabel: b.date,
                                        valueLabel: Units.formatLengthWithUnit(inches: v, system: system))
             }

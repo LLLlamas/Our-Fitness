@@ -630,10 +630,17 @@ public struct BodyMetricDTO: Codable, Equatable, Sendable, Identifiable {
     public var bodyFatPct: Double?
     public var waistIn: Double?
     public var notes: String?
+    // Tape measurements for frame size, canonical inches like `waistIn`.
+    public var shouldersIn: Double?
+    public var chestIn: Double?
+    public var armIn: Double?
+    public var thighIn: Double?
 
     public init(id: UUID = UUID(), userId: UUID, date: String,
                 weightLb: Double? = nil, bodyFatPct: Double? = nil,
-                waistIn: Double? = nil, notes: String? = nil) {
+                waistIn: Double? = nil, notes: String? = nil,
+                shouldersIn: Double? = nil, chestIn: Double? = nil,
+                armIn: Double? = nil, thighIn: Double? = nil) {
         self.id = id
         self.userId = userId
         self.date = date
@@ -641,6 +648,10 @@ public struct BodyMetricDTO: Codable, Equatable, Sendable, Identifiable {
         self.bodyFatPct = bodyFatPct
         self.waistIn = waistIn
         self.notes = notes
+        self.shouldersIn = shouldersIn
+        self.chestIn = chestIn
+        self.armIn = armIn
+        self.thighIn = thighIn
     }
 }
 
