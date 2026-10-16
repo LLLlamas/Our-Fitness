@@ -56,6 +56,61 @@ final class SetEditCaloriesTests: XCTestCase {
         XCTAssertNotEqual(set(exercise("Barbell Squat"), reps: 10), set(baby, reps: 10), accuracy: 0.01)
     }
 
+    // MARK: - Load override (a row priced at the load it was done at)
+
+    func test_load_override_defaults_to_the_exercise_load_so_existing_callers_are_unchanged() {
+        let baby = exercise("Lifted Baby", category: .bodyweight, loadLb: 30)
+        let carry = exercise("Carried Baby", category: .bodyweight, kind: .duration, loadLb: 30)
+        for ex in [baby, carry] {
+            XCTAssertEqual(
+                CalorieEstimator.caloriesForSet(exercise: ex, reps: 10, holdSeconds: nil,
+                                                bodyWeightLb: 180, loadLb: nil),
+                set(ex, reps: 10), accuracy: 0.0000001)
+        }
+    }
+
+    func test_load_override_on_a_fixed_load_exercise_stays_on_the_loaded_branch() {
+        // The baby grew from 30 to 40 lb after this row was logged. Pricing the row at
+        // its own 30 lb must give the figure the original log stored; the flat loaded
+        // MET reads only the load's presence, so both loads land on one number.
+        let grown = exercise("Lifted Baby", category: .bodyweight, loadLb: 40)
+        let at30 = CalorieEstimator.caloriesForSet(exercise: grown, reps: 10, holdSeconds: nil,
+                                                   bodyWeightLb: 180, loadLb: 30)
+        XCTAssertEqual(at30, 2.041165665, accuracy: 0.0001)
+        XCTAssertEqual(at30, set(grown, reps: 10), accuracy: 0.0000001)
+        let carry = exercise("Carried Baby", category: .bodyweight, kind: .duration, loadLb: 40)
+        XCTAssertEqual(
+            CalorieEstimator.caloriesForSet(exercise: carry, reps: 10, holdSeconds: nil,
+                                            bodyWeightLb: 180, loadLb: 30),
+            CalorieEstimator.caloriesForDuration(minutes: 10, loadLb: 30, bodyWeightLb: 180),
+            accuracy: 0.0000001)
+    }
+
+    func test_load_override_never_turns_an_unloaded_exercise_into_a_loaded_one() {
+        let squat = exercise("Barbell Squat")
+        XCTAssertEqual(
+            CalorieEstimator.caloriesForSet(exercise: squat, reps: 10, holdSeconds: nil,
+                                            bodyWeightLb: 180, loadLb: 100),
+            set(squat, reps: 10), accuracy: 0.0000001)
+        let walkMinutes = exercise("Plain Carry", category: .bodyweight, kind: .duration)
+        XCTAssertEqual(
+            CalorieEstimator.caloriesForSet(exercise: walkMinutes, reps: 10, holdSeconds: nil,
+                                            bodyWeightLb: 180, loadLb: 30),
+            CalorieEstimator.caloriesForDuration(minutes: 10, loadLb: nil, bodyWeightLb: 180),
+            accuracy: 0.0000001)
+    }
+
+    func test_fixedLoadLb_prefers_the_rows_stamp_and_never_applies_to_holds_or_unloaded() {
+        let baby = exercise("Lifted Baby", category: .bodyweight, loadLb: 40)
+        XCTAssertEqual(baby.fixedLoadLb(forRowWeight: 30, holdSeconds: nil), 30)
+        XCTAssertEqual(baby.fixedLoadLb(forRowWeight: 32.5, holdSeconds: nil), 32.5)   // exact, no rounding
+        XCTAssertEqual(baby.fixedLoadLb(forRowWeight: nil, holdSeconds: nil), 40)      // unstamped row
+        XCTAssertEqual(baby.fixedLoadLb(forRowWeight: 0, holdSeconds: nil), 40)
+        XCTAssertEqual(baby.fixedLoadLb(forRowWeight: -5, holdSeconds: nil), 40)
+        XCTAssertNil(baby.fixedLoadLb(forRowWeight: 30, holdSeconds: 45))              // holds never get a weight
+        XCTAssertNil(exercise("Barbell Squat").fixedLoadLb(forRowWeight: 135, holdSeconds: nil))
+    }
+
     // MARK: - Duration path (reps carries minutes)
 
     func test_duration_movement_reads_its_count_as_minutes_not_reps() {

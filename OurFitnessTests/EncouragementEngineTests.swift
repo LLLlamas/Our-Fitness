@@ -38,37 +38,83 @@ final class EncouragementEngineTests: XCTestCase {
         }
     }
 
-    // MARK: - Workout milestones
+    // MARK: - Strength progress copy
 
-    func testWorkoutMilestone_4sets_scienceTip() {
-        let msg = EncouragementEngine.workoutSetMessage(
-            exercise: pullUpExercise(), repsJustLogged: 10,
-            totalSetsThisWeekForMuscle: 4)
-        XCTAssertNotNil(msg)
-        XCTAssertEqual(msg?.tone, .scienceTip)
-        // Spells out the acronym.
-        XCTAssertTrue(msg?.detail.contains("minimum effective volume") ?? false)
+    private func w(_ lb: Double) -> String { "\(Int(lb)) lb" }
+    private func d(_ key: String) -> String { key }
+
+    func testNewBestAtWeight_namesWeightAndPreviousBest() {
+        let msg = EncouragementEngine.newBestMessage(
+            .atWeight(measure: .reps, weight: .init(50), amount: 34, previousBest: 30, previousDayKey: "2026-10-02"),
+            formatWeight: w, formatDay: d)
+        XCTAssertEqual(msg.headline, "New best: 34 reps @ 50 lb")
+        XCTAssertTrue(msg.detail.contains("4 more reps"))
+        XCTAssertTrue(msg.detail.contains("30 reps on 2026-10-02"))
+        XCTAssertEqual(msg.tone, .celebrate)
     }
 
-    func testWorkoutMilestone_3sets_returnsNil() {
-        let msg = EncouragementEngine.workoutSetMessage(
-            exercise: pullUpExercise(), repsJustLogged: 10,
-            totalSetsThisWeekForMuscle: 3)
-        XCTAssertNil(msg)
+    func testNewBestBodyweight_hasNoWeightSuffix() {
+        let msg = EncouragementEngine.newBestMessage(
+            .atWeight(measure: .reps, weight: .bodyweight, amount: 1, previousBest: 0, previousDayKey: "x"),
+            formatWeight: w, formatDay: d)
+        XCTAssertEqual(msg.headline, "New best: 1 rep")
     }
 
-    func testWorkoutMilestone_10sets_isCelebrate() {
-        let msg = EncouragementEngine.workoutSetMessage(
-            exercise: pullUpExercise(), repsJustLogged: 10,
-            totalSetsThisWeekForMuscle: 10)
-        XCTAssertEqual(msg?.tone, .celebrate)
+    func testNewBestMinutes() {
+        let msg = EncouragementEngine.newBestMessage(
+            .atWeight(measure: .minutes, weight: .init(30), amount: 25, previousBest: 20, previousDayKey: "k"),
+            formatWeight: w, formatDay: d)
+        XCTAssertEqual(msg.headline, "New best: 25 min @ 30 lb")
+        XCTAssertTrue(msg.detail.contains("5 more min"))
     }
 
-    func testWorkoutMilestone_usesPrimaryMuscleName() {
-        let msg = EncouragementEngine.workoutSetMessage(
-            exercise: pullUpExercise(), repsJustLogged: 10,
-            totalSetsThisWeekForMuscle: 4)
-        XCTAssertTrue(msg?.detail.contains("Lats") ?? false)
+    func testHeaviestYetAndLongestHold() {
+        let heavy = EncouragementEngine.newBestMessage(
+            .heaviest(weightLb: 55, previousLb: 50, previousDayKey: "k"), formatWeight: w, formatDay: d)
+        XCTAssertEqual(heavy.headline, "Heaviest yet: 55 lb")
+        XCTAssertTrue(heavy.detail.contains("50 lb"))
+        let hold = EncouragementEngine.newBestMessage(
+            .longestHold(seconds: 75, previousSeconds: 60, previousDayKey: "k"), formatWeight: w, formatDay: d)
+        XCTAssertEqual(hold.headline, "Longest hold yet: 1 min 15 s")
+        XCTAssertTrue(hold.detail.contains("15 s longer"))
+    }
+
+    func testBestHeadlinesStayWithinFiftyCharacters() {
+        let bests: [RepHistory.NewBest] = [
+            .atWeight(measure: .reps, weight: .init(137.5), amount: 123, previousBest: 100, previousDayKey: "k"),
+            .heaviest(weightLb: 137.5, previousLb: 100, previousDayKey: "k"),
+            .longestHold(seconds: 3_725, previousSeconds: 60, previousDayKey: "k"),
+        ]
+        for b in bests {
+            let msg = EncouragementEngine.newBestMessage(b, formatWeight: { "\($0) pounds of iron plate" }, formatDay: d)
+            XCTAssertLessThanOrEqual(msg.headline.count, 50, msg.headline)
+        }
+    }
+
+    func testWeeklyRepsMessage_perNote() {
+        func msg(_ note: RepHistory.WeeklyNote, this: Int = 100, last: Int = 120) -> EncouragementMessage? {
+            EncouragementEngine.weeklyRepsMessage(
+                RepHistory.WeeklyReps(thisWeek: this, lastWeek: last, note: note, byExercise: []))
+        }
+        XCTAssertEqual(msg(.approaching(remaining: 20))?.headline, "20 reps to match last week")
+        XCTAssertEqual(msg(.approaching(remaining: 20))?.tone, .approaching)
+        XCTAssertEqual(msg(.passed(by: 35), this: 155)?.headline, "+35 reps vs last week")
+        XCTAssertEqual(msg(.bestWeek)?.headline, "Most reps in a week yet")
+        XCTAssertEqual(msg(.firstWeekBack, last: 0)?.headline, "First week back")
+        XCTAssertNil(msg(.none))
+    }
+
+    func testWeeklyRepsMessage_neverShamesOrNamesADecrease() {
+        let notes: [RepHistory.WeeklyNote] = [.approaching(remaining: 1), .passed(by: 1), .bestWeek, .firstWeekBack]
+        for n in notes {
+            let m = EncouragementEngine.weeklyRepsMessage(
+                RepHistory.WeeklyReps(thisWeek: 10, lastWeek: 11, note: n, byExercise: []))
+            let copy = ((m?.headline ?? "") + " " + (m?.detail ?? "")).lowercased()
+            for banned in ["missed", "behind", "failed", "worse", "fewer", "lost", "streak"] {
+                XCTAssertFalse(copy.contains(banned), "\(n): \(copy)")
+            }
+            XCTAssertLessThanOrEqual(m?.headline.count ?? 0, 50)
+        }
     }
 
     // MARK: - Projections

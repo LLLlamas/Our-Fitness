@@ -3,16 +3,19 @@ import SwiftData
 
 // MARK: - Training history sheet
 
-/// Cross-day training history — every logged set/session grouped by day, newest first.
+/// Cross-day training history — every logged exercise/session grouped by day, newest first.
 /// This is the home for past workouts. Opened from the Train tab and from
-/// Progress. Tapping an exercise row opens `SetHistorySheet` on that day, where
-/// its sets are edited, removed, or a forgotten set is added.
+/// Progress. An exercise row reads as reps at a weight ("50 lb × 30 · 55 lb × 8",
+/// the same line `ExerciseProgressSheet` prints — `RepHistory.summary`), and
+/// tapping it opens `SetHistorySheet` on that day, where its rows are edited,
+/// removed, or a forgotten one is added.
 struct TrainingHistorySheet: View {
     let profile: ProfileDTO
 
     @Environment(\.modelContext) private var ctx
     @Environment(\.theme) private var theme
     @EnvironmentObject private var toasts: ToastCenter
+    @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
     @Query private var setModels: [WorkoutSetModel]
     @Query private var exerciseModels: [ExerciseModel]
@@ -85,7 +88,7 @@ struct TrainingHistorySheet: View {
                         VStack(alignment: .leading, spacing: 6) {
                             Text("No training logged yet.")
                                 .font(.callout).foregroundStyle(theme.text)
-                            Text("Sets, cardio, Pilates, and live sessions show up here grouped by day.")
+                            Text("Reps, cardio, Pilates, and live sessions show up here grouped by day.")
                                 .font(.caption).foregroundStyle(theme.dim)
                         }
                     }
@@ -156,8 +159,11 @@ struct TrainingHistorySheet: View {
     ) -> String {
         let sessionCount = cardio.count + pilates.count + activities.count
         var parts: [String] = []
-        if let strength, strength.totalSets > 0 {
-            parts.append("\(strength.totalSets) set\(strength.totalSets == 1 ? "" : "s")")
+        // Exercises, not sets: progress is reps at a weight, and `totalSets` is
+        // only the number of rows that happened to be logged.
+        if let strength, !strength.exercises.isEmpty {
+            let n = strength.exercises.count
+            parts.append("\(n) exercise\(n == 1 ? "" : "s")")
         }
         if sessionCount > 0 {
             parts.append("\(sessionCount) session\(sessionCount == 1 ? "" : "s")")
@@ -215,13 +221,12 @@ struct TrainingHistorySheet: View {
         .padding(.vertical, 4)
     }
 
+    /// The shared reps-at-weight line (reps / minutes / hold time folded per exact
+    /// weight), then the day's burn for that exercise.
     private func lineDetail(_ line: TrainingHistory.ExerciseLine) -> String {
-        if line.isIsometric {
-            return "\(line.setCount) hold\(line.setCount == 1 ? "" : "s") · \(holdLabel(line.totalHoldSeconds))"
-        }
-        var s = "\(line.setCount) set\(line.setCount == 1 ? "" : "s") · \(line.totalReps) rep\(line.totalReps == 1 ? "" : "s")"
-        if line.calories > 0 { s += " · ~\(line.calories) cal" }
-        return s
+        let amount = RepHistory.summary(line.tally) { ProgressFormat.weight($0, system: unitSystem) }
+        let parts = [amount, line.calories > 0 ? "~\(line.calories) cal" : ""].filter { !$0.isEmpty }
+        return parts.isEmpty ? "—" : parts.joined(separator: " · ")
     }
 
     @ViewBuilder
@@ -309,16 +314,5 @@ struct TrainingHistorySheet: View {
         guard Repos.deleteSet(ctx, id: id) else { return }
         // No Haptics.warn() here — ToastCenter fires the .warn accent's haptic.
         toasts.show(Toast(title: "Set removed", detail: line.name, accent: .warn, symbol: "trash.fill"))
-    }
-
-    private func holdLabel(_ seconds: Int) -> String {
-        guard seconds > 0 else { return "—" }
-        if seconds < 90 { return "\(seconds)s" }
-        if seconds < 4200 {
-            let m = seconds / 60; let s = seconds % 60
-            return s > 0 ? "\(m)m \(s)s" : "\(m)m"
-        }
-        let h = seconds / 3600; let m = (seconds % 3600) / 60
-        return m > 0 ? "\(h)h \(m)m" : "\(h)h"
     }
 }

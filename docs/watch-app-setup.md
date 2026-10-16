@@ -79,15 +79,15 @@ signing.
 
 ## Step 2 — Generate the watch app's App Store provisioning profile
 
-Mirror exactly what we already do for the main app and the widget (CLAUDE.md →
-"TestFlight signing"; `docs/live-activity-setup.md` Step 2):
+Mirror exactly what we already do for the main app and the widget ([ci.md](ci.md) →
+"CI / TestFlight" signing; `docs/live-activity-setup.md` Step 2):
 
 1. developer.apple.com → **Profiles → +**.
 2. Type: **App Store** (distribution).
 3. App ID: `com.ourfitness.app.watchkitapp`.
 4. Certificate: the **same Apple Distribution certificate** the app and widget
    use (the one stored in the `Our-Fitness-Certs` match repo). Do not create a
-   new cert — cert slots are limited (CLAUDE.md).
+   new cert — cert slots are limited ([ci.md](ci.md)).
 5. Name it **`OurFitnessWatch AppStore`** — this string must match
    `PROVISIONING_PROFILE_SPECIFIER` for the `OurFitnessWatch` target in
    `project.yml`. If you choose a different name, update `project.yml` to match.

@@ -14,7 +14,9 @@ public enum TrainingHistory {
         public let exerciseId: String
         public let name: String
         public let isIsometric: Bool
-        public let setCount: Int
+        /// Reps / minutes / hold seconds folded per exact weight — print it with
+        /// `RepHistory.summary(line.tally, formatWeight:)` so every list reads alike.
+        public let tally: RepHistory.Tally
         public let totalReps: Int
         public let totalHoldSeconds: Int
         public let calories: Int
@@ -27,6 +29,7 @@ public enum TrainingHistory {
     public struct DaySession: Sendable, Identifiable {
         public let dayKey: String          // local YYYY-MM-DD
         public let exercises: [ExerciseLine]
+        /// Logged rows that day (one per Save set / +1 tap), not a progress figure.
         public let totalSets: Int
         public let totalCalories: Int
         public var id: String { dayKey }
@@ -61,7 +64,11 @@ public enum TrainingHistory {
                             exerciseId: exerciseId,
                             name: acc.name,
                             isIsometric: acc.isIsometric,
-                            setCount: acc.setCount,
+                            tally: RepHistory.dayTally(
+                                for: byId[exerciseId] ?? ExerciseDTO(
+                                    id: exerciseId, name: acc.name, category: .compound,
+                                    muscleGroups: [], equipment: []),
+                                rows: acc.rows, dayKey: dayKey),
                             totalReps: acc.totalReps,
                             totalHoldSeconds: acc.totalHoldSeconds,
                             calories: acc.calories,
@@ -73,7 +80,7 @@ public enum TrainingHistory {
                 return DaySession(
                     dayKey: dayKey,
                     exercises: lines,
-                    totalSets: lines.reduce(0) { $0 + $1.setCount },
+                    totalSets: lines.reduce(0) { $0 + $1.tally.rowCount },
                     totalCalories: lines.reduce(0) { $0 + $1.calories }
                 )
             }
@@ -83,45 +90,46 @@ public enum TrainingHistory {
 
     // MARK: - Weekly volume
 
-    /// Sets logged inside one Monday-anchored ISO week. `weeksAgo: 0` is the
-    /// current week, `1` the week before, and so on.
+    /// REPS logged inside one Monday-anchored ISO week, across rep exercises only
+    /// (`kind == .reps`, not isometric — holds and duration exercises are
+    /// excluded, as are sets of unknown exercises). `weeksAgo: 0` is the current
+    /// week, `1` the week before, and so on.
     ///
+    /// Reps, not rows: ten +1 taps and one set of ten are the same ten reps.
     /// Weeks are ISO (Monday→Sunday) so the Progress tab's "this week" matches
     /// Today/Train, which have always used `Movement`'s Monday weeks.
-    public static func setsInWeek(
+    public static func repsInWeek(
         _ sets: [WorkoutSetDTO],
+        exercises: [ExerciseDTO],
         weeksAgo: Int = 0,
         now: Date = Date()
     ) -> Int {
-        let start = Dates.startOfISOWeek(now, weeksAgo: weeksAgo)
-        let end = Dates.startOfISOWeek(now, weeksAgo: weeksAgo - 1)
-        return sets.filter { $0.timestamp >= start && $0.timestamp < end }.count
+        let key = Dates.dayKey(Dates.startOfISOWeek(now, weeksAgo: weeksAgo))
+        return RepHistory.weeklyRepTotals(sets: sets, exercises: exercises)[key] ?? 0
     }
 
-    /// One point per ISO week that has at least one set, over the last `weeks`
+    /// One point per ISO week that has at least one rep, over the last `weeks`
     /// weeks (including the current, partial one). Oldest first; the point's
-    /// `date` is the week's Monday as a dayKey. Weeks with no sets are omitted
+    /// `date` is the week's Monday as a dayKey. Weeks with no reps are omitted
     /// rather than zero-filled — the chart plots what was actually logged.
-    public static func weeklySetCounts(
+    public static func weeklyRepCounts(
         _ sets: [WorkoutSetDTO],
+        exercises: [ExerciseDTO],
         weeks: Int = 12,
         now: Date = Date()
     ) -> [Trends.Point] {
         guard weeks > 0 else { return [] }
-        let cutoff = Dates.startOfISOWeek(now, weeksAgo: weeks - 1)
-        var counts: [String: Double] = [:]
-        for s in sets where s.timestamp >= cutoff {
-            counts[Dates.dayKey(Dates.startOfISOWeek(s.timestamp)), default: 0] += 1
-        }
-        return counts
-            .map { Trends.Point(date: $0.key, value: $0.value) }
+        let cutoffKey = Dates.dayKey(Dates.startOfISOWeek(now, weeksAgo: weeks - 1))
+        return RepHistory.weeklyRepTotals(sets: sets, exercises: exercises)
+            .filter { $0.key >= cutoffKey }
+            .map { Trends.Point(date: $0.key, value: Double($0.value)) }
             .sorted { $0.date < $1.date }
     }
 
     private struct Accumulator {
         var name: String = "Exercise"
         var isIsometric: Bool = false
-        var setCount: Int = 0
+        var rows: [WorkoutSetDTO] = []
         var totalReps: Int = 0
         var totalHoldSeconds: Int = 0
         var calories: Int = 0
@@ -130,7 +138,7 @@ public enum TrainingHistory {
         mutating func add(_ s: WorkoutSetDTO, exercise ex: ExerciseDTO?) {
             name = ex?.name ?? name
             isIsometric = ex?.isIsometric ?? isIsometric
-            setCount += 1
+            rows.append(s)
             totalReps += s.reps
             totalHoldSeconds += s.holdSeconds ?? 0
             calories += Int((s.caloriesEst ?? 0).rounded())
