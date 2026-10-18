@@ -8,10 +8,7 @@ Update affected Markdown in every milestone commit alongside its code. Record cu
 
 ## Audit remediation and handoff
 
-[docs/audit-handoff.md](audit-handoff.md) is a **historical record** of the
-2026-09-14 session, superseded on 14 Oct 2026 — read it for why the reminders and
-watch work landed the way it did, not for current state. The open backlog it fed
-into is [docs/next-audit-scope.md](next-audit-scope.md) (privacy controls,
+The 2026-09-14 audit-remediation handoff note (`docs/audit-handoff.md`, deleted Oct 2026 as superseded) is recoverable with `git show ff15fa5:docs/audit-handoff.md`. The open backlog it fed into is [next-audit-scope.md](next-audit-scope.md) (privacy controls,
 erase-local-data, measured performance), which is still accurate.
 
 When a session hands off, record unverified edits explicitly and update affected
@@ -83,3 +80,9 @@ Implemented plan sections 3.1 to 3.5 of [progress-tracking-plan.md](progress-tra
 - Full-history fetch cost per rep save (`Repos.setHistory(limit: 100_000)`, `Repos.weeklyReps`) against a multi-year fixture; non-UTC time zones (Linux runs were UTC).
 - Research figures in the Weekly Reps ⓘ (about 10 hard sets per muscle per week; 80-120 reps rule of thumb) are unchecked against the papers.
 - The Linux harness cannot catch a Swift 6 / iOS-only API error in files it does not compile.
+
+## Docs audit, build and test on `main` (2026-10-18) — validation record
+
+Verified locally on Xcode 26.6, `main` at `ff15fa5` (before the docs and comment-only edits below): `xcodegen generate`; app build (scheme `OurFitness`, iPhone 17 simulator, `CODE_SIGNING_ALLOWED=NO`) **BUILD SUCCEEDED**; `scripts/validate-ci-invariants.sh` exit 0; scheme test run **TEST SUCCEEDED** with 496 `OurFitnessTests` + 26 `OurFitnessPersistenceTests` cases, 0 failures (run through `xcodebuild test`: fastlane gems are not installed on this Mac). This is the first Xcode compile of the progress-tracking branch code (reps at a weight, `FixedLoadTests`) that the entry above lists as unverified.
+Not run: `OurFitnessUITests` smoke test; any simulator walk-through, physical phone or watch check; the in-place upgrade of a store holding nil-weight fixed-load rows.
+Docs: deleted the superseded or duplicate `where-to-touch-notes.md` (every row already lives in `docs/map/`; its Strength entry was stale), `validation-records.md` (the same three records are above), `audit-handoff.md`, `medication-reminders-plan.md`, and the old-two-mode research and plan docs (`health-tracking-ui-plan`, `encouragement-system-plan`, `activity-and-ai-expansion-research`, `nutrition-plan-research`, `RepCheck`), plus root `nutrition-plan.html` and `screen.png`. All are recoverable with `git show ff15fa5:docs/<name>`. Fixed dead links (`AGENTS.md` → `map/watch.md`), the Reminders/plant text in `watch-app-setup.md`, and code comments that cited deleted docs.

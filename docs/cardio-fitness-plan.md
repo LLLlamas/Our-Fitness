@@ -20,7 +20,7 @@
 2. **Dizziness is for a clinician, not the app.** One calm line in the VO₂ max ⓘ: dizziness at easy effort, or often, is worth mentioning to a doctor before adding intensity. Seek urgent help for chest/arm/jaw pain, trouble breathing, fainting, or sudden speech/vision changes (Mass General Brigham, search summary: [dizzy spells after workout](https://www.massgeneralbrigham.org/en/health-wellness/dizzy-spells-after-workout), not opened). Shown once in the ⓘ, never a nag or a gate.
 3. **No VO₂ max target or goal.** It's a slow outcome, not something to chase. Show the value and a trend, never "you should be at N".
 4. **No ranges or "good/bad" labels** until age/sex norms are sourced (they aren't). `HealthRanges` gets a no-classification case for this kind.
-5. **Observation over prescription** (RepCheck, StallDetector): comparisons are to the user's own history; "not logged", never "missed"; a lower number is shown plainly, never in red.
+5. **Observation over prescription** (StallDetector): comparisons are to the user's own history; "not logged", never "missed"; a lower number is shown plainly, never in red.
 
 ## 2. What the app can actually know (Apple docs, opened)
 

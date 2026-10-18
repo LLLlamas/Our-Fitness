@@ -1,6 +1,6 @@
 // Detects an activity / progress STALL from the user's logs — the input to a
-// gentle "keep going" nudge (Phase 4 of docs/encouragement-system-plan.md →
-// "Stall Detection Logic").
+// gentle "keep going" nudge (Phase 4 of the old encouragement plan, "Stall Detection Logic":
+// `git show ff15fa5:docs/encouragement-system-plan.md`).
 //
 // Pure Domain: no SwiftUI / SwiftData. Fully unit-tested (hostless).
 //

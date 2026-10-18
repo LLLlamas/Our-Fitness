@@ -9,10 +9,10 @@ Native iOS / SwiftUI app (App Store target). **[CLAUDE.md](CLAUDE.md) is the sin
 - Calorie math is written once, net of resting: [docs/calorie-math.md](docs/calorie-math.md). Never hardcode kcal.
 - Persisted raw values and schema rules: [docs/data-model.md](docs/data-model.md). Bump a schema version before changing a persisted raw value.
 - Before changing any health or fitness number: [docs/health-data-audit.md](docs/health-data-audit.md).
-- Watch wire format (one envelope, one context key): [docs/map/reminders-watch.md](docs/map/reminders-watch.md).
+- Watch wire format (one envelope, one context key): [docs/map/watch.md](docs/map/watch.md).
 
 ## Working agreements
 
 - Build and test locally ([CLAUDE.md](CLAUDE.md) → "Build and test"; details in [docs/ci.md](docs/ci.md)); do not push to CI to discover compile errors.
 - Edit the matching `docs/map/` row in the same commit as the code it describes; record what was actually verified in [docs/validation-log.md](docs/validation-log.md) and never claim unbuilt or untested edits are complete.
-- Handoffs: record unverified edits explicitly. A successor reads `CLAUDE.md`, the latest handoff note, and current `git status` / `git diff` first. The open backlog is [docs/next-audit-scope.md](docs/next-audit-scope.md); [docs/audit-handoff.md](docs/audit-handoff.md) is a historical record.
+- Handoffs: record unverified edits explicitly. A successor reads `CLAUDE.md`, the latest handoff note, and current `git status` / `git diff` first. The open backlog is [docs/next-audit-scope.md](docs/next-audit-scope.md).

@@ -1,6 +1,6 @@
 # Progress tracking plan: reps at a weight, over all history
 
-> **Status: IMPLEMENTED on branch `claude/awesome-dirac-rremd5` (Oct 2026), not yet compiled in Xcode.**
+> **Status: IMPLEMENTED and merged to `main` (Oct 2026). Compiled in Xcode and unit/persistence tests pass on 2026-10-18; no simulator, device or watch check yet.**
 > Sections 3.1 to 3.5 are in the code; the living description is in [map/workouts.md](map/workouts.md)
 > and [map/progress.md](map/progress.md) (code and those rows win over this plan wherever they differ).
 > Section 1 below is the pre-change snapshot, kept for the reasoning. Verification record:
@@ -23,7 +23,6 @@
 > - Behaviour change to know about: a hold no longer auto-logs when the countdown reaches the target; the user taps "Stop and log".
 >
 > **Unverified**
-> - Nothing that imports SwiftUI or SwiftData has been compiled or run (no Xcode in the build container): all of `Features/`, `Repositories.swift`, `Seeder.swift`, `ToastCenter.swift`, `WatchSyncService.swift`, and the 17 tests in `OurFitnessPersistenceTests/FixedLoadTests`.
 > - No simulator, device or watch check: sheet layouts (medium-detent reference block, comparison grid at 375 pt), the hold haptic and backgrounding mid-hold, toast order at runtime.
 > - The in-place upgrade of an existing store with nil-weight fixed-load rows (backfill + `updateExercise` stamping).
 > - Full-history fetches per rep save (`Repos.setHistory(limit: 100_000)`, `Repos.weeklyReps`) are not measured against a multi-year fixture.
@@ -149,7 +148,7 @@ Contents:
   - Back-fills and edits never toast.
   - Watch logs never toast (their bests still show in the history view).
   - One toast at a time: best > "Set saved".
-- No badges, points or confetti (rejected in `encouragement-system-plan.md`).
+- No badges, points or confetti (rejected in the old encouragement plan, `git show ff15fa5:docs/encouragement-system-plan.md`).
 
 ### 3.5 Replace the set-based pieces
 

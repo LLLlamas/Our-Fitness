@@ -90,8 +90,8 @@ simulator with real V7 data before shipping. Then also delete the DTOs, the
 
 ## Medication design notes (kept for a future return)
 
-Full original spec: [medication-reminders-plan.md](medication-reminders-plan.md)
-(marked RETIRED; its §12 and §16 safety wording was binding).
+Full original spec: `docs/medication-reminders-plan.md` at `d284700` (`git show d284700:docs/medication-reminders-plan.md`).
+Its §12 and §16 safety wording was binding for the feature; re-read it before any return.
 
 - **Set times vs inferred pattern.** A medication could have user-set dose times
   (`ReminderDTO.scheduledMinutesOfDay`, several per day) or none. Set times each

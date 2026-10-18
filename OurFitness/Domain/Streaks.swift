@@ -8,7 +8,7 @@ public enum Streaks {
     // The calorie-adherence arm below (`dailyCalories` / `currentStreak` /
     // `adherencePct`) has no UI yet — `loggingStreak` is the one that ships
     // today. It implements the "Progress signals" spec in
-    // docs/nutrition-plan-research.md section 6 ("how many days in a row the
+    // `git show ff15fa5:docs/nutrition-plan-research.md` section 6 ("how many days in a row the
     // user hit at least 80% of calorie target" + `adherence_score: 0..1`), so
     // it is a deliberate building block, not leftovers.
 

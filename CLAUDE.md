@@ -96,7 +96,7 @@ Each `docs/map/` file is a table of "goal → file(s) and the rules that bind th
 | Calorie math | [docs/calorie-math.md](docs/calorie-math.md) | Net-MET formula, per-activity multipliers, step-overlap rule |
 | Data model | [docs/data-model.md](docs/data-model.md) | Entities, append-only logs, legacy `CardioSessionDTO`, pinned raw values |
 | CI / signing / TestFlight | [docs/ci.md](docs/ci.md) | Local commands, UI smoke test, signing, XcodeGen rules; incident history in [docs/ci-history.md](docs/ci-history.md) |
-| Validation history | [docs/validation-log.md](docs/validation-log.md) | What was verified and not at each milestone, audit handoff (historical) |
+| Validation history | [docs/validation-log.md](docs/validation-log.md) | What was verified and not at each milestone (historical) |
 
 ## Milestone documentation
 

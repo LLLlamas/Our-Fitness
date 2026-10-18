@@ -1,5 +1,5 @@
 // Build-mode food library. Picky-eater friendly, nut-free, calorie-dense.
-// Ported from nutrition-plan-research.md.
+// Ported from nutrition-plan-research.md (`git show ff15fa5:docs/nutrition-plan-research.md`).
 
 import Foundation
 

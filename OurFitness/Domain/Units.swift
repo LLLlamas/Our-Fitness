@@ -167,7 +167,7 @@ public enum Units {
     // No app caller today — the only one was the deleted cardio logger. Kept
     // because `CardioSessionDTO.distanceMiles` is still persisted (SchemaV1-V6)
     // and the planned MET activity catalog carries `tracksDistance`
-    // (docs/activity-and-ai-expansion-research.md), which needs exactly this
+    // (`git show ff15fa5:docs/activity-and-ai-expansion-research.md`), which needs exactly this
     // pair at the UI boundary. Covered by `UnitsTests`.
 
     public static func distanceUnit(_ system: UnitSystem) -> String {

@@ -1,29 +1,17 @@
 # Watch app setup (Apple Watch companion)
 
-> **Reminders removed (October 2026).** The watch no longer has a Reminders tab,
-> reminder/medication snapshots, plant thumbnails or reminder actions, and the
-> phone no longer posts reminder notifications. Passages below that describe them
-> are historical; see [removed-reminders.md](removed-reminders.md).
-
-`OurFitnessWatch` has four tabs: Today (glance and water), Train (quick sets and
-live sessions), Meals (shortcuts), and Reminders. The phone remains the source of
-truth for logged records. The watch caches the received snapshot envelope in
-UserDefaults and plant thumbnails on disk so it can display data after a cold
-launch without connectivity. On-wrist workout sessions provide HealthKit telemetry.
+`OurFitnessWatch` has three tabs: Today (glance and water), Train (quick sets and
+live sessions), and Meals (shortcuts). The phone remains the source of truth for
+logged records. The watch caches the received snapshot envelope in UserDefaults so
+it can display data after a cold launch without connectivity. On-wrist workout
+sessions provide HealthKit telemetry. Reminders, plants and medication were removed
+from the watch in Oct 2026 ([removed-reminders.md](removed-reminders.md)).
 See [privacy-security.md](privacy-security.md) for storage and data-flow details.
 
 The repository already signs and embeds all three binaries: phone app, widget
 extension, and watch app. These steps cover provisioning setup/renewal and device
 verification. Check portal capabilities and secret validity at release time;
 repository configuration does not establish their current external state.
-
-> The notification-mirroring path is **already live and needs none of this**:
-> `Services/ReminderNotificationService.swift` posts a local notification with
-> action buttons ("Watered"/"Done" + "Snooze 1 day") that Apple Watch mirrors
-> automatically to a paired watch with **zero watch app installed** — that's
-> standard `UNNotificationCategory` behavior, not something this companion app
-> provides. The steps below are only for the separate, richer companion **app**
-> (browsing all reminders, watch-side thumbnails, etc.).
 
 ---
 
@@ -33,19 +21,17 @@ repository configuration does not establish their current external state.
 |---|---|
 | Phone-side sync driver | `Services/WatchSyncService.swift` |
 | Wire format shared by phone + watch | `Shared/WatchSyncPayload.swift` |
-| Photo/thumbnail downscale (shared) | `Services/ImageDownscale.swift` |
 | Watch app entry point (`@main`) | `OurFitnessWatch/OurFitnessWatchApp.swift` |
 | Watch snapshot store and disk caches (no SwiftData) | `OurFitnessWatch/WatchSyncStore.swift` |
-| Watch list / detail UI | `OurFitnessWatch/ReminderListView.swift` + `ReminderDetailView.swift` |
+| Watch UI | `OurFitnessWatch/Watch{Today,Train,Meals,QuickLog,LiveSession}View.swift` |
 | Watch target + embedding | `project.yml` (`OurFitnessWatch` target, `dependencies: embed: true` on the app) |
 
 Bundle ids:
 - App: `com.ourfitness.app`
 - Watch app: **`com.ourfitness.app.watchkitapp`** (must be a child of the app id)
 
-The watch target compiles `OurFitness/Domain/PlantCatalog.swift`,
-`ReminderSchedule.swift`, `LiveSessionState.swift`, `ActivityCatalog.swift`,
-`CalorieEstimator.swift`, and `Shared/WatchSyncPayload.swift`
+The watch target compiles `OurFitness/Domain/LiveSessionState.swift`,
+`ActivityCatalog.swift`, `CalorieEstimator.swift`, and `Shared/WatchSyncPayload.swift`
 directly as extra sources rather than pulling in the whole `Domain/` folder —
 the same pattern `OurFitnessTests` uses to compile `OurFitness/Domain` directly
 without linking the app target.
@@ -166,15 +152,12 @@ iOS Simulator:
    no watch target to install to).
 2. Build/install `OurFitness` to the iPhone (device or simulator); the embedded
    `OurFitnessWatch` app installs to the paired watch automatically.
-3. Add or edit a plant reminder on the phone (Reminders tab) → confirm the
-   phone-to-watch snapshot (`WatchSyncService.updateApplicationContext`) shows
-   up in the watch app's reminder list.
-4. Mark a reminder done or snooze it **from the watch** → confirm the
-   watch-to-phone action (`transferUserInfo`) lands back on the phone (the
-   reminder's due date / event log updates in the Reminders tab).
-5. Add a reminder photo on the phone → confirm the thumbnail
-   (`transferFile`) appears on the watch detail view.
-6. Force-quit the phone app and repeat step 3/4 — `WatchConnectivity`'s
+3. Log water or a meal on the phone → confirm the phone-to-watch snapshot
+   (`WatchSyncService.updateApplicationContext`) updates the watch's Today and
+   Meals tabs.
+4. Log water or a quick set **from the watch** → confirm the watch-to-phone action
+   (`transferUserInfo`) lands back on the phone and the Today totals update.
+5. Force-quit the phone app and repeat step 3/4 — `WatchConnectivity`'s
    background transfer APIs should still deliver once the phone app relaunches
    or wakes in the background.
 
@@ -185,18 +168,16 @@ iOS Simulator:
 
 ---
 
-### Additional checks for the current four-tab app
+### Additional checks for the current three-tab app
 
-- Sync a profile, then verify Today totals/water, Train quick sets, Meals shortcuts,
-  and medication/plant reminders against the phone.
+- Sync a profile, then verify Today totals/water, Train quick sets, and Meals shortcuts
+  against the phone.
 - Cold-launch the watch out of range and verify cached data displays. Queue a
   supported logging action, reconnect, and verify the intended phone record.
 - Start and finish a live session from the watch; verify permission is requested
   only from Start, the timer survives wrist-down, and phone history receives it.
   Check HealthKit telemetry on a paired physical watch; simulator results do not
   establish real sensor behavior.
-- Update/delete a plant photo on the phone and verify watch thumbnail refresh and
-  eviction after synchronization.
 
 
 ## Troubleshooting — "doesn't include signing certificate"
@@ -317,14 +298,8 @@ top-level `CFBundleIconName` key in either bundle despite the error's wording.
 
 ## Notes / gotchas
 
-- **Notification mirroring vs. this companion app are separate features.** A
-  paired Apple Watch already shows reminder notifications with actionable
-  buttons today, with no watch app installed — that's `UNNotificationCategory`
-  mirroring from `Services/ReminderNotificationService.swift`, not
-  `WatchConnectivity`. This doc only covers the richer companion **app**
-  (browsing reminders, thumbnails, etc.) added by the `OurFitnessWatch` target.
 - **Thin client with local caches:** the watch app has no SwiftData store, but
-  persists its envelope in UserDefaults and thumbnails in its caches directory.
+  persists its envelope in UserDefaults.
   If the watch and phone are unpaired/out of range, the watch shows the last
   synced envelope (`WatchSyncStore`) until connectivity resumes — it does
   not independently track state. Wrist actions taken offline are not lost:
@@ -339,7 +314,7 @@ top-level `CFBundleIconName` key in either bundle despite the error's wording.
   the wrist would drag `Models.swift` + `ExerciseInfo.swift` + `CommonFoods.swift`
   into the watch target. When the watch logs something it sends an id and the
   phone re-resolves the real values — a stale snapshot must never be able to
-  write wrong macros. The watch compiles only five dependency-free Domain files;
+  write wrong macros. The watch compiles only three dependency-free Domain files;
   `CalorieEstimator.swift` was split (see `Domain/ExerciseCalories.swift`) to
   keep it that way.
 - **No APNs; one background mode.** Sync still relies purely on

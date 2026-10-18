@@ -1,14 +1,12 @@
-# Next audit scope — prepared 2026-09-14
+# Next audit scope — prepared 2026-09-14, revised 2026-10-18
 
-Start with CLAUDE.md and audit-handoff.md. This is a scoped backlog, not a claim
-that the remaining privacy features are implemented. Finish verifying the active
-TestFlight release before starting another shipping milestone.
+Start with CLAUDE.md. This is a scoped backlog, not a claim that the remaining
+privacy features are implemented.
 
 ## Milestone 2: privacy controls and retention
 
-- ~~Resolve the pending medication-notification preference~~ — moot: medication
-  and reminders were removed (see [removed-reminders.md](removed-reminders.md)).
-  NEW: the erase-local-data flow must also delete the retired
+- Medication and reminders were removed (see [removed-reminders.md](removed-reminders.md)).
+  The erase-local-data flow must also delete the retired
   `ReminderGroupModel` / `ReminderModel` / `ReminderEventModel` rows (medication
   names, doses and history are still on disk), which needs a schema version bump
   and migration stage.
@@ -21,8 +19,7 @@ TestFlight release before starting another shipping milestone.
 - Clarify that app deletion does not remove original HealthKit data or backups.
   Verify OS storage protection/backup behavior on physical devices before making
   public privacy claims. Keep privacy-security.md and user-facing copy aligned.
-- Acceptance: locked/unlocked medication actions; preview on/off; mirrored watch;
-  erase with connected/offline watch; relaunch without resurrection; user cancel
+- Acceptance: erase with connected/offline watch; relaunch without resurrection; user cancel
   leaves data untouched. Use disposable fixtures.
 
 ## Independent release maintenance
@@ -35,9 +32,9 @@ TestFlight release before starting another shipping milestone.
 
 ## Milestone 3: measured performance and delivery resilience
 
-- Benchmark Meals/Progress and reminder aggregation with realistic multi-year
+- Benchmark Meals/Progress (including the full-history rep fetches, `Repos.setHistory(limit: 100_000)` and `Repos.weeklyReps`) with realistic multi-year
   persisted fixtures on device. Snapshot food/water/steps are already bounded.
-- Preserve uncapped medication history, streak semantics and historical shortcuts.
+- Preserve streak semantics and historical shortcuts.
 - Design durable watch action acknowledgement/retry and stable action IDs before
   promising exactly-once delivery under storage failure. Reconciliation exists;
   persistent retry does not. Include profile/erase generation boundaries.
@@ -47,5 +44,5 @@ TestFlight release before starting another shipping milestone.
 
 Work one bounded change at a time; keep a buildable checkpoint. Before usage
 exhaustion, record actual results, unverified edits, exact next command/task,
-release state and unanswered decisions in audit-handoff.md. Update related docs
+release state and unanswered decisions in [validation-log.md](validation-log.md). Update related docs
 in each milestone commit. Do not start a broad refactor near exhaustion.

@@ -19,7 +19,7 @@ Every screen is the same for everyone. Your goal only changes the numbers (calor
 
 Heart-health targets apply to everyone: fiber ≥ 35 g, sodium ≤ 1,500 mg, added sugar ≤ 25 g, saturated fat ≤ 10% of calories.
 
-One profile per install; the goal is changeable in Settings. The app stores data locally and syncs selected snapshots and photos to a paired Apple Watch, which caches them locally. Apple Health access and notification/Lock Screen surfaces also handle selected data. See the [privacy and security account](docs/privacy-security.md) for the current data flows and limitations.
+One profile per install; the goal is changeable in Settings. The app stores data locally and syncs selected snapshots to a paired Apple Watch, which caches them locally. Apple Health access and notification/Lock Screen surfaces also handle selected data. See the [privacy and security account](docs/privacy-security.md) for the current data flows and limitations.
 
 ---
 
