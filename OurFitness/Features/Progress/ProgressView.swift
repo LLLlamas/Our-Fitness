@@ -26,6 +26,13 @@ struct ProgressTabView: View {
     @State private var showEditTrackers = false
     @State private var showEnergyBalance = false
     @State private var showTrainingHistory = false
+    /// Exercise whose full history is open (`ExerciseProgressSheet`), from a Strength-card row.
+    @State private var progressTarget: ExerciseDTO?
+    @State private var showAllStrength = false
+    /// The Training tracker and the Strength card both fold the profile's whole
+    /// set history; this holds the last fold so a body pass that changed nothing
+    /// about the sets (a unit toggle, a sheet opening) doesn't redo it.
+    @State private var trainingMemo = TrainingSummaryMemo()
 
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
@@ -142,6 +149,7 @@ struct ProgressTabView: View {
             cardio: cardio, pilates: pilates, activities: activities,
             bodyWeightLb: profile.weightLb
         )
+        let training = trainingSummary(sets: sets, exercises: exerciseModels.map(\.snapshot), now: Date())
         let enabled = enabledSet(body: body_, markers: markers)
         let visibleStats = visibleStats(in: enabled)
         // The card only needs "how many days" and "which was last", so take the
@@ -179,7 +187,7 @@ struct ProgressTabView: View {
                 } else {
                     LazyVGrid(columns: columns, spacing: 14) {
                         ForEach(visibleStats, id: \.self) { kind in
-                            statCard(for: kind, body: body_, markers: markers, steps: steps, sets: sets)
+                            statCard(for: kind, body: body_, markers: markers, steps: steps, training: training)
                         }
                     }
                     // A hidden tracker's card is also the only place to log that
@@ -195,12 +203,10 @@ struct ProgressTabView: View {
                     }
                 }
 
-                // Progress per exercise (estimated max, best reps, longest hold) plus
-                // this week's sets per muscle — only once something is logged.
-                let exercises = exerciseModels.map(\.snapshot)
-                let lifts = StrengthProgress.lifts(sets: sets, exercises: exercises, now: Date())
-                if !lifts.isEmpty {
-                    strengthCard(lifts: lifts, volume: MuscleVolume.weekly(sets: sets, exercises: exercises, now: Date()))
+                // Every trained exercise, each by its own shape's figure — only
+                // once something is logged.
+                if !training.strength.isEmpty {
+                    strengthCard(entries: training.strength)
                 }
 
                 // Calorie intake vs activity burn — shown for every goal, but
@@ -241,41 +247,81 @@ struct ProgressTabView: View {
         .sheet(isPresented: $showTrainingHistory) {
             TrainingHistorySheet(profile: profile)
         }
+        .sheet(item: $progressTarget) { exercise in
+            ExerciseProgressSheet(profile: profile, exercise: exercise)
+        }
+    }
+
+    /// The folded training figures for the current sets, recomputed only when the
+    /// rows (or the day, which moves the week and the 4-week window) change. The
+    /// fingerprint covers every field the fold reads, so an edit to an old row
+    /// invalidates it as surely as a new one.
+    private func trainingSummary(sets: [WorkoutSetDTO], exercises: [ExerciseDTO], now: Date) -> TrainingSummary {
+        var h = Hasher()
+        h.combine(Dates.dayKey(now))
+        h.combine(sets.count)
+        for s in sets {
+            h.combine(s.id)
+            h.combine(s.exerciseId)
+            h.combine(s.reps)
+            h.combine(s.weightLb)
+            h.combine(s.holdSeconds)
+            h.combine(s.timestamp)
+        }
+        h.combine(exercises.count)
+        for e in exercises {
+            h.combine(e.id)
+            h.combine(e.name)
+            h.combine(e.loadLb)
+            h.combine(e.kind)
+            h.combine(e.category)
+            h.combine(e.isIsometric)
+        }
+        let signature = h.finalize()
+        if trainingMemo.signature == signature { return trainingMemo.summary }
+        let summary = TrainingSummary.make(sets: sets, exercises: exercises, now: now)
+        trainingMemo.signature = signature
+        trainingMemo.summary = summary
+        return summary
     }
 
     // MARK: - Strength card
 
+    /// Every exercise the profile has trained, most recently trained first — each
+    /// row shows the figure that fits its shape (see `StrengthEntry.Figure`) and
+    /// opens that exercise's whole history. A plain `Card` with a button per row
+    /// rather than a `PressableCard`: rows are separate tap targets, and a button
+    /// nested in a button label never receives its own tap.
     @ViewBuilder
-    private func strengthCard(lifts: [StrengthProgress.Lift], volume: [MuscleVolume.Row]) -> some View {
-        let tips = MuscleVolume.recommendations(rows: volume, equipment: HomeEquipment(encoded: equipmentRaw))
+    private func strengthCard(entries: [StrengthEntry]) -> some View {
+        let shown = showAllStrength ? entries : Array(entries.prefix(Self.strengthRowLimit))
+        let tips = MuscleVolume.recommendations(
+            rows: MuscleVolume.weekly(sets: sets, exercises: exerciseModels.map(\.snapshot), now: Date()),
+            equipment: HomeEquipment(encoded: equipmentRaw)
+        )
         Card {
             VStack(alignment: .leading, spacing: 12) {
                 Label("Strength", systemImage: "figure.strengthtraining.traditional")
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(theme.accent)
-                ForEach(lifts.prefix(6)) { lift in
-                    HStack(alignment: .firstTextBaseline) {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(lift.name)
-                                .font(.system(size: 14, weight: .medium))
-                                .foregroundStyle(theme.text)
-                            Text(liftSubtitle(lift))
-                                .font(.caption).foregroundStyle(theme.dim)
-                        }
-                        Spacer()
-                        VStack(alignment: .trailing, spacing: 2) {
-                            Text(liftHeadline(lift))
-                                .font(.system(size: 15, weight: .semibold))
-                                .foregroundStyle(theme.text)
-                            if let change = lift.change, let label = liftChangeLabel(lift, change) {
-                                Text(label)
-                                    .font(.caption)
-                                    .foregroundStyle(change > 0 ? theme.ok : theme.dim)
-                            }
-                        }
-                    }
+                ForEach(shown) { entry in
+                    strengthRow(entry)
                 }
-                Text("Loaded: estimated one-rep max (Epley, 1–12 reps). Others: best day or longest hold. Change vs. before 4 weeks.")
+                if entries.count > Self.strengthRowLimit {
+                    Button {
+                        withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                            showAllStrength.toggle()
+                        }
+                        Haptics.selection()
+                    } label: {
+                        Text(showAllStrength ? "Show fewer" : "Show all \(entries.count)")
+                            .font(.footnote)
+                            .foregroundStyle(theme.accent)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .tactile(.ghost)
+                }
+                Text("Weighted lifts show an estimated one-rep max; other rows show your best day. Tap one for its history.")
                     .font(.caption2).foregroundStyle(theme.dim)
 
                 if !tips.isEmpty {
@@ -294,34 +340,81 @@ struct ProgressTabView: View {
         }
     }
 
-    private func liftSubtitle(_ lift: StrengthProgress.Lift) -> String {
-        switch lift.metric {
-        case .estimatedMax:
-            return "best set \(Units.formatWeight(lb: lift.bestWeightLb, system: unitSystem, decimals: 0)) × \(lift.bestReps)"
-        case .bestReps:    return "most in a day"
-        case .bestMinutes: return "most in a day"
-        case .bestHold:    return "longest hold"
+    private static let strengthRowLimit = 5
+
+    @ViewBuilder
+    private func strengthRow(_ entry: StrengthEntry) -> some View {
+        let change = strengthChange(entry)
+        Button {
+            progressTarget = entry.exercise
+        } label: {
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(entry.exercise.name)
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundStyle(theme.text)
+                    Text(strengthDetail(entry))
+                        .font(.caption).foregroundStyle(theme.dim)
+                }
+                Spacer()
+                VStack(alignment: .trailing, spacing: 2) {
+                    Text(strengthHeadline(entry))
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(theme.text)
+                    if let change {
+                        Text(change.text)
+                            .font(.caption)
+                            .foregroundStyle(change.isGain ? theme.ok : theme.dim)
+                    }
+                }
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(theme.dim)
+            }
+            .contentShape(Rectangle())
         }
+        .tactile(.ghost)
+        .accessibilityLabel("\(entry.exercise.name), \(strengthHeadline(entry)). Open history")
     }
 
-    private func liftHeadline(_ lift: StrengthProgress.Lift) -> String {
-        guard let unit = lift.metric.unitLabel else {
+    /// The row's big figure. The estimate keeps its "≈" so it never reads as a logged number.
+    private func strengthHeadline(_ entry: StrengthEntry) -> String {
+        switch entry.figure {
+        case .estimatedMax(let lift):
             return "≈ " + Units.formatWeightWithUnit(lb: lift.estimatedMaxLb, system: unitSystem, decimals: 0)
+        case .bestReps(let n), .bestRepsAtLoad(let n, _):
+            return "\(n) \(n == 1 ? "rep" : "reps")"
+        case .bestMinutes(let n, _):
+            return "\(n) min"
+        case .longestHold(let seconds):
+            return RepHistory.durationText(seconds: seconds)
         }
-        return "\(Int(lift.headline.rounded())) \(unit)"
     }
 
-    private func liftChangeLabel(_ lift: StrengthProgress.Lift, _ change: Double) -> String? {
-        guard let unit = lift.metric.unitLabel else { return lift.gainLb.map(strengthGainLabel) }
-        let n = Int(abs(change).rounded())
-        if n == 0 { return "no change · 4 wk" }
-        return (change > 0 ? "+" : "−") + "\(n) \(unit) · 4 wk"
+    private func strengthDetail(_ entry: StrengthEntry) -> String {
+        let last = "last \(Dates.formatShort(entry.lastDayKey))"
+        switch entry.figure {
+        case .estimatedMax(let lift):
+            let set = "\(Units.formatWeightWithUnit(lb: lift.bestWeightLb, system: unitSystem, decimals: 0)) × \(lift.bestReps)"
+            return "estimated max · best set \(set)"
+        case .bestReps:
+            return "best day · \(last)"
+        case .bestRepsAtLoad(_, let loadLb), .bestMinutes(_, let loadLb?):
+            return "best day at \(Units.formatWeightWithUnit(lb: loadLb, system: unitSystem, decimals: 0)) · \(last)"
+        case .bestMinutes(_, nil):
+            return "best day · \(last)"
+        case .longestHold:
+            return "longest hold · \(last)"
+        }
     }
 
-    private func strengthGainLabel(_ gainLb: Double) -> String {
-        let magnitude = Units.formatWeightWithUnit(lb: abs(gainLb), system: unitSystem, decimals: 0)
-        if magnitude.hasPrefix("0 ") { return "no change · 4 wk" }
-        return (gainLb > 0 ? "+" : "−") + magnitude + " · 4 wk"
+    /// Only the estimate has a windowed change. A decline prints plainly, in the
+    /// neutral colour — only a gain gets the "ok" tint.
+    private func strengthChange(_ entry: StrengthEntry) -> (text: String, isGain: Bool)? {
+        guard case .estimatedMax(let lift) = entry.figure, let gain = lift.gainLb else { return nil }
+        let magnitude = Units.formatWeightWithUnit(lb: abs(gain), system: unitSystem, decimals: 0)
+        if magnitude.hasPrefix("0 ") { return ("no change · 4 wk", false) }
+        return ((gain > 0 ? "+" : "−") + magnitude + " · 4 wk", gain > 0)
     }
 
     // MARK: - Training history card
@@ -408,21 +501,21 @@ struct ProgressTabView: View {
 
     // MARK: - Cards
 
-    /// Takes the four snapshot arrays rather than reading the computed
-    /// properties, which each rebuild DTOs from the whole unbounded query. This
-    /// is called once per visible tracker and used to read them TWICE per call —
-    /// at 13 trackers that was ~104 full rebuilds of the user's entire body,
-    /// marker, step and set history for one pass of the grid.
+    /// Takes the snapshot arrays (and the already-folded `training` summary)
+    /// rather than reading the computed properties, which each rebuild DTOs from
+    /// the whole unbounded query. This is called once per visible tracker and used
+    /// to read them TWICE per call — at 13 trackers that was ~104 full rebuilds of
+    /// the user's entire body, marker, step and set history for one pass of the grid.
     @ViewBuilder
     private func statCard(
         for kind: StatKind,
         body body_: [BodyMetricDTO],
         markers: [HealthMarkerDTO],
         steps: [StepCountDTO],
-        sets: [WorkoutSetDTO]
+        training: TrainingSummary
     ) -> some View {
-        let value = kind.displayValue(body: body_, markers: markers, steps: steps, sets: sets, profile: profile, system: unitSystem)
-        let trend = kind.trendChip(body: body_, markers: markers, steps: steps, sets: sets, profile: profile, system: unitSystem)
+        let value = kind.displayValue(body: body_, markers: markers, steps: steps, training: training, profile: profile, system: unitSystem)
+        let trend = kind.trendChip(body: body_, markers: markers, steps: steps, training: training, profile: profile, system: unitSystem)
         let tint  = statusTint(for: kind, body: body_, markers: markers)
         StatCard(
             title: kind.title,
@@ -493,7 +586,7 @@ struct ProgressTabView: View {
             StatDetailSheet(
                 title: kind.title,
                 unit: kind.unit(system: unitSystem),
-                series: kind.series(body: body_, markers: markers, steps: steps, sets: sets, system: unitSystem),
+                series: kind.series(body: body_, markers: markers, steps: steps, training: trainingMemo.summary, system: unitSystem),
                 entries: kind.entries(body: body_, markers: markers, system: unitSystem),
                 placeholder: kind.placeholder(system: unitSystem),
                 canLog: kind.canLog,
@@ -532,17 +625,13 @@ struct ProgressTabView: View {
         )
     }
 
+    /// Reps this week. The summary is the one the grid just folded
+    /// (`trainingMemo`), so opening the sheet re-reads nothing.
     @ViewBuilder
     private var trainingVolumeDetail: some View {
-        StatDetailSheet(
-            title: "Training",
-            unit: "sets · weekly",
-            series: TrainingHistory.weeklySetCounts(sets),
-            canLog: false,
-            showsEntries: false,
-            minChartPoints: 2,
-            emptyChartText: "Not enough logged weeks yet.",
-            emptyChartDetail: "Log sets for two weeks to see the volume trend. Individual sessions live in Training history."
+        WeeklyRepsDetailSheet(
+            weekly: trainingMemo.summary.weekly,
+            series: trainingMemo.summary.weeklySeries
         )
     }
 
@@ -592,6 +681,210 @@ struct ProgressTabView: View {
     }
 }
 
+// MARK: - Training summary (Strength card + weekly-reps tracker)
+
+/// Everything the Progress tab derives from the profile's whole set history,
+/// folded once per data change (see `ProgressTabView.trainingSummary`).
+struct TrainingSummary {
+    /// This week / last week reps, the one own-history note and the per-exercise breakdown.
+    let weekly: RepHistory.WeeklyReps
+    /// Reps per ISO week, oldest first, for the tracker chart.
+    let weeklySeries: [Trends.Point]
+    /// One entry per trained exercise, most recently trained first.
+    let strength: [StrengthEntry]
+
+    static let empty = TrainingSummary(
+        weekly: RepHistory.weeklyReps(sets: [], exercises: [], now: Date(timeIntervalSince1970: 0)),
+        weeklySeries: [], strength: []
+    )
+
+    static func make(sets: [WorkoutSetDTO], exercises: [ExerciseDTO], now: Date) -> TrainingSummary {
+        TrainingSummary(
+            weekly: RepHistory.weeklyReps(sets: sets, exercises: exercises, now: now),
+            weeklySeries: TrainingHistory.weeklyRepCounts(sets, exercises: exercises, now: now),
+            strength: StrengthEntry.entries(sets: sets, exercises: exercises, now: now)
+        )
+    }
+}
+
+/// Holds the last fold. A reference type on purpose: it is read and refreshed
+/// inside `body`, and mutating a class property doesn't invalidate the view the
+/// way a `@State` write during body would.
+private final class TrainingSummaryMemo {
+    var signature: Int?
+    var summary: TrainingSummary = .empty
+}
+
+/// One trained exercise on the Strength card: the figure that fits its SHAPE
+/// (never its goal) plus when it was last done. Figures are logged or estimated
+/// from logged rows, nothing is stored.
+struct StrengthEntry: Identifiable {
+    enum Figure {
+        /// A lift that logs a weight each set: best Epley estimate (an ESTIMATE, labelled as one).
+        case estimatedMax(StrengthProgress.Lift)
+        /// Most reps in one day (bodyweight, or a lift with no countable weighted set).
+        case bestReps(Int)
+        /// Fixed-load movement (e.g. Lifted Baby): most reps in one day at its current load.
+        case bestRepsAtLoad(Int, loadLb: Double)
+        /// Timed exercise: most minutes in one day, at its fixed load when it has one.
+        case bestMinutes(Int, loadLb: Double?)
+        /// Isometric hold: longest single hold, in seconds.
+        case longestHold(Int)
+    }
+
+    let exercise: ExerciseDTO
+    let figure: Figure
+    /// Newest day trained (`Dates.dayKey`).
+    let lastDayKey: String
+    let lastTrained: Date
+    var id: String { exercise.id }
+
+    /// Every exercise with a countable log, most recently trained first (name breaks ties).
+    static func entries(sets: [WorkoutSetDTO], exercises: [ExerciseDTO], now: Date) -> [StrengthEntry] {
+        guard !sets.isEmpty else { return [] }
+        let rowsByExercise = Dictionary(grouping: sets, by: \.exerciseId)
+        let lifts = Dictionary(
+            StrengthProgress.lifts(sets: sets, exercises: exercises, now: now).map { ($0.exerciseId, $0) },
+            uniquingKeysWith: { first, _ in first }
+        )
+        return exercises
+            .compactMap { ex -> StrengthEntry? in
+                guard let rows = rowsByExercise[ex.id],
+                      let lastTrained = rows.map(\.timestamp).max() else { return nil }
+                let days = RepHistory.days(for: ex, rows: rows)
+                guard let lastDay = days.first?.key else { return nil }
+                let bests = RepHistory.bests(from: days)
+                let load = ex.loadLb.map { RepHistory.WeightKey($0) }
+
+                let figure: Figure
+                switch RepHistory.measure(for: ex) {
+                case .holdSeconds:
+                    guard let hold = bests.longestHold else { return nil }
+                    figure = .longestHold(hold.amount)
+                case .minutes:
+                    if let load, let lb = load.lb, let best = bests.best(at: load) {
+                        figure = .bestMinutes(best.amount, loadLb: lb)
+                    } else if let day = bests.bestDay {
+                        figure = .bestMinutes(day.amount, loadLb: nil)
+                    } else { return nil }
+                case .reps:
+                    if let lift = lifts[ex.id] {
+                        figure = .estimatedMax(lift)
+                    } else if let load, let lb = load.lb, let best = bests.best(at: load) {
+                        figure = .bestRepsAtLoad(best.amount, loadLb: lb)
+                    } else if let day = bests.bestDay {
+                        figure = .bestReps(day.amount)
+                    } else { return nil }
+                }
+                return StrengthEntry(exercise: ex, figure: figure, lastDayKey: lastDay, lastTrained: lastTrained)
+            }
+            .sorted {
+                $0.lastTrained != $1.lastTrained
+                    ? $0.lastTrained > $1.lastTrained
+                    : $0.exercise.name.localizedCaseInsensitiveCompare($1.exercise.name) == .orderedAscending
+            }
+    }
+}
+
+// MARK: - Weekly reps detail sheet
+
+/// The Training tracker's detail: reps per week, the one own-history note, and
+/// this week split by exercise. A thin host over `StatDetailSheet`. Nothing is
+/// colour-judged and nothing toasts — a lower week is information, not a verdict.
+private struct WeeklyRepsDetailSheet: View {
+    let weekly: RepHistory.WeeklyReps
+    let series: [Trends.Point]
+
+    @Environment(\.theme) private var theme
+    @State private var showInfo = false
+
+    var body: some View {
+        StatDetailSheet(
+            title: "Weekly reps",
+            unit: "reps · by week, Monday to Sunday",
+            series: series,
+            canLog: false,
+            showsEntries: false,
+            minChartPoints: 2,
+            emptyChartText: "Not enough logged weeks yet.",
+            emptyChartDetail: "Log reps for two weeks to see the weekly trend. Individual sessions live in Training history.",
+            // Arithmetic on the user's own logs, so it may sit beside the number.
+            personalNote: RepHistory.noteText(weekly.note),
+            headline: { headline },
+            footer: { footer }
+        )
+        .sheet(isPresented: $showInfo) {
+            WeeklyRepsInfoSheet()
+        }
+    }
+
+    @ViewBuilder
+    private var headline: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(alignment: .firstTextBaseline, spacing: 10) {
+                Text(weekly.thisWeek.formatted())
+                    .font(.system(size: 48, weight: .semibold, design: .monospaced))
+                    .foregroundStyle(theme.text)
+                Text("reps this week")
+                    .font(.system(size: 18, weight: .regular))
+                    .foregroundStyle(theme.text)
+                Spacer()
+                Button {
+                    showInfo = true
+                    Haptics.selection()
+                } label: {
+                    Image(systemName: "info.circle")
+                        .font(.system(size: 18))
+                        .foregroundStyle(theme.dim)
+                }
+                .tactile(.ghost)
+                .accessibilityLabel("How to read this number")
+            }
+            Text("Last week: \(weekly.lastWeek.formatted()) \(weekly.lastWeek == 1 ? "rep" : "reps")")
+                .font(.callout)
+                .foregroundStyle(theme.dim)
+        }
+    }
+
+    @ViewBuilder
+    private var footer: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("This week by exercise")
+                .font(.caption).tracking(2).textCase(.uppercase)
+                .foregroundStyle(theme.dim)
+            if weekly.byExercise.isEmpty {
+                Text("No reps logged this week yet.")
+                    .font(.callout).foregroundStyle(theme.dim)
+            } else {
+                ForEach(weekly.byExercise) { row in
+                    StatDetailRow(label: row.name,
+                                  value: "\(row.reps.formatted()) \(row.reps == 1 ? "rep" : "reps")")
+                }
+            }
+        }
+    }
+}
+
+/// Why a weekly reps total can't say "enough" — and the clearly-labelled rough
+/// translation. The research figure is in plain, hedged words on purpose: it was
+/// taken from secondary summaries (docs/progress-tracking-plan.md §7).
+private struct WeeklyRepsInfoSheet: View {
+    var body: some View {
+        InfoSheetScaffold(title: "Weekly reps", subtitle: "WHAT THIS NUMBER CAN AND CAN'T SAY") {
+            InfoSection(title: "What it counts") {
+                InfoBody("Every rep you logged this week, Monday to Sunday, across your rep exercises. Holds and timed exercises aren't included. Ten single-rep taps and one set of ten are the same ten reps.")
+            }
+            InfoSection(title: "What it can't tell you") {
+                InfoBody("Research on building muscle counts hard sets per muscle per week. About 10 or more a week is linked with more growth, with diminishing returns, across a wide range of reps when the sets finish close to failure. A total of reps adds every muscle and every effort level together, so it can't say whether any one muscle got enough.")
+            }
+            InfoSection(title: "A rough rule of thumb (an estimate)") {
+                InfoBody("About 10 hard sets of 8 to 12 reps works out to roughly 80 to 120 reps for one muscle in a week. That is our own back-of-envelope arithmetic, not a sourced target, and it only makes sense for a single exercise, never for the total.")
+            }
+            InfoFootnote("The note under the number compares you with your own earlier weeks only. A lower week is information, not a verdict.")
+        }
+    }
+}
+
 // MARK: - StatKind
 
 enum StatKind: String, CaseIterable, Identifiable {
@@ -615,7 +908,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .bmi:              return "BMI"
         case .restingHR:        return "Resting HR"
         case .stepsAvg:         return "Steps · 7d avg"
-        case .trainingVolume:   return "Training"
+        case .trainingVolume:   return "Weekly Reps"
         case .bp:               return "BP"
         case .ldl:              return "LDL"
         case .hdl:              return "HDL"
@@ -633,7 +926,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .bmi:              return "BMI"
         case .restingHR:        return "bpm"
         case .stepsAvg:         return "steps"
-        case .trainingVolume:   return "sets · this week"
+        case .trainingVolume:   return "reps · this week"
         case .bp:               return "mmHg"
         case .ldl, .hdl, .totalCholesterol, .fastingGlucose: return "mg/dL"
         case .a1c:              return "%"
@@ -691,7 +984,7 @@ enum StatKind: String, CaseIterable, Identifiable {
     var isDefault: Bool {
         switch self {
         case .weight, .stepsAvg, .trainingVolume:
-            // Weight: in-app wheel + Health sync. Steps: Health. Sets: in-app.
+            // Weight: in-app wheel + Health sync. Steps: Health. Weekly reps: in-app.
             return true
         case .restingHR, .bp:
             // Heart-health markers: resting HR arrives from Health, and blood
@@ -733,7 +1026,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         body: [BodyMetricDTO],
         markers: [HealthMarkerDTO],
         steps: [StepCountDTO],
-        sets: [WorkoutSetDTO] = [],
+        training: TrainingSummary = .empty,
         profile: ProfileDTO? = nil,
         system: UnitSystem = .imperial
     ) -> String? {
@@ -757,8 +1050,11 @@ enum StatKind: String, CaseIterable, Identifiable {
             let avg = Steps.average(steps, days: 7)
             return avg > 0 ? avg.formatted() : nil
         case .trainingVolume:
-            let thisWeekSets = TrainingHistory.setsInWeek(sets)
-            return thisWeekSets > 0 ? "\(thisWeekSets)" : nil
+            // A week that hasn't started logging still shows 0 beside last
+            // week's total (the chip prints the difference); only a profile
+            // with no reps in either week reads "No data yet".
+            let weekly = training.weekly
+            return weekly.thisWeek > 0 || weekly.lastWeek > 0 ? weekly.thisWeek.formatted() : nil
         case .bp:
             let s = latestMarkerValue(.bpSystolic, in: markers)
             let d = latestMarkerValue(.bpDiastolic, in: markers)
@@ -781,7 +1077,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         body: [BodyMetricDTO],
         markers: [HealthMarkerDTO],
         steps: [StepCountDTO],
-        sets: [WorkoutSetDTO] = [],
+        training: TrainingSummary = .empty,
         profile: ProfileDTO? = nil,
         system: UnitSystem = .imperial
     ) -> String? {
@@ -809,11 +1105,9 @@ enum StatKind: String, CaseIterable, Identifiable {
             let avg30 = Steps.average(steps, days: 30)
             return avg30 > 0 ? "30d \(avg30.formatted())" : nil
         case .trainingVolume:
-            let this = TrainingHistory.setsInWeek(sets)
-            let last = TrainingHistory.setsInWeek(sets, weeksAgo: 1)
-            guard last > 0 || this > 0 else { return nil }
-            let delta = this - last
-            return String(format: "%@%d vs last wk", delta >= 0 ? "+" : "", delta)
+            let weekly = training.weekly
+            guard weekly.lastWeek > 0 || weekly.thisWeek > 0 else { return nil }
+            return String(format: "%@%d vs last wk", weekly.delta >= 0 ? "+" : "", weekly.delta)
         default:
             return nil
         }
@@ -823,7 +1117,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         body: [BodyMetricDTO],
         markers: [HealthMarkerDTO],
         steps: [StepCountDTO],
-        sets: [WorkoutSetDTO] = [],
+        training: TrainingSummary = .empty,
         system: UnitSystem = .imperial
     ) -> [Trends.Point] {
         switch self {
@@ -847,7 +1141,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .stepsAvg:
             return Steps.series(steps, days: 30)
         case .trainingVolume:
-            return TrainingHistory.weeklySetCounts(sets)
+            return training.weeklySeries
         case .bp:
             return Trends.markerSeries(markers, kind: .bpSystolic)
         case .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:

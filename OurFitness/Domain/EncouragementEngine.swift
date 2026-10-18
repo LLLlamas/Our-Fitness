@@ -60,43 +60,74 @@ public enum EncouragementEngine {
         }
     }
 
-    // MARK: - Workout volume
+    // MARK: - Strength progress (reps at a weight)
 
-    /// Volume-milestone copy after logging a set. Returns nil at non-milestone
-    /// counts so the view layer never spams the user.
-    /// `totalSetsThisWeekForMuscle` is the count of sets logged this week for the
-    /// exercise's primary muscle group.
-    public static func workoutSetMessage(
-        exercise: ExerciseDTO,
-        repsJustLogged: Int,
-        totalSetsThisWeekForMuscle: Int
-    ) -> EncouragementMessage? {
-        let muscle = exercise.muscleGroups.first ?? "this muscle group"
-        switch totalSetsThisWeekForMuscle {
-        case 4:
+    /// Toast copy for a new best from `RepHistory.newBest(after:exercise:rows:)`.
+    /// Compares only to the person's own history and is never produced for a
+    /// decrease. `formatWeight` returns the full weight text with its unit
+    /// ("50 lb") so unit conversion stays at the UI boundary; `formatDay` turns a
+    /// dayKey into a short label ("Oct 2").
+    public static func newBestMessage(
+        _ best: RepHistory.NewBest,
+        formatWeight: (Double) -> String,
+        formatDay: (String) -> String = { Dates.formatShort($0) }
+    ) -> EncouragementMessage {
+        switch best {
+        case let .atWeight(measure, weight, amount, previous, previousDay):
+            let unit = measure == .minutes ? "min" : (amount == 1 ? "rep" : "reps")
+            let prevUnit = measure == .minutes ? "min" : (previous == 1 ? "rep" : "reps")
+            let amountText = "\(amount) \(unit)"
+            var headline = "New best: \(amountText)"
+            if let lb = weight.lb {
+                let full = "\(headline) @ \(formatWeight(lb))"
+                if full.count <= 50 { headline = full }
+            }
+            let more = amount - previous
+            let moreText = measure == .minutes ? "\(more) more min" : "\(more) more \(more == 1 ? "rep" : "reps")"
             return EncouragementMessage(
-                headline: "Growth signal on.",
-                detail: "4 sets this week for \(muscle) — that's the minimum effective volume for muscle growth. The adaptation signal is live.",
-                scienceLine: "RP Strength; Schoenfeld, J Strength Cond Res, 2010.",
-                tone: .scienceTip, sfSymbol: "bolt.fill")
-        case 6:
+                headline: headline,
+                detail: "That's \(moreText) than your previous best of \(previous) \(prevUnit) on \(formatDay(previousDay)).",
+                tone: .celebrate, sfSymbol: "star.fill")
+        case let .heaviest(lb, previous, previousDay):
             return EncouragementMessage(
-                headline: "6 sets this week.",
-                detail: "\(muscle) is getting solid stimulus. Research shows visible muscle changes start appearing after 8–12 weeks of consistent volume like this.",
-                scienceLine: "Schoenfeld BJ et al., J Strength Cond Res, 2017 (dose–response meta-analysis).",
-                tone: .scienceTip, sfSymbol: "bolt.fill")
-        case 10:
+                headline: "Heaviest yet: \(formatWeight(lb))",
+                detail: "Your previous heaviest was \(formatWeight(previous)) on \(formatDay(previousDay)).",
+                tone: .celebrate, sfSymbol: "arrow.up.circle.fill")
+        case let .longestHold(seconds, previous, previousDay):
             return EncouragementMessage(
-                headline: "10 sets this week.",
-                detail: "You're deep in the hypertrophy sweet spot for \(muscle). This is the volume range where most muscle growth happens.",
-                scienceLine: "RP Strength: 10–20 sets/muscle/week = maximum adaptive volume.",
-                tone: .celebrate, sfSymbol: "flame.fill")
-        case 12:
+                headline: "Longest hold yet: \(RepHistory.durationText(seconds: seconds))",
+                detail: "That's \(RepHistory.durationText(seconds: seconds - previous)) longer than your previous best of \(RepHistory.durationText(seconds: previous)) on \(formatDay(previousDay)).",
+                tone: .celebrate, sfSymbol: "timer")
+        }
+    }
+
+    /// Weekly-reps note as a toast, from the user's OWN history. Nil when there is
+    /// nothing to say (`.none`); there is no message for a decrease — "approaching"
+    /// only points at what is left to match.
+    public static func weeklyRepsMessage(_ weekly: RepHistory.WeeklyReps) -> EncouragementMessage? {
+        guard let headline = RepHistory.noteText(weekly.note) else { return nil }
+        switch weekly.note {
+        case .approaching:
             return EncouragementMessage(
-                headline: "12 sets. Elite volume.",
-                detail: "That's upper-range hypertrophy volume for \(muscle). Keep quality high — each set at this frequency compounds.",
-                tone: .impressed, sfSymbol: "flame.fill")
-        default:
+                headline: headline,
+                detail: "You're at \(weekly.thisWeek) reps so far this week, against \(weekly.lastWeek) last week.",
+                tone: .approaching, sfSymbol: "arrow.up.right")
+        case .passed:
+            return EncouragementMessage(
+                headline: headline,
+                detail: "That's \(weekly.thisWeek) reps so far this week, past all \(weekly.lastWeek) from last week.",
+                tone: .celebrate, sfSymbol: "arrow.up.right")
+        case .bestWeek:
+            return EncouragementMessage(
+                headline: headline,
+                detail: "\(weekly.thisWeek) reps so far this week is more than any earlier week you've logged.",
+                tone: .impressed, sfSymbol: "star.fill")
+        case .firstWeekBack:
+            return EncouragementMessage(
+                headline: headline,
+                detail: "This week's \(weekly.thisWeek) reps are your new baseline. Nothing to catch up on.",
+                tone: .celebrate, sfSymbol: "hand.wave.fill")
+        case .none:
             return nil
         }
     }

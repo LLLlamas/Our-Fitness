@@ -13,5 +13,8 @@ public enum Seeder {
         // Heart-health micros now apply to every goal; recompute stored targets
         // that predate that (nil micros). Idempotent.
         Repos.backfillHeartHealthTargets(ctx)
+        // Fixed-load rows carry the load they were done at; stamps pre-existing
+        // ones once (flagged, so it can never touch rows after a load edit).
+        Repos.backfillFixedLoadWeightsOnce(ctx)
     }
 }

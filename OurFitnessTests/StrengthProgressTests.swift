@@ -48,6 +48,22 @@ final class StrengthProgressTests: XCTestCase {
         XCTAssertEqual(r[0].gainLb ?? 0, 17.5, accuracy: 0.001)
     }
 
+    func testGainCanBeNegativeWhenTheRecentBestFellBelowTheOlderOne() {
+        // Old: 165×5 = 192.5. Recent: 150×5 = 175 → -17.5, and the headline stays the all-time best.
+        let r = StrengthProgress.lifts(sets: [set(165, 5, -60), set(150, 5, -3)],
+                                       exercises: [press()], now: now, calendar: cal)
+        XCTAssertEqual(r[0].gainLb ?? 0, -17.5, accuracy: 0.001)
+        XCTAssertEqual(r[0].estimatedMaxLb, 192.5, accuracy: 0.001)
+        XCTAssertEqual(r[0].recentMaxLb ?? 0, 175, accuracy: 0.001)
+    }
+
+    func testGainUsesBestInsideTheWindowNotTheLatestSet() {
+        // Recent window holds a strong set then a weaker one; the best recent set counts.
+        let r = StrengthProgress.lifts(sets: [set(150, 5, -60), set(165, 5, -10), set(135, 5, -1)],
+                                       exercises: [press()], now: now, calendar: cal)
+        XCTAssertEqual(r[0].gainLb ?? 0, 17.5, accuracy: 0.001)
+    }
+
     func testLiftNotTrainedInTheWindowMakesNoGainClaim() {
         let r = StrengthProgress.lifts(sets: [set(150, 5, -60), set(165, 5, -45)],
                                        exercises: [press()], now: now, calendar: cal)
@@ -64,13 +80,9 @@ final class StrengthProgressTests: XCTestCase {
         XCTAssertTrue(StrengthProgress.lifts(sets: sets, exercises: [press()], now: now, calendar: cal).isEmpty)
     }
 
-    func testFixedLoadAndIsometricExercisesHaveNoEstimatedMax() {
+    func testFixedLoadAndIsometricExercisesAreNotLifts() {
         let sets = [set(30, 10, -1)]
-        // A fixed-load exercise is tracked by reps, never by an Epley estimate.
-        let fixed = StrengthProgress.lifts(sets: sets, exercises: [press(loadLb: 30)], now: now, calendar: cal)
-        XCTAssertEqual(fixed.map(\.metric), [.bestReps])
-        XCTAssertNil(fixed[0].gainLb)
-        // An isometric set with no hold seconds (legacy row) has nothing to track.
+        XCTAssertTrue(StrengthProgress.lifts(sets: sets, exercises: [press(loadLb: 30)], now: now, calendar: cal).isEmpty)
         XCTAssertTrue(StrengthProgress.lifts(sets: sets, exercises: [press(isometric: true)], now: now, calendar: cal).isEmpty)
     }
 

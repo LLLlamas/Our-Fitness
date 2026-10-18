@@ -5,6 +5,8 @@
 > everyone, and a per-user goal (Build muscle / Lose weight) that only changes
 > targets. [CLAUDE.md](../CLAUDE.md) is authoritative.
 >
+> **Superseded (Oct 2026): set-based workout copy.** The "sets this week" / per-muscle volume toasts below (`workoutSetMessage`, `setsThisWeekForMuscle`) were removed. Progress is now reps at a weight over all history, with new-best and weekly-reps toasts: [progress-tracking-plan.md](progress-tracking-plan.md) and [map/workouts.md](map/workouts.md). The tables below are kept as research only.
+>
 > Status: Partially implemented. `EncouragementEngine`, `EncouragementMessage`, `ToastCenter` hooks, and `ProjectionBar` exist; notification scheduling and the larger sheet system remain future work.
 >
 > **Stale file names (14 Oct 2026):** `StepsCardioCard` no longer exists — the two

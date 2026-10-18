@@ -215,7 +215,7 @@ struct MoveCard<Steps: View>: View {
         }
         .sheet(isPresented: $showExercisesInfo) {
             ExercisesInfoSheet(
-                weightKg: weightKg, weightLb: profile.weightLb,
+                weightLb: profile.weightLb,
                 todaySteps: todaySteps, stepsKcal: stepsKcal,
                 setsKcal: setsKcal, cardioKcal: cardioKcal,
                 pilatesKcal: pilatesKcal, activitiesKcal: activitiesKcal,
@@ -404,7 +404,6 @@ private struct MetTotalInfoSheet: View {
 // MARK: - Training (Exercises) info sheet
 
 private struct ExercisesInfoSheet: View {
-    let weightKg: Int
     let weightLb: Double
     let todaySteps: Int
     let stepsKcal: Int

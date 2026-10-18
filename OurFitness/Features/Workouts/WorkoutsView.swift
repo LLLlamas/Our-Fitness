@@ -607,13 +607,19 @@ struct SetHistorySheet: View {
             timestamp = Calendar.current.date(byAdding: .hour, value: 12, to: dayStart) ?? dayStart
         }
         let defaultCount = exercise.kind == .duration ? 5 : 10
+        let holdSeconds = exercise.isIsometric ? (base?.holdSeconds ?? 60) : nil
+        // A fixed-load movement carries the load it is done at: this day's own
+        // stamped weight if it has sets (a back-filled day may predate an edit
+        // of the load), else the exercise's. Holds never get one.
+        let fixedLoad = exercise.fixedLoadLb(
+            forRowWeight: daySets.first?.weightLb, holdSeconds: holdSeconds)
         return WorkoutSetDTO(
             userId: profile.id,
             exerciseId: exercise.id,
-            weightLb: exercise.tracksPerSetWeight ? base?.weightLb : nil,
+            weightLb: exercise.tracksPerSetWeight ? base?.weightLb : fixedLoad,
             reps: exercise.isIsometric ? 1 : (base?.reps ?? defaultCount),
             timestamp: timestamp,
-            holdSeconds: exercise.isIsometric ? (base?.holdSeconds ?? 60) : nil
+            holdSeconds: holdSeconds
         )
     }
 
@@ -708,6 +714,7 @@ private struct EditSetSheet: View {
     @State private var holdSeconds: Int
     @State private var weightStr: String = ""
     @State private var prefilled = false
+    @State private var prefilledWeightStr: String?
     @FocusState private var weightFocused: Bool
 
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
@@ -737,7 +744,21 @@ private struct EditSetSheet: View {
     private var weightLb: Double? {
         // Field is in the active unit; persist canonical lb.
         guard !weightStr.isEmpty else { return nil }
-        return Units.parseWeightToLb(weightStr, system: unitSystem)
+        // Untouched since the prefill: keep the stored value. The field shows
+        // whole units, so re-parsing it would turn a 32.5 lb load into 33 on any
+        // unrelated edit (weights match exactly).
+        if weightStr == prefilledWeightStr, let stored = loggedSet.weightLb { return stored }
+        // Canonical to 0.01 lb so a retyped metric value matches the logged weight.
+        return Units.parseWeightToLb(weightStr, system: unitSystem).map(RepHistory.canonicalLb)
+    }
+
+    /// The load a fixed-load row is priced at: what the field says, else the
+    /// row's stamped weight, else the exercise's (nil for any other shape). The
+    /// same resolution `Repos.updateSet` applies, so the preview is the stored figure.
+    private var rowLoadLb: Double? {
+        exercise.fixedLoadLb(
+            forRowWeight: (showsWeight ? weightLb : nil) ?? loggedSet.weightLb,
+            holdSeconds: isHold ? holdSeconds : nil)
     }
 
     private var estimatedCal: Int {
@@ -745,7 +766,8 @@ private struct EditSetSheet: View {
             exercise: exercise,
             reps: isHold ? max(1, loggedSet.reps) : reps,
             holdSeconds: isHold ? holdSeconds : nil,
-            bodyWeightLb: profile.weightLb
+            bodyWeightLb: profile.weightLb,
+            loadLb: rowLoadLb
         ).rounded())
     }
 
@@ -797,6 +819,7 @@ private struct EditSetSheet: View {
             prefilled = true
             if let w = loggedSet.weightLb, w > 0 {
                 weightStr = Units.formatWeight(lb: w, system: unitSystem, decimals: 0)
+                prefilledWeightStr = weightStr
             }
         }
         .toolbar {
@@ -887,11 +910,12 @@ private struct EditSetSheet: View {
         if isNew {
             var dto = loggedSet
             dto.reps = newReps
-            dto.weightLb = showsWeight ? weightLb : nil
+            dto.weightLb = rowLoadLb ?? (showsWeight ? weightLb : nil)
             dto.holdSeconds = isHold ? holdSeconds : nil
             dto.caloriesEst = Repos.setCaloriesEstimate(
                 exercise: exercise, reps: newReps,
-                holdSeconds: dto.holdSeconds, bodyWeightLb: profile.weightLb
+                holdSeconds: dto.holdSeconds, bodyWeightLb: profile.weightLb,
+                loadLb: rowLoadLb
             )
             guard Repos.addSet(ctx, dto) else { return }
         } else {
