@@ -1,13 +1,13 @@
 // Top-level shell. User-created profiles; first launch routes to creation.
 // One light theme for everyone. Overlays the toast host.
 //
-// Tab layout (same for every goal): Today | Meals | Train | Reminders | Progress
+// Tab layout (same for every goal): Today | Meals | Train | Progress
 
 import SwiftUI
 import SwiftData
 
 private enum Tab: String, CaseIterable, Identifiable {
-    case today, meals, workouts, reminders, progress
+    case today, meals, workouts, progress
     var id: String { rawValue }
 
     var label: String {
@@ -15,7 +15,6 @@ private enum Tab: String, CaseIterable, Identifiable {
         case .today:     return "Today"
         case .meals:     return "Meals"
         case .workouts:  return "Train"
-        case .reminders: return "Reminders"
         case .progress:  return "Progress"
         }
     }
@@ -25,7 +24,6 @@ private enum Tab: String, CaseIterable, Identifiable {
         case .today:     return "sun.max"
         case .meals:     return "fork.knife"
         case .workouts:  return "dumbbell"
-        case .reminders: return "bell"
         case .progress:  return "chart.line.uptrend.xyaxis"
         }
     }
@@ -98,10 +96,6 @@ struct RootView: View {
     private func appShell(for profile: ProfileDTO) -> some View {
         VStack(spacing: 0) {
             header(for: profile)
-            // Under the header rather than over the content: an unlogged dose
-            // should be visible on every tab, and pushing the tab down beats
-            // covering whatever the person was reading.
-            MedicationDueBanner(profile: profile)
             TabView(selection: $tab) {
                 TodayView(profile: profile, health: health)
                     .tag(Tab.today)
@@ -114,10 +108,6 @@ struct RootView: View {
                 WorkoutsView(profile: profile)
                     .tag(Tab.workouts)
                     .tabItem { Label(Tab.workouts.label, systemImage: Tab.workouts.icon) }
-
-                RemindersView(profile: profile)
-                    .tag(Tab.reminders)
-                    .tabItem { Label(Tab.reminders.label, systemImage: Tab.reminders.icon) }
 
                 ProgressTabView(profile: profile)
                     .tag(Tab.progress)
@@ -138,19 +128,12 @@ struct RootView: View {
                 }
             }
         }
-        // Reconcile pending reminder notifications whenever the app comes to
-        // the foreground (covers day-boundary drift, permission changes made
-        // in Settings, and notifications that fired while backgrounded).
         .onChange(of: scenePhase) { _, newPhase in
             guard newPhase == .active else { return }
-            Task { await ReminderNotificationService.reconcile(ctx, userId: profile.id) }
             // Rolls the meal-nudge window forward a day and catches permission
             // changes made in iOS Settings.
             Task { await MealReminderService.replan(ctx, userId: profile.id) }
             WatchSyncService.shared.pushSnapshot(ctx, userId: profile.id)
-        }
-        .onReceive(NotificationCenter.default.publisher(for: .openRemindersTab)) { _ in
-            tab = .reminders
         }
         .onReceive(NotificationCenter.default.publisher(for: .openMealsTab)) { _ in
             tab = .meals

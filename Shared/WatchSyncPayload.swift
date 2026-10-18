@@ -11,9 +11,7 @@
 // watch app isn't foregrounded) under `WatchSyncKeys.snapshotContextKey`. The
 // watch sends a `WatchAction` back via `WCSession.transferUserInfo` (queues
 // automatically while unreachable, so a wrist action taken offline is never
-// lost) under `WatchSyncKeys.actionUserInfoKey`. Photo thumbnails travel
-// separately via `transferFile`, keyed by reminder id in the file's metadata —
-// `updateApplicationContext`'s payload is small, so images don't ride along.
+// lost) under `WatchSyncKeys.actionUserInfoKey`.
 //
 // WHY ONE ENVELOPE, NOT A KEY PER FEATURE: `updateApplicationContext` REPLACES
 // the entire context dictionary. Two features each pushing their own key would
@@ -22,68 +20,6 @@
 // the phone always builds the whole envelope in one pass.
 
 import Foundation
-
-/// A read-only projection of one reminder for the watch's list/detail UI.
-/// `groupKind` is the raw string of `ReminderGroupKind`
-/// ("medication"/"plants"/"custom") — this file intentionally doesn't depend on
-/// the Domain module's enum so it stays a zero-dependency wire format compiled
-/// identically into both targets.
-///
-/// A medication reminder needs NO field of its own here: the wrist only has to
-/// tell medication apart from a plant to render it (which `groupKind` already
-/// does), and when it sends `.done` the phone re-resolves the dose from its own
-/// store before writing — the same rule as meal logging, so a stale snapshot
-/// can never put a wrong dose in the log. Resist adding a `dosage` here.
-public struct ReminderSnapshot: Codable, Equatable, Sendable, Identifiable {
-    public var id: UUID
-    public var groupId: UUID
-    public var groupName: String
-    public var groupKind: String
-    public var name: String
-    public var speciesId: String?
-    public var room: String?
-    public var lightRaw: String?
-    public var potDiameterInches: Int?
-    public var intervalDays: Int
-    public var amountFlOz: Double?
-    public var createdAt: Date
-    public var snoozedUntil: Date?
-    public var lastDoneAt: Date?
-    public var notes: String?
-    /// The profile's preferred notification hour (0-23), so the watch's
-    /// optimistic snooze lands on the same time the phone will schedule
-    /// rather than assuming `ReminderSchedule.defaultReminderHour`.
-    public var preferredHour: Int?
-
-    /// Every field added after the initial wire format is optional with a
-    /// `nil` default, so a payload encoded by an older build still decodes.
-    public init(
-        id: UUID, groupId: UUID, groupName: String, groupKind: String, name: String,
-        speciesId: String? = nil, room: String? = nil, lightRaw: String? = nil,
-        potDiameterInches: Int? = nil, intervalDays: Int, amountFlOz: Double? = nil,
-        createdAt: Date, snoozedUntil: Date? = nil, lastDoneAt: Date? = nil,
-        notes: String? = nil, preferredHour: Int? = nil
-    ) {
-        self.id = id
-        self.groupId = groupId
-        self.groupName = groupName
-        self.groupKind = groupKind
-        self.name = name
-        self.speciesId = speciesId
-        self.room = room
-        self.lightRaw = lightRaw
-        self.potDiameterInches = potDiameterInches
-        self.intervalDays = intervalDays
-        self.amountFlOz = amountFlOz
-        self.createdAt = createdAt
-        self.snoozedUntil = snoozedUntil
-        self.lastDoneAt = lastDoneAt
-        self.notes = notes
-        self.preferredHour = preferredHour
-    }
-
-    public var isPlant: Bool { groupKind == "plants" }
-}
 
 // MARK: - Today
 
@@ -135,8 +71,7 @@ public struct TodaySnapshot: Codable, Equatable, Sendable {
     /// throwing. Swift's synthesised `Codable` ignores an `init` default for an
     /// absent key unless the property is Optional — so without this, adding a
     /// thirteenth metric here would break decoding of every payload written by
-    /// an older phone, and the watch would lose the whole envelope (reminders
-    /// included), not just the new number.
+    /// an older phone, and the watch would lose the whole envelope, not just the new number.
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         func int(_ key: CodingKeys) throws -> Int { try c.decodeIfPresent(Int.self, forKey: key) ?? 0 }
@@ -162,8 +97,7 @@ public struct TodaySnapshot: Codable, Equatable, Sendable {
 
 /// One tap-to-+1 movement (the seeded parenting exercises, plus any the user
 /// added that pass `ExerciseDTO.isOneTapLoggable`). `kind` is the raw string of `ExerciseKind` ("reps"/"duration") —
-/// like `ReminderSnapshot.groupKind`, kept as a String so this file stays free
-/// of Domain enums.
+/// kept as a String so this file stays free of Domain enums.
 public struct QuickLogExercise: Codable, Equatable, Sendable, Identifiable {
     public var id: String
     public var name: String
@@ -249,7 +183,6 @@ public struct WatchSnapshotEnvelope: Codable, Equatable, Sendable {
     /// keep decoding.
     public var mode: String
     public var bodyWeightLb: Double
-    public var reminders: [ReminderSnapshot]
     public var today: TodaySnapshot
     public var quickLogExercises: [QuickLogExercise]
     public var mealShortcuts: [MealShortcut]
@@ -262,7 +195,6 @@ public struct WatchSnapshotEnvelope: Codable, Equatable, Sendable {
         profileName: String? = nil,
         mode: String,
         bodyWeightLb: Double,
-        reminders: [ReminderSnapshot] = [],
         today: TodaySnapshot = TodaySnapshot(),
         quickLogExercises: [QuickLogExercise] = [],
         mealShortcuts: [MealShortcut] = [],
@@ -274,7 +206,6 @@ public struct WatchSnapshotEnvelope: Codable, Equatable, Sendable {
         self.profileName = profileName
         self.mode = mode
         self.bodyWeightLb = bodyWeightLb
-        self.reminders = reminders
         self.today = today
         self.quickLogExercises = quickLogExercises
         self.mealShortcuts = mealShortcuts
@@ -285,8 +216,8 @@ public struct WatchSnapshotEnvelope: Codable, Equatable, Sendable {
     /// Hand-written for the same reason as `TodaySnapshot`'s: only the fields
     /// with no sensible default are genuinely required. Every collection and
     /// nested snapshot degrades to empty, so a payload from an older phone
-    /// still yields a usable envelope rather than throwing and costing the
-    /// watch its reminders too.
+    /// still yields a usable envelope rather than throwing. Unknown keys (e.g. the
+    /// `reminders` array older phone builds still send) are ignored.
     ///
     /// Keep it this way. If you add a field here, give it a default in this
     /// initializer — do NOT rely on the memberwise default, which the
@@ -299,7 +230,6 @@ public struct WatchSnapshotEnvelope: Codable, Equatable, Sendable {
         self.profileName = try c.decodeIfPresent(String.self, forKey: .profileName)
         self.mode = try c.decodeIfPresent(String.self, forKey: .mode) ?? ""
         self.bodyWeightLb = try c.decodeIfPresent(Double.self, forKey: .bodyWeightLb) ?? 0
-        self.reminders = try c.decodeIfPresent([ReminderSnapshot].self, forKey: .reminders) ?? []
         self.today = try c.decodeIfPresent(TodaySnapshot.self, forKey: .today) ?? TodaySnapshot()
         self.quickLogExercises = try c.decodeIfPresent([QuickLogExercise].self, forKey: .quickLogExercises) ?? []
         self.mealShortcuts = try c.decodeIfPresent([MealShortcut].self, forKey: .mealShortcuts) ?? []
@@ -317,17 +247,12 @@ public struct WatchSnapshotEnvelope: Codable, Equatable, Sendable {
 // MARK: - Wrist actions
 
 /// A wrist-initiated mutation, sent phone-ward for the phone (source of
-/// truth) to apply. The phone re-derives everything else (rescheduling the
-/// notification, pushing a fresh snapshot back) — the watch never computes
-/// due dates itself beyond display, even though it links `ReminderSchedule`
-/// for that display math.
+/// truth) to apply. The phone re-derives everything else (pushing a fresh
+/// snapshot back).
 ///
 /// Every case carries a `date` where the write is day-scoped, so an action
 /// queued offline lands on the day it was TAKEN, not the day it was delivered.
 public enum WatchAction: Codable, Sendable, Equatable {
-    case done(reminderId: UUID, date: Date)
-    case setInterval(reminderId: UUID, days: Int)
-    case snooze(reminderId: UUID)
     case logWater(flOz: Double, date: Date)
     case logQuickSet(exerciseId: String, amount: Int, date: Date)
     /// Removes the most recent set logged for this exercise on `date`.
@@ -343,11 +268,10 @@ public enum WatchAction: Codable, Sendable, Equatable {
 public enum WatchSyncKeys {
     /// Key inside the `updateApplicationContext` dictionary; value is a
     /// JSON-encoded `WatchSnapshotEnvelope`.
+    /// The value is the historical "reminderSnapshots": it is the wire key both
+    /// sides already agree on, so it stays even though Reminders is gone.
     public static let snapshotContextKey = "reminderSnapshots"
     /// Key inside the `transferUserInfo` dictionary; value is JSON-encoded
     /// `WatchAction` `Data`.
     public static let actionUserInfoKey = "watchAction"
-    /// Prefix for thumbnail file transfers; the reminder id travels in the
-    /// transfer's `metadata`, not the filename (which is unique per transfer).
-    public static let thumbnailFilePrefix = "plant-thumb-"
 }

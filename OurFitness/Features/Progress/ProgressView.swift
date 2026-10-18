@@ -33,10 +33,13 @@ struct ProgressTabView: View {
     /// "none" = customized to show nothing; otherwise a CSV of StatKind raw values.
     /// IMPORTANT: never add a StatKind whose rawValue is "none" — it collides with the sentinel.
     @AppStorage private var enabledStatsRaw: String
+    /// Home kit ("20,1"), edited in the Train tab's "Work on…" sheet; names the exercise in weekly-volume tips.
+    @AppStorage private var equipmentRaw: String
 
     init(profile: ProfileDTO) {
         self.profile = profile
         let uid = profile.id
+        _equipmentRaw = AppStorage(wrappedValue: "", HomeEquipment.storageKey(uid))
         _enabledStatsRaw = AppStorage(wrappedValue: "", "progressStats.\(uid.uuidString)")
         _bodyModels = Query(
             filter: #Predicate<BodyMetricModel> { $0.userId == uid },
@@ -192,10 +195,12 @@ struct ProgressTabView: View {
                     }
                 }
 
-                // Estimated max per loaded lift — only once a weighted set exists.
-                let lifts = StrengthProgress.lifts(sets: sets, exercises: exerciseModels.map(\.snapshot), now: Date())
+                // Progress per exercise (estimated max, best reps, longest hold) plus
+                // this week's sets per muscle — only once something is logged.
+                let exercises = exerciseModels.map(\.snapshot)
+                let lifts = StrengthProgress.lifts(sets: sets, exercises: exercises, now: Date())
                 if !lifts.isEmpty {
-                    strengthCard(lifts: lifts)
+                    strengthCard(lifts: lifts, volume: MuscleVolume.weekly(sets: sets, exercises: exercises, now: Date()))
                 }
 
                 // Calorie intake vs activity burn — shown for every goal, but
@@ -241,38 +246,76 @@ struct ProgressTabView: View {
     // MARK: - Strength card
 
     @ViewBuilder
-    private func strengthCard(lifts: [StrengthProgress.Lift]) -> some View {
+    private func strengthCard(lifts: [StrengthProgress.Lift], volume: [MuscleVolume.Row]) -> some View {
+        let tips = MuscleVolume.recommendations(rows: volume, equipment: HomeEquipment(encoded: equipmentRaw))
         Card {
             VStack(alignment: .leading, spacing: 12) {
                 Label("Strength", systemImage: "figure.strengthtraining.traditional")
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(theme.accent)
-                ForEach(lifts.prefix(5)) { lift in
+                ForEach(lifts.prefix(6)) { lift in
                     HStack(alignment: .firstTextBaseline) {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(lift.name)
                                 .font(.system(size: 14, weight: .medium))
                                 .foregroundStyle(theme.text)
-                            Text("best set \(Units.formatWeight(lb: lift.bestWeightLb, system: unitSystem, decimals: 0)) × \(lift.bestReps)")
+                            Text(liftSubtitle(lift))
                                 .font(.caption).foregroundStyle(theme.dim)
                         }
                         Spacer()
                         VStack(alignment: .trailing, spacing: 2) {
-                            Text("≈ " + Units.formatWeightWithUnit(lb: lift.estimatedMaxLb, system: unitSystem, decimals: 0))
+                            Text(liftHeadline(lift))
                                 .font(.system(size: 15, weight: .semibold))
                                 .foregroundStyle(theme.text)
-                            if let gain = lift.gainLb {
-                                Text(strengthGainLabel(gain))
+                            if let change = lift.change, let label = liftChangeLabel(lift, change) {
+                                Text(label)
                                     .font(.caption)
-                                    .foregroundStyle(gain > 0 ? theme.ok : theme.dim)
+                                    .foregroundStyle(change > 0 ? theme.ok : theme.dim)
                             }
                         }
                     }
                 }
-                Text("Estimated one-rep max (Epley formula) from sets of 1–12 reps. Change is vs. before the last 4 weeks.")
+                Text("Loaded: estimated one-rep max (Epley, 1–12 reps). Others: best day or longest hold. Change vs. before 4 weeks.")
                     .font(.caption2).foregroundStyle(theme.dim)
+
+                if !tips.isEmpty {
+                    Divider().background(theme.line)
+                    ForEach(tips) { tip in
+                        Text(tip.text)
+                            .font(.system(size: 13))
+                            .foregroundStyle(theme.text)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    Text(MuscleVolume.lightLoadTip)
+                        .font(.caption2).foregroundStyle(theme.dim)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
             }
         }
+    }
+
+    private func liftSubtitle(_ lift: StrengthProgress.Lift) -> String {
+        switch lift.metric {
+        case .estimatedMax:
+            return "best set \(Units.formatWeight(lb: lift.bestWeightLb, system: unitSystem, decimals: 0)) × \(lift.bestReps)"
+        case .bestReps:    return "most in a day"
+        case .bestMinutes: return "most in a day"
+        case .bestHold:    return "longest hold"
+        }
+    }
+
+    private func liftHeadline(_ lift: StrengthProgress.Lift) -> String {
+        guard let unit = lift.metric.unitLabel else {
+            return "≈ " + Units.formatWeightWithUnit(lb: lift.estimatedMaxLb, system: unitSystem, decimals: 0)
+        }
+        return "\(Int(lift.headline.rounded())) \(unit)"
+    }
+
+    private func liftChangeLabel(_ lift: StrengthProgress.Lift, _ change: Double) -> String? {
+        guard let unit = lift.metric.unitLabel else { return lift.gainLb.map(strengthGainLabel) }
+        let n = Int(abs(change).rounded())
+        if n == 0 { return "no change · 4 wk" }
+        return (change > 0 ? "+" : "−") + "\(n) \(unit) · 4 wk"
     }
 
     private func strengthGainLabel(_ gainLb: Double) -> String {

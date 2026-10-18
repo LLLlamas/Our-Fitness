@@ -1,5 +1,10 @@
 # Watch app setup (Apple Watch companion)
 
+> **Reminders removed (October 2026).** The watch no longer has a Reminders tab,
+> reminder/medication snapshots, plant thumbnails or reminder actions, and the
+> phone no longer posts reminder notifications. Passages below that describe them
+> are historical; see [removed-reminders.md](removed-reminders.md).
+
 `OurFitnessWatch` has four tabs: Today (glance and water), Train (quick sets and
 live sessions), Meals (shortcuts), and Reminders. The phone remains the source of
 truth for logged records. The watch caches the received snapshot envelope in

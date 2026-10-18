@@ -6,9 +6,12 @@ TestFlight release before starting another shipping milestone.
 
 ## Milestone 2: privacy controls and retention
 
-- Resolve the pending medication-notification preference: authentication for
-  "Log taken" and generic versus named text. Preserve existing behavior until
-  the user answers. Keep the binding medication safety wording rules.
+- ~~Resolve the pending medication-notification preference~~ — moot: medication
+  and reminders were removed (see [removed-reminders.md](removed-reminders.md)).
+  NEW: the erase-local-data flow must also delete the retired
+  `ReminderGroupModel` / `ReminderModel` / `ReminderEventModel` rows (medication
+  names, doses and history are still on disk), which needs a schema version bump
+  and migration stage.
 - Design one explicit erase-local-data flow with a reviewable confirmation.
   Inventory current and legacy stores, profile defaults, AI/service caches,
   pending/delivered notifications, live sessions/activities, watch envelope and

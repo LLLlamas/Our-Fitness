@@ -27,8 +27,6 @@ final class WatchSyncPayloadTests: XCTestCase {
     }
 
     private let profileId = UUID(uuidString: "11111111-1111-1111-1111-111111111111")!
-    private let reminderId = UUID(uuidString: "22222222-2222-2222-2222-222222222222")!
-    private let groupId = UUID(uuidString: "33333333-3333-3333-3333-333333333333")!
 
     private func makeEncoder() -> JSONEncoder { JSONEncoder() }
     private func makeDecoder() -> JSONDecoder { JSONDecoder() }
@@ -45,35 +43,6 @@ final class WatchSyncPayloadTests: XCTestCase {
             profileName: "Sam",
             mode: "reset", // FitnessGoal.lose's persisted raw value (the old Circuit name); wire data, kept for back-compat
             bodyWeightLb: 163.4,
-            reminders: [
-                ReminderSnapshot(
-                    id: reminderId,
-                    groupId: groupId,
-                    groupName: "Plants",
-                    groupKind: "plants",
-                    name: "Monstera",
-                    speciesId: "monstera-deliciosa",
-                    room: "Living room",
-                    lightRaw: "bright-indirect",
-                    potDiameterInches: 10,
-                    intervalDays: 7,
-                    amountFlOz: 16,
-                    createdAt: offsetDays(-30),
-                    snoozedUntil: offsetDays(1),
-                    lastDoneAt: offsetDays(-4),
-                    notes: "Let the top inch dry out.",
-                    preferredHour: 8
-                ),
-                ReminderSnapshot(
-                    id: UUID(uuidString: "44444444-4444-4444-4444-444444444444")!,
-                    groupId: UUID(uuidString: "55555555-5555-5555-5555-555555555555")!,
-                    groupName: "Home",
-                    groupKind: "custom",
-                    name: "Replace filter",
-                    intervalDays: 90,
-                    createdAt: offsetDays(-120)
-                )
-            ],
             today: TodaySnapshot(
                 caloriesConsumed: 1_420, caloriesTarget: 2_100,
                 proteinG: 118, proteinTargetG: 165,
@@ -109,7 +78,9 @@ final class WatchSyncPayloadTests: XCTestCase {
     /// The MINIMUM JSON that decodes — i.e. every key that is genuinely required
     /// (see `test_decode_throws_when_any_nonOptional_envelope_key_is_missing`).
     /// Optional keys are deliberately absent, standing in for a payload written
-    /// by an older phone build that didn't know about them yet.
+    /// by an older phone build that didn't know about them yet. It also carries
+    /// the retired `reminders` array that pre-removal phone builds still send,
+    /// so every decode below doubles as a "legacy keys are ignored" check.
     private func minimalEnvelopeJSON() -> Data {
         let seconds = now.timeIntervalSinceReferenceDate
         let json = """
@@ -120,8 +91,8 @@ final class WatchSyncPayloadTests: XCTestCase {
           "bodyWeightLb": 180.5,
           "reminders": [
             {
-              "id": "\(reminderId.uuidString)",
-              "groupId": "\(groupId.uuidString)",
+              "id": "22222222-2222-2222-2222-222222222222",
+              "groupId": "33333333-3333-3333-3333-333333333333",
               "groupName": "Plants",
               "groupKind": "plants",
               "name": "Fiddle Leaf Fig",
@@ -164,7 +135,6 @@ final class WatchSyncPayloadTests: XCTestCase {
         let decoded = try makeDecoder().decode(WatchSnapshotEnvelope.self, from: data)
         XCTAssertEqual(decoded, original)
         XCTAssertNil(decoded.liveSession)
-        XCTAssertTrue(decoded.reminders.isEmpty)
     }
 
     func test_envelope_dates_roundTrip_exactly() throws {
@@ -181,7 +151,7 @@ final class WatchSyncPayloadTests: XCTestCase {
                        accuracy: 0.000_001)
     }
 
-    // MARK: - WatchAction round-trip (all nine cases)
+    // MARK: - WatchAction round-trip (all six cases)
 
     func test_watchAction_roundTrips_for_every_case() throws {
         let encoder = makeEncoder()
@@ -190,9 +160,6 @@ final class WatchSyncPayloadTests: XCTestCase {
         // One entry per case of `WatchAction`. If a case is added and this array
         // isn't extended, the count assertion below fails and says so.
         let actions: [(label: String, action: WatchAction)] = [
-            ("done", .done(reminderId: reminderId, date: now)),
-            ("setInterval", .setInterval(reminderId: reminderId, days: 14)),
-            ("snooze", .snooze(reminderId: reminderId)),
             ("logWater", .logWater(flOz: 16.5, date: now)),
             ("logQuickSet", .logQuickSet(exerciseId: "lifted-baby", amount: 3, date: now)),
             ("undoQuickSet", .undoQuickSet(exerciseId: "lifted-baby", date: now)),
@@ -204,7 +171,7 @@ final class WatchSyncPayloadTests: XCTestCase {
             ("endLiveSession", .endLiveSession(startDate: now, elapsedSeconds: 1_805))
         ]
 
-        XCTAssertEqual(actions.count, 9, "WatchAction gained or lost a case — cover it here.")
+        XCTAssertEqual(actions.count, 6, "WatchAction gained or lost a case — cover it here.")
 
         for (label, action) in actions {
             let data = try encoder.encode(action)
@@ -218,13 +185,13 @@ final class WatchSyncPayloadTests: XCTestCase {
         // day the action was TAKEN. That only holds if the date rides along
         // intact, so assert the value itself, not just equality of the case.
         let takenOn = offsetDays(-3)
-        let data = try makeEncoder().encode(WatchAction.done(reminderId: reminderId, date: takenOn))
+        let data = try makeEncoder().encode(WatchAction.logWater(flOz: 8, date: takenOn))
         let decoded = try makeDecoder().decode(WatchAction.self, from: data)
 
-        guard case let .done(decodedId, decodedDate) = decoded else {
-            return XCTFail("expected .done, got \(decoded)")
+        guard case let .logWater(decodedFlOz, decodedDate) = decoded else {
+            return XCTFail("expected .logWater, got \(decoded)")
         }
-        XCTAssertEqual(decodedId, reminderId)
+        XCTAssertEqual(decodedFlOz, 8, accuracy: 0.000_001)
         XCTAssertEqual(decodedDate.timeIntervalSinceReferenceDate,
                        takenOn.timeIntervalSinceReferenceDate,
                        accuracy: 0.000_001)
@@ -249,23 +216,11 @@ final class WatchSyncPayloadTests: XCTestCase {
 
         // Optional nested fields likewise.
         XCTAssertNil(decoded.today.waterLastFlOz)
-        let reminder = try XCTUnwrap(decoded.reminders.first)
-        XCTAssertNil(reminder.speciesId)
-        XCTAssertNil(reminder.room)
-        XCTAssertNil(reminder.lightRaw)
-        XCTAssertNil(reminder.potDiameterInches)
-        XCTAssertNil(reminder.amountFlOz)
-        XCTAssertNil(reminder.snoozedUntil)
-        XCTAssertNil(reminder.lastDoneAt)
-        XCTAssertNil(reminder.notes)
-        XCTAssertNil(reminder.preferredHour)
 
         // The required fields that were present decoded correctly.
         XCTAssertEqual(decoded.profileId, profileId)
         XCTAssertEqual(decoded.mode, "build")
         XCTAssertEqual(decoded.bodyWeightLb, 180.5, accuracy: 0.000_001)
-        XCTAssertEqual(reminder.name, "Fiddle Leaf Fig")
-        XCTAssertEqual(reminder.intervalDays, 10)
         XCTAssertTrue(decoded.quickLogExercises.isEmpty)
         XCTAssertTrue(decoded.mealShortcuts.isEmpty)
     }
@@ -287,12 +242,12 @@ final class WatchSyncPayloadTests: XCTestCase {
     func test_decode_tolerates_any_missing_key_except_profileId() throws {
         // The envelope hand-writes init(from:) precisely so this holds. Synthesised
         // Codable would throw on every one of these, and a phone build that
-        // omitted, say, `mealShortcuts` would cost the watch its REMINDERS too —
+        // omitted, say, `mealShortcuts` would cost the watch its TODAY numbers too —
         // the whole envelope fails, not just the unknown section. profileId is the
         // sole genuinely-required key: there is no safe default for identity.
         let defaultable = [
             "schemaVersion", "mode", "bodyWeightLb",
-            "reminders", "today", "quickLogExercises", "mealShortcuts", "generatedAt"
+            "today", "quickLogExercises", "mealShortcuts", "generatedAt"
         ]
         let object = try XCTUnwrap(
             JSONSerialization.jsonObject(with: minimalEnvelopeJSON()) as? [String: Any]
@@ -327,7 +282,7 @@ final class WatchSyncPayloadTests: XCTestCase {
             JSONSerialization.jsonObject(with: minimalEnvelopeJSON()) as? [String: Any]
         )
         var stripped = object
-        for key in ["schemaVersion", "mode", "bodyWeightLb", "reminders",
+        for key in ["schemaVersion", "mode", "bodyWeightLb",
                     "today", "quickLogExercises", "mealShortcuts", "generatedAt"] {
             stripped.removeValue(forKey: key)
         }
@@ -342,7 +297,6 @@ final class WatchSyncPayloadTests: XCTestCase {
         XCTAssertTrue(decoded.isReadable)
         XCTAssertEqual(decoded.mode, "")
         XCTAssertEqual(decoded.bodyWeightLb, 0)
-        XCTAssertTrue(decoded.reminders.isEmpty)
         XCTAssertTrue(decoded.quickLogExercises.isEmpty)
         XCTAssertTrue(decoded.mealShortcuts.isEmpty)
         XCTAssertNil(decoded.liveSession)
@@ -423,37 +377,6 @@ final class WatchSyncPayloadTests: XCTestCase {
         XCTAssertFalse(decoded.isReadable)
     }
 
-    // MARK: - ReminderSnapshot.isPlant
-
-    private func snapshot(groupKind: String) -> ReminderSnapshot {
-        ReminderSnapshot(
-            id: reminderId, groupId: groupId, groupName: "Group",
-            groupKind: groupKind, name: "Thing", intervalDays: 7, createdAt: now
-        )
-    }
-
-    func test_isPlant_true_only_for_the_plants_groupKind() {
-        XCTAssertTrue(snapshot(groupKind: "plants").isPlant)
-        // The wire side answers by raw group kind alone — unlike ReminderDTO,
-        // there is no speciesId involved — so anything else is false.
-        XCTAssertFalse(snapshot(groupKind: "custom").isPlant)
-        XCTAssertFalse(snapshot(groupKind: "").isPlant)
-        XCTAssertFalse(snapshot(groupKind: "Plants").isPlant, "raw values are case-sensitive")
-        XCTAssertFalse(snapshot(groupKind: "plant").isPlant)
-        // A newly-added group kind must not start reading as a plant on the
-        // wire — that would put a watering amount and a species row on the
-        // wrist for a pill bottle.
-        XCTAssertFalse(snapshot(groupKind: "medication").isPlant)
-    }
-
-    func test_isPlant_survives_the_round_trip() throws {
-        let original = snapshot(groupKind: "plants")
-        let data = try makeEncoder().encode(original)
-        let decoded = try makeDecoder().decode(ReminderSnapshot.self, from: data)
-        XCTAssertEqual(decoded, original)
-        XCTAssertTrue(decoded.isPlant)
-    }
-
     // MARK: - QuickLogExercise.isDuration
 
     func test_isDuration_true_only_for_the_duration_kind() {
@@ -478,36 +401,44 @@ final class WatchSyncPayloadTests: XCTestCase {
     // MARK: - Nested elements are NOT decode-hardened
 
     /// The envelope and `TodaySnapshot` hand-write `init(from:)` so a missing key
-    /// falls back to a default. The nested ELEMENT types — `ReminderSnapshot`,
-    /// `QuickLogExercise`, `MealShortcut`, `LiveSessionSnapshot` — do not: they
-    /// use synthesised `Codable`, where a missing non-Optional key throws.
+    /// falls back to a default. The nested ELEMENT types — `QuickLogExercise`,
+    /// `MealShortcut`, `LiveSessionSnapshot` — do not: they use synthesised
+    /// `Codable`, where a missing non-Optional key throws.
     ///
     /// This test pins the CONSEQUENCE, which is worse than it looks: the throw
-    /// happens inside `decodeIfPresent([ReminderSnapshot].self, …)`, which
+    /// happens inside `decodeIfPresent([MealShortcut].self, …)`, which
     /// propagates rather than yielding nil, so one element missing one key costs
-    /// the watch the WHOLE envelope — today's numbers and meal shortcuts
-    /// included — and it falls back to its cached snapshot silently.
+    /// the watch the WHOLE envelope — today's numbers included — and it falls
+    /// back to its cached snapshot silently.
     ///
     /// Read this as a boundary, not an endorsement: adding a non-Optional field
-    /// to any of those four structs is a BREAKING wire change and needs
+    /// to any of those structs is a BREAKING wire change and needs
     /// `WatchSnapshotEnvelope.currentSchemaVersion` bumped (or element-level
     /// lossy decoding added), not just a memberwise default. If you harden them,
     /// this test should be the one that fails.
     func test_a_nested_element_missing_a_required_key_loses_the_whole_envelope() throws {
-        let object = try XCTUnwrap(
+        var object = try XCTUnwrap(
             JSONSerialization.jsonObject(with: minimalEnvelopeJSON()) as? [String: Any]
         )
-        // Every non-Optional key on the single ReminderSnapshot in the fixture.
-        for key in ["id", "groupId", "groupName", "groupKind", "name", "intervalDays", "createdAt"] {
+        // Every non-Optional key on a MealShortcut.
+        let shortcut: [String: Any] = [
+            "id": "tmpl-breakfast", "name": "Usual breakfast",
+            "calories": 520, "proteinG": 34, "source": "template"
+        ]
+        object["mealShortcuts"] = [shortcut]
+        XCTAssertNoThrow(try makeDecoder().decode(
+            WatchSnapshotEnvelope.self, from: try JSONSerialization.data(withJSONObject: object)
+        ), "fixture drifted: a complete MealShortcut should decode")
+
+        for key in ["id", "name", "calories", "proteinG", "source"] {
             var mutated = object
-            var reminders = try XCTUnwrap(mutated["reminders"] as? [[String: Any]])
-            XCTAssertNotNil(reminders[0].removeValue(forKey: key),
-                            "\(key) was not in the minimal payload — fixture drifted")
-            mutated["reminders"] = reminders
+            var element = shortcut
+            XCTAssertNotNil(element.removeValue(forKey: key))
+            mutated["mealShortcuts"] = [element]
             let data = try JSONSerialization.data(withJSONObject: mutated)
             XCTAssertThrowsError(
                 try makeDecoder().decode(WatchSnapshotEnvelope.self, from: data),
-                "ReminderSnapshot.\(key) is currently required; if that changed, update this test"
+                "MealShortcut.\(key) is currently required; if that changed, update this test"
             )
         }
     }
@@ -519,15 +450,17 @@ final class WatchSyncPayloadTests: XCTestCase {
         var object = try XCTUnwrap(
             JSONSerialization.jsonObject(with: minimalEnvelopeJSON()) as? [String: Any]
         )
-        var reminders = try XCTUnwrap(object["reminders"] as? [[String: Any]])
-        reminders[0]["dosageFromSomeFuturePhoneBuild"] = "500 mg"
-        object["reminders"] = reminders
+        object["mealShortcuts"] = [[
+            "id": "tmpl-breakfast", "name": "Usual breakfast",
+            "calories": 520, "proteinG": 34, "source": "template",
+            "someFieldFromTheFuture": "x"
+        ] as [String: Any]]
         let decoded = try makeDecoder().decode(
             WatchSnapshotEnvelope.self,
             from: try JSONSerialization.data(withJSONObject: object)
         )
-        XCTAssertEqual(decoded.reminders.count, 1)
-        XCTAssertEqual(decoded.reminders.first?.name, "Fiddle Leaf Fig")
+        XCTAssertEqual(decoded.mealShortcuts.count, 1)
+        XCTAssertEqual(decoded.mealShortcuts.first?.name, "Usual breakfast")
     }
 
     // MARK: - Transport keys
@@ -537,6 +470,5 @@ final class WatchSyncPayloadTests: XCTestCase {
         // renaming one silently breaks sync for anyone mid-update.
         XCTAssertEqual(WatchSyncKeys.snapshotContextKey, "reminderSnapshots")
         XCTAssertEqual(WatchSyncKeys.actionUserInfoKey, "watchAction")
-        XCTAssertEqual(WatchSyncKeys.thumbnailFilePrefix, "plant-thumb-")
     }
 }

@@ -176,7 +176,7 @@ private struct HeartHealthInfoSheet: View {
             section("Added sugar — stay under", TargetRationale.addedSugarWhy(for: profile))
             section("Saturated fat — stay under", TargetRationale.saturatedFatWhy(for: profile))
 
-            InfoFootnote("These are practical starting targets aligned with DASH and American Heart Association guidance for blood pressure and cholesterol. Individual needs vary — your doctor's advice comes first.")
+            InfoFootnote("Starting targets — your doctor's advice comes first.")
         }
     }
 

@@ -1027,83 +1027,36 @@ private struct NutritionInsightSheet: View {
     let logs: [FoodLogEntryDTO]
 
     @Environment(\.theme) private var theme
-    @Query private var markerModels: [HealthMarkerModel]
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
-
-    init(profile: ProfileDTO, logs: [FoodLogEntryDTO]) {
-        self.profile = profile
-        self.logs = logs
-        let uid = profile.id
-        // HealthMarkerModel.date is a "yyyy-MM-dd" String; lexicographic sort == chronological for this format.
-        _markerModels = Query(
-            filter: #Predicate<HealthMarkerModel> { $0.userId == uid },
-            sort: \.date, order: .reverse
-        )
-    }
 
     private var targets: MacroTargets { profile.computedTargets }
 
-    private func proteinStatus(avg7: DailyTotals, logged7: Int, targets: MacroTargets) -> String {
-        guard logged7 > 0 else { return "No data yet — log a few days to see your average." }
-        let pct = Int(Double(avg7.proteinG) / Double(targets.proteinG) * 100)
-        if pct >= 90 { return "You're hitting your protein target — great for muscle support." }
-        if pct >= 70 { return "Protein is a bit under target. Try adding eggs, Greek yogurt, or chicken." }
-        return "Protein is well below target. Prioritise protein-dense foods at each meal."
-    }
-
-    private func calorieStatus(avg7: DailyTotals, logged7: Int, targets: MacroTargets) -> String {
-        guard logged7 > 0 else { return "Log meals consistently to track your calorie pattern." }
-        let pct = Int(Double(avg7.calories) / Double(targets.calories) * 100)
-        switch profile.fitnessGoal {
-        case .gain:
-            if pct >= 95 { return "Calorie intake looks solid for muscle gain." }
-            if pct >= 80 { return "Slightly under target — add a snack or larger portion to hit your surplus." }
-            return "Calories are low for a building phase. Aim for the full \(targets.calories) cal daily."
-        case .lose:
-            if pct <= 95 && pct >= 70 { return "Nice deficit — you're in the right calorie range for fat loss." }
-            if pct > 95 { return "You're near maintenance. A small additional reduction helps the deficit." }
-            return "Calories look very low. Make sure you're still fueling activity and recovery."
-        }
-    }
-
     private var goalBlurb: String {
-        // Personalized to the user's own maintenance + surplus/deficit numbers.
-        TargetRationale.goalLine(for: profile.fitnessGoal) + "\n\n" + TargetRationale.calorieWhy(for: profile)
+        TargetRationale.calorieWhy(for: profile)
     }
 
     var body: some View {
-        // Each of these walked the full log / marker history on every read, and
-        // each was read between two and six times per pass. The two marker
-        // lookups also rebuilt every HealthMarkerDTO twice over.
         let targets = self.targets
         let avg7 = NutritionHistory.averagePerLoggedDay(logs, days: 7)
         let logged7 = NutritionHistory.daysLogged(logs, days: 7)
-        let markers = markerModels.map(\.snapshot)
-        let hasLDL = markers.contains { $0.kind == .ldl }
-        let hasBP = markers.contains { $0.kind == .bpSystolic }
-        // `[.large]` as it shipped — this sheet is long enough that opening at
-        // medium reads as truncated.
-        InfoSheetScaffold(title: "Nutrition goals", subtitle: "YOUR TARGETS · PLAIN ENGLISH",
-                          detents: [.large]) {
+        InfoSheetScaffold(title: "Nutrition goals", subtitle: "YOUR TARGETS · PLAIN ENGLISH") {
             InfoSection(title: "Your daily targets") {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("**\(targets.calories) calories** — \(profile.fitnessGoal == .gain ? "surplus" : "slight deficit") from your maintenance")
+                    Text("**\(targets.calories) calories** — \(profile.fitnessGoal == .gain ? "surplus" : "slight deficit") from maintenance")
                         .font(.callout).foregroundStyle(theme.text)
                     Text(unitSystem == .metric
-                         ? "**\(targets.proteinG)g protein** — \(String(format: "%.1f", Double(targets.proteinG) / (profile.weightLb * Units.kgPerLb)))g per kilogram of body weight"
-                         : "**\(targets.proteinG)g protein** — \(String(format: "%.1f", Double(targets.proteinG) / profile.weightLb))g per pound of body weight")
+                         ? "**\(targets.proteinG)g protein** — \(String(format: "%.1f", Double(targets.proteinG) / (profile.weightLb * Units.kgPerLb)))g per kg"
+                         : "**\(targets.proteinG)g protein** — \(String(format: "%.1f", Double(targets.proteinG) / profile.weightLb))g per lb")
                         .font(.callout).foregroundStyle(theme.text)
-                    Text("**\(targets.carbsG)g carbs** — primary fuel for movement and brain function")
+                    Text("**\(targets.carbsG)g carbs**")
                         .font(.callout).foregroundStyle(theme.text)
-                    Text("**\(targets.fatG)g fat** — supports hormones, joint health, and fat-soluble vitamins")
+                    Text("**\(targets.fatG)g fat**")
                         .font(.callout).foregroundStyle(theme.text)
                 }
             }
 
-            InfoSection(title: "What this means for you") {
-                Text(goalBlurb)
-                    .font(.callout).foregroundStyle(theme.text)
-            }
+            Text(goalBlurb)
+                .font(.callout).foregroundStyle(theme.text)
 
             if logged7 > 0 {
                 InfoSection(title: "Your last \(logged7) logged days") {
@@ -1114,40 +1067,7 @@ private struct NutritionInsightSheet: View {
                         InfoCalcRow(label: "Average fat", detail: "\(avg7.fatG)g / \(targets.fatG)g")
                     }
                 }
-
-                InfoSection(title: "Reading your data") {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(calorieStatus(avg7: avg7, logged7: logged7, targets: targets))
-                            .font(.callout).foregroundStyle(theme.text)
-                        Text(proteinStatus(avg7: avg7, logged7: logged7, targets: targets))
-                            .font(.callout).foregroundStyle(theme.text)
-                    }
-                }
             }
-
-            if hasLDL || hasBP {
-                InfoSection(title: "Dietary tips for your markers") {
-                    VStack(alignment: .leading, spacing: 8) {
-                        if hasLDL {
-                            Text("**Cholesterol on file** — limit saturated fat, choose oats, legumes, and fatty fish. Soluble fiber (oats, beans) actively lowers LDL.")
-                                .font(.callout).foregroundStyle(theme.text)
-                        }
-                        if hasBP {
-                            Text("**Blood pressure on file** — reduce sodium, increase potassium-rich foods (bananas, sweet potato, spinach). DASH diet pattern is well-supported.")
-                                .font(.callout).foregroundStyle(theme.text)
-                        }
-                    }
-                }
-            }
-
-            // Kept boxed at .caption rather than swapped for `InfoFootnote`:
-            // this one is a card in the stack, not small print at the foot.
-            Text("Targets are estimated from your height, weight, age, activity level, and goal. Log consistently for the most accurate picture.")
-                .font(.caption).foregroundStyle(theme.dim)
-                .padding(10)
-                .background(theme.card)
-                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
         }
     }
 }

@@ -1,12 +1,11 @@
 // Learned meal-logging times: "you usually log lunch around 12:30 — it isn't
 // logged yet today."
 //
-// The meal counterpart of MedicationPattern's OBSERVED path, and built the
-// same way: the median of each day's earliest log for a slot, today excluded,
+// The median of each day's earliest log for a slot, today excluded,
 // read off the log on demand (nothing stored — deleting entries erases the
 // inference with them, and a drifting routine re-settles on its own).
 //
-// Differences from medication, each deliberate:
+// Deliberate rules:
 //   - Only breakfast / lunch / dinner are learned. Snacks, pre/post-workout and
 //     "other" are irregular by nature; a "your snack isn't logged" ping is nagging.
 //   - A slot needs `minDays` logged days in a 14-day window before it is
@@ -77,8 +76,8 @@ public enum MealLogPattern {
         let today = calendar.startOfDay(for: now)
         guard let windowStart = calendar.date(byAdding: .day, value: -lookbackDays, to: today) else { return [] }
 
-        // Today is excluded for the same reason as MedicationPattern: today's
-        // log is what the nudge checks FOR, not evidence about the routine.
+        // Today is excluded: today's log is what the nudge checks FOR, not
+        // evidence about the routine.
         var firstByDay: [String: Date] = [:]
         for e in entries where e.slot == slot
             && e.timestamp >= windowStart && e.timestamp < today
@@ -91,6 +90,29 @@ public enum MealLogPattern {
 
     // MARK: - Typical time
 
+    /// Minute-of-day (0..<1440) of an instant.
+    public static func minuteOfDay(of date: Date, calendar: Calendar) -> Int {
+        let parts = calendar.dateComponents([.hour, .minute], from: date)
+        return (parts.hour ?? 0) * 60 + (parts.minute ?? 0)
+    }
+
+    /// "8:00 AM" for a minute-of-day, in the user's locale.
+    ///
+    /// Built on a fixed reference day rather than today, because only the clock
+    /// face matters: rendering through a real date would let a daylight-saving
+    /// boundary shift the label by an hour from the number that was stored.
+    public static func clockLabel(minuteOfDay minute: Int, calendar: Calendar = .current) -> String {
+        let m = min(max(minute, 0), 24 * 60 - 1)
+        var comps = DateComponents()
+        comps.year = 2000
+        comps.month = 1
+        comps.day = 1
+        comps.hour = m / 60
+        comps.minute = m % 60
+        guard let date = calendar.date(from: comps) else { return "" }
+        return date.formatted(date: .omitted, time: .shortened)
+    }
+
     /// Median minute-of-day of `recentDailyFirstLogs`, or nil below `minDays`.
     /// Median, not mean, so one late Sunday brunch doesn't move a steady 8am
     /// breakfast. Even counts average the two middle values.
@@ -98,7 +120,7 @@ public enum MealLogPattern {
                                           now: Date, calendar: Calendar) -> Int? {
         let logs = recentDailyFirstLogs(entries, slot: slot, now: now, calendar: calendar)
         guard logs.count >= minDays else { return nil }
-        let minutes = logs.map { MedicationPattern.minuteOfDay(of: $0, calendar: calendar) }.sorted()
+        let minutes = logs.map { minuteOfDay(of: $0, calendar: calendar) }.sorted()
         let mid = minutes.count / 2
         if minutes.count % 2 == 1 { return minutes[mid] }
         return Int((Double(minutes[mid - 1] + minutes[mid]) / 2).rounded())

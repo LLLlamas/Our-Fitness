@@ -317,43 +317,13 @@ private struct MoveInfoSheet: View {
 
     var body: some View {
         InfoSheetScaffold(title: "Move", subtitle: "MET × WEIGHT × TIME = CALORIES") {
-            InfoSection(title: "Two sources, one picture") {
-                InfoBody("Apple Health measures what its sensors detect. Our Estimate calculates from what you log — steps + training. They'll rarely match perfectly, and that's fine.")
-            }
+            InfoBody("Apple counts what its sensors detect. Our Estimate adds steps and the training you log.")
 
-            InfoSection(title: "Apple Total") {
-                VStack(alignment: .leading, spacing: 8) {
-                    columnNote(label: "Active energy", detail: "Steps and all movement Apple detects. Misses logged strength and sport sessions. Syncs from Watch every 15–60 min.")
-                    columnNote(label: "Distance & Flights", detail: "Foot distance from GPS and floors climbed from the barometer.")
-                    columnNote(label: "Heart Rate", detail: "Most recent spot reading — not a daily average.")
-                }
-            }
-
-            InfoSection(title: "Our Estimate") {
-                VStack(alignment: .leading, spacing: 8) {
-                    columnNote(label: "Activity total", detail: "Step burn (MET 4.3) + all logged training sessions. Activity-only — the resting calories inside every MET score are subtracted, same scope as Apple's active energy.")
-                    columnNote(label: "Training", detail: "Only logged sessions — strength, cardio, pilates, live activities. The activity Apple's sensors miss. Walks, runs and hikes sit out: their steps are already in the step burn.")
-                    InfoRow(
-                        label: "Today's breakdown",
-                        detail: "Steps: ≈\(stepsKcal) cal\nTraining: ≈\(trainingMet) cal\nTotal: ≈\(metTotal) cal"
-                    )
-                }
-            }
-
-            InfoFootnote("Source: Ainsworth BE et al. 2011 Compendium of Physical Activities. Med Sci Sports Exerc.")
+            InfoRow(
+                label: "Today's breakdown",
+                detail: "Steps: ≈\(stepsKcal) cal\nTraining: ≈\(trainingMet) cal\nTotal: ≈\(metTotal) cal"
+            )
         }
-    }
-
-    // Unboxed label + detail pair. Only this sheet uses it, so it stays local
-    // rather than joining the shared info-sheet vocabulary.
-    @ViewBuilder
-    private func columnNote(label: String, detail: String) -> some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text(label).font(.system(size: 13, weight: .medium)).foregroundStyle(theme.text)
-            Text(detail).font(.footnote).foregroundStyle(theme.dim)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
@@ -370,7 +340,7 @@ private struct AppleEnergyInfoSheet: View {
                 VStack(spacing: 6) {
                     if activeKcal == nil {
                         InfoMetricRow(icon: "bolt.fill", name: "No data yet",
-                                           detail: "Watch syncs every 15–60 min. Carry your iPhone for iPhone-only tracking.",
+                                           detail: "Syncs from your Watch every 15–60 min.",
                                            value: "-", unit: "cal")
                     } else {
                         InfoMetricRow(
@@ -390,19 +360,7 @@ private struct AppleEnergyInfoSheet: View {
                 }
             }
 
-            InfoSection(title: "What's counted") {
-                VStack(alignment: .leading, spacing: 5) {
-                    InfoBody("Every calorie burned beyond your resting baseline — walking, workouts, stairs, fidgeting. Measured directly by iPhone and Apple Watch sensors.")
-                    InfoBody("✓  All steps and movement Apple can detect\n✗  Doesn't include manually logged training sessions (those are in Our Estimate)")
-                }
-            }
-
-            InfoSection(title: "vs. Our Estimate") {
-                InfoRow(
-                    label: "Apple active vs. Our Estimate",
-                    detail: "Our Estimate = steps (MET formula) + logged training. Apple active energy = movement its sensors detect. Numbers won't match exactly — that's expected."
-                )
-            }
+            InfoBody("Movement beyond resting, as measured by your iPhone and Watch. It won't match Our Estimate exactly.")
         }
     }
 }
@@ -430,7 +388,7 @@ private struct MetTotalInfoSheet: View {
                     InfoMetricRow(
                         icon: "dumbbell.fill",
                         name: "Training",
-                        detail: "Logged strength, cardio, pilates, live sessions",
+                        detail: "Logged sessions",
                         value: "~\(trainingKcal)",
                         unit: "cal"
                     )
@@ -438,9 +396,7 @@ private struct MetTotalInfoSheet: View {
                 }
             }
 
-            InfoSection(title: "vs. Apple Total") {
-                InfoBody("Apple shows active energy from its sensors. Our Estimate uses the Ainsworth MET formula on what you log — step count + training sessions. Both figures are activity-only: neither counts the calories you'd burn at rest. Numbers still won't match exactly; that's expected.")
-            }
+            InfoBody("Activity only — resting calories aren't counted.")
         }
     }
 }
@@ -464,8 +420,6 @@ private struct ExercisesInfoSheet: View {
     let exerciseNames: [String: String]
 
     @Environment(\.theme) private var theme
-    @State private var showWhatCounts = false
-    @State private var showFormula = false
 
     /// The sessions that actually contribute to the training total. `DailyBurn`
     /// owns which ones overlap with the step count; this sheet must list exactly
@@ -504,7 +458,7 @@ private struct ExercisesInfoSheet: View {
             InfoSection(title: "Today's activity") {
                 VStack(spacing: 6) {
                     if !hasAnyTraining {
-                        InfoBody("No training logged yet. Head to the Workouts tab to get started.")
+                        InfoBody("No training logged yet.")
                     }
 
                     // Strength sets grouped by exercise
@@ -566,29 +520,7 @@ private struct ExercisesInfoSheet: View {
                 }
             }
 
-            // ── Collapsible: what's counted ───────────────────────────
-            collapsibleSection(title: "WHAT'S COUNTED", isExpanded: $showWhatCounts) {
-                VStack(alignment: .leading, spacing: 5) {
-                    Bullet("Strength sets — MET 3.5–8.0 by exercise", marker: .check)
-                    Bullet("Cardio sessions — MET 4.5 (bike, swim, elliptical)", marker: .check)
-                    Bullet("Pilates sessions — MET 3.0", marker: .check)
-                    Bullet("Live sessions (basketball, yoga, etc.) — MET 2.8–11.8", marker: .check)
-                    Bullet("Walks, runs and hikes — their steps are already in Our Estimate, so the session isn't added again", marker: .cross)
-                    Bullet("Steps — counted in Our Estimate, not here", marker: .cross)
-                }
-            }
-
-            // ── Collapsible: how it's calculated ─────────────────────
-            collapsibleSection(title: "HOW IT'S CALCULATED", isExpanded: $showFormula) {
-                VStack(alignment: .leading, spacing: 8) {
-                    InfoBody("Formula: (MET − 1) × your weight (\(weightKg) kg) × hours = calories. MET scores how intense an activity is relative to sitting still, and sitting still is MET 1.0 — so we subtract that one to leave only the calories the activity itself added. Walking = 4.3, squats = 5.0, pull-ups = 8.0.")
-                    InfoRow(
-                        label: "Example",
-                        detail: "60 min basketball (MET 8.0): (8.0 − 1) × \(weightKg) kg × 1 hr = \(7 * weightKg) cal"
-                    )
-                    InfoFootnote("Source: Ainsworth BE et al. 2011 Compendium of Physical Activities. Med Sci Sports Exerc.")
-                }
-            }
+            InfoBody("Walks, runs and hikes sit out — their steps are already counted.")
         }
     }
 
@@ -623,40 +555,6 @@ private struct ExercisesInfoSheet: View {
         .overlay(dimmed ? RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(theme.line, lineWidth: 0.5) : nil)
     }
 
-    // Only this sheet has collapsible sections, so the disclosure chrome stays
-    // local rather than joining the shared info-sheet vocabulary.
-    @ViewBuilder
-    private func collapsibleSection<Content: View>(
-        title: String, isExpanded: Binding<Bool>,
-        @ViewBuilder content: () -> Content
-    ) -> some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Button {
-                withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
-                    isExpanded.wrappedValue.toggle()
-                }
-            } label: {
-                HStack {
-                    Text(title)
-                        .font(.caption).tracking(2).textCase(.uppercase)
-                        .foregroundStyle(theme.dim)
-                    Spacer()
-                    Image(systemName: isExpanded.wrappedValue ? "chevron.up" : "chevron.down")
-                        .font(.system(size: 10, weight: .semibold))
-                        .foregroundStyle(theme.dim)
-                }
-                .padding(.vertical, 10)
-            }
-            .tactile(.ghost)
-
-            if isExpanded.wrappedValue {
-                content()
-                    .transition(.opacity)
-                    .padding(.bottom, 4)
-            }
-        }
-    }
-
     private func cardioIcon(_ type: CardioType) -> String {
         switch type {
         case .walk:       return "figure.walk"
@@ -682,25 +580,13 @@ private struct HeartRateInfoSheet: View {
                     InfoMetricRow(
                         icon: "heart.fill",
                         name: "Latest reading",
-                        detail: asOf.map { "as of \($0)" } ?? "Wear your Apple Watch to get a reading.",
+                        detail: asOf.map { "as of \($0)" } ?? "No reading yet.",
                         value: bpm.map { "\($0)" } ?? "-",
                         unit: "bpm"
                     )
                 }
             }
-            InfoSection(title: "Ranges") {
-                VStack(spacing: 6) {
-                    InfoRow(label: "Resting",
-                            detail: "60–100 bpm is normal. Athletes often sit at 50–70 bpm.")
-                    InfoRow(label: "Moderate exercise",
-                            detail: "50–70% of your max (≈ 220 − your age)")
-                    InfoRow(label: "Vigorous exercise",
-                            detail: "70–85% of your max")
-                }
-            }
-            InfoSection(title: "Why it matters") {
-                InfoBody("A falling resting heart rate over weeks is one of the clearest signs of improving cardiovascular fitness. Consistent steps and regular cardio are the fastest levers.")
-            }
+            InfoBody("Resting: 60–100 bpm is normal.")
         }
     }
 }
@@ -725,20 +611,13 @@ private struct DistanceInfoSheet: View {
                     InfoMetricRow(
                         icon: "figure.walk",
                         name: "Walking + Running",
-                        detail: miles > 0 ? "total foot distance today" : "Carry your iPhone or wear your Apple Watch.",
+                        detail: miles > 0 ? "total foot distance today" : "No distance yet.",
                         value: miles > 0 ? displayValue : "-",
                         unit: unitLabel
                     )
                 }
             }
-            InfoSection(title: "Benchmarks") {
-                VStack(spacing: 6) {
-                    InfoRow(label: "2,000 steps ≈ 1 mile",
-                            detail: "Exact distance depends on stride length.")
-                    InfoRow(label: "10,000 steps ≈ 4–5 miles",
-                            detail: "The step count linked to cardiovascular benefits in major studies.")
-                }
-            }
+            InfoBody("About 2,000 steps per mile.")
         }
     }
 }
@@ -757,14 +636,11 @@ private struct FlightsClimbedInfoSheet: View {
                         name: "Floors climbed",
                         detail: floors > 0
                             ? "≈ \(floors * 10) ft / \(floors * 3) m elevation"
-                            : "Detected automatically as you ascend ~10 feet.",
+                            : "About 10 feet per floor.",
                         value: floors > 0 ? "\(floors)" : "-",
                         unit: "floors"
                     )
                 }
-            }
-            InfoSection(title: "Why it matters") {
-                InfoBody("Stair climbing (MET 4.0–8.0) activates glutes and quads and spikes heart rate faster than flat walking. Studies link regular stair use to lower all-cause mortality. (Stamatakis et al., Brit J Sports Med 2021)")
             }
         }
     }

@@ -53,7 +53,7 @@ final class TabSmokeTests: XCTestCase {
         XCTAssertTrue(app.tabBars.firstMatch.waitForExistence(timeout: 15),
                       "No tab bar after onboarding — the app never reached its main shell.")
 
-        for name in ["Today", "Meals", "Train", "Reminders", "Progress"] {
+        for name in ["Today", "Meals", "Train", "Progress"] {
             let tab = app.tabBars.buttons[name]
             XCTAssertTrue(tab.waitForExistence(timeout: 10), "Tab '\(name)' is missing.")
             tab.tap()

@@ -76,6 +76,7 @@ public enum ExerciseInfo {
             ("Bench Press",             false,  true,   6...10),
             ("Bicep Curl",              false,  true,   8...12),
             ("Box Jump",                false,  false,  3...8),
+            ("Bulgarian Split Squat",   false,  true,   8...12),
             ("Burpee",                  false,  false,  8...20),
             ("Calf Raise",              false,  true,   12...20),
             ("Chest Fly",               false,  true,   10...15),
@@ -84,6 +85,7 @@ public enum ExerciseInfo {
             ("Dead Hang",               true,   false,  1...1),
             ("Deadlift",                false,  true,   4...8),
             ("Dip",                     false,  false,  6...12),
+            ("Dumbbell Row",            false,  true,   8...12),
             ("Face Pull",               false,  true,   12...20),
             ("Farmer Carry",            true,   true,   1...1),
             ("Front Raise",             false,  true,   10...15),
@@ -104,6 +106,7 @@ public enum ExerciseInfo {
             ("Lunge",                   false,  false,  8...12),
             ("Mountain Climber",        false,  false,  20...40),
             ("Overhead Press",          false,  true,   6...10),
+            ("Pike Push-up",            false,  false,  6...15),
             ("Plank",                   true,   false,  1...1),
             ("Pull-over",               false,  true,   10...15),
             ("Pull-up",                 false,  false,  5...10),
@@ -113,6 +116,7 @@ public enum ExerciseInfo {
             ("Russian Twist",           false,  true,   12...30),
             ("Shrug",                   false,  true,   10...15),
             ("Squat",                   false,  true,   6...10),
+            ("Tricep Extension",        false,  true,   10...15),
             ("Tricep Pushdown",         false,  true,   10...15),
             ("Wall Sit",                true,   false,  1...1),
         ]
@@ -245,6 +249,22 @@ public enum ExerciseInfo {
                     "NSCA research links pulling strength to reduced lower-back injury risk."
                 ],
                 met: 8.0, secondsPerRep: 4.0
+            )
+        }
+
+        // Pike push-up — checked BEFORE the push-up branch (its name does not start
+        // with "push"). Home-friendly shoulder press with body weight. MET and tempo
+        // are the push-up entry's values below (same Compendium bodyweight-calisthenics
+        // class, not a new figure).
+        if lower.contains("pike push") {
+            return Meta(
+                muscleGroups: ["Anterior delts", "Triceps", "Upper pectorals"],
+                secondaryMuscles: ["Lateral delts", "Serratus anterior", "Core"],
+                benefits: [
+                    "A bodyweight shoulder press: hips high puts most of your weight through the shoulders and triceps.",
+                    "Scalable with no equipment — raise the feet on a chair to make it harder."
+                ],
+                met: 8.0, secondsPerRep: 2.5
             )
         }
 

@@ -17,7 +17,7 @@
 //
 // DEPENDENCY-FREE ON PURPOSE. This file imports nothing but Foundation and
 // references no other Domain type, so it compiles directly into the watch target
-// (see project.yml → OurFitnessWatch sources) the way ReminderSchedule.swift does.
+// (see project.yml → OurFitnessWatch sources).
 // The one estimator that needs a named exercise — caloriesForReps(reps:exercise:) —
 // lives in ExerciseCalories.swift instead, because ExerciseDTO + ExerciseInfo would
 // drag ~1,800 lines of Domain onto the wrist for a function the watch never calls.

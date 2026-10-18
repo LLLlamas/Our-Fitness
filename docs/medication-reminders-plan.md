@@ -1,5 +1,7 @@
 # OurFitness — Medication Reminders & Logging Feature Plan
 
+> **Status: RETIRED (October 2026).** The Reminders feature, including medication tracking, was removed from the app. This spec is kept for reference only; see [removed-reminders.md](removed-reminders.md) for what was removed, how to recover it from git (at/after `d284700`), and the leftover database tables.
+
 > **Status: shipped** on `feature/reminders-plants` (September 2026). The rest of
 > this document is the original spec, kept for the reasoning behind the design —
 > where it and the code disagree, the code and [CLAUDE.md](../CLAUDE.md) win.

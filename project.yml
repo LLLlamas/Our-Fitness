@@ -167,10 +167,10 @@ targets:
           CODE_SIGNING_REQUIRED: "NO"
           CODE_SIGNING_ALLOWED: "NO"
 
-  # watchOS companion app for the Reminders tab (single-target watch app, no
+  # watchOS companion app (single-target watch app, no
   # separate WatchKit extension). Thin client: no local SwiftData store — it
   # syncs with the iOS app over WatchConnectivity (Services/WatchSyncService.swift
-  # on the phone side). Compiles the two pure-Foundation Domain files it needs
+  # on the phone side). Compiles the pure-Foundation Domain files it needs
   # directly (mirrors how OurFitnessTests compiles OurFitness/Domain directly)
   # plus the shared wire format, instead of pulling in the whole Domain folder.
   # Same no-`info:`/`entitlements:`-block rule as every other target.
@@ -188,8 +188,6 @@ targets:
       # dependency-free (Foundation only, no other Domain type) or it drags the
       # rest of Domain onto the wrist — CalorieEstimator.swift was split for
       # exactly this reason, see Domain/ExerciseCalories.swift.
-      - path: OurFitness/Domain/PlantCatalog.swift
-      - path: OurFitness/Domain/ReminderSchedule.swift
       - path: OurFitness/Domain/LiveSessionState.swift
       - path: OurFitness/Domain/ActivityCatalog.swift
       - path: OurFitness/Domain/CalorieEstimator.swift

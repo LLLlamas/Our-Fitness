@@ -90,6 +90,7 @@ unscaled figure plus a count (every other path pre-scales and leaves servings at
 - **No hardcoded kcal anywhere** — every path routes through `CalorieEstimator`. No 3,500-cal-per-pound shortcut.
 - **BMI** (`× 703`, CDC cut-points), **Tudor-Locke step bands**, **ADA A1c/glucose cut-points**, **ATP III total-cholesterol and triglyceride bands**, and the **IOM water AIs** all match their citations.
 - Units are canonically imperial with conversion only at the UI boundary; no double conversion found.
+- **Weekly sets per muscle (`Domain/MuscleVolume.swift`, added 2026-10-18).** Target of 10 sets/week per muscle group, shown as "a target to reach, not a proven threshold". Source: Schoenfeld, Ogborn & Krieger 2017, *J Sports Sci* 35(11):1073-82 (dose–response meta-analysis, 15 studies): a graded relationship, about +0.37% gain per added weekly set (P=0.002); the `<5` / `5-9` / `10+` band comparison was only a trend (P=0.074). The paper sets no upper limit, so the app shows no "too much" status. Checked against the abstract only, not the full text. Light-load copy rests on Schoenfeld, Grgic, Ogborn & Krieger 2017, *J Strength Cond Res* 31(12):3508-23 (21 studies, sets to momentary failure: similar hypertrophy at ≤60% and >60% of 1RM; heavier loads better only for 1RM strength).
 
 ---
 
@@ -116,4 +117,5 @@ actual guideline in hand.
 
 - **Sodium, added sugar and saturated fat are only available for foods logged from a scanned nutrition label.** The curated database has no fields for them. Until it does, the heart-health card (now shown to everyone) can only ever report on part of the day.
 - **Lab markers (LDL, HDL, total cholesterol, A1c, fasting glucose) are manual-entry only** and cannot come from Apple Health. This is by design, not an omission.
+- **Weekly-set counting is coarse.** The app records no RPE or failure, so every logged resistance set counts, and each primary mover gets full credit (pull-ups count toward back, biceps and shoulders). Core, forearms, upper traps, lower back and hip flexors map to no group. A primary/secondary split would need a number not yet sourced.
 - **`HealthMarkerKind.triglycerides`** has range support but no tracker, no card and no way to enter it.

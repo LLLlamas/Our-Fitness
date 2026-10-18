@@ -2,7 +2,7 @@
 //
 // Architecture: the watch is a thin client with no local SwiftData store; the
 // phone is the sole source of truth. The phone pushes ONE
-// `WatchSnapshotEnvelope` — reminders, today's numbers, quick-log movements,
+// `WatchSnapshotEnvelope` — today's numbers, quick-log movements,
 // meal shortcuts, live session — via `updateApplicationContext` (latest-wins,
 // delivered even when the watch app is closed) on activation, on every
 // foreground, and after every mutation the watch can see. It is one envelope
@@ -40,13 +40,6 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
             self.pushSnapshot(ctx, userId: profile.id)
         }
     }
-    /// Session-scoped change detection: hash of the `photoData` last handed to
-    /// `transferFile` per reminder, so unchanged photos skip the decode →
-    /// re-encode → transfer pipeline on every foreground/mutation push.
-    private var pushedThumbnailHashes: [UUID: Int] = [:]
-    /// Cleared-hash trigger: the watch prunes its thumbnail cache to the
-    /// pushed profile's reminders, so a profile switch must re-push everything.
-    private var lastPushedUserId: UUID?
 
     private override init() {
         super.init()
@@ -72,12 +65,11 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
 
     /// Builds and pushes the whole `WatchSnapshotEnvelope` for one profile. Call
     /// after activation, on `scenePhase == .active`, and after every mutation the
-    /// watch can see (the same call sites that call
-    /// `ReminderNotificationService.reschedule`).
+    /// watch can see.
     ///
     /// Deliberately ONE build-everything pass: `updateApplicationContext` replaces
     /// the entire context dictionary, so there is no such thing as pushing "just
-    /// the reminders" or "just today" — see Shared/WatchSyncPayload.swift's header.
+    /// the meals" or "just today" — see Shared/WatchSyncPayload.swift's header.
     /// The rule throughout is one fetch per entity, folded in memory; never a
     /// per-row fetch inside a loop.
     func pushSnapshot(_ ctx: ModelContext, userId: UUID) {
@@ -92,31 +84,6 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
         let now = Date()
         let todayKey = Dates.dayKey(now)
 
-        let groupsById = Dictionary(uniqueKeysWithValues: Repos.listReminderGroups(ctx, userId: userId).map { ($0.id, $0) })
-        let reminders = Repos.listReminders(ctx, userId: userId)
-
-        // One fetch of every event, folded into "latest per reminder" — not a
-        // per-reminder lastReminderEvent call, which would be an N+1 fetch.
-        var lastDoneById: [UUID: Date] = [:]
-        for e in Repos.listReminderEvents(ctx, userId: userId) where lastDoneById[e.reminderId] == nil {
-            lastDoneById[e.reminderId] = e.timestamp
-        }
-
-        // Same for every reminder in this push (it's a per-profile setting),
-        // so it's read once rather than per iteration.
-        let preferredHour = ReminderNotificationService.preferredHour(for: userId)
-
-        let snapshots: [ReminderSnapshot] = reminders.compactMap { r in
-            guard let group = groupsById[r.groupId] else { return nil }
-            return ReminderSnapshot(
-                id: r.id, groupId: r.groupId, groupName: group.name, groupKind: group.kind.rawValue,
-                name: r.name, speciesId: r.speciesId, room: r.room, lightRaw: r.light?.rawValue,
-                potDiameterInches: r.potDiameterInches, intervalDays: r.intervalDays,
-                amountFlOz: r.amountFlOz, createdAt: r.createdAt, snoozedUntil: r.snoozedUntil,
-                lastDoneAt: lastDoneById[r.id], notes: r.notes, preferredHour: preferredHour
-            )
-        }
-
         // ONE fetch of the whole food log, reused three ways: today's totals, the
         // 30-day affinity ranking, and the name/macro lookup that resolves the
         // ranked ids. Fetching per purpose would triple the same query.
@@ -128,7 +95,6 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
             profileName: profile.name,
             mode: profile.fitnessGoal.rawValue,
             bodyWeightLb: profile.weightLb,
-            reminders: snapshots,
             today: todaySnapshot(ctx, profile: profile, logs: allLogs, todayKey: todayKey),
             quickLogExercises: quickLogExercises(ctx, userId: userId, now: now),
             mealShortcuts: mealShortcuts(ctx, userId: userId, logs: allLogs, now: now),
@@ -144,17 +110,14 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
 
         guard let data = try? JSONEncoder().encode(envelope) else { return }
         // NOT `try?`. The application context is a size-limited dictionary, and
-        // `reminders` (user notes) and `quickLogExercises` (every exercise the
-        // profile owns) are both uncapped — so this call CAN start failing on a
-        // heavy profile. Swallowed, the symptom is a watch that silently stops
+        // `quickLogExercises` (every exercise the profile owns)
+        // is uncapped — so this call CAN start failing on a heavy profile. Swallowed, the symptom is a watch that silently stops
         // updating forever; logged, the size is at least visible in a console.
         do {
             try WCSession.default.updateApplicationContext([WatchSyncKeys.snapshotContextKey: data])
         } catch {
             print("[WatchSync] updateApplicationContext failed (\(data.count) bytes):", error.localizedDescription)
         }
-
-        pushChangedThumbnails(reminders, userId: userId)
     }
 
     // MARK: - Envelope sections
@@ -305,8 +268,7 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
     // These keys are `@AppStorage` on the phone, which WCSession can't see. A
     // bare `.double(forKey:)`/`.integer(forKey:)` returns 0 for an ABSENT key,
     // which would read as "goal of zero" rather than "never set" — so read the
-    // boxed object and let nil mean absent, the same care
-    // `ReminderNotificationService.remindersGloballyEnabled()` takes.
+    // boxed object and let nil mean absent.
 
     private static func doubleDefault(_ key: String) -> Double? {
         (UserDefaults.standard.object(forKey: key) as? NSNumber)?.doubleValue
@@ -316,55 +278,12 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
         (UserDefaults.standard.object(forKey: key) as? NSNumber)?.intValue
     }
 
-    /// Transfers thumbnails only for photos not yet pushed (or changed) this
-    /// session. A superseded in-flight transfer for the same reminder is
-    /// cancelled — and its temp file removed — before the replacement queues.
-    private func pushChangedThumbnails(_ reminders: [ReminderDTO], userId: UUID) {
-        if userId != lastPushedUserId {
-            pushedThumbnailHashes.removeAll()
-            lastPushedUserId = userId
-        }
-        let outstanding = WCSession.default.outstandingFileTransfers
-        for r in reminders {
-            guard let photo = r.photoData, pushedThumbnailHashes[r.id] != photo.hashValue else { continue }
-            pushedThumbnailHashes[r.id] = photo.hashValue
-            for t in outstanding where t.file.metadata?["reminderId"] as? String == r.id.uuidString {
-                t.cancel()
-                try? FileManager.default.removeItem(at: t.file.fileURL)
-            }
-            pushThumbnail(reminderId: r.id, fullPhotoData: photo)
-        }
-    }
-
-    /// Sends a small (~120px) JPEG thumbnail so the watch can show the actual
-    /// plant instead of only an SF Symbol. Best-effort: `transferFile` queues
-    /// on the system side, so this needs no reachability check, and a failed
-    /// downscale/write just leaves the watch on its sfSymbol fallback.
-    /// Decode/re-encode runs off the main actor; the temp filename is unique
-    /// per transfer so a cancelled predecessor's cleanup can't race the new
-    /// write (the watch reads the reminder id from metadata, not the name).
-    /// Each temp file is deleted in `session(_:didFinish:error:)`.
-    private func pushThumbnail(reminderId: UUID, fullPhotoData: Data) {
-        let tmpURL = FileManager.default.temporaryDirectory
-            .appendingPathComponent(WatchSyncKeys.thumbnailFilePrefix + reminderId.uuidString + "-" + UUID().uuidString)
-            .appendingPathExtension("jpg")
-        Task.detached(priority: .utility) {
-            guard let thumb = ImageDownscale.jpegData(from: fullPhotoData, maxDimension: 120),
-                  (try? thumb.write(to: tmpURL, options: .atomic)) != nil else { return }
-            WCSession.default.transferFile(tmpURL, metadata: ["reminderId": reminderId.uuidString])
-        }
-    }
-
     /// Applies a wrist-initiated action. EVERY case must end with the phone's
     /// state pushed back, so the watch sees the result of its own action with no
     /// extra round trip.
     ///
-    /// The reminder cases get that for free by going through the same mutation
-    /// coordinators the UI uses (ReminderNotificationService.logDone/update/
-    /// snooze) — each already reschedules the notification AND calls
-    /// `pushSnapshot`. The cases with no such coordinator call `pushSnapshot`
-    /// themselves after the write; that is the whole reason each of them resolves
-    /// the active profile first.
+    /// Each case calls `pushSnapshot` itself after its write; that is the whole
+    /// reason each of them resolves the active profile first.
     ///
     /// Nothing here trusts a number from the wire that it could derive itself:
     /// calories are recomputed from the real exercise/session and the profile's
@@ -376,19 +295,6 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
         defer { scheduleSnapshot() } // Reconcile optimistic wrist state even after a rejected/failed action.
 
         switch action {
-        case .done(let reminderId, let date):
-            ReminderNotificationService.logDone(ctx, reminderId: reminderId, date: date)
-
-        case .setInterval(let reminderId, let days):
-            guard var reminder = Repos.reminder(ctx, id: reminderId) else { return }
-            // Generic 1...365 bounds, NOT PlantCatalog's watering range — a
-            // yearly reminder must survive a wrist edit round-trip intact.
-            reminder.intervalDays = ReminderSchedule.clampInterval(days)
-            ReminderNotificationService.update(ctx, reminder)
-
-        case .snooze(let reminderId):
-            ReminderNotificationService.snooze(ctx, reminderId: reminderId)
-
         case .logWater(let flOz, let date):
             guard flOz.isFinite, flOz > 0, flOz <= 1024,
                   SessionInputValidation.validDate(date, now: Date()), let profile = activeProfile(ctx) else { return }
@@ -518,7 +424,6 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
         if let error {
             print("[WatchSync] activation failed:", error.localizedDescription)
         }
-        sweepStaleTempFiles(session)
         Task { @MainActor in
             guard let container = self.container else { return }
             let ctx = container.mainContext
@@ -526,30 +431,6 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
             // application-context key, leaving whichever pushed last on the watch.
             guard let profile = self.activeProfile(ctx) else { return }
             self.pushSnapshot(ctx, userId: profile.id)
-        }
-    }
-
-    /// Deletes leftover thumbnail temp files (e.g. from a session that died
-    /// mid-transfer) that no outstanding transfer still references.
-    nonisolated private func sweepStaleTempFiles(_ session: WCSession) {
-        let live = Set(session.outstandingFileTransfers.map { $0.file.fileURL.standardizedFileURL })
-        let tmp = FileManager.default.temporaryDirectory
-        let files = (try? FileManager.default.contentsOfDirectory(at: tmp, includingPropertiesForKeys: nil)) ?? []
-        for url in files
-        where url.lastPathComponent.hasPrefix(WatchSyncKeys.thumbnailFilePrefix) && !live.contains(url.standardizedFileURL) {
-            try? FileManager.default.removeItem(at: url)
-        }
-    }
-
-    nonisolated func session(_ session: WCSession, didFinish fileTransfer: WCSessionFileTransfer, error: Error?) {
-        try? FileManager.default.removeItem(at: fileTransfer.file.fileURL)
-        // A failed transfer stays retryable: drop its hash so the next
-        // pushSnapshot re-sends instead of skipping it as already pushed.
-        guard error != nil,
-              let idString = fileTransfer.file.metadata?["reminderId"] as? String,
-              let id = UUID(uuidString: idString) else { return }
-        Task { @MainActor in
-            self.pushedThumbnailHashes.removeValue(forKey: id)
         }
     }
 

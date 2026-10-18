@@ -191,6 +191,11 @@ public enum SchemaV6: VersionedSchema {
 /// container opens V7 against an existing V6 store; we deliberately ship NO
 /// staged `MigrationPlan` (the `NSLightweightMigrationStage` path is what threw
 /// the uncatchable Obj-C exception in builds 26/27 — see ModelContainer+App.swift).
+///
+/// RETIRED FEATURE: the Reminders tab is gone from the app, but these three
+/// entities stay in the schema so existing installs keep their data untouched.
+/// Nothing reads or writes them. Removing them needs a V8 + migration stage —
+/// see docs/removed-reminders.md.
 public enum SchemaV7: VersionedSchema {
     public static let versionIdentifier = Schema.Version(7, 0, 0)
 

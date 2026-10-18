@@ -75,7 +75,13 @@ public final class WorkoutSuggestionService: @unchecked Sendable {
     /// Ask the model to pick exercises from `ExerciseInfo.catalog` for a free-text
     /// goal. Returns picks whose names resolve back to the catalog (others are
     /// dropped), de-duplicated, capped at `limit`. Empty on unavailability/failure.
-    public func picks(forGoal goal: String, fitnessGoal: FitnessGoal, limit: Int = 5) async -> [WorkoutAIPick] {
+    ///
+    /// `equipment` (nil = no filter) limits both the menu handed to the model and
+    /// the accepted picks to exercises the user's home kit can do.
+    public func picks(
+        forGoal goal: String, fitnessGoal: FitnessGoal, limit: Int = 5,
+        equipment: HomeEquipment? = nil
+    ) async -> [WorkoutAIPick] {
         let trimmed = goal.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return [] }
 
@@ -83,11 +89,11 @@ public final class WorkoutSuggestionService: @unchecked Sendable {
         if #available(iOS 26.0, *) {
             guard let draft = await OnDeviceModel.generate(instructions: Self.instructions, { session in
                 try await session.respond(
-                    to: prompt(forGoal: trimmed, fitnessGoal: fitnessGoal),
+                    to: prompt(forGoal: trimmed, fitnessGoal: fitnessGoal, equipment: equipment),
                     generating: WorkoutSuggestionDraft.self
                 ).content
             }) else { return [] }
-            return clean(draft.picks, limit: limit)
+            return clean(draft.picks, limit: limit, equipment: equipment)
         }
         #endif
         return []
@@ -106,9 +112,10 @@ public final class WorkoutSuggestionService: @unchecked Sendable {
     names EXACTLY as written in the list.
     """
 
-    private func prompt(forGoal goal: String, fitnessGoal: FitnessGoal) -> String {
+    private func prompt(forGoal goal: String, fitnessGoal: FitnessGoal, equipment: HomeEquipment?) -> String {
         // Hand the model the curated catalog as ground truth: name + primary muscles.
         let menu = ExerciseInfo.catalog
+            .filter { equipment?.canDo(exerciseNamed: $0.name) ?? true }
             .map { "- \($0.name): \($0.muscleGroups.joined(separator: ", "))" }
             .joined(separator: "\n")
         let goalLine = OnDeviceModel.goalLine(
@@ -133,11 +140,12 @@ public final class WorkoutSuggestionService: @unchecked Sendable {
     /// Keep only picks that map back to the catalog (canonicalising the name),
     /// drop duplicates and blanks, cap the count.
     @available(iOS 26.0, *)
-    private func clean(_ drafts: [WorkoutPickDraft], limit: Int) -> [WorkoutAIPick] {
+    private func clean(_ drafts: [WorkoutPickDraft], limit: Int, equipment: HomeEquipment?) -> [WorkoutAIPick] {
         var seen = Set<String>()
         var out: [WorkoutAIPick] = []
         for draft in drafts {
             guard let entry = ExerciseInfo.catalogEntry(named: draft.exerciseName) else { continue }
+            guard equipment?.canDo(exerciseNamed: entry.name) ?? true else { continue }
             guard seen.insert(entry.name).inserted else { continue }
             let reason = draft.reason.trimmingCharacters(in: .whitespacesAndNewlines)
             out.append(WorkoutAIPick(exerciseName: entry.name, reason: reason))

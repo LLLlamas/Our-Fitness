@@ -29,9 +29,9 @@ public enum TargetRationale {
     public static func goalLine(for fitnessGoal: FitnessGoal) -> String {
         switch fitnessGoal {
         case .gain:
-            return "Your goal is to build muscle — slowly adding muscle and mass."
+            return "Your goal: build muscle."
         case .lose:
-            return "Your goal is to lose weight — and improve your heart-health numbers (cholesterol, blood pressure, blood sugar) along the way."
+            return "Your goal: lose weight."
         }
     }
 
@@ -69,9 +69,9 @@ public enum TargetRationale {
         let mag = abs(c.delta)
         switch p.fitnessGoal {
         case .gain:
-            return "You burn about \(c.tdee) calories on a normal day (your maintenance). To slowly add muscle, your goal eats roughly \(mag) calories above that — a controlled surplus. Aim to gain about a quarter to half a pound a week; gaining faster mostly adds fat, not muscle."
+            return "You burn about \(c.tdee) calories a day. Your goal adds roughly \(mag) on top to build muscle."
         case .lose:
-            return "You burn about \(c.tdee) calories on a normal day (your maintenance). To lose fat, your goal eats roughly \(mag) calories below that. That pace takes off about half a pound to a pound a week while protecting your muscle."
+            return "You burn about \(c.tdee) calories a day. Your goal is roughly \(mag) below that to lose fat."
         }
     }
 
@@ -93,7 +93,7 @@ public enum TargetRationale {
         case .lose: role = "protects your muscle while you lose fat"
         }
         return String(
-            format: "Your %dg protein target is about %.1fg for every pound you weigh — enough that it %@. Protein also keeps you full and costs the most energy to digest: your body burns 20–30%% of protein's calories just breaking it down.",
+            format: "Your %dg protein target is about %.1fg per pound — enough that it %@.",
             g, perLb, role
         )
     }
@@ -101,7 +101,7 @@ public enum TargetRationale {
     // MARK: - Carbs
 
     public static func carbsWhy(for p: ProfileDTO) -> String {
-        "Carbs are whatever calories are left after protein and fat. They're your main fuel for training and for your brain. Your \(p.computedTargets.carbsG)g target simply fills the rest of your daily calories."
+        "Your \(p.computedTargets.carbsG)g of carbs fills the calories left after protein and fat."
     }
 
     // MARK: - Fat
@@ -115,7 +115,7 @@ public enum TargetRationale {
 
     /// Source: low-fat diets and testosterone (Whittaker & Wu, JSBMB 2021).
     public static func fatWhy(for p: ProfileDTO) -> String {
-        "Fat is set to about \(fatPctOfCalories(for: p))% of your calories (\(p.computedTargets.fatG)g). Some fat is essential — your body needs it to make hormones and to absorb vitamins A, D, E, and K. Eating very low-fat can modestly lower testosterone, so this stays at a sensible floor."
+        "Fat is about \(fatPctOfCalories(for: p))% of your calories (\(p.computedTargets.fatG)g) — enough for hormones and vitamins."
     }
 
     // MARK: - Heart-health targets (fiber floor + sodium / added-sugar / saturated-fat caps)
@@ -129,25 +129,25 @@ public enum TargetRationale {
     /// Why your fiber floor is what it is. Reads the computed `fiberGMin`.
     public static func fiberWhy(for p: ProfileDTO) -> String {
         let g = p.computedTargets.fiberGMin ?? 35
-        return "Aim for at least \(g)g of fiber a day. Soluble fiber from oats, beans, and fruit binds cholesterol in your gut so less of the 'bad' LDL kind gets into your blood. It also slows how fast sugar hits your bloodstream and keeps you full on fewer calories."
+        return "Aim for at least \(g)g a day. Fiber helps lower cholesterol."
     }
 
     /// Why your sodium cap is what it is. Reads the computed `sodiumMgMax`.
     public static func sodiumWhy(for p: ProfileDTO) -> String {
         let mg = p.computedTargets.sodiumMgMax ?? 1500
-        return "Try to stay under about \(mg) mg of sodium a day. Less salt means less water your body holds onto and lower blood pressure — often a drop of several points on its own. Most sodium hides in restaurant and packaged food, not the salt shaker."
+        return "Stay under about \(mg) mg a day. Less sodium helps lower blood pressure."
     }
 
     /// Why your added-sugar cap is what it is. Reads the computed `addedSugarGMax`.
     public static func addedSugarWhy(for p: ProfileDTO) -> String {
         let g = p.computedTargets.addedSugarGMax ?? 25
-        return "Try to keep added sugar under about \(g)g a day. Added sugar spikes your blood sugar and raises triglycerides (the fat circulating in your blood) without filling you up — cutting it is one of the fastest ways to move those numbers."
+        return "Keep added sugar under about \(g)g a day. It spikes blood sugar without filling you up."
     }
 
     /// Why your saturated-fat cap is what it is. Reads the computed `saturatedFatGMax`.
     public static func saturatedFatWhy(for p: ProfileDTO) -> String {
         let g = p.computedTargets.saturatedFatGMax ?? 22
-        return "Try to keep saturated fat under about \(g)g a day (roughly a tenth of your calories). Swapping some saturated fat — fatty meat, butter, cheese — for unsaturated fat like olive oil, nuts, and fish lowers the 'bad' LDL cholesterol."
+        return "Keep saturated fat under about \(g)g a day (a tenth of your calories). Less of it lowers LDL cholesterol."
     }
 
     // MARK: - Steps
@@ -159,9 +159,9 @@ public enum TargetRationale {
     public static func stepsWhy(fitnessGoal: FitnessGoal, goal: Int) -> String {
         switch fitnessGoal {
         case .gain:
-            return "Your \(goal.formatted())-step goal keeps you active on top of lifting. Most of the health payoff from walking shows up by about 7,000–8,000 steps a day — every extra 1,000–2,000 steps lowers your risk of dying early, and the calories burned support your recovery without eating into your surplus."
+            return "Your \(goal.formatted())-step goal keeps you active on top of lifting. Most of the health payoff arrives by about 7,000–8,000 steps."
         case .lose:
-            return "Your \(goal.formatted())-step goal is your daily movement engine. Walking reliably brings blood pressure down a few points and is your most repeatable daily calorie burn. Most of the benefit lands by about 7,000–8,000 steps — going higher keeps adding a little more. (Cholesterol and blood sugar respond best when you pair steps with cardio and the food tips.)"
+            return "Your \(goal.formatted())-step goal is your most repeatable daily burn. Most of the health payoff arrives by about 7,000–8,000 steps."
         }
     }
 
@@ -181,28 +181,28 @@ public enum TargetRationale {
         switch kind {
         case .ldl:
             let where_ = statusWord(status, optimal: "in the healthy range", borderline: "a little high", high: "high")
-            return "Your LDL (the 'bad' cholesterol that clogs arteries) of \(v) is \(where_). To move it down: more soluble fibre (oats, beans), less saturated fat, and fatty fish. Regular cardio helps too."
+            return "Your LDL ('bad' cholesterol) of \(v) is \(where_)."
         case .hdl:
             let where_ = statusWord(status, optimal: "protective", borderline: "okay", high: "low")
-            return "Your HDL (the 'good' cholesterol that clears the bad kind out) of \(v) is \(where_). Steady cardio nudges it up a couple of points over a couple of months."
+            return "Your HDL ('good' cholesterol) of \(v) is \(where_)."
         case .triglycerides:
             let where_ = statusWord(status, optimal: "in the healthy range", borderline: "a little high", high: "high")
-            return "Your triglycerides (fat circulating in your blood) of \(v) are \(where_). Cutting added sugar and refined carbs and doing regular cardio lowers them about 10–20%."
+            return "Your triglycerides (blood fat) of \(v) are \(where_)."
         case .totalCholesterol:
             let where_ = statusWord(status, optimal: "desirable", borderline: "a little high", high: "high")
-            return "Your total cholesterol of \(v) is \(where_). It's the sum of the good and bad kinds — the LDL and HDL split matters more than this one number."
+            return "Your total cholesterol of \(v) is \(where_)."
         case .bpSystolic, .bpDiastolic:
             let where_ = statusWord(status, optimal: "in the healthy range", borderline: "slightly elevated", high: "high")
-            return "Your blood pressure reading of \(v) is \(where_). Daily walking, less salt, and more potassium (bananas, sweet potato, spinach) bring it down — often by 5 points or more together."
+            return "Your blood pressure reading of \(v) is \(where_)."
         case .fastingGlucose:
             let where_ = statusWord(status, optimal: "normal", borderline: "in the pre-diabetes range", high: "high")
-            return "Your fasting blood sugar of \(v) is \(where_). A single walk improves how your body handles sugar for the next day or two; consistent steps and fat loss help the most."
+            return "Your fasting blood sugar of \(v) is \(where_)."
         case .a1c:
             let where_ = statusWord(status, optimal: "normal", borderline: "in the pre-diabetes range", high: "high")
-            return String(format: "Your A1c (your average blood sugar over ~3 months) of %.1f is %@. Daily movement and losing excess fat are the biggest levers.", value, where_)
+            return String(format: "Your A1c (average blood sugar over ~3 months) of %.1f is %@.", value, where_)
         case .restingHR:
             let where_ = statusWord(status, optimal: "healthy", borderline: "borderline", high: "worth watching")
-            return "Your resting heart rate of \(v) beats per minute is \(where_). It's how hard your heart works at rest — regular cardio lowers it over weeks, and a lower resting rate is linked to living longer."
+            return "Your resting heart rate of \(v) beats per minute is \(where_)."
         }
     }
 

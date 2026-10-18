@@ -26,7 +26,7 @@ struct EnergyBalanceDetailSheet: View {
 
             recentSection(recentRows: recentRows)
 
-            InfoFootnote("Burn = active calories from steps + logged training — the energy on top of what you'd burn at rest, so it's not a whole-day expenditure. Walks, runs and hikes you log are left out because their steps are already counted. Target is your daily calorie goal. Net = calories in minus activity burn.")
+            InfoFootnote("Burn is active calories from steps and logged training. Net = in minus burn.")
         }
     }
 

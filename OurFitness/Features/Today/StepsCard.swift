@@ -362,8 +362,7 @@ struct StepsCard: View {
 
 // MARK: - Steps info sheet
 
-// One copy of the fat-grams math, the Tudor-Locke activity categories, the
-// walking research copy, what walking works, and the cardio-pairing section.
+// One copy of the fat-grams math and the Tudor-Locke activity categories.
 private struct StepsInfoSheet: View {
     let steps: Int
     let goal: Int
@@ -381,19 +380,17 @@ private struct StepsInfoSheet: View {
     private var stepCategory: (label: String, description: String) {
         switch steps {
         case 0..<5000:
-            return ("Sedentary", "Under 5,000 steps so far. Adding a short daily walk is the single easiest health upgrade you can make.")
+            return ("Sedentary", "Under 5,000 steps.")
         case 5000..<7500:
-            return ("Low active", "5,000–7,499 steps. Better than sitting — a 10–15 minute walk gets you over 7,500, where the benefits really start to stack up.")
+            return ("Low active", "5,000–7,499 steps.")
         case 7500..<10000:
-            return ("Somewhat active", "7,500–9,999 steps. You're in the sweet spot — most of walking's health payoff lands right around here.")
+            return ("Somewhat active", "7,500–9,999 steps.")
         case 10000..<12500:
-            return ("Active", "10,000+ steps. Strong, consistent movement that supports your heart and your everyday calorie burn.")
+            return ("Active", "10,000+ steps.")
         default:
-            return ("Highly active", "12,500+ steps. Excellent — among the most active step counts, linked with the best fitness and longevity numbers.")
+            return ("Highly active", "12,500+ steps.")
         }
     }
-
-    private let sources = "Sources: Tudor-Locke & Bassett, Sports Med, 2004; Saint-Maurice et al., JAMA, 2020; Ding et al., Lancet Public Health, 2025; Hanson & Jones, Br J Sports Med, 2015; Kodama et al., Arch Intern Med, 2007; Ainsworth et al., 2011 Compendium."
 
     var body: some View {
         InfoSheetScaffold(
@@ -403,10 +400,10 @@ private struct StepsInfoSheet: View {
             InfoSection(title: "Your numbers today") {
                 VStack(spacing: 8) {
                     InfoRow(label: "Calories burned walking",
-                            detail: "≈\(stepsKcal) cal from \(steps.formatted()) steps — the energy on top of what you'd burn at rest",
+                            detail: "≈\(stepsKcal) cal from \(steps.formatted()) steps",
                             emphasis: .label)
                     InfoRow(label: "Roughly how much was fat",
-                            detail: "~\(fatGrams)g — about half your walking calories come from fat at an easy pace",
+                            detail: "~\(fatGrams)g",
                             emphasis: .label)
                 }
             }
@@ -427,33 +424,9 @@ private struct StepsInfoSheet: View {
                 .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
             }
 
-            InfoSection(title: "Why your \(goal.formatted())-step goal") {
-                Text(TargetRationale.stepsWhy(fitnessGoal: fitnessGoal, goal: goal))
-                    .font(.callout).foregroundStyle(theme.text)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-
-            InfoSection(title: "What walking does for you") {
-                VStack(alignment: .leading, spacing: 8) {
-                    Bullet("It's your most repeatable daily calorie burn.")
-                    Bullet("Every extra 1,000–2,000 steps a day lowers your risk of dying early — with most of the gain showing up by about 7,000–8,000 steps.")
-                    Bullet("Walking regularly brings blood pressure down a few points over a couple of months.")
-                    Bullet("A single walk improves how your body handles blood sugar for the next day or two.")
-                }
-            }
-
-            InfoSection(title: "What it works") {
-                InfoBody("Calves, thighs (quads), glutes (your seat muscles), hip flexors, and the deep core muscles that keep you upright. Over time: your heart, your everyday calorie burn, and your bones.")
-            }
-
-            InfoSection(title: "Add some cardio") {
-                VStack(alignment: .leading, spacing: 8) {
-                    Bullet("Easy, steady cardio — a pace where you can still talk — nudges your 'good' cholesterol (HDL) up a couple of points and lowers the fat in your blood (triglycerides) by about 10–20% over a couple of months.")
-                    Bullet("Steps plus a little cardio together do more for your cholesterol and blood pressure than either alone — pair them with the food tips in Nutrition.")
-                }
-            }
-
-            InfoFootnote(sources)
+            Text(TargetRationale.stepsWhy(fitnessGoal: fitnessGoal, goal: goal))
+                .font(.callout).foregroundStyle(theme.text)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 }

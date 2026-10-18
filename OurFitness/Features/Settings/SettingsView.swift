@@ -18,17 +18,11 @@ struct SettingsView: View {
     @AppStorage("nudge.meal.enabled") private var mealNudgeEnabled: Bool = true
     @AppStorage("nudge.water.enabled") private var waterNudgeEnabled: Bool = true
     @AppStorage("nudge.stall.enabled") private var stallNudgeEnabled: Bool = true
-    @AppStorage("reminders.enabled") private var remindersEnabled: Bool = true
-    @AppStorage private var reminderHour: Int
     @AppStorage private var mealRemindersEnabled: Bool
 
     init(profile: ProfileDTO, health: HealthKitService) {
         self.profile = profile
         self.health = health
-        _reminderHour = AppStorage(
-            wrappedValue: ReminderNotificationService.defaultPreferredHour,
-            "reminderHour.\(profile.id.uuidString)"
-        )
         // Opt-in: default OFF. Same key MealReminderService reads.
         _mealRemindersEnabled = AppStorage(
             wrappedValue: false,
@@ -79,7 +73,7 @@ struct SettingsView: View {
                         unitsRow
                     }
 
-                    section("Reminders") {
+                    section("Nudges") {
                         remindersSection
                     }
                 }
@@ -180,38 +174,11 @@ struct SettingsView: View {
                 label: "Keep-going nudge",
                 detail: "A once-a-day prompt if your steps, workouts, or a tracked number have gone quiet.",
                 isOn: $stallNudgeEnabled,
-                isFirst: false, isLast: false
+                isFirst: false, isLast: true
             )
-            nudgeToggleRow(
-                label: "Reminders (medication, plants & more)",
-                detail: "Notifications from your Reminders tab — medication, plant watering, and anything else you add. Turning this off silences all of them.",
-                isOn: $remindersEnabled,
-                isFirst: false, isLast: false
-            )
-            reminderHourRow
         }
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-        .onChange(of: remindersEnabled) { _, enabled in
-            if enabled {
-                Task { await ReminderNotificationService.reconcile(ctx, userId: profile.id) }
-            } else {
-                // reconcile() no-ops while globally disabled, so clear pending
-                // requests here. "reminder.<uuid>" mirrors the private identifier
-                // scheme in ReminderNotificationService — consolidate into a
-                // service API when that file is next touched.
-                Task {
-                    let center = UNUserNotificationCenter.current()
-                    let ids = await center.pendingNotificationRequests()
-                        .map(\.identifier)
-                        .filter { $0.hasPrefix("reminder.") }
-                    center.removePendingNotificationRequests(withIdentifiers: ids)
-                }
-            }
-        }
-        .onChange(of: reminderHour) { _, _ in
-            Task { await ReminderNotificationService.reconcile(ctx, userId: profile.id) }
-        }
         .onChange(of: mealRemindersEnabled) { _, enabled in
             guard enabled else {
                 MealReminderService.cancelAll()
@@ -240,41 +207,10 @@ struct SettingsView: View {
             return intro + " Still learning your routine — once a meal is logged on \(MealLogPattern.minDays) different days, its reminder starts."
         }
         let times = learned
-            .map { "\($0.slot.label) \(MedicationPattern.clockLabel(minuteOfDay: $0.minuteOfDay))" }
+            .map { "\($0.slot.label) \(MealLogPattern.clockLabel(minuteOfDay: $0.minuteOfDay))" }
             .joined(separator: " · ")
         return intro + " Usual times: \(times)."
     }
-
-    @ViewBuilder
-    private var reminderHourRow: some View {
-        HStack(spacing: 12) {
-            VStack(alignment: .leading, spacing: 3) {
-                Text("Reminder time")
-                    .font(.system(size: 15, weight: .medium))
-                    .foregroundStyle(theme.text)
-                Text("What time of day reminders fire.")
-                    .font(.caption)
-                    .foregroundStyle(theme.dim)
-            }
-            Spacer()
-            Picker("", selection: $reminderHour) {
-                ForEach(6..<22, id: \.self) { hour in
-                    Text(Self.hourLabels[hour] ?? "").tag(hour)
-                }
-            }
-            .labelsHidden()
-            .tint(theme.accent)
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
-        .background(theme.card)
-    }
-
-    /// Built once — respects the user's 12/24-hour locale setting at first use.
-    private static let hourLabels: [Int: String] = Dictionary(uniqueKeysWithValues: (6..<22).map { hour in
-        let date = Calendar.current.date(from: DateComponents(hour: hour, minute: 0)) ?? Date()
-        return (hour, date.formatted(date: .omitted, time: .shortened))
-    })
 
     @ViewBuilder
     private func nudgeToggleRow(

@@ -4,16 +4,15 @@
 //
 // Opt-in, default OFF, per profile: `mealReminders.enabled.<profile-uuid>`.
 // Authorization is requested ONLY from the Settings toggle being turned on
-// (`enable`) — never from .onAppear/.task (see ReminderNotificationService).
+// (`enable`) — never from .onAppear/.task.
 //
 // One one-shot request per (meal day, slot), identifier
 // `mealLog.<yyyy-MM-dd>.<slot>`, for today plus the next two days — at most 9
-// pending, well clear of iOS's 64 and of the Reminders tab's requests. The
-// prefix is deliberately NOT "reminder.": ReminderNotificationService.reconcile
-// prunes every "reminder.*" id it doesn't own, and AppNotificationDelegate's
-// willPresent banners only "reminder.*" — so a meal nudge stays silent while the
-// app is open, where the in-app meal toast (TodayView) already covers it. That
-// is the whole no-double-nag rule; nothing in TodayView needed to change.
+// pending, well clear of iOS's 64. AppNotificationDelegate's willPresent
+// banners nothing, so a meal nudge stays silent while the app is open, where
+// the in-app meal toast (TodayView) already covers it. That is the whole
+// no-double-nag rule. (The prefix is deliberately NOT "reminder.": that prefix
+// belonged to the removed Reminders tab and RetiredReminderCleanup clears it.)
 //
 // Re-planned (a cheap diff — unchanged requests are left alone):
 //   - on every successful repository save (observes `.repositoryDidSave`,
@@ -102,9 +101,27 @@ final class MealReminderService {
     /// notifications are allowed — false leaves the toggle on but nothing fires.
     @discardableResult
     static func enable(_ ctx: ModelContext, userId: UUID) async -> Bool {
-        let granted = await ReminderNotificationService.requestAuthorizationIfNeeded()
+        let granted = await requestAuthorizationIfNeeded()
         await replan(ctx, userId: userId)
         return granted
+    }
+
+    /// CALL ONLY FROM AN EXPLICIT USER ACTION. Returns whether notifications
+    /// are permitted.
+    @discardableResult
+    private static func requestAuthorizationIfNeeded() async -> Bool {
+        let center = UNUserNotificationCenter.current()
+        let settings = await center.notificationSettings()
+        switch settings.authorizationStatus {
+        case .authorized, .provisional, .ephemeral:
+            return true
+        case .denied:
+            return false
+        case .notDetermined:
+            return (try? await center.requestAuthorization(options: [.alert, .sound])) ?? false
+        @unknown default:
+            return false
+        }
     }
 
     // MARK: - Planning
@@ -193,7 +210,7 @@ final class MealReminderService {
         content.threadIdentifier = "mealLog"
         let meal = nudge.slot.label
         content.title = "Log your \(meal)?"
-        let clock = MedicationPattern.clockLabel(minuteOfDay: nudge.typicalMinuteOfDay, calendar: calendar)
+        let clock = MealLogPattern.clockLabel(minuteOfDay: nudge.typicalMinuteOfDay, calendar: calendar)
         content.body = "You usually log \(meal) around \(clock), and it isn't logged yet today. A quick entry or an estimate is plenty."
         // Year/month/day/hour/minute: a one-shot at a real wall-clock time.
         let comps = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: nudge.fireDate)

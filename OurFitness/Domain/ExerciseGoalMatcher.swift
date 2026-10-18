@@ -63,13 +63,23 @@ public enum ExerciseGoalMatcher {
         )
     }
 
+    /// Home-kit staples used when no body part is recognised and an `equipment`
+    /// filter is on (the barbell staples below would all be filtered out).
+    private static let homeStaples = ["Pull-up", "Push-up", "Bulgarian Split Squat", "Dumbbell Row", "Pike Push-up"]
+
     /// Rank the catalog against a free-text goal. Returns up to `limit` suggestions,
     /// most relevant first. `fitnessGoal` gives a light tilt — gaining toward loadable,
     /// progressable lifts; losing toward higher calorie-burn, joint-friendly work —
     /// applied only to exercises the goal already makes relevant, so it never
     /// overrides the muscle match. Falls back to compound staples when no body part
     /// is recognised so the user always gets a sensible answer.
-    public static func suggestions(for goalText: String, fitnessGoal: FitnessGoal, limit: Int = 5) -> [GoalSuggestion] {
+    ///
+    /// `equipment` (nil = no filter, the default) keeps only exercises doable with
+    /// the user's home kit — see `HomeEquipment`.
+    public static func suggestions(
+        for goalText: String, fitnessGoal: FitnessGoal, limit: Int = 5,
+        equipment: HomeEquipment? = nil
+    ) -> [GoalSuggestion] {
         let lower = goalText.lowercased()
 
         // 1) Which muscle keywords does the goal imply?
@@ -83,7 +93,7 @@ public enum ExerciseGoalMatcher {
         // 2) Did the user name a specific exercise? Give it a strong head start.
         let directlyNamed = ExerciseInfo.catalog.filter { lower.contains($0.name.lowercased()) }
 
-        let pool = ExerciseInfo.catalog
+        let pool = ExerciseInfo.catalog.filter { equipment?.canDo(exerciseNamed: $0.name) ?? true }
         let ranked = pool
             .map { entry -> (entry: ExerciseInfo.CatalogExercise, score: Double) in
                 let base = score(entry, targets: targets, directlyNamed: directlyNamed)
@@ -100,7 +110,9 @@ public enum ExerciseGoalMatcher {
         let chosen: [ExerciseInfo.CatalogExercise]
         if ranked.isEmpty {
             // No recognised body part — recommend the highest-yield compounds.
-            let staples = ["Squat", "Deadlift", "Bench Press", "Pull-up", "Overhead Press"]
+            let staples = equipment == nil
+                ? ["Squat", "Deadlift", "Bench Press", "Pull-up", "Overhead Press"]
+                : homeStaples
             chosen = staples.compactMap { name in pool.first { $0.name == name } }
         } else {
             chosen = ranked.prefix(limit).map(\.entry)

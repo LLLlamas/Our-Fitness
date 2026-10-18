@@ -748,9 +748,10 @@ public struct WaterEntryDTO: Codable, Equatable, Sendable, Identifiable {
 // with it: "Plants" (species catalog, seeded amount/interval, care sheets) and
 // "Medication" (dosage + a learned "you usually take this around now" nudge);
 // user-created groups hold basic reminders (name + photo + interval) until
-// they get their own customization later. See Domain/PlantCatalog.swift for
-// PlantLightLevel and the species catalog, Domain/ReminderSchedule.swift for
-// due-date math, and Domain/MedicationPattern.swift for the habit inference.
+// they get their own customization later.
+//
+// RETIRED: the feature and its UI were removed; these DTOs stay only because the
+// @Model classes remain in the schema. See docs/removed-reminders.md.
 
 public enum ReminderGroupKind: String, Codable, Sendable {
     case medication
@@ -824,15 +825,8 @@ public struct ReminderDTO: Codable, Equatable, Sendable, Identifiable {
     /// The dose times the user CONFIGURED, each as minutes from local midnight
     /// (0..<1440), sorted. A medication taken morning and night holds two.
     ///
-    /// Distinct from `MedicationPattern.typicalMinuteOfDay`, which infers a
-    /// single time from the completion log: these are stated, so they apply
-    /// from the first day with no history at all, and each becomes its own
-    /// daily alarm. Empty means "no set times" — the inferred pattern is then
-    /// the only timing the app has, exactly as before this field existed.
-    ///
-    /// Minutes rather than Dates because these are wall-clock times of day with
-    /// no calendar day attached; see `MedicationPattern.fireInstant` for why
-    /// fire instants are rebuilt from components rather than offsets.
+    /// Stated dose times, as wall-clock minutes (no calendar day attached).
+    /// Empty means "no set times". Retired with the Reminders feature.
     public var scheduledMinutesOfDay: [Int]
 
     public init(

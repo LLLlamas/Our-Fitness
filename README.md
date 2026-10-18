@@ -1,6 +1,6 @@
 # Our Fitness
 
-A native iOS fitness app: log meals, training, steps, water and reminders in one place, with targets tuned to your goal — **Build muscle** or **Lose weight**. SwiftUI, SwiftData, Apple Health integration — no backend, no subscription.
+A native iOS fitness app: log meals, training, steps and water in one place, with targets tuned to your goal — **Build muscle** or **Lose weight**. SwiftUI, SwiftData, Apple Health integration — no backend, no subscription.
 
 Show up, log honestly, let the numbers tell the truth.
 
@@ -47,7 +47,7 @@ CLI: `bundle exec fastlane ios compile` (build) / `bundle exec fastlane ios test
 - [docs/live-activity-setup.md](docs/live-activity-setup.md) — Live Activity / widget signing checklist
 - [docs/RepCheck.md](docs/RepCheck.md) — friction-free logging UX
 - [docs/nutrition-plan-research.md](docs/nutrition-plan-research.md) — original nutrition spec (written for the old Build mode; now informs the Build muscle goal)
-- [docs/medication-reminders-plan.md](docs/medication-reminders-plan.md) — medication logging spec, with the notification wording rules it ships under
+- [docs/removed-reminders.md](docs/removed-reminders.md) — Reminders/plants/medication removal, retired-feature notes, leftover DB tables
 
 ### Audit maintenance
 

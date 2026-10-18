@@ -2,15 +2,14 @@
 // sole source of truth (see Shared/WatchSyncPayload.swift for the wire format
 // and OurFitness/Services/WatchSyncService.swift for the phone side).
 //
-// The phone pushes ONE `WatchSnapshotEnvelope` (reminders + today + quick-log
+// The phone pushes ONE `WatchSnapshotEnvelope` (today + quick-log
 // + meal shortcuts + live session) per `updateApplicationContext`, so this
 // store holds exactly that one value and exposes read-throughs for each
 // section — views never unwrap the optional envelope themselves.
 //
-// Two caches keep the watch usable offline / on cold launch before the phone
-// round-trips anything:
-//   - `envelope` mirrors into UserDefaults as JSON on every update.
-//   - `thumbnails` mirrors into files in the watch's Caches directory.
+// The cache keeps the watch usable offline / on cold launch before the phone
+// round-trips anything: `envelope` mirrors into UserDefaults as JSON on every
+// update.
 // Wrist actions (`send(_:)`) apply an optimistic local update immediately,
 // then queue a `transferUserInfo` — which the system delivers even while the
 // phone is unreachable, so nothing taken on the wrist is ever lost.
@@ -18,7 +17,6 @@
 import Foundation
 import Combine
 import WatchConnectivity
-import UIKit
 
 @MainActor
 final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
@@ -26,18 +24,10 @@ final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
 
     /// nil until the first successful sync (or cache load) — `hasSynced`.
     @Published private(set) var envelope: WatchSnapshotEnvelope?
-    /// Already-DECODED images, not JPEG bytes. A row's thumbnail is re-read on
-    /// every body pass (and a watch list re-renders on every envelope push and
-    /// every arriving transfer), so decoding at render time meant decoding the
-    /// same JPEG dozens of times. Decode once, here, on the way in.
-    @Published private(set) var thumbnails: [UUID: UIImage] = [:]
-
-    /// New key: the cached value is now a whole envelope, not a bare
-    /// `[ReminderSnapshot]`. The old `watch.cachedReminderSnapshots` blob has an
-    /// incompatible shape and is discarded at launch rather than migrated — the
-    /// gap it leaves lasts only until the phone's next context push, and the
-    /// transitional wire-format fallback in `decodeEnvelope` covers a phone that
-    /// is still on the old build.
+    /// The cached value is a whole envelope. The pre-envelope
+    /// `watch.cachedReminderSnapshots` blob (a bare reminder list) has an
+    /// incompatible shape and is discarded at launch; so is the plant-thumbnail
+    /// cache directory from builds that still had Reminders.
     private let envelopeDefaultsKey = "watch.cachedSnapshotEnvelope"
 
     /// Amount this watch last logged per exercise, so an undo rewinds by the
@@ -56,21 +46,19 @@ final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
     /// may only be called on an ACTIVATED session, so these wait here and flush
     /// from the activation callback instead of being dropped (or raising).
     private var pendingActions: [Data] = []
-    private let thumbnailsDirectory: URL
 
     /// Only ever used before the first sync, so a calorie readout shows a
     /// ballpark rather than zero. The real weight rides on every envelope.
     private static let fallbackBodyWeightLb: Double = 155
 
     private override init() {
-        let caches = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
-        thumbnailsDirectory = caches.appendingPathComponent("PlantThumbnails", isDirectory: true)
         super.init()
 
-        try? FileManager.default.createDirectory(at: thumbnailsDirectory, withIntermediateDirectories: true)
         UserDefaults.standard.removeObject(forKey: legacySnapshotsDefaultsKey)
+        if let caches = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first {
+            try? FileManager.default.removeItem(at: caches.appendingPathComponent("PlantThumbnails", isDirectory: true))
+        }
         loadCachedEnvelope()
-        loadCachedThumbnails()
 
         guard WCSession.isSupported() else { return }
         WCSession.default.delegate = self
@@ -81,7 +69,6 @@ final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
     // Views bind to these rather than to `envelope`, so "no sync yet" and
     // "synced but empty" render through the same code path.
 
-    var reminders: [ReminderSnapshot] { envelope?.reminders ?? [] }
     var today: TodaySnapshot { envelope?.today ?? TodaySnapshot() }
     var quickLogExercises: [QuickLogExercise] { envelope?.quickLogExercises ?? [] }
     var mealShortcuts: [MealShortcut] { envelope?.mealShortcuts ?? [] }
@@ -116,57 +103,6 @@ final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
         UserDefaults.standard.set(data, forKey: envelopeDefaultsKey)
     }
 
-    /// Reads cached thumbnail files off the main actor at launch, then merges
-    /// only ids still in `reminders` and not already set — so a slow load can
-    /// neither clobber a fresher transfer nor resurrect a pruned entry.
-    private func loadCachedThumbnails() {
-        let dir = thumbnailsDirectory
-        Task.detached(priority: .utility) {
-            let files = (try? FileManager.default.contentsOfDirectory(at: dir, includingPropertiesForKeys: nil)) ?? []
-            // Read AND decode off the main actor — the decode is the expensive
-            // half, and doing it here is why no view has to.
-            let loaded: [UUID: UIImage] = files.reduce(into: [:]) { acc, url in
-                guard let id = UUID(uuidString: url.deletingPathExtension().lastPathComponent),
-                      let data = try? Data(contentsOf: url),
-                      let image = UIImage(data: data) else { return }
-                acc[id] = image
-            }
-            await MainActor.run {
-                let valid = Set(self.reminders.map(\.id))
-                for (id, data) in loaded where valid.contains(id) && self.thumbnails[id] == nil {
-                    self.thumbnails[id] = data
-                }
-            }
-        }
-    }
-
-    private func thumbnailURL(for reminderId: UUID) -> URL {
-        thumbnailsDirectory.appendingPathComponent(reminderId.uuidString).appendingPathExtension("jpg")
-    }
-
-    /// `data` is kept only long enough to hit the disk cache; the in-memory
-    /// value is the decoded image (see `thumbnails`).
-    private func storeThumbnail(_ data: Data, for reminderId: UUID) {
-        try? data.write(to: thumbnailURL(for: reminderId), options: .atomic)
-        guard let image = UIImage(data: data) else { return }
-        thumbnails[reminderId] = image
-    }
-
-    /// Evicts cached thumbnails (memory + disk) for reminders no longer in
-    /// the latest snapshot set (deleted, or another profile's).
-    private func pruneThumbnails(keeping ids: Set<UUID>) {
-        thumbnails = thumbnails.filter { ids.contains($0.key) }
-        let files = (try? FileManager.default.contentsOfDirectory(
-            at: thumbnailsDirectory, includingPropertiesForKeys: nil
-        )) ?? []
-        for url in files {
-            let id = UUID(uuidString: url.deletingPathExtension().lastPathComponent)
-            if id.map(ids.contains) != true {
-                try? FileManager.default.removeItem(at: url)
-            }
-        }
-    }
-
     // MARK: - Applying context from the phone
 
     private func applyApplicationContext(_ context: [String: Any]) {
@@ -189,28 +125,10 @@ final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
         }
         envelope = decoded
         persistEnvelope()
-        pruneThumbnails(keeping: Set(decoded.reminders.map(\.id)))
     }
 
     private func decodeEnvelope(from data: Data) -> WatchSnapshotEnvelope? {
-        let decoder = JSONDecoder()
-        if let envelope = try? decoder.decode(WatchSnapshotEnvelope.self, from: data) {
-            return envelope
-        }
-        // TRANSITIONAL: builds before the envelope pushed a bare
-        // [ReminderSnapshot] under the same context key. During an app update
-        // the phone and watch can briefly disagree; without this the watch
-        // would show an empty screen until the phone side caught up. Remove
-        // once no shipped phone build sends the old shape.
-        guard let legacy = try? decoder.decode([ReminderSnapshot].self, from: data) else { return nil }
-        print("[WatchSync] decoded legacy [ReminderSnapshot] payload; wrapping in a minimal envelope")
-        return WatchSnapshotEnvelope(
-            profileId: envelope?.profileId ?? UUID(),
-            mode: envelope?.mode ?? "",
-            bodyWeightLb: envelope?.bodyWeightLb ?? Self.fallbackBodyWeightLb,
-            reminders: legacy,
-            generatedAt: Date()
-        )
+        try? JSONDecoder().decode(WatchSnapshotEnvelope.self, from: data)
     }
 
     // MARK: - Sending wrist actions
@@ -256,21 +174,6 @@ final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
     private func applyOptimistic(_ action: WatchAction) {
         guard var env = envelope else { return }
         switch action {
-        case .done(let reminderId, let date):
-            guard let idx = env.reminders.firstIndex(where: { $0.id == reminderId }) else { return }
-            env.reminders[idx].lastDoneAt = date
-        case .setInterval(let reminderId, let days):
-            guard let idx = env.reminders.firstIndex(where: { $0.id == reminderId }) else { return }
-            // Generic 1...365 bounds, NOT PlantCatalog's watering range —
-            // mirrors the phone-side clamp in WatchSyncService.apply.
-            env.reminders[idx].intervalDays = ReminderSchedule.clampInterval(days)
-        case .snooze(let reminderId):
-            guard let idx = env.reminders.firstIndex(where: { $0.id == reminderId }) else { return }
-            // The profile's own hour rides on the snapshot; falling back to the
-            // default only for a payload from a build that didn't send it.
-            env.reminders[idx].snoozedUntil = ReminderSchedule.snoozeDate(
-                preferredHour: env.reminders[idx].preferredHour ?? ReminderSchedule.defaultReminderHour
-            )
         case .logWater(let flOz, _):
             env.today.waterFlOz += flOz
             env.today.waterLastFlOz = flOz
@@ -308,7 +211,7 @@ final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
 
     // MARK: - WCSessionDelegate
     // watchOS's WCSessionDelegate has no sessionDidBecomeInactive/sessionDidDeactivate
-    // (those are iOS-only) -- only the three methods below exist on this platform.
+    // (those are iOS-only) -- only the two methods below exist on this platform.
 
     nonisolated func session(
         _ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?
@@ -325,18 +228,6 @@ final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
     nonisolated func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
         Task { @MainActor in
             self.applyApplicationContext(applicationContext)
-        }
-    }
-
-    nonisolated func session(_ session: WCSession, didReceive file: WCSessionFile) {
-        // Read the bytes out synchronously -- the system deletes the temp
-        // file right after this method returns, so this cannot wait for a
-        // Task hop before extracting the data.
-        guard let reminderIdString = file.metadata?["reminderId"] as? String,
-              let reminderId = UUID(uuidString: reminderIdString),
-              let data = try? Data(contentsOf: file.fileURL) else { return }
-        Task { @MainActor in
-            self.storeThumbnail(data, for: reminderId)
         }
     }
 }

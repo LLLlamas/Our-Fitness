@@ -268,12 +268,12 @@ private struct WaterInfoSheet: View {
                     InfoCalcRow(label: "Recommended total",
                                 detail: recommendedDetail)
                     if Int(goalFlOz) < recommendedOz {
-                        Text("Your current goal (\(Units.formatVolumeWithUnit(flOz: goalFlOz, system: unitSystem))) is below the recommendation. Consider raising it with the +/− buttons.")
+                        Text("Your goal (\(Units.formatVolumeWithUnit(flOz: goalFlOz, system: unitSystem))) is below this.")
                             .font(.caption)
                             .foregroundStyle(theme.warn)
                             .padding(.top, 4)
                     } else {
-                        Text("Your current goal (\(Units.formatVolumeWithUnit(flOz: goalFlOz, system: unitSystem))) meets your recommendation.")
+                        Text("Your goal (\(Units.formatVolumeWithUnit(flOz: goalFlOz, system: unitSystem))) meets this.")
                             .font(.caption)
                             .foregroundStyle(theme.ok)
                             .padding(.top, 4)
@@ -281,15 +281,7 @@ private struct WaterInfoSheet: View {
                 }
             }
 
-            InfoSection(title: "Why hydration matters") {
-                VStack(alignment: .leading, spacing: 8) {
-                    Bullet("Losing just 2% of your body weight in fluid can sap your endurance and mood, and may dull your focus.")
-                    Bullet("Water helps your body absorb nutrients and recover after training.")
-                    Bullet("Thirst is a good guide for most people — this goal is just a target to aim for, especially on hot or active days.")
-                }
-            }
-
-            InfoFootnote("This goal is a practical starting point (about half an ounce per pound, plus a little for activity). Official guidance (Institute of Medicine, 2005) is roughly 3.7 L for men and 2.7 L for women of total water per day — and that counts the water in your food, too. Individual needs vary.")
+            InfoFootnote("Starting point: half an ounce per pound, plus a little for activity.")
         }
     }
 }

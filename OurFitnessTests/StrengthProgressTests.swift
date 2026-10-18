@@ -64,9 +64,13 @@ final class StrengthProgressTests: XCTestCase {
         XCTAssertTrue(StrengthProgress.lifts(sets: sets, exercises: [press()], now: now, calendar: cal).isEmpty)
     }
 
-    func testFixedLoadAndIsometricExercisesAreNotLifts() {
+    func testFixedLoadAndIsometricExercisesHaveNoEstimatedMax() {
         let sets = [set(30, 10, -1)]
-        XCTAssertTrue(StrengthProgress.lifts(sets: sets, exercises: [press(loadLb: 30)], now: now, calendar: cal).isEmpty)
+        // A fixed-load exercise is tracked by reps, never by an Epley estimate.
+        let fixed = StrengthProgress.lifts(sets: sets, exercises: [press(loadLb: 30)], now: now, calendar: cal)
+        XCTAssertEqual(fixed.map(\.metric), [.bestReps])
+        XCTAssertNil(fixed[0].gainLb)
+        // An isometric set with no hold seconds (legacy row) has nothing to track.
         XCTAssertTrue(StrengthProgress.lifts(sets: sets, exercises: [press(isometric: true)], now: now, calendar: cal).isEmpty)
     }
 

@@ -156,21 +156,12 @@ private struct MacroInfoSheet: View {
             subtitle: "YOUR DAILY TARGET · \(headline.uppercased())",
             dragIndicator: true
         ) {
-            Text(TargetRationale.goalLine(for: profile.fitnessGoal))
+            Text(why)
                 .font(.callout).foregroundStyle(theme.text)
                 .fixedSize(horizontal: false, vertical: true)
 
-            // Calories get a full from-the-ground-up breakdown of how the
-            // number was built (rest → maintenance → goal).
+            // Calories also show how the number was built (rest → maintenance → goal).
             if macro == .calories { calorieBreakdown }
-
-            InfoSection(title: "Why this number") {
-                Text(why)
-                    .font(.callout).foregroundStyle(theme.text)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-
-            InfoFootnote(footnote)
         }
     }
 
@@ -179,28 +170,15 @@ private struct MacroInfoSheet: View {
         let c = TargetRationale.calories(for: profile)
         InfoSection(title: "How we got your number") {
             VStack(alignment: .leading, spacing: 8) {
-                InfoCalcRow(label: "At complete rest (your body's baseline)",
+                InfoCalcRow(label: "At rest",
                             detail: "\(c.bmr) cal", labelWraps: true)
-                InfoCalcRow(label: "On a normal day · \(c.activityLabel)",
+                InfoCalcRow(label: "Normal day · \(c.activityLabel)",
                             detail: "\(c.tdee) cal", labelWraps: true)
                 InfoCalcRow(label: c.isSurplus ? "Surplus to build" : "Deficit to lose fat",
                             detail: "\(c.isSurplus ? "+" : "−")\(abs(c.delta)) cal", labelWraps: true)
                 InfoCalcRow(label: "Your daily goal",
                             detail: "\(c.target) cal", labelWraps: true)
             }
-        }
-    }
-
-    private var footnote: String {
-        switch macro {
-        case .calories:
-            return "Estimated with the Mifflin-St Jeor formula from your height, weight, age, sex, and activity. It's the best available estimate — your real number can vary by about 10%. Source: Frankenfield et al., J Am Diet Assoc, 2005."
-        case .protein:
-            return "Source: International Society of Sports Nutrition protein position stand (Jäger et al., 2017)."
-        case .carbs:
-            return "Carbs fill the calories left after your protein and fat are set."
-        case .fat:
-            return "Source: Whittaker & Wu, J Steroid Biochem Mol Biol, 2021 (dietary fat and testosterone)."
         }
     }
 }

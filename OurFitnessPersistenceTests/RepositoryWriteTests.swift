@@ -20,12 +20,10 @@ final class RepositoryWriteTests: XCTestCase {
                 sex: .female, heightIn: 65, weightLb: 150, age: 30, activity: .moderate))
             XCTAssertEqual(Set(Repos.exercises(ctx, forProfile: profile.id).map(\.name)),
                            ["Lifted Baby", "Lifted Stroller", "Carried Baby"], "\(goal)")
-            XCTAssertEqual(Set(Repos.listReminderGroups(ctx, userId: profile.id).map(\.kind)), [.plants, .medication])
             let other: FitnessGoal = goal == .gain ? .lose : .gain
             XCTAssertNotNil(Repos.updateGoal(ctx, profileId: profile.id, to: other))
             XCTAssertNotNil(Repos.updateGoal(ctx, profileId: profile.id, to: goal))
             XCTAssertEqual(Repos.exercises(ctx, forProfile: profile.id).count, 3)
-            XCTAssertEqual(Repos.listReminderGroups(ctx, userId: profile.id).count, 2)
         }
     }
 

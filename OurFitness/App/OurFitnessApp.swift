@@ -1,6 +1,6 @@
 // @main entry. Sets up the SwiftData container, runs seeder once per launch,
-// pre-warms haptic generators, injects ToastCenter, wires the Reminders
-// notification delegate + watch sync.
+// pre-warms haptic generators, injects ToastCenter, wires the notification
+// delegate + watch sync.
 
 import SwiftUI
 import SwiftData
@@ -15,12 +15,11 @@ struct OurFitnessApp: App {
         self.container = AppModelContainer.make()
         Seeder.seedAll(container.mainContext)
 
-        // Registering categories never prompts; the actual authorization
-        // request only ever fires from an explicit user action elsewhere
-        // (Add-reminder save, the in-tab banner) — see ReminderNotificationService.
-        AppNotificationDelegate.shared.container = container
+        // Authorization is only ever requested from an explicit user action
+        // (the meal-reminders Settings toggle) — see MealReminderService.
         UNUserNotificationCenter.current().delegate = AppNotificationDelegate.shared
-        ReminderNotificationService.registerCategories()
+        // One-time: clear notifications left over from the removed Reminders tab.
+        RetiredReminderCleanup.runOnce()
         WatchSyncService.shared.activate(container: container)
         // Observes saves to re-plan meal-logging nudges; never prompts.
         MealReminderService.shared.activate(container: container)

@@ -934,6 +934,9 @@ private struct WorkoutGoalSheet: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var toasts: ToastCenter
 
+    /// Home kit for this profile ("20,1"); see `HomeEquipment`. Also read by the Strength card.
+    @AppStorage private var equipmentRaw: String
+
     @State private var goal: String = ""
     @State private var results: [ExerciseGoalMatcher.GoalSuggestion] = []
     @State private var loading = false
@@ -941,6 +944,14 @@ private struct WorkoutGoalSheet: View {
     @State private var hasSearched = false
     @State private var added: Set<String> = []
     @FocusState private var focused: Bool
+
+    init(profile: ProfileDTO, existingNames: Set<String>) {
+        self.profile = profile
+        self.existingNames = existingNames
+        _equipmentRaw = AppStorage(wrappedValue: "", HomeEquipment.storageKey(profile.id))
+    }
+
+    private var equipment: HomeEquipment { HomeEquipment(encoded: equipmentRaw) }
 
     private let examples = ["bigger back and shoulders", "stronger legs and glutes", "bigger arms", "better posture"]
 
@@ -972,6 +983,8 @@ private struct WorkoutGoalSheet: View {
                         .disabled(trimmedGoal.isEmpty)
                         .accessibilityLabel("Get suggestions")
                     }
+
+                    equipmentRow
 
                     if !hasSearched {
                         FlowChips(items: examples) { example in
@@ -1020,7 +1033,8 @@ private struct WorkoutGoalSheet: View {
 
         if WorkoutSuggestionService.shared.isAvailable {
             loading = true
-            let picks = await WorkoutSuggestionService.shared.picks(forGoal: g, fitnessGoal: profile.fitnessGoal)
+            let picks = await WorkoutSuggestionService.shared.picks(
+                forGoal: g, fitnessGoal: profile.fitnessGoal, equipment: equipment)
             loading = false
             let mapped = picks.compactMap { pick -> ExerciseGoalMatcher.GoalSuggestion? in
                 guard let entry = ExerciseInfo.catalogEntry(named: pick.exerciseName) else { return nil }
@@ -1036,8 +1050,41 @@ private struct WorkoutGoalSheet: View {
 
         // Deterministic fallback — always returns sensible picks.
         usedAI = false
-        results = ExerciseGoalMatcher.suggestions(for: g, fitnessGoal: profile.fitnessGoal)
+        results = ExerciseGoalMatcher.suggestions(for: g, fitnessGoal: profile.fitnessGoal, equipment: equipment)
         Haptics.selection()
+    }
+
+    /// What you have at home. Suggestions (here and on the Strength card) only name exercises this kit can do.
+    @ViewBuilder
+    private var equipmentRow: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Text("Dumbbells up to").font(.callout).foregroundStyle(theme.text)
+                Spacer()
+                Picker("Dumbbell weight", selection: Binding(
+                    get: { equipment.maxDumbbellLb },
+                    set: { equipmentRaw = HomeEquipment(maxDumbbellLb: $0, hasPullUpBar: equipment.hasPullUpBar).encoded }
+                )) {
+                    ForEach(HomeEquipment.dumbbellChoices, id: \.self) { lb in
+                        Text(lb == 0 ? "None" : "\(lb) lb").tag(lb)
+                    }
+                }
+                .pickerStyle(.menu)
+                .tint(theme.accent)
+            }
+            Toggle(isOn: Binding(
+                get: { equipment.hasPullUpBar },
+                set: { equipmentRaw = HomeEquipment(maxDumbbellLb: equipment.maxDumbbellLb, hasPullUpBar: $0).encoded }
+            )) {
+                Text("Pull-up bar").font(.callout).foregroundStyle(theme.text)
+            }
+            .tint(theme.accent)
+        }
+        .padding(10)
+        .background(theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+        .onChange(of: equipmentRaw) { _, _ in Haptics.selection() }
     }
 
     @ViewBuilder

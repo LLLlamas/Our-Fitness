@@ -48,11 +48,6 @@ struct ExerciseInfoSheet: View {
         if Movement.hasNamedHint(for: exercise) { return hint.musclesWorked }
         return info.muscleGroups
     }
-    private var displaySecondary: [String] {
-        if let ai { return ai.secondaryMuscles }
-        if Movement.hasNamedHint(for: exercise) { return [] }
-        return info.secondaryMuscles
-    }
     private var displayBenefits: [String] {
         if let ai, !ai.benefits.isEmpty { return ai.benefits }
         return info.benefits
@@ -93,19 +88,21 @@ struct ExerciseInfoSheet: View {
                 }
 
                 if aiLoading { aiLoadingRow }
-                formSafetySection
                 muscleSection
-                benefitsSection
+                if let line = oneLiner {
+                    Text(line)
+                        .font(.callout)
+                        .foregroundStyle(theme.dim)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
                 todaySection
-                recoverySection
-                citationsSection
                 if usingAI { aiAttribution }
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .presentationDetents([.medium, .large])
+        .presentationDetents([.medium])
         .presentationBackground(theme.bg)
         .presentationDragIndicator(.visible)
         .task(id: exercise.id) { await loadAIIfNeeded() }
@@ -135,89 +132,24 @@ struct ExerciseInfoSheet: View {
         }
     }
 
-    // Non-empty only for loaded movements (parenting lifts, weighted carries).
-    @ViewBuilder
-    private var formSafetySection: some View {
-        let cues = hint.formCues
-        if !cues.isEmpty {
-            VStack(alignment: .leading, spacing: 8) {
-                HStack(spacing: 6) {
-                    Image(systemName: "exclamationmark.shield.fill")
-                        .font(.system(size: 11))
-                        .foregroundStyle(theme.warn)
-                    Text("Form & safety")
-                        .font(.caption).tracking(2).textCase(.uppercase)
-                        .foregroundStyle(theme.dim)
-                }
-                ForEach(Array(cues.enumerated()), id: \.offset) { _, cue in
-                    HStack(alignment: .top, spacing: 8) {
-                        Text("·")
-                            .font(.callout)
-                            .foregroundStyle(theme.warn)
-                        Text(cue)
-                            .font(.callout)
-                            .foregroundStyle(theme.text)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                }
-            }
-            .padding(14)
-            .background(theme.warn.opacity(0.08))
-            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.warn.opacity(0.3), lineWidth: 1))
+    /// One short sentence (≤ 25 words): the first form cue for loaded movements,
+    /// otherwise the first benefit — each cut to its first sentence. Nothing shows
+    /// if no candidate is that short (cutting mid-sentence would mislead).
+    private var oneLiner: String? {
+        for text in hint.formCues + displayBenefits {
+            let first = text.components(separatedBy: ". ").first?
+                .trimmingCharacters(in: CharacterSet(charactersIn: ". ")) ?? ""
+            if !first.isEmpty, first.split(separator: " ").count <= 25 { return first + "." }
         }
+        return nil
     }
 
     @ViewBuilder
     private var muscleSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Muscles worked")
-                .font(.caption).tracking(2).textCase(.uppercase)
-                .foregroundStyle(theme.dim)
-            Text(ExerciseInfo.plainMuscleList(displayPrimary))
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundStyle(theme.text)
-                .fixedSize(horizontal: false, vertical: true)
-            let secondary = displaySecondary
-            if !secondary.isEmpty {
-                Text("Also: \(ExerciseInfo.plainMuscleList(secondary, separator: ", "))")
-                    .font(.caption)
-                    .foregroundStyle(theme.dim)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-        }
-        .padding(12)
-        .background(theme.card)
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.accent.opacity(0.25), lineWidth: 1))
-    }
-
-    @ViewBuilder
-    private var benefitsSection: some View {
-        let benefits = displayBenefits
-        if !benefits.isEmpty {
-            VStack(alignment: .leading, spacing: 8) {
-                HStack(spacing: 6) {
-                    if usingAI {
-                        Image(systemName: "sparkles")
-                            .font(.system(size: 11)).foregroundStyle(theme.accent)
-                    }
-                    Text("What it does")
-                        .font(.caption).tracking(2).textCase(.uppercase)
-                        .foregroundStyle(theme.dim)
-                }
-                ForEach(Array(benefits.enumerated()), id: \.offset) { _, b in
-                    HStack(alignment: .top, spacing: 8) {
-                        Text("·")
-                            .foregroundStyle(theme.accent)
-                        Text(b)
-                            .font(.callout)
-                            .foregroundStyle(theme.text)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                }
-            }
-        }
+        Text(displayPrimary.joined(separator: " · "))
+            .font(.system(size: 17, weight: .semibold))
+            .foregroundStyle(theme.text)
+            .fixedSize(horizontal: false, vertical: true)
     }
 
     @ViewBuilder
@@ -247,49 +179,11 @@ struct ExerciseInfoSheet: View {
     }
 
     @ViewBuilder
-    private var recoverySection: some View {
-        let recovery = hint
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 6) {
-                Image(systemName: "leaf.fill").font(.system(size: 11)).foregroundStyle(theme.accent)
-                Text("Recovery · rest \(recovery.recoveryHours)h")
-                    .font(.caption).tracking(2).textCase(.uppercase)
-                    .foregroundStyle(theme.dim)
-            }
-            Text("\(recovery.primaryNeed) within \(recovery.windowMinutes) min.")
-                .font(.caption).foregroundStyle(theme.text)
-                .fixedSize(horizontal: false, vertical: true)
-            Text("Try: \(recovery.recoveryFoods.joined(separator: " · "))")
-                .font(.caption).italic().foregroundStyle(theme.dim)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .padding(12)
-        .background(theme.card)
-        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-    }
-
-    @ViewBuilder
-    private var citationsSection: some View {
-        let citations = hint.citations
-        if !citations.isEmpty {
-            VStack(alignment: .leading, spacing: 4) {
-                ForEach(Array(citations.enumerated()), id: \.offset) { _, cite in
-                    Text(cite)
-                        .font(.caption2)
-                        .foregroundStyle(theme.dim)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-            }
-        }
-    }
-
-    @ViewBuilder
     private var aiAttribution: some View {
         HStack(alignment: .top, spacing: 6) {
             Image(systemName: "sparkles")
                 .font(.system(size: 10)).foregroundStyle(theme.accent)
-            Text("Muscles and benefits for this custom movement were generated on-device by Apple Intelligence. Calorie estimates come from the app's research, not the model. General fitness guidance, not medical advice.")
+            Text("Muscles and note written on-device by Apple Intelligence.")
                 .font(.caption2).foregroundStyle(theme.dim)
                 .fixedSize(horizontal: false, vertical: true)
         }
