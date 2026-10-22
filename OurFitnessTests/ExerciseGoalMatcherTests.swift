@@ -94,4 +94,65 @@ final class ExerciseGoalMatcherTests: XCTestCase {
             ExerciseGoalMatcher.suggestions(for: "I want to deadlift more", fitnessGoal: .lose).first?.exerciseName,
             "Deadlift")
     }
+
+    // MARK: - Tendon drills
+
+    private let tendonDrills = ["Decline Squat", "Eccentric Heel Drop", "Eccentric Wrist Extension",
+                                "Heavy Slow Calf Raise", "Spanish Squat"]
+
+    // Each drill must resolve to its own curated entry, not a general squat / tricep /
+    // calf-raise branch, and carry the muscles it is meant to load.
+    func test_tendon_drills_resolve_to_their_own_curated_meta() {
+        for name in tendonDrills {
+            guard let e = ExerciseInfo.catalogEntry(named: name), e.name == name else {
+                return XCTFail("\(name) missing from catalog")
+            }
+            XCTAssertTrue(e.meta.benefits.count >= 3, name)
+            XCTAssertTrue(e.meta.benefits[0].count > 60, "\(name) leads with a real description")
+        }
+        func primary(_ name: String) -> String {
+            (ExerciseInfo.catalogEntry(named: name)?.muscleGroups ?? []).joined(separator: " ").lowercased()
+        }
+        XCTAssertTrue(primary("Eccentric Heel Drop").contains("gastrocnemius"))
+        XCTAssertTrue(primary("Heavy Slow Calf Raise").contains("soleus"))
+        XCTAssertTrue(primary("Decline Squat").contains("quad"))
+        XCTAssertTrue(primary("Spanish Squat").contains("quad"))
+        XCTAssertTrue(primary("Eccentric Wrist Extension").contains("forearm"),
+                      "must not fall into the triceps 'extension' branch")
+        XCTAssertTrue(ExerciseInfo.catalogEntry(named: "Spanish Squat")?.isIsometric == true)
+        // 3 s down + 3 s up in the heavy-slow trials.
+        XCTAssertEqual(ExerciseInfo.catalogEntry(named: "Heavy Slow Calf Raise")?.meta.secondsPerRep, 6.0)
+    }
+
+    func test_tendon_goals_lead_with_the_matching_drill() {
+        let cases: [(goal: String, expect: [String])] = [
+            ("my Achilles tendon hurts", ["Eccentric Heel Drop", "Heavy Slow Calf Raise"]),
+            ("patellar tendon / jumper's knee", ["Decline Squat", "Spanish Squat"]),
+            ("tennis elbow", ["Eccentric Wrist Extension"]),
+        ]
+        for c in cases {
+            for fitnessGoal in [FitnessGoal.gain, .lose] {
+                let out = names(ExerciseGoalMatcher.suggestions(for: c.goal, fitnessGoal: fitnessGoal))
+                XCTAssertFalse(out.isEmpty, c.goal)
+                XCTAssertTrue(c.expect.contains(out[0]), "\(c.goal) led with \(out[0]) (\(fitnessGoal))")
+                XCTAssertTrue(c.expect.allSatisfy(out.contains), "\(c.goal) should list \(c.expect): \(out)")
+            }
+        }
+        // A bare "tendon" goal surfaces tendon drills first, not general lifts.
+        let generic = names(ExerciseGoalMatcher.suggestions(for: "stronger tendons", fitnessGoal: .gain))
+        XCTAssertTrue(tendonDrills.contains(generic[0]), "got \(generic)")
+    }
+
+    // "lateral" also trips the back-muscle key "lat", so back work may appear, but the
+    // forearm drill must still lead.
+    func test_lateral_epicondylitis_still_leads_with_the_wrist_drill() {
+        let out = names(ExerciseGoalMatcher.suggestions(for: "lateral epicondylitis", fitnessGoal: .gain))
+        XCTAssertEqual(out.first, "Eccentric Wrist Extension", "\(out)")
+    }
+
+    // Without tendon wording nothing changes: a plain calves goal still lists Calf Raise.
+    func test_plain_calf_goal_unchanged() {
+        let out = names(ExerciseGoalMatcher.suggestions(for: "bigger calves", fitnessGoal: .gain))
+        XCTAssertTrue(out.contains("Calf Raise"), "\(out)")
+    }
 }

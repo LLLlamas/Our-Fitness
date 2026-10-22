@@ -93,12 +93,22 @@ public enum ExerciseGoalMatcher {
         // 2) Did the user name a specific exercise? Give it a strong head start.
         let directlyNamed = ExerciseInfo.catalog.filter { lower.contains($0.name.lowercased()) }
 
+        // 3) A tendon-flavoured goal puts the tendon-loading drills ahead of general
+        // lifts that hit the same muscles.
+        let wantsTendon = tendonPhrases.contains { lower.contains($0) }
+        // A bare "tendon" with no site named: aim at every site the drills cover.
+        if wantsTendon && targets.isEmpty {
+            targets = ["gastrocnemius", "soleus", "quad", "forearm"]
+        }
+
         let pool = ExerciseInfo.catalog.filter { equipment?.canDo(exerciseNamed: $0.name) ?? true }
         let ranked = pool
             .map { entry -> (entry: ExerciseInfo.CatalogExercise, score: Double) in
                 let base = score(entry, targets: targets, directlyNamed: directlyNamed)
                 // Goal tilt only nudges exercises that are already a match.
-                return (entry, base > 0 ? base + goalBias(entry, fitnessGoal: fitnessGoal) : 0)
+                guard base > 0 else { return (entry, 0) }
+                let tendon = wantsTendon && tendonDrills.contains(entry.name) ? tendonBonus : 0
+                return (entry, base + goalBias(entry, fitnessGoal: fitnessGoal) + tendon)
             }
             .filter { $0.score > 0 }
             .sorted { a, b in
@@ -169,6 +179,27 @@ public enum ExerciseGoalMatcher {
             return b
         }
     }
+
+    // MARK: - Tendon goals
+
+    /// Words that mark a goal as tendon-focused. "epicondyl" (not "lateral
+    /// epicondylitis") because "lat" is a back-muscle key in `goalMuscleMap`.
+    private static let tendonPhrases = [
+        "tendon", "tendin", "achilles", "patellar", "jumper's knee", "jumpers knee",
+        "tennis elbow", "epicondyl",
+    ]
+
+    /// The catalog's tendon-loading drills (see the "Tendon-loading drills" block in
+    /// `ExerciseInfo.namedMeta`).
+    private static let tendonDrills: Set<String> = [
+        "Decline Squat", "Eccentric Heel Drop", "Eccentric Wrist Extension",
+        "Heavy Slow Calf Raise", "Spanish Squat",
+    ]
+
+    /// Above any stack of muscle matches (a "lateral epicondylitis" goal also trips the
+    /// back key "lat", and rows then score ~8) so a tendon request leads with its drills;
+    /// below a direct name (100).
+    private static let tendonBonus = 10.0
 
     // MARK: - Goal vocabulary
 
@@ -276,5 +307,11 @@ public enum ExerciseGoalMatcher {
          ["serratus", "pectoral", "anterior delt"]),
         (["hourglass", "shapely waist", "snatched waist", "feminine curves"],
          ["glute", "oblique", "abdominis", "lat"]),
+        (["achilles"],
+         ["gastrocnemius", "soleus"]),
+        (["patellar", "jumper's knee", "jumpers knee", "knee tendon"],
+         ["quad"]),
+        (["tennis elbow", "epicondyl", "elbow tendon"],
+         ["forearm"]),
     ]
 }

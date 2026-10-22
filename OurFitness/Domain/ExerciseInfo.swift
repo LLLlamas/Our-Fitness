@@ -84,8 +84,11 @@ public enum ExerciseInfo {
             ("Crunch",                  false,  false,  12...20),
             ("Dead Hang",               true,   false,  1...1),
             ("Deadlift",                false,  true,   4...8),
+            ("Decline Squat",           false,  false,  10...15),
             ("Dip",                     false,  false,  6...12),
             ("Dumbbell Row",            false,  true,   8...12),
+            ("Eccentric Heel Drop",     false,  false,  10...15),
+            ("Eccentric Wrist Extension", false, true,  10...15),
             ("Face Pull",               false,  true,   12...20),
             ("Farmer Carry",            true,   true,   1...1),
             ("Front Raise",             false,  true,   10...15),
@@ -93,7 +96,8 @@ public enum ExerciseInfo {
             ("Glute Kickback",          false,  true,   10...20),
             ("Good Morning",            false,  true,   8...12),
             ("Hanging Leg Raise",       false,  false,  8...15),
-            ("Hip Abduction",           false,  true,   12...20),
+            ("Heavy Slow Calf Raise",   false,  true,   6...15),
+            ("Hip Abduction",          false,  true,   12...20),
             ("Hip Adduction",           false,  true,   12...20),
             ("Hip Thrust",              false,  true,   8...12),
             ("Kettlebell Swing",        false,  true,   10...20),
@@ -115,7 +119,8 @@ public enum ExerciseInfo {
             ("Romanian Deadlift",       false,  true,   8...12),
             ("Russian Twist",           false,  true,   12...30),
             ("Shrug",                   false,  true,   10...15),
-            ("Squat",                   false,  true,   6...10),
+            ("Spanish Squat",           true,   false,  1...1),
+            ("Squat",                  false,  true,   6...10),
             ("Tricep Extension",        false,  true,   10...15),
             ("Tricep Pushdown",         false,  true,   10...15),
             ("Wall Sit",                true,   false,  1...1),
@@ -219,6 +224,89 @@ public enum ExerciseInfo {
     // MARK: - Named library
 
     private static func namedMeta(_ lower: String) -> Meta? {
+
+        // Tendon-loading drills — checked FIRST so "decline squat", "spanish squat" and
+        // "wrist extension" are not captured by the general squat / tricep-extension
+        // branches below. METs and tempo are the nearest existing entry's values (Calf
+        // raise 3.5, Squat 5.0, Wall sit 4.0, Bicep curl 3.5), not new figures; the
+        // tempo is the studied one where a trial states it (3 s/rep, or 3 s up + 3 s down).
+        // Every study named here was checked against its abstract/full text; see
+        // docs/validation-log.md. These are general-fitness notes, not medical advice.
+
+        // Eccentric heel drop (Alfredson-style Achilles loading)
+        if lower.contains("heel drop") || lower.contains("eccentric calf") || lower.contains("alfredson") {
+            return Meta(
+                muscleGroups: ["Gastrocnemius", "Soleus"],
+                secondaryMuscles: ["Tibialis posterior", "Peronei"],
+                benefits: [
+                    "The classic Achilles tendon loading drill: rise on both feet, then lower slowly (about 3 seconds) off a step on one leg — once with a straight knee, once with a bent knee.",
+                    "Alfredson 1998 (small study, 15 recreational athletes with chronic Achilles tendinosis): 12 weeks of heavy eccentric calf training and all 15 were back to full running.",
+                    "Beyer 2015 (58 patients, 12 weeks): this routine (3 × 15, twice a day) and heavy slow calf raises gave similar pain and function gains, still there at 52 weeks.",
+                    "In the trials, tendon discomfort during the drill was allowed if it had settled by the next session. Stop and see a clinician if pain is sharp or getting worse."
+                ],
+                met: 3.5, secondsPerRep: 3.0
+            )
+        }
+
+        // Heavy slow calf raise (heavy slow resistance for the Achilles)
+        if lower.contains("heavy slow") {
+            return Meta(
+                muscleGroups: ["Gastrocnemius", "Soleus"],
+                secondaryMuscles: ["Tibialis posterior", "Peronei"],
+                benefits: [
+                    "Heavy, slow calf raises (3 seconds up, 3 seconds down) keep the Achilles under high tension for longer each rep — the \u{201C}heavy slow resistance\u{201D} approach.",
+                    "Beyer 2015 (58 patients with midportion Achilles tendinopathy): as effective as eccentric-only training after 12 weeks, with better adherence (92% vs 78% of sessions).",
+                    "The trial plan: 3 sessions a week, 3–4 sets, straight- and bent-knee versions, adding load as reps dropped from 15 to 6 over 12 weeks.",
+                    "Bohm 2015 (27 studies, healthy adults, 8+ weeks): tendon training makes Achilles and patellar tendons stiffer (pooled effect 0.70)."
+                ],
+                met: 3.5, secondsPerRep: 6.0
+            )
+        }
+
+        // Decline squat (single-leg squat on a decline board — patellar tendon loading)
+        if lower.contains("decline squat") {
+            return Meta(
+                muscleGroups: ["Quads", "Glutes"],
+                secondaryMuscles: ["Hamstrings", "Calves", "Core"],
+                benefits: [
+                    "Squat on one leg with your heels raised on a decline board (about 25°) — the classic eccentric exercise for the patellar tendon below the kneecap.",
+                    "Kongsgaard 2009 (39 men with patellar tendinopathy, 12 weeks): the decline-squat group did 3 × 15 slow reps (about 3 seconds each), twice a day.",
+                    "In that trial, heavy slow resistance (loads from 15RM down to 6RM, 3 seconds up and 3 seconds down) gave good short- and long-term results, while steroid injections did not last.",
+                    "Lower slowly on the sore side; use both legs or your hands to come back up if needed."
+                ],
+                met: 5.0, secondsPerRep: 3.0
+            )
+        }
+
+        // Spanish squat (isometric quad hold against a strap)
+        if lower.contains("spanish squat") {
+            return Meta(
+                muscleGroups: ["Quads", "Glutes"],
+                secondaryMuscles: ["Hamstrings", "Calves"],
+                benefits: [
+                    "Hold a squat with a strap or band behind your knees, anchored to a post, so your shins stay vertical and your quads carry the load.",
+                    "Rio 2015 (only 6 volleyball players with patellar tendinopathy): isometric quad contractions cut pain on a single-leg decline squat from 7.0 to 0.17 out of 10, lasting 45 minutes, without losing strength.",
+                    "Isotonic (moving) reps in the same study dropped pain less (6.3 to 3.8). The study used a knee-extension hold, so the Spanish squat is the home version of the idea, not the tested exercise.",
+                    "A steady hold means no movement through the joint — easy to control and to time."
+                ],
+                met: 4.0, secondsPerRep: 3.0
+            )
+        }
+
+        // Eccentric wrist extension (extensor tendon — tennis elbow)
+        if lower.contains("wrist extension") || lower.contains("eccentric wrist") || lower.contains("tyler twist") {
+            return Meta(
+                muscleGroups: ["Wrist extensors (forearm)"],
+                secondaryMuscles: ["Wrist flexors (forearm)", "Brachioradialis"],
+                benefits: [
+                    "Sit with your forearm on your thigh, palm down, and lower a light dumbbell slowly — this loads the forearm extensor tendon that is irritated in tennis elbow (lateral epicondylitis).",
+                    "Cullinane 2014 (systematic review, 12 studies): the evidence supports eccentric exercise for lowering pain and improving function, but the trials varied a lot in method and quality.",
+                    "Other reviews found eccentric and ordinary strengthening work about equally well, so pick the version you will keep doing.",
+                    "Use a light weight, lift it back up with the other hand, and lower slowly. See a clinician if pain is sharp or getting worse."
+                ],
+                met: 3.5, secondsPerRep: 3.0
+            )
+        }
 
         // Pull-over — checked BEFORE the "pull" prefix branch so "pullover" isn't
         // captured as a pull-up (it is a lats + chest stretch, not elbow flexion).
