@@ -1,4 +1,4 @@
-// Build-a-meal sheet: a meal is a list of ingredients, each with a 0.5-step
+// Build-a-meal sheet: a meal is a list of ingredients, each with a quarter-step
 // quantity. Totals are derived live from the ingredients (never stored as a
 // frozen number) so editing quantities re-derives the logged macros.
 //
@@ -295,14 +295,31 @@ private struct IngredientRow: View {
 
     @Environment(\.theme) private var theme
 
-    private var formattedQty: String {
-        String(format: "%.1f", ingredient.quantity)
+    /// Quick-portion pills: value + glyph label.
+    private static let portions: [(value: Double, label: String)] = [
+        (0.25, "¼"), (0.5, "½"), (0.75, "¾"), (1, "1"), (1.5, "1½"), (2, "2")
+    ]
+
+    /// Up to 2 decimals, trailing zeros dropped (1 → "1", 1.5 → "1.5", 0.25 → "0.25").
+    private func format(_ q: Double) -> String {
+        var s = String(format: "%.2f", q)
+        while s.hasSuffix("0") { s.removeLast() }
+        if s.hasSuffix(".") { s.removeLast() }
+        return s
+    }
+
+    private var formattedQty: String { format(ingredient.quantity) }
+
+    private func setQuantity(_ q: Double) {
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+            ingredient.quantity = q
+        }
+        Haptics.bump()
     }
 
     private func adjust(by delta: Double) {
-        let next = (ingredient.quantity + delta)
-        ingredient.quantity = min(10.0, max(0.5, next))
-        Haptics.bump()
+        let next = ((ingredient.quantity + delta) * 4).rounded() / 4
+        setQuantity(min(10.0, max(0.25, next)))
     }
 
     var body: some View {
@@ -330,12 +347,12 @@ private struct IngredientRow: View {
 
             HStack(spacing: 10) {
                 Button {
-                    adjust(by: -0.5)
+                    adjust(by: -0.25)
                 } label: {
                     Image(systemName: "minus")
                 }
                 .tactile(.bump)
-                .disabled(ingredient.quantity <= 0.5)
+                .disabled(ingredient.quantity <= 0.25)
 
                 Text("×\(formattedQty)")
                     .font(.system(.caption, design: .monospaced).weight(.medium))
@@ -343,7 +360,7 @@ private struct IngredientRow: View {
                     .frame(minWidth: 44)
 
                 Button {
-                    adjust(by: 0.5)
+                    adjust(by: 0.25)
                 } label: {
                     Image(systemName: "plus")
                 }
@@ -359,6 +376,15 @@ private struct IngredientRow: View {
                 }
                 .tactile(.ghost)
                 .tint(.red)
+            }
+
+            HStack(spacing: 6) {
+                ForEach(Self.portions, id: \.value) { p in
+                    Button { setQuantity(p.value) } label: { Text(p.label) }
+                        .tactile(.pill, fill: ingredient.quantity == p.value ? theme.accent : nil)
+                        .accessibilityLabel("\(format(p.value)) servings")
+                }
+                Spacer(minLength: 0)
             }
         }
         .padding(14)

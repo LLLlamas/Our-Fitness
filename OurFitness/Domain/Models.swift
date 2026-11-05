@@ -506,7 +506,7 @@ public struct MealIngredient: Codable, Equatable, Sendable, Identifiable {
     public var foodId: String?
     public var name: String
     public var servingLabel: String
-    public var quantity: Double   // steps of 0.5; 1.0 = one canonical serving
+    public var quantity: Double   // steps of 0.25; 1.0 = one canonical serving
     public var perServing: PerServing  // nutrition at quantity == 1.0
 
     public var scaledPerServing: PerServing {
@@ -619,6 +619,21 @@ public struct FoodLogEntryDTO: Codable, Equatable, Sendable, Identifiable {
             addedSugarG: Int((Double(perServing.addedSugarG) * s).rounded()),
             saturatedFatG: Int((Double(perServing.saturatedFatG) * s).rounded())
         )
+    }
+}
+
+extension FoodLogEntryDTO {
+    /// The starting point for logging this entry again: its ingredients at the
+    /// quantities logged, with fresh ids so the repeat is a new log, not an edit.
+    /// An entry without ingredients (older/manual logs) becomes one ingredient
+    /// built from its own stored snapshot — never re-looked-up, so the repeat
+    /// matches what was actually logged.
+    public var repeatIngredients: [MealIngredient] {
+        if let ings = ingredients, !ings.isEmpty {
+            return ings.map { var i = $0; i.id = UUID(); return i }
+        }
+        return [MealIngredient(foodId: foodId, name: customName ?? "Meal", servingLabel: "as logged",
+                               quantity: servings, perServing: perServing)]
     }
 }
 

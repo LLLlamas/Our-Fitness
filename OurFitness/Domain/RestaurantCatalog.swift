@@ -138,13 +138,18 @@ public enum RestaurantMatcher {
         return nil
     }
 
-    /// Chains matching `query`, best first (score, then name). A query that
+    /// Chains matching `query`, best first (score, then chains common near NYC,
+    /// then name — `RegionalChains`). A query that
     /// STARTS with a chain ("shake shack fries") includes that chain first.
     public static func chains(matching query: String, in chains: [RestaurantChain], limit: Int = 3) -> [RestaurantChain] {
         let q = normalize(query)
         var ranked = chains
             .compactMap { c in score(c, normalized: q).map { (c, $0) } }
-            .sorted { ($0.1, $0.0.name) < ($1.1, $1.0.name) }
+            .sorted {
+                let ra = RegionalChains.isRare(slug: $0.0.slug) ? 1 : 0
+                let rb = RegionalChains.isRare(slug: $1.0.slug) ? 1 : 0
+                return ($0.1, ra, $0.0.name) < ($1.1, rb, $1.0.name)
+            }
             .map(\.0)
         if let lead = split(query, chains: chains)?.chain {
             ranked.removeAll { $0.slug == lead.slug }
@@ -209,8 +214,8 @@ public enum RestaurantMatcher {
             .map(\.item)
     }
 
-    /// Items grouped by category; categories in order of first appearance,
-    /// items in menu order.
+    /// Items grouped by category; categories in the chain's menu order (first
+    /// appearance), items A–Z within each so a long section is scannable.
     public static func sections(_ items: [RestaurantMenuItem]) -> [RestaurantMenuSection] {
         var order: [String] = []
         var byCategory: [String: [RestaurantMenuItem]] = [:]
@@ -218,7 +223,12 @@ public enum RestaurantMatcher {
             if byCategory[item.category] == nil { order.append(item.category) }
             byCategory[item.category, default: []].append(item)
         }
-        return order.map { RestaurantMenuSection(category: $0, items: byCategory[$0] ?? []) }
+        return order.map { category in
+            let sorted = (byCategory[category] ?? []).sorted {
+                $0.itemName.localizedCaseInsensitiveCompare($1.itemName) == .orderedAscending
+            }
+            return RestaurantMenuSection(category: category, items: sorted)
+        }
     }
 
     /// True when `q` is within one edit (insert/delete/substitute) of some

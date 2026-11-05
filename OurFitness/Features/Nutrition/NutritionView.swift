@@ -18,13 +18,16 @@ struct NutritionView: View {
     @State private var showAddFood = false
     @State private var showMealHistory = false
     @State private var entryToDetail: FoodLogEntryDTO?
+    /// "Log again" from a log row: reopens that entry's ingredients at the same
+    /// portions in the build-a-meal sheet, on the selected day.
+    @State private var entryToRepeat: FoodLogEntryDTO?
     @State private var showNutritionTrend = false
     @State private var showNutritionInsight = false
     @State private var showCameraLog = false
     @State private var showMoodSheet = false
     @State private var selectedDayKey: String = Dates.dayKey()
     /// An add tapped while a past day is selected waits here for confirmation.
-    private enum PendingAdd { case food, mood }
+    private enum PendingAdd: Equatable { case food, mood, again(FoodLogEntryDTO) }
     @State private var pendingAdd: PendingAdd?
     @Environment(\.scenePhase) private var scenePhase
     @State private var wasBackgrounded = false
@@ -259,6 +262,16 @@ struct NutritionView: View {
                 mode: .editing(entry: entry),
                 profile: profile,
                 onDone: { entryToDetail = nil }
+            )
+        }
+        // Same guarded write + toast as every other pick (the sheet owns both).
+        .sheet(item: $entryToRepeat) { entry in
+            MealIngredientDetailSheet(
+                mode: .logging(name: entry.customName ?? "Meal", emoji: "🍽️", defaultSlot: entry.slot,
+                               ingredients: entry.repeatIngredients),
+                profile: profile,
+                targetDate: selectedDayKey,
+                onDone: { entryToRepeat = nil }
             )
         }
         .sheet(isPresented: $showNutritionTrend) {
@@ -669,6 +682,7 @@ struct NutritionView: View {
         switch kind {
         case .food: showAddFood = true
         case .mood: showMoodSheet = true
+        case .again(let entry): entryToRepeat = entry
         }
     }
 
@@ -695,7 +709,10 @@ struct NutritionView: View {
                 emptyLogState
             } else {
                 ForEach(dayLogs) { e in
-                    LogRow(entry: e, onTap: { entryToDetail = e }) {
+                    LogRow(entry: e, onTap: { entryToDetail = e }, onRepeat: {
+                        Haptics.tap()
+                        requestAdd(.again(e))
+                    }) {
                         guard Repos.deleteFoodLog(ctx, id: e.id) else { return }
                         // ToastCenter fires the .warn accent's haptic already.
                         toasts.show(Toast(title: "Removed", detail: e.customName ?? "Meal", accent: .warn, symbol: "minus.circle.fill"))
@@ -740,6 +757,7 @@ struct NutritionView: View {
 private struct LogRow: View {
     let entry: FoodLogEntryDTO
     let onTap: () -> Void
+    let onRepeat: () -> Void
     let onDelete: () -> Void
     @Environment(\.theme) private var theme
 
@@ -755,12 +773,21 @@ private struct LogRow: View {
                         .foregroundStyle(theme.dim)
                 }
                 Spacer(minLength: 0)
+                Button(action: onRepeat) {
+                    Image(systemName: "arrow.counterclockwise")
+                }
+                .tactile(.ghost)
+                .accessibilityLabel("Log \(entry.customName ?? "meal") again")
                 Button(action: onDelete) {
                     Image(systemName: "xmark")
                 }
                 .tactile(.ghost)
                 .accessibilityLabel("Remove \(entry.customName ?? "meal")")
             }
+        }
+        .contextMenu {
+            Button(action: onRepeat) { Label("Log again", systemImage: "arrow.counterclockwise") }
+            Button(role: .destructive, action: onDelete) { Label("Remove", systemImage: "trash") }
         }
     }
 }

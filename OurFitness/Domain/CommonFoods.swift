@@ -677,7 +677,7 @@ public enum CommonFoods {
         CommonFood(
             id: "duck-breast", name: "Duck breast",
             // USDA FDC #171478
-            aliases: ["duck", "duck breast", "roast duck", "peking duck"],
+            aliases: ["duck", "duck breast", "roast duck"],
             servingLabel: "3 oz cooked (85 g)",
             calories: 172, proteinG: 20, carbsG: 0, fatG: 10, fiberG: 0
         ),
@@ -888,7 +888,7 @@ public enum CommonFoods {
     private static let eggsAndDairy: [CommonFood] = [
         CommonFood(
             id: "egg", name: "Egg",
-            aliases: ["egg", "eggs", "fried egg", "scrambled egg", "scrambled eggs", "boiled egg", "poached egg"],
+            aliases: ["egg", "eggs", "fried egg", "scrambled egg", "scrambled eggs", "poached egg"],
             servingLabel: "1 large (50 g)",
             calories: 72, proteinG: 6, carbsG: 0, fatG: 5, fiberG: 0
         ),
@@ -1056,7 +1056,7 @@ public enum CommonFoods {
         CommonFood(
             id: "kraft-american-single", name: "Kraft American single",
             // Kraft official
-            aliases: ["kraft american single", "american cheese slice", "kraft cheese single", "processed cheese slice"],
+            aliases: ["kraft american single", "kraft cheese single", "processed cheese slice"],
             servingLabel: "1 slice (21 g)",
             calories: 60, proteinG: 3, carbsG: 2, fatG: 4, fiberG: 0
         ),
@@ -1664,7 +1664,7 @@ public enum CommonFoods {
         ),
         CommonFood(
             id: "lentils", name: "Lentils",
-            aliases: ["lentils", "lentil soup", "red lentils"],
+            aliases: ["lentils", "red lentils"],
             servingLabel: "1 cup cooked (198 g)",
             calories: 230, proteinG: 18, carbsG: 40, fatG: 1, fiberG: 16
         ),
@@ -2482,7 +2482,7 @@ public enum CommonFoods {
         CommonFood(
             id: "broccoli-cheddar-soup", name: "Broccoli cheddar soup",
             // Panera Bread published nutrition (cup serving)
-            aliases: ["broccoli cheddar soup", "broccoli cheese soup", "panera broccoli soup", "broccoli soup"],
+            aliases: ["broccoli cheddar soup", "broccoli cheese soup", "broccoli soup"],
             servingLabel: "1 cup (247 g)",
             calories: 290, proteinG: 11, carbsG: 18, fatG: 20, fiberG: 3
         ),
@@ -2632,7 +2632,7 @@ public enum CommonFoods {
         ),
         CommonFood(
             id: "cereal", name: "Cereal",
-            aliases: ["cereal", "corn flakes", "cheerios"],
+            aliases: ["cereal"],
             servingLabel: "1 cup with milk (~280 g)",
             calories: 210, proteinG: 9, carbsG: 40, fatG: 3, fiberG: 2
         ),
@@ -2746,7 +2746,7 @@ public enum CommonFoods {
         CommonFood(
             id: "mac-and-cheese", name: "Mac and cheese",
             // USDA FDC #172898; Kraft Official (boxed prepared)
-            aliases: ["mac and cheese", "mac & cheese", "macaroni and cheese", "kraft mac and cheese", "kraft mac", "blue box mac"],
+            aliases: ["mac and cheese", "mac & cheese", "macaroni and cheese", "kraft mac", "blue box mac"],
             servingLabel: "1 cup prepared (200 g)",
             calories: 380, proteinG: 14, carbsG: 47, fatG: 15, fiberG: 2
         ),
@@ -3339,7 +3339,7 @@ public enum CommonFoods {
         ),
         CommonFood(
             id: "lechon-belly", name: "Lechon",
-            aliases: ["lechon", "lechon kawali", "crispy pork belly", "roast pork belly"],
+            aliases: ["lechon", "crispy pork belly", "roast pork belly"],
             servingLabel: "3 oz (85 g)",
             calories: 310, proteinG: 18, carbsG: 4, fatG: 25, fiberG: 0
         ),
@@ -4324,7 +4324,7 @@ public enum CommonFoods {
         ),
         CommonFood(
             id: "crackers", name: "Crackers",
-            aliases: ["crackers", "saltines", "cracker"],
+            aliases: ["crackers", "cracker"],
             servingLabel: "5 crackers (15 g)",
             calories: 65, proteinG: 1, carbsG: 11, fatG: 2, fiberG: 0
         ),
@@ -4366,7 +4366,7 @@ public enum CommonFoods {
         ),
         CommonFood(
             id: "protein-bar", name: "Protein bar",
-            aliases: ["protein bar", "energy bar", "cliff bar", "clif bar"],
+            aliases: ["protein bar", "energy bar"],
             servingLabel: "1 bar (60 g)",
             calories: 220, proteinG: 20, carbsG: 23, fatG: 7, fiberG: 3
         ),
@@ -6060,7 +6060,7 @@ public enum CommonFoods {
         CommonFood(
             id: "ff-panda-kung-pao-chicken", name: "Kung Pao Chicken (Panda Express)",
             // Panda Express official
-            aliases: ["kung pao chicken", "panda express kung pao", "panda kung pao chicken", "spicy kung pao chicken"],
+            aliases: ["panda express kung pao", "panda kung pao chicken", "spicy kung pao chicken"],
             servingLabel: "1 serving (5.7 oz / 162 g)",
             calories: 290, proteinG: 16, carbsG: 14, fatG: 19, fiberG: 2
         ),
@@ -7266,7 +7266,7 @@ public enum CommonFoods {
         ),
         CommonFood(
             id: "sutlac-rice-pudding", name: "Turkish rice pudding (sütlaç)",
-            aliases: ["sutlac", "sutlach", "turkish rice pudding", "firni", "muhallabia", "rice pudding middle eastern"],
+            aliases: ["sutlac", "sutlach", "turkish rice pudding", "muhallabia", "rice pudding middle eastern"],
             servingLabel: "1 cup (180 g)",
             calories: 230, proteinG: 6, carbsG: 40, fatG: 5, fiberG: 0
         ),

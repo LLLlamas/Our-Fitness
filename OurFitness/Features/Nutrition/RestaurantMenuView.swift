@@ -1,5 +1,5 @@
 // One restaurant's menu, pushed from AddFoodSheet's Restaurants row: the
-// chain's own categories (jump pills + sections, source order) and a search
+// chain's own categories (jump pills + sections in menu order, items A–Z) and a search
 // field that filters in memory on every keystroke (a few hundred rows — no SQL).
 // A tapped item goes back through `onPick`, which AddFoodSheet routes into the
 // same MealIngredientDetailSheet confirm/log flow as every other pick, so this

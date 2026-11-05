@@ -86,6 +86,17 @@ public final class SQLiteFoodDatabase: @unchecked Sendable {
         }
     }
 
+    /// Async search with a caller-built FTS5 expression (`FoodSearchQuery.ftsQuery`:
+    /// singular forms + spelling variants OR'd per word). Ranked by FTS relevance.
+    public func searchAsync(ftsQuery: String, limit: Int) async -> [FoodDatabaseEntry] {
+        guard !ftsQuery.isEmpty else { return [] }
+        return await withCheckedContinuation { continuation in
+            queue.async {
+                continuation.resume(returning: self.db == nil ? [] : self._query(ftsQuery: ftsQuery, limit: limit))
+            }
+        }
+    }
+
     // MARK: - Private (called on `queue`)
 
     private func _bestMatch(in chunk: String) -> FoodDatabaseEntry? {

@@ -1,6 +1,7 @@
 // Single "Add food" surface — replaces the separate "Log a meal" (free text) and
 // "Browse" (library) sheets. One field does both jobs:
-//   • empty  → quick picks (recipes · favorites · recently logged) + the full
+//   • empty  → quick picks (recipes · recently logged at last portion ·
+//              restaurants · favorites) + the full
 //              library, ordered favorites → most-logged (30 days) → rest
 //   • typed  → matching restaurants (RestaurantCatalog — tap = that chain's menu,
 //              RestaurantMenuView), then a "log what you described" card
@@ -81,9 +82,11 @@ struct AddFoodSheet: View {
     private var favoriteFoods: [CommonFood] {
         let ids = favoriteIds
         return CommonFoods.all.filter { ids.contains($0.id) }
+            .sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
     }
 
-    /// Last 6 distinct foods/meals logged, newest first.
+    /// Last 10 distinct foods/meals logged, newest first. Tapping one reopens it
+    /// at the portion logged last time, so a repeat is two taps.
     private func recentlyLogged(from allLogs: [FoodLogEntryDTO]) -> [FoodLogEntryDTO] {
         var seen = Set<String>()
         var result: [FoodLogEntryDTO] = []
@@ -91,7 +94,7 @@ struct AddFoodSheet: View {
             let key = log.foodId ?? log.customName ?? log.id.uuidString
             if seen.insert(key).inserted {
                 result.append(log)
-                if result.count >= 6 { break }
+                if result.count >= 10 { break }
             }
         }
         return result
@@ -99,20 +102,22 @@ struct AddFoodSheet: View {
 
     /// Default (empty-query) ordering for the full curated library:
     /// (a) favorites first, (b) then non-favorites the user actually logs
-    /// (last 30 days) by descending frequency, (c) then everything else in
-    /// `CommonFoods.all` order. Deterministic: frequency ties break by the
-    /// food's existing index, and favorites order by frequency then index.
+    /// (last 30 days) by descending frequency, (c) then everything else A–Z.
+    /// Deterministic: frequency ties break A–Z too.
     private func defaultOrdered(_ allLogs: [FoodLogEntryDTO]) -> [CommonFood] {
         let favs = favoriteIds
         let freq = FoodAffinity.frequencyByFoodId(allLogs, days: 30)
-        let ranked = CommonFoods.all.enumerated().map { idx, food -> (rank: (Int, Int, Int), food: CommonFood) in
+        let ranked = CommonFoods.all.map { food -> (rank: (Int, Int), food: CommonFood) in
             let f = freq[food.id] ?? 0
             // Bucket 0 = favorite, 1 = logged non-favorite, 2 = the rest.
             let bucket = favs.contains(food.id) ? 0 : (f > 0 ? 1 : 2)
-            // Within a bucket: higher frequency first (negate), then existing index.
-            return ((bucket, -f, idx), food)
+            // Within a bucket: higher frequency first (negate), then A–Z.
+            return ((bucket, -f), food)
         }
-        return ranked.sorted { $0.rank < $1.rank }.map(\.food)
+        return ranked.sorted {
+            if $0.rank != $1.rank { return $0.rank < $1.rank }
+            return $0.food.name.localizedCaseInsensitiveCompare($1.food.name) == .orderedAscending
+        }.map(\.food)
     }
 
     private func toggleFavorite(_ id: String) {
@@ -128,11 +133,42 @@ struct AddFoodSheet: View {
     }
 
     private func ingredients(for entry: FoodLogEntryDTO) -> [MealIngredient] {
-        if let ings = entry.ingredients, !ings.isEmpty { return ings }
-        if let fid = entry.foodId, let food = CommonFoods.all.first(where: { $0.id == fid }) {
-            return [MealIngredient.from(food)]
+        entry.repeatIngredients
+    }
+
+    /// "×1.5" for a single food logged at other than one serving; nil otherwise.
+    private func portionLabel(for entry: FoodLogEntryDTO) -> String? {
+        let ings = entry.repeatIngredients
+        guard ings.count == 1, let q = ings.first?.quantity, q != 1 else { return nil }
+        var s = String(format: "%.2f", q)
+        while s.hasSuffix("0") { s.removeLast() }
+        if s.hasSuffix(".") { s.removeLast() }
+        return "×" + s
+    }
+
+    /// Chains for the empty-query Restaurants row: ones the user has logged from
+    /// (most recent first), then every other restaurant A–Z with chains rare
+    /// near NYC last (`RegionalChains`). Brands appear only once used.
+    private func restaurantPicks(from allLogs: [FoodLogEntryDTO]) -> [RestaurantChain] {
+        guard restaurantsReady else { return [] }
+        let chains = RestaurantCatalog.shared.chains
+        var usedSlugs: [String] = []
+        for log in allLogs.reversed() {
+            let ids = [log.foodId] + (log.ingredients ?? []).map(\.foodId)
+            for case let id? in ids where id.hasPrefix("rest:") {
+                let slug = String(id.dropFirst(5).prefix { $0 != ":" })
+                if !usedSlugs.contains(slug) { usedSlugs.append(slug) }
+            }
         }
-        return []
+        let used = usedSlugs.compactMap { slug in chains.first { $0.slug == slug } }
+        let rest = chains
+            .filter { !$0.isBrand && !usedSlugs.contains($0.slug) }
+            .sorted {
+                let ra = RegionalChains.isRare(slug: $0.slug), rb = RegionalChains.isRare(slug: $1.slug)
+                if ra != rb { return !ra }
+                return $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
+            }
+        return used + rest
     }
 
     var body: some View {
@@ -375,7 +411,27 @@ struct AddFoodSheet: View {
                     Button {
                         mealToLog = QuickMealLog(name: entry.customName ?? "Meal", emoji: "🍽️", ingredients: ingredients(for: entry))
                     } label: {
-                        Text(entry.customName ?? "Meal")
+                        HStack(spacing: 4) {
+                            Text(entry.customName ?? "Meal")
+                            if let portion = portionLabel(for: entry) {
+                                Text(portion).opacity(0.7)
+                            }
+                        }
+                    }
+                    .tactile(.pill)
+                }
+            }
+        }
+        let restaurants = restaurantPicks(from: allLogs)
+        if !restaurants.isEmpty {
+            pillSection(header: "restaurants") {
+                ForEach(restaurants) { chain in
+                    Button {
+                        Haptics.tap()
+                        searchFocused = false
+                        restaurantRoute = RestaurantRoute(chain: chain, query: "")
+                    } label: {
+                        Text(chain.name)
                     }
                     .tactile(.pill)
                 }

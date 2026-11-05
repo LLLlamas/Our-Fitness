@@ -630,6 +630,14 @@ private struct ConfirmationView: View {
         _draft = State(initialValue: EditableDraft(from: label))
     }
 
+    /// Up to 2 decimals, trailing zeros dropped (1.5 → "1.5", 0.25 → "0.25").
+    private static func fmtQty(_ q: Double) -> String {
+        var s = String(format: "%.2f", q)
+        while s.hasSuffix("0") { s.removeLast() }
+        if s.hasSuffix(".") { s.removeLast() }
+        return s
+    }
+
     private var scaledKcal: Int { Int((Double(draft.caloriesInt) * qty).rounded()) }
 
     var body: some View {
@@ -690,18 +698,18 @@ private struct ConfirmationView: View {
         VStack(alignment: .leading, spacing: 12) {
             sectionLabel("Servings")
             HStack(spacing: 16) {
-                Button { if qty > 0.5 { qty -= 0.5 } } label: {
+                Button { if qty > 0.25 { qty = ((qty - 0.25) * 4).rounded() / 4 } } label: {
                     Image(systemName: "minus").frame(width: 36, height: 36)
                 }
-                .tactile(.secondary).disabled(qty <= 0.5)
+                .tactile(.secondary).disabled(qty <= 0.25)
 
                 Text(qty.truncatingRemainder(dividingBy: 1) == 0
-                     ? "\(Int(qty))" : String(format: "%.1f", qty))
+                     ? "\(Int(qty))" : Self.fmtQty(qty))
                     .font(.system(size: 22, weight: .semibold, design: .rounded))
                     .foregroundStyle(theme.text)
                     .frame(minWidth: 48).multilineTextAlignment(.center)
 
-                Button { if qty < 10.0 { qty += 0.5 } } label: {
+                Button { if qty < 10.0 { qty = ((qty + 0.25) * 4).rounded() / 4 } } label: {
                     Image(systemName: "plus").frame(width: 36, height: 36)
                 }
                 .tactile(.secondary).disabled(qty >= 10.0)

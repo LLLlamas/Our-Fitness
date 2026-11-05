@@ -132,10 +132,26 @@ final class RestaurantCatalogTests: XCTestCase {
         XCTAssertEqual(RestaurantMatcher.filter(menu, query: "pizza"), [])
     }
 
-    func testSectionsKeepSourceOrder() {
+    func testSectionsKeepCategoryOrderAndSortItemsAToZ() {
         let sections = RestaurantMatcher.sections(menu.reversed())
         XCTAssertEqual(sections.map(\.category), ["Burgers", "Fries", "Shakes"])
         XCTAssertEqual(sections[1].items.map(\.itemName), ["Cheese Fries", "Fries"])
+        let names = sections.flatMap { $0.items.map(\.itemName) }
+        for section in sections {
+            let n = section.items.map(\.itemName)
+            XCTAssertEqual(n, n.sorted { $0.localizedCaseInsensitiveCompare($1) == .orderedAscending })
+        }
+        XCTAssertEqual(Set(names).count, menu.count)
+    }
+
+    func testChainsRareNearNYCSortAfterCommonOnesAtSameScore() {
+        let innout = RestaurantChain(slug: "in-n-out", name: "In-N-Out Burger",
+                                     aliases: ["in n out"], kind: "fast-food", itemCount: 1)
+        let inn = RestaurantChain(slug: "inn-diner", name: "Inn Diner", aliases: ["inn diner"],
+                                  kind: "casual-dining", itemCount: 1)
+        // Both prefix-match "inn" (score 1); by name alone "In-N-Out" sorts first.
+        let ranked = RestaurantMatcher.chains(matching: "inn", in: [innout, inn], limit: 3)
+        XCTAssertEqual(ranked.map(\.slug), ["inn-diner", "in-n-out"])
     }
 
     func testMenuMatchesNeedARemainder() {
