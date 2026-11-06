@@ -148,6 +148,8 @@ struct StepsCard: View {
     @ViewBuilder
     private var ringRow: some View {
         HStack(spacing: 18) {
+            // The whole ring opens the goal picker, not just the "/ goal" label.
+            Button(action: openGoalPicker) {
             ZStack {
                 ProgressRing(pct: hasData ? pct : 0,
                              color: ok ? theme.ok : theme.accent,
@@ -164,10 +166,17 @@ struct StepsCard: View {
                             .font(.system(size: 28, weight: .semibold))
                             .foregroundStyle(theme.dim)
                     }
-                    goalButton(label: "/ \(goal.formatted())")
+                    Text("/ \(goal.formatted())")
+                        .font(.system(.caption2, design: .monospaced))
+                        .foregroundStyle(theme.dim)
+                        .underline(color: theme.dim.opacity(0.5))
                 }
             }
             .frame(width: 110, height: 110)
+            .contentShape(Circle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Edit daily steps goal")
 
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 4) {
@@ -282,19 +291,11 @@ struct StepsCard: View {
         .accessibilityLabel("Steps health info")
     }
 
-    private func goalButton(label: String) -> some View {
-        Button {
-            pickerGoal = goal
-            pickerDays = weeklyDaysGoal
-            showGoalPicker = true
-        } label: {
-            Text(label)
-                .font(.system(.caption2, design: .monospaced))
-                .foregroundStyle(theme.dim)
-                .underline(color: theme.dim.opacity(0.5))
-        }
-        .tactile(.ghost)
-        .accessibilityLabel("Edit daily steps goal")
+    private func openGoalPicker() {
+        Haptics.tap()
+        pickerGoal = goal
+        pickerDays = weeklyDaysGoal
+        showGoalPicker = true
     }
 
     // MARK: - Milestones

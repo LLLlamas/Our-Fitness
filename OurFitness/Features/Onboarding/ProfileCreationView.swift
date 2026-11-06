@@ -15,7 +15,6 @@ struct ProfileCreationView: View {
 
     @State private var step: Step = .vitals
     @State private var name: String = ""
-    @State private var fitnessGoal: FitnessGoal = .gain
     @State private var sex: Sex = .male
     @State private var heightIn: Double = 67
     @State private var weightLb: Double = 150
@@ -88,26 +87,8 @@ struct ProfileCreationView: View {
                 .foregroundStyle(theme.text)
         }
 
-        // The goal only sets the numbers (targets, default step goal); every
-        // tab and card is the same whichever is picked.
-        Text("What's your goal?").font(.caption).tracking(2).foregroundStyle(theme.dim)
-        ForEach(FitnessGoal.allCases, id: \.self) { g in
-            PressableCard(action: { fitnessGoal = g }) {
-                HStack(alignment: .top, spacing: 10) {
-                    Image(systemName: fitnessGoal == g ? "largecircle.fill.circle" : "circle")
-                        .foregroundStyle(theme.accent)
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(g.displayName)
-                            .font(.system(size: 17, weight: .semibold))
-                            .foregroundStyle(theme.text)
-                        Text(g.blurb)
-                            .font(.callout).foregroundStyle(theme.dim)
-                    }
-                    Spacer(minLength: 0)
-                }
-            }
-        }
-
+        // No goal question: every profile starts on the maintenance suggestion;
+        // Settings → Daily targets offers lose / gain or custom numbers.
         Text("Sex").font(.caption).tracking(2).foregroundStyle(theme.dim).padding(.top, 4)
         HStack(spacing: 8) {
             ForEach(Sex.allCases, id: \.self) { s in
@@ -179,7 +160,7 @@ struct ProfileCreationView: View {
         guard let dto = Repos.createProfile(
             ctx,
             name: name.trimmingCharacters(in: .whitespaces),
-            fitnessGoal: fitnessGoal, sex: sex,
+            sex: sex,
             heightIn: heightIn, weightLb: weightLb, age: age,
             activity: activity
         ) else { return }

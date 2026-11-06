@@ -12,34 +12,64 @@ final class RepositoryWriteTests: XCTestCase {
         ])
     }
 
-    func testEveryGoalSeedsStarterMovementsAndGoalSwitchPreservesThem() throws {
-        for goal in FitnessGoal.allCases {
+    func testEveryPlanSeedsStarterMovementsAndTargetChangesPreserveThem() throws {
+        for plan in TargetPlan.suggestions {
             let container = try profileContainer()
             let ctx = container.mainContext
-            let profile = try XCTUnwrap(Repos.createProfile(ctx, name: "Fixture", fitnessGoal: goal,
+            let profile = try XCTUnwrap(Repos.createProfile(ctx, name: "Fixture", plan: plan,
                 sex: .female, heightIn: 65, weightLb: 150, age: 30, activity: .moderate))
             XCTAssertEqual(Set(Repos.exercises(ctx, forProfile: profile.id).map(\.name)),
-                           ["Lifted Baby", "Lifted Stroller", "Carried Baby"], "\(goal)")
-            let other: FitnessGoal = goal == .gain ? .lose : .gain
-            XCTAssertNotNil(Repos.updateGoal(ctx, profileId: profile.id, to: other))
-            XCTAssertNotNil(Repos.updateGoal(ctx, profileId: profile.id, to: goal))
+                           ["Lifted Baby", "Lifted Stroller", "Carried Baby"], "\(plan)")
+            let other: TargetPlan = plan == .lose ? .gain : .lose
+            XCTAssertNotNil(Repos.updateTargets(ctx, profileId: profile.id, plan: other))
+            XCTAssertNotNil(Repos.updateTargets(ctx, profileId: profile.id, plan: plan))
             XCTAssertEqual(Repos.exercises(ctx, forProfile: profile.id).count, 3)
         }
     }
 
-    func testGoalSwitchNeverSeeds() throws {
+    func testNewProfileStartsOnMaintenance() throws {
         let container = try profileContainer()
         let ctx = container.mainContext
-        let profile = try XCTUnwrap(Repos.createProfile(ctx, name: "Fixture", fitnessGoal: .gain,
+        let profile = try XCTUnwrap(Repos.createProfile(ctx, name: "Fixture",
+            sex: .male, heightIn: 70, weightLb: 180, age: 35, activity: .light))
+        XCTAssertEqual(profile.computedTargets, Targets.compute(plan: .maintain, vitals: profile.vitals))
+        XCTAssertEqual(profile.computedTargets.calories, Targets.tdee(profile.vitals))
+        XCTAssertEqual(profile.fitnessGoal, .gain)
+    }
+
+    func testTargetChangeNeverSeedsAndRepointsTiltGoal() throws {
+        let container = try profileContainer()
+        let ctx = container.mainContext
+        let profile = try XCTUnwrap(Repos.createProfile(ctx, name: "Fixture",
             sex: .male, heightIn: 70, weightLb: 180, age: 35, activity: .light))
         for ex in Repos.exercises(ctx, forProfile: profile.id) {
             XCTAssertTrue(Repos.deleteExercise(ctx, id: ex.id))
         }
-        let switched = try XCTUnwrap(Repos.updateGoal(ctx, profileId: profile.id, to: .lose))
+        let switched = try XCTUnwrap(Repos.updateTargets(ctx, profileId: profile.id, plan: .lose))
         XCTAssertEqual(switched.fitnessGoal, .lose)
-        XCTAssertEqual(switched.computedTargets,
-                       Targets.compute(fitnessGoal: .lose, vitals: profile.vitals))
+        XCTAssertEqual(switched.computedTargets, Targets.compute(plan: .lose, vitals: profile.vitals))
         XCTAssertTrue(Repos.exercises(ctx, forProfile: profile.id).isEmpty)
+    }
+
+    func testCustomTargetsSurviveWeightChangeButSuggestionsFollowIt() throws {
+        let container = try profileContainer()
+        let ctx = container.mainContext
+        let profile = try XCTUnwrap(Repos.createProfile(ctx, name: "Fixture",
+            sex: .female, heightIn: 65, weightLb: 150, age: 30, activity: .moderate))
+        let mine = Targets.custom(calories: 1_900, proteinG: 120, fatG: 60, stepsDaily: 9_000)
+        let saved = try XCTUnwrap(Repos.updateTargets(ctx, profileId: profile.id, plan: .custom, custom: mine))
+        XCTAssertEqual(saved.computedTargets, mine)
+        // 1,900 is below this profile's maintenance, so the hidden tilt is weight loss.
+        XCTAssertLessThan(1_900, Targets.tdee(profile.vitals))
+        XCTAssertEqual(saved.fitnessGoal, .lose)
+
+        let heavier = try XCTUnwrap(Repos.updateVitals(ctx, profileId: profile.id, weightLb: 160))
+        XCTAssertEqual(heavier.computedTargets, mine)
+
+        let suggested = try XCTUnwrap(Repos.updateTargets(ctx, profileId: profile.id, plan: .maintain))
+        let lighter = try XCTUnwrap(Repos.updateVitals(ctx, profileId: profile.id, weightLb: 140))
+        XCTAssertNotEqual(lighter.computedTargets.calories, suggested.computedTargets.calories)
+        XCTAssertEqual(lighter.computedTargets, Targets.compute(plan: .maintain, vitals: lighter.vitals))
     }
 
     func testHeartHealthBackfillRecomputesOnlyStaleTargetsAndIsIdempotent() throws {
@@ -52,7 +82,7 @@ final class RepositoryWriteTests: XCTestCase {
         legacy.saturatedFatGMax = nil; legacy.fiberGMin = nil
         let stale = ProfileDTO(name: "Old", fitnessGoal: .gain, sex: .male, heightIn: 70,
                                weightLb: 180, age: 35, activity: .moderate, computedTargets: legacy)
-        let current = try XCTUnwrap(Repos.createProfile(ctx, name: "New", fitnessGoal: .lose,
+        let current = try XCTUnwrap(Repos.createProfile(ctx, name: "New", plan: .lose,
             sex: .female, heightIn: 65, weightLb: 150, age: 30, activity: .moderate))
         ctx.insert(ProfileModel(snapshot: stale))
         try ctx.save()

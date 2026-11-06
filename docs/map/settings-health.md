@@ -1,6 +1,6 @@
 # Map: Settings, Profile, HealthKit, Schema
 
-Vitals, goal switching, onboarding goal pick, tab layout, units, HealthKit services and absent-data policy, schema migration.
+Vitals, daily targets, onboarding, tab layout, units, HealthKit services and absent-data policy, schema migration.
 
 > Rows describe current code. **Update the matching row in the same commit as the code it describes** — a stale row is worse than none. Index of all maps: [../../CLAUDE.md](../../CLAUDE.md) → "Find it fast".
 
@@ -8,7 +8,7 @@ Vitals, goal switching, onboarding goal pick, tab layout, units, HealthKit servi
 
 The goal table is in [CLAUDE.md](../../CLAUDE.md). This is the rest of the goal section, moved verbatim.
 
-Every new profile gets three starter movements (`Repos.createProfile` → `seedStarterMovements`): Lifted Baby (30 lb), Lifted Stroller (25 lb), Carried Baby (30 lb, duration). Changing goal (`Repos.updateGoal`) never seeds; existing profiles aren't backfilled. Their weights are editable (ⓘ sheet → `Repos.updateExercise`) and every logged row carries the load it was done at in `weightLb` — see "Edit a fixed load" in [workouts.md](workouts.md). `Seeder.seedAll` also runs `Repos.backfillFixedLoadWeightsOnce` (once, UserDefaults flag `backfill.fixedLoadWeights.v1`) next to `backfillHeartHealthTargets`. Isometric exercises: `isIsometric: true` on `ExerciseDTO`; hold saves `WorkoutSetModel{reps:1, holdSeconds:N}`; calorie: `CalorieEstimator.caloriesForIsometric`.
+Every new profile gets three starter movements (`Repos.createProfile` → `seedStarterMovements`): Lifted Baby (30 lb), Lifted Stroller (25 lb), Carried Baby (30 lb, duration). Changing targets (`Repos.updateTargets`) never seeds; existing profiles aren't backfilled. Their weights are editable (ⓘ sheet → `Repos.updateExercise`) and every logged row carries the load it was done at in `weightLb` — see "Edit a fixed load" in [workouts.md](workouts.md). `Seeder.seedAll` also runs `Repos.backfillFixedLoadWeightsOnce` (once, UserDefaults flag `backfill.fixedLoadWeights.v1`) next to `backfillHeartHealthTargets`. Isometric exercises: `isIsometric: true` on `ExerciseDTO`; hold saves `WorkoutSetModel{reps:1, holdSeconds:N}`; calorie: `CalorieEstimator.caloriesForIsometric`.
 
 ---
 
@@ -16,8 +16,8 @@ Every new profile gets three starter movements (`Repos.createProfile` → `seedS
 |---|---|
 | **Settings / Profile** | |
 | Edit vitals | `Repos.updateVitals` + `Features/Settings/SettingsView.swift` → `EditVitalsSheet` |
-| Switch goal | `Repos.updateGoal` (recomputes targets from current vitals via `Repos.recomputeTargets`; never seeds; logs untouched) + `Features/Settings/SettingsView.swift` → `GoalSwitchSheet` (previews old → new targets from `Targets.compute`) |
-| Pick goal at onboarding | `Features/Onboarding/ProfileCreationView.swift` → "What's your goal?" (`FitnessGoal.allCases`, copy from `displayName` / `blurb`) → `Repos.createProfile(fitnessGoal:)` |
+| Daily targets | `Features/Settings/SettingsView.swift` → "Daily targets" row → `TargetsSheet`: shows maintenance (TDEE), three suggestion cards (`TargetPlan.suggestions`, numbers from `Targets.compute(plan:)`), editable calories / protein / fat (any edit → `.custom`; carbs = `Targets.carbsFilling`). Save → `Repos.updateTargets(plan:custom:)` (writes targets + re-points hidden `modeRaw` tilt goal; never seeds; logs untouched). Saving a suggested plan also clears the Steps ring override (`StepsGoalPrefs.dailyKey` → 0) so the plan's step default shows; custom leaves it. Vitals changes recompute via `Targets.recompute` (custom kept, suggestions follow) |
+| Onboarding | `Features/Onboarding/ProfileCreationView.swift` — no goal question; `Repos.createProfile` defaults to `plan: .maintain` |
 | App tab layout | `App/RootView.swift` — same for every goal: Today / Meals / Train / Progress. `WorkoutsView` is the same for everyone (live sessions · `ExercisesCard` · optional Pilates / Yoga / Stretching sections · suggestions). Today is a **read-only status board**: move (steps on top) · macro rings · today-vs-yesterday insights (`Domain/DayInsights.swift` → `Features/Today/DayInsightsCard.swift`; ≤3 rules-based observations with a next step, no claim off a day with no data; tests `DayInsightsTests`) · water, and a log list with no tap target. One surface per job — logging food happens on Meals, nowhere else |
 | Profile avatar | `Components/ProfileAvatar.swift` |
 | Units (metric ↔ imperial) | `Domain/Units.swift` — canonical storage IMPERIAL; convert only at UI boundary |

@@ -1,6 +1,7 @@
 // Turns a profile (+ optional latest health markers) into personalized,
 // plain-language explanations of WHY each nutrition / movement target is what
-// it is — anchored to the user's OWN numbers and their fitness goal.
+// it is — anchored to the user's OWN numbers and how far their calorie target
+// sits from maintenance.
 //
 //   .gain = slowly add muscle & mass        (calorie surplus, high protein)
 //   .lose = lose weight via a modest deficit, steps, and cardio.
@@ -48,6 +49,8 @@ public enum TargetRationale {
         public let delta: Int
         public let activityLabel: String
         public var isSurplus: Bool { delta > 0 }
+        /// Within ±50 of maintenance counts as maintaining.
+        public var isMaintenance: Bool { abs(delta) <= 50 }
     }
 
     public static func calories(for p: ProfileDTO) -> CalorieBreakdown {
@@ -61,18 +64,20 @@ public enum TargetRationale {
         )
     }
 
-    /// Plain-language "why your calorie target is what it is", tied to the goal.
-    /// Sources: Mifflin-St Jeor (Frankenfield, J Am Diet Assoc 2005);
-    /// gain/loss rates (Garthe, IJSNEM 2013; Helms, JISSN 2014).
+    /// Plain-language "why your calorie target is what it is", tied to how far
+    /// the target sits from maintenance (works for suggested and custom targets).
+    /// Sources: Mifflin-St Jeor (Frankenfield, J Am Diet Assoc 2005); surplus
+    /// size (Iraki, Sports 2019); deficit pace (500–750/day ≈ 1–2 lb/week).
     public static func calorieWhy(for p: ProfileDTO) -> String {
         let c = calories(for: p)
         let mag = abs(c.delta)
-        switch p.fitnessGoal {
-        case .gain:
-            return "You burn about \(c.tdee) calories a day. Your goal adds roughly \(mag) on top to build muscle."
-        case .lose:
-            return "You burn about \(c.tdee) calories a day. Your goal is roughly \(mag) below that to lose fat."
+        if c.isMaintenance {
+            return "You burn about \(c.tdee) calories a day. Your target matches that to hold your weight steady."
         }
+        if c.isSurplus {
+            return "You burn about \(c.tdee) calories a day. Your target adds roughly \(mag) on top to build muscle."
+        }
+        return "You burn about \(c.tdee) calories a day. Your target is roughly \(mag) below that to lose fat."
     }
 
     // MARK: - Protein
@@ -87,10 +92,14 @@ public enum TargetRationale {
     public static func proteinWhy(for p: ProfileDTO) -> String {
         let g = p.computedTargets.proteinG
         let perLb = proteinPerLb(for: p)
+        let c = calories(for: p)
         let role: String
-        switch p.fitnessGoal {
-        case .gain:   role = "gives your body the material to build new muscle"
-        case .lose: role = "protects your muscle while you lose fat"
+        if c.isMaintenance {
+            role = "keeps the muscle you have"
+        } else if c.isSurplus {
+            role = "gives your body the material to build new muscle"
+        } else {
+            role = "protects your muscle while you lose fat"
         }
         return String(
             format: "Your %dg protein target is about %.1fg per pound — enough that it %@.",

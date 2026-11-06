@@ -1,19 +1,21 @@
 # Our-Fitness — Foundation (iOS / SwiftUI)
 
-Native iOS app targeting App Store release, one profile per install. One app for everyone: the profile's **fitness goal** (`FitnessGoal.gain` "Build muscle" / `.lose` "Lose weight") only changes target numbers and soft tilts — never show, hide or restyle a surface by goal. Persisted raw values are pinned to the retired mode names (`.gain` = `"build"`, `.lose` = `"reset"`, column `ProfileModel.modeRaw`, watch wire field `mode`): bump a schema version before changing any of them ([docs/data-model.md](docs/data-model.md)). `_stashed/` = excluded from the build target.
+Native iOS app targeting App Store release, one profile per install. One app for everyone: there is **no goal picker**. The user sets **daily targets** in Settings (a suggested plan — `TargetPlan` maintain / lose / gain — or custom numbers). The profile's hidden **fitness goal** (`FitnessGoal.gain` / `.lose`) is derived from those targets and only drives soft tilts — never show, hide or restyle a surface by goal or plan. Persisted raw values are pinned to the retired mode names (`.gain` = `"build"`, `.lose` = `"reset"`, column `ProfileModel.modeRaw`, watch wire field `mode`): bump a schema version before changing any of them ([docs/data-model.md](docs/data-model.md)). `_stashed/` = excluded from the build target.
 
 **Doc index with status of every doc: [docs/README.md](docs/README.md).** Read only the `docs/map/` file for the area you are touching, not all of them.
 
-## Goals
+## Targets
 
-`Domain/Targets.swift` → `Targets.rules` (`GoalRules`) is the only per-goal number set:
+`Domain/Targets.swift` → `Targets.rules` (`PlanRules`) is the only per-plan number set (sources inline in that file):
 
-| | `.gain` (Build muscle) | `.lose` (Lose weight) |
-|---|---|---|
-| Calories | TDEE + 500 | TDEE − 400 (floor 1,200 either way) |
-| Protein g/lb | 1.0 | 1.1 |
-| Fat % of calories | 27% | 28% |
-| Default steps/day | 8,000 | 10,000 |
+| | `.maintain` | `.lose` | `.gain` |
+|---|---|---|---|
+| Calories | TDEE | TDEE − 500 | TDEE × 1.10 (floor 1,200 for all, custom too) |
+| Protein g/kg body weight | 1.6 | 2.0 | 1.8 |
+| Fat % of calories | 30% | 30% | 30% |
+| Default steps/day (under 60 / 60+) | 8,000 / 6,000 | 10,000 / 8,000 | 8,000 / 6,000 |
+
+New profiles start on `.maintain`. `.custom` keeps the user's calories/protein/fat through weight changes (carbs fill the rest); suggested plans recompute on every vitals change (`Targets.recompute`). Hidden tilt goal: `.lose` plan or custom calories below TDEE → `.lose`, otherwise `.gain` (`Targets.fitnessGoal(for:tdee:)`). Targets stored before plans existed (`MacroTargets.plan == nil`) recompute under `fitnessGoal.defaultPlan`.
 
 Everything else about goals (nudge thresholds, soft tilts, heart-health micros, starter movements): [docs/map/settings-health.md](docs/map/settings-health.md) → "Goal rules in detail".
 
@@ -91,7 +93,7 @@ Each `docs/map/` file is a table of "goal → file(s) and the rules that bind th
 | Today tab | [docs/map/today-steps.md](docs/map/today-steps.md) | Move card, Steps card, water, burn estimate, encouragement, nudges, meal push reminders |
 | Watch | [docs/map/watch.md](docs/map/watch.md) | Watch app, sync wire format, on-wrist workouts. (Reminders/plants/medication were removed: [docs/removed-reminders.md](docs/removed-reminders.md)) |
 | Progress tab | [docs/map/progress.md](docs/map/progress.md) | Trackers, stat detail sheet, weekly reps, strength card, tape measurements, weeks, energy balance, history |
-| Settings, HealthKit, schema | [docs/map/settings-health.md](docs/map/settings-health.md) | Vitals, goal switch, onboarding, tab layout, units, HealthKit services, schema migration, goal rules in detail |
+| Settings, HealthKit, schema | [docs/map/settings-health.md](docs/map/settings-health.md) | Vitals, daily targets, onboarding, tab layout, units, HealthKit services, schema migration, goal rules in detail |
 | Shared UI | [docs/map/ui-components.md](docs/map/ui-components.md) | Buttons, rings, info sheets, goal picker, haptics, toasts, freshness |
 | Calorie math | [docs/calorie-math.md](docs/calorie-math.md) | Net-MET formula, per-activity multipliers, step-overlap rule |
 | Data model | [docs/data-model.md](docs/data-model.md) | Entities, append-only logs, legacy `CardioSessionDTO`, pinned raw values |

@@ -32,9 +32,52 @@ public enum FitnessGoal: String, Codable, CaseIterable, Sendable {
         }
     }
 
-    /// The other goal. With only two goals this is the single switch target.
-    public var toggled: FitnessGoal {
-        self == .gain ? .lose : .gain
+    /// The suggested plan a legacy profile (targets stored before `MacroTargets.plan`
+    /// existed) keeps recomputing under.
+    public var defaultPlan: TargetPlan {
+        self == .gain ? .gain : .lose
+    }
+}
+
+/// Where a profile's daily targets come from. The user picks one in Settings
+/// ("Daily targets"); there is no goal picker any more. `maintain` / `lose` /
+/// `gain` are suggestions recomputed from vitals (`Targets.compute(plan:)`), so
+/// they follow weight changes; `custom` keeps the user's own calories and macros.
+/// Raw values are persisted inside `ProfileModel.targetsJSON` — never rename them.
+public enum TargetPlan: String, Codable, CaseIterable, Sendable {
+    case maintain, lose, gain, custom
+
+    /// The three plans Settings offers as one-tap suggestions.
+    public static let suggestions: [TargetPlan] = [.maintain, .lose, .gain]
+
+    public var displayName: String {
+        switch self {
+        case .maintain: return "Maintain weight"
+        case .lose:     return "Lose weight"
+        case .gain:     return "Build muscle"
+        case .custom:   return "Your own targets"
+        }
+    }
+
+    public var blurb: String {
+        switch self {
+        case .maintain: return "Eat what you burn. Steady weight, enough protein to keep muscle."
+        case .lose:     return "About 500 below what you burn — roughly 1 lb a week."
+        case .gain:     return "About 10% above what you burn, with extra protein for lifting."
+        case .custom:   return "Numbers you set yourself. They stay put when your weight changes."
+        }
+    }
+
+    /// The soft ranking tilt (meal ideas, encouragement, exercise picks) this plan
+    /// implies. Maintaining counts as `.gain` — the muscle-keeping side — so only a
+    /// deficit tilts toward weight loss. `.custom` is decided by calories in
+    /// `Targets.fitnessGoal(for:tdee:)`.
+    public var fitnessGoal: FitnessGoal? {
+        switch self {
+        case .maintain, .gain: return .gain
+        case .lose:            return .lose
+        case .custom:          return nil
+        }
     }
 }
 
@@ -138,11 +181,14 @@ public struct MacroTargets: Codable, Equatable, Sendable {
     public var addedSugarGMax: Int?
     public var saturatedFatGMax: Int?
     public var fiberGMin: Int?
+    /// Which plan produced these numbers. nil = stored before plans existed; such
+    /// a profile recomputes under `fitnessGoal.defaultPlan`.
+    public var plan: TargetPlan?
 
     public init(
         calories: Int, proteinG: Int, carbsG: Int, fatG: Int, stepsDaily: Int,
         sodiumMgMax: Int? = nil, addedSugarGMax: Int? = nil,
-        saturatedFatGMax: Int? = nil, fiberGMin: Int? = nil
+        saturatedFatGMax: Int? = nil, fiberGMin: Int? = nil, plan: TargetPlan? = nil
     ) {
         self.calories = calories
         self.proteinG = proteinG
@@ -153,6 +199,7 @@ public struct MacroTargets: Codable, Equatable, Sendable {
         self.addedSugarGMax = addedSugarGMax
         self.saturatedFatGMax = saturatedFatGMax
         self.fiberGMin = fiberGMin
+        self.plan = plan
     }
 }
 

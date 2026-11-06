@@ -5,6 +5,8 @@
 ## Persisted raw values (pinned to the retired mode names)
 
 > Persisted raw values are pinned to the retired mode names: `.gain` = `"build"`, `.lose` = `"reset"`, stored in the legacy column `ProfileModel.modeRaw` (Swift property `ProfileDTO.fitnessGoal`); the watch wire field is still `mode`, and `ExerciseDTO.availableForMode` keeps its name. Bump a schema version before changing any of them. `_stashed/` = excluded from build target.
+>
+> `TargetPlan` raw values (`maintain` / `lose` / `gain` / `custom`) are persisted as `MacroTargets.plan` inside `ProfileModel.targetsJSON`. The field is optional (nil = stored before plans existed), so adding it needed no schema bump; renaming a raw value would.
 
 Append-only logs. Derived figures never stored. DTOs in `Domain/Models.swift`; `@Model` classes in `Data/PersistenceModels.swift` with `snapshot` adapters; CRUD in `Data/Repositories/Repositories.swift`. Writes return success (Bool or optional DTO); callers must check before showing success or dismissing. `RepositoryWrite` saves explicitly, rolls back failures and re-fetches affected models to restore retained UI values, and posts success/failure notifications. Profile creation, starter-movement seeding and the two built-in reminder groups share one commit boundary (`Repos.createProfile`).
 

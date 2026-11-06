@@ -11,7 +11,7 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var toasts: ToastCenter
 
-    @State private var showGoalSwitch = false
+    @State private var showTargets = false
     @State private var showEditVitals = false
 
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
@@ -57,8 +57,8 @@ struct SettingsView: View {
                         }
                     }
 
-                    section("Goal") {
-                        goalRow
+                    section("Daily targets") {
+                        targetsRow
                     }
 
                     section("Profile") {
@@ -89,8 +89,8 @@ struct SettingsView: View {
                 }
             }
         }
-        .sheet(isPresented: $showGoalSwitch) {
-            GoalSwitchSheet(profile: profile, onConfirm: switchGoal)
+        .sheet(isPresented: $showTargets) {
+            TargetsSheet(profile: profile, onSave: saveTargets)
         }
         .sheet(isPresented: $showEditVitals) {
             EditVitalsSheet(profile: profile, unitSystem: unitSystem, onSave: saveVitals)
@@ -98,18 +98,19 @@ struct SettingsView: View {
     }
 
     @ViewBuilder
-    private var goalRow: some View {
-        PressableCard(action: { showGoalSwitch = true }) {
+    private var targetsRow: some View {
+        let t = profile.computedTargets
+        PressableCard(action: { showTargets = true }) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(profile.fitnessGoal.displayName)
+                    Text("\(t.calories.formatted()) cal · \(t.proteinG)g protein")
                         .font(.system(size: 15, weight: .medium))
                         .foregroundStyle(theme.text)
-                    Text("Tap to switch to \(profile.fitnessGoal.toggled.displayName)")
+                    Text("\((t.plan ?? profile.fitnessGoal.defaultPlan).displayName) · \(t.carbsG)g carbs · \(t.fatG)g fat · tap to edit")
                         .font(.caption).foregroundStyle(theme.dim)
                 }
                 Spacer()
-                Image(systemName: "arrow.left.arrow.right")
+                Image(systemName: "slider.horizontal.3")
                     .foregroundStyle(theme.accent)
             }
         }
@@ -266,12 +267,18 @@ struct SettingsView: View {
         showEditVitals = false
     }
 
-    private func switchGoal(to newGoal: FitnessGoal) {
-        guard Repos.updateGoal(ctx, profileId: profile.id, to: newGoal) != nil else { return }
-        toasts.show(Toast(title: "Goal: \(newGoal.displayName)",
-                          detail: "Targets recomputed. Your logs are kept.",
+    private func saveTargets(plan: TargetPlan, custom: MacroTargets?) {
+        guard let updated = Repos.updateTargets(ctx, profileId: profile.id, plan: plan, custom: custom)
+        else { return }
+        // A suggested plan brings its step goal with it: clear the Steps ring's
+        // override so the plan's default shows. Custom targets leave steps alone.
+        if plan != .custom {
+            UserDefaults.standard.set(0, forKey: StepsGoalPrefs.dailyKey(profile.id))
+        }
+        toasts.show(Toast(title: "Targets saved",
+                          detail: "\(updated.computedTargets.calories.formatted()) cal · \(updated.computedTargets.proteinG)g protein a day.",
                           accent: .win, symbol: "checkmark.circle.fill"))
-        showGoalSwitch = false
+        showTargets = false
     }
 
     private func connectHealth() {
@@ -310,7 +317,7 @@ struct SettingsView: View {
 
 // MARK: - Shared target compare row
 
-/// `from → to` row used by the goal-switch and edit-vitals previews to show how a
+/// `from → to` row used by the edit-vitals preview to show how a
 /// change shifts a computed target. Reads the theme from the environment.
 private struct TargetCompareRow: View {
     let label: String
@@ -398,7 +405,9 @@ private struct EditVitalsSheet: View {
         Targets.ProfileVitals(sex: sex, weightLb: weightLb, heightIn: heightIn, age: age, activity: activity)
     }
     private var current: MacroTargets { profile.computedTargets }
-    private var next: MacroTargets { Targets.compute(fitnessGoal: profile.fitnessGoal, vitals: draftVitals) }
+    private var next: MacroTargets {
+        Targets.recompute(current, fitnessGoal: profile.fitnessGoal, vitals: draftVitals)
+    }
 
     var body: some View {
         NavigationStack {
@@ -506,65 +515,199 @@ private struct EditVitalsSheet: View {
     }
 }
 
-// MARK: - Goal switch sheet
+// MARK: - Daily targets sheet
 
-/// Confirms an at-will goal switch, previewing how the recomputed targets shift
-/// before applying. Targets come straight from Targets.compute so the preview
-/// matches exactly what Repos.updateGoal will persist. The goal changes numbers
-/// only — every tab, card and tracker stays the same.
-private struct GoalSwitchSheet: View {
+/// Set the profile's daily targets. Three suggestions (maintain / lose / gain)
+/// are computed from the user's own vitals by `Targets.compute(plan:)`, exactly
+/// what `Repos.updateTargets` will persist; tapping one fills the fields. Editing
+/// any field turns the draft into custom targets, which stay as typed when weight
+/// changes. Carbs always fill the calories protein and fat leave. Targets change
+/// numbers only — every tab, card and log stays the same.
+private struct TargetsSheet: View {
     let profile: ProfileDTO
-    let onConfirm: (FitnessGoal) -> Void
+    let onSave: (_ plan: TargetPlan, _ custom: MacroTargets?) -> Void
 
     @Environment(\.theme) private var theme
     @Environment(\.dismiss) private var dismiss
 
-    private var newGoal: FitnessGoal { profile.fitnessGoal.toggled }
+    @State private var plan: TargetPlan
+    @State private var calories: Int
+    @State private var proteinG: Int
+    @State private var fatG: Int
+    @FocusState private var fieldFocused: Bool
 
-    private var current: MacroTargets { Targets.compute(fitnessGoal: profile.fitnessGoal, vitals: profile.vitals) }
-    private var next: MacroTargets { Targets.compute(fitnessGoal: newGoal, vitals: profile.vitals) }
+    init(profile: ProfileDTO, onSave: @escaping (TargetPlan, MacroTargets?) -> Void) {
+        self.profile = profile
+        self.onSave = onSave
+        let t = profile.computedTargets
+        _plan = State(initialValue: t.plan ?? profile.fitnessGoal.defaultPlan)
+        _calories = State(initialValue: t.calories)
+        _proteinG = State(initialValue: t.proteinG)
+        _fatG = State(initialValue: t.fatG)
+    }
+
+    private var maintenance: Int { Targets.tdee(profile.vitals) }
+    private func suggestion(_ p: TargetPlan) -> MacroTargets { Targets.compute(plan: p, vitals: profile.vitals) }
+    private var carbsG: Int { Targets.carbsFilling(calories: calories, proteinG: proteinG, fatG: fatG) }
+    private var canSave: Bool { calories >= Targets.calorieFloor && proteinG > 0 && fatG > 0 }
+
+    /// A field edit makes the draft custom (unless the value is unchanged).
+    private func edited(_ value: Binding<Int>) -> Binding<Int> {
+        Binding(
+            get: { value.wrappedValue },
+            set: { new in
+                guard new != value.wrappedValue else { return }
+                value.wrappedValue = new
+                plan = .custom
+            }
+        )
+    }
+
+    private func pick(_ p: TargetPlan) {
+        let t = suggestion(p)
+        Haptics.selection()
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+            plan = p
+            calories = t.calories
+            proteinG = t.proteinG
+            fatG = t.fatG
+        }
+    }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Change goal")
-                        .font(.system(size: 42, weight: .regular))
-                        .foregroundStyle(theme.text)
-                    Text("\(profile.fitnessGoal.displayName.uppercased()) → \(newGoal.displayName.uppercased())")
-                        .font(.system(size: 10, weight: .medium)).tracking(2)
-                        .foregroundStyle(theme.dim)
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Daily targets")
+                            .font(.system(size: 42, weight: .regular))
+                            .foregroundStyle(theme.text)
+                        Text("SUGGESTED FROM YOUR BODY · OR SET YOUR OWN")
+                            .font(.system(size: 10, weight: .medium)).tracking(2)
+                            .foregroundStyle(theme.dim)
+                    }
+
+                    Text("You burn about \(maintenance.formatted()) calories a day at your weight, height, age and activity. That's your maintenance number.")
+                        .font(.callout).foregroundStyle(theme.dim)
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Suggestions")
+                            .font(.caption).tracking(2).textCase(.uppercase)
+                            .foregroundStyle(theme.dim)
+                        ForEach(TargetPlan.suggestions, id: \.self) { p in
+                            suggestionCard(p)
+                        }
+                    }
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Text("Your numbers")
+                                .font(.caption).tracking(2).textCase(.uppercase)
+                                .foregroundStyle(theme.dim)
+                            Spacer()
+                            if plan == .custom {
+                                Text("CUSTOM").font(.system(size: 10, weight: .medium)).tracking(2)
+                                    .foregroundStyle(theme.accent)
+                            }
+                        }
+                        intField("Calories", unit: "cal", value: edited($calories))
+                        intField("Protein", unit: "g", value: edited($proteinG))
+                        intField("Fat", unit: "g", value: edited($fatG))
+                        HStack {
+                            Text("Carbs").foregroundStyle(theme.text).font(.callout)
+                            Spacer()
+                            Text("\(carbsG)")
+                                .font(.system(.callout, design: .monospaced))
+                                .foregroundStyle(theme.text)
+                                .contentTransition(.numericText())
+                            Text("g · fills the rest").font(.caption).foregroundStyle(theme.dim)
+                        }
+                        .padding(10)
+                        .background(theme.card)
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+                    }
+
+                    Text(plan == .custom
+                         ? "Custom targets stay as you set them when your weight changes. Change your step goal by tapping the Steps ring on Today."
+                         : "Suggested targets update on their own as your weight changes. Saving also sets your daily step goal to \(suggestion(plan).stepsDaily.formatted()).")
+                        .font(.footnote).foregroundStyle(theme.dim)
+
+                    Button {
+                        onSave(plan, plan == .custom
+                               ? Targets.custom(calories: calories, proteinG: proteinG, fatG: fatG,
+                                                stepsDaily: profile.computedTargets.stepsDaily)
+                               : nil)
+                    } label: {
+                        Text("Save targets").frame(maxWidth: .infinity)
+                    }
+                    .tactile(.primary, fullWidth: true)
+                    .disabled(!canSave)
+                    .opacity(canSave ? 1 : 0.6)
+
+                    if calories < Targets.calorieFloor {
+                        Text("Calories can't go below \(Targets.calorieFloor.formatted()) a day.")
+                            .font(.footnote).foregroundStyle(theme.dim)
+                    }
+
+                    Button { dismiss() } label: { Text("Cancel") }
+                        .tactile(.ghost)
                 }
-
-                Text(newGoal.blurb)
-                    .font(.callout).foregroundStyle(theme.dim)
-
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("What changes")
-                        .font(.caption).tracking(2).textCase(.uppercase)
-                        .foregroundStyle(theme.dim)
-                    TargetCompareRow(label: "Calories", from: "\(current.calories)", to: "\(next.calories)", unit: "cal")
-                    TargetCompareRow(label: "Protein", from: "\(current.proteinG)", to: "\(next.proteinG)", unit: "g")
-                    TargetCompareRow(label: "Steps", from: current.stepsDaily.formatted(), to: next.stepsDaily.formatted(), unit: "/day")
-                }
-
-                Text("Only your targets change. Your food, workout, and body logs — and every tab and card — stay exactly as they are.")
-                    .font(.footnote).foregroundStyle(theme.dim)
-
-                Button {
-                    onConfirm(newGoal)
-                } label: {
-                    Text("Switch to \(newGoal.displayName)").frame(maxWidth: .infinity)
-                }
-                .tactile(.primary, fullWidth: true)
-
-                Button { dismiss() } label: { Text("Cancel") }
-                    .tactile(.ghost)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 24)
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
+            .background(theme.bg.ignoresSafeArea())
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") { fieldFocused = false }
+                }
+            }
         }
-        .presentationDetents([.medium, .large])
+        .presentationDetents([.large])
         .presentationBackground(theme.bg)
+    }
+
+    @ViewBuilder
+    private func suggestionCard(_ p: TargetPlan) -> some View {
+        let t = suggestion(p)
+        let selected = plan == p
+        PressableCard(action: { pick(p) }) {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(p.displayName)
+                        .font(.system(size: 15, weight: .medium))
+                        .foregroundStyle(theme.text)
+                    Text(p.blurb)
+                        .font(.caption).foregroundStyle(theme.dim)
+                    Text("\(t.calories.formatted()) cal · \(t.proteinG)g protein · \(t.stepsDaily.formatted()) steps")
+                        .font(.system(.caption, design: .monospaced))
+                        .foregroundStyle(theme.accent)
+                }
+                Spacer()
+                Image(systemName: selected ? "checkmark.circle.fill" : "circle")
+                    .foregroundStyle(selected ? theme.accent : theme.dim)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func intField(_ label: String, unit: String, value: Binding<Int>) -> some View {
+        HStack {
+            Text(label).foregroundStyle(theme.text).font(.callout)
+            Spacer()
+            TextField("", value: value, format: .number)
+                .keyboardType(.numberPad)
+                .multilineTextAlignment(.trailing)
+                .font(.system(.callout, design: .monospaced))
+                .frame(maxWidth: 100)
+                .focused($fieldFocused)
+            Text(unit).font(.caption).foregroundStyle(theme.dim)
+        }
+        .padding(10)
+        .background(theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+        .foregroundStyle(theme.text)
     }
 }

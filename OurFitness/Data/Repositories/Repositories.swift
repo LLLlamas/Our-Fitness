@@ -40,12 +40,14 @@ public enum Repos {
     }
 
     /// Create a brand-new profile. Computes MacroTargets from the supplied
-    /// vitals so callers don't need to thread Targets.compute themselves.
+    /// vitals so callers don't need to thread Targets.compute themselves. New
+    /// profiles start on the maintenance suggestion; Settings → Daily targets
+    /// changes it.
     @discardableResult
     public static func createProfile(
         _ ctx: ModelContext,
         name: String,
-        fitnessGoal: FitnessGoal,
+        plan: TargetPlan = .maintain,
         sex: Sex,
         heightIn: Double,
         weightLb: Double,
@@ -56,10 +58,11 @@ public enum Repos {
         let vitals = Targets.ProfileVitals(
             sex: sex, weightLb: weightLb, heightIn: heightIn, age: age, activity: activity
         )
+        let targets = Targets.compute(plan: plan, vitals: vitals)
         let dto = ProfileDTO(
-            name: name, fitnessGoal: fitnessGoal, sex: sex,
+            name: name, fitnessGoal: Targets.fitnessGoal(for: targets, tdee: Targets.tdee(vitals)), sex: sex,
             heightIn: heightIn, weightLb: weightLb, age: age, activity: activity,
-            computedTargets: Targets.compute(fitnessGoal: fitnessGoal, vitals: vitals),
+            computedTargets: targets,
             healthGranted: healthGranted
         )
         let saved = RepositoryWrite.perform(ctx) {
@@ -154,36 +157,45 @@ public enum Repos {
         return updateVitals(ctx, profileId: profileId, weightLb: latest)
     }
 
-    /// Switch a profile's fitness goal at will. Recomputes macro/step targets
-    /// from the profile's existing vitals (logs are goal-agnostic and untouched).
-    /// Never seeds anything. Returns the updated DTO, or nil if the profile no
-    /// longer exists or the save failed.
+    /// Set a profile's daily targets: one of the suggested plans (recomputed from
+    /// vitals now and on every later vitals change), or `custom` numbers that stay
+    /// as typed. Also re-points the hidden soft-tilt goal (`modeRaw`) at the
+    /// direction the targets imply. Logs are untouched; never seeds. Returns the
+    /// updated DTO, or nil if the profile no longer exists or the save failed.
     @discardableResult
-    public static func updateGoal(_ ctx: ModelContext, profileId: UUID, to newGoal: FitnessGoal) -> ProfileDTO? {
+    public static func updateTargets(
+        _ ctx: ModelContext, profileId: UUID, plan: TargetPlan, custom: MacroTargets? = nil
+    ) -> ProfileDTO? {
         var updatedProfile: ProfileDTO?
         let saved = RepositoryWrite.perform(ctx) {
             let target = profileId
             let desc = FetchDescriptor<ProfileModel>(predicate: #Predicate { $0.id == target })
             guard let model = try ctx.fetch(desc).first else { throw RepositoryWriteError.missingRecord }
 
-            let current = model.snapshot
-            guard current.fitnessGoal != newGoal else { updatedProfile = current; return }
-
-            model.modeRaw = newGoal.rawValue   // legacy column name; stores the goal
-            try recomputeTargets(model)
+            let vitals = model.snapshot.vitals
+            let next: MacroTargets
+            if plan == .custom, let c = custom {
+                next = Targets.custom(calories: c.calories, proteinG: c.proteinG, fatG: c.fatG, stepsDaily: c.stepsDaily)
+            } else {
+                next = Targets.compute(plan: plan, vitals: vitals)
+            }
+            model.targetsJSON = try JSONEncoder().encode(next)
+            // Legacy column name; stores the soft-tilt goal.
+            model.modeRaw = Targets.fitnessGoal(for: next, tdee: Targets.tdee(vitals)).rawValue
+            model.updatedAt = Date()
             updatedProfile = model.snapshot
         }
         return saved ? updatedProfile : nil
     }
 
-    /// The one target-recompute path: re-derives `targetsJSON` from the model's
-    /// current goal + vitals and stamps `updatedAt`. Shared by `updateVitals`,
-    /// `updateGoal` and `Seeder`'s heart-health backstop. Call inside a
+    /// The one target-recompute path after a vitals change (rules in
+    /// `Targets.recompute`). Stamps `updatedAt`. Shared by
+    /// `updateVitals` and `Seeder`'s heart-health backstop. Call inside a
     /// `RepositoryWrite.perform` block — it does not save.
     static func recomputeTargets(_ model: ProfileModel) throws {
         let profile = model.snapshot
         model.targetsJSON = try JSONEncoder().encode(
-            Targets.compute(fitnessGoal: profile.fitnessGoal, vitals: profile.vitals)
+            Targets.recompute(profile.computedTargets, fitnessGoal: profile.fitnessGoal, vitals: profile.vitals)
         )
         model.updatedAt = Date()
     }

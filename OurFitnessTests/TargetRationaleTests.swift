@@ -53,9 +53,21 @@ final class TargetRationaleTests: XCTestCase {
     // MARK: - Fat
 
     func test_fat_pct_is_reasonable_for_goal() {
-        // Gain ~27%, lose ~28% of calories per Targets.rules.
-        XCTAssertEqual(Double(TargetRationale.fatPctOfCalories(for: profile(fitnessGoal: .gain))), 27, accuracy: 3)
-        XCTAssertEqual(Double(TargetRationale.fatPctOfCalories(for: profile(fitnessGoal: .lose))), 28, accuracy: 3)
+        // 30% of calories for every plan per Targets.rules.
+        XCTAssertEqual(Double(TargetRationale.fatPctOfCalories(for: profile(fitnessGoal: .gain))), 30, accuracy: 3)
+        XCTAssertEqual(Double(TargetRationale.fatPctOfCalories(for: profile(fitnessGoal: .lose))), 30, accuracy: 3)
+    }
+
+    func test_calorie_and_protein_why_for_maintenance() {
+        let base = profile(fitnessGoal: .gain)
+        let maintained = ProfileDTO(
+            name: "Test", fitnessGoal: .gain, sex: base.sex, heightIn: base.heightIn,
+            weightLb: base.weightLb, age: base.age, activity: base.activity,
+            computedTargets: Targets.compute(plan: .maintain, vitals: base.vitals)
+        )
+        XCTAssertTrue(TargetRationale.calories(for: maintained).isMaintenance)
+        XCTAssertTrue(TargetRationale.calorieWhy(for: maintained).contains("hold your weight steady"))
+        XCTAssertTrue(TargetRationale.proteinWhy(for: maintained).contains("keeps the muscle you have"))
     }
 
     // MARK: - Goal framing
