@@ -58,7 +58,7 @@ struct NutritionView: View {
     }
 
     private var favoriteIds: Set<String> {
-        Set(favoriteIdsString.split(separator: ",").map(String.init).filter { !$0.isEmpty })
+        FoodFavorites.parse(favoriteIdsString)
     }
 
     private var favoriteFoods: [CommonFood] {
@@ -244,7 +244,7 @@ struct NutritionView: View {
             AddFoodSheet(profile: profile, targetDate: selectedDayKey) { dto in
                 // Don't toast or prefetch off a write that didn't commit.
                 guard Repos.addFoodLog(ctx, dto) else { return false }
-                toasts.logged(dto.customName ?? "Meal", perServing: dto.perServing)
+                toasts.logged(dto.customName ?? "Meal", perServing: dto.totalNutrition)
                 let foodName = dto.foodId ?? dto.customName ?? ""
                 if !foodName.isEmpty {
                     FoodAlternativeService.shared.prefetch(for: foodName, fitnessGoal: profile.fitnessGoal)
@@ -285,7 +285,7 @@ struct NutritionView: View {
         .sheet(isPresented: $showCameraLog) {
             CameraFoodLogSheet(profile: profile, slot: .lunch) { dto in
                 guard Repos.addFoodLog(ctx, dto) else { return false }
-                toasts.logged(dto.customName ?? "Meal", perServing: dto.perServing)
+                toasts.logged(dto.customName ?? "Meal", perServing: dto.totalNutrition)
                 let foodName = dto.foodId ?? dto.customName ?? ""
                 if !foodName.isEmpty {
                     FoodAlternativeService.shared.prefetch(for: foodName, fitnessGoal: profile.fitnessGoal)
@@ -299,7 +299,7 @@ struct NutritionView: View {
                 recentLogs: allLogs, favoriteFoodIds: favoriteIds,
                 onPick: { dto in
                     guard Repos.addFoodLog(ctx, dto) else { return }
-                    toasts.logged(dto.customName ?? "Meal", perServing: dto.perServing)
+                    toasts.logged(dto.customName ?? "Meal", perServing: dto.totalNutrition)
                     showMoodSheet = false
                     let foodName = dto.foodId ?? dto.customName ?? ""
                     if !foodName.isEmpty {
@@ -506,7 +506,7 @@ struct NutritionView: View {
                                     )
                                 )
                                 guard Repos.addFoodLog(ctx, dto) else { return }
-                                toasts.logged(item.food.name, calories: item.scaledCalories)
+                                toasts.logged(item.food.name, perServing: dto.perServing)
                                 FoodAlternativeService.shared.prefetch(for: item.food.name, fitnessGoal: profile.fitnessGoal)
                             } label: {
                                 Image(systemName: "plus.circle")

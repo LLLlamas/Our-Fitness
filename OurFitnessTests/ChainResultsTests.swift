@@ -118,6 +118,14 @@ final class ChainResultsTests: XCTestCase {
         XCTAssertEqual(out.foods.first?.id, "rest:mcdonalds:fries-medium")
     }
 
+    /// A chain alias split with no menu hit ("ghost pepper" → Ghost brand) is a
+    /// false alarm: the ordinary results must not be capped at 5.
+    func testChainSplitWithoutMenuHitIsNotCapped() async {
+        let others = (0..<9).map { curated("plain-\($0)", "Mcdonalds style salad \($0)") }
+        let out = await run("mcdonalds salad", curated: others)
+        XCTAssertEqual(out.foods.count, 9)
+    }
+
     func testNonChainQueryIsUnchanged() async {
         let out = await run("fries", curated: [curated("fries", "French fries", ["fries"])])
         XCTAssertEqual(out.foods.map(\.id), ["fries"])

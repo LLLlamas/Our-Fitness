@@ -77,17 +77,13 @@ public final class ToastCenter: ObservableObject {
 
     // Convenience constructors
 
-    public func logged(_ name: String, calories: Int) {
-        show(Toast(title: "Logged", detail: "\(name) · +\(calories) cal",
-                   accent: .ok, symbol: "checkmark"))
-    }
-
     /// Logged-food confirmation with the numbers: "Logged · Name" over
     /// "+cal · Pg pro · Cg carbs · Fg fat". An empty name reads "Meal".
-    public func logged(_ name: String, perServing p: PerServing) {
+    public func logged(_ name: String, perServing p: PerServing, note: String? = nil) {
         let label = name.isEmpty ? "Meal" : name
+        let numbers = "+\(p.calories) cal · \(p.proteinG)g pro · \(p.carbsG)g carbs · \(p.fatG)g fat"
         show(Toast(title: "Logged · \(label)",
-                   detail: "+\(p.calories) cal · \(p.proteinG)g pro · \(p.carbsG)g carbs · \(p.fatG)g fat",
+                   detail: note.map { "\(numbers) · \($0)" } ?? numbers,
                    accent: .ok, symbol: "checkmark"), for: 2.4)
     }
 

@@ -249,7 +249,9 @@ extension FoodSearch {
             if f.id.hasPrefix("ff-") { return menu.isEmpty && chain.ownsCuratedFastFood(id: f.id) }
             return true
         }
-        let shown = grouped.foods + others.prefix(maxOtherRows)
+        // No menu hit (e.g. "ghost pepper" split off the Ghost brand): the chain was a
+        // false alarm, so don't cap the ordinary results.
+        let shown = grouped.foods + others.prefix(hits.isEmpty ? others.count : maxOtherRows)
         return FoodSearchOutcome(foods: shown, sizeChoices: grouped.choices, correctedQuery: corrected,
                                  strength: strength(of: shown, for: FoodSearchQuery(plan.effective),
                                                     chainHit: !hits.isEmpty))

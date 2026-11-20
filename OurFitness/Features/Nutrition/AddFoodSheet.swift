@@ -47,10 +47,10 @@ struct AddFoodSheet: View {
     /// How strongly `displayedResults` answer the query, and the query that was true for.
     @State private var strength: MatchStrength = .none
     @State private var strengthQuery: String = ""
-    /// Apple Intelligence "did you mean" alternatives for `aiCheckedQuery` (empty = none / AI off).
+    /// Apple Intelligence "did you mean" alternatives for the current query (empty = none / AI off).
     @State private var didYouMean: [String] = []
-    /// The last query AI was asked about (or that came from a tapped suggestion), so it runs once per query.
-    @State private var aiCheckedQuery: String = ""
+    /// AI answers per query (a tapped suggestion is stored as []), so each query is asked once.
+    @State private var didYouMeanCache: [String: [String]] = [:]
     @State private var mealToLog: QuickMealLog?
     @State private var templateToLog: SavedMealTemplateDTO?
     @State private var describeText: String?
@@ -298,13 +298,16 @@ struct AddFoodSheet: View {
     /// Ask the on-device model for alternative queries, once per query. Shows
     /// nothing when AI is unavailable/off, fails, or the query moved on.
     private func checkDidYouMean(for q: String) async {
-        guard aiCheckedQuery != q, strengthQuery == q, strength != .strong,
+        guard strengthQuery == q, strength != .strong,
               FoodQueryRewriteService.shared.isAvailable else { return }
+        // Asked before (e.g. backspace + retype): reuse the answer instead of losing it.
+        if let cached = didYouMeanCache[q] { didYouMean = cached; return }
         // A multi-food sentence ("2 eggs and toast") has no single library match by
         // design; the describe card already handles it, so don't second-guess it.
         if displayedResults.isEmpty, FoodParser.parse(text: q, includeDatabase: false).hasMatches { return }
-        aiCheckedQuery = q
+        didYouMeanCache[q] = []
         let suggestions = await FoodQueryRewriteService.shared.suggestions(for: q)
+        didYouMeanCache[q] = suggestions ?? []
         guard q == trimmedQuery else { return }
         didYouMean = suggestions ?? []
     }
@@ -315,7 +318,7 @@ struct AddFoodSheet: View {
             ForEach(didYouMean, id: \.self) { suggestion in
                 Button {
                     // A suggestion is already a vetted query: don't run AI on it again.
-                    aiCheckedQuery = suggestion
+                    didYouMeanCache[suggestion] = []
                     query = suggestion
                 } label: {
                     Text(suggestion)
@@ -451,7 +454,7 @@ struct AddFoodSheet: View {
         let name = entry.customName ?? "Meal"
         let key = FoodAffinity.identityKey(of: entry)
         let favoritable = !key.hasPrefix("name:")
-        let p = entry.perServing
+        let p = entry.totalNutrition
         return PressableCard(action: {
             mealToLog = QuickMealLog(name: name, emoji: "🍽️", ingredients: ingredients(for: entry))
         }) {
@@ -810,7 +813,8 @@ struct DescribeMealForm: View {
                                           symbol: "exclamationmark.triangle"))
                         return
                     }
-                    toasts.show(Toast(title: "Saved to My Foods", detail: name, accent: .ok, symbol: "bookmark.fill"))
+                    // Re-show the log confirmation with the save noted, so it isn't replaced.
+                    toasts.logged(name, perServing: perServing, note: "saved to My Foods")
                 } label: {
                     Text("Save")
                 }
