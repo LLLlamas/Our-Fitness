@@ -164,6 +164,23 @@ final class CardioFitnessTests: XCTestCase {
         XCTAssertEqual(CardioFitness.enabledTrackers("none", adding: "vo2Max"), "vo2Max")
     }
 
+    func test_cardio_minutes_migration_runs_after_vo2() {
+        // ProgressTabView runs the VO₂ migration, then the cardio-minutes one
+        // (its own flag), both through enabledTrackers. Raw values pinned here:
+        // StatKind lives in the app target, not Domain.
+        func both(_ csv: String) -> String {
+            CardioFitness.enabledTrackers(CardioFitness.enabledTrackers(csv, adding: "vo2Max"), adding: "cardioMinutes")
+        }
+        XCTAssertEqual(both(""), "", "defaults already include both")
+        XCTAssertEqual(both("weight,bp"), "weight,bp,vo2Max,cardioMinutes")
+        XCTAssertEqual(both("none"), "vo2Max,cardioMinutes", "never \"none,…\"")
+        // A profile whose VO₂ flag already ran (and kept or hid vo2Max).
+        XCTAssertEqual(CardioFitness.enabledTrackers("weight,vo2Max", adding: "cardioMinutes"), "weight,vo2Max,cardioMinutes")
+        XCTAssertEqual(CardioFitness.enabledTrackers("weight", adding: "cardioMinutes"), "weight,cardioMinutes")
+        XCTAssertEqual(CardioFitness.enabledTrackers("none", adding: "cardioMinutes"), "cardioMinutes")
+        XCTAssertEqual(CardioFitness.enabledTrackers("cardioMinutes,weight", adding: "cardioMinutes"), "cardioMinutes,weight")
+    }
+
     func test_supported_range_matches_apple() {
         XCTAssertEqual(CardioFitness.supportedRange.lowerBound, 14)
         XCTAssertEqual(CardioFitness.supportedRange.upperBound, 65)

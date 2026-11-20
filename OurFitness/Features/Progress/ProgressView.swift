@@ -254,7 +254,11 @@ struct ProgressTabView: View {
         .sheet(item: $progressTarget) { exercise in
             ExerciseProgressSheet(profile: profile, exercise: exercise)
         }
-        .onAppear { addVO2TrackerOnce() }
+        .onAppear {
+            // VO₂ first, so a "none" profile ends as "vo2Max,cardioMinutes".
+            addVO2TrackerOnce()
+            addCardioMinutesTrackerOnce()
+        }
         // A read, never an authorization request: refreshes the Health workouts
         // when Progress opens, since the sync otherwise runs from Today.
         .task(id: profile.id) {
@@ -270,6 +274,17 @@ struct ProgressTabView: View {
         let key = "progressStats.vo2MaxAdded.v1.\(profile.id.uuidString)"
         guard !UserDefaults.standard.bool(forKey: key) else { return }
         let updated = CardioFitness.enabledTrackers(enabledStatsRaw, adding: StatKind.vo2Max.rawValue)
+        if updated != enabledStatsRaw { enabledStatsRaw = updated }
+        UserDefaults.standard.set(true, forKey: key)
+    }
+
+    /// Same one-time pattern for the cardio-minutes tracker (owner decision
+    /// 2026-11-20), with its own flag so it runs for profiles whose VO₂ flag is
+    /// already set. Hiding it afterwards sticks.
+    private func addCardioMinutesTrackerOnce() {
+        let key = "progressStats.cardioMinutesAdded.v1.\(profile.id.uuidString)"
+        guard !UserDefaults.standard.bool(forKey: key) else { return }
+        let updated = CardioFitness.enabledTrackers(enabledStatsRaw, adding: StatKind.cardioMinutes.rawValue)
         if updated != enabledStatsRaw { enabledStatsRaw = updated }
         UserDefaults.standard.set(true, forKey: key)
     }

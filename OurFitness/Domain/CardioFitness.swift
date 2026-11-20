@@ -132,8 +132,9 @@ public enum CardioFitness {
     // MARK: - Tracker visibility (one-time migration)
 
     /// The stored Progress tracker CSV with `raw` added, everything else kept as
-    /// is. Used once per profile to put the VO₂ max tracker in front of people
-    /// who had already customized their trackers (owner decision, plan §10).
+    /// is. Used once per profile (one flag per tracker) to put the VO₂ max and
+    /// cardio-minutes trackers in front of people who had already customized
+    /// their trackers (owner decisions, plan §10 and 2026-11-20).
     /// Empty = still on the defaults, which already include it; "none" (the
     /// "show nothing" sentinel) becomes just this tracker.
     public static func enabledTrackers(_ csv: String, adding raw: String) -> String {
