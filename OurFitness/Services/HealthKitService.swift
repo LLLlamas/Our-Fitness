@@ -1,7 +1,8 @@
 // Single owner of HealthKit access. Views never touch HKHealthStore directly.
 // Read: steps, body mass, heart rate, resting HR, active energy, exercise time,
 //       body fat %, waist, blood pressure, blood glucose (fasting-marked only),
-//       VO₂ max (Apple Watch cardio fitness estimate, read-only, full history).
+//       VO₂ max (Apple Watch cardio fitness estimate, read-only, full history),
+//       workouts (cardio minutes only — never burn or active energy).
 // Write: workouts, body mass (optional, mirrors in-app logs to Apple Health).
 // syncFromHealth() pulls latest body/marker readings into the app's logs.
 
@@ -19,6 +20,15 @@ public final class HealthKitService: ObservableObject {
     private let store = HKHealthStore()
 
     @Published public private(set) var isAuthorized: Bool = false
+
+    /// Health workouts since `CardioFitness.healthWindowStart`, for the cardio
+    /// minutes tracker only. Derived on read: re-fetched on every sync and when
+    /// Progress appears, kept in memory, never stored, never fed into burn,
+    /// `DailyBurn` or active energy (plan §7 Q5 b).
+    @Published public private(set) var cardioWorkouts: [CardioFitness.HealthWorkout] = []
+    /// Own-app bundle ids already logged this process (plan §9: which one
+    /// HealthKit stamps on a watch-saved workout is not verified).
+    private var loggedOwnSources: Set<String> = []
 
     private var stepObserver: HKObserverQuery?
     private var observerSink: ((Int) -> Void)?
@@ -45,6 +55,10 @@ public final class HealthKitService: ObservableObject {
         // Cardio fitness. Apple Watch writes it; we only read. People connected
         // before this was added must run Connect again to grant it (plan §4.3).
         if let t = HKObjectType.quantityType(forIdentifier: .vo2Max)                 { s.insert(t) }
+        // Workouts from other apps (Apple's Workout app) count toward cardio
+        // minutes. Also in writeTypes for the watch's own workouts. People
+        // connected before this was added must run Connect again (plan §8).
+        s.insert(HKObjectType.workoutType())
         // MERGE: restored with `restingEnergy(for:)` below — the read is useless
         // without it. A *quantity* type, so it's safe to authorize (see the note).
         if let t = HKObjectType.quantityType(forIdentifier: .basalEnergyBurned)      { s.insert(t) }
@@ -462,6 +476,68 @@ public final class HealthKitService: ObservableObject {
             upsertMarker(ctx, profileId: profileId, day: Dates.dayKey(glu.date), kind: .fastingGlucose, value: glu.value)
         }
         await syncVO2MaxHistory(ctx, profileId: profileId)
+        await refreshCardioWorkouts()
+    }
+
+    /// Re-reads every workout that started since `CardioFitness.healthWindowStart`
+    /// (this week and the 11 before it). The whole window every time — no
+    /// one-shot flag — because a read made before the user re-ran Connect comes
+    /// back empty (HealthKit hides denied reads). Filtering (cardio kinds, own
+    /// app, overlap with logged sessions) happens in `CardioFitness.weeklyMinutes`.
+    public func refreshCardioWorkouts(now: Date = Date()) async {
+        guard isAvailable else { return }
+        let start = CardioFitness.healthWindowStart(now: now)
+        let predicate = HKQuery.predicateForSamples(withStart: start, end: now, options: [.strictStartDate])
+        let sort = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
+        let workouts: [CardioFitness.HealthWorkout] = await withCheckedContinuation { cont in
+            let q = HKSampleQuery(sampleType: HKObjectType.workoutType(), predicate: predicate,
+                                  limit: HKObjectQueryNoLimit, sortDescriptors: [sort]) { _, samples, _ in
+                let out = (samples as? [HKWorkout] ?? []).map {
+                    CardioFitness.HealthWorkout(
+                        start: $0.startDate, end: $0.endDate, durationSeconds: $0.duration,
+                        kind: Self.workoutKind($0.workoutActivityType),
+                        sourceBundleId: $0.sourceRevision.source.bundleIdentifier)
+                }
+                cont.resume(returning: out)
+            }
+            store.execute(q)
+        }
+        for id in Set(workouts.map(\.sourceBundleId)) where CardioFitness.ownBundleIds.contains(id)
+            && !loggedOwnSources.contains(id) {
+            print("[HealthKit] own-app workouts in Health stamped with source:", id)
+            loggedOwnSources.insert(id)
+        }
+        cardioWorkouts = workouts
+    }
+
+    /// The cardio set for Health workouts (plan §9 "Phase 2 must"). Anything not
+    /// listed — strength, core, cooldown, mind and body, … — is `.other` and
+    /// doesn't count; yoga, Pilates and flexibility are named so tests can pin them.
+    nonisolated private static func workoutKind(_ type: HKWorkoutActivityType) -> CardioFitness.WorkoutKind {
+        switch type {
+        case .walking:                                    return .walking
+        case .running:                                    return .running
+        case .hiking:                                     return .hiking
+        case .cycling, .handCycling:                      return .cycling
+        case .swimming:                                   return .swimming
+        case .rowing:                                     return .rowing
+        case .elliptical:                                 return .elliptical
+        case .stairClimbing, .stairs, .stepTraining:      return .stairs
+        case .jumpRope:                                   return .jumpRope
+        case .socialDance, .cardioDance:                  return .dance
+        case .mixedCardio:                                return .mixedCardio
+        case .highIntensityIntervalTraining:              return .intervals
+        case .skatingSports:                              return .skating
+        case .crossCountrySkiing:                         return .skiing
+        case .paddleSports:                               return .paddling
+        case .wheelchairWalkPace, .wheelchairRunPace:     return .wheelchair
+        case .basketball, .soccer, .tennis:               return .ballSports
+        case .swimBikeRun:                                return .multisport
+        case .yoga:                                       return .yoga
+        case .pilates:                                    return .pilates
+        case .flexibility:                                return .flexibility
+        default:                                          return .other
+        }
     }
 
     /// VO₂ max history, not just the latest sample: estimates arrive only a few

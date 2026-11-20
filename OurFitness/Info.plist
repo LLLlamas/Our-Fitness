@@ -27,7 +27,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Scan food labels to log nutrition quickly.</string>
 	<key>NSHealthShareUsageDescription</key>
-	<string>Our-Fitness reads your steps, weight, heart rate, resting heart rate, active energy, exercise time, body fat, waist, blood pressure, blood glucose, and cardio fitness (VO₂ max) from Apple Health to show your daily progress and trends.</string>
+	<string>Our-Fitness reads your steps, weight, heart rate, resting heart rate, active energy, exercise time, body fat, waist, blood pressure, blood glucose, cardio fitness (VO₂ max), and workouts from Apple Health to show your daily progress and trends.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Our-Fitness can write workouts and body weight back to Apple Health so your data stays in one place.</string>
 	<key>NSSupportsLiveActivities</key>

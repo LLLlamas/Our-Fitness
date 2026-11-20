@@ -9,6 +9,8 @@ struct ProgressTabView: View {
     @Environment(\.modelContext) private var ctx
     @Environment(\.theme) private var theme
     @EnvironmentObject private var toasts: ToastCenter
+    /// Health workouts for the cardio-minutes tracker (in memory, re-read each sync).
+    @ObservedObject private var health = HealthKitService.shared
 
     // Profile-scoped at the query level — never fetch another profile's rows.
     @Query private var bodyModels: [BodyMetricModel]
@@ -150,6 +152,8 @@ struct ProgressTabView: View {
             bodyWeightLb: profile.weightLb
         )
         let training = trainingSummary(sets: sets, exercises: exerciseModels.map(\.snapshot), now: Date())
+        let cardioWeek = CardioFitness.weeklyMinutes(activities: activities, legacy: cardio,
+                                                     health: health.cardioWorkouts, now: Date())
         let enabled = enabledSet(body: body_, markers: markers)
         let visibleStats = visibleStats(in: enabled)
         // The card only needs "how many days" and "which was last", so take the
@@ -187,7 +191,7 @@ struct ProgressTabView: View {
                 } else {
                     LazyVGrid(columns: columns, spacing: 14) {
                         ForEach(visibleStats, id: \.self) { kind in
-                            statCard(for: kind, body: body_, markers: markers, steps: steps, training: training)
+                            statCard(for: kind, body: body_, markers: markers, steps: steps, training: training, cardio: cardioWeek)
                         }
                     }
                     // A hidden tracker's card is also the only place to log that
@@ -251,6 +255,11 @@ struct ProgressTabView: View {
             ExerciseProgressSheet(profile: profile, exercise: exercise)
         }
         .onAppear { addVO2TrackerOnce() }
+        // A read, never an authorization request: refreshes the Health workouts
+        // when Progress opens, since the sync otherwise runs from Today.
+        .task(id: profile.id) {
+            if profile.healthGranted { await health.refreshCardioWorkouts() }
+        }
     }
 
     /// One-time, per profile: the VO₂ max tracker is on for everyone (owner
@@ -265,11 +274,11 @@ struct ProgressTabView: View {
         UserDefaults.standard.set(true, forKey: key)
     }
 
-    /// The tracker's empty state offers the existing explicit Connect flow: a
-    /// new read type is only granted through it (CLAUDE.md hard rule 4), so
-    /// people who connected before VO₂ max was added need to run it again.
-    /// Never called from `.task`/`.onAppear`.
-    private func connectHealthForVO2() {
+    /// The VO₂ max and cardio-minutes empty states offer the existing explicit
+    /// Connect flow: a new read type is only granted through it (CLAUDE.md hard
+    /// rule 4), so people who connected before VO₂ max or workouts were added
+    /// need to run it again. Button taps only — never `.task`/`.onAppear`.
+    private func connectHealth() {
         Task {
             let health = HealthKitService.shared
             guard await health.connectAndPersist(profileId: profile.id, ctx: ctx, toasts: toasts) else { return }
@@ -537,10 +546,11 @@ struct ProgressTabView: View {
         body body_: [BodyMetricDTO],
         markers: [HealthMarkerDTO],
         steps: [StepCountDTO],
-        training: TrainingSummary
+        training: TrainingSummary,
+        cardio: CardioFitness.WeeklyMinutes
     ) -> some View {
-        let value = kind.displayValue(body: body_, markers: markers, steps: steps, training: training, profile: profile, system: unitSystem)
-        let trend = kind.trendChip(body: body_, markers: markers, steps: steps, training: training, profile: profile, system: unitSystem)
+        let value = kind.displayValue(body: body_, markers: markers, steps: steps, training: training, cardio: cardio, profile: profile, system: unitSystem)
+        let trend = kind.trendChip(body: body_, markers: markers, steps: steps, training: training, cardio: cardio, profile: profile, system: unitSystem)
         let tint  = statusTint(for: kind, body: body_, markers: markers)
         StatCard(
             title: kind.title,
@@ -565,7 +575,7 @@ struct ProgressTabView: View {
             guard let mk = kind.markerKind,
                   let v = latestMarkerValue(mk, in: markers) else { return nil }
             status = HealthRanges.status(for: mk, value: v)
-        case .vo2Max:
+        case .vo2Max, .cardioMinutes:
             // Never tinted: no sourced range, no target (plan §1.3–1.4, §9.1).
             return nil
         case .bmi:
@@ -611,7 +621,15 @@ struct ProgressTabView: View {
         case .trainingVolume:
             trainingVolumeDetail
         case .vo2Max:
-            VO2MaxDetailSheet(markers: markers, onConnect: connectHealthForVO2)
+            VO2MaxDetailSheet(markers: markers, onConnect: connectHealth)
+        case .cardioMinutes:
+            CardioMinutesDetailSheet(
+                weekly: CardioFitness.weeklyMinutes(
+                    activities: activityModels.map(\.snapshot), legacy: cardioModels.map(\.snapshot),
+                    health: health.cardioWorkouts, now: Date()),
+                hasHealthWorkouts: !health.cardioWorkouts.isEmpty,
+                onConnect: connectHealth
+            )
         default:
             StatDetailSheet(
                 title: kind.title,
@@ -705,8 +723,9 @@ struct ProgressTabView: View {
             toasts.show(Toast(title: "\(kind.title) logged",
                               detail: "\(formattedValue(value)) \(kind.unit(system: unitSystem))",
                               accent: .ok, symbol: "heart.text.square.fill"))
-        case .bp, .stepsAvg, .bmi, .trainingVolume, .vo2Max:
+        case .bp, .stepsAvg, .bmi, .trainingVolume, .vo2Max, .cardioMinutes:
             // vo2Max: read-only Apple Watch estimate, never entered by hand.
+            // cardioMinutes: derived from logged sessions + Health workouts.
             break
         }
     }
@@ -1038,6 +1057,115 @@ private struct VO2MaxInfoSheet: View {
     }
 }
 
+// MARK: - Cardio minutes detail sheet
+
+/// Weekly cardio minutes: logged sessions plus workouts other apps saved to
+/// Apple Health (docs/cardio-fitness-plan.md §4.5, §7 Q5 b + Q7). A thin
+/// `StatDetailSheet` host like Weekly reps. Own history only, no target, nothing
+/// colour-judged; the minutes never feed burn or the energy balance.
+private struct CardioMinutesDetailSheet: View {
+    let weekly: CardioFitness.WeeklyMinutes
+    /// False before the workout read is granted, or when Health simply has no
+    /// workouts in the window — HealthKit doesn't say which, so the hint is calm.
+    let hasHealthWorkouts: Bool
+    /// The existing explicit Connect flow (see `ProgressTabView.connectHealth`).
+    let onConnect: () -> Void
+
+    @Environment(\.theme) private var theme
+    @State private var showInfo = false
+
+    var body: some View {
+        StatDetailSheet(
+            title: StatKind.cardioMinutes.title,
+            unit: "minutes · by week, Monday to Sunday",
+            series: weekly.series,
+            canLog: false,
+            showsEntries: false,
+            minChartPoints: 2,
+            emptyChartText: "Not enough weeks yet.",
+            emptyChartDetail: "Two weeks with cardio sessions and the weekly trend appears here.",
+            personalNote: CardioFitness.minutesNoteText(weekly.note),
+            headline: { headline },
+            footer: { footer }
+        )
+        .sheet(isPresented: $showInfo) {
+            CardioMinutesInfoSheet()
+        }
+    }
+
+    @ViewBuilder
+    private var headline: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(alignment: .firstTextBaseline, spacing: 10) {
+                Text(weekly.thisWeek.formatted())
+                    .font(.system(size: 48, weight: .semibold, design: .monospaced))
+                    .foregroundStyle(theme.text)
+                Text("min this week")
+                    .font(.system(size: 18, weight: .regular))
+                    .foregroundStyle(theme.text)
+                Spacer()
+                Button {
+                    showInfo = true
+                    Haptics.selection()
+                } label: {
+                    Image(systemName: "info.circle")
+                        .font(.system(size: 18))
+                        .foregroundStyle(theme.dim)
+                }
+                .tactile(.ghost)
+                .accessibilityLabel("What counts as cardio minutes")
+            }
+            Text("Last week: \(weekly.lastWeek.formatted()) min")
+                .font(.callout)
+                .foregroundStyle(theme.dim)
+        }
+    }
+
+    @ViewBuilder
+    private var footer: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("This week")
+                .font(.caption).tracking(2).textCase(.uppercase)
+                .foregroundStyle(theme.dim)
+            StatDetailRow(label: "Logged here", value: "\(weekly.loggedThisWeek.formatted()) min")
+            StatDetailRow(label: "From Apple Health", value: "\(weekly.healthThisWeek.formatted()) min")
+            if !hasHealthWorkouts {
+                // HealthKit never reveals a denied read, so this never says "denied" (plan §4.3).
+                Text("No workouts from Apple Health yet. Connected Apple Health before this tracker was added? Connect again so workouts from other apps, like Apple's Workout app, count here.")
+                    .font(.footnote).foregroundStyle(theme.dim)
+                    .fixedSize(horizontal: false, vertical: true)
+                Button {
+                    Haptics.selection()
+                    onConnect()
+                } label: {
+                    Text("Connect Apple Health")
+                }
+                .tactile(.primary)
+            }
+        }
+    }
+}
+
+/// What counts, how double counting is avoided, and why this isn't Apple's
+/// exercise minutes. No target and no push for more (plan §1, §6).
+private struct CardioMinutesInfoSheet: View {
+    var body: some View {
+        InfoSheetScaffold(title: "Cardio minutes", subtitle: "YOUR OWN WEEKS, NOT A TARGET") {
+            InfoSection(title: "What it counts") {
+                InfoBody("Every minute of the cardio sessions you log here — walks, runs, rides, swims, sports, dancing and the like — plus workouts other apps save to Apple Health, such as Apple's Workout app. Pilates, yoga and stretching aren't included. Weeks run Monday to Sunday, and a session counts in the week it started.")
+            }
+            InfoSection(title: "Nothing counted twice") {
+                InfoBody("Workouts from this app's watch app are already logged here, so they're skipped. A Health workout that overlaps a session you logged here by more than half its length is skipped too. If you record a walk in Apple's Workout app, there's no need to log it again here.")
+                InfoBody("These minutes only count time. They never add to your calories burned.")
+            }
+            InfoSection(title: "Not Apple's exercise minutes") {
+                InfoBody("Apple's exercise minutes need brisk movement, so a slow walk may not count there. Here every minute of a session counts, at any pace.")
+            }
+            InfoFootnote("The note under the number compares you only with your own earlier weeks. A lower week is information, not a verdict.")
+        }
+    }
+}
+
 // MARK: - StatKind
 
 enum StatKind: String, CaseIterable, Identifiable {
@@ -1048,6 +1176,8 @@ enum StatKind: String, CaseIterable, Identifiable {
     case shoulders, chest, arm, thigh
     // Cardio fitness (VO₂ max) from Apple Health. Appended last for the same reason.
     case vo2Max
+    // Weekly cardio minutes (logged sessions + Health workouts). Appended last too.
+    case cardioMinutes
 
     var id: String { rawValue }
 
@@ -1071,6 +1201,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .a1c:              return "A1c"
         case .fastingGlucose:   return "Fasting Gluc."
         case .vo2Max:           return "Cardio Fitness"
+        case .cardioMinutes:    return "Cardio Minutes"
         }
     }
 
@@ -1087,6 +1218,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .ldl, .hdl, .totalCholesterol, .fastingGlucose: return "mg/dL"
         case .a1c:              return "%"
         case .vo2Max:           return "VO₂ max"
+        case .cardioMinutes:    return "min · this week"
         }
     }
 
@@ -1102,7 +1234,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .restingHR:        return "resting HR (bpm)"
         case .ldl, .hdl, .totalCholesterol, .fastingGlucose: return "value (mg/dL)"
         case .a1c:              return "A1c (%)"
-        case .bmi, .bp, .stepsAvg, .trainingVolume, .vo2Max: return ""
+        case .bmi, .bp, .stepsAvg, .trainingVolume, .vo2Max, .cardioMinutes: return ""
         }
     }
 
@@ -1126,6 +1258,8 @@ enum StatKind: String, CaseIterable, Identifiable {
             return false   // derived
         case .vo2Max:
             return false   // read-only Apple Watch estimate; no manual entry
+        case .cardioMinutes:
+            return false   // derived; sessions are logged in LogPastSessionSheet
         case .weight, .bodyFat, .waist, .shoulders, .chest, .arm, .thigh,
              .restingHR, .bp, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
             return true
@@ -1142,7 +1276,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .fastingGlucose:   return .fastingGlucose
         case .vo2Max:           return .vo2Max
         case .weight, .bodyFat, .waist, .shoulders, .chest, .arm, .thigh,
-             .bmi, .stepsAvg, .trainingVolume, .bp:
+             .bmi, .stepsAvg, .trainingVolume, .bp, .cardioMinutes:
             return nil
         }
     }
@@ -1163,6 +1297,9 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .vo2Max:
             // On for everyone (owner decision, plan §10), with a calm empty
             // state until an Apple Watch estimate arrives from Health.
+            return true
+        case .cardioMinutes:
+            // Filled in by the app itself (logged sessions + Health workouts).
             return true
         case .bmi:
             // Derived from weight + profile height — the Weight card already
@@ -1190,7 +1327,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .restingHR, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose, .vo2Max:
             guard let k = markerKind else { return false }
             return markers.contains { $0.kind == k }
-        case .bmi, .stepsAvg, .trainingVolume:
+        case .bmi, .stepsAvg, .trainingVolume, .cardioMinutes:
             // Derived or always-on: nothing of their own is "logged".
             return false
         }
@@ -1201,6 +1338,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         markers: [HealthMarkerDTO],
         steps: [StepCountDTO],
         training: TrainingSummary = .empty,
+        cardio: CardioFitness.WeeklyMinutes = .empty,
         profile: ProfileDTO? = nil,
         system: UnitSystem = .imperial
     ) -> String? {
@@ -1246,6 +1384,10 @@ enum StatKind: String, CaseIterable, Identifiable {
             return latestMarkerValue(.fastingGlucose, in: markers).map { formattedValue($0) }
         case .vo2Max:
             return latestMarkerValue(.vo2Max, in: markers).map { formattedValue($0) }
+        case .cardioMinutes:
+            // Like Weekly Reps: 0 beside last week's total; "No data yet" only
+            // when neither week has minutes.
+            return cardio.thisWeek > 0 || cardio.lastWeek > 0 ? cardio.thisWeek.formatted() : nil
         }
     }
 
@@ -1254,6 +1396,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         markers: [HealthMarkerDTO],
         steps: [StepCountDTO],
         training: TrainingSummary = .empty,
+        cardio: CardioFitness.WeeklyMinutes = .empty,
         profile: ProfileDTO? = nil,
         system: UnitSystem = .imperial
     ) -> String? {
@@ -1289,6 +1432,9 @@ enum StatKind: String, CaseIterable, Identifiable {
             return CardioFitness.chipText(
                 CardioFitness.vo2Trend(samples: Trends.markerSeries(markers, kind: .vo2Max), now: Date())
             )
+        case .cardioMinutes:
+            guard cardio.lastWeek > 0 || cardio.thisWeek > 0 else { return nil }
+            return String(format: "%@%d vs last wk", cardio.delta >= 0 ? "+" : "", cardio.delta)
         default:
             return nil
         }
@@ -1299,6 +1445,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         markers: [HealthMarkerDTO],
         steps: [StepCountDTO],
         training: TrainingSummary = .empty,
+        cardio: CardioFitness.WeeklyMinutes = .empty,
         system: UnitSystem = .imperial
     ) -> [Trends.Point] {
         switch self {
@@ -1323,6 +1470,8 @@ enum StatKind: String, CaseIterable, Identifiable {
             return Steps.series(steps, days: 30)
         case .trainingVolume:
             return training.weeklySeries
+        case .cardioMinutes:
+            return cardio.series
         case .bp:
             return Trends.markerSeries(markers, kind: .bpSystolic)
         case .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose, .vo2Max:
@@ -1389,7 +1538,7 @@ enum StatKind: String, CaseIterable, Identifiable {
                     return StatDetailEntry(id: m.id.uuidString, dateLabel: m.date,
                                            valueLabel: "\(Int(m.value)) \(label)")
                 }
-        case .stepsAvg, .bmi, .trainingVolume:
+        case .stepsAvg, .bmi, .trainingVolume, .cardioMinutes:
             return []
         }
     }
