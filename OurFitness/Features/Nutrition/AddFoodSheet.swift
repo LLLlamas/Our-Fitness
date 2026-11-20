@@ -49,6 +49,8 @@ struct AddFoodSheet: View {
     @State private var displayedResults: [CommonFood] = []
     /// Other sizes of a collapsed chain item, keyed by the shown row's id.
     @State private var sizeChoices: [String: [SizeChoice]] = [:]
+    /// The spelling-fixed query the results are for ("Showing results for …"); nil = as typed.
+    @State private var correctedQuery: String?
     @State private var mealToLog: QuickMealLog?
     @State private var templateToLog: SavedMealTemplateDTO?
     @State private var describeText: String?
@@ -187,6 +189,10 @@ struct AddFoodSheet: View {
                     } else {
                         restaurantRow
                         describeCard
+                        if let correctedQuery, !displayedResults.isEmpty {
+                            Text("Showing results for “\(correctedQuery)”")
+                                .font(.caption).foregroundStyle(theme.dim)
+                        }
                         if !displayedResults.isEmpty { sectionHeader("Foods") }
                     }
 
@@ -233,10 +239,11 @@ struct AddFoodSheet: View {
         .task {
             // Read the (small) restaurant catalog off the main thread once, so the
             // first keystroke that consults it doesn't pay for the SQLite read.
-            await Task.detached(priority: .userInitiated) { _ = RestaurantCatalog.shared.isEmpty }.value
+            await Task.detached(priority: .userInitiated) { _ = CuratedSearchIndex.shared.vocabulary }.value
             restaurantsReady = true
         }
-        .debouncedFoodSearch(query: query, results: $displayedResults, sizeChoices: $sizeChoices) {
+        .debouncedFoodSearch(query: query, results: $displayedResults, sizeChoices: $sizeChoices,
+                             correctedQuery: $correctedQuery) {
             defaultOrdered(logModels.map(\.snapshot))
         }
         .presentationDetents([.large])
@@ -517,18 +524,20 @@ extension View {
         results: Binding<[CommonFood]>,
         emptyResults: @escaping () -> [CommonFood]
     ) -> some View {
-        modifier(DebouncedFoodSearch(query: query, results: results, sizeChoices: nil, emptyResults: emptyResults))
+        modifier(DebouncedFoodSearch(query: query, results: results, sizeChoices: nil, correctedQuery: nil, emptyResults: emptyResults))
     }
 
     /// Same search, also reporting the size choices of collapsed chain items
-    /// (keyed by the shown row's id).
+    /// (keyed by the shown row's id) and the spelling-corrected query, if any.
     func debouncedFoodSearch(
         query: String,
         results: Binding<[CommonFood]>,
         sizeChoices: Binding<[String: [SizeChoice]]>,
+        correctedQuery: Binding<String?>,
         emptyResults: @escaping () -> [CommonFood]
     ) -> some View {
-        modifier(DebouncedFoodSearch(query: query, results: results, sizeChoices: sizeChoices, emptyResults: emptyResults))
+        modifier(DebouncedFoodSearch(query: query, results: results, sizeChoices: sizeChoices,
+                                     correctedQuery: correctedQuery, emptyResults: emptyResults))
     }
 }
 
@@ -536,6 +545,7 @@ private struct DebouncedFoodSearch: ViewModifier {
     let query: String
     @Binding var results: [CommonFood]
     let sizeChoices: Binding<[String: [SizeChoice]]>?
+    let correctedQuery: Binding<String?>?
     let emptyResults: () -> [CommonFood]
 
     func body(content: Content) -> some View {
@@ -544,6 +554,7 @@ private struct DebouncedFoodSearch: ViewModifier {
             if q.trimmingCharacters(in: .whitespaces).isEmpty {
                 results = emptyResults()
                 sizeChoices?.wrappedValue = [:]
+                correctedQuery?.wrappedValue = nil
                 return
             }
             try? await Task.sleep(nanoseconds: 180_000_000)   // 180 ms
@@ -554,6 +565,7 @@ private struct DebouncedFoodSearch: ViewModifier {
             guard !Task.isCancelled else { return }
             results = outcome.foods
             sizeChoices?.wrappedValue = outcome.sizeChoices
+            correctedQuery?.wrappedValue = outcome.correctedQuery
         }
     }
 }

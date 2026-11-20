@@ -159,14 +159,22 @@ public struct FoodSearchQuery: Sendable {
 /// Pre-normalized name/alias words for every curated food, so a search is a
 /// pass over small arrays instead of re-normalizing ~5k aliases per keystroke.
 final class CuratedSearchIndex: Sendable {
-    static let shared = CuratedSearchIndex(CommonFoods.all)
+    static let shared = CuratedSearchIndex(CommonFoods.all, catalog: .shared)
 
     private let entries: [(food: CommonFood, name: [String], aliases: [[String]])]
+    /// Typo-correction words: curated names + aliases, `catalog`'s menu-item
+    /// words and chain keys (`SearchVocabulary`).
+    let vocabulary: SearchVocabulary
 
     init(_ foods: [CommonFood], catalog: RestaurantCatalog? = nil) {
-        entries = foods.map { food in
-            (food, FoodSearchQuery.normalizedWords(food.name), food.aliases.map(FoodSearchQuery.normalizedWords))
+        let built = foods.map { food in
+            (food: food, name: FoodSearchQuery.normalizedWords(food.name),
+             aliases: food.aliases.map(FoodSearchQuery.normalizedWords))
         }
+        entries = built
+        vocabulary = SearchVocabulary(
+            wordLists: built.flatMap { [$0.name] + $0.aliases } + (catalog?.itemWordLists ?? []),
+            chainKeys: catalog?.chainKeys ?? [])
     }
 
     func matches(_ q: FoodSearchQuery) -> [CommonFood] {

@@ -119,3 +119,8 @@ Shipped 2026-11-06 from the Mac (fastlane not installed), `main` at `07bfa1e`: R
 FTS fix: `FoodSearchQuery.ftsQuery` joins words with ` AND `; chain queries collapse size variants (default Medium > Regular > Grande > 10 pc), max 5 chain groups, other chains and duplicate curated `ff-` rows dropped, other rows capped at 5; size pills inside `FoodResultRow`.
 Verified: `xcodebuild test -only-testing:` `FoodSearchTests` (9), `RestaurantCatalogTests` (16), `ChainResultsTests` (6) on iPhone 17 simulator, `CODE_SIGNING_ALLOWED=NO` — 31 tests, 0 failures (incl. a real FTS5 MATCH on a temp database); full app `xcodebuild build` BUILD SUCCEEDED.
 Not run: any simulator/device look at the size pills; the real bundled database for the chain queries (fixtures only so far).
+
+## Add-food search S2: typo tolerance (2026-11-20, branch feat/add-food-search) — validation record
+Adjacent swap = one edit; fuzzy chain split with food-word guards; `SearchVocabulary` correction; chain-menu-scoped remainder fix; `filter` uses plural forms; AddFoodSheet shows "Showing results for …".
+Verified: `xcodebuild test -only-testing:` `FoodSearchTests` (11), `RestaurantCatalogTests` (20), `ChainResultsTests` (6), `FoodSearchRealDataTests` (3, real bundled `usda-foods.db` + real curated library) — 40 tests, 0 failures. Real-data must-pass queries: mdconalds fries, mcdonals nuggets, starbuks latte, shak shack fries, mcdonalds frys, mcdonalds freis, shake shack fires, chiken breast, bananna, grenola all return the expected item FIRST (asserted in `testMustPassTypoQueries`).
+Not run: simulator/device look at the "Showing results for" line.

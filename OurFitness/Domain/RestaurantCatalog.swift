@@ -158,12 +158,30 @@ public enum RestaurantMatcher {
         return Array(ranked.prefix(limit))
     }
 
+    /// Real words that sit one edit from a chain key but aren't the chain:
+    /// cakes/canes, queso/quest, panela/panera, zoodles/noodles, chiles/chilis.
+    /// A floor under the vocabulary check (`CuratedSearchIndex` adds every curated
+    /// food word), for words the curated list doesn't carry.
+    static let nonChainWords: Set<String> = [
+        "cakes", "queso", "panela", "zoodles", "chiles", "organ", "habits",
+    ]
+    public static func isNonChainWord(_ w: String) -> Bool { nonChainWords.contains(w) }
+
     /// Splits "shake shack fries" / "shakeshack fries" / "raising canes box"
     /// into (chain, remainder) when the query's leading words spell a chain's
     /// whole name or an alias. The longest leading match wins. Remainder may be
     /// empty ("shake shack"). Partial chain names don't split — "shake fries"
     /// stays a plain food search.
-    public static func split(_ query: String, chains: [RestaurantChain]) -> (chain: RestaurantChain, remainder: String, fuzzy: Bool)? {
+    ///
+    /// No exact match → typo tolerance: leading words run together (≥5
+    /// characters, `fuzzy` = true) within ONE edit (an adjacent swap counts as
+    /// one) of a key of exactly one chain split off ("mdconalds fries",
+    /// "shak shack fries"), unless the word is a real food word
+    /// (`isFoodWord`: "cakes" ≠ Canes, "queso" ≠ Quest).
+    public static func split(
+        _ query: String, chains: [RestaurantChain],
+        isFoodWord: (String) -> Bool = RestaurantMatcher.isNonChainWord
+    ) -> (chain: RestaurantChain, remainder: String, fuzzy: Bool)? {
         let qw = words(query)
         guard !qw.isEmpty else { return nil }
         var prefixes: [String] = []
@@ -177,12 +195,23 @@ public enum RestaurantMatcher {
                 if best == nil || n > best!.consumed { best = (chain, n) }
             }
         }
-        guard let best else { return nil }
-        return (best.chain, qw[best.consumed...].joined(separator: " "), false)
+        if let best { return (best.chain, qw[best.consumed...].joined(separator: " "), false) }
+
+        var fuzzy: (chain: RestaurantChain, consumed: Int)?
+        for (i, p) in prefixes.enumerated() where p.count >= minTypoLength && !isFoodWord(p) {
+            let a = Array(p)
+            let near = chains.filter { chain in
+                chain.matchKeys.contains { editDistance(a, Array($0), cap: 1) == 1 }
+            }
+            if near.count == 1 { fuzzy = (near[0], i + 1) }   // longest leading match wins
+        }
+        guard let fuzzy else { return nil }
+        return (fuzzy.chain, qw[fuzzy.consumed...].joined(separator: " "), true)
     }
 
     /// Menu items matching `query`: every query word must prefix a word of the
-    /// item name or its category, or appear inside the run-together item name
+    /// item name or its category (or share its singular form — "fry" finds
+    /// "Fries", never "Fried"), or appear inside the run-together item name
     /// ("burger" finds "ShackBurger"). Ranked: all words hit the item name before
     /// category-only hits; within that, the name with the fewest words beyond the
     /// query (so "shackburger" puts "Single ShackBurger" above "ShackBurger, Single
@@ -200,9 +229,9 @@ public enum RestaurantMatcher {
             var allInName = true
             var matched = true
             for w in qw {
-                if nameWords.contains(where: { $0.hasPrefix(w) }) || compactName.contains(w) { continue }
+                if nameWords.contains(where: { FoodSearchQuery.hits(w, $0) }) || compactName.contains(w) { continue }
                 allInName = false
-                if !catWords.contains(where: { $0.hasPrefix(w) }) { matched = false; break }
+                if !catWords.contains(where: { FoodSearchQuery.hits(w, $0) }) { matched = false; break }
             }
             guard matched else { continue }
             let extraWords = max(0, nameWords.count - qw.count)
@@ -212,6 +241,27 @@ public enum RestaurantMatcher {
         return hits
             .sorted { $0.rank.lexicographicallyPrecedes($1.rank) }
             .map(\.item)
+    }
+
+    /// Fixes one misspelled query word against THIS menu: the word itself when
+    /// any item accepts it (as `filter` would), else the single menu word ≥4
+    /// letters one edit away (most frequent first, then A–Z), else nil. Scoped
+    /// to the menu on purpose — "fires" is a word, but at Shake Shack the user
+    /// meant "fries".
+    static func menuCorrection(for w: String, in items: [RestaurantMenuItem]) -> String? {
+        guard w.count >= SearchVocabulary.minCorrectableLength, w.allSatisfy(\.isLetter) else { return nil }
+        var freq: [String: Int] = [:]
+        for item in items {
+            let compact = item.nameWords.joined()
+            if item.nameWords.contains(where: { FoodSearchQuery.hits(w, $0) }) || compact.contains(w)
+                || item.categoryWords.contains(where: { FoodSearchQuery.hits(w, $0) }) { return w }
+            for word in item.nameWords + item.categoryWords where word.count >= 4 && word.allSatisfy(\.isLetter) {
+                freq[word, default: 0] += 1
+            }
+        }
+        let a = Array(w)
+        let near = freq.filter { editDistance(a, Array($0.key), cap: 1) == 1 }
+        return near.max { $0.value != $1.value ? $0.value < $1.value : $0.key > $1.key }?.key
     }
 
     /// Items grouped by category; categories in the chain's menu order (first
@@ -243,20 +293,32 @@ public enum RestaurantMatcher {
         return false
     }
 
-    /// Levenshtein distance, short-circuiting once every cell exceeds `cap`.
+    /// Edit distance (insert / delete / substitute, plus an adjacent swap as ONE
+    /// edit — optimal string alignment: "freis" ↔ "fries" = 1), short-circuiting
+    /// once two consecutive rows all exceed `cap`.
     static func editDistance(_ a: [Character], _ b: [Character], cap: Int) -> Int {
         if abs(a.count - b.count) > cap { return cap + 1 }
         guard !a.isEmpty else { return b.count }
+        guard !b.isEmpty else { return a.count }
+        var prevPrev: [Int] = []
         var prev = Array(0...b.count)
+        var prevMin = 0
         for i in 1...a.count {
             var cur = [i] + Array(repeating: 0, count: b.count)
             var rowMin = cur[0]
             for j in stride(from: 1, through: b.count, by: 1) {
-                cur[j] = min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] == b[j - 1] ? 0 : 1))
-                rowMin = min(rowMin, cur[j])
+                var v = min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] == b[j - 1] ? 0 : 1))
+                if i > 1, j > 1, a[i - 1] == b[j - 2], a[i - 2] == b[j - 1] {
+                    v = min(v, prevPrev[j - 2] + 1)
+                }
+                cur[j] = v
+                rowMin = min(rowMin, v)
             }
-            if rowMin > cap { return cap + 1 }
+            // A swap reaches two rows back, so only give up when both rows are over.
+            if rowMin > cap, prevMin > cap { return cap + 1 }
+            prevPrev = prev
             prev = cur
+            prevMin = rowMin
         }
         return prev[b.count]
     }
@@ -297,9 +359,17 @@ public final class RestaurantCatalog: Sendable {
         RestaurantMatcher.sections(menu(for: slug))
     }
 
-    public func split(_ query: String) -> (chain: RestaurantChain, remainder: String, fuzzy: Bool)? {
-        RestaurantMatcher.split(query, chains: chains)
+    public func split(
+        _ query: String, isFoodWord: (String) -> Bool = RestaurantMatcher.isNonChainWord
+    ) -> (chain: RestaurantChain, remainder: String, fuzzy: Bool)? {
+        RestaurantMatcher.split(query, chains: chains, isFoodWord: isFoodWord)
     }
+
+    /// Item-name words of every menu, for the search vocabulary.
+    var itemWordLists: [[String]] { itemsBySlug.values.flatMap { $0.map(\.nameWords) } }
+
+    /// Every chain name / alias run together, for the search vocabulary.
+    var chainKeys: [String] { chains.flatMap(\.matchKeys) }
 
     /// "shake shack fries" → Shake Shack's items matching "fries", best first.
     /// Empty when the query doesn't start with a chain or names only the chain.

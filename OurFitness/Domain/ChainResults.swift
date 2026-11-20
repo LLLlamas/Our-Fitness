@@ -204,11 +204,17 @@ extension FoodSearch {
         database: SQLiteFoodDatabase,
         index: CuratedSearchIndex
     ) async -> FoodSearchOutcome {
-        let q = FoodSearchQuery(raw)
-        guard !q.isEmpty else { return FoodSearchOutcome() }
-        let found = await combined(q, index: index, database: database)
-        guard let (chain, remainder, _) = catalog.split(raw), !remainder.isEmpty else {
-            return FoodSearchOutcome(foods: found)
+        guard !FoodSearchQuery(raw).isEmpty else { return FoodSearchOutcome() }
+        let plan = index.plan(for: raw, catalog: catalog)
+        var found = await combined(FoodSearchQuery(plan.effective), index: index, database: database)
+        var corrected = plan.corrected
+        guard let (chain, remainder) = plan.chain, !remainder.isEmpty else {
+            // A fix that finds nothing must never hide what the typed words would have found.
+            if corrected != nil, found.isEmpty {
+                found = await combined(FoodSearchQuery(raw), index: index, database: database)
+                corrected = nil
+            }
+            return FoodSearchOutcome(foods: found, correctedQuery: corrected)
         }
         let menu = catalog.menu(for: chain.slug)
         let hits = RestaurantMatcher.filter(menu, query: remainder).map { $0.food.asCommonFood }
@@ -220,7 +226,40 @@ extension FoodSearch {
             if f.id.hasPrefix("ff-") { return menu.isEmpty && chain.ownsCuratedFastFood(id: f.id) }
             return true
         }
-        return FoodSearchOutcome(foods: grouped.foods + others.prefix(maxOtherRows), sizeChoices: grouped.choices)
+        return FoodSearchOutcome(foods: grouped.foods + others.prefix(maxOtherRows),
+                                 sizeChoices: grouped.choices, correctedQuery: corrected)
+    }
+}
+
+/// How a raw query is read: the text actually searched, the chain peeled off
+/// it (with the remainder, misspellings fixed), and — only when the spelling
+/// changed — the text to show as "Showing results for …".
+struct SearchPlan {
+    let effective: String
+    let chain: (chain: RestaurantChain, remainder: String)?
+    let corrected: String?
+}
+
+extension CuratedSearchIndex {
+
+    func plan(for raw: String, catalog: RestaurantCatalog) -> SearchPlan {
+        let split = catalog.split(raw, isFoodWord: { vocabulary.isFoodWord($0) || RestaurantMatcher.isNonChainWord($0) })
+        if let (chain, remainder, fuzzy) = split {
+            let original = RestaurantMatcher.words(remainder)
+            let menu = catalog.menu(for: chain.slug)
+            // This menu's words first ("fires" → Fries at Shake Shack), then the whole vocabulary.
+            let fixed = original.map { RestaurantMatcher.menuCorrection(for: $0, in: menu) ?? vocabulary.correction(for: $0) ?? $0 }
+            if !fuzzy, fixed == original {
+                return SearchPlan(effective: raw, chain: (chain, remainder), corrected: nil)
+            }
+            let shown = ([chain.name] + fixed).joined(separator: " ")
+            return SearchPlan(effective: shown, chain: (chain, fixed.joined(separator: " ")), corrected: shown)
+        }
+        let original = RestaurantMatcher.words(raw)
+        let fixed = original.map { vocabulary.correction(for: $0) ?? $0 }
+        guard fixed != original else { return SearchPlan(effective: raw, chain: nil, corrected: nil) }
+        let shown = fixed.joined(separator: " ")
+        return SearchPlan(effective: shown, chain: nil, corrected: shown)
     }
 }
 

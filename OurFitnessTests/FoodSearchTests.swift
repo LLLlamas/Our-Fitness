@@ -122,6 +122,44 @@ final class FoodSearchTests: XCTestCase {
         XCTAssertEqual(hits.map(\.id), ["a"])
     }
 
+    // MARK: - Typo correction
+
+    private lazy var vocabIndex = CuratedSearchIndex([
+        food("chicken", "Chicken breast", ["grilled chicken"]),
+        food("banana", "Banana"),
+        food("granola", "Granola", ["muesli"]),
+        food("fries", "French fries"),
+        food("cheese", "Cheddar cheese", ["cheese"]),
+        food("cheese2", "Cheese pizza"),
+        food("chickpea", "Chickpeas"),
+    ])
+
+    func testCorrectsUnknownWordsToVocabulary() {
+        let v = vocabIndex.vocabulary
+        XCTAssertEqual(v.correction(for: "chiken"), "chicken")
+        XCTAssertEqual(v.correction(for: "bananna"), "banana")
+        XCTAssertEqual(v.correction(for: "grenola"), "granola")
+        XCTAssertEqual(v.correction(for: "chesse"), "cheese")     // two candidates' worth of letters, one word
+        XCTAssertEqual(v.correction(for: "fries"), nil)           // already a word
+        XCTAssertEqual(v.correction(for: "mueslli"), "muesli")    // an alias counts
+        XCTAssertNil(v.correction(for: "zzzzzz"))                 // nothing one edit away
+        XCTAssertNil(v.correction(for: "fry"))                    // under 5 characters
+        // Ties go to the more frequent word: "cheese" appears 3×, "chese"-like neighbours fewer.
+        let plan = vocabIndex.plan(for: "chiken breast", catalog: RestaurantCatalog(chains: [], items: []))
+        XCTAssertEqual(plan.corrected, "chicken breast")
+        XCTAssertEqual(plan.effective, "chicken breast")
+    }
+
+    func testNoCorrectionWhileTypingAPrefix() {
+        let v = vocabIndex.vocabulary
+        for typing in ["chick", "chicke", "banan", "granol", "chicken", "bananas", "grilled"] {
+            XCTAssertNil(v.correction(for: typing), typing)        // a prefix, a word or a plural of one
+        }
+        let plan = vocabIndex.plan(for: "chick", catalog: RestaurantCatalog(chains: [], items: []))
+        XCTAssertNil(plan.corrected)
+        XCTAssertEqual(plan.effective, "chick")
+    }
+
     func testRepeatIngredientsKeepPortionsWithFreshIds() {
         let uid = UUID()
         let ing = MealIngredient(foodId: "bagel", name: "Bagel", servingLabel: "1 bagel",
