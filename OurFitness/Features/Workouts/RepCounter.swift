@@ -1,5 +1,5 @@
 // Friction-free set counter for any exercise. Scroll a wheel to the set's reps
-// (or minutes for a duration exercise), Save set commits a WorkoutSet. Shows a weight field only
+// (or minutes for a duration exercise) and nudge it with the ±1 buttons beside it; Save set commits a WorkoutSet. Shows a weight field only
 // for a lift that tracks per-set weight. For isometric exercises, shows a
 // hold timer instead. Calories go through `Repos.setCaloriesEstimate`, the
 // same function a set edit recomputes with.
@@ -469,21 +469,50 @@ private struct RepCounterView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    /// Same wheel idiom as the isometric hold picker.
+    /// Wheel flanked by one-step buttons: the wheel for big jumps, ±1 for the last rep or two.
+    /// The buttons sit outside the wheel's clipped, hit-tested rectangle so a tap never lands on it.
     @ViewBuilder
     private var countPicker: some View {
         VStack(spacing: 8) {
             Text((isMinutes ? "Minutes this set" : "Reps this set").uppercased())
                 .font(.system(size: 10)).tracking(2)
                 .foregroundStyle(theme.dim)
-            Picker(isMinutes ? "Minutes" : "Reps", selection: $reps) {
-                ForEach(Array(countRange), id: \.self) { n in
-                    Text("\(n) \(unitWord(n))").tag(n)
+            HStack(spacing: 12) {
+                Button {
+                    reps = max(countRange.lowerBound, reps - 1)
+                    Haptics.bump()
+                } label: {
+                    Image(systemName: "minus")
+                        .font(.system(size: 20, weight: .semibold))
+                        .frame(width: 36, height: 36)
                 }
+                .tactile(.secondary)
+                .disabled(reps <= countRange.lowerBound)
+                .accessibilityLabel(isMinutes ? "One fewer minute" : "One fewer rep")
+
+                Picker(isMinutes ? "Minutes" : "Reps", selection: $reps) {
+                    ForEach(Array(countRange), id: \.self) { n in
+                        Text("\(n) \(unitWord(n))").tag(n)
+                    }
+                }
+                .pickerStyle(.wheel)
+                .frame(maxWidth: .infinity)
+                .frame(height: 150)
+                .clipped()
+                .contentShape(Rectangle())
+
+                Button {
+                    reps = min(countRange.upperBound, reps + 1)
+                    Haptics.bump()
+                } label: {
+                    Image(systemName: "plus")
+                        .font(.system(size: 20, weight: .semibold))
+                        .frame(width: 36, height: 36)
+                }
+                .tactile(.primary)
+                .disabled(reps >= countRange.upperBound)
+                .accessibilityLabel(isMinutes ? "One more minute" : "One more rep")
             }
-            .pickerStyle(.wheel)
-            .frame(height: 150)
-            .clipped()
         }
     }
 
