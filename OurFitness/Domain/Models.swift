@@ -617,6 +617,16 @@ public struct SavedMealTemplateDTO: Codable, Equatable, Sendable, Identifiable {
     public var totalPerServing: PerServing {
         ingredients.map(\.scaledPerServing).reduce(.zero, +)
     }
+
+    /// A food the user typed in by hand ("Save to My Foods"): one ingredient with
+    /// no `foodId` (it isn't in any database) carrying exactly the macros entered.
+    public static func singleFood(userId: UUID, name: String, perServing: PerServing,
+                                  emoji: String = "🍽️", createdAt: Date = Date()) -> SavedMealTemplateDTO {
+        SavedMealTemplateDTO(
+            userId: userId, name: name, emoji: emoji,
+            ingredients: [MealIngredient(foodId: nil, name: name, servingLabel: "1 serving", perServing: perServing)],
+            createdAt: createdAt)
+    }
 }
 
 public struct FoodLogEntryDTO: Codable, Equatable, Sendable, Identifiable {

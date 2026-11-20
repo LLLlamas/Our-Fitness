@@ -1,4 +1,5 @@
 import XCTest
+import SQLite3
 
 /// Lenient food search (`Domain/FoodSearch.swift`): case, apostrophes, word
 /// order, plurals and spelling variants don't matter; results rank by match
@@ -90,6 +91,88 @@ final class FoodSearchTests: XCTestCase {
         XCTAssertTrue(fts.contains("\"donuts\"*"))
         XCTAssertTrue(fts.contains("\"doughnut\"*"))
         XCTAssertEqual(FoodSearchQuery("rice").ftsQuery, "\"rice\"*")
+        // Words join with AND — a bare space before "(… OR …)" is an FTS5 syntax error.
+        XCTAssertEqual(FoodSearchQuery("shake shack fries").ftsQuery,
+                       "\"shake\"* AND \"shack\"* AND (\"frie\"* OR \"fries\"* OR \"fry\"*)")
+    }
+
+    private func makeFoodsDatabase() throws -> (path: String, db: SQLiteFoodDatabase) {
+        let path = FileManager.default.temporaryDirectory.appendingPathComponent("fts-\(UUID().uuidString).db").path
+        var raw: OpaquePointer?
+        guard sqlite3_open(path, &raw) == SQLITE_OK else { throw XCTSkip("sqlite open failed") }
+        let setup = """
+            CREATE TABLE foods (id TEXT NOT NULL, name TEXT NOT NULL, aliases TEXT NOT NULL, serving_label TEXT NOT NULL,
+              calories INTEGER NOT NULL, protein_g INTEGER NOT NULL, carbs_g INTEGER NOT NULL,
+              fat_g INTEGER NOT NULL, fiber_g INTEGER NOT NULL);
+            CREATE VIRTUAL TABLE foods_fts USING fts5(name, aliases, content=foods, content_rowid=rowid);
+            INSERT INTO foods VALUES ('a','Shake Shack Fries','','1 order',470,6,63,22,6);
+            INSERT INTO foods VALUES ('b','Shake Shack Shake','x|y','1 shake',500,9,60,20,0);
+            INSERT INTO foods VALUES ('c','Fried chicken','','1 piece',300,20,10,15,0);
+            INSERT INTO foods_fts(foods_fts) VALUES ('rebuild');
+            """
+        XCTAssertEqual(sqlite3_exec(raw, setup, nil, nil, nil), SQLITE_OK)
+        sqlite3_close(raw)
+        return (path, SQLiteFoodDatabase.open(path: path))
+    }
+
+    /// The query that used to throw "syntax error near (" must run for real.
+    func testMultiWordFTSQueryMatchesFTS5() async throws {
+        let (path, db) = try makeFoodsDatabase()
+        defer { try? FileManager.default.removeItem(atPath: path) }
+        let q = FoodSearchQuery("shake shack fries")
+        XCTAssertTrue(q.ftsQuery.contains("(\""))   // the shape that broke
+        let hits = await db.searchAsync(ftsQuery: q.ftsQuery, limit: 10)
+        XCTAssertEqual(hits.map(\.id), ["a"])
+    }
+
+    func testEntriesByIdReadsRowsAndIgnoresMissingIds() async throws {
+        let (path, db) = try makeFoodsDatabase()
+        defer { try? FileManager.default.removeItem(atPath: path) }
+        let rows = await db.entries(ids: ["c", "b", "nope"])
+        XCTAssertEqual(Set(rows.map(\.id)), ["b", "c"])
+        let b = rows.first { $0.id == "b" }
+        XCTAssertEqual(b?.aliases, ["x", "y"])
+        XCTAssertEqual([b?.calories, b?.proteinG, b?.carbsG, b?.fatG], [500, 9, 60, 20])
+        let none = await db.entries(ids: [])
+        XCTAssertTrue(none.isEmpty)
+    }
+
+    // MARK: - Typo correction
+
+    private lazy var vocabIndex = CuratedSearchIndex([
+        food("chicken", "Chicken breast", ["grilled chicken"]),
+        food("banana", "Banana"),
+        food("granola", "Granola", ["muesli"]),
+        food("fries", "French fries"),
+        food("cheese", "Cheddar cheese", ["cheese"]),
+        food("cheese2", "Cheese pizza"),
+        food("chickpea", "Chickpeas"),
+    ])
+
+    func testCorrectsUnknownWordsToVocabulary() {
+        let v = vocabIndex.vocabulary
+        XCTAssertEqual(v.correction(for: "chiken"), "chicken")
+        XCTAssertEqual(v.correction(for: "bananna"), "banana")
+        XCTAssertEqual(v.correction(for: "grenola"), "granola")
+        XCTAssertEqual(v.correction(for: "chesse"), "cheese")     // two candidates' worth of letters, one word
+        XCTAssertEqual(v.correction(for: "fries"), nil)           // already a word
+        XCTAssertEqual(v.correction(for: "mueslli"), "muesli")    // an alias counts
+        XCTAssertNil(v.correction(for: "zzzzzz"))                 // nothing one edit away
+        XCTAssertNil(v.correction(for: "fry"))                    // under 5 characters
+        // Ties go to the more frequent word: "cheese" appears 3×, "chese"-like neighbours fewer.
+        let plan = vocabIndex.plan(for: "chiken breast", catalog: RestaurantCatalog(chains: [], items: []))
+        XCTAssertEqual(plan.corrected, "chicken breast")
+        XCTAssertEqual(plan.effective, "chicken breast")
+    }
+
+    func testNoCorrectionWhileTypingAPrefix() {
+        let v = vocabIndex.vocabulary
+        for typing in ["chick", "chicke", "banan", "granol", "chicken", "bananas", "grilled"] {
+            XCTAssertNil(v.correction(for: typing), typing)        // a prefix, a word or a plural of one
+        }
+        let plan = vocabIndex.plan(for: "chick", catalog: RestaurantCatalog(chains: [], items: []))
+        XCTAssertNil(plan.corrected)
+        XCTAssertEqual(plan.effective, "chick")
     }
 
     func testRepeatIngredientsKeepPortionsWithFreshIds() {

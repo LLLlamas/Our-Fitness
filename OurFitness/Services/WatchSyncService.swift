@@ -222,7 +222,7 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
         // The affinity ranking returns ids only; names + macros are resolved from
         // the SAME log array (no extra fetch, no CommonFoods lookup — the user's
         // own most recent logging of that food is the truest label for it).
-        let index = Self.loggedFoodIndex(logs)
+        let index = FoodAffinity.loggedFoodIndex(logs)
         for id in FoodAffinity.mostLoggedIds(logs, days: 30, limit: Self.maxMealShortcuts, end: now) {
             guard let entry = index[id], seen.insert(id).inserted else { continue }
             out.append(MealShortcut(
@@ -242,27 +242,6 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
     /// Cap on `mealShortcuts`: the watch list stays glanceable and the
     /// application context stays small (it is a size-limited dictionary).
     private static let maxMealShortcuts = 20
-
-    /// foodId → the most recent way this profile logged that food. `logs` arrives
-    /// reverse-chronological from `Repos.listFoodLog`, so the FIRST hit per id is
-    /// the newest one and later hits are skipped. Ingredient foodIds count too,
-    /// matching how `FoodAffinity` counts them.
-    private static func loggedFoodIndex(
-        _ logs: [FoodLogEntryDTO]
-    ) -> [String: (name: String, perServing: PerServing)] {
-        var out: [String: (name: String, perServing: PerServing)] = [:]
-        for e in logs {
-            if let ings = e.ingredients, !ings.isEmpty {
-                for ing in ings {
-                    guard let id = ing.foodId, out[id] == nil else { continue }
-                    out[id] = (ing.name, ing.scaledPerServing)
-                }
-            } else if let id = e.foodId, out[id] == nil {
-                out[id] = (e.customName ?? id, e.perServing)
-            }
-        }
-        return out
-    }
 
     // MARK: - AppStorage bridges
     //
@@ -361,7 +340,7 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
                     timestamp: date, ingredients: template.ingredients
                 )) else { return }
             } else {
-                guard let entry = Self.loggedFoodIndex(Repos.listFoodLog(ctx, userId: profile.id))[shortcutId] else {
+                guard let entry = FoodAffinity.loggedFoodIndex(Repos.listFoodLog(ctx, userId: profile.id))[shortcutId] else {
                     print("[WatchSync] logMeal: food \(shortcutId) not in this profile's log history — ignored")
                     return
                 }

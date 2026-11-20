@@ -1,7 +1,7 @@
 import XCTest
 import SQLite3
 
-/// Restaurant chain matching + query splitting (`Domain/RestaurantCatalog.swift`).
+/// Restaurant chain query splitting, menu filtering and typo tolerance (`Domain/RestaurantCatalog.swift`).
 /// Pure fixtures — never the bundled database, whose chain list changes as menus
 /// are added. One test builds a throwaway SQLite file to pin the table contract
 /// with `scripts/build-food-db.py` and the "older database" no-op.
@@ -18,7 +18,22 @@ final class RestaurantCatalogTests: XCTestCase {
         slug: "olive-garden", name: "Olive Garden",
         aliases: ["olive garden", "olivegarden", "og"], kind: "casual-dining", itemCount: 1)
 
+    private let mcdonalds = RestaurantChain(
+        slug: "mcdonalds", name: "McDonald's",
+        aliases: ["mcdonalds", "mcdonald", "mcd"], kind: "fast-food", itemCount: 1)
+    private let starbucks = RestaurantChain(
+        slug: "starbucks", name: "Starbucks", aliases: ["starbucks", "sbux"], kind: "coffee", itemCount: 1)
+    private let quest = RestaurantChain(
+        slug: "quest-nutrition", name: "Quest Nutrition", aliases: ["quest", "quest bar"], kind: "supplement", itemCount: 1)
+    private let panera = RestaurantChain(
+        slug: "panera", name: "Panera Bread", aliases: ["panera", "panera bread"], kind: "fast-casual", itemCount: 1)
+    private let noodles = RestaurantChain(
+        slug: "noodles-and-company", name: "Noodles & Company", aliases: ["noodles"], kind: "fast-casual", itemCount: 1)
+    private let chilis = RestaurantChain(
+        slug: "chilis", name: "Chili's", aliases: ["chilis", "chili's"], kind: "casual-dining", itemCount: 1)
+
     private var chains: [RestaurantChain] { [shakeShack, canes, oliveGarden] }
+    private var allChains: [RestaurantChain] { chains + [mcdonalds, starbucks, quest, panera, noodles, chilis] }
 
     private func item(_ name: String, _ category: String, _ order: Int, chain: String = "shake-shack") -> RestaurantMenuItem {
         RestaurantMenuItem(
@@ -33,52 +48,6 @@ final class RestaurantCatalogTests: XCTestCase {
          item("Cheese Fries", "Fries", 1),
          item("Fries", "Fries", 2),
          item("Chocolate Shake", "Shakes", 3)]
-    }
-
-    private func slugs(_ q: String) -> [String] {
-        RestaurantMatcher.chains(matching: q, in: chains).map(\.slug)
-    }
-
-    // MARK: - Chain matching
-
-    func testRunTogetherAndPartialSpellingsMatch() {
-        for q in ["shakesha", "shakeshack", "shake shack", "SHAKE SHACK", "shake-sh", "Shake Shack!"] {
-            XCTAssertEqual(slugs(q).first, "shake-shack", q)
-        }
-    }
-
-    func testLaterWordPrefixAndApostrophe() {
-        XCTAssertEqual(slugs("cane").first, "raising-canes")
-        XCTAssertEqual(slugs("raising cane's").first, "raising-canes")
-        XCTAssertEqual(slugs("raisingcanes").first, "raising-canes")
-    }
-
-    func testAliasesAndOneTypo() {
-        XCTAssertEqual(slugs("shakeshak").first, "shake-shack")   // alias typo from the data file
-        XCTAssertEqual(slugs("shakshack").first, "shake-shack")   // one dropped letter
-        XCTAssertEqual(slugs("og"), ["olive-garden"])             // exact 2-letter alias
-    }
-
-    func testTooShortOrUnrelatedDoesNotMatch() {
-        XCTAssertEqual(slugs("sh"), [])
-        XCTAssertEqual(slugs("ol"), [])
-        XCTAssertEqual(slugs("chicken"), [])
-        XCTAssertEqual(slugs("banana"), [])
-    }
-
-    /// Decision (documented on `RestaurantMatcher.score`): a bare first word
-    /// matches. It's one compact row above the unchanged food results.
-    func testBareFirstWordMatchesButRanksBelowExact() {
-        XCTAssertEqual(slugs("shake"), ["shake-shack"])
-        let exact = RestaurantMatcher.score(shakeShack, query: "shake shack")
-        let partial = RestaurantMatcher.score(shakeShack, query: "shake")
-        XCTAssertNotNil(partial)
-        XCTAssertLessThan(exact!, partial!)
-    }
-
-    func testQueryStartingWithChainSurfacesThatChain() {
-        XCTAssertEqual(slugs("shake shack fries").first, "shake-shack")
-        XCTAssertEqual(slugs("og breadsticks").first, "olive-garden")
     }
 
     // MARK: - Splitting
@@ -109,6 +78,64 @@ final class RestaurantCatalogTests: XCTestCase {
         XCTAssertEqual(RestaurantMatcher.split("shake shack", chains: chains)?.remainder, "")
     }
 
+    // MARK: - Typos
+
+    func testTranspositionIsOneEdit() {
+        func d(_ a: String, _ b: String) -> Int { RestaurantMatcher.editDistance(Array(a), Array(b), cap: 2) }
+        XCTAssertEqual(d("freis", "fries"), 1)
+        XCTAssertEqual(d("fires", "fries"), 1)
+        XCTAssertEqual(d("mdconalds", "mcdonalds"), 1)
+        XCTAssertEqual(d("ab", "ba"), 1)
+        XCTAssertEqual(d("fries", "fries"), 0)
+        XCTAssertEqual(d("shak", "shake"), 1)
+        XCTAssertEqual(d("abc", "cba"), 2)            // a non-adjacent swap is still two edits
+        XCTAssertEqual(d("fries", "fried"), 1)
+        XCTAssertGreaterThan(d("fries", "fresh"), 1)
+    }
+
+    func testSplitToleratesOneTypoInChainName() {
+        func split(_ q: String) -> (String, String, Bool)? {
+            RestaurantMatcher.split(q, chains: allChains).map { ($0.chain.slug, $0.remainder, $0.fuzzy) }
+        }
+        for (q, slug, rest) in [("mdconalds fries", "mcdonalds", "fries"),     // swapped letters
+                                ("mcdonals nuggets", "mcdonalds", "nuggets"),   // dropped letter
+                                ("starbuks latte", "starbucks", "latte"),
+                                ("shak shack fries", "shake-shack", "fries"),   // two words, run together
+                                ("shake shack fires", "shake-shack", "fires")] {
+            let s = split(q)
+            XCTAssertEqual(s?.0, slug, q)
+            XCTAssertEqual(s?.1, rest, q)
+        }
+        XCTAssertEqual(split("mdconalds fries")?.2, true)
+        XCTAssertEqual(split("shake shack fires")?.2, false)   // exact chain, typo is in the remainder
+        XCTAssertEqual(split("mcdonalds fries")?.2, false)     // exact stays exact
+    }
+
+    func testSplitIgnoresRealFoodWords() {
+        for q in ["cakes", "queso dip", "panela cheese", "zoodles", "chiles rellenos", "cakes and pies"] {
+            XCTAssertNil(RestaurantMatcher.split(q, chains: allChains), q)
+        }
+        // The vocabulary guard: a word the curated list knows is never a chain typo.
+        XCTAssertNotNil(RestaurantMatcher.split("starbuks latte", chains: allChains))
+        XCTAssertNil(RestaurantMatcher.split("starbuks latte", chains: allChains, isFoodWord: { $0 == "starbuks" }))
+        // Too short, or two chains equally near → no guess.
+        XCTAssertNil(RestaurantMatcher.split("cane fries", chains: allChains))
+        // "chilxs" is one edit from both Chili's ("chilis") and Chilas.
+        XCTAssertNotNil(RestaurantMatcher.split("chilxs", chains: allChains))
+        XCTAssertNil(RestaurantMatcher.split("chilxs", chains: allChains + [RestaurantChain(
+            slug: "chilas", name: "Chilas", aliases: ["chilas"], kind: "x", itemCount: 1)]))
+    }
+
+    func testFilterAcceptsPluralFormsAndMenuCorrectionFixesWords() {
+        XCTAssertEqual(RestaurantMatcher.filter(menu, query: "fry").map(\.itemName), ["Fries", "Cheese Fries"])
+        XCTAssertEqual(RestaurantMatcher.filter(menu, query: "burgers").map(\.itemName), ["ShackBurger"])
+        XCTAssertTrue(RestaurantMatcher.filter(menu, query: "fried").isEmpty)   // "fries" never reaches "fried"
+        XCTAssertEqual(RestaurantMatcher.menuCorrection(for: "fires", in: menu), "fries")
+        XCTAssertEqual(RestaurantMatcher.menuCorrection(for: "freis", in: menu), "fries")
+        XCTAssertEqual(RestaurantMatcher.menuCorrection(for: "fries", in: menu), "fries")   // already valid
+        XCTAssertNil(RestaurantMatcher.menuCorrection(for: "pizza", in: menu))
+    }
+
     // MARK: - Menu
 
     func testFilterRanksNameStartFirstThenMenuOrder() {
@@ -130,28 +157,6 @@ final class RestaurantCatalogTests: XCTestCase {
         XCTAssertEqual(RestaurantMatcher.filter(menu, query: "shakes").map(\.itemName), ["Chocolate Shake"])
         XCTAssertEqual(RestaurantMatcher.filter(menu, query: "").count, menu.count)
         XCTAssertEqual(RestaurantMatcher.filter(menu, query: "pizza"), [])
-    }
-
-    func testSectionsKeepCategoryOrderAndSortItemsAToZ() {
-        let sections = RestaurantMatcher.sections(menu.reversed())
-        XCTAssertEqual(sections.map(\.category), ["Burgers", "Fries", "Shakes"])
-        XCTAssertEqual(sections[1].items.map(\.itemName), ["Cheese Fries", "Fries"])
-        let names = sections.flatMap { $0.items.map(\.itemName) }
-        for section in sections {
-            let n = section.items.map(\.itemName)
-            XCTAssertEqual(n, n.sorted { $0.localizedCaseInsensitiveCompare($1) == .orderedAscending })
-        }
-        XCTAssertEqual(Set(names).count, menu.count)
-    }
-
-    func testChainsRareNearNYCSortAfterCommonOnesAtSameScore() {
-        let innout = RestaurantChain(slug: "in-n-out", name: "In-N-Out Burger",
-                                     aliases: ["in n out"], kind: "fast-food", itemCount: 1)
-        let inn = RestaurantChain(slug: "inn-diner", name: "Inn Diner", aliases: ["inn diner"],
-                                  kind: "casual-dining", itemCount: 1)
-        // Both prefix-match "inn" (score 1); by name alone "In-N-Out" sorts first.
-        let ranked = RestaurantMatcher.chains(matching: "inn", in: [innout, inn], limit: 3)
-        XCTAssertEqual(ranked.map(\.slug), ["inn-diner", "in-n-out"])
     }
 
     func testMenuMatchesNeedARemainder() {
@@ -193,7 +198,8 @@ final class RestaurantCatalogTests: XCTestCase {
         XCTAssertEqual(fries.id, "rest:shake-shack:fries")
         XCTAssertEqual(fries.name, "Shake Shack Fries")
         XCTAssertEqual([fries.calories, fries.proteinG, fries.carbsG, fries.fatG, fries.fiberG], [470, 6, 63, 22, 6])
-        XCTAssertEqual(catalog.chains(matching: "shakesha").first?.slug, "shake-shack")
+        XCTAssertEqual(catalog.split("shake shack fries")?.chain.slug, "shake-shack")
+        XCTAssertEqual(catalog.menuMatches(for: "shake shack fries").first?.itemName, "Fries")
 
         XCTAssertTrue(RestaurantCatalog(database: .open(path: withoutTables)).isEmpty)
         XCTAssertTrue(RestaurantCatalog(database: .open(path: dir.appendingPathComponent("missing/x.db").path)).isEmpty)

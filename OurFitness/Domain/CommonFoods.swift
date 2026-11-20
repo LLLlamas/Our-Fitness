@@ -31,6 +31,10 @@ public enum CommonFoods {
         + vegetables + fruits + legumes + nutsAndFats + drinks + soups + preparedMeals
         + snacksAndSweets + fastFood + condiments + deli + sushiExtended + expanded
 
+    /// id → food, for resolving saved ids (favorites). First one wins on a repeated id.
+    public static let byId: [String: CommonFood] = Dictionary(
+        all.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+
     // MARK: - Fast curated matcher (keystroke hot path)
     //
     // `bestMatch(in:)` is what `FoodParser` calls on EVERY keystroke. A flat scan

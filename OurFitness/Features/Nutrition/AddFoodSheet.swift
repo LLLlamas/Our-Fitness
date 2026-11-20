@@ -1,12 +1,12 @@
 // Single "Add food" surface — replaces the separate "Log a meal" (free text) and
 // "Browse" (library) sheets. One field does both jobs:
-//   • empty  → quick picks (recipes · recently logged at last portion ·
-//              restaurants · favorites) + the full
-//              library, ordered favorites → most-logged (30 days) → rest
-//   • typed  → matching restaurants (RestaurantCatalog — tap = that chain's menu,
-//              RestaurantMenuView), then a "log what you described" card
-//              (FoodParser, AI-refined on open) on top of matching library foods
-//              (curated + USDA + restaurant items)
+//   • empty  → "My Foods": favorites · recent (at the last portion) · most
+//              logged · recipes & my foods, each food shown once, + a
+//              manual-entry row
+//   • typed  → a "log what you described" card (FoodParser, AI-refined on open)
+//              on top of matching foods (curated + USDA + restaurant items; a
+//              chain in the query — "mcdonalds fries" — leads with that chain's
+//              items, sizes collapsed)
 // Tapping a food/recipe/recent opens MealIngredientDetailSheet (portion + slot);
 // the sheet stays open so several foods can be added in a row.
 
@@ -19,13 +19,6 @@ private struct QuickMealLog: Identifiable {
     let name: String
     let emoji: String
     let ingredients: [MealIngredient]
-}
-
-/// Push target for a chain's menu; `query` is what followed the chain name
-/// ("shake shack fries" → "fries"), pre-filled into the menu's search.
-private struct RestaurantRoute: Hashable {
-    let chain: RestaurantChain
-    let query: String
 }
 
 struct AddFoodSheet: View {
@@ -47,13 +40,13 @@ struct AddFoodSheet: View {
 
     @State private var query: String = ""
     @State private var displayedResults: [CommonFood] = []
+    /// Other sizes of a collapsed chain item, keyed by the shown row's id.
+    @State private var sizeChoices: [String: [SizeChoice]] = [:]
+    /// The spelling-fixed query the results are for ("Showing results for …"); nil = as typed.
+    @State private var correctedQuery: String?
     @State private var mealToLog: QuickMealLog?
     @State private var templateToLog: SavedMealTemplateDTO?
     @State private var describeText: String?
-    @State private var restaurantRoute: RestaurantRoute?
-    /// False until the catalog has loaded off the main thread; until then the
-    /// Restaurants row stays empty rather than blocking `body` on the load.
-    @State private var restaurantsReady = false
     @FocusState private var searchFocused: Bool
 
     init(profile: ProfileDTO, targetDate: String, onSave: @escaping (FoodLogEntryDTO) -> Bool) {
@@ -79,45 +72,16 @@ struct AddFoodSheet: View {
         Set(favoriteIdsString.split(separator: ",").map(String.init).filter { !$0.isEmpty })
     }
 
-    private var favoriteFoods: [CommonFood] {
-        let ids = favoriteIds
-        return CommonFoods.all.filter { ids.contains($0.id) }
-            .sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
-    }
+    /// Favorites that aren't curated or in the user's own logs, read from the
+    /// bundled database once (`SQLiteFoodDatabase.entries(ids:)`, off the main thread).
+    @State private var databaseFavorites: [String: CommonFood] = [:]
 
-    /// Last 10 distinct foods/meals logged, newest first. Tapping one reopens it
-    /// at the portion logged last time, so a repeat is two taps.
-    private func recentlyLogged(from allLogs: [FoodLogEntryDTO]) -> [FoodLogEntryDTO] {
-        var seen = Set<String>()
-        var result: [FoodLogEntryDTO] = []
-        for log in allLogs.reversed() {
-            let key = log.foodId ?? log.customName ?? log.id.uuidString
-            if seen.insert(key).inserted {
-                result.append(log)
-                if result.count >= 10 { break }
-            }
-        }
-        return result
-    }
-
-    /// Default (empty-query) ordering for the full curated library:
-    /// (a) favorites first, (b) then non-favorites the user actually logs
-    /// (last 30 days) by descending frequency, (c) then everything else A–Z.
-    /// Deterministic: frequency ties break A–Z too.
-    private func defaultOrdered(_ allLogs: [FoodLogEntryDTO]) -> [CommonFood] {
-        let favs = favoriteIds
-        let freq = FoodAffinity.frequencyByFoodId(allLogs, days: 30)
-        let ranked = CommonFoods.all.map { food -> (rank: (Int, Int), food: CommonFood) in
-            let f = freq[food.id] ?? 0
-            // Bucket 0 = favorite, 1 = logged non-favorite, 2 = the rest.
-            let bucket = favs.contains(food.id) ? 0 : (f > 0 ? 1 : 2)
-            // Within a bucket: higher frequency first (negate), then A–Z.
-            return ((bucket, -f), food)
-        }
-        return ranked.sorted {
-            if $0.rank != $1.rank { return $0.rank < $1.rank }
-            return $0.food.name.localizedCaseInsensitiveCompare($1.food.name) == .orderedAscending
-        }.map(\.food)
+    /// Favorite ids nothing local can name yet (not curated, never logged).
+    private var unresolvedFavoriteIds: [String] {
+        let notCurated = favoriteIds.filter { CommonFoods.byId[$0] == nil }
+        guard !notCurated.isEmpty else { return [] }
+        let logged = FoodAffinity.loggedFoods(logModels.reversed().map(\.snapshot))
+        return notCurated.filter { logged[$0] == nil && databaseFavorites[$0] == nil }.sorted()
     }
 
     private func toggleFavorite(_ id: String) {
@@ -146,31 +110,6 @@ struct AddFoodSheet: View {
         return "×" + s
     }
 
-    /// Chains for the empty-query Restaurants row: ones the user has logged from
-    /// (most recent first), then every other restaurant A–Z with chains rare
-    /// near NYC last (`RegionalChains`). Brands appear only once used.
-    private func restaurantPicks(from allLogs: [FoodLogEntryDTO]) -> [RestaurantChain] {
-        guard restaurantsReady else { return [] }
-        let chains = RestaurantCatalog.shared.chains
-        var usedSlugs: [String] = []
-        for log in allLogs.reversed() {
-            let ids = [log.foodId] + (log.ingredients ?? []).map(\.foodId)
-            for case let id? in ids where id.hasPrefix("rest:") {
-                let slug = String(id.dropFirst(5).prefix { $0 != ":" })
-                if !usedSlugs.contains(slug) { usedSlugs.append(slug) }
-            }
-        }
-        let used = usedSlugs.compactMap { slug in chains.first { $0.slug == slug } }
-        let rest = chains
-            .filter { !$0.isBrand && !usedSlugs.contains($0.slug) }
-            .sorted {
-                let ra = RegionalChains.isRare(slug: $0.slug), rb = RegionalChains.isRare(slug: $1.slug)
-                if ra != rb { return !ra }
-                return $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
-            }
-        return used + rest
-    }
-
     var body: some View {
         let allLogs = logModels.map(\.snapshot)
         NavigationStack {
@@ -179,18 +118,20 @@ struct AddFoodSheet: View {
                     searchField
 
                     if trimmedQuery.isEmpty {
-                        quickPicks(allLogs: allLogs)
+                        myFoods(allLogs: allLogs)
                         manualEntryRow
-                        sectionHeader("All foods")
                     } else {
-                        restaurantRow
                         describeCard
+                        savedMatches
+                        if let correctedQuery, !displayedResults.isEmpty {
+                            Text("Showing results for “\(correctedQuery)”")
+                                .font(.caption).foregroundStyle(theme.dim)
+                        }
                         if !displayedResults.isEmpty { sectionHeader("Foods") }
                     }
 
                     if displayedResults.isEmpty {
-                        // Empty + a real query = genuine no-match; empty + blank query
-                        // is just the pre-seed moment, so stay silent.
+                        // Only a real query can be a genuine no-match; blank shows no list.
                         if !trimmedQuery.isEmpty {
                             Text("No library matches — log it as described above.")
                                 .font(.callout).foregroundStyle(theme.dim)
@@ -217,26 +158,26 @@ struct AddFoodSheet: View {
             }
             .navigationDestination(item: $describeText) { text in
                 DescribeMealForm(profile: profile, targetDate: targetDate, initialText: text) { dto in
-                    if onSave(dto) { dismiss() }
-                }
-            }
-            .navigationDestination(item: $restaurantRoute) { route in
-                RestaurantMenuView(chain: route.chain, initialQuery: route.query) { item in
-                    // Same confirm/log path as every other pick.
-                    mealToLog = QuickMealLog(name: item.food.name, emoji: "🍽️",
-                                             ingredients: [MealIngredient.from(item.food.asCommonFood)])
+                    let saved = onSave(dto)
+                    if saved { dismiss() }
+                    return saved
                 }
             }
         }
         .task {
-            // Read the (small) restaurant catalog off the main thread once, so the
-            // first keystroke that consults it doesn't pay for the SQLite read.
-            await Task.detached(priority: .userInitiated) { _ = RestaurantCatalog.shared.isEmpty }.value
-            restaurantsReady = true
+            // Read the restaurant catalog + build the search vocabulary off the
+            // main thread once, so the first keystroke doesn't pay for the SQLite read.
+            await Task.detached(priority: .userInitiated) { _ = CuratedSearchIndex.shared.vocabulary }.value
         }
-        .debouncedFoodSearch(query: query, results: $displayedResults) {
-            defaultOrdered(logModels.map(\.snapshot))
+        .task(id: unresolvedFavoriteIds) {
+            let ids = unresolvedFavoriteIds
+            guard !ids.isEmpty else { return }
+            for entry in await SQLiteFoodDatabase.shared.entries(ids: ids) {
+                databaseFavorites[entry.id] = entry.asCommonFood
+            }
         }
+        .debouncedFoodSearch(query: query, results: $displayedResults, sizeChoices: $sizeChoices,
+                             correctedQuery: $correctedQuery) { [] }
         .presentationDetents([.large])
         .presentationBackground(theme.bg)
         .sheet(item: $mealToLog) { meal in
@@ -297,46 +238,28 @@ struct AddFoodSheet: View {
         .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
     }
 
-    // MARK: - Restaurants (typed query)
+    // MARK: - Saved foods matching the query
 
-    /// Chains the query names or starts to spell ("shakesha" → Shake Shack).
-    /// In-memory over a few chains — cheap enough to run in `body`.
+    /// The user's own saved recipes / foods whose name matches what's typed, above Foods.
     @ViewBuilder
-    private var restaurantRow: some View {
-        let chains = restaurantsReady ? RestaurantCatalog.shared.chains(matching: trimmedQuery) : []
-        VStack(alignment: .leading, spacing: 8) {
-            if !chains.isEmpty {
-                sectionHeader(chains.allSatisfy(\.isBrand) ? "Brands" : chains.contains(where: \.isBrand) ? "Restaurants & brands" : "Restaurants")
-                ForEach(chains) { chain in
-                    PressableCard(action: {
-                        Haptics.tap()
-                        searchFocused = false
-                        let split = RestaurantCatalog.shared.split(trimmedQuery)
-                        let rest = split?.chain.slug == chain.slug ? split?.remainder ?? "" : ""
-                        restaurantRoute = RestaurantRoute(chain: chain, query: rest)
-                    }) {
-                        HStack(spacing: 12) {
-                            Image(systemName: chain.isBrand ? "dumbbell.fill" : "fork.knife")
-                                .font(.system(size: 16))
-                                .foregroundStyle(theme.accent)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(chain.name)
-                                    .font(.system(size: 15, weight: .semibold))
-                                    .foregroundStyle(theme.text)
-                                Text("\(chain.isBrand ? "Products" : "Menu") · \(chain.itemCount) items")
-                                    .font(.caption).foregroundStyle(theme.dim)
-                            }
-                            Spacer(minLength: 0)
-                            Image(systemName: "chevron.right")
-                                .font(.system(size: 12))
-                                .foregroundStyle(theme.dim)
-                        }
+    private var savedMatches: some View {
+        let matches = FoodAffinity.matchingTemplates(savedTemplates.map(\.snapshot), query: trimmedQuery)
+        if !matches.isEmpty {
+            sectionHeader("My Foods")
+            VStack(spacing: 8) {
+                ForEach(matches) { template in
+                    let total = template.totalPerServing
+                    FoodResultRow(food: CommonFood(
+                        id: "template:\(template.id.uuidString)", name: "\(template.emoji) \(template.name)",
+                        aliases: [], servingLabel: template.ingredients.count > 1 ? "\(template.ingredients.count) ingredients" : "1 serving",
+                        calories: total.calories, proteinG: total.proteinG, carbsG: total.carbsG,
+                        fatG: total.fatG, fiberG: total.fiberG)
+                    ) {
+                        templateToLog = template
                     }
-                    .transition(.opacity.combined(with: .move(edge: .top)))
                 }
             }
         }
-        .animation(.spring(response: 0.3, dampingFraction: 0.8), value: chains.map(\.slug))
     }
 
     // MARK: - Describe card (typed query)
@@ -377,37 +300,33 @@ struct AddFoodSheet: View {
         }
     }
 
-    // MARK: - Quick picks (empty query)
+    // MARK: - My Foods (empty query)
 
     @ViewBuilder
-    private func quickPicks(allLogs: [FoodLogEntryDTO]) -> some View {
-        let favorites = favoriteFoods
-        let recents = recentlyLogged(from: allLogs)
-        if !savedTemplates.isEmpty {
-            pillSection(header: "recipes") {
-                ForEach(savedTemplates) { template in
-                    Button {
-                        templateToLog = template.snapshot
-                    } label: {
-                        HStack(spacing: 6) {
-                            Text(template.emoji)
-                            Text(template.name)
-                        }
-                    }
-                    .tactile(.pill)
-                    .contextMenu {
-                        Button(role: .destructive) {
-                            deleteTemplate(id: template.id, name: template.name)
-                        } label: {
-                            Label("Delete recipe", systemImage: "trash")
-                        }
-                    }
-                }
+    private func myFoods(allLogs: [FoodLogEntryDTO]) -> some View {
+        // Newest first; a favorite resolves curated → the user's own logs → the database.
+        let newest = Array(allLogs.reversed())
+        let logged = FoodAffinity.loggedFoods(newest)
+        let favorites = favoriteIds.compactMap { CommonFoods.byId[$0] ?? logged[$0] ?? databaseFavorites[$0] }
+        let sections = FoodAffinity.myFoodsSections(
+            favorites: favorites, logs: newest, templates: savedTemplates.map(\.snapshot),
+            resolve: { CommonFoods.byId[$0] ?? logged[$0] })
+
+        Text("My Foods")
+            .font(.system(size: 20, weight: .semibold))
+            .foregroundStyle(theme.text)
+        if sections.isEmpty {
+            Text("Heart foods you eat often — they'll show here")
+                .font(.callout).foregroundStyle(theme.dim)
+        }
+        if !sections.favorites.isEmpty {
+            pillSection(header: "favorites") {
+                ForEach(sections.favorites) { food in foodPill(food) }
             }
         }
-        if !recents.isEmpty {
-            pillSection(header: "recently logged") {
-                ForEach(recents) { entry in
+        if !sections.recent.isEmpty {
+            pillSection(header: "recent") {
+                ForEach(sections.recent) { entry in
                     Button {
                         mealToLog = QuickMealLog(name: entry.customName ?? "Meal", emoji: "🍽️", ingredients: ingredients(for: entry))
                     } label: {
@@ -422,33 +341,42 @@ struct AddFoodSheet: View {
                 }
             }
         }
-        let restaurants = restaurantPicks(from: allLogs)
-        if !restaurants.isEmpty {
-            pillSection(header: "restaurants") {
-                ForEach(restaurants) { chain in
+        if !sections.mostLogged.isEmpty {
+            pillSection(header: "most logged") {
+                ForEach(sections.mostLogged) { food in foodPill(food) }
+            }
+        }
+        if !sections.recipes.isEmpty {
+            pillSection(header: "recipes & my foods") {
+                ForEach(sections.recipes) { template in
                     Button {
-                        Haptics.tap()
-                        searchFocused = false
-                        restaurantRoute = RestaurantRoute(chain: chain, query: "")
+                        templateToLog = template
                     } label: {
-                        Text(chain.name)
+                        HStack(spacing: 6) {
+                            Text(template.emoji)
+                            Text(template.name)
+                        }
                     }
                     .tactile(.pill)
+                    .contextMenu {
+                        Button(role: .destructive) {
+                            deleteTemplate(id: template.id, name: template.name)
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    }
                 }
             }
         }
-        if !favorites.isEmpty {
-            pillSection(header: "favorites") {
-                ForEach(favorites) { food in
-                    Button {
-                        mealToLog = QuickMealLog(name: food.name, emoji: "🍽️", ingredients: ingredients(for: food))
-                    } label: {
-                        Text(food.name)
-                    }
-                    .tactile(.pill)
-                }
-            }
+    }
+
+    private func foodPill(_ food: CommonFood) -> some View {
+        Button {
+            mealToLog = QuickMealLog(name: food.name, emoji: "🍽️", ingredients: ingredients(for: food))
+        } label: {
+            Text(food.name)
         }
+        .tactile(.pill)
     }
 
     @ViewBuilder
@@ -489,7 +417,11 @@ struct AddFoodSheet: View {
                 FoodResultRow(
                     food: food,
                     isFavorite: ids.contains(food.id),
-                    onToggleFavorite: { toggleFavorite(food.id) }
+                    onToggleFavorite: { toggleFavorite(food.id) },
+                    sizes: sizeChoices[food.id] ?? [],
+                    onPickSize: { picked in
+                        mealToLog = QuickMealLog(name: picked.name, emoji: "🍽️", ingredients: ingredients(for: picked))
+                    }
                 ) {
                     mealToLog = QuickMealLog(name: food.name, emoji: "🍽️", ingredients: ingredients(for: food))
                 }
@@ -503,21 +435,36 @@ struct AddFoodSheet: View {
 extension View {
     /// The one debounced food search: each keystroke restarts the task
     /// (cancelling the prior one), and only after a 180 ms pause does
-    /// `FoodSearch.combined` (curated + the USDA FTS5 scan, off the main thread)
-    /// run — so typing never rescans 15–20k entries synchronously in `body`.
-    /// A blank query shows `emptyResults()` immediately.
+    /// `FoodSearch.search` (curated + the USDA FTS5 scan + chain menus, off the
+    /// main thread) run — so typing never rescans 15–20k entries synchronously
+    /// in `body`. A blank query shows `emptyResults()` immediately.
     func debouncedFoodSearch(
         query: String,
         results: Binding<[CommonFood]>,
         emptyResults: @escaping () -> [CommonFood]
     ) -> some View {
-        modifier(DebouncedFoodSearch(query: query, results: results, emptyResults: emptyResults))
+        modifier(DebouncedFoodSearch(query: query, results: results, sizeChoices: nil, correctedQuery: nil, emptyResults: emptyResults))
+    }
+
+    /// Same search, also reporting the size choices of collapsed chain items
+    /// (keyed by the shown row's id) and the spelling-corrected query, if any.
+    func debouncedFoodSearch(
+        query: String,
+        results: Binding<[CommonFood]>,
+        sizeChoices: Binding<[String: [SizeChoice]]>,
+        correctedQuery: Binding<String?>,
+        emptyResults: @escaping () -> [CommonFood]
+    ) -> some View {
+        modifier(DebouncedFoodSearch(query: query, results: results, sizeChoices: sizeChoices,
+                                     correctedQuery: correctedQuery, emptyResults: emptyResults))
     }
 }
 
 private struct DebouncedFoodSearch: ViewModifier {
     let query: String
     @Binding var results: [CommonFood]
+    let sizeChoices: Binding<[String: [SizeChoice]]>?
+    let correctedQuery: Binding<String?>?
     let emptyResults: () -> [CommonFood]
 
     func body(content: Content) -> some View {
@@ -525,21 +472,19 @@ private struct DebouncedFoodSearch: ViewModifier {
             let q = query
             if q.trimmingCharacters(in: .whitespaces).isEmpty {
                 results = emptyResults()
+                sizeChoices?.wrappedValue = [:]
+                correctedQuery?.wrappedValue = nil
                 return
             }
             try? await Task.sleep(nanoseconds: 180_000_000)   // 180 ms
             guard !Task.isCancelled else { return }
-            let found = await FoodSearch.combined(matching: q)
+            // "shake shack fries": that chain's fries lead, sizes collapsed
+            // (FTS rank alone can't promise it) — see `FoodSearch.search`.
+            let outcome = await FoodSearch.search(q)
             guard !Task.isCancelled else { return }
-            // "shake shack fries": that chain's fries lead, ranked within its menu
-            // (FTS rank alone can't promise it); the same rows aren't repeated below.
-            // Off the main actor: the first call may still be loading the catalog.
-            let menuHits = await Task.detached(priority: .userInitiated) {
-                RestaurantCatalog.shared.menuMatches(for: q).map { $0.food.asCommonFood }
-            }.value
-            guard !Task.isCancelled else { return }
-            let leadIds = Set(menuHits.map(\.id))
-            results = menuHits + found.filter { !leadIds.contains($0.id) }
+            results = outcome.foods
+            sizeChoices?.wrappedValue = outcome.sizeChoices
+            correctedQuery?.wrappedValue = outcome.correctedQuery
         }
     }
 }
@@ -551,6 +496,10 @@ struct FoodResultRow: View {
     let food: CommonFood
     var isFavorite: Bool = false
     var onToggleFavorite: (() -> Void)? = nil
+    /// Other sizes of this item (chain results). Shown as small inline pills;
+    /// tapping one picks that size's own row via `onPickSize`.
+    var sizes: [SizeChoice] = []
+    var onPickSize: ((CommonFood) -> Void)? = nil
     let onTap: () -> Void
 
     @Environment(\.theme) private var theme
@@ -567,6 +516,7 @@ struct FoodResultRow: View {
                     Text("\(food.calories) cal · \(food.proteinG)g pro · \(food.carbsG)g carbs · \(food.fatG)g fat")
                         .font(.system(.caption2, design: .monospaced))
                         .foregroundStyle(theme.accent)
+                    if sizes.count > 1, let onPickSize { sizePills(onPickSize) }
                 }
                 Spacer(minLength: 0)
                 if let onToggleFavorite {
@@ -577,6 +527,29 @@ struct FoodResultRow: View {
                     }
                     .tactile(.ghost)
                     .accessibilityLabel(isFavorite ? "Remove \(food.name) from favorites" : "Add \(food.name) to favorites")
+                }
+            }
+        }
+    }
+
+    /// One small pill per size ("Small 230"); the shown row's size is filled.
+    @ViewBuilder
+    private func sizePills(_ pick: @escaping (CommonFood) -> Void) -> some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 6) {
+                ForEach(sizes) { size in
+                    let isShown = size.food.id == food.id
+                    Button {
+                        if !isShown { pick(size.food) }
+                    } label: {
+                        Text("\(size.label) \(size.food.calories)")
+                            .font(.system(size: 11, weight: isShown ? .semibold : .regular))
+                            .padding(.horizontal, 8).padding(.vertical, 4)
+                            .foregroundStyle(isShown ? theme.bg : theme.text)
+                            .background(isShown ? theme.accent : theme.card2, in: Capsule())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("\(size.label), \(size.food.calories) calories")
                 }
             }
         }
@@ -595,9 +568,12 @@ struct DescribeMealForm: View {
     let profile: ProfileDTO
     let targetDate: String
     let initialText: String
-    let onSave: (FoodLogEntryDTO) -> Void
+    /// Returns whether the log write committed (rule 9: nothing else happens on false).
+    let onSave: (FoodLogEntryDTO) -> Bool
 
     @Environment(\.theme) private var theme
+    @Environment(\.modelContext) private var ctx
+    @EnvironmentObject private var toasts: ToastCenter
 
     @State private var input: String = ""
     @State private var parseResult: FoodParser.ParseResult? = nil
@@ -611,12 +587,14 @@ struct DescribeMealForm: View {
     @State private var manualProtein: Int = 0
     @State private var manualCarbs: Int = 0
     @State private var manualFat: Int = 0
+    /// Manual entry only: also keep this food in My Foods after the log commits.
+    @State private var saveToMyFoods = false
 
     private enum Field: Hashable { case input, cal, protein, carbs, fat }
     @FocusState private var focused: Field?
 
     init(profile: ProfileDTO, targetDate: String, initialText: String,
-         slot: Slot = .lunch, onSave: @escaping (FoodLogEntryDTO) -> Void) {
+         slot: Slot = .lunch, onSave: @escaping (FoodLogEntryDTO) -> Bool) {
         self.profile = profile
         self.targetDate = targetDate
         self.initialText = initialText
@@ -680,6 +658,14 @@ struct DescribeMealForm: View {
                 slotPicker
                 nutritionSummary
 
+                if showManual {
+                    Toggle("Save to My Foods", isOn: $saveToMyFoods)
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundStyle(theme.text)
+                        .tint(theme.accent)
+                        .disabled(!canSave)
+                }
+
                 Button {
                     let mealIngredients = parseResult?.recognized.map {
                         MealIngredient.from($0.food, quantity: $0.quantity)
@@ -692,7 +678,18 @@ struct DescribeMealForm: View {
                         perServing: resolvedPerServing,
                         ingredients: mealIngredients
                     )
-                    onSave(dto)
+                    let name = resolvedName, perServing = resolvedPerServing
+                    guard onSave(dto) else { return }
+                    // The log committed; keeping the food is a second write with its own result.
+                    guard showManual, saveToMyFoods else { return }
+                    guard Repos.addSavedTemplate(
+                        ctx, .singleFood(userId: profile.id, name: name, perServing: perServing)
+                    ) else {
+                        toasts.show(Toast(title: "Logged, but not saved to My Foods", detail: name, accent: .warn,
+                                          symbol: "exclamationmark.triangle"))
+                        return
+                    }
+                    toasts.show(Toast(title: "Saved to My Foods", detail: name, accent: .ok, symbol: "bookmark.fill"))
                 } label: {
                     Text("Save")
                 }

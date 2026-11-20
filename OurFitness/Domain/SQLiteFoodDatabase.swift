@@ -97,6 +97,18 @@ public final class SQLiteFoodDatabase: @unchecked Sendable {
         }
     }
 
+    /// The rows with these ids (curated shadows, restaurant `rest:` rows and
+    /// USDA alike live in `foods`). Off the calling actor, like `searchAsync`.
+    /// Ids that aren't in the database are simply absent; order is not promised.
+    public func entries(ids: [String]) async -> [FoodDatabaseEntry] {
+        guard !ids.isEmpty else { return [] }
+        return await withCheckedContinuation { continuation in
+            queue.async {
+                continuation.resume(returning: self._entries(ids: ids))
+            }
+        }
+    }
+
     // MARK: - Private (called on `queue`)
 
     private func _bestMatch(in chunk: String) -> FoodDatabaseEntry? {
@@ -178,6 +190,34 @@ public final class SQLiteFoodDatabase: @unchecked Sendable {
         "\"" + token.replacingOccurrences(of: "\"", with: "\"\"") + "\""
     }
 
+    private func _entries(ids: [String]) -> [FoodDatabaseEntry] {
+        guard let db else { return [] }
+        let sql = """
+            SELECT id, name, aliases, serving_label, calories, protein_g, carbs_g, fat_g, fiber_g
+            FROM foods WHERE id IN (\(Array(repeating: "?", count: ids.count).joined(separator: ",")))
+            """
+        var stmt: OpaquePointer?
+        guard sqlite3_prepare_v2(db, sql, -1, &stmt, nil) == SQLITE_OK else { return [] }
+        defer { sqlite3_finalize(stmt) }
+        let SQLITE_TRANSIENT = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
+        for (i, id) in ids.enumerated() { sqlite3_bind_text(stmt, Int32(i + 1), id, -1, SQLITE_TRANSIENT) }
+        var results: [FoodDatabaseEntry] = []
+        while sqlite3_step(stmt) == SQLITE_ROW { results.append(Self.entry(stmt)) }
+        return results
+    }
+
+    /// One `foods` row (columns: id, name, aliases, serving_label, calories,
+    /// protein_g, carbs_g, fat_g, fiber_g).
+    private static func entry(_ stmt: OpaquePointer?) -> FoodDatabaseEntry {
+        FoodDatabaseEntry(
+            id: text(stmt, 0), name: text(stmt, 1),
+            aliases: text(stmt, 2).split(separator: "|").map(String.init),
+            servingLabel: text(stmt, 3),
+            calories: Int(sqlite3_column_int(stmt, 4)), proteinG: Int(sqlite3_column_int(stmt, 5)),
+            carbsG: Int(sqlite3_column_int(stmt, 6)), fatG: Int(sqlite3_column_int(stmt, 7)),
+            fiberG: Int(sqlite3_column_int(stmt, 8)))
+    }
+
     private func _query(ftsQuery: String, limit: Int) -> [FoodDatabaseEntry] {
         guard let db else { return [] }
         let sql = """
@@ -199,24 +239,7 @@ public final class SQLiteFoodDatabase: @unchecked Sendable {
         sqlite3_bind_int(stmt, 2, Int32(limit))
 
         var results: [FoodDatabaseEntry] = []
-        while sqlite3_step(stmt) == SQLITE_ROW {
-            let id       = String(cString: sqlite3_column_text(stmt, 0))
-            let name     = String(cString: sqlite3_column_text(stmt, 1))
-            let aliasStr = String(cString: sqlite3_column_text(stmt, 2))
-            let aliases  = aliasStr.split(separator: "|").map(String.init)
-            let label    = String(cString: sqlite3_column_text(stmt, 3))
-            let cal      = Int(sqlite3_column_int(stmt, 4))
-            let prot     = Int(sqlite3_column_int(stmt, 5))
-            let carb     = Int(sqlite3_column_int(stmt, 6))
-            let fat      = Int(sqlite3_column_int(stmt, 7))
-            let fib      = Int(sqlite3_column_int(stmt, 8))
-            results.append(FoodDatabaseEntry(
-                id: id, name: name, aliases: aliases,
-                servingLabel: label,
-                calories: cal, proteinG: prot,
-                carbsG: carb, fatG: fat, fiberG: fib
-            ))
-        }
+        while sqlite3_step(stmt) == SQLITE_ROW { results.append(Self.entry(stmt)) }
         return results
     }
 }
