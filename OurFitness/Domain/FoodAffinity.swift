@@ -90,8 +90,7 @@ public enum FoodAffinity {
     // MARK: - "My Foods" (Add food's empty state)
 
     public static let myFoodsFavoritesCap = 8
-    public static let myFoodsRecentCap = 5
-    public static let myFoodsMostLoggedCap = 5
+    public static let myFoodsRecentCap = 8
     public static let myFoodsRecipesCap = 8
 
     public struct MyFoodsSections: Equatable, Sendable {
@@ -99,12 +98,10 @@ public enum FoodAffinity {
         public var favorites: [CommonFood] = []
         /// Newest first; reopen at `repeatIngredients`.
         public var recent: [FoodLogEntryDTO] = []
-        /// Most-logged foods over 30 days.
-        public var mostLogged: [CommonFood] = []
         /// Saved templates (recipes and single foods the user saved), newest first.
         public var recipes: [SavedMealTemplateDTO] = []
 
-        public var isEmpty: Bool { favorites.isEmpty && recent.isEmpty && mostLogged.isEmpty && recipes.isEmpty }
+        public var isEmpty: Bool { favorites.isEmpty && recent.isEmpty && recipes.isEmpty }
     }
 
     /// What one log entry IS, for "no food twice": its foodId — or its single
@@ -120,18 +117,16 @@ public enum FoodAffinity {
         return "name:" + template.name.lowercased()
     }
 
-    /// The four sections in screen order — Favorites, Recent, Most logged,
-    /// Recipes & my foods — each capped, and each food shown ONCE on the whole
-    /// screen (a later section skips what an earlier one already shows, then
-    /// takes the next in line).
+    /// The three sections in screen order — Favorites, Recent, Recipes & my
+    /// foods — each capped, and each food shown ONCE on the whole screen (a
+    /// later section skips what an earlier one already shows, then takes the
+    /// next in line).
     /// - Parameters:
     ///   - favorites: already resolved (curated → own logs → database).
     ///   - logs: the profile's food log, NEWEST FIRST.
     ///   - templates: saved templates, NEWEST FIRST.
-    ///   - resolve: foodId → loggable food, for the most-logged ids.
     public static func myFoodsSections(
-        favorites: [CommonFood], logs: [FoodLogEntryDTO], templates: [SavedMealTemplateDTO],
-        resolve: (String) -> CommonFood?, end: Date = Date()
+        favorites: [CommonFood], logs: [FoodLogEntryDTO], templates: [SavedMealTemplateDTO]
     ) -> MyFoodsSections {
         var out = MyFoodsSections()
         var seen = Set<String>()
@@ -142,11 +137,6 @@ public enum FoodAffinity {
         }
         for e in logs where out.recent.count < myFoodsRecentCap && seen.insert(identityKey(of: e)).inserted {
             out.recent.append(e)
-        }
-        for id in mostLoggedIds(logs, days: 30, limit: 100, end: end) where out.mostLogged.count < myFoodsMostLoggedCap {
-            guard !seen.contains(id), let food = resolve(id) else { continue }
-            seen.insert(id)
-            out.mostLogged.append(food)
         }
         for t in templates where out.recipes.count < myFoodsRecipesCap && seen.insert(identityKey(of: t)).inserted {
             out.recipes.append(t)
@@ -166,5 +156,24 @@ public enum FoodAffinity {
         }
         hits.sort { $0.tier != $1.tier ? $0.tier < $1.tier : $0.order < $1.order }
         return hits.map { $0.template }
+    }
+}
+
+/// The favorite-food id set as stored in `@AppStorage` — one comma-joined
+/// string per profile. Pure so the round trip is testable.
+public enum FoodFavorites {
+    public static func key(profileId: UUID) -> String { "favoriteFoodIds.\(profileId.uuidString)" }
+
+    public static func parse(_ stored: String) -> Set<String> {
+        Set(stored.split(separator: ",").map(String.init).filter { !$0.isEmpty })
+    }
+
+    /// Sorted, so the stored string doesn't reshuffle between writes.
+    public static func serialize(_ ids: Set<String>) -> String { ids.sorted().joined(separator: ",") }
+
+    public static func toggled(_ ids: Set<String>, _ id: String) -> Set<String> {
+        var out = ids
+        if out.contains(id) { out.remove(id) } else { out.insert(id) }
+        return out
     }
 }

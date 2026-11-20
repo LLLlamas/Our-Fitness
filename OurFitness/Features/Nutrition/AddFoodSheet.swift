@@ -1,8 +1,8 @@
 // Single "Add food" surface — replaces the separate "Log a meal" (free text) and
 // "Browse" (library) sheets. One field does both jobs:
-//   • empty  → "My Foods": favorites · recent (at the last portion) · most
-//              logged · recipes & my foods, each food shown once, + a
-//              manual-entry row
+//   • empty  → "My Foods": favorites · recent (a list at the last portion, with
+//              a heart on each) · recipes & my foods, each food shown once, + a
+//              manual-entry link
 //   • typed  → a "log what you described" card (FoodParser, AI-refined on open)
 //              on top of matching foods (curated + USDA + restaurant items; a
 //              chain in the query — "mcdonalds fries" — leads with that chain's
@@ -54,7 +54,7 @@ struct AddFoodSheet: View {
         self.targetDate = targetDate
         self.onSave = onSave
         let uid = profile.id
-        _favoriteIdsString = AppStorage(wrappedValue: "", "favoriteFoodIds.\(uid.uuidString)")
+        _favoriteIdsString = AppStorage(wrappedValue: "", FoodFavorites.key(profileId: uid))
         _logModels = Query(
             filter: #Predicate<FoodLogEntryModel> { $0.userId == uid },
             sort: \.timestamp,
@@ -68,9 +68,7 @@ struct AddFoodSheet: View {
 
     private var trimmedQuery: String { query.trimmingCharacters(in: .whitespaces) }
 
-    private var favoriteIds: Set<String> {
-        Set(favoriteIdsString.split(separator: ",").map(String.init).filter { !$0.isEmpty })
-    }
+    private var favoriteIds: Set<String> { FoodFavorites.parse(favoriteIdsString) }
 
     /// Favorites that aren't curated or in the user's own logs, read from the
     /// bundled database once (`SQLiteFoodDatabase.entries(ids:)`, off the main thread).
@@ -85,9 +83,7 @@ struct AddFoodSheet: View {
     }
 
     private func toggleFavorite(_ id: String) {
-        var ids = favoriteIds
-        if ids.contains(id) { ids.remove(id) } else { ids.insert(id) }
-        favoriteIdsString = ids.joined(separator: ",")
+        favoriteIdsString = FoodFavorites.serialize(FoodFavorites.toggled(favoriteIds, id))
         Haptics.bump()
     }
 
@@ -312,14 +308,13 @@ struct AddFoodSheet: View {
         let logged = FoodAffinity.loggedFoods(newest)
         let favorites = favoriteIds.compactMap { CommonFoods.byId[$0] ?? logged[$0] ?? databaseFavorites[$0] }
         let sections = FoodAffinity.myFoodsSections(
-            favorites: favorites, logs: newest, templates: savedTemplates.map(\.snapshot),
-            resolve: { CommonFoods.byId[$0] ?? logged[$0] })
+            favorites: favorites, logs: newest, templates: savedTemplates.map(\.snapshot))
 
         Text("My Foods")
             .font(.system(size: 20, weight: .semibold))
             .foregroundStyle(theme.text)
         if sections.isEmpty {
-            Text("Heart foods you eat often — they'll show here")
+            Text("Tap ♥ on a food to keep it here")
                 .font(.callout).foregroundStyle(theme.dim)
         }
         if !sections.favorites.isEmpty {
@@ -328,25 +323,11 @@ struct AddFoodSheet: View {
             }
         }
         if !sections.recent.isEmpty {
-            pillSection(header: "recent") {
-                ForEach(sections.recent) { entry in
-                    Button {
-                        mealToLog = QuickMealLog(name: entry.customName ?? "Meal", emoji: "🍽️", ingredients: ingredients(for: entry))
-                    } label: {
-                        HStack(spacing: 4) {
-                            Text(entry.customName ?? "Meal")
-                            if let portion = portionLabel(for: entry) {
-                                Text(portion).opacity(0.7)
-                            }
-                        }
-                    }
-                    .tactile(.pill)
+            VStack(alignment: .leading, spacing: 6) {
+                sectionHeader("recent")
+                LazyVStack(spacing: 8) {
+                    ForEach(sections.recent) { entry in recentRow(entry) }
                 }
-            }
-        }
-        if !sections.mostLogged.isEmpty {
-            pillSection(header: "most logged") {
-                ForEach(sections.mostLogged) { food in foodPill(food) }
             }
         }
         if !sections.recipes.isEmpty {
@@ -380,12 +361,57 @@ struct AddFoodSheet: View {
             Text(food.name)
         }
         .tactile(.pill)
+        .contextMenu {
+            Button { toggleFavorite(food.id) } label: {
+                Label("Remove from favorites", systemImage: "heart.slash")
+            }
+        }
+    }
+
+    /// One recent log as a row — same look as a search result: name (+ "×1.5"
+    /// when logged at another portion), calories and macros of what was logged,
+    /// tap to reopen at that portion, heart when the entry is one known food.
+    private func recentRow(_ entry: FoodLogEntryDTO) -> some View {
+        let name = entry.customName ?? "Meal"
+        let key = FoodAffinity.identityKey(of: entry)
+        let favoritable = !key.hasPrefix("name:")
+        let p = entry.perServing
+        return PressableCard(action: {
+            mealToLog = QuickMealLog(name: name, emoji: "🍽️", ingredients: ingredients(for: entry))
+        }) {
+            HStack(alignment: .top, spacing: 12) {
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack(spacing: 4) {
+                        Text(name)
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundStyle(theme.text)
+                        if let portion = portionLabel(for: entry) {
+                            Text(portion).font(.caption).foregroundStyle(theme.dim)
+                        }
+                    }
+                    Text("\(p.calories) cal · \(p.proteinG)g pro · \(p.carbsG)g carbs · \(p.fatG)g fat")
+                        .font(.system(.caption2, design: .monospaced))
+                        .foregroundStyle(theme.accent)
+                }
+                Spacer(minLength: 0)
+                if favoritable {
+                    let isFavorite = favoriteIds.contains(key)
+                    Button { toggleFavorite(key) } label: {
+                        Image(systemName: isFavorite ? "heart.fill" : "heart")
+                            .foregroundStyle(isFavorite ? theme.accent : theme.dim)
+                            .font(.system(size: 16))
+                    }
+                    .tactile(.ghost)
+                    .accessibilityLabel(isFavorite ? "Remove \(name) from favorites" : "Add \(name) to favorites")
+                }
+            }
+        }
     }
 
     @ViewBuilder
     private var manualEntryRow: some View {
         Button { describeText = "" } label: {
-            Label("Enter calories & macros manually", systemImage: "square.and.pencil")
+            Label("Enter numbers manually", systemImage: "square.and.pencil")
                 .font(.system(size: 13, weight: .medium))
         }
         .tactile(.ghost)

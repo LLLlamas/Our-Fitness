@@ -136,32 +136,39 @@ final class FoodAffinityTests: XCTestCase {
         for _ in 0..<4 { logs.append(log("2026-05-23", id: "fav1", name: "Fav B")) }
         for i in 0..<7 { for _ in 0..<(7 - i) { logs.append(log("2026-05-22", id: "r\(i)", name: "Recent \(i)")) } }
         for _ in 0..<2 { logs.append(log("2026-05-21", id: "m", name: "Most")) }
-        let known = Dictionary(uniqueKeysWithValues:
-            (favs + (0..<7).map { food("r\($0)", "Recent \($0)") } + [food("m", "Most")]).map { ($0.id, $0) })
 
         let templates = [template("Salad", minutesAgo: 1),                 // same name as a recent log → skipped
                          template("Oats", foodId: "r0", minutesAgo: 2)]     // same food as a recent → skipped
             + (0..<9).map { template("Recipe \($0)", minutesAgo: 10 + $0) }
 
-        let s = FoodAffinity.myFoodsSections(favorites: favs, logs: logs, templates: templates,
-                                             resolve: { known[$0] }, end: end)
+        let s = FoodAffinity.myFoodsSections(favorites: favs, logs: logs, templates: templates)
 
         XCTAssertEqual(s.favorites.map(\.name), (0..<8).map { "Fav \(Character(UnicodeScalar(65 + $0)!))" })   // A–Z, capped
-        XCTAssertEqual(s.recent.count, 5)
+        XCTAssertEqual(s.recent.count, 8)
         XCTAssertFalse(s.recent.contains { $0.foodId == "fav1" })                  // already a favorite
-        XCTAssertEqual(s.recent.map(\.customName), ["Salad", "Recent 0", "Recent 1", "Recent 2", "Recent 3"])   // newest first, next in line fills in
-        XCTAssertEqual(s.mostLogged.map(\.id), ["r4", "r5", "m", "r6"])            // by count then A–Z; fav1 and r0–r3 are shown above
+        XCTAssertEqual(s.recent.map(\.customName), ["Salad"] + (0..<7).map { "Recent \($0)" })   // newest first, next in line fills in
         XCTAssertEqual(s.recipes.count, 8)                                          // capped
         XCTAssertEqual(s.recipes.first?.name, "Recipe 0")                           // newest first, duplicates skipped
         XCTAssertFalse(s.recipes.contains { $0.name == "Salad" || $0.name == "Oats" })
 
         // Nothing appears twice anywhere on the screen.
         let keys = s.favorites.map(\.id) + s.recent.map { FoodAffinity.identityKey(of: $0) }
-            + s.mostLogged.map(\.id) + s.recipes.map { FoodAffinity.identityKey(of: $0) }
+            + s.recipes.map { FoodAffinity.identityKey(of: $0) }
         XCTAssertEqual(keys.count, Set(keys).count)
 
         // A brand-new user has nothing.
-        XCTAssertTrue(FoodAffinity.myFoodsSections(favorites: [], logs: [], templates: [], resolve: { _ in nil }, end: end).isEmpty)
+        XCTAssertTrue(FoodAffinity.myFoodsSections(favorites: [], logs: [], templates: []).isEmpty)
+    }
+
+    func testFavoritesStringRoundTrip() {
+        let id = UUID(uuidString: "11111111-2222-3333-4444-555555555555")!
+        XCTAssertEqual(FoodFavorites.key(profileId: id), "favoriteFoodIds.11111111-2222-3333-4444-555555555555")
+        XCTAssertEqual(FoodFavorites.parse(""), [])
+        XCTAssertEqual(FoodFavorites.parse("b,,a,b"), ["a", "b"])           // blanks dropped, duplicates collapse
+        let on = FoodFavorites.toggled(["b"], "a")
+        XCTAssertEqual(FoodFavorites.serialize(on), "a,b")                    // sorted, stable
+        XCTAssertEqual(FoodFavorites.parse(FoodFavorites.serialize(on)), on)
+        XCTAssertEqual(FoodFavorites.toggled(on, "a"), ["b"])                 // toggling again removes
     }
 
     func testSavedTemplatesMatchTypedNamesBestFirst() {
