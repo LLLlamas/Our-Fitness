@@ -47,6 +47,8 @@ struct AddFoodSheet: View {
 
     @State private var query: String = ""
     @State private var displayedResults: [CommonFood] = []
+    /// Other sizes of a collapsed chain item, keyed by the shown row's id.
+    @State private var sizeChoices: [String: [SizeChoice]] = [:]
     @State private var mealToLog: QuickMealLog?
     @State private var templateToLog: SavedMealTemplateDTO?
     @State private var describeText: String?
@@ -234,7 +236,7 @@ struct AddFoodSheet: View {
             await Task.detached(priority: .userInitiated) { _ = RestaurantCatalog.shared.isEmpty }.value
             restaurantsReady = true
         }
-        .debouncedFoodSearch(query: query, results: $displayedResults) {
+        .debouncedFoodSearch(query: query, results: $displayedResults, sizeChoices: $sizeChoices) {
             defaultOrdered(logModels.map(\.snapshot))
         }
         .presentationDetents([.large])
@@ -489,7 +491,11 @@ struct AddFoodSheet: View {
                 FoodResultRow(
                     food: food,
                     isFavorite: ids.contains(food.id),
-                    onToggleFavorite: { toggleFavorite(food.id) }
+                    onToggleFavorite: { toggleFavorite(food.id) },
+                    sizes: sizeChoices[food.id] ?? [],
+                    onPickSize: { picked in
+                        mealToLog = QuickMealLog(name: picked.name, emoji: "🍽️", ingredients: ingredients(for: picked))
+                    }
                 ) {
                     mealToLog = QuickMealLog(name: food.name, emoji: "🍽️", ingredients: ingredients(for: food))
                 }
@@ -503,21 +509,33 @@ struct AddFoodSheet: View {
 extension View {
     /// The one debounced food search: each keystroke restarts the task
     /// (cancelling the prior one), and only after a 180 ms pause does
-    /// `FoodSearch.combined` (curated + the USDA FTS5 scan, off the main thread)
-    /// run — so typing never rescans 15–20k entries synchronously in `body`.
-    /// A blank query shows `emptyResults()` immediately.
+    /// `FoodSearch.search` (curated + the USDA FTS5 scan + chain menus, off the
+    /// main thread) run — so typing never rescans 15–20k entries synchronously
+    /// in `body`. A blank query shows `emptyResults()` immediately.
     func debouncedFoodSearch(
         query: String,
         results: Binding<[CommonFood]>,
         emptyResults: @escaping () -> [CommonFood]
     ) -> some View {
-        modifier(DebouncedFoodSearch(query: query, results: results, emptyResults: emptyResults))
+        modifier(DebouncedFoodSearch(query: query, results: results, sizeChoices: nil, emptyResults: emptyResults))
+    }
+
+    /// Same search, also reporting the size choices of collapsed chain items
+    /// (keyed by the shown row's id).
+    func debouncedFoodSearch(
+        query: String,
+        results: Binding<[CommonFood]>,
+        sizeChoices: Binding<[String: [SizeChoice]]>,
+        emptyResults: @escaping () -> [CommonFood]
+    ) -> some View {
+        modifier(DebouncedFoodSearch(query: query, results: results, sizeChoices: sizeChoices, emptyResults: emptyResults))
     }
 }
 
 private struct DebouncedFoodSearch: ViewModifier {
     let query: String
     @Binding var results: [CommonFood]
+    let sizeChoices: Binding<[String: [SizeChoice]]>?
     let emptyResults: () -> [CommonFood]
 
     func body(content: Content) -> some View {
@@ -525,21 +543,17 @@ private struct DebouncedFoodSearch: ViewModifier {
             let q = query
             if q.trimmingCharacters(in: .whitespaces).isEmpty {
                 results = emptyResults()
+                sizeChoices?.wrappedValue = [:]
                 return
             }
             try? await Task.sleep(nanoseconds: 180_000_000)   // 180 ms
             guard !Task.isCancelled else { return }
-            let found = await FoodSearch.combined(matching: q)
+            // "shake shack fries": that chain's fries lead, sizes collapsed
+            // (FTS rank alone can't promise it) — see `FoodSearch.search`.
+            let outcome = await FoodSearch.search(q)
             guard !Task.isCancelled else { return }
-            // "shake shack fries": that chain's fries lead, ranked within its menu
-            // (FTS rank alone can't promise it); the same rows aren't repeated below.
-            // Off the main actor: the first call may still be loading the catalog.
-            let menuHits = await Task.detached(priority: .userInitiated) {
-                RestaurantCatalog.shared.menuMatches(for: q).map { $0.food.asCommonFood }
-            }.value
-            guard !Task.isCancelled else { return }
-            let leadIds = Set(menuHits.map(\.id))
-            results = menuHits + found.filter { !leadIds.contains($0.id) }
+            results = outcome.foods
+            sizeChoices?.wrappedValue = outcome.sizeChoices
         }
     }
 }
@@ -551,6 +565,10 @@ struct FoodResultRow: View {
     let food: CommonFood
     var isFavorite: Bool = false
     var onToggleFavorite: (() -> Void)? = nil
+    /// Other sizes of this item (chain results). Shown as small inline pills;
+    /// tapping one picks that size's own row via `onPickSize`.
+    var sizes: [SizeChoice] = []
+    var onPickSize: ((CommonFood) -> Void)? = nil
     let onTap: () -> Void
 
     @Environment(\.theme) private var theme
@@ -567,6 +585,7 @@ struct FoodResultRow: View {
                     Text("\(food.calories) cal · \(food.proteinG)g pro · \(food.carbsG)g carbs · \(food.fatG)g fat")
                         .font(.system(.caption2, design: .monospaced))
                         .foregroundStyle(theme.accent)
+                    if sizes.count > 1, let onPickSize { sizePills(onPickSize) }
                 }
                 Spacer(minLength: 0)
                 if let onToggleFavorite {
@@ -577,6 +596,29 @@ struct FoodResultRow: View {
                     }
                     .tactile(.ghost)
                     .accessibilityLabel(isFavorite ? "Remove \(food.name) from favorites" : "Add \(food.name) to favorites")
+                }
+            }
+        }
+    }
+
+    /// One small pill per size ("Small 230"); the shown row's size is filled.
+    @ViewBuilder
+    private func sizePills(_ pick: @escaping (CommonFood) -> Void) -> some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 6) {
+                ForEach(sizes) { size in
+                    let isShown = size.food.id == food.id
+                    Button {
+                        if !isShown { pick(size.food) }
+                    } label: {
+                        Text("\(size.label) \(size.food.calories)")
+                            .font(.system(size: 11, weight: isShown ? .semibold : .regular))
+                            .padding(.horizontal, 8).padding(.vertical, 4)
+                            .foregroundStyle(isShown ? theme.bg : theme.text)
+                            .background(isShown ? theme.accent : theme.card2, in: Capsule())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("\(size.label), \(size.food.calories) calories")
                 }
             }
         }

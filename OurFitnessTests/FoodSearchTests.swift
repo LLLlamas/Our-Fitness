@@ -1,4 +1,5 @@
 import XCTest
+import SQLite3
 
 /// Lenient food search (`Domain/FoodSearch.swift`): case, apostrophes, word
 /// order, plurals and spelling variants don't matter; results rank by match
@@ -90,6 +91,35 @@ final class FoodSearchTests: XCTestCase {
         XCTAssertTrue(fts.contains("\"donuts\"*"))
         XCTAssertTrue(fts.contains("\"doughnut\"*"))
         XCTAssertEqual(FoodSearchQuery("rice").ftsQuery, "\"rice\"*")
+        // Words join with AND — a bare space before "(… OR …)" is an FTS5 syntax error.
+        XCTAssertEqual(FoodSearchQuery("shake shack fries").ftsQuery,
+                       "\"shake\"* AND \"shack\"* AND (\"frie\"* OR \"fries\"* OR \"fry\"*)")
+    }
+
+    /// The query that used to throw "syntax error near (" must run for real.
+    func testMultiWordFTSQueryMatchesFTS5() async throws {
+        let path = FileManager.default.temporaryDirectory.appendingPathComponent("fts-\(UUID().uuidString).db").path
+        defer { try? FileManager.default.removeItem(atPath: path) }
+        var raw: OpaquePointer?
+        guard sqlite3_open(path, &raw) == SQLITE_OK else { throw XCTSkip("sqlite open failed") }
+        let setup = """
+            CREATE TABLE foods (id TEXT NOT NULL, name TEXT NOT NULL, aliases TEXT NOT NULL, serving_label TEXT NOT NULL,
+              calories INTEGER NOT NULL, protein_g INTEGER NOT NULL, carbs_g INTEGER NOT NULL,
+              fat_g INTEGER NOT NULL, fiber_g INTEGER NOT NULL);
+            CREATE VIRTUAL TABLE foods_fts USING fts5(name, aliases, content=foods, content_rowid=rowid);
+            INSERT INTO foods VALUES ('a','Shake Shack Fries','','1 order',470,6,63,22,6);
+            INSERT INTO foods VALUES ('b','Shake Shack Shake','','1 shake',500,9,60,20,0);
+            INSERT INTO foods VALUES ('c','Fried chicken','','1 piece',300,20,10,15,0);
+            INSERT INTO foods_fts(foods_fts) VALUES ('rebuild');
+            """
+        XCTAssertEqual(sqlite3_exec(raw, setup, nil, nil, nil), SQLITE_OK)
+        sqlite3_close(raw)
+
+        let db = SQLiteFoodDatabase.open(path: path)
+        let q = FoodSearchQuery("shake shack fries")
+        XCTAssertTrue(q.ftsQuery.contains("(\""))   // the shape that broke
+        let hits = await db.searchAsync(ftsQuery: q.ftsQuery, limit: 10)
+        XCTAssertEqual(hits.map(\.id), ["a"])
     }
 
     func testRepeatIngredientsKeepPortionsWithFreshIds() {

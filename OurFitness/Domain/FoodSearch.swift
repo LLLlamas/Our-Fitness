@@ -12,11 +12,14 @@ import Foundation
 public enum FoodSearch {
 
     public static func combined(matching query: String) async -> [CommonFood] {
-        let q = FoodSearchQuery(query)
+        await combined(FoodSearchQuery(query), index: .shared, database: .shared)
+    }
+
+    static func combined(_ q: FoodSearchQuery, index: CuratedSearchIndex, database: SQLiteFoodDatabase) async -> [CommonFood] {
         guard !q.isEmpty else { return [] }
-        let curated = CuratedSearchIndex.shared.matches(q)
+        let curated = index.matches(q)
         let curatedNames = Set(curated.map { $0.name.lowercased() })
-        let usda = await SQLiteFoodDatabase.shared.searchAsync(ftsQuery: q.ftsQuery, limit: 60)
+        let usda = await database.searchAsync(ftsQuery: q.ftsQuery, limit: 60)
             .map { $0.asCommonFood }
             .filter { !curatedNames.contains($0.name.lowercased()) }
             .compactMap { food in q.tier(name: food.name, aliases: food.aliases).map { (food, $0) } }
@@ -144,7 +147,10 @@ public struct FoodSearchQuery: Sendable {
             let terms = Array(Set(alts)).sorted().map { "\"\($0.replacingOccurrences(of: "\"", with: "\"\""))\"*" }
             return terms.count == 1 ? terms[0] : "(" + terms.joined(separator: " OR ") + ")"
         }
-        .joined(separator: " ")
+        // AND, not a bare space: FTS5 rejects a space before a parenthesised OR
+        // group ("syntax error near ("), which zeroed every multi-word query
+        // with a plural or spelling variant ("shake shack fries").
+        .joined(separator: " AND ")
     }
 }
 
@@ -157,7 +163,7 @@ final class CuratedSearchIndex: Sendable {
 
     private let entries: [(food: CommonFood, name: [String], aliases: [[String]])]
 
-    init(_ foods: [CommonFood]) {
+    init(_ foods: [CommonFood], catalog: RestaurantCatalog? = nil) {
         entries = foods.map { food in
             (food, FoodSearchQuery.normalizedWords(food.name), food.aliases.map(FoodSearchQuery.normalizedWords))
         }

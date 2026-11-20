@@ -163,7 +163,7 @@ public enum RestaurantMatcher {
     /// whole name or an alias. The longest leading match wins. Remainder may be
     /// empty ("shake shack"). Partial chain names don't split — "shake fries"
     /// stays a plain food search.
-    public static func split(_ query: String, chains: [RestaurantChain]) -> (chain: RestaurantChain, remainder: String)? {
+    public static func split(_ query: String, chains: [RestaurantChain]) -> (chain: RestaurantChain, remainder: String, fuzzy: Bool)? {
         let qw = words(query)
         guard !qw.isEmpty else { return nil }
         var prefixes: [String] = []
@@ -178,7 +178,7 @@ public enum RestaurantMatcher {
             }
         }
         guard let best else { return nil }
-        return (best.chain, qw[best.consumed...].joined(separator: " "))
+        return (best.chain, qw[best.consumed...].joined(separator: " "), false)
     }
 
     /// Menu items matching `query`: every query word must prefix a word of the
@@ -297,14 +297,14 @@ public final class RestaurantCatalog: Sendable {
         RestaurantMatcher.sections(menu(for: slug))
     }
 
-    public func split(_ query: String) -> (chain: RestaurantChain, remainder: String)? {
+    public func split(_ query: String) -> (chain: RestaurantChain, remainder: String, fuzzy: Bool)? {
         RestaurantMatcher.split(query, chains: chains)
     }
 
     /// "shake shack fries" → Shake Shack's items matching "fries", best first.
     /// Empty when the query doesn't start with a chain or names only the chain.
     public func menuMatches(for query: String, limit: Int = 8) -> [RestaurantMenuItem] {
-        guard let (chain, remainder) = split(query), !remainder.isEmpty else { return [] }
+        guard let (chain, remainder, _) = split(query), !remainder.isEmpty else { return [] }
         return Array(RestaurantMatcher.filter(menu(for: chain.slug), query: remainder).prefix(limit))
     }
 }
