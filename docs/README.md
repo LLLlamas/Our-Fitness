@@ -31,12 +31,11 @@ Status key: **Living** = describes current behavior, update it in the same commi
 |---|---|---|
 | [progress-tracking-plan.md](progress-tracking-plan.md) | Plan, implemented and merged (Oct 2026); compiled and unit-tested, no device check yet | Progress as reps at a weight over all history, "last time" and same-day-last-week comparisons, editable fixed loads. Banner lists what was built, deferred and unverified; the map rows describe current behavior |
 | [app-expansion.md](app-expansion.md) | Plan | Phase 2/3 roadmap only: iCloud sync, store polish (Phase 1 shipped and removed from the doc) |
+| [cardio-fitness-plan.md](cardio-fitness-plan.md) | Plan, revived 2026-11-20 for a newer watch; awaiting owner approval | VO₂ max, cardio minutes and slow base-building, plus a watch-check-first rollout (§8). Its safety rules bind any cardio feature |
 
 ## Shelved
 
-| Doc | Status | What it is |
-|---|---|---|
-| [cardio-fitness-plan.md](cardio-fitness-plan.md) | Shelved | VO₂ max and slow cardio base-building. The owner dropped it for now (Oct 2026); kept as research, and its safety rules would bind any future cardio feature |
+None right now.
 
 ## Historical records
 
