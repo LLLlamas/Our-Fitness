@@ -82,6 +82,15 @@ public final class ToastCenter: ObservableObject {
                    accent: .ok, symbol: "checkmark"))
     }
 
+    /// Logged-food confirmation with the numbers: "Logged · Name" over
+    /// "+cal · Pg pro · Cg carbs · Fg fat". An empty name reads "Meal".
+    public func logged(_ name: String, perServing p: PerServing) {
+        let label = name.isEmpty ? "Meal" : name
+        show(Toast(title: "Logged · \(label)",
+                   detail: "+\(p.calories) cal · \(p.proteinG)g pro · \(p.carbsG)g carbs · \(p.fatG)g fat",
+                   accent: .ok, symbol: "checkmark"), for: 2.4)
+    }
+
     // Encouragement-engine driven toasts (Phase 1). All of these are thin wrappers
     // over `show(_:accent:for:)` — they exist because they either call the engine
     // themselves, gate on a nil message, or pick the accent from the message tone.

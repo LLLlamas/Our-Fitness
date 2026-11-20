@@ -178,6 +178,9 @@ struct AddFoodSheet: View {
         }
         .debouncedFoodSearch(query: query, results: $displayedResults, sizeChoices: $sizeChoices,
                              correctedQuery: $correctedQuery) { [] }
+        // The root ToastHost sits under this sheet, so "Logged" would be hidden
+        // while the sheet stays open after a pick; host a toast layer here too.
+        .overlay(alignment: .top) { ToastHost() }
         .presentationDetents([.large])
         .presentationBackground(theme.bg)
         .sheet(item: $mealToLog) { meal in

@@ -244,7 +244,7 @@ struct NutritionView: View {
             AddFoodSheet(profile: profile, targetDate: selectedDayKey) { dto in
                 // Don't toast or prefetch off a write that didn't commit.
                 guard Repos.addFoodLog(ctx, dto) else { return false }
-                toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
+                toasts.logged(dto.customName ?? "Meal", perServing: dto.perServing)
                 let foodName = dto.foodId ?? dto.customName ?? ""
                 if !foodName.isEmpty {
                     FoodAlternativeService.shared.prefetch(for: foodName, fitnessGoal: profile.fitnessGoal)
@@ -285,7 +285,7 @@ struct NutritionView: View {
         .sheet(isPresented: $showCameraLog) {
             CameraFoodLogSheet(profile: profile, slot: .lunch) { dto in
                 guard Repos.addFoodLog(ctx, dto) else { return false }
-                toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
+                toasts.logged(dto.customName ?? "Meal", perServing: dto.perServing)
                 let foodName = dto.foodId ?? dto.customName ?? ""
                 if !foodName.isEmpty {
                     FoodAlternativeService.shared.prefetch(for: foodName, fitnessGoal: profile.fitnessGoal)
@@ -299,7 +299,7 @@ struct NutritionView: View {
                 recentLogs: allLogs, favoriteFoodIds: favoriteIds,
                 onPick: { dto in
                     guard Repos.addFoodLog(ctx, dto) else { return }
-                    toasts.logged(dto.customName ?? "Meal", calories: dto.perServing.calories)
+                    toasts.logged(dto.customName ?? "Meal", perServing: dto.perServing)
                     showMoodSheet = false
                     let foodName = dto.foodId ?? dto.customName ?? ""
                     if !foodName.isEmpty {

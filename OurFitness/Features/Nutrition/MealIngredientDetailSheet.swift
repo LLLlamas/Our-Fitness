@@ -211,7 +211,7 @@ struct MealIngredientDetailSheet: View {
         )
         guard Repos.addFoodLog(ctx, dto) else { return }
         // ToastCenter fires the accent's haptic — a Haptics call here is two taps.
-        toasts.show(Toast(title: "Logged", detail: name, accent: .ok, symbol: "checkmark.circle.fill"))
+        toasts.logged(name, perServing: perServing)
         onDone()
         dismiss()
     }
