@@ -1,12 +1,11 @@
 // Single "Add food" surface — replaces the separate "Log a meal" (free text) and
 // "Browse" (library) sheets. One field does both jobs:
 //   • empty  → quick picks (recipes · recently logged at last portion ·
-//              restaurants · favorites) + the full
-//              library, ordered favorites → most-logged (30 days) → rest
-//   • typed  → matching restaurants (RestaurantCatalog — tap = that chain's menu,
-//              RestaurantMenuView), then a "log what you described" card
-//              (FoodParser, AI-refined on open) on top of matching library foods
-//              (curated + USDA + restaurant items)
+//              favorites) + a manual-entry row
+//   • typed  → a "log what you described" card (FoodParser, AI-refined on open)
+//              on top of matching foods (curated + USDA + restaurant items; a
+//              chain in the query — "mcdonalds fries" — leads with that chain's
+//              items, sizes collapsed)
 // Tapping a food/recipe/recent opens MealIngredientDetailSheet (portion + slot);
 // the sheet stays open so several foods can be added in a row.
 
@@ -19,13 +18,6 @@ private struct QuickMealLog: Identifiable {
     let name: String
     let emoji: String
     let ingredients: [MealIngredient]
-}
-
-/// Push target for a chain's menu; `query` is what followed the chain name
-/// ("shake shack fries" → "fries"), pre-filled into the menu's search.
-private struct RestaurantRoute: Hashable {
-    let chain: RestaurantChain
-    let query: String
 }
 
 struct AddFoodSheet: View {
@@ -54,10 +46,6 @@ struct AddFoodSheet: View {
     @State private var mealToLog: QuickMealLog?
     @State private var templateToLog: SavedMealTemplateDTO?
     @State private var describeText: String?
-    @State private var restaurantRoute: RestaurantRoute?
-    /// False until the catalog has loaded off the main thread; until then the
-    /// Restaurants row stays empty rather than blocking `body` on the load.
-    @State private var restaurantsReady = false
     @FocusState private var searchFocused: Bool
 
     init(profile: ProfileDTO, targetDate: String, onSave: @escaping (FoodLogEntryDTO) -> Bool) {
@@ -104,26 +92,6 @@ struct AddFoodSheet: View {
         return result
     }
 
-    /// Default (empty-query) ordering for the full curated library:
-    /// (a) favorites first, (b) then non-favorites the user actually logs
-    /// (last 30 days) by descending frequency, (c) then everything else A–Z.
-    /// Deterministic: frequency ties break A–Z too.
-    private func defaultOrdered(_ allLogs: [FoodLogEntryDTO]) -> [CommonFood] {
-        let favs = favoriteIds
-        let freq = FoodAffinity.frequencyByFoodId(allLogs, days: 30)
-        let ranked = CommonFoods.all.map { food -> (rank: (Int, Int), food: CommonFood) in
-            let f = freq[food.id] ?? 0
-            // Bucket 0 = favorite, 1 = logged non-favorite, 2 = the rest.
-            let bucket = favs.contains(food.id) ? 0 : (f > 0 ? 1 : 2)
-            // Within a bucket: higher frequency first (negate), then A–Z.
-            return ((bucket, -f), food)
-        }
-        return ranked.sorted {
-            if $0.rank != $1.rank { return $0.rank < $1.rank }
-            return $0.food.name.localizedCaseInsensitiveCompare($1.food.name) == .orderedAscending
-        }.map(\.food)
-    }
-
     private func toggleFavorite(_ id: String) {
         var ids = favoriteIds
         if ids.contains(id) { ids.remove(id) } else { ids.insert(id) }
@@ -150,31 +118,6 @@ struct AddFoodSheet: View {
         return "×" + s
     }
 
-    /// Chains for the empty-query Restaurants row: ones the user has logged from
-    /// (most recent first), then every other restaurant A–Z with chains rare
-    /// near NYC last (`RegionalChains`). Brands appear only once used.
-    private func restaurantPicks(from allLogs: [FoodLogEntryDTO]) -> [RestaurantChain] {
-        guard restaurantsReady else { return [] }
-        let chains = RestaurantCatalog.shared.chains
-        var usedSlugs: [String] = []
-        for log in allLogs.reversed() {
-            let ids = [log.foodId] + (log.ingredients ?? []).map(\.foodId)
-            for case let id? in ids where id.hasPrefix("rest:") {
-                let slug = String(id.dropFirst(5).prefix { $0 != ":" })
-                if !usedSlugs.contains(slug) { usedSlugs.append(slug) }
-            }
-        }
-        let used = usedSlugs.compactMap { slug in chains.first { $0.slug == slug } }
-        let rest = chains
-            .filter { !$0.isBrand && !usedSlugs.contains($0.slug) }
-            .sorted {
-                let ra = RegionalChains.isRare(slug: $0.slug), rb = RegionalChains.isRare(slug: $1.slug)
-                if ra != rb { return !ra }
-                return $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
-            }
-        return used + rest
-    }
-
     var body: some View {
         let allLogs = logModels.map(\.snapshot)
         NavigationStack {
@@ -185,9 +128,7 @@ struct AddFoodSheet: View {
                     if trimmedQuery.isEmpty {
                         quickPicks(allLogs: allLogs)
                         manualEntryRow
-                        sectionHeader("All foods")
                     } else {
-                        restaurantRow
                         describeCard
                         if let correctedQuery, !displayedResults.isEmpty {
                             Text("Showing results for “\(correctedQuery)”")
@@ -197,8 +138,7 @@ struct AddFoodSheet: View {
                     }
 
                     if displayedResults.isEmpty {
-                        // Empty + a real query = genuine no-match; empty + blank query
-                        // is just the pre-seed moment, so stay silent.
+                        // Only a real query can be a genuine no-match; blank shows no list.
                         if !trimmedQuery.isEmpty {
                             Text("No library matches — log it as described above.")
                                 .font(.callout).foregroundStyle(theme.dim)
@@ -228,24 +168,14 @@ struct AddFoodSheet: View {
                     if onSave(dto) { dismiss() }
                 }
             }
-            .navigationDestination(item: $restaurantRoute) { route in
-                RestaurantMenuView(chain: route.chain, initialQuery: route.query) { item in
-                    // Same confirm/log path as every other pick.
-                    mealToLog = QuickMealLog(name: item.food.name, emoji: "🍽️",
-                                             ingredients: [MealIngredient.from(item.food.asCommonFood)])
-                }
-            }
         }
         .task {
-            // Read the (small) restaurant catalog off the main thread once, so the
-            // first keystroke that consults it doesn't pay for the SQLite read.
+            // Read the restaurant catalog + build the search vocabulary off the
+            // main thread once, so the first keystroke doesn't pay for the SQLite read.
             await Task.detached(priority: .userInitiated) { _ = CuratedSearchIndex.shared.vocabulary }.value
-            restaurantsReady = true
         }
         .debouncedFoodSearch(query: query, results: $displayedResults, sizeChoices: $sizeChoices,
-                             correctedQuery: $correctedQuery) {
-            defaultOrdered(logModels.map(\.snapshot))
-        }
+                             correctedQuery: $correctedQuery) { [] }
         .presentationDetents([.large])
         .presentationBackground(theme.bg)
         .sheet(item: $mealToLog) { meal in
@@ -304,48 +234,6 @@ struct AddFoodSheet: View {
         .background(theme.card)
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
-    }
-
-    // MARK: - Restaurants (typed query)
-
-    /// Chains the query names or starts to spell ("shakesha" → Shake Shack).
-    /// In-memory over a few chains — cheap enough to run in `body`.
-    @ViewBuilder
-    private var restaurantRow: some View {
-        let chains = restaurantsReady ? RestaurantCatalog.shared.chains(matching: trimmedQuery) : []
-        VStack(alignment: .leading, spacing: 8) {
-            if !chains.isEmpty {
-                sectionHeader(chains.allSatisfy(\.isBrand) ? "Brands" : chains.contains(where: \.isBrand) ? "Restaurants & brands" : "Restaurants")
-                ForEach(chains) { chain in
-                    PressableCard(action: {
-                        Haptics.tap()
-                        searchFocused = false
-                        let split = RestaurantCatalog.shared.split(trimmedQuery)
-                        let rest = split?.chain.slug == chain.slug ? split?.remainder ?? "" : ""
-                        restaurantRoute = RestaurantRoute(chain: chain, query: rest)
-                    }) {
-                        HStack(spacing: 12) {
-                            Image(systemName: chain.isBrand ? "dumbbell.fill" : "fork.knife")
-                                .font(.system(size: 16))
-                                .foregroundStyle(theme.accent)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(chain.name)
-                                    .font(.system(size: 15, weight: .semibold))
-                                    .foregroundStyle(theme.text)
-                                Text("\(chain.isBrand ? "Products" : "Menu") · \(chain.itemCount) items")
-                                    .font(.caption).foregroundStyle(theme.dim)
-                            }
-                            Spacer(minLength: 0)
-                            Image(systemName: "chevron.right")
-                                .font(.system(size: 12))
-                                .foregroundStyle(theme.dim)
-                        }
-                    }
-                    .transition(.opacity.combined(with: .move(edge: .top)))
-                }
-            }
-        }
-        .animation(.spring(response: 0.3, dampingFraction: 0.8), value: chains.map(\.slug))
     }
 
     // MARK: - Describe card (typed query)
@@ -426,21 +314,6 @@ struct AddFoodSheet: View {
                                 Text(portion).opacity(0.7)
                             }
                         }
-                    }
-                    .tactile(.pill)
-                }
-            }
-        }
-        let restaurants = restaurantPicks(from: allLogs)
-        if !restaurants.isEmpty {
-            pillSection(header: "restaurants") {
-                ForEach(restaurants) { chain in
-                    Button {
-                        Haptics.tap()
-                        searchFocused = false
-                        restaurantRoute = RestaurantRoute(chain: chain, query: "")
-                    } label: {
-                        Text(chain.name)
                     }
                     .tactile(.pill)
                 }
