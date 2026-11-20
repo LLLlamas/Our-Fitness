@@ -3,7 +3,8 @@
 //       body fat %, waist, blood pressure, blood glucose (fasting-marked only),
 //       VO₂ max (Apple Watch cardio fitness estimate, read-only, full history),
 //       workouts (cardio minutes only — never burn or active energy).
-// Write: workouts, body mass (optional, mirrors in-app logs to Apple Health).
+// Write: workouts, body mass (optional, mirrors in-app logs to Apple Health),
+//        the Dizziness symptom for a flagged live session (its real window only).
 // syncFromHealth() pulls latest body/marker readings into the app's logs.
 
 import Foundation
@@ -75,6 +76,10 @@ public final class HealthKitService: ObservableObject {
         var s: Set<HKSampleType> = []
         if let t = HKQuantityType.quantityType(forIdentifier: .bodyMass) { s.insert(t) }
         s.insert(HKObjectType.workoutType())
+        // Symptom (category type, values are HKCategoryValueSeverity per Apple's
+        // docs). Written only for a "Felt dizzy" live session. People connected
+        // before this was added must run Connect again to grant it.
+        s.insert(HKCategoryType(.dizziness))
         return s
     }()
 
@@ -208,6 +213,66 @@ public final class HealthKitService: ObservableObject {
         } catch {
             print("[HealthKit] write weight failed:", error.localizedDescription)
         }
+    }
+
+    // MARK: - "Felt dizzy" session (cardio plan §10 Q2)
+
+    /// Average and peak heart rate from Health samples that start inside the
+    /// window. nil when there are none — including when read access was never
+    /// granted, which HealthKit reports as no data. Never estimated.
+    public func heartRateSummary(start: Date, end: Date) async -> (average: Double, peak: Double)? {
+        guard let type = HKQuantityType.quantityType(forIdentifier: .heartRate) else { return nil }
+        let predicate = HKQuery.predicateForSamples(withStart: start, end: end, options: [.strictStartDate])
+        let unit = Self.bpmUnit
+        let stats: (Double?, Double?) = await withCheckedContinuation { cont in
+            let q = HKStatisticsQuery(quantityType: type, quantitySamplePredicate: predicate,
+                                      options: [.discreteAverage, .discreteMax]) { _, stats, _ in
+                cont.resume(returning: (stats?.averageQuantity()?.doubleValue(for: unit),
+                                        stats?.maximumQuantity()?.doubleValue(for: unit)))
+            }
+            store.execute(q)
+        }
+        return SessionDizziness.heartRate(average: stats.0, peak: stats.1)
+    }
+
+    /// Saves one Dizziness symptom sample over the session window. Returns false
+    /// (no prompt, no throw) when sharing isn't authorized or the save fails —
+    /// the local flag is already saved either way.
+    @discardableResult
+    public func writeDizziness(_ severity: SessionDizziness.HealthSeverity, start: Date, end: Date) async -> Bool {
+        let type = HKCategoryType(.dizziness)
+        guard isAvailable, store.authorizationStatus(for: type) == .sharingAuthorized else { return false }
+        let value: HKCategoryValueSeverity
+        switch severity {
+        case .unspecified: value = .unspecified
+        case .mild: value = .mild
+        case .moderate: value = .moderate
+        case .severe: value = .severe
+        }
+        let sample = HKCategorySample(type: type, value: value.rawValue, start: start, end: end)
+        do {
+            try await store.save(sample)
+            return true
+        } catch {
+            print("[HealthKit] write dizziness failed:", error.localizedDescription)
+            return false
+        }
+    }
+
+    /// After a flagged live session is saved: read heart rate over its real
+    /// window and store it, then write the Dizziness symptom to Health. Sessions
+    /// logged after the fact never come here (`SessionDizziness.healthWindow`).
+    /// Failures are quiet; the flag itself was saved with the session.
+    public func recordDizzySession(_ ctx: ModelContext, state: LiveSessionState, end: Date,
+                                   report: DizzinessReport, healthGranted: Bool) async {
+        guard healthGranted,
+              let window = SessionDizziness.healthWindow(
+                flagged: true, origin: .live(start: state.startDate, end: end)) else { return }
+        if let hr = await heartRateSummary(start: window.start, end: window.end) {
+            _ = Repos.recordDizzyHeartRate(ctx, state: state, averageBpm: hr.average, peakBpm: hr.peak)
+        }
+        await writeDizziness(SessionDizziness.healthSeverity(report.severity),
+                             start: window.start, end: window.end)
     }
 
     // MARK: - Resting heart rate

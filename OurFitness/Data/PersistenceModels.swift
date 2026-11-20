@@ -420,6 +420,12 @@ public final class PilatesSessionModel {
     public var durationMinutes: Int
     public var focusAreasRaw: [String]
     public var notes: String?
+    // "Felt dizzy" flag (SchemaV8). Optional columns, so pre-V8 rows migrate
+    // additively with nil = not flagged. Read/write only through `dizziness`.
+    public var feltDizzy: Bool?
+    public var dizzySeverityRaw: String?
+    public var dizzyAvgHeartRateBpm: Double?
+    public var dizzyPeakHeartRateBpm: Double?
 
     public init(snapshot s: PilatesSessionDTO) {
         self.id = s.id
@@ -428,6 +434,7 @@ public final class PilatesSessionModel {
         self.durationMinutes = s.durationMinutes
         self.focusAreasRaw = s.focusAreas.map(\.rawValue)
         self.notes = s.notes
+        self.dizziness = s.dizziness
     }
 
     public var snapshot: PilatesSessionDTO {
@@ -435,9 +442,27 @@ public final class PilatesSessionModel {
             id: id, profileId: profileId, date: date,
             durationMinutes: durationMinutes,
             focusAreas: focusAreasRaw.compactMap(PilatesFocusArea.init(rawValue:)),
-            notes: notes
+            notes: notes, dizziness: dizziness
         )
     }
+
+    /// The stored flag as a DTO value; nil unless the session was flagged.
+    public var dizziness: DizzinessReport? {
+        get {
+            guard feltDizzy == true else { return nil }
+            return DizzinessReport(
+                severity: dizzySeverityRaw.flatMap(DizzinessSeverity.init(rawValue:)),
+                averageHeartRateBpm: dizzyAvgHeartRateBpm,
+                peakHeartRateBpm: dizzyPeakHeartRateBpm)
+        }
+        set {
+            feltDizzy = newValue == nil ? nil : true
+            dizzySeverityRaw = newValue?.severity?.rawValue
+            dizzyAvgHeartRateBpm = newValue?.averageHeartRateBpm
+            dizzyPeakHeartRateBpm = newValue?.peakHeartRateBpm
+        }
+    }
+
 
     public func apply(_ s: PilatesSessionDTO) {
         self.profileId = s.profileId
@@ -445,6 +470,7 @@ public final class PilatesSessionModel {
         self.durationMinutes = s.durationMinutes
         self.focusAreasRaw = s.focusAreas.map(\.rawValue)
         self.notes = s.notes
+        self.dizziness = s.dizziness
     }
 }
 
@@ -501,6 +527,12 @@ public final class ActivitySessionModel {
     /// MET-based kcal estimate computed at log time.
     public var caloriesEst: Double?
     public var notes: String?
+    // "Felt dizzy" flag (SchemaV8). Optional columns, so pre-V8 rows migrate
+    // additively with nil = not flagged. Read/write only through `dizziness`.
+    public var feltDizzy: Bool?
+    public var dizzySeverityRaw: String?
+    public var dizzyAvgHeartRateBpm: Double?
+    public var dizzyPeakHeartRateBpm: Double?
 
     public init(snapshot s: ActivitySessionDTO) {
         self.id = s.id
@@ -513,6 +545,7 @@ public final class ActivitySessionModel {
         self.expectedMinutes = s.expectedMinutes
         self.caloriesEst = s.caloriesEst
         self.notes = s.notes
+        self.dizziness = s.dizziness
     }
 
     public var snapshot: ActivitySessionDTO {
@@ -520,9 +553,27 @@ public final class ActivitySessionModel {
             id: id, profileId: profileId, date: date,
             activityId: activityId, activityName: activityName, met: met,
             durationMinutes: durationMinutes, expectedMinutes: expectedMinutes,
-            caloriesEst: caloriesEst, notes: notes
+            caloriesEst: caloriesEst, notes: notes, dizziness: dizziness
         )
     }
+
+    /// The stored flag as a DTO value; nil unless the session was flagged.
+    public var dizziness: DizzinessReport? {
+        get {
+            guard feltDizzy == true else { return nil }
+            return DizzinessReport(
+                severity: dizzySeverityRaw.flatMap(DizzinessSeverity.init(rawValue:)),
+                averageHeartRateBpm: dizzyAvgHeartRateBpm,
+                peakHeartRateBpm: dizzyPeakHeartRateBpm)
+        }
+        set {
+            feltDizzy = newValue == nil ? nil : true
+            dizzySeverityRaw = newValue?.severity?.rawValue
+            dizzyAvgHeartRateBpm = newValue?.averageHeartRateBpm
+            dizzyPeakHeartRateBpm = newValue?.peakHeartRateBpm
+        }
+    }
+
 }
 
 // MARK: - Water intake (V4)

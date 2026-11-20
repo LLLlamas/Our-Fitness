@@ -223,6 +223,39 @@ public enum SchemaV7: VersionedSchema {
     }
 }
 
+/// V8 adds the optional "Felt dizzy" columns on `ActivitySessionModel` and
+/// `PilatesSessionModel` (`feltDizzy`, `dizzySeverityRaw`, `dizzyAvgHeartRateBpm`,
+/// `dizzyPeakHeartRateBpm` — cardio plan §10 Q2). Purely additive: every new
+/// column is optional, so V7 rows open with nil (= not flagged) through
+/// SwiftData's automatic lightweight migration. Same entity list as V7; still
+/// NO staged `MigrationPlan` (see the V6 note and ModelContainer+App.swift).
+public enum SchemaV8: VersionedSchema {
+    public static let versionIdentifier = Schema.Version(8, 0, 0)
+
+    public static var models: [any PersistentModel.Type] {
+        [
+            ProfileModel.self,
+            ExerciseModel.self,
+            ProgramModel.self,
+            WorkoutModel.self,
+            WorkoutSetModel.self,
+            FoodModel.self,
+            FoodLogEntryModel.self,
+            BodyMetricModel.self,
+            HealthMarkerModel.self,
+            StepCountModel.self,
+            PilatesSessionModel.self,
+            CardioSessionModel.self,
+            WaterEntryModel.self,
+            ActivitySessionModel.self,
+            SavedMealTemplateModel.self,
+            ReminderGroupModel.self,
+            ReminderModel.self,
+            ReminderEventModel.self,
+        ]
+    }
+}
+
 public enum AppSchema {
-    public static let current: any VersionedSchema.Type = SchemaV7.self
+    public static let current: any VersionedSchema.Type = SchemaV8.self
 }

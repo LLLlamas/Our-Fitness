@@ -29,7 +29,7 @@
 	<key>NSHealthShareUsageDescription</key>
 	<string>Our-Fitness reads your steps, weight, heart rate, resting heart rate, active energy, exercise time, body fat, waist, blood pressure, blood glucose, cardio fitness (VO₂ max), and workouts from Apple Health to show your daily progress and trends.</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>Our-Fitness can write workouts and body weight back to Apple Health so your data stays in one place.</string>
+	<string>Our-Fitness can write workouts, body weight, and a dizziness symptom you flag at the end of a live session back to Apple Health so your data stays in one place.</string>
 	<key>NSSupportsLiveActivities</key>
 	<true/>
 	<key>UIApplicationSceneManifest</key>

@@ -9,13 +9,15 @@ enum LiveSessionCompletionService {
     /// is no suspension between checking the active anchor, saving, and clearing.
     static func finish(_ ctx: ModelContext, profileId: UUID, startDate: Date,
                        elapsedSeconds: Int, bodyWeightLb: Double,
+                       dizziness: DizzinessReport? = nil,
                        now: Date = Date(), save: (() throws -> Void)? = nil,
                        endPresentation: @MainActor () -> Void = endSystemPresentation) -> Outcome {
         guard let state = LiveSessionStore.active(for: profileId),
               abs(state.startDate.timeIntervalSince(startDate)) < 0.001 else { return .stale }
         let elapsed = min(max(0, elapsedSeconds), state.elapsedSeconds(now: now))
         guard Repos.completeLiveSession(ctx, state: state, elapsedSeconds: elapsed,
-                                        bodyWeightLb: bodyWeightLb, save: save) else { return .failed }
+                                        bodyWeightLb: bodyWeightLb, dizziness: dizziness,
+                                        save: save) else { return .failed }
         LiveSessionStore.clear()
         endPresentation()
         return .saved

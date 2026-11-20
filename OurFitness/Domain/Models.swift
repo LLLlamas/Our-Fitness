@@ -440,16 +440,19 @@ public struct PilatesSessionDTO: Codable, Equatable, Sendable, Identifiable {
     public var durationMinutes: Int
     public var focusAreas: [PilatesFocusArea]
     public var notes: String?
+    /// Set only when the user flagged "Felt dizzy" (SchemaV8, optional).
+    public var dizziness: DizzinessReport?
 
     public init(id: UUID = UUID(), profileId: UUID, date: Date = Date(),
                 durationMinutes: Int, focusAreas: [PilatesFocusArea],
-                notes: String? = nil) {
+                notes: String? = nil, dizziness: DizzinessReport? = nil) {
         self.id = id
         self.profileId = profileId
         self.date = date
         self.durationMinutes = durationMinutes
         self.focusAreas = focusAreas
         self.notes = notes
+        self.dizziness = dizziness
     }
 }
 
@@ -1066,11 +1069,14 @@ public struct ActivitySessionDTO: Codable, Equatable, Sendable, Identifiable {
     public var expectedMinutes: Int  // planned
     public var caloriesEst: Double?
     public var notes: String?
+    /// Set only when the user flagged "Felt dizzy" (SchemaV8, optional).
+    public var dizziness: DizzinessReport?
 
     public init(id: UUID = UUID(), profileId: UUID, date: Date = Date(),
                 activityId: String, activityName: String, met: Double,
                 durationMinutes: Int, expectedMinutes: Int,
-                caloriesEst: Double? = nil, notes: String? = nil) {
+                caloriesEst: Double? = nil, notes: String? = nil,
+                dizziness: DizzinessReport? = nil) {
         self.id = id
         self.profileId = profileId
         self.date = date
@@ -1081,11 +1087,12 @@ public struct ActivitySessionDTO: Codable, Equatable, Sendable, Identifiable {
         self.expectedMinutes = expectedMinutes
         self.caloriesEst = caloriesEst
         self.notes = notes
+        self.dizziness = dizziness
     }
 
     // Codable: tolerate older payloads missing the optional fields.
     private enum CodingKeys: String, CodingKey {
-        case id, profileId, date, activityId, activityName, met, durationMinutes, expectedMinutes, caloriesEst, notes
+        case id, profileId, date, activityId, activityName, met, durationMinutes, expectedMinutes, caloriesEst, notes, dizziness
     }
 
     public init(from decoder: Decoder) throws {
@@ -1100,5 +1107,6 @@ public struct ActivitySessionDTO: Codable, Equatable, Sendable, Identifiable {
         self.expectedMinutes = try c.decodeIfPresent(Int.self, forKey: .expectedMinutes) ?? 0
         self.caloriesEst = try c.decodeIfPresent(Double.self, forKey: .caloriesEst)
         self.notes = try c.decodeIfPresent(String.self, forKey: .notes)
+        self.dizziness = try c.decodeIfPresent(DizzinessReport.self, forKey: .dizziness)
     }
 }
