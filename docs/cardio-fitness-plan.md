@@ -106,14 +106,41 @@ Each phase is one build agent working from this doc and the matching `docs/map/`
 | Phase | What | Files (expected) | Verification | Model |
 |---|---|---|---|---|
 | 0 | **Watch check, simulator.** Pair an iPhone 17 simulator with a watchOS simulator. Walk all three tabs, the "Not synced yet" state, sync after a phone log, water and quick-set from the wrist, a meal shortcut, and the stale-day notice (clock change). Start and end a workout; record what the simulator does for heart rate. Fix `docs/map/watch.md`, whose root row still lists the removed `ReminderListView`/`ReminderDetailView`. | Read-only except the map row and `validation-log.md` | Screenshots via XCUITest if the sim tools are denied (memory: fix-ios-screenshots-via-xcuitest); `devclean` after | Sonnet / low Opus (mapped) |
-| 1 | **VO₂ max tracker.** §4 steps 1–4 and the pure half of step 6 (`vo2Trend`). Also: the ~2-year backfill, the 14–65 range note, and the §2 accuracy footer. | `Domain/Models.swift` (`HealthMarkerKind`), `Domain/HealthRanges.swift`, new `Domain/CardioFitness.swift`, `Services/HealthKitService.swift`, `Features/Progress/ProgressView.swift` (`StatKind` + switches), `StatDetailSheet` host, tests, `map/progress.md`, `map/settings-health.md` | Build + hostless tests; simulator Health app with a manually added VO₂ max sample if it allows one (**not verified** that it does) | Opus high: HealthKit authorization traps |
-| 2 | **Cardio minutes.** §4 step 5 plus `weeklyMinutes`, sourced per the answer to §7 Q5 (and Q7 if b). | `Domain/CardioFitness.swift`, `HealthKitService` (workout read, if b), `ProgressView.swift`, tests, `map/progress.md` | Build + tests, with pinned `now` and ISO-week edges | Sonnet once Q5 is answered |
-| 3 | **Optional: "felt dizzy" flag** (only if §7 Q2 = yes). It's a new field on the session model, so read `docs/data-model.md` first, then the schema-version rules and a migration test. Phone `LogPastSessionSheet` / end-of-session only, no watch wire change. | `Data/PersistenceModels.swift`, session DTO, the end-of-session UI, `OurFitnessPersistenceTests` | Build + both test targets | Opus high: schema |
+| 1 | **VO₂ max tracker.** §4 steps 1–4 and the pure half of step 6 (`vo2Trend`). Also: the ~2-year backfill, the 14–65 range note, and the §2 accuracy footer. | `Domain/Models.swift` (`HealthMarkerKind`), `Domain/HealthRanges.swift`, `Domain/TargetRationale.swift` and `Domain/EncouragementEngine.swift` (their `HealthMarkerKind` switches), `OurFitness/Info.plist` (Health usage text), new `Domain/CardioFitness.swift`, `Services/HealthKitService.swift`, `Features/Progress/ProgressView.swift` (`StatKind` + switches), `StatDetailSheet` host, tests, `map/progress.md`, `map/settings-health.md` | Build + hostless tests; simulator Health app with a manually added VO₂ max sample if it allows one (**not verified** that it does) | Opus high: HealthKit authorization traps |
+| 2 | **Cardio minutes.** §4 step 5 plus `weeklyMinutes`, sourced per the answer to §7 Q5 (and Q7 if b). | `Domain/CardioFitness.swift`, `HealthKitService` (workout read, if b), `ProgressView.swift`, tests, `map/progress.md` | Build + tests, with pinned `now` and ISO-week edges | Opus high if Q5 = b (new Health read); Sonnet if a |
+| 3 | **Optional: "felt dizzy" flag** (only if §7 Q2 = yes). It's a new field on the session model, so read `docs/data-model.md` first, then the schema-version rules and a migration test. Phone `LogPastSessionSheet` / end-of-session only, no watch wire change. | `Data/PersistenceModels.swift`, `Data/Schema.swift` (new SchemaV8 + `AppSchema.current`; an optional column is additive per `Schema.swift:10-19`), session DTO, `LogPastSessionSheet` (it lives in `Features/Workouts/LiveSessionCard.swift`), `docs/data-model.md`, the schema rows in `map/settings-health.md`, `OurFitnessPersistenceTests` | Build + both test targets | Opus high: schema |
 | 4 | **On the owner's real watch**, after pairing. Everything Phase 0 couldn't show: real heart rate, Health permissions, and a VO₂ max estimate arriving after a few outdoor walks (weeks, §2). Owner-run, with a checklist from `watch-app-setup.md` Step 5. | none | Owner | — |
 
 **Not in this plan:** intervals or intensity of any kind (§5), watch-side VO₂ max UI, heart-rate recovery and walking heart rate (Q4), and writing VO₂ max samples by hand.
 
 **What could go wrong**
 - A new read type makes already-connected users reconnect. The empty state must say so calmly, without the word "denied" (§4.3).
-- `StatKind` has about 11 exhaustive switches; missing one fails the build, which is the safe failure.
+- `StatKind` has 13 exhaustive switches, but three spots fall through silently (`markerKind` `default: nil`, `canLog`'s exclusion list, `detailSheet` `default:`). See §9.
 - The simulator may not generate heart rate or VO₂ max at all. If so, Phase 1's visual check is limited to the empty state and the code is verified only by tests. Say that plainly in the validation log.
+
+## 9. Audit fixes (2026-11-20, binding for build agents)
+
+An independent read-only audit checked this plan against the code at `5a0a7bd`. Blockers 1–3 were spot-checked in the code before being written here.
+
+**Phase 1 must:**
+1. **Never label VO₂ max.** `TargetRationale.statusWord` returns the *optimal* word for `.unknown` (`Domain/TargetRationale.swift:218-224`), and every marker-backed tracker goes through `markerMeaning` (`ProgressView.swift:~597`) and `HealthRanges.context(for:)`. A bare "no-classification case" would still say "healthy range". Return nil from both for `.vo2Max`, apply no `statusTint`, and add a test pinning it.
+2. **Not use a one-time backfill flag.** Already-connected users have the step-backfill flag set (`Domain/HealthAccess.swift:21-23`), and a VO₂ max read before they reconnect returns nothing (denied reads look empty), so a one-shot backfill would never run again. Instead, every sync queries from the newest stored `vo2_max` day, or 2 years back if there is none.
+3. **Make the tracker findable** (owner choice, §7 Q8). `hasLoggedData` only matters while `enabledStatsRaw` is empty (`ProgressView.swift:104-110`). Anyone who has ever edited trackers never sees new ones appear, and nobody sees an empty state.
+4. **Handle the silent fall-throughs:** set `markerKind` → `.vo2Max` explicitly, add `.vo2Max` and `.cardioMinutes` to `canLog`'s can't-log list (no manual VO₂ max entry), and give `detailSheet` a real case.
+5. **Show the date only** ("as of Nov 18"). `HealthMarkerDTO.date` is a day key, while `Freshness.label` takes a `Date` and prints a time.
+6. **Fetch existing markers once per backfill** and dedupe in memory. `upsertMarker` fetches all markers on every call (`HealthKitService.swift:462-466`); about 300 samples would mean about 300 fetch+save cycles.
+7. **Update `OurFitness/Info.plist:30`** (Health read usage text) to include cardio fitness (VO₂ max). Edit the plist directly; there's no `info:` block in project.yml. Run `xcodegen generate` after adding `Domain/CardioFitness.swift`.
+8. **Also update** the "Add health marker kind" row in `docs/map/progress.md` to list the `TargetRationale` and `EncouragementEngine` switches.
+
+**Phase 2 must:**
+- **Define which activities count as cardio.** Pilates, yoga and stretching are `ActivitySessionDTO` too (`ActivityCatalog.swift:24-29`). Decide whether legacy `CardioSessionDTO` rows count. Test both.
+- **If Q5 = b:** drop Health workouts whose source is `com.ourfitness.app` **or** `com.ourfitness.app.watchkitapp` (the watch saves its own; `project.yml:206`). Which ID HealthKit stamps is **not verified**, so log the source on first run. Add "workouts" to the Info.plist usage text.
+
+**Known and accepted:**
+- An older TestFlight build reading a `vo2_max` row falls back to `.ldl` (`PersistenceModels.swift:381`), so a rollback would show VO₂ max as LDL. Don't roll back past Phase 1.
+- Checked by the audit: the phone never writes HKWorkouts, so phone and watch can't duplicate each other. `DailyBurn` is unaffected. Appending to `HealthMarkerKind` needs no schema bump.
+- `Domain/Models.swift` is shared with other work. Check whether the add-food redesign touched it before starting Phase 1.
+
+**Owner question added:**
+
+8. **How do you find the VO₂ max tracker?** (a) A one-line hint under Settings › Apple Health ("Have an Apple Watch? Add the Cardio fitness tracker in Progress › Edit trackers."), plus it appears automatically once data exists for anyone who hasn't edited trackers; or (b) on by default for everyone, showing the calm empty state until data arrives. *Recommended: a.* Most people have no watch, so a default-on empty card would read as broken. Either way it's the same for every goal.
