@@ -359,7 +359,11 @@ struct CameraFoodLogSheet: View {
             DescribeMealForm(
                 profile: profile, targetDate: Dates.dayKey(),
                 initialText: initialText, slot: slot,
-                onSave: { entry in if onLog(entry) { dismiss() } }
+                onSave: { entry in
+                    let saved = onLog(entry)
+                    if saved { dismiss() }
+                    return saved
+                }
             )
         }
     }

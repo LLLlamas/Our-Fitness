@@ -122,6 +122,7 @@ struct AddFoodSheet: View {
                         manualEntryRow
                     } else {
                         describeCard
+                        savedMatches
                         if let correctedQuery, !displayedResults.isEmpty {
                             Text("Showing results for “\(correctedQuery)”")
                                 .font(.caption).foregroundStyle(theme.dim)
@@ -157,7 +158,9 @@ struct AddFoodSheet: View {
             }
             .navigationDestination(item: $describeText) { text in
                 DescribeMealForm(profile: profile, targetDate: targetDate, initialText: text) { dto in
-                    if onSave(dto) { dismiss() }
+                    let saved = onSave(dto)
+                    if saved { dismiss() }
+                    return saved
                 }
             }
         }
@@ -233,6 +236,30 @@ struct AddFoodSheet: View {
         .background(theme.card)
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+    }
+
+    // MARK: - Saved foods matching the query
+
+    /// The user's own saved recipes / foods whose name matches what's typed, above Foods.
+    @ViewBuilder
+    private var savedMatches: some View {
+        let matches = FoodAffinity.matchingTemplates(savedTemplates.map(\.snapshot), query: trimmedQuery)
+        if !matches.isEmpty {
+            sectionHeader("My Foods")
+            VStack(spacing: 8) {
+                ForEach(matches) { template in
+                    let total = template.totalPerServing
+                    FoodResultRow(food: CommonFood(
+                        id: "template:\(template.id.uuidString)", name: "\(template.emoji) \(template.name)",
+                        aliases: [], servingLabel: template.ingredients.count > 1 ? "\(template.ingredients.count) ingredients" : "1 serving",
+                        calories: total.calories, proteinG: total.proteinG, carbsG: total.carbsG,
+                        fatG: total.fatG, fiberG: total.fiberG)
+                    ) {
+                        templateToLog = template
+                    }
+                }
+            }
+        }
     }
 
     // MARK: - Describe card (typed query)
@@ -541,9 +568,12 @@ struct DescribeMealForm: View {
     let profile: ProfileDTO
     let targetDate: String
     let initialText: String
-    let onSave: (FoodLogEntryDTO) -> Void
+    /// Returns whether the log write committed (rule 9: nothing else happens on false).
+    let onSave: (FoodLogEntryDTO) -> Bool
 
     @Environment(\.theme) private var theme
+    @Environment(\.modelContext) private var ctx
+    @EnvironmentObject private var toasts: ToastCenter
 
     @State private var input: String = ""
     @State private var parseResult: FoodParser.ParseResult? = nil
@@ -557,12 +587,14 @@ struct DescribeMealForm: View {
     @State private var manualProtein: Int = 0
     @State private var manualCarbs: Int = 0
     @State private var manualFat: Int = 0
+    /// Manual entry only: also keep this food in My Foods after the log commits.
+    @State private var saveToMyFoods = false
 
     private enum Field: Hashable { case input, cal, protein, carbs, fat }
     @FocusState private var focused: Field?
 
     init(profile: ProfileDTO, targetDate: String, initialText: String,
-         slot: Slot = .lunch, onSave: @escaping (FoodLogEntryDTO) -> Void) {
+         slot: Slot = .lunch, onSave: @escaping (FoodLogEntryDTO) -> Bool) {
         self.profile = profile
         self.targetDate = targetDate
         self.initialText = initialText
@@ -626,6 +658,14 @@ struct DescribeMealForm: View {
                 slotPicker
                 nutritionSummary
 
+                if showManual {
+                    Toggle("Save to My Foods", isOn: $saveToMyFoods)
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundStyle(theme.text)
+                        .tint(theme.accent)
+                        .disabled(!canSave)
+                }
+
                 Button {
                     let mealIngredients = parseResult?.recognized.map {
                         MealIngredient.from($0.food, quantity: $0.quantity)
@@ -638,7 +678,18 @@ struct DescribeMealForm: View {
                         perServing: resolvedPerServing,
                         ingredients: mealIngredients
                     )
-                    onSave(dto)
+                    let name = resolvedName, perServing = resolvedPerServing
+                    guard onSave(dto) else { return }
+                    // The log committed; keeping the food is a second write with its own result.
+                    guard showManual, saveToMyFoods else { return }
+                    guard Repos.addSavedTemplate(
+                        ctx, .singleFood(userId: profile.id, name: name, perServing: perServing)
+                    ) else {
+                        toasts.show(Toast(title: "Logged, but not saved to My Foods", detail: name, accent: .warn,
+                                          symbol: "exclamationmark.triangle"))
+                        return
+                    }
+                    toasts.show(Toast(title: "Saved to My Foods", detail: name, accent: .ok, symbol: "bookmark.fill"))
                 } label: {
                     Text("Save")
                 }

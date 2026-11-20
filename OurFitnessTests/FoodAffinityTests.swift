@@ -163,4 +163,25 @@ final class FoodAffinityTests: XCTestCase {
         // A brand-new user has nothing.
         XCTAssertTrue(FoodAffinity.myFoodsSections(favorites: [], logs: [], templates: [], resolve: { _ in nil }, end: end).isEmpty)
     }
+
+    func testSavedTemplatesMatchTypedNamesBestFirst() {
+        let names = ["Protein pancakes", "Pancakes", "My pancake stack", "Oat bowl"]
+        let t = names.enumerated().map { template($1, minutesAgo: $0) }   // newest first
+        XCTAssertEqual(FoodAffinity.matchingTemplates(t, query: "pancakes").map(\.name),
+                       ["Pancakes", "Protein pancakes", "My pancake stack"])      // exact, then all-words by recency
+        XCTAssertEqual(FoodAffinity.matchingTemplates(t, query: "oat").map(\.name), ["Oat bowl"])
+        XCTAssertTrue(FoodAffinity.matchingTemplates(t, query: "pizza").isEmpty)
+        XCTAssertTrue(FoodAffinity.matchingTemplates(t, query: "  ").isEmpty)
+    }
+
+    func testSingleFoodTemplateKeepsTheMacrosEntered() {
+        let uid = UUID()
+        let p = PerServing(calories: 412, proteinG: 30, carbsG: 40, fatG: 14, fiberG: 3)
+        let t = SavedMealTemplateDTO.singleFood(userId: uid, name: "Grandma's lasagna", perServing: p)
+        XCTAssertEqual(t.userId, uid)
+        XCTAssertEqual(t.ingredients.count, 1)
+        XCTAssertNil(t.ingredients[0].foodId)
+        XCTAssertEqual(t.ingredients[0].quantity, 1)
+        XCTAssertEqual(t.totalPerServing, p)
+    }
 }

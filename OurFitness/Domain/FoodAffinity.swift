@@ -153,4 +153,18 @@ public enum FoodAffinity {
         }
         return out
     }
+
+    /// Saved templates whose NAME matches a typed query (`FoodSearchQuery.tier`:
+    /// exact, starts-with, all words), best match first, newest first within a
+    /// tier. `templates` arrive newest first.
+    public static func matchingTemplates(_ templates: [SavedMealTemplateDTO], query: String) -> [SavedMealTemplateDTO] {
+        let q = FoodSearchQuery(query)
+        guard !q.isEmpty else { return [] }
+        var hits: [(template: SavedMealTemplateDTO, tier: Int, order: Int)] = []
+        for (i, t) in templates.enumerated() {
+            if let tier = q.tier(name: t.name, aliases: []) { hits.append((t, tier, i)) }
+        }
+        hits.sort { $0.tier != $1.tier ? $0.tier < $1.tier : $0.order < $1.order }
+        return hits.map { $0.template }
+    }
 }
