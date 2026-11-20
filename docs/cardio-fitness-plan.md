@@ -2,7 +2,7 @@
 
 > **APPROVED 2026-11-20 (owner decisions in §10).** Was: **REVIVED 2026-11-20, awaiting owner approval.** The owner is getting a newer Apple Watch (Series 4+), so the October blocker (a Series 3 that can't pair) is going away. Nothing is built. §8 is the rollout: a watch check first, then the build phases. No build agents go out until the owner approves §8 and answers §7.
 
-> **Status: PLAN, not built.** CLAUDE.md and the code stay authoritative.
+> **Status: Phase 1 (VO₂ max tracker) built 2026-11-20; Phases 2, 3, 0 and 4 not built.** CLAUDE.md, the code and the `docs/map/` rows stay authoritative; validation in [validation-log](validation-log.md).
 > **Constraint from the owner:** they get dizzy easily, so everything starts slow and
 > the app must never push intensity. The safety rules in §1 are binding for any cardio
 > feature, not just this one.

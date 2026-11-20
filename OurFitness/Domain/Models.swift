@@ -156,6 +156,9 @@ public enum HealthMarkerKind: String, Codable, CaseIterable, Sendable {
     case a1c
     case fastingGlucose   = "fasting_glucose"
     case restingHR        = "resting_hr"
+    // Appended (additive, no schema bump). Read-only Apple Watch estimate in
+    // ml/kg/min from Health; never classified (HealthRanges returns no range).
+    case vo2Max           = "vo2_max"
 }
 
 public enum StepSource: String, Codable, Sendable {

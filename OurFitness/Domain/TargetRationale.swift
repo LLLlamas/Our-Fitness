@@ -184,7 +184,10 @@ public enum TargetRationale {
     /// (lipids); ADA 2024 (glucose/A1c). Diet effects: soluble fibre lowers LDL
     /// (Whitehead, AJCN 2014); DASH + lower sodium lowers blood pressure (Sacks,
     /// NEJM 2001).
-    public static func markerMeaning(kind: HealthMarkerKind, value: Double, fitnessGoal: FitnessGoal) -> String {
+    ///
+    /// nil for VO₂ max: it has no sourced range, so there is no status word to
+    /// give it (`statusWord` would fall back to the optimal word for `.unknown`).
+    public static func markerMeaning(kind: HealthMarkerKind, value: Double, fitnessGoal: FitnessGoal) -> String? {
         let status = HealthRanges.status(for: kind, value: value)
         let v = Int(value.rounded())
         switch kind {
@@ -212,6 +215,8 @@ public enum TargetRationale {
         case .restingHR:
             let where_ = statusWord(status, optimal: "healthy", borderline: "borderline", high: "worth watching")
             return "Your resting heart rate of \(v) beats per minute is \(where_)."
+        case .vo2Max:
+            return nil
         }
     }
 

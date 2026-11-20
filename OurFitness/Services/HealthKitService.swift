@@ -1,6 +1,7 @@
 // Single owner of HealthKit access. Views never touch HKHealthStore directly.
 // Read: steps, body mass, heart rate, resting HR, active energy, exercise time,
-//       body fat %, waist, blood pressure, blood glucose (fasting-marked only).
+//       body fat %, waist, blood pressure, blood glucose (fasting-marked only),
+//       VO₂ max (Apple Watch cardio fitness estimate, read-only, full history).
 // Write: workouts, body mass (optional, mirrors in-app logs to Apple Health).
 // syncFromHealth() pulls latest body/marker readings into the app's logs.
 
@@ -41,6 +42,9 @@ public final class HealthKitService: ObservableObject {
         if let t = HKObjectType.quantityType(forIdentifier: .bloodGlucose)           { s.insert(t) }
         if let t = HKObjectType.quantityType(forIdentifier: .flightsClimbed)         { s.insert(t) }
         if let t = HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning)  { s.insert(t) }
+        // Cardio fitness. Apple Watch writes it; we only read. People connected
+        // before this was added must run Connect again to grant it (plan §4.3).
+        if let t = HKObjectType.quantityType(forIdentifier: .vo2Max)                 { s.insert(t) }
         // MERGE: restored with `restingEnergy(for:)` below — the read is useless
         // without it. A *quantity* type, so it's safe to authorize (see the note).
         if let t = HKObjectType.quantityType(forIdentifier: .basalEnergyBurned)      { s.insert(t) }
@@ -457,6 +461,46 @@ public final class HealthKitService: ObservableObject {
         if let glu = await latestFastingGlucoseMgDL() {
             upsertMarker(ctx, profileId: profileId, day: Dates.dayKey(glu.date), kind: .fastingGlucose, value: glu.value)
         }
+        await syncVO2MaxHistory(ctx, profileId: profileId)
+    }
+
+    /// VO₂ max history, not just the latest sample: estimates arrive only a few
+    /// times a week, so `latestQuantity` alone would leave the chart empty.
+    ///
+    /// Every sync reads from the newest stored `vo2_max` day, or 2 years back if
+    /// none — no one-shot flag, because a read made before the user re-ran Connect
+    /// comes back empty (HealthKit hides denied reads) and must not end the
+    /// backfill (plan §9.2). Existing markers are fetched once and deduped in
+    /// memory, and the new days go in as one commit (plan §9.6).
+    private func syncVO2MaxHistory(_ ctx: ModelContext, profileId: UUID) async {
+        let existing = Repos.listMarkers(ctx, userId: profileId)
+        let now = Date()
+        let start = CardioFitness.historyStart(existing: existing, now: now)
+        let samples = await quantitySamples(.vo2Max, unit: Self.vo2MaxUnit, start: start, end: now)
+        let fresh = CardioFitness.newDailyReadings(samples, existing: existing)
+        guard !fresh.isEmpty else { return }
+        Repos.addMarkers(ctx, fresh.map {
+            HealthMarkerDTO(userId: profileId, date: $0.date, kind: .vo2Max, value: $0.value, source: "healthkit")
+        })
+    }
+
+    /// Every sample of a quantity type ending in [start, end], oldest first, with
+    /// its end date (the date every other read here keys the day by).
+    private func quantitySamples(_ id: HKQuantityTypeIdentifier, unit: HKUnit,
+                                 start: Date, end: Date) async -> [CardioFitness.Reading] {
+        guard let type = HKQuantityType.quantityType(forIdentifier: id) else { return [] }
+        let predicate = HKQuery.predicateForSamples(withStart: start, end: end, options: [])
+        let sort = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)
+        return await withCheckedContinuation { cont in
+            let q = HKSampleQuery(sampleType: type, predicate: predicate, limit: HKObjectQueryNoLimit,
+                                  sortDescriptors: [sort]) { _, samples, _ in
+                let readings = (samples as? [HKQuantitySample] ?? []).map {
+                    CardioFitness.Reading(date: $0.endDate, value: $0.quantity.doubleValue(for: unit))
+                }
+                cont.resume(returning: readings)
+            }
+            store.execute(q)
+        }
     }
 
     private func upsertMarker(_ ctx: ModelContext, profileId: UUID, day: String,
@@ -469,6 +513,9 @@ public final class HealthKitService: ObservableObject {
     // Type-safe units (string-initialized HKUnit(from:) crashes on a typo).
     nonisolated private static let bpmUnit = HKUnit.count().unitDivided(by: .minute())
     nonisolated private static let mgPerDLUnit = HKUnit.gramUnit(with: .milli).unitDivided(by: HKUnit.literUnit(with: .deci))
+    /// ml/(kg·min), the unit Apple documents for `.vo2Max`.
+    nonisolated private static let vo2MaxUnit = HKUnit.literUnit(with: .milli)
+        .unitDivided(by: HKUnit.gramUnit(with: .kilo).unitMultiplied(by: .minute()))
 
     // MARK: - Helpers
 

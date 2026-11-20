@@ -632,6 +632,15 @@ public enum Repos {
         }
     }
 
+    /// Many markers in one commit (the VO₂ max history backfill: up to ~2 years of
+    /// readings). The caller dedupes first; this only inserts.
+    @discardableResult
+    public static func addMarkers(_ ctx: ModelContext, _ markers: [HealthMarkerDTO]) -> Bool {
+        RepositoryWrite.perform(ctx) {
+            for m in markers { ctx.insert(HealthMarkerModel(snapshot: m)) }
+        }
+    }
+
     // MARK: - Pilates sessions
 
     @discardableResult

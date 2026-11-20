@@ -424,6 +424,7 @@ public enum EncouragementEngine {
         case .a1c:                      return "A1c"
         case .fastingGlucose:           return "Fasting glucose"
         case .restingHR:                return "Resting heart rate"
+        case .vo2Max:                   return "Cardio fitness (VO₂ max)"
         }
     }
 }

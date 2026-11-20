@@ -115,17 +115,17 @@ final class TargetRationaleTests: XCTestCase {
 
     // MARK: - Marker meaning
 
-    func test_marker_meaning_reflects_status_words() {
+    func test_marker_meaning_reflects_status_words() throws {
         // Optimal LDL.
-        XCTAssertTrue(TargetRationale.markerMeaning(kind: .ldl, value: 90, fitnessGoal: .lose).contains("healthy range"))
+        XCTAssertTrue(try XCTUnwrap(TargetRationale.markerMeaning(kind: .ldl, value: 90, fitnessGoal: .lose)).contains("healthy range"))
         // High LDL.
-        XCTAssertTrue(TargetRationale.markerMeaning(kind: .ldl, value: 160, fitnessGoal: .lose).contains("high"))
+        XCTAssertTrue(try XCTUnwrap(TargetRationale.markerMeaning(kind: .ldl, value: 160, fitnessGoal: .lose)).contains("high"))
     }
 
-    func test_marker_meaning_spells_out_acronyms() {
-        let ldl = TargetRationale.markerMeaning(kind: .ldl, value: 90, fitnessGoal: .lose)
+    func test_marker_meaning_spells_out_acronyms() throws {
+        let ldl = try XCTUnwrap(TargetRationale.markerMeaning(kind: .ldl, value: 90, fitnessGoal: .lose))
         XCTAssertTrue(ldl.localizedCaseInsensitiveContains("cholesterol"))
-        let glucose = TargetRationale.markerMeaning(kind: .fastingGlucose, value: 95, fitnessGoal: .lose)
+        let glucose = try XCTUnwrap(TargetRationale.markerMeaning(kind: .fastingGlucose, value: 95, fitnessGoal: .lose))
         XCTAssertTrue(glucose.localizedCaseInsensitiveContains("blood sugar"))
     }
 }

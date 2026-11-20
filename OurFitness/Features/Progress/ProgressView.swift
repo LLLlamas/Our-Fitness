@@ -250,6 +250,31 @@ struct ProgressTabView: View {
         .sheet(item: $progressTarget) { exercise in
             ExerciseProgressSheet(profile: profile, exercise: exercise)
         }
+        .onAppear { addVO2TrackerOnce() }
+    }
+
+    /// One-time, per profile: the VO₂ max tracker is on for everyone (owner
+    /// decision, docs/cardio-fitness-plan.md §10), so a profile that already
+    /// customized its trackers gets it appended once. The flag keeps it hidden
+    /// for good if the user then turns it off in Edit trackers.
+    private func addVO2TrackerOnce() {
+        let key = "progressStats.vo2MaxAdded.v1.\(profile.id.uuidString)"
+        guard !UserDefaults.standard.bool(forKey: key) else { return }
+        let updated = CardioFitness.enabledTrackers(enabledStatsRaw, adding: StatKind.vo2Max.rawValue)
+        if updated != enabledStatsRaw { enabledStatsRaw = updated }
+        UserDefaults.standard.set(true, forKey: key)
+    }
+
+    /// The tracker's empty state offers the existing explicit Connect flow: a
+    /// new read type is only granted through it (CLAUDE.md hard rule 4), so
+    /// people who connected before VO₂ max was added need to run it again.
+    /// Never called from `.task`/`.onAppear`.
+    private func connectHealthForVO2() {
+        Task {
+            let health = HealthKitService.shared
+            guard await health.connectAndPersist(profileId: profile.id, ctx: ctx, toasts: toasts) else { return }
+            await health.syncFromHealth(profileId: profile.id, ctx: ctx)
+        }
     }
 
     /// The folded training figures for the current sets, recomputed only when the
@@ -540,6 +565,9 @@ struct ProgressTabView: View {
             guard let mk = kind.markerKind,
                   let v = latestMarkerValue(mk, in: markers) else { return nil }
             status = HealthRanges.status(for: mk, value: v)
+        case .vo2Max:
+            // Never tinted: no sourced range, no target (plan §1.3–1.4, §9.1).
+            return nil
         case .bmi:
             guard let w = body_.compactMap(\.weightLb).last else { return nil }
             let bmi = BodyComposition.bmi(weightLb: w, heightIn: profile.heightIn)
@@ -582,6 +610,8 @@ struct ProgressTabView: View {
             BMIDetailSheet(profile: profile, metrics: body_)
         case .trainingVolume:
             trainingVolumeDetail
+        case .vo2Max:
+            VO2MaxDetailSheet(markers: markers, onConnect: connectHealthForVO2)
         default:
             StatDetailSheet(
                 title: kind.title,
@@ -590,9 +620,9 @@ struct ProgressTabView: View {
                 entries: kind.entries(body: body_, markers: markers, system: unitSystem),
                 placeholder: kind.placeholder(system: unitSystem),
                 canLog: kind.canLog,
-                rangeContext: kind.markerKind.map(HealthRanges.context(for:)),
+                rangeContext: kind.markerKind.flatMap(HealthRanges.context(for:)),
                 personalNote: kind.markerKind.flatMap { mk in
-                    latestMarkerValue(mk, in: markers).map { TargetRationale.markerMeaning(kind: mk, value: $0, fitnessGoal: profile.fitnessGoal) }
+                    latestMarkerValue(mk, in: markers).flatMap { TargetRationale.markerMeaning(kind: mk, value: $0, fitnessGoal: profile.fitnessGoal) }
                 },
                 onSave: { value in
                     // Tape measurements are entered in the active unit; convert back to canonical inches.
@@ -675,7 +705,8 @@ struct ProgressTabView: View {
             toasts.show(Toast(title: "\(kind.title) logged",
                               detail: "\(formattedValue(value)) \(kind.unit(system: unitSystem))",
                               accent: .ok, symbol: "heart.text.square.fill"))
-        case .bp, .stepsAvg, .bmi, .trainingVolume:
+        case .bp, .stepsAvg, .bmi, .trainingVolume, .vo2Max:
+            // vo2Max: read-only Apple Watch estimate, never entered by hand.
             break
         }
     }
@@ -885,6 +916,128 @@ private struct WeeklyRepsInfoSheet: View {
     }
 }
 
+// MARK: - Cardio fitness (VO₂ max) detail sheet
+
+/// The Apple Watch VO₂ max estimate, read from Health. A thin `StatDetailSheet`
+/// host: chart, "as of <date>", the own-history note, and an accuracy footer.
+/// No range line, no tint, no rating word, no target (docs/cardio-fitness-plan.md
+/// §1, §9.1). Nothing to log: the estimate is read-only.
+private struct VO2MaxDetailSheet: View {
+    let markers: [HealthMarkerDTO]
+    /// The existing explicit Connect flow (see `ProgressTabView.connectHealthForVO2`).
+    let onConnect: () -> Void
+
+    @Environment(\.theme) private var theme
+    @State private var showInfo = false
+
+    var body: some View {
+        let series = Trends.markerSeries(markers, kind: .vo2Max)
+        StatDetailSheet(
+            title: StatKind.vo2Max.title,
+            unit: "VO₂ max estimate · ml/kg/min",
+            series: series,
+            entries: StatKind.vo2Max.entries(body: [], markers: markers),
+            canLog: false,
+            showsEntries: !series.isEmpty,
+            // HealthKit never reveals a denied read, so this never says "denied" (plan §4.3).
+            emptyChartText: "No estimate yet.",
+            emptyChartDetail: "Apple Watch makes one from outdoor walks or runs.",
+            personalNote: series.isEmpty ? nil : CardioFitness.noteText(CardioFitness.vo2Trend(samples: series, now: Date())),
+            headline: { headline(latest: series.last) },
+            footer: { footer(isEmpty: series.isEmpty) }
+        )
+        .sheet(isPresented: $showInfo) {
+            VO2MaxInfoSheet()
+        }
+    }
+
+    @ViewBuilder
+    private func headline(latest: Trends.Point?) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(alignment: .firstTextBaseline, spacing: 10) {
+                if let latest {
+                    Text(formattedValue(latest.value))
+                        .font(.system(size: 48, weight: .semibold, design: .monospaced))
+                        .foregroundStyle(theme.text)
+                    Text("estimate")
+                        .font(.system(size: 18, weight: .regular))
+                        .foregroundStyle(theme.text)
+                }
+                Spacer()
+                Button {
+                    showInfo = true
+                    Haptics.selection()
+                } label: {
+                    Image(systemName: "info.circle")
+                        .font(.system(size: 18))
+                        .foregroundStyle(theme.dim)
+                }
+                .tactile(.ghost)
+                .accessibilityLabel("About this estimate")
+            }
+            if let latest {
+                Text(CardioFitness.asOfLabel(dayKey: latest.date))
+                    .font(.callout)
+                    .foregroundStyle(theme.dim)
+            }
+            Text("How well your body uses oxygen during effort.")
+                .font(.callout)
+                .foregroundStyle(theme.dim)
+        }
+    }
+
+    @ViewBuilder
+    private func footer(isEmpty: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            if isEmpty {
+                Text("Connected Apple Health before this tracker was added? Connect again so the app can read cardio fitness. Without an Apple Watch, this stays empty.")
+                    .font(.footnote).foregroundStyle(theme.dim)
+                    .fixedSize(horizontal: false, vertical: true)
+                Button {
+                    Haptics.selection()
+                    onConnect()
+                } label: {
+                    Text("Connect Apple Health")
+                }
+                .tactile(.primary)
+            }
+            Text("An estimate from heart rate and movement, not a lab test, so a change of a point or two is just noise. The trend over months is what counts. Apple Watch estimates between \(Int(CardioFitness.supportedRange.lowerBound)) and \(Int(CardioFitness.supportedRange.upperBound)) ml/kg/min.")
+                .font(.caption2).foregroundStyle(theme.dim)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+}
+
+/// What the estimate is, how to read it, and how to build it slowly. Guidance
+/// only, never a prescription: no zones, paces or intervals (plan §1, §5). The
+/// dizziness line appears here once and nowhere else (plan §1.2).
+/// Sources: Apple Support 108790 (workouts, first estimate, 14–65 range,
+/// heart-rate-limiting medicines; opened 2026-11-20) and Apple's HealthKit
+/// `vo2Max` docs (flat ground, Health medication setting); see the plan §2.
+private struct VO2MaxInfoSheet: View {
+    var body: some View {
+        InfoSheetScaffold(title: "Cardio fitness", subtitle: "VO₂ MAX · AN ESTIMATE, NOT A TARGET") {
+            InfoSection(title: "What it is") {
+                InfoBody("VO₂ max is an estimate of how well your body uses oxygen during effort. Apple Watch makes it during Outdoor Walk, Outdoor Run and Hiking workouts in Apple's Workout app, on fairly flat ground. Indoor workouts don't count. The first estimate takes at least a day of wearing the watch and then several of those workouts, so expect weeks, not days.")
+            }
+            InfoSection(title: "How to read it") {
+                InfoBody("It is a prediction from your heart rate and movement, not a lab measurement. A change of a point or two is just noise; the trend over months is what counts. The note compares you only with your own earlier estimates.")
+                InfoBody("Medicines or conditions that limit your heart rate can make the estimate come out higher than it should. If you take one, you can say so in the Health app's cardio fitness settings.")
+            }
+            InfoSection(title: "Building it slowly") {
+                Bullet("Go at a pace where you can still speak in full sentences.")
+                Bullet("Start with short, easy walks. Add a minute or two at a time rather than big jumps.")
+                Bullet("Warm up and cool down, drink water, don't hold your breath, and stand up slowly.")
+                Bullet("Dizzy? Stop, sit, and sip water.")
+            }
+            InfoSection(title: "Dizziness") {
+                InfoBody("Dizziness at easy effort, or dizziness that happens often, is worth mentioning to a doctor before adding intensity. Get urgent help for chest, arm or jaw pain, trouble breathing, fainting, or sudden changes in speech or vision.")
+            }
+            InfoFootnote("There is no target and no rating here. The number only moves slowly, and that's expected.")
+        }
+    }
+}
+
 // MARK: - StatKind
 
 enum StatKind: String, CaseIterable, Identifiable {
@@ -893,6 +1046,8 @@ enum StatKind: String, CaseIterable, Identifiable {
     case bp, ldl, hdl, totalCholesterol, a1c, fastingGlucose
     // Tape measurements for frame size. Appended last: the enabled set is a persisted CSV of raw values.
     case shoulders, chest, arm, thigh
+    // Cardio fitness (VO₂ max) from Apple Health. Appended last for the same reason.
+    case vo2Max
 
     var id: String { rawValue }
 
@@ -915,6 +1070,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .totalCholesterol: return "Total Chol."
         case .a1c:              return "A1c"
         case .fastingGlucose:   return "Fasting Gluc."
+        case .vo2Max:           return "Cardio Fitness"
         }
     }
 
@@ -930,6 +1086,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .bp:               return "mmHg"
         case .ldl, .hdl, .totalCholesterol, .fastingGlucose: return "mg/dL"
         case .a1c:              return "%"
+        case .vo2Max:           return "VO₂ max"
         }
     }
 
@@ -945,7 +1102,7 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .restingHR:        return "resting HR (bpm)"
         case .ldl, .hdl, .totalCholesterol, .fastingGlucose: return "value (mg/dL)"
         case .a1c:              return "A1c (%)"
-        case .bmi, .bp, .stepsAvg, .trainingVolume: return ""
+        case .bmi, .bp, .stepsAvg, .trainingVolume, .vo2Max: return ""
         }
     }
 
@@ -961,8 +1118,18 @@ enum StatKind: String, CaseIterable, Identifiable {
         }
     }
 
+    /// Exhaustive on purpose: a new tracker must decide, rather than silently
+    /// getting a log form (plan §9.4).
     var canLog: Bool {
-        self != .stepsAvg && self != .bmi && self != .trainingVolume
+        switch self {
+        case .stepsAvg, .bmi, .trainingVolume:
+            return false   // derived
+        case .vo2Max:
+            return false   // read-only Apple Watch estimate; no manual entry
+        case .weight, .bodyFat, .waist, .shoulders, .chest, .arm, .thigh,
+             .restingHR, .bp, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
+            return true
+        }
     }
 
     var markerKind: HealthMarkerKind? {
@@ -973,7 +1140,10 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .totalCholesterol: return .totalCholesterol
         case .a1c:              return .a1c
         case .fastingGlucose:   return .fastingGlucose
-        default:                return nil
+        case .vo2Max:           return .vo2Max
+        case .weight, .bodyFat, .waist, .shoulders, .chest, .arm, .thigh,
+             .bmi, .stepsAvg, .trainingVolume, .bp:
+            return nil
         }
     }
 
@@ -989,6 +1159,10 @@ enum StatKind: String, CaseIterable, Identifiable {
         case .restingHR, .bp:
             // Heart-health markers: resting HR arrives from Health, and blood
             // pressure is the one marker that's cheap to self-measure.
+            return true
+        case .vo2Max:
+            // On for everyone (owner decision, plan §10), with a calm empty
+            // state until an Apple Watch estimate arrives from Health.
             return true
         case .bmi:
             // Derived from weight + profile height — the Weight card already
@@ -1013,7 +1187,7 @@ enum StatKind: String, CaseIterable, Identifiable {
             return body.contains { $0[keyPath: kp] != nil }
         case .bp:
             return markers.contains { $0.kind == .bpSystolic || $0.kind == .bpDiastolic }
-        case .restingHR, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
+        case .restingHR, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose, .vo2Max:
             guard let k = markerKind else { return false }
             return markers.contains { $0.kind == k }
         case .bmi, .stepsAvg, .trainingVolume:
@@ -1070,6 +1244,8 @@ enum StatKind: String, CaseIterable, Identifiable {
             return latestMarkerValue(.a1c, in: markers).map { formattedValue($0) }
         case .fastingGlucose:
             return latestMarkerValue(.fastingGlucose, in: markers).map { formattedValue($0) }
+        case .vo2Max:
+            return latestMarkerValue(.vo2Max, in: markers).map { formattedValue($0) }
         }
     }
 
@@ -1108,6 +1284,11 @@ enum StatKind: String, CaseIterable, Identifiable {
             let weekly = training.weekly
             guard weekly.lastWeek > 0 || weekly.thisWeek > 0 else { return nil }
             return String(format: "%@%d vs last wk", weekly.delta >= 0 ? "+" : "", weekly.delta)
+        case .vo2Max:
+            // Own history only; nil until there's an estimate 8+ weeks back.
+            return CardioFitness.chipText(
+                CardioFitness.vo2Trend(samples: Trends.markerSeries(markers, kind: .vo2Max), now: Date())
+            )
         default:
             return nil
         }
@@ -1144,7 +1325,7 @@ enum StatKind: String, CaseIterable, Identifiable {
             return training.weeklySeries
         case .bp:
             return Trends.markerSeries(markers, kind: .bpSystolic)
-        case .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
+        case .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose, .vo2Max:
             guard let k = markerKind else { return [] }
             return Trends.markerSeries(markers, kind: k)
         case .bmi:
@@ -1188,7 +1369,7 @@ enum StatKind: String, CaseIterable, Identifiable {
             .reversed()
             .prefix(10)
             .map { $0 }
-        case .restingHR, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose:
+        case .restingHR, .ldl, .hdl, .totalCholesterol, .a1c, .fastingGlucose, .vo2Max:
             guard let k = markerKind else { return [] }
             return markers
                 .filter { $0.kind == k }
@@ -1485,7 +1666,7 @@ private struct BPDetailSheet: View {
             entries: StatKind.bp.entries(body: [], markers: markers, system: unitSystem),
             logTitle: "Log new reading",
             rangeContext: HealthRanges.bpContext,
-            personalNote: latestMarkerValue(.bpSystolic, in: markers).map {
+            personalNote: latestMarkerValue(.bpSystolic, in: markers).flatMap {
                 TargetRationale.markerMeaning(kind: .bpSystolic, value: $0, fitnessGoal: profile.fitnessGoal)
             },
             chartOverride: { dualChart },
