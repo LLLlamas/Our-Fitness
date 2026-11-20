@@ -279,4 +279,15 @@ final class FixedLoadTests: XCTestCase {
         XCTAssertNil(hold.weightLb, "holds never get a weight")
         XCTAssertEqual(hold.holdSeconds, 45)
     }
+
+    func testUpdateSetStoresOffGridTypedHolds() throws {
+        // Typed holds (47 s, an hour) are not on the old 5-second wheel grid.
+        let ctx = try makeContext()
+        try insertExercise(ctx, id: "plank", name: "Plank", loadLb: nil, kind: .duration, isIsometric: true)
+        let holdId = try insertSet(ctx, exercise: "plank", reps: 1, weightLb: nil, holdSeconds: 30)
+        for secs in [47, 90, 3600] {
+            XCTAssertTrue(Repos.updateSet(ctx, id: holdId, reps: 1, weightLb: nil, holdSeconds: secs, bodyWeightLb: 180))
+            XCTAssertEqual(sets(ctx, "plank").first?.holdSeconds, secs)
+        }
+    }
 }

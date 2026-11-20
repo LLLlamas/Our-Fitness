@@ -1,7 +1,7 @@
 // Friction-free set counter for any exercise. Scroll a wheel to the set's reps
 // (or minutes for a duration exercise) and nudge it with the ±1 buttons beside it; Save set commits a WorkoutSet. Shows a weight field only
 // for a lift that tracks per-set weight. For isometric exercises, shows a
-// hold timer instead. Calories go through `Repos.setCaloriesEstimate`, the
+// typed-hold field ("47" or "1:30"); the hold timer sits behind "Time it instead". Calories go through `Repos.setCaloriesEstimate`, the
 // same function a set edit recomputes with.
 //
 // Progress is reps at a weight over the exercise's WHOLE history (docs/progress-tracking-plan.md):
@@ -637,6 +637,12 @@ private struct IsometricTimerView: View {
     @State private var holdsThisSession: Int = 0
     @State private var totalSecSession: Int = 0
     @State private var showInfo = false
+    /// What the user typed ("47" or "1:30"). Kept after a save: the same hold again is
+    /// the common case, like the rep counter keeping its count.
+    @State private var holdStr = ""
+    /// The stopwatch (presets, wheel, Start hold) is tucked behind "Time it instead".
+    @State private var timerMode = false
+    @FocusState private var holdFocused: Bool
 
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
@@ -648,6 +654,12 @@ private struct IsometricTimerView: View {
     private var isRunning: Bool { startedAt != nil }
     private var live: ExerciseDTO { exerciseModels.first?.snapshot ?? exercise }
     private var info: ExerciseInfo.Meta { ExerciseInfo.meta(for: live) }
+    /// The typed hold in seconds, or nil while the field is empty or not a valid 1...3600 hold.
+    private var typedSeconds: Int? {
+        guard let s = HoldDuration.parseSeconds(holdStr),
+              (1...HoldDuration.maxSeconds).contains(s) else { return nil }
+        return s
+    }
 
     init(profile: ProfileDTO, exercise: ExerciseDTO) {
         self.profile = profile
@@ -669,6 +681,7 @@ private struct IsometricTimerView: View {
     var body: some View {
         let days = history.days
         let todayKey = Dates.dayKey()
+        ScrollView {
         VStack(spacing: 18) {
             header
             ReferenceBlock(lines: ReferenceBuilder.holdLines(days: days, todayKey: todayKey))
@@ -677,8 +690,13 @@ private struct IsometricTimerView: View {
                 stopButton
                 discardButton
             } else {
-                pickerSection
-                startButton
+                holdEntry
+                logHoldButton
+                timerToggle
+                if timerMode {
+                    pickerSection
+                    startButton
+                }
             }
             if let strip = ReferenceBuilder.holdStrip(days: days, todayKey: todayKey) {
                 ProjectionBar(text: strip)
@@ -686,12 +704,14 @@ private struct IsometricTimerView: View {
             if holdsThisSession > 0 {
                 sessionSummary
             }
-            Spacer()
             Button { dismiss() } label: { Text("Done") }
                 .tactile(.ghost)
         }
         .padding(.horizontal, 24)
         .padding(.vertical, 24)
+        .frame(maxWidth: .infinity)
+        }
+        .scrollBounceBehavior(.basedOnSize)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .presentationDetents([.large])
         .presentationBackground(theme.bg)
@@ -699,6 +719,62 @@ private struct IsometricTimerView: View {
         .sheet(isPresented: $showInfo) {
             ExerciseInfoSheet(exercise: live, profile: profile)
         }
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") { holdFocused = false }
+            }
+        }
+    }
+
+    /// Type the hold you already did ("47" or "1:30"). Same field idiom as the rep
+    /// counter's weight field; the placeholder is the last logged hold.
+    @ViewBuilder
+    private var holdEntry: some View {
+        let lastHold = history.rows.first(where: { $0.holdSeconds != nil })?.holdSeconds
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Seconds held · or m:ss")
+                .font(.caption).tracking(2).foregroundStyle(theme.dim)
+            TextField(lastHold.map { HoldDuration.entryText($0) } ?? "45", text: $holdStr)
+                .keyboardType(.numbersAndPunctuation)
+                .padding(10).background(theme.card)
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+                .foregroundStyle(theme.text)
+                .font(.system(.title3, design: .monospaced))
+                .focused($holdFocused)
+                .accessibilityIdentifier("holdEntryField")
+            if !holdStr.trimmingCharacters(in: .whitespaces).isEmpty, typedSeconds == nil {
+                Text("Enter seconds or m:ss, e.g. 45 or 1:30")
+                    .font(.caption).foregroundStyle(theme.dim)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var logHoldButton: some View {
+        Button {
+            guard let held = typedSeconds else { return }
+            holdFocused = false
+            logHold(held)
+        } label: {
+            Text("Log hold")
+        }
+        .tactile(.primary, fill: theme.ok)
+        .disabled(typedSeconds == nil)
+    }
+
+    @ViewBuilder
+    private var timerToggle: some View {
+        Button {
+            holdFocused = false
+            timerMode.toggle()
+        } label: {
+            Text(timerMode ? "Hide timer" : "Time it instead")
+                .font(.system(size: 18, weight: .semibold))
+                .frame(maxWidth: .infinity, minHeight: 44)
+        }
+        .tactile(.secondary, fullWidth: true)
     }
 
     @ViewBuilder
@@ -868,7 +944,11 @@ private struct IsometricTimerView: View {
         startedAt = nil
         elapsed = 0
         guard held >= 1 else { return }
+        logHold(held)
+    }
 
+    /// Writes one hold of `held` seconds (timed or typed) and fires the toast.
+    private func logHold(_ held: Int) {
         let ex = live
         let kcal = Repos.setCaloriesEstimate(
             exercise: ex,

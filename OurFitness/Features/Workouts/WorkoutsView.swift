@@ -711,11 +711,15 @@ private struct EditSetSheet: View {
     @EnvironmentObject private var toasts: ToastCenter
 
     @State private var reps: Int
-    @State private var holdSeconds: Int
+    /// The hold field's text ("47" / "1:30"). Seeded from the stored hold with
+    /// `HoldDuration.entryText`, whose parse is the identity, so an untouched save
+    /// never re-prices a logged hold. Read it only through `effectiveHold`.
+    @State private var holdStr: String
     @State private var weightStr: String = ""
     @State private var prefilled = false
     @State private var prefilledWeightStr: String?
     @FocusState private var weightFocused: Bool
+    @FocusState private var holdFocused: Bool
 
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
 
@@ -725,8 +729,18 @@ private struct EditSetSheet: View {
         self.loggedSet = loggedSet
         self.isNew = isNew
         _reps = State(initialValue: max(1, loggedSet.reps))
-        _holdSeconds = State(initialValue: max(5, loggedSet.holdSeconds ?? 60))
+        _holdStr = State(initialValue: HoldDuration.entryText(max(1, loggedSet.holdSeconds ?? 60)))
     }
+
+    /// The typed hold when it is a valid 1...3600 s, else nil (Save is disabled then).
+    private var parsedHold: Int? {
+        guard let s = HoldDuration.parseSeconds(holdStr),
+              (1...HoldDuration.maxSeconds).contains(s) else { return nil }
+        return s
+    }
+    /// The one hold value every price, save and toast below uses: what the field
+    /// says, else the stored hold.
+    private var effectiveHold: Int { parsedHold ?? max(1, loggedSet.holdSeconds ?? 60) }
 
     /// A hold row is the one that carries holdSeconds; reps there is the hold
     /// count (1) and is left alone. A `.duration` exercise stores minutes
@@ -758,14 +772,14 @@ private struct EditSetSheet: View {
     private var rowLoadLb: Double? {
         exercise.fixedLoadLb(
             forRowWeight: (showsWeight ? weightLb : nil) ?? loggedSet.weightLb,
-            holdSeconds: isHold ? holdSeconds : nil)
+            holdSeconds: isHold ? effectiveHold : nil)
     }
 
     private var estimatedCal: Int {
         Int(Repos.setCaloriesEstimate(
             exercise: exercise,
             reps: isHold ? max(1, loggedSet.reps) : reps,
-            holdSeconds: isHold ? holdSeconds : nil,
+            holdSeconds: isHold ? effectiveHold : nil,
             bodyWeightLb: profile.weightLb,
             loadLb: rowLoadLb
         ).rounded())
@@ -808,6 +822,7 @@ private struct EditSetSheet: View {
 
                 Button { save() } label: { Text(isNew ? "Add set" : "Save changes") }
                     .tactile(.primary, fullWidth: true)
+                    .disabled(isHold && parsedHold == nil)
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
@@ -825,7 +840,7 @@ private struct EditSetSheet: View {
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
-                Button("Done") { weightFocused = false }
+                Button("Done") { weightFocused = false; holdFocused = false }
             }
         }
     }
@@ -874,16 +889,19 @@ private struct EditSetSheet: View {
             Text("Hold duration".uppercased())
                 .font(.system(size: 10, weight: .medium)).tracking(2)
                 .foregroundStyle(theme.dim)
-            // Same 5-second grid the isometric timer logs on, so an edited hold
-            // can only land on a value the timer could have produced.
-            Picker("Hold duration", selection: $holdSeconds) {
-                ForEach(Array(stride(from: 5, through: 300, by: 5)), id: \.self) { s in
-                    Text(formattedHoldDuration(s)).tag(s)
-                }
-            }
-            .pickerStyle(.wheel)
-            .frame(height: 150)
-            .clipped()
+            TextField("45", text: $holdStr)
+                .keyboardType(.numbersAndPunctuation)
+                .padding(10).background(theme.card)
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
+                .foregroundStyle(theme.text)
+                .font(.system(.title3, design: .monospaced))
+                .focused($holdFocused)
+                .accessibilityIdentifier("editHoldField")
+            Text(parsedHold == nil
+                 ? "Enter seconds or m:ss, e.g. 45 or 1:30"
+                 : "Seconds, or m:ss for a minute or more")
+                .font(.caption).foregroundStyle(theme.dim)
         }
     }
 
@@ -911,7 +929,7 @@ private struct EditSetSheet: View {
             var dto = loggedSet
             dto.reps = newReps
             dto.weightLb = rowLoadLb ?? (showsWeight ? weightLb : nil)
-            dto.holdSeconds = isHold ? holdSeconds : nil
+            dto.holdSeconds = isHold ? effectiveHold : nil
             dto.caloriesEst = Repos.setCaloriesEstimate(
                 exercise: exercise, reps: newReps,
                 holdSeconds: dto.holdSeconds, bodyWeightLb: profile.weightLb,
@@ -923,13 +941,13 @@ private struct EditSetSheet: View {
                 ctx, id: loggedSet.id,
                 reps: newReps,
                 weightLb: showsWeight ? weightLb : nil,
-                holdSeconds: isHold ? holdSeconds : nil,
+                holdSeconds: isHold ? effectiveHold : nil,
                 bodyWeightLb: profile.weightLb
             ) else { return }
         }
 
         var detail = isHold
-            ? "\(formattedHoldDuration(holdSeconds)) hold"
+            ? "\(formattedHoldDuration(effectiveHold)) hold"
             : "\(newReps) \(isMinutes ? "min" : (newReps == 1 ? "rep" : "reps"))"
         if let w = weightLb, w > 0, showsWeight {
             detail += " · \(Units.formatWeightWithUnit(lb: w, system: unitSystem, decimals: 0))"
