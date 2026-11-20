@@ -1,7 +1,8 @@
 // Single "Add food" surface — replaces the separate "Log a meal" (free text) and
 // "Browse" (library) sheets. One field does both jobs:
-//   • empty  → quick picks (recipes · recently logged at last portion ·
-//              favorites) + a manual-entry row
+//   • empty  → "My Foods": favorites · recent (at the last portion) · most
+//              logged · recipes & my foods, each food shown once, + a
+//              manual-entry row
 //   • typed  → a "log what you described" card (FoodParser, AI-refined on open)
 //              on top of matching foods (curated + USDA + restaurant items; a
 //              chain in the query — "mcdonalds fries" — leads with that chain's
@@ -71,25 +72,16 @@ struct AddFoodSheet: View {
         Set(favoriteIdsString.split(separator: ",").map(String.init).filter { !$0.isEmpty })
     }
 
-    private var favoriteFoods: [CommonFood] {
-        let ids = favoriteIds
-        return CommonFoods.all.filter { ids.contains($0.id) }
-            .sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
-    }
+    /// Favorites that aren't curated or in the user's own logs, read from the
+    /// bundled database once (`SQLiteFoodDatabase.entries(ids:)`, off the main thread).
+    @State private var databaseFavorites: [String: CommonFood] = [:]
 
-    /// Last 10 distinct foods/meals logged, newest first. Tapping one reopens it
-    /// at the portion logged last time, so a repeat is two taps.
-    private func recentlyLogged(from allLogs: [FoodLogEntryDTO]) -> [FoodLogEntryDTO] {
-        var seen = Set<String>()
-        var result: [FoodLogEntryDTO] = []
-        for log in allLogs.reversed() {
-            let key = log.foodId ?? log.customName ?? log.id.uuidString
-            if seen.insert(key).inserted {
-                result.append(log)
-                if result.count >= 10 { break }
-            }
-        }
-        return result
+    /// Favorite ids nothing local can name yet (not curated, never logged).
+    private var unresolvedFavoriteIds: [String] {
+        let notCurated = favoriteIds.filter { CommonFoods.byId[$0] == nil }
+        guard !notCurated.isEmpty else { return [] }
+        let logged = FoodAffinity.loggedFoods(logModels.reversed().map(\.snapshot))
+        return notCurated.filter { logged[$0] == nil && databaseFavorites[$0] == nil }.sorted()
     }
 
     private func toggleFavorite(_ id: String) {
@@ -126,7 +118,7 @@ struct AddFoodSheet: View {
                     searchField
 
                     if trimmedQuery.isEmpty {
-                        quickPicks(allLogs: allLogs)
+                        myFoods(allLogs: allLogs)
                         manualEntryRow
                     } else {
                         describeCard
@@ -173,6 +165,13 @@ struct AddFoodSheet: View {
             // Read the restaurant catalog + build the search vocabulary off the
             // main thread once, so the first keystroke doesn't pay for the SQLite read.
             await Task.detached(priority: .userInitiated) { _ = CuratedSearchIndex.shared.vocabulary }.value
+        }
+        .task(id: unresolvedFavoriteIds) {
+            let ids = unresolvedFavoriteIds
+            guard !ids.isEmpty else { return }
+            for entry in await SQLiteFoodDatabase.shared.entries(ids: ids) {
+                databaseFavorites[entry.id] = entry.asCommonFood
+            }
         }
         .debouncedFoodSearch(query: query, results: $displayedResults, sizeChoices: $sizeChoices,
                              correctedQuery: $correctedQuery) { [] }
@@ -274,37 +273,33 @@ struct AddFoodSheet: View {
         }
     }
 
-    // MARK: - Quick picks (empty query)
+    // MARK: - My Foods (empty query)
 
     @ViewBuilder
-    private func quickPicks(allLogs: [FoodLogEntryDTO]) -> some View {
-        let favorites = favoriteFoods
-        let recents = recentlyLogged(from: allLogs)
-        if !savedTemplates.isEmpty {
-            pillSection(header: "recipes") {
-                ForEach(savedTemplates) { template in
-                    Button {
-                        templateToLog = template.snapshot
-                    } label: {
-                        HStack(spacing: 6) {
-                            Text(template.emoji)
-                            Text(template.name)
-                        }
-                    }
-                    .tactile(.pill)
-                    .contextMenu {
-                        Button(role: .destructive) {
-                            deleteTemplate(id: template.id, name: template.name)
-                        } label: {
-                            Label("Delete recipe", systemImage: "trash")
-                        }
-                    }
-                }
+    private func myFoods(allLogs: [FoodLogEntryDTO]) -> some View {
+        // Newest first; a favorite resolves curated → the user's own logs → the database.
+        let newest = Array(allLogs.reversed())
+        let logged = FoodAffinity.loggedFoods(newest)
+        let favorites = favoriteIds.compactMap { CommonFoods.byId[$0] ?? logged[$0] ?? databaseFavorites[$0] }
+        let sections = FoodAffinity.myFoodsSections(
+            favorites: favorites, logs: newest, templates: savedTemplates.map(\.snapshot),
+            resolve: { CommonFoods.byId[$0] ?? logged[$0] })
+
+        Text("My Foods")
+            .font(.system(size: 20, weight: .semibold))
+            .foregroundStyle(theme.text)
+        if sections.isEmpty {
+            Text("Heart foods you eat often — they'll show here")
+                .font(.callout).foregroundStyle(theme.dim)
+        }
+        if !sections.favorites.isEmpty {
+            pillSection(header: "favorites") {
+                ForEach(sections.favorites) { food in foodPill(food) }
             }
         }
-        if !recents.isEmpty {
-            pillSection(header: "recently logged") {
-                ForEach(recents) { entry in
+        if !sections.recent.isEmpty {
+            pillSection(header: "recent") {
+                ForEach(sections.recent) { entry in
                     Button {
                         mealToLog = QuickMealLog(name: entry.customName ?? "Meal", emoji: "🍽️", ingredients: ingredients(for: entry))
                     } label: {
@@ -319,18 +314,42 @@ struct AddFoodSheet: View {
                 }
             }
         }
-        if !favorites.isEmpty {
-            pillSection(header: "favorites") {
-                ForEach(favorites) { food in
+        if !sections.mostLogged.isEmpty {
+            pillSection(header: "most logged") {
+                ForEach(sections.mostLogged) { food in foodPill(food) }
+            }
+        }
+        if !sections.recipes.isEmpty {
+            pillSection(header: "recipes & my foods") {
+                ForEach(sections.recipes) { template in
                     Button {
-                        mealToLog = QuickMealLog(name: food.name, emoji: "🍽️", ingredients: ingredients(for: food))
+                        templateToLog = template
                     } label: {
-                        Text(food.name)
+                        HStack(spacing: 6) {
+                            Text(template.emoji)
+                            Text(template.name)
+                        }
                     }
                     .tactile(.pill)
+                    .contextMenu {
+                        Button(role: .destructive) {
+                            deleteTemplate(id: template.id, name: template.name)
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    }
                 }
             }
         }
+    }
+
+    private func foodPill(_ food: CommonFood) -> some View {
+        Button {
+            mealToLog = QuickMealLog(name: food.name, emoji: "🍽️", ingredients: ingredients(for: food))
+        } label: {
+            Text(food.name)
+        }
+        .tactile(.pill)
     }
 
     @ViewBuilder

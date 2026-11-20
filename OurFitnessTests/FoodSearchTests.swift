@@ -96,10 +96,8 @@ final class FoodSearchTests: XCTestCase {
                        "\"shake\"* AND \"shack\"* AND (\"frie\"* OR \"fries\"* OR \"fry\"*)")
     }
 
-    /// The query that used to throw "syntax error near (" must run for real.
-    func testMultiWordFTSQueryMatchesFTS5() async throws {
+    private func makeFoodsDatabase() throws -> (path: String, db: SQLiteFoodDatabase) {
         let path = FileManager.default.temporaryDirectory.appendingPathComponent("fts-\(UUID().uuidString).db").path
-        defer { try? FileManager.default.removeItem(atPath: path) }
         var raw: OpaquePointer?
         guard sqlite3_open(path, &raw) == SQLITE_OK else { throw XCTSkip("sqlite open failed") }
         let setup = """
@@ -108,18 +106,35 @@ final class FoodSearchTests: XCTestCase {
               fat_g INTEGER NOT NULL, fiber_g INTEGER NOT NULL);
             CREATE VIRTUAL TABLE foods_fts USING fts5(name, aliases, content=foods, content_rowid=rowid);
             INSERT INTO foods VALUES ('a','Shake Shack Fries','','1 order',470,6,63,22,6);
-            INSERT INTO foods VALUES ('b','Shake Shack Shake','','1 shake',500,9,60,20,0);
+            INSERT INTO foods VALUES ('b','Shake Shack Shake','x|y','1 shake',500,9,60,20,0);
             INSERT INTO foods VALUES ('c','Fried chicken','','1 piece',300,20,10,15,0);
             INSERT INTO foods_fts(foods_fts) VALUES ('rebuild');
             """
         XCTAssertEqual(sqlite3_exec(raw, setup, nil, nil, nil), SQLITE_OK)
         sqlite3_close(raw)
+        return (path, SQLiteFoodDatabase.open(path: path))
+    }
 
-        let db = SQLiteFoodDatabase.open(path: path)
+    /// The query that used to throw "syntax error near (" must run for real.
+    func testMultiWordFTSQueryMatchesFTS5() async throws {
+        let (path, db) = try makeFoodsDatabase()
+        defer { try? FileManager.default.removeItem(atPath: path) }
         let q = FoodSearchQuery("shake shack fries")
         XCTAssertTrue(q.ftsQuery.contains("(\""))   // the shape that broke
         let hits = await db.searchAsync(ftsQuery: q.ftsQuery, limit: 10)
         XCTAssertEqual(hits.map(\.id), ["a"])
+    }
+
+    func testEntriesByIdReadsRowsAndIgnoresMissingIds() async throws {
+        let (path, db) = try makeFoodsDatabase()
+        defer { try? FileManager.default.removeItem(atPath: path) }
+        let rows = await db.entries(ids: ["c", "b", "nope"])
+        XCTAssertEqual(Set(rows.map(\.id)), ["b", "c"])
+        let b = rows.first { $0.id == "b" }
+        XCTAssertEqual(b?.aliases, ["x", "y"])
+        XCTAssertEqual([b?.calories, b?.proteinG, b?.carbsG, b?.fatG], [500, 9, 60, 20])
+        let none = await db.entries(ids: [])
+        XCTAssertTrue(none.isEmpty)
     }
 
     // MARK: - Typo correction
