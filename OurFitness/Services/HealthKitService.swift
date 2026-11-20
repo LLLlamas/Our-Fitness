@@ -1,7 +1,10 @@
 // Single owner of HealthKit access. Views never touch HKHealthStore directly.
 // Read: steps, body mass, heart rate, resting HR, active energy, exercise time,
-//       body fat %, waist, blood pressure, blood glucose (fasting-marked only).
-// Write: workouts, body mass (optional, mirrors in-app logs to Apple Health).
+//       body fat %, waist, blood pressure, blood glucose (fasting-marked only),
+//       VO₂ max (Apple Watch cardio fitness estimate, read-only, full history),
+//       workouts (cardio minutes only — never burn or active energy).
+// Write: workouts, body mass (optional, mirrors in-app logs to Apple Health),
+//        the Dizziness symptom for a flagged live session (its real window only).
 // syncFromHealth() pulls latest body/marker readings into the app's logs.
 
 import Foundation
@@ -18,6 +21,15 @@ public final class HealthKitService: ObservableObject {
     private let store = HKHealthStore()
 
     @Published public private(set) var isAuthorized: Bool = false
+
+    /// Health workouts since `CardioFitness.healthWindowStart`, for the cardio
+    /// minutes tracker only. Derived on read: re-fetched on every sync and when
+    /// Progress appears, kept in memory, never stored, never fed into burn,
+    /// `DailyBurn` or active energy (plan §7 Q5 b).
+    @Published public private(set) var cardioWorkouts: [CardioFitness.HealthWorkout] = []
+    /// Own-app bundle ids already logged this process (plan §9: which one
+    /// HealthKit stamps on a watch-saved workout is not verified).
+    private var loggedOwnSources: Set<String> = []
 
     private var stepObserver: HKObserverQuery?
     private var observerSink: ((Int) -> Void)?
@@ -41,6 +53,13 @@ public final class HealthKitService: ObservableObject {
         if let t = HKObjectType.quantityType(forIdentifier: .bloodGlucose)           { s.insert(t) }
         if let t = HKObjectType.quantityType(forIdentifier: .flightsClimbed)         { s.insert(t) }
         if let t = HKObjectType.quantityType(forIdentifier: .distanceWalkingRunning)  { s.insert(t) }
+        // Cardio fitness. Apple Watch writes it; we only read. People connected
+        // before this was added must run Connect again to grant it (plan §4.3).
+        if let t = HKObjectType.quantityType(forIdentifier: .vo2Max)                 { s.insert(t) }
+        // Workouts from other apps (Apple's Workout app) count toward cardio
+        // minutes. Also in writeTypes for the watch's own workouts. People
+        // connected before this was added must run Connect again (plan §8).
+        s.insert(HKObjectType.workoutType())
         // MERGE: restored with `restingEnergy(for:)` below — the read is useless
         // without it. A *quantity* type, so it's safe to authorize (see the note).
         if let t = HKObjectType.quantityType(forIdentifier: .basalEnergyBurned)      { s.insert(t) }
@@ -57,6 +76,10 @@ public final class HealthKitService: ObservableObject {
         var s: Set<HKSampleType> = []
         if let t = HKQuantityType.quantityType(forIdentifier: .bodyMass) { s.insert(t) }
         s.insert(HKObjectType.workoutType())
+        // Symptom (category type, values are HKCategoryValueSeverity per Apple's
+        // docs). Written only for a "Felt dizzy" live session. People connected
+        // before this was added must run Connect again to grant it.
+        s.insert(HKCategoryType(.dizziness))
         return s
     }()
 
@@ -190,6 +213,66 @@ public final class HealthKitService: ObservableObject {
         } catch {
             print("[HealthKit] write weight failed:", error.localizedDescription)
         }
+    }
+
+    // MARK: - "Felt dizzy" session (cardio plan §10 Q2)
+
+    /// Average and peak heart rate from Health samples that start inside the
+    /// window. nil when there are none — including when read access was never
+    /// granted, which HealthKit reports as no data. Never estimated.
+    public func heartRateSummary(start: Date, end: Date) async -> (average: Double, peak: Double)? {
+        guard let type = HKQuantityType.quantityType(forIdentifier: .heartRate) else { return nil }
+        let predicate = HKQuery.predicateForSamples(withStart: start, end: end, options: [.strictStartDate])
+        let unit = Self.bpmUnit
+        let stats: (Double?, Double?) = await withCheckedContinuation { cont in
+            let q = HKStatisticsQuery(quantityType: type, quantitySamplePredicate: predicate,
+                                      options: [.discreteAverage, .discreteMax]) { _, stats, _ in
+                cont.resume(returning: (stats?.averageQuantity()?.doubleValue(for: unit),
+                                        stats?.maximumQuantity()?.doubleValue(for: unit)))
+            }
+            store.execute(q)
+        }
+        return SessionDizziness.heartRate(average: stats.0, peak: stats.1)
+    }
+
+    /// Saves one Dizziness symptom sample over the session window. Returns false
+    /// (no prompt, no throw) when sharing isn't authorized or the save fails —
+    /// the local flag is already saved either way.
+    @discardableResult
+    public func writeDizziness(_ severity: SessionDizziness.HealthSeverity, start: Date, end: Date) async -> Bool {
+        let type = HKCategoryType(.dizziness)
+        guard isAvailable, store.authorizationStatus(for: type) == .sharingAuthorized else { return false }
+        let value: HKCategoryValueSeverity
+        switch severity {
+        case .unspecified: value = .unspecified
+        case .mild: value = .mild
+        case .moderate: value = .moderate
+        case .severe: value = .severe
+        }
+        let sample = HKCategorySample(type: type, value: value.rawValue, start: start, end: end)
+        do {
+            try await store.save(sample)
+            return true
+        } catch {
+            print("[HealthKit] write dizziness failed:", error.localizedDescription)
+            return false
+        }
+    }
+
+    /// After a flagged live session is saved: read heart rate over its real
+    /// window and store it, then write the Dizziness symptom to Health. Sessions
+    /// logged after the fact never come here (`SessionDizziness.healthWindow`).
+    /// Failures are quiet; the flag itself was saved with the session.
+    public func recordDizzySession(_ ctx: ModelContext, state: LiveSessionState, end: Date,
+                                   report: DizzinessReport, healthGranted: Bool) async {
+        guard healthGranted,
+              let window = SessionDizziness.healthWindow(
+                flagged: true, origin: .live(start: state.startDate, end: end)) else { return }
+        if let hr = await heartRateSummary(start: window.start, end: window.end) {
+            _ = Repos.recordDizzyHeartRate(ctx, state: state, averageBpm: hr.average, peakBpm: hr.peak)
+        }
+        await writeDizziness(SessionDizziness.healthSeverity(report.severity),
+                             start: window.start, end: window.end)
     }
 
     // MARK: - Resting heart rate
@@ -457,6 +540,108 @@ public final class HealthKitService: ObservableObject {
         if let glu = await latestFastingGlucoseMgDL() {
             upsertMarker(ctx, profileId: profileId, day: Dates.dayKey(glu.date), kind: .fastingGlucose, value: glu.value)
         }
+        await syncVO2MaxHistory(ctx, profileId: profileId)
+        await refreshCardioWorkouts()
+    }
+
+    /// Re-reads every workout that started since `CardioFitness.healthWindowStart`
+    /// (this week and the 11 before it). The whole window every time — no
+    /// one-shot flag — because a read made before the user re-ran Connect comes
+    /// back empty (HealthKit hides denied reads). Filtering (cardio kinds, own
+    /// app, overlap with logged sessions) happens in `CardioFitness.weeklyMinutes`.
+    public func refreshCardioWorkouts(now: Date = Date()) async {
+        guard isAvailable else { return }
+        let start = CardioFitness.healthWindowStart(now: now)
+        let predicate = HKQuery.predicateForSamples(withStart: start, end: now, options: [.strictStartDate])
+        let sort = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: true)
+        let workouts: [CardioFitness.HealthWorkout] = await withCheckedContinuation { cont in
+            let q = HKSampleQuery(sampleType: HKObjectType.workoutType(), predicate: predicate,
+                                  limit: HKObjectQueryNoLimit, sortDescriptors: [sort]) { _, samples, _ in
+                let out = (samples as? [HKWorkout] ?? []).map {
+                    CardioFitness.HealthWorkout(
+                        start: $0.startDate, end: $0.endDate, durationSeconds: $0.duration,
+                        kind: Self.workoutKind($0.workoutActivityType),
+                        sourceBundleId: $0.sourceRevision.source.bundleIdentifier)
+                }
+                cont.resume(returning: out)
+            }
+            store.execute(q)
+        }
+        for id in Set(workouts.map(\.sourceBundleId)) where CardioFitness.ownBundleIds.contains(id)
+            && !loggedOwnSources.contains(id) {
+            print("[HealthKit] own-app workouts in Health stamped with source:", id)
+            loggedOwnSources.insert(id)
+        }
+        cardioWorkouts = workouts
+    }
+
+    /// The cardio set for Health workouts (plan §9 "Phase 2 must"). Anything not
+    /// listed — strength, core, cooldown, mind and body, … — is `.other` and
+    /// doesn't count; yoga, Pilates and flexibility are named so tests can pin them.
+    nonisolated private static func workoutKind(_ type: HKWorkoutActivityType) -> CardioFitness.WorkoutKind {
+        switch type {
+        case .walking:                                    return .walking
+        case .running:                                    return .running
+        case .hiking:                                     return .hiking
+        case .cycling, .handCycling:                      return .cycling
+        case .swimming:                                   return .swimming
+        case .rowing:                                     return .rowing
+        case .elliptical:                                 return .elliptical
+        case .stairClimbing, .stairs, .stepTraining:      return .stairs
+        case .jumpRope:                                   return .jumpRope
+        case .socialDance, .cardioDance:                  return .dance
+        case .mixedCardio:                                return .mixedCardio
+        case .highIntensityIntervalTraining:              return .intervals
+        case .skatingSports:                              return .skating
+        case .crossCountrySkiing:                         return .skiing
+        case .paddleSports:                               return .paddling
+        case .wheelchairWalkPace, .wheelchairRunPace:     return .wheelchair
+        case .basketball, .soccer, .tennis:               return .ballSports
+        case .swimBikeRun:                                return .multisport
+        case .yoga:                                       return .yoga
+        case .pilates:                                    return .pilates
+        case .flexibility:                                return .flexibility
+        default:                                          return .other
+        }
+    }
+
+    /// VO₂ max history, not just the latest sample: estimates arrive only a few
+    /// times a week, so `latestQuantity` alone would leave the chart empty.
+    ///
+    /// Every sync reads from the newest stored `vo2_max` day, or 2 years back if
+    /// none — no one-shot flag, because a read made before the user re-ran Connect
+    /// comes back empty (HealthKit hides denied reads) and must not end the
+    /// backfill (plan §9.2). Existing markers are fetched once and deduped in
+    /// memory, and the new days go in as one commit (plan §9.6).
+    private func syncVO2MaxHistory(_ ctx: ModelContext, profileId: UUID) async {
+        let existing = Repos.listMarkers(ctx, userId: profileId)
+        let now = Date()
+        let start = CardioFitness.historyStart(existing: existing, now: now)
+        let samples = await quantitySamples(.vo2Max, unit: Self.vo2MaxUnit, start: start, end: now)
+        let fresh = CardioFitness.newDailyReadings(samples, existing: existing)
+        guard !fresh.isEmpty else { return }
+        Repos.addMarkers(ctx, fresh.map {
+            HealthMarkerDTO(userId: profileId, date: $0.date, kind: .vo2Max, value: $0.value, source: "healthkit")
+        })
+    }
+
+    /// Every sample of a quantity type ending in [start, end], oldest first, with
+    /// its end date (the date every other read here keys the day by).
+    private func quantitySamples(_ id: HKQuantityTypeIdentifier, unit: HKUnit,
+                                 start: Date, end: Date) async -> [CardioFitness.Reading] {
+        guard let type = HKQuantityType.quantityType(forIdentifier: id) else { return [] }
+        let predicate = HKQuery.predicateForSamples(withStart: start, end: end, options: [])
+        let sort = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)
+        return await withCheckedContinuation { cont in
+            let q = HKSampleQuery(sampleType: type, predicate: predicate, limit: HKObjectQueryNoLimit,
+                                  sortDescriptors: [sort]) { _, samples, _ in
+                let readings = (samples as? [HKQuantitySample] ?? []).map {
+                    CardioFitness.Reading(date: $0.endDate, value: $0.quantity.doubleValue(for: unit))
+                }
+                cont.resume(returning: readings)
+            }
+            store.execute(q)
+        }
     }
 
     private func upsertMarker(_ ctx: ModelContext, profileId: UUID, day: String,
@@ -469,6 +654,9 @@ public final class HealthKitService: ObservableObject {
     // Type-safe units (string-initialized HKUnit(from:) crashes on a typo).
     nonisolated private static let bpmUnit = HKUnit.count().unitDivided(by: .minute())
     nonisolated private static let mgPerDLUnit = HKUnit.gramUnit(with: .milli).unitDivided(by: HKUnit.literUnit(with: .deci))
+    /// ml/(kg·min), the unit Apple documents for `.vo2Max`.
+    nonisolated private static let vo2MaxUnit = HKUnit.literUnit(with: .milli)
+        .unitDivided(by: HKUnit.gramUnit(with: .kilo).unitMultiplied(by: .minute()))
 
     // MARK: - Helpers
 

@@ -254,6 +254,7 @@ struct TrainingHistorySheet: View {
             title: "Pilates",
             detail: "\(focus) · \(session.durationMinutes) min",
             calories: calories,
+            dizziness: session.dizziness,
             deleteLabel: "Delete Pilates session"
         ) {
             return Repos.deletePilatesSession(ctx, id: session.id)
@@ -268,6 +269,7 @@ struct TrainingHistorySheet: View {
             title: session.activityName,
             detail: "\(session.durationMinutes) min",
             calories: Int((session.caloriesEst ?? 0).rounded()),
+            dizziness: session.dizziness,
             deleteLabel: "Delete \(session.activityName) session"
         ) {
             return Repos.deleteActivitySession(ctx, id: session.id)
@@ -280,6 +282,7 @@ struct TrainingHistorySheet: View {
         title: String,
         detail: String,
         calories: Int,
+        dizziness: DizzinessReport? = nil,
         deleteLabel: String,
         onDelete: @escaping () -> Bool
     ) -> some View {
@@ -294,6 +297,10 @@ struct TrainingHistorySheet: View {
                     .foregroundStyle(theme.text)
                 Text(calories > 0 ? "\(detail) · ~\(calories) cal" : detail)
                     .font(.caption).foregroundStyle(theme.dim)
+                if let dizziness {
+                    Text(SessionDizziness.summary(dizziness))
+                        .font(.caption).foregroundStyle(theme.dim)
+                }
             }
             Spacer()
             Button(role: .destructive) {

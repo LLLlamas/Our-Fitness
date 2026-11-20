@@ -470,5 +470,78 @@ final class WatchSyncPayloadTests: XCTestCase {
         // renaming one silently breaks sync for anyone mid-update.
         XCTAssertEqual(WatchSyncKeys.snapshotContextKey, "reminderSnapshots")
         XCTAssertEqual(WatchSyncKeys.actionUserInfoKey, "watchAction")
+        XCTAssertEqual(WatchSyncKeys.actionIdKey, "watchActionId")
+    }
+
+    // MARK: - Wrist action transport (sendMessage + transferUserInfo)
+
+    private let actionId = UUID(uuidString: "22222222-2222-2222-2222-222222222222")!
+
+    func test_actionMessage_roundTrips_id_and_action_through_its_dictionary() throws {
+        let sent = WatchActionMessage(id: actionId, action: .logWater(flOz: 8, date: now))
+        let dict = try XCTUnwrap(sent.dictionary)
+        // Both keys must be property-list values, or sendMessage's errorHandler fires.
+        XCTAssertTrue(PropertyListSerialization.propertyList(dict, isValidFor: .binary))
+        XCTAssertEqual(WatchActionMessage(dictionary: dict), sent)
+    }
+
+    func test_actionMessage_action_bytes_are_plain_WatchAction_JSON() throws {
+        // An OLDER phone build reads only `actionUserInfoKey` and decodes it as a
+        // bare WatchAction; the id must not change those bytes.
+        let action = WatchAction.logQuickSet(exerciseId: "squat", amount: 5, date: now)
+        let dict = try XCTUnwrap(WatchActionMessage(id: actionId, action: action).dictionary)
+        let data = try XCTUnwrap(dict[WatchSyncKeys.actionUserInfoKey] as? Data)
+        XCTAssertEqual(try makeDecoder().decode(WatchAction.self, from: data), action)
+    }
+
+    func test_actionMessage_from_an_older_watch_without_id_still_decodes() throws {
+        // An OLDER watch build sends only the action key.
+        let data = try makeEncoder().encode(WatchAction.endLiveSession(startDate: now, elapsedSeconds: 60))
+        let decoded = try XCTUnwrap(WatchActionMessage(dictionary: [WatchSyncKeys.actionUserInfoKey: data]))
+        XCTAssertNil(decoded.id)
+        XCTAssertEqual(decoded.action, .endLiveSession(startDate: now, elapsedSeconds: 60))
+    }
+
+    func test_actionMessage_malformed_id_decodes_as_nil_not_as_failure() throws {
+        let data = try makeEncoder().encode(WatchAction.logWater(flOz: 4, date: now))
+        let decoded = WatchActionMessage(dictionary: [
+            WatchSyncKeys.actionUserInfoKey: data, WatchSyncKeys.actionIdKey: "not-a-uuid"
+        ])
+        XCTAssertNotNil(decoded)
+        XCTAssertNil(decoded?.id)
+    }
+
+    func test_actionMessage_rejects_a_dictionary_without_an_action() {
+        XCTAssertNil(WatchActionMessage(dictionary: [WatchSyncKeys.actionIdKey: actionId.uuidString]))
+        XCTAssertNil(WatchActionMessage(dictionary: [WatchSyncKeys.actionUserInfoKey: Data("{}".utf8)]))
+    }
+
+    func test_actionMessage_gives_each_action_its_own_id_by_default() {
+        let a = WatchActionMessage(action: .logWater(flOz: 4, date: now))
+        let b = WatchActionMessage(action: .logWater(flOz: 4, date: now))
+        XCTAssertNotNil(a.id)
+        XCTAssertNotEqual(a.id, b.id)
+    }
+
+    func test_recentActionIDs_drops_a_repeat_delivery() {
+        var recent = RecentActionIDs()
+        XCTAssertTrue(recent.insert(actionId), "first delivery applies")
+        XCTAssertFalse(recent.insert(actionId), "the fallback copy of the same action is skipped")
+        XCTAssertTrue(recent.insert(UUID()), "a different action still applies")
+    }
+
+    func test_recentActionIDs_stays_bounded_and_forgets_the_oldest() {
+        var recent = RecentActionIDs(capacity: 3)
+        let ids = (0..<4).map { _ in UUID() }
+        for id in ids { XCTAssertTrue(recent.insert(id)) }
+        XCTAssertEqual(recent.ids, Array(ids.suffix(3)))
+        XCTAssertTrue(recent.insert(ids[0]), "evicted id is no longer remembered")
+    }
+
+    func test_recentActionIDs_restored_from_storage_keeps_only_the_newest() {
+        let ids = (0..<5).map { _ in UUID() }
+        var recent = RecentActionIDs(ids: ids, capacity: 2)
+        XCTAssertEqual(recent.ids, Array(ids.suffix(2)))
+        XCTAssertFalse(recent.insert(ids[4]), "an id persisted before a relaunch is still a duplicate")
     }
 }

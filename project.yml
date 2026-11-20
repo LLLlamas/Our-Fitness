@@ -291,6 +291,7 @@ targets:
       - path: OurFitnessPersistenceTests
       - path: OurFitness/Domain
       - path: OurFitness/Data/PersistenceModels.swift
+      - path: OurFitness/Data/Schema.swift
       - path: OurFitness/Data/Repositories
       - path: OurFitness/Services/LiveSessionService.swift
       - path: OurFitness/Services/LiveSessionCompletionService.swift

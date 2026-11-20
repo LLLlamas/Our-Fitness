@@ -11,8 +11,10 @@
 // round-trips anything: `envelope` mirrors into UserDefaults as JSON on every
 // update.
 // Wrist actions (`send(_:)`) apply an optimistic local update immediately,
-// then queue a `transferUserInfo` — which the system delivers even while the
-// phone is unreachable, so nothing taken on the wrist is ever lost.
+// then go to the phone by `sendMessage` while it is reachable, falling back to
+// `transferUserInfo` — which the system delivers even while the phone is
+// unreachable, so nothing taken on the wrist is ever lost. Each action carries
+// an id so the phone applies it once even if both paths deliver it.
 
 import Foundation
 import Combine
@@ -42,10 +44,11 @@ final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
     /// to protect, and reapplying the stored context is then exactly right.
     private var lastReceivedContextData: Data?
 
-    /// Actions encoded before `WCSession` finished activating. `transferUserInfo`
-    /// may only be called on an ACTIVATED session, so these wait here and flush
-    /// from the activation callback instead of being dropped (or raising).
-    private var pendingActions: [Data] = []
+    /// Actions encoded before `WCSession` finished activating. `sendMessage` and
+    /// `transferUserInfo` may only be called on an ACTIVATED session, so these
+    /// wait here and flush from the activation callback instead of being dropped
+    /// (or raising).
+    private var pendingActions: [[String: Any]] = []
 
     /// Only ever used before the first sync, so a calorie readout shows a
     /// ballpark rather than zero. The real weight rides on every envelope.
@@ -135,26 +138,49 @@ final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
 
     /// Encodes and queues a wrist action for the phone, and applies an
     /// optimistic local update immediately so the UI feels instant even
-    /// before the phone round-trips a fresh snapshot back. Never gated on
-    /// `isReachable` — `transferUserInfo` queues automatically offline.
+    /// before the phone round-trips a fresh snapshot back. Never dropped for
+    /// want of reachability — `transferUserInfo` queues automatically offline.
     func send(_ action: WatchAction) {
         applyOptimistic(action)
-        guard WCSession.isSupported(), let data = try? JSONEncoder().encode(action) else { return }
-        deliver(data)
+        guard WCSession.isSupported(), let message = WatchActionMessage(action: action).dictionary else { return }
+        deliver(message)
     }
 
-    /// `transferUserInfo` may only be called on an ACTIVATED session, and
+    /// Both send paths may only be used on an ACTIVATED session, and
     /// activation is asynchronous — a tap in the first moments after launch can
     /// land before it completes. The phone guards its own `updateApplicationContext`
     /// the same way (`WatchSyncService.pushSnapshot`); here the action is queued
     /// rather than dropped, because the optimistic update has already been applied
     /// and a dropped action would leave the two devices disagreeing.
-    private func deliver(_ data: Data) {
+    private func deliver(_ message: [String: Any]) {
         guard WCSession.default.activationState == .activated else {
-            pendingActions.append(data)
+            pendingActions.append(message)
             return
         }
-        WCSession.default.transferUserInfo([WatchSyncKeys.actionUserInfoKey: data])
+        Self.transmit(message)
+    }
+
+    /// `sendMessage` first when the phone is reachable, because it is applied at
+    /// once (and wakes the phone app); `transferUserInfo` otherwise, or when the
+    /// message errors. The fallback can deliver an action the phone already got
+    /// (an error can mean only the reply was lost); the action id in `message`
+    /// lets the phone drop that duplicate.
+    ///
+    /// `sendMessage` is not optional on the simulator either: there, a
+    /// `transferUserInfo` from the watch reaches the phone's WatchConnectivity
+    /// daemon and is dropped before the app sees it (docs/validation-log.md,
+    /// "Wrist → phone fix"). Static and nonisolated because the handlers run on
+    /// a background queue and touch nothing on the store.
+    nonisolated private static func transmit(_ message: [String: Any]) {
+        let session = WCSession.default
+        guard session.isReachable else {
+            session.transferUserInfo(message)
+            return
+        }
+        session.sendMessage(message, replyHandler: { _ in }, errorHandler: { error in
+            print("[WatchSync] sendMessage failed, queueing transferUserInfo:", error.localizedDescription)
+            WCSession.default.transferUserInfo(message)
+        })
     }
 
     /// Drains the queue exactly once — emptied BEFORE the transfers are handed
@@ -163,8 +189,8 @@ final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
         guard !pendingActions.isEmpty, WCSession.default.activationState == .activated else { return }
         let queued = pendingActions
         pendingActions.removeAll()
-        for data in queued {
-            WCSession.default.transferUserInfo([WatchSyncKeys.actionUserInfoKey: data])
+        for message in queued {
+            Self.transmit(message)
         }
     }
 
@@ -211,7 +237,7 @@ final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
 
     // MARK: - WCSessionDelegate
     // watchOS's WCSessionDelegate has no sessionDidBecomeInactive/sessionDidDeactivate
-    // (those are iOS-only) -- only the two methods below exist on this platform.
+    // (those are iOS-only).
 
     nonisolated func session(
         _ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?
@@ -228,6 +254,15 @@ final class WatchSyncStore: NSObject, ObservableObject, WCSessionDelegate {
     nonisolated func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
         Task { @MainActor in
             self.applyApplicationContext(applicationContext)
+        }
+    }
+
+    /// Logging only. A failed transfer is not retried here: the system already
+    /// retries queued transfers, and the phone's next snapshot settles the
+    /// optimistic state either way.
+    nonisolated func session(_ session: WCSession, didFinish userInfoTransfer: WCSessionUserInfoTransfer, error: Error?) {
+        if let error {
+            print("[WatchSync] transferUserInfo failed:", error.localizedDescription)
         }
     }
 }

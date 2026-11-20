@@ -20,8 +20,9 @@ public enum HealthRanges {
 
     /// One-line "what's healthy" caption shown under the marker chart.
     /// Source: ACC/AHA 2017 BP, NCEP ATP III lipids, ADA 2024 glycaemia,
-    /// AHA resting heart-rate reference.
-    public static func context(for kind: HealthMarkerKind) -> String {
+    /// AHA resting heart-rate reference. nil = no sourced range, so no caption:
+    /// VO₂ max has no age/sex norms on file (docs/cardio-fitness-plan.md §1.4).
+    public static func context(for kind: HealthMarkerKind) -> String? {
         switch kind {
         case .bpSystolic:       return "Optimal: <120 mmHg (ACC/AHA)"
         case .bpDiastolic:      return "Optimal: <80 mmHg (ACC/AHA)"
@@ -32,6 +33,7 @@ public enum HealthRanges {
         case .a1c:              return "Normal: <5.7% · Pre-diabetes: 5.7–6.4% (ADA)"
         case .fastingGlucose:   return "Normal: <100 mg/dL · Pre-diabetes: 100–125 (ADA)"
         case .restingHR:        return "Healthy adult: 60–80 bpm (AHA)"
+        case .vo2Max:           return nil
         }
     }
 
@@ -85,6 +87,10 @@ public enum HealthRanges {
             if value >= 60 && value <= 80 { return .optimal }
             if value >= 50 && value <= 90 { return .borderline }
             return .high
+        case .vo2Max:
+            // Never classified: no sourced norms, and no target (plan §1.3–1.4).
+            // Callers must treat .unknown as "no verdict", never as optimal.
+            return .unknown
         }
     }
 

@@ -278,6 +278,8 @@ private struct LiveSessionRunner: View {
 
     @State private var state: LiveSessionState
     @State private var ended = false
+    @State private var feltDizzy = false
+    @State private var dizzySeverity: DizzinessSeverity?
 
     init(profile: ProfileDTO, initial: LiveSessionState) {
         self.profile = profile
@@ -388,6 +390,8 @@ private struct LiveSessionRunner: View {
     @ViewBuilder
     private var controls: some View {
         VStack(spacing: 10) {
+            DizzyFlagSection(flagged: $feltDizzy, severity: $dizzySeverity)
+
             Button {
                 end()
             } label: {
@@ -459,9 +463,11 @@ private struct LiveSessionRunner: View {
             met: state.met, minutes: Double(elapsedSeconds) / 60.0, bodyWeightLb: profile.weightLb
         )
 
+        let dizziness = feltDizzy ? DizzinessReport(severity: dizzySeverity) : nil
         switch LiveSessionCompletionService.finish(
             ctx, profileId: profile.id, startDate: state.startDate,
-            elapsedSeconds: elapsedSeconds, bodyWeightLb: profile.weightLb
+            elapsedSeconds: elapsedSeconds, bodyWeightLb: profile.weightLb,
+            dizziness: dizziness
         ) {
         case .failed:
             ended = false
@@ -471,6 +477,18 @@ private struct LiveSessionRunner: View {
             return
         case .saved:
             break
+        }
+
+        // Heart rate + the Health symptom need the real window, so only a live
+        // session gets them; they land after dismiss and fail quietly.
+        if let dizziness {
+            let finished = state
+            let end = state.startDate.addingTimeInterval(Double(elapsedSeconds))
+            let granted = profile.healthGranted
+            Task { @MainActor in
+                await HealthKitService.shared.recordDizzySession(
+                    ctx, state: finished, end: end, report: dizziness, healthGranted: granted)
+            }
         }
 
         toasts.show(Toast(
@@ -542,6 +560,12 @@ private struct RecentActivitySessions: View {
             case .activity(let s):
                 return ActivityCatalog.activity(id: s.activityId)?.symbol ?? "figure.mixed.cardio"
             case .pilates: return "figure.pilates"
+            }
+        }
+        var dizziness: DizzinessReport? {
+            switch self {
+            case .activity(let s): return s.dizziness
+            case .pilates(let s): return s.dizziness
             }
         }
     }
@@ -700,6 +724,10 @@ private struct RecentActivitySessions: View {
                         .foregroundStyle(theme.text)
                     Text(subtitle(s))
                         .font(.caption).foregroundStyle(theme.dim)
+                    if let report = s.dizziness {
+                        Text(SessionDizziness.summary(report))
+                            .font(.caption).foregroundStyle(theme.dim)
+                    }
                 }
                 Spacer()
                 if let c = displayCalories(s) {
@@ -919,6 +947,8 @@ struct LogPastSessionSheet: View {
     @State private var logDay: LogDay = .today
     @State private var focusAreas: Set<PilatesFocusArea> = []
     @State private var notes: String = ""
+    @State private var feltDizzy = false
+    @State private var dizzySeverity: DizzinessSeverity?
 
     private let columns = [GridItem(.adaptive(minimum: 96), spacing: 12)]
 
@@ -1011,6 +1041,13 @@ struct LogPastSessionSheet: View {
                         }
                         notesSection
                     }
+
+                    // Logged after the fact = no real time window, so this
+                    // stays local: no heart-rate read, no Apple Health write.
+                    DizzyFlagSection(
+                        flagged: $feltDizzy, severity: $dizzySeverity,
+                        footnote: "Saved with this session. Heart rate is added only to timed live sessions."
+                    )
 
                     Text("≈ \(estimatedCal) cal")
                         .font(.system(size: 18, weight: .semibold, design: .monospaced))
@@ -1108,6 +1145,7 @@ struct LogPastSessionSheet: View {
     private func save() {
         guard let activity = selected else { return }
         let minutes = max(1, totalMinutes)
+        let dizziness = feltDizzy ? DizzinessReport(severity: dizzySeverity) : nil
         // Pilates routes to its own model so it credits the pilates weekly streak,
         // mirroring the live runner's end path. Focus areas keep the canonical
         // `allCases` order so the stored array is stable regardless of tap order.
@@ -1117,7 +1155,8 @@ struct LogPastSessionSheet: View {
                 date: logDay.date,
                 durationMinutes: minutes,
                 focusAreas: PilatesFocusArea.allCases.filter { focusAreas.contains($0) },
-                notes: notes.isEmpty ? nil : notes
+                notes: notes.isEmpty ? nil : notes,
+                dizziness: dizziness
             )) else { return }
         } else {
             let cal = CalorieEstimator.caloriesForActivity(
@@ -1131,7 +1170,8 @@ struct LogPastSessionSheet: View {
                 met: met,
                 durationMinutes: minutes,
                 expectedMinutes: minutes,
-                caloriesEst: cal
+                caloriesEst: cal,
+                dizziness: dizziness
             )) else { return }
         }
         toasts.show(Toast(
@@ -1140,6 +1180,64 @@ struct LogPastSessionSheet: View {
             accent: .win, symbol: "checkmark.seal.fill"
         ), for: 2.4)
         dismiss()
+    }
+}
+
+// MARK: - "Felt dizzy" flag (shared)
+
+/// The optional "Felt dizzy" toggle + severity pills, shared by the live runner
+/// (end of session) and `LogPastSessionSheet`. Records only: no warning, no
+/// gate, no advice (cardio plan §1 rule 2 — that one line lives in the VO₂ max ⓘ).
+private struct DizzyFlagSection: View {
+    @Binding var flagged: Bool
+    @Binding var severity: DizzinessSeverity?
+    var footnote: String? = nil
+
+    @Environment(\.theme) private var theme
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Toggle(isOn: Binding(
+                get: { flagged },
+                set: { on in
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                        flagged = on
+                        if !on { severity = nil }
+                    }
+                    Haptics.selection()
+                }
+            )) {
+                Text("Felt dizzy").font(.callout).foregroundStyle(theme.text)
+            }
+            .tint(theme.accent)
+
+            if flagged {
+                Text("How much (optional)")
+                    .font(.caption).tracking(2).textCase(.uppercase)
+                    .foregroundStyle(theme.dim)
+                HStack(spacing: 8) {
+                    ForEach(DizzinessSeverity.allCases, id: \.self) { level in
+                        Button {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                severity = severity == level ? nil : level
+                            }
+                        } label: {
+                            Text(level.label)
+                        }
+                        .tactile(.pill, fill: severity == level ? theme.accent : nil)
+                    }
+                }
+                if let footnote {
+                    Text(footnote)
+                        .font(.caption).foregroundStyle(theme.dim)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+        }
+        .padding(10)
+        .background(theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(theme.line, lineWidth: 1))
     }
 }
 
