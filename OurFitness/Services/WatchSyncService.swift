@@ -8,10 +8,12 @@
 // foreground, and after every mutation the watch can see. It is one envelope
 // because `updateApplicationContext` REPLACES the whole context dictionary, so
 // a second key would silently clobber the first. The watch sends
-// `WatchAction`s back via `transferUserInfo`, which queues automatically while
-// the phone is unreachable, so a wrist action taken offline is never lost — it
-// applies as soon as connectivity resumes. See Shared/WatchSyncPayload.swift
-// for the wire format.
+// `WatchAction`s back by `sendMessage` while the phone is reachable and by
+// `transferUserInfo` otherwise (queues automatically while the phone is
+// unreachable, so a wrist action taken offline is never lost — it applies as
+// soon as connectivity resumes). Both arrive in `receive(_:)`, which drops an
+// action id it has already applied. See Shared/WatchSyncPayload.swift for the
+// wire format.
 //
 // Guarded by `WCSession.isSupported()` throughout, so this is a complete
 // no-op (zero behavior change) for any user without a paired Apple Watch.
@@ -27,6 +29,14 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
     private var container: ModelContainer?
     private var changeObservers: [NSObjectProtocol] = []
     private var snapshotTask: Task<Void, Never>?
+
+    /// Ids of wrist actions already applied. The watch can deliver one action on
+    /// both paths (`sendMessage`, then `transferUserInfo` when the reply is lost),
+    /// so this is the double-apply guard. Persisted because the duplicate can
+    /// arrive after the phone app was relaunched in between.
+    private let recentActionIdsKey = "watchSync.recentActionIds"
+    private lazy var recentActionIds = RecentActionIDs(
+        ids: (UserDefaults.standard.stringArray(forKey: recentActionIdsKey) ?? []).compactMap(UUID.init(uuidString:)))
 
     /// Coalesce save bursts and goal/session changes into one latest-state push.
     private func scheduleSnapshot() {
@@ -415,6 +425,19 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
         }
     }
 
+    /// The one entry point for both delivery paths. An action without an id (an
+    /// older watch build) applies unguarded, as it always did.
+    private func receive(_ message: WatchActionMessage) {
+        if let id = message.id {
+            guard recentActionIds.insert(id) else {
+                print("[WatchSync] duplicate wrist action \(id) — ignored")
+                return
+            }
+            UserDefaults.standard.set(recentActionIds.ids.map(\.uuidString), forKey: recentActionIdsKey)
+        }
+        apply(message.action)
+    }
+
     /// Mirrors RootView's active-profile resolution: `@AppStorage("activeProfileId")`
     /// with a fallback to the first (oldest-created) profile.
     private func activeProfile(_ ctx: ModelContext) -> ProfileDTO? {
@@ -447,10 +470,24 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
     }
 
     nonisolated func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any] = [:]) {
-        guard let data = userInfo[WatchSyncKeys.actionUserInfoKey] as? Data,
-              let action = try? JSONDecoder().decode(WatchAction.self, from: data) else { return }
+        guard let message = WatchActionMessage(dictionary: userInfo) else { return }
         Task { @MainActor in
-            self.apply(action)
+            self.receive(message)
+        }
+    }
+
+    /// The watch's `sendMessage` path (it always passes a reply handler, so this
+    /// is the variant called). The reply only acknowledges receipt, so it is sent
+    /// at once; the reply must be called in every case, per Apple's docs.
+    nonisolated func session(
+        _ session: WCSession, didReceiveMessage message: [String: Any],
+        replyHandler: @escaping ([String: Any]) -> Void
+    ) {
+        let decoded = WatchActionMessage(dictionary: message)
+        replyHandler([:])
+        guard let decoded else { return }
+        Task { @MainActor in
+            self.receive(decoded)
         }
     }
 }

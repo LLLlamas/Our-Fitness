@@ -9,9 +9,12 @@
 // Transport: the phone pushes ONE `WatchSnapshotEnvelope` via
 // `WCSession.updateApplicationContext` (latest-wins, delivered even when the
 // watch app isn't foregrounded) under `WatchSyncKeys.snapshotContextKey`. The
-// watch sends a `WatchAction` back via `WCSession.transferUserInfo` (queues
-// automatically while unreachable, so a wrist action taken offline is never
-// lost) under `WatchSyncKeys.actionUserInfoKey`.
+// watch sends a `WatchAction` back as a `WatchActionMessage` dictionary: by
+// `sendMessage` while the phone is reachable, otherwise (or when that fails) by
+// `WCSession.transferUserInfo` (queues automatically while unreachable, so a
+// wrist action taken offline is never lost). Both paths can deliver the same
+// action, so it carries an id and the phone drops ids it has already applied
+// (`RecentActionIDs`).
 //
 // WHY ONE ENVELOPE, NOT A KEY PER FEATURE: `updateApplicationContext` REPLACES
 // the entire context dictionary. Two features each pushing their own key would
@@ -271,7 +274,70 @@ public enum WatchSyncKeys {
     /// The value is the historical "reminderSnapshots": it is the wire key both
     /// sides already agree on, so it stays even though Reminders is gone.
     public static let snapshotContextKey = "reminderSnapshots"
-    /// Key inside the `transferUserInfo` dictionary; value is JSON-encoded
-    /// `WatchAction` `Data`.
+    /// Key inside the `sendMessage` / `transferUserInfo` dictionary; value is
+    /// JSON-encoded `WatchAction` `Data`.
     public static let actionUserInfoKey = "watchAction"
+    /// Key beside `actionUserInfoKey`; value is the action's UUID string. A
+    /// sibling key rather than a field inside `WatchAction`, so the action's JSON
+    /// is unchanged: an older phone ignores the key, and an older watch's
+    /// dictionary (no id) still applies, just without the duplicate guard.
+    public static let actionIdKey = "watchActionId"
+}
+
+// MARK: - Wrist action transport
+
+/// One wrist action as it travels: the action plus an id that is the same on
+/// every delivery path. The watch tries `sendMessage` first and falls back to
+/// `transferUserInfo` when that errors, but an error does not prove the phone
+/// never got the message (the reply can be what was lost), so the same action
+/// can arrive twice. The id is what lets the phone apply it once.
+public struct WatchActionMessage: Equatable, Sendable {
+    public var id: UUID?
+    public var action: WatchAction
+
+    public init(id: UUID? = UUID(), action: WatchAction) {
+        self.id = id
+        self.action = action
+    }
+
+    /// Property-list dictionary for `sendMessage` / `transferUserInfo`. Nil only
+    /// if the action fails to encode.
+    public var dictionary: [String: Any]? {
+        guard let data = try? JSONEncoder().encode(action) else { return nil }
+        var dict: [String: Any] = [WatchSyncKeys.actionUserInfoKey: data]
+        if let id { dict[WatchSyncKeys.actionIdKey] = id.uuidString }
+        return dict
+    }
+
+    /// Reads either path's dictionary. A missing or malformed id decodes as nil
+    /// (an older watch build) rather than failing the action.
+    public init?(dictionary: [String: Any]) {
+        guard let data = dictionary[WatchSyncKeys.actionUserInfoKey] as? Data,
+              let action = try? JSONDecoder().decode(WatchAction.self, from: data) else { return nil }
+        self.action = action
+        self.id = (dictionary[WatchSyncKeys.actionIdKey] as? String).flatMap(UUID.init(uuidString:))
+    }
+}
+
+/// The phone's memory of action ids it has already applied, oldest first and
+/// capped, so a duplicate delivery is dropped without the list growing forever.
+/// A duplicate arrives within moments of the original (the fallback fires when
+/// the `sendMessage` reply fails), so a short window is enough.
+public struct RecentActionIDs: Equatable, Sendable {
+    public static let defaultCapacity = 64
+    public private(set) var ids: [UUID]
+    public let capacity: Int
+
+    public init(ids: [UUID] = [], capacity: Int = RecentActionIDs.defaultCapacity) {
+        self.capacity = max(1, capacity)
+        self.ids = Array(ids.suffix(self.capacity))
+    }
+
+    /// Records `id`; returns false if it was already recorded (a duplicate to skip).
+    public mutating func insert(_ id: UUID) -> Bool {
+        guard !ids.contains(id) else { return false }
+        ids.append(id)
+        if ids.count > capacity { ids.removeFirst(ids.count - capacity) }
+        return true
+    }
 }

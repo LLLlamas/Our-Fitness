@@ -156,7 +156,8 @@ iOS Simulator:
    (`WatchSyncService.updateApplicationContext`) updates the watch's Today and
    Meals tabs.
 4. Log water or a quick set **from the watch** → confirm the watch-to-phone action
-   (`transferUserInfo`) lands back on the phone and the Today totals update.
+   (`sendMessage` while reachable, `transferUserInfo` fallback) lands back on the
+   phone once and the Today totals update.
 5. Force-quit the phone app and repeat step 3/4 — `WatchConnectivity`'s
    background transfer APIs should still deliver once the phone app relaunches
    or wakes in the background.
@@ -303,7 +304,9 @@ top-level `CFBundleIconName` key in either bundle despite the error's wording.
   If the watch and phone are unpaired/out of range, the watch shows the last
   synced envelope (`WatchSyncStore`) until connectivity resumes — it does
   not independently track state. Wrist actions taken offline are not lost:
-  `transferUserInfo` queues them and the phone applies them on reconnect.
+  `transferUserInfo` queues them and the phone applies them on reconnect
+  (while reachable they go by `sendMessage`, which applies at once; the
+  action id stops a double apply when both paths deliver).
 - **One envelope, not a key per feature.** `updateApplicationContext` REPLACES
   the whole context dictionary, so two features each pushing their own key
   would silently clobber each other. Everything the watch needs travels in a
