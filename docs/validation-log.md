@@ -223,3 +223,23 @@ Not verified: the keyboard "Done" toolbar button. It did not appear in the simul
 ## TestFlight upload 2026-11-20 (Add food round 2 + Train ±1/typed holds) — validation record
 
 Shipped 2026-11-20 from the Mac (fastlane not installed), `main` at `cd22e6a`, a fast-forward over `feat/food-round2` (`d5bfa72`) and `feat/train-holds` (`cd22e6a`), pushed to origin. `xcodegen generate`, `validate-ci-invariants.sh` exit 0, `xcodebuild build` (iPhone 17 sim) BUILD SUCCEEDED, `xcodebuild test -scheme OurFitness` TEST SUCCEEDED (unit + persistence, 0 failures), UI smoke test after `simctl erase` TEST SUCCEEDED (2 tests). Release `xcodebuild archive` with the 2026-11-05 command-line signing overrides → ARCHIVE SUCCEEDED, watch app embedded; `-exportArchive` (`app-store-connect`, `destination upload`, automatic signing, `manageAppVersionAndBuildNumber`, `uploadSymbols`) → "Upload succeeded", EXPORT SUCCEEDED. ASC build number not captured locally — check TestFlight. Not verified: ASC processing finishing, the build on a device, tapping a "Did you mean" pill, the on-device AI rewrite timing, long-press remove-from-favorites, SE width, the hold timer flow, real-watch behaviour.
+
+## Audit fixes + TestFlight upload 2026-11-20 — validation record
+
+A read-only audit of `8abc265..256abf0` found no ship-blockers and no schema risk (train holds reuse the existing `WorkoutSetDTO.holdSeconds`). Fixed in `f2c0e9c`:
+- Multi-serving label-scan macros in the log toast and the Recent row now use `totalNutrition`.
+- The Save to My Foods toast no longer replaces the log toast.
+- A chain split with no menu hit is no longer capped (new test `testChainSplitWithoutMenuHitIsNotCapped`).
+- Did-you-mean suggestions are cached per query.
+- The old "Logged" toast and the hand-rolled favorites parse were replaced with shared helpers.
+- The docs rows were corrected.
+
+Left as is: no `foods.id` index, because it needs a DB rebuild (`entries(ids:)` scans about 21 ms per call on the Mac); `menuMatches` kept as a test-facing wrapper.
+
+Verified:
+- `xcodebuild test -scheme OurFitness`: TEST SUCCEEDED (603 unit tests, 0 failures; persistence 35, 0 failures).
+- UI smoke test after `simctl erase`: TEST SUCCEEDED (2 tests).
+- Release archive with the 2026-11-05 signing overrides: ARCHIVE SUCCEEDED, watch app embedded.
+- `-exportArchive`: "Upload succeeded", EXPORT SUCCEEDED.
+
+Not verified: ASC processing finishing, the build on a device, and the new toast text on screen.
