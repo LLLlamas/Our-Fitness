@@ -1,6 +1,6 @@
 # Cardio fitness (VO₂ max): track it, build it slowly
 
-> **REVIVED 2026-11-20, awaiting owner approval.** The owner is getting a newer Apple Watch (Series 4+), so the October blocker (a Series 3 that can't pair) is going away. Nothing is built. §8 is the rollout: a watch check first, then the build phases. No build agents go out until the owner approves §8 and answers §7.
+> **APPROVED 2026-11-20 (owner decisions in §10).** Was: **REVIVED 2026-11-20, awaiting owner approval.** The owner is getting a newer Apple Watch (Series 4+), so the October blocker (a Series 3 that can't pair) is going away. Nothing is built. §8 is the rollout: a watch check first, then the build phases. No build agents go out until the owner approves §8 and answers §7.
 
 > **Status: PLAN, not built.** CLAUDE.md and the code stay authoritative.
 > **Constraint from the owner:** they get dizzy easily, so everything starts slow and
@@ -144,3 +144,17 @@ An independent read-only audit checked this plan against the code at `5a0a7bd`. 
 **Owner question added:**
 
 8. **How do you find the VO₂ max tracker?** (a) A one-line hint under Settings › Apple Health ("Have an Apple Watch? Add the Cardio fitness tracker in Progress › Edit trackers."), plus it appears automatically once data exists for anyone who hasn't edited trackers; or (b) on by default for everyone, showing the calm empty state until data arrives. *Recommended: a.* Most people have no watch, so a default-on empty card would read as broken. Either way it's the same for every goal.
+
+## 10. Owner decisions (2026-11-20) — these override the recommendations above
+
+- **Phases 0–3 approved.** Order changed: **1 → 2 → 3 → 0**. The add-food redesign is using Xcode and the simulator in its own worktree (`../Our-Fitness-addfood`), so the simulator walk goes last and can also check the new trackers.
+- **Q5 = b, and the general rule is to integrate with Apple Health as much as possible** ("for accuracy and feature"). Cardio minutes include Health workouts from other apps (Apple's Workout app), deduped per §7 Q7 and §9.
+- **Q2 = yes, the "felt dizzy" flag, with real data recorded alongside it** (Phase 3):
+  - Optional severity: mild / moderate / severe.
+  - **Average and peak heart rate from Health over the session window.** `heartRate` is already in `readTypes` (`HealthKitService.swift:34`), so this needs no new permission. If there are no samples, store nil and show "no heart-rate data" — never an estimate.
+  - **Also write it to Apple Health as a Dizziness symptom** ([`HKCategoryTypeIdentifier.dizziness`](https://developer.apple.com/documentation/healthkit/hkcategorytypeidentifier/dizziness); exists per Apple's docs, search summary). The value is believed to be an `HKCategoryValueSeverity` (**not verified**: open the docs page before coding). It goes in `writeTypes`, so it's a new write permission, granted only via the explicit Connect action (hard rule 4 / crash traps). If permission isn't granted, the flag still saves locally.
+  - Still never a medical signal: no warnings, no gating, no "see a doctor" nag beyond §1 rule 2's single ⓘ line.
+- **Q8 = b: the VO₂ max tracker is on by default for everyone**, with the calm empty state. It has to reach existing users who already edited their trackers (non-empty `enabledStatsRaw`): add it once via a one-time migration flag that appends `vo2Max` to the stored set, without touching anything else in it. Same for every goal.
+- **Q4: skip** heart-rate recovery and walking heart rate.
+- **Watch:** a couple of years old, currently on the owner's wife's iPhone. To use it with the owner's own iPhone it must be unpaired from hers and re-paired (Apple's normal flow; it erases the watch). Phase 4 waits for that.
+- **Machine rule for every build agent:** work only in `../Our-Fitness-cardio`. Before any `xcodebuild`, wait until `pgrep -x xcodebuild` is empty, and use a private `-derivedDataPath` inside the worktree. Never boot a simulator in Phases 1–3. Filter build output to errors.
