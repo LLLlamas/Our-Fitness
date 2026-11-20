@@ -30,6 +30,8 @@ final class FoodSearchRealDataTests: XCTestCase {
                        ["Kids", "Small", "Medium", "Large"])
         XCTAssertEqual(fries.foods.filter { $0.name.contains("World Famous Fries") }.count, 1)
         XCTAssertFalse(fries.foods.contains { $0.id.hasPrefix("ff-mcd") })   // curated duplicates suppressed
+        XCTAssertFalse(fries.foods.contains { $0.id == "usda-170721" })      // bare "Mcdonald's" brand row dropped
+        XCTAssertEqual(fries.strength, .strong)
 
         let latte = try await search("starbucks latte")
         XCTAssertEqual(latte.foods.first?.id, "rest:starbucks:caff-latte-3")   // Grande

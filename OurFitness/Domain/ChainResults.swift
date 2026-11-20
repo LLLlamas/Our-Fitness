@@ -29,6 +29,18 @@ struct FoodSearchOutcome: Sendable {
     var foods: [CommonFood] = []
     var sizeChoices: [String: [SizeChoice]] = [:]
     var correctedQuery: String?
+    /// How sure the results are that they answer the query (see `MatchStrength`).
+    var strength: MatchStrength = .none
+}
+
+/// How well the top result answers the typed query.
+///   none   — nothing found
+///   weak   — something found, but only loosely (the words are spread over name
+///            and aliases, or the best food merely contains them)
+///   strong — a chain's own menu items matched, or the best food is named
+///            exactly / starts with the query (`FoodSearchQuery.tier` ≤ 1)
+enum MatchStrength: Sendable, Equatable {
+    case none, weak, strong
 }
 
 enum SizeVariants {
@@ -210,24 +222,45 @@ extension FoodSearch {
         var corrected = plan.corrected
         guard let (chain, remainder) = plan.chain, !remainder.isEmpty else {
             // A fix that finds nothing must never hide what the typed words would have found.
+            var searched = plan.effective
             if corrected != nil, found.isEmpty {
                 found = await combined(FoodSearchQuery(raw), index: index, database: database)
                 corrected = nil
+                searched = raw
             }
-            return FoodSearchOutcome(foods: found, correctedQuery: corrected)
+            let tierQuery = FoodSearchQuery(searched)
+            return FoodSearchOutcome(foods: found, correctedQuery: corrected,
+                                     strength: strength(of: found, for: tierQuery, chainHit: false))
         }
         let menu = catalog.menu(for: chain.slug)
         let hits = RestaurantMatcher.filter(menu, query: remainder).map { $0.food.asCommonFood }
         let grouped = SizeVariants.group(hits, maxGroups: maxChainGroups)
         let shownIds = Set(hits.map(\.id))
+        // A bare brand row ("Mcdonald's", alias "french fries") adds nothing once
+        // the chain's own menu answered; drop usda rows made only of chain words.
+        let chainWords = Set(([chain.name] + chain.aliases).flatMap(FoodSearchQuery.normalizedWords))
         let others = found.filter { f in
             if shownIds.contains(f.id) { return false }
+            if !hits.isEmpty, f.id.hasPrefix("usda-") {
+                let nameWords = FoodSearchQuery.normalizedWords(f.name)
+                if !nameWords.isEmpty, nameWords.allSatisfy(chainWords.contains) { return false }
+            }
             if f.id.hasPrefix("rest:") { return RestaurantChain.slug(ofRestaurantFoodId: f.id) == chain.slug }
             if f.id.hasPrefix("ff-") { return menu.isEmpty && chain.ownsCuratedFastFood(id: f.id) }
             return true
         }
-        return FoodSearchOutcome(foods: grouped.foods + others.prefix(maxOtherRows),
-                                 sizeChoices: grouped.choices, correctedQuery: corrected)
+        let shown = grouped.foods + others.prefix(maxOtherRows)
+        return FoodSearchOutcome(foods: shown, sizeChoices: grouped.choices, correctedQuery: corrected,
+                                 strength: strength(of: shown, for: FoodSearchQuery(plan.effective),
+                                                    chainHit: !hits.isEmpty))
+    }
+
+    /// strong = chain menu hit, or the first food ties the query at tier ≤ 1.
+    private static func strength(of foods: [CommonFood], for q: FoodSearchQuery, chainHit: Bool) -> MatchStrength {
+        guard let first = foods.first else { return .none }
+        if chainHit { return .strong }
+        if let tier = q.tier(name: first.name, aliases: first.aliases), tier <= 1 { return .strong }
+        return .weak
     }
 }
 

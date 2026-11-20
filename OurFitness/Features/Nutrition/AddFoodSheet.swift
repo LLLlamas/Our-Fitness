@@ -44,6 +44,9 @@ struct AddFoodSheet: View {
     @State private var sizeChoices: [String: [SizeChoice]] = [:]
     /// The spelling-fixed query the results are for ("Showing results for …"); nil = as typed.
     @State private var correctedQuery: String?
+    /// How strongly `displayedResults` answer the query, and the query that was true for.
+    @State private var strength: MatchStrength = .none
+    @State private var strengthQuery: String = ""
     @State private var mealToLog: QuickMealLog?
     @State private var templateToLog: SavedMealTemplateDTO?
     @State private var describeText: String?
@@ -65,6 +68,9 @@ struct AddFoodSheet: View {
             sort: \.createdAt, order: .reverse
         )
     }
+
+    /// The results are a confident answer (chain menu hit, or an exact / leading name match).
+    private var resultsAreStrong: Bool { strength == .strong && !displayedResults.isEmpty }
 
     private var trimmedQuery: String { query.trimmingCharacters(in: .whitespaces) }
 
@@ -117,7 +123,7 @@ struct AddFoodSheet: View {
                         myFoods(allLogs: allLogs)
                         manualEntryRow
                     } else {
-                        describeCard
+                        if !resultsAreStrong { describeCard(compact: false) }
                         savedMatches
                         if let correctedQuery, !displayedResults.isEmpty {
                             Text("Showing results for “\(correctedQuery)”")
@@ -135,6 +141,10 @@ struct AddFoodSheet: View {
                     } else {
                         foodList
                     }
+
+                    // A strong match answers the query: the describe card becomes a
+                    // small "or log it as a meal" link under the results.
+                    if !trimmedQuery.isEmpty && resultsAreStrong { describeCard(compact: true) }
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 18)
@@ -173,7 +183,8 @@ struct AddFoodSheet: View {
             }
         }
         .debouncedFoodSearch(query: query, results: $displayedResults, sizeChoices: $sizeChoices,
-                             correctedQuery: $correctedQuery) { [] }
+                             correctedQuery: $correctedQuery, strength: $strength,
+                             strengthQuery: $strengthQuery) { [] }
         // The root ToastHost sits under this sheet, so "Logged" would be hidden
         // while the sheet stays open after a pick; host a toast layer here too.
         .overlay(alignment: .top) { ToastHost() }
@@ -266,15 +277,25 @@ struct AddFoodSheet: View {
     /// "Log what you described": instant curated parse of the query, so a
     /// multi-food sentence ("2 eggs and toast") logs as one meal.
     @ViewBuilder
-    private var describeCard: some View {
-        let parsed = FoodParser.parse(text: trimmedQuery, includeDatabase: false)
-        PressableCard(action: { describeText = trimmedQuery }) {
+    private func describeCard(compact: Bool) -> some View {
+        // Describe what the results are for ("McDonald's fries", not the typo).
+        let described = correctedQuery ?? trimmedQuery
+        let parsed = FoodParser.parse(text: described, includeDatabase: false)
+        if compact {
+            Button { describeText = described } label: {
+                Label("Or log “\(described)” as a meal", systemImage: "text.badge.plus")
+                    .font(.system(size: 13, weight: .medium))
+                    .lineLimit(1)
+            }
+            .tactile(.ghost)
+        } else {
+        PressableCard(action: { describeText = described }) {
             HStack(alignment: .top, spacing: 12) {
                 Image(systemName: "text.badge.plus")
                     .font(.system(size: 18))
                     .foregroundStyle(theme.accent)
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Log “\(trimmedQuery)”")
+                    Text("Log “\(described)”")
                         .font(.system(size: 15, weight: .semibold))
                         .foregroundStyle(theme.text)
                         .lineLimit(2)
@@ -296,6 +317,7 @@ struct AddFoodSheet: View {
                     .font(.system(size: 12))
                     .foregroundStyle(theme.dim)
             }
+        }
         }
     }
 
@@ -472,7 +494,8 @@ extension View {
         results: Binding<[CommonFood]>,
         emptyResults: @escaping () -> [CommonFood]
     ) -> some View {
-        modifier(DebouncedFoodSearch(query: query, results: results, sizeChoices: nil, correctedQuery: nil, emptyResults: emptyResults))
+        modifier(DebouncedFoodSearch(query: query, results: results, sizeChoices: nil, correctedQuery: nil,
+                                     strength: nil, strengthQuery: nil, emptyResults: emptyResults))
     }
 
     /// Same search, also reporting the size choices of collapsed chain items
@@ -482,10 +505,13 @@ extension View {
         results: Binding<[CommonFood]>,
         sizeChoices: Binding<[String: [SizeChoice]]>,
         correctedQuery: Binding<String?>,
+        strength: Binding<MatchStrength>,
+        strengthQuery: Binding<String>,
         emptyResults: @escaping () -> [CommonFood]
     ) -> some View {
         modifier(DebouncedFoodSearch(query: query, results: results, sizeChoices: sizeChoices,
-                                     correctedQuery: correctedQuery, emptyResults: emptyResults))
+                                     correctedQuery: correctedQuery, strength: strength,
+                                     strengthQuery: strengthQuery, emptyResults: emptyResults))
     }
 }
 
@@ -494,6 +520,9 @@ private struct DebouncedFoodSearch: ViewModifier {
     @Binding var results: [CommonFood]
     let sizeChoices: Binding<[String: [SizeChoice]]>?
     let correctedQuery: Binding<String?>?
+    /// How strongly the results answer the query, and the query it was computed for.
+    let strength: Binding<MatchStrength>?
+    let strengthQuery: Binding<String>?
     let emptyResults: () -> [CommonFood]
 
     func body(content: Content) -> some View {
@@ -503,6 +532,8 @@ private struct DebouncedFoodSearch: ViewModifier {
                 results = emptyResults()
                 sizeChoices?.wrappedValue = [:]
                 correctedQuery?.wrappedValue = nil
+                strength?.wrappedValue = .none
+                strengthQuery?.wrappedValue = ""
                 return
             }
             try? await Task.sleep(nanoseconds: 180_000_000)   // 180 ms
@@ -514,6 +545,8 @@ private struct DebouncedFoodSearch: ViewModifier {
             results = outcome.foods
             sizeChoices?.wrappedValue = outcome.sizeChoices
             correctedQuery?.wrappedValue = outcome.correctedQuery
+            strength?.wrappedValue = outcome.strength
+            strengthQuery?.wrappedValue = q.trimmingCharacters(in: .whitespaces)
         }
     }
 }
@@ -535,29 +568,34 @@ struct FoodResultRow: View {
 
     var body: some View {
         PressableCard(action: onTap) {
-            HStack(alignment: .top, spacing: 12) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(food.name)
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(theme.text)
-                    Text(food.servingLabel)
-                        .font(.caption).foregroundStyle(theme.dim)
-                    Text("\(food.calories) cal · \(food.proteinG)g pro · \(food.carbsG)g carbs · \(food.fatG)g fat")
-                        .font(.system(.caption2, design: .monospaced))
-                        .foregroundStyle(theme.accent)
-                    if sizes.count > 1, let onPickSize { sizePills(onPickSize) }
-                }
-                Spacer(minLength: 0)
-                if let onToggleFavorite {
-                    Button(action: onToggleFavorite) {
-                        Image(systemName: isFavorite ? "heart.fill" : "heart")
-                            .foregroundStyle(isFavorite ? theme.accent : theme.dim)
-                            .font(.system(size: 16))
+            // The size pills sit under the whole row (not inside the text column)
+            // so their horizontal scroll can't push the heart or clip the text.
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(alignment: .top, spacing: 12) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(food.name)
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundStyle(theme.text)
+                        Text(food.servingLabel)
+                            .font(.caption).foregroundStyle(theme.dim)
+                        Text("\(food.calories) cal · \(food.proteinG)g pro · \(food.carbsG)g carbs · \(food.fatG)g fat")
+                            .font(.system(.caption2, design: .monospaced))
+                            .foregroundStyle(theme.accent)
                     }
-                    .tactile(.ghost)
-                    .accessibilityLabel(isFavorite ? "Remove \(food.name) from favorites" : "Add \(food.name) to favorites")
+                    Spacer(minLength: 0)
+                    if let onToggleFavorite {
+                        Button(action: onToggleFavorite) {
+                            Image(systemName: isFavorite ? "heart.fill" : "heart")
+                                .foregroundStyle(isFavorite ? theme.accent : theme.dim)
+                                .font(.system(size: 16))
+                        }
+                        .tactile(.ghost)
+                        .accessibilityLabel(isFavorite ? "Remove \(food.name) from favorites" : "Add \(food.name) to favorites")
+                    }
                 }
+                if sizes.count > 1, let onPickSize { sizePills(onPickSize) }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 

@@ -123,4 +123,35 @@ final class ChainResultsTests: XCTestCase {
         XCTAssertEqual(out.foods.map(\.id), ["fries"])
         XCTAssertTrue(out.sizeChoices.isEmpty)
     }
+
+    func testBareBrandUSDARowIsDroppedWhenTheChainMenuAnswers() async {
+        // Real DB has usda-170721 "Mcdonald's" (alias "french fries") — a bare brand row.
+        let bareBrand = curated("usda-x", "McDonald's", ["mcdonald's", "french fries"])
+        let out = await run("mcdonalds fries", curated: [bareBrand])
+        XCTAssertEqual(out.foods.map(\.id), ["rest:mcdonalds:fries-medium"])
+
+        // A usda row with a non-chain word in its name is real food: it stays.
+        let realFood = curated("usda-y", "McDonald's fries", ["fries"])
+        let kept = await run("mcdonalds fries", curated: [bareBrand, realFood])
+        XCTAssertEqual(kept.foods.map(\.id), ["rest:mcdonalds:fries-medium", "usda-y"])
+
+        // Without a menu match the bare row is not filtered (nothing better to show).
+        let noHit = await run("mcdonalds zzzz", curated: [bareBrand])
+        XCTAssertFalse(noHit.foods.contains { $0.id == "rest:mcdonalds:fries-medium" })
+    }
+
+    func testMatchStrength() async {
+        let chain = await run("mcdonalds fries")
+        XCTAssertEqual(chain.strength, .strong)                                   // chain menu hit
+
+        let exact = await run("fries", curated: [curated("fries", "French fries", ["fries"])])
+        XCTAssertEqual(exact.strength, .strong)                                   // alias is exactly the query
+
+        let spread = await run("chicken spicy", curated: [curated("cs", "Chicken sandwich", ["spicy"])])
+        XCTAssertEqual(spread.foods.map(\.id), ["cs"])
+        XCTAssertEqual(spread.strength, .weak)                                    // words only across name + aliases
+
+        let nothing = await run("zzzzqx")
+        XCTAssertEqual(nothing.strength, .none)
+    }
 }
