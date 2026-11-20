@@ -30,6 +30,14 @@ final class FoodSearchTests: XCTestCase {
         index.matches(FoodSearchQuery(query)).map(\.id)
     }
 
+    func testCleanSuggestionsTrimDedupeDropTypedAndCap() {
+        let raw = "Crunchy Cereal"
+        let out = FoodSearch.cleanSuggestions(
+            ["  cereal ", "crunchy cereal", "CEREAL", "", "granola", "Muesli", "oats"], raw: raw)
+        XCTAssertEqual(out, ["cereal", "granola", "Muesli"])          // trimmed, typed + repeat + blank dropped, cap 3
+        XCTAssertEqual(FoodSearch.cleanSuggestions([], raw: raw), [])
+    }
+
     func testCaseApostrophesAndPluralsAreTheSameSearch() {
         let expected = ["donut", "dunkin", "krispy"]   // exact name first, then A–Z
         XCTAssertEqual(ids("donut"), expected)

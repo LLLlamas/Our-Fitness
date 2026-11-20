@@ -47,6 +47,10 @@ struct AddFoodSheet: View {
     /// How strongly `displayedResults` answer the query, and the query that was true for.
     @State private var strength: MatchStrength = .none
     @State private var strengthQuery: String = ""
+    /// Apple Intelligence "did you mean" alternatives for `aiCheckedQuery` (empty = none / AI off).
+    @State private var didYouMean: [String] = []
+    /// The last query AI was asked about (or that came from a tapped suggestion), so it runs once per query.
+    @State private var aiCheckedQuery: String = ""
     @State private var mealToLog: QuickMealLog?
     @State private var templateToLog: SavedMealTemplateDTO?
     @State private var describeText: String?
@@ -129,6 +133,7 @@ struct AddFoodSheet: View {
                             Text("Showing results for “\(correctedQuery)”")
                                 .font(.caption).foregroundStyle(theme.dim)
                         }
+                        if !didYouMean.isEmpty { didYouMeanSection }
                         if !displayedResults.isEmpty { sectionHeader("Foods") }
                     }
 
@@ -187,6 +192,17 @@ struct AddFoodSheet: View {
                              strengthQuery: $strengthQuery) { [] }
         // The root ToastHost sits under this sheet, so "Logged" would be hidden
         // while the sheet stays open after a pick; host a toast layer here too.
+        .onChange(of: query) { _, _ in didYouMean = [] }
+        // Weak or empty results: after a pause, ask Apple Intelligence (if available)
+        // for alternative queries. Re-keyed on the search outcome so a late result restarts it.
+        .task(id: "\(trimmedQuery)|\(strengthQuery)|\(String(describing: strength))") {
+            let q = trimmedQuery
+            guard !q.isEmpty, strength != .strong, strengthQuery == q,
+                  FoodQueryRewriteService.shared.isAvailable else { return }
+            try? await Task.sleep(nanoseconds: 1_200_000_000)
+            guard !Task.isCancelled, q == trimmedQuery, strengthQuery == q, strength != .strong else { return }
+            await checkDidYouMean(for: q)
+        }
         .overlay(alignment: .top) { ToastHost() }
         .presentationDetents([.large])
         .presentationBackground(theme.bg)
@@ -235,6 +251,11 @@ struct AddFoodSheet: View {
                     // Return with a description and no exact library hit → go straight
                     // to the describe form (full-DB + AI parse happens there).
                     if !trimmedQuery.isEmpty && displayedResults.isEmpty { describeText = trimmedQuery }
+                    else if !trimmedQuery.isEmpty && strength != .strong {
+                        // Results exist but only loosely: ask AI for alternatives now.
+                        let q = trimmedQuery
+                        Task { await checkDidYouMean(for: q) }
+                    }
                 }
             if !query.isEmpty {
                 Button { query = "" } label: { Image(systemName: "xmark") }
@@ -270,6 +291,36 @@ struct AddFoodSheet: View {
                 }
             }
         }
+    }
+
+    // MARK: - Did you mean (Apple Intelligence)
+
+    /// Ask the on-device model for alternative queries, once per query. Shows
+    /// nothing when AI is unavailable/off, fails, or the query moved on.
+    private func checkDidYouMean(for q: String) async {
+        guard aiCheckedQuery != q, strengthQuery == q, strength != .strong,
+              FoodQueryRewriteService.shared.isAvailable else { return }
+        aiCheckedQuery = q
+        let suggestions = await FoodQueryRewriteService.shared.suggestions(for: q)
+        guard q == trimmedQuery else { return }
+        didYouMean = suggestions ?? []
+    }
+
+    @ViewBuilder
+    private var didYouMeanSection: some View {
+        pillSection(header: "did you mean") {
+            ForEach(didYouMean, id: \.self) { suggestion in
+                Button {
+                    // A suggestion is already a vetted query: don't run AI on it again.
+                    aiCheckedQuery = suggestion
+                    query = suggestion
+                } label: {
+                    Text(suggestion)
+                }
+                .tactile(.pill)
+            }
+        }
+        AISearchAttribution()
     }
 
     // MARK: - Describe card (typed query)
@@ -956,6 +1007,22 @@ struct DescribeMealForm: View {
                 .foregroundStyle(theme.text)
                 .font(.system(.callout, design: .monospaced))
                 .focused($focused, equals: field)
+        }
+    }
+}
+
+/// Credit line under the AI-suggested searches. Same look as the describe form's
+/// attribution (that one is private to `DescribeMealForm`).
+private struct AISearchAttribution: View {
+    @Environment(\.theme) private var theme
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 6) {
+            Image(systemName: "sparkles")
+                .font(.system(size: 10)).foregroundStyle(theme.accent)
+            Text("Search ideas from Apple Intelligence, on this device. Foods and numbers come from the food database.")
+                .font(.caption2).foregroundStyle(theme.dim)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 }

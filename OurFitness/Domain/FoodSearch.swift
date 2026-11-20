@@ -26,6 +26,24 @@ public enum FoodSearch {
         return curated + ranked(usda)
     }
 
+    /// Model-proposed alternative queries made safe to show: trimmed, blanks and
+    /// repeats (case-insensitive) dropped, anything equal to what was typed
+    /// dropped, at most `maxSuggestions`. Order kept.
+    static let maxSuggestions = 3
+
+    static func cleanSuggestions(_ suggestions: [String], raw: String) -> [String] {
+        let typed = raw.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        var seen: Set<String> = [typed]
+        var out: [String] = []
+        for s in suggestions {
+            let t = s.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !t.isEmpty, seen.insert(t.lowercased()).inserted else { continue }
+            out.append(t)
+            if out.count == maxSuggestions { break }
+        }
+        return out
+    }
+
     /// Match quality, then foods from chains rare near NYC last, then A–Z.
     static func ranked(_ hits: [(CommonFood, Int)]) -> [CommonFood] {
         hits.sorted { a, b in
