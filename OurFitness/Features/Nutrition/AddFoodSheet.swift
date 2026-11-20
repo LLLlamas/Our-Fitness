@@ -300,6 +300,9 @@ struct AddFoodSheet: View {
     private func checkDidYouMean(for q: String) async {
         guard aiCheckedQuery != q, strengthQuery == q, strength != .strong,
               FoodQueryRewriteService.shared.isAvailable else { return }
+        // A multi-food sentence ("2 eggs and toast") has no single library match by
+        // design; the describe card already handles it, so don't second-guess it.
+        if displayedResults.isEmpty, FoodParser.parse(text: q, includeDatabase: false).hasMatches { return }
         aiCheckedQuery = q
         let suggestions = await FoodQueryRewriteService.shared.suggestions(for: q)
         guard q == trimmedQuery else { return }
