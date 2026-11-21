@@ -1,6 +1,6 @@
 // Single "Add food" surface — replaces the separate "Log a meal" (free text) and
 // "Browse" (library) sheets. One field does both jobs:
-//   • empty  → "My Foods": favorites · recent (a list at the last portion, with
+//   • empty  → "My Foods": favorites · recent (a compact scrolling list at the last portion, with
 //              a heart on each) · recipes & my foods, each food shown once, + a
 //              manual-entry link
 //   • typed  → a "log what you described" card (FoodParser, AI-refined on open)
@@ -409,20 +409,22 @@ struct AddFoodSheet: View {
             }
         }
         if !sections.recent.isEmpty {
+            let scrolls = sections.recent.count > Self.recentVisibleRows
             VStack(alignment: .leading, spacing: 6) {
-                sectionHeader("recent")
-                let rows = LazyVStack(spacing: 8) {
-                    ForEach(sections.recent) { entry in recentRow(entry) }
+                HStack {
+                    sectionHeader("recent")
+                    Spacer()
+                    if scrolls {
+                        HStack(spacing: 3) {
+                            Text("\(sections.recent.count) · scroll")
+                            Image(systemName: "chevron.down")
+                        }
+                        .font(.system(size: 10, weight: .medium))
+                        .foregroundStyle(theme.dim)
+                        .accessibilityHidden(true)
+                    }
                 }
-                // More than three: its own scroller (about three rows tall, at most
-                // 35% of the container so a small screen with the keyboard up isn't
-                // taken over) so the sections below stay on screen with up to 8 recents.
-                if sections.recent.count > 3 {
-                    ScrollView { rows.padding(.vertical, 2) }
-                        .containerRelativeFrame(.vertical) { height, _ in min(280, height * 0.35) }
-                } else {
-                    rows
-                }
+                recentList(sections.recent, scrolls: scrolls)
             }
         }
         if !sections.recipes.isEmpty {
@@ -463,46 +465,102 @@ struct AddFoodSheet: View {
         }
     }
 
-    /// One recent log as a row — same look as a search result: name (+ "×1.5"
-    /// when logged at another portion), calories and macros of what was logged,
+    /// Recent rows shown before the list scrolls; the box is this many rows
+    /// plus most of the next, so a cut-off row reads as "more below".
+    private static let recentVisibleRows = 4
+    private static let recentRowHeight: CGFloat = 58
+
+    /// Recent as one bordered list (rows split by hairlines). Past
+    /// `recentVisibleRows` it gets its own scroller — capped at 45% of the
+    /// container so a small screen with the keyboard up isn't taken over — with
+    /// a flashed indicator and a bottom fade, so the sections below stay on screen.
+    @ViewBuilder
+    private func recentList(_ entries: [FoodLogEntryDTO], scrolls: Bool) -> some View {
+        let shape = RoundedRectangle(cornerRadius: 16, style: .continuous)
+        let rows = VStack(spacing: 0) {
+            ForEach(Array(entries.enumerated()), id: \.element.id) { index, entry in
+                if index > 0 {
+                    Rectangle().fill(theme.line).frame(height: 1).padding(.leading, 14)
+                }
+                recentRow(entry)
+            }
+        }
+        Group {
+            if scrolls {
+                ScrollView {
+                    rows
+                }
+                .contentMargins(.bottom, 18, for: .scrollContent)
+                .scrollIndicators(.visible)
+                .scrollIndicatorsFlash(onAppear: true)
+                .containerRelativeFrame(.vertical) { height, _ in
+                    min(Self.recentRowHeight * (CGFloat(Self.recentVisibleRows) + 0.65), height * 0.45)
+                }
+                .overlay(alignment: .bottom) {
+                    LinearGradient(colors: [theme.card.opacity(0), theme.card.opacity(0.85)],
+                                   startPoint: .top, endPoint: .bottom)
+                        .frame(height: 14)
+                        .allowsHitTesting(false)
+                }
+            } else {
+                rows
+            }
+        }
+        .background(theme.card, in: shape)
+        .clipShape(shape)
+        .overlay { shape.strokeBorder(theme.line, lineWidth: 1) }
+    }
+
+    /// One recent log as a compact list row: name (+ "×1.5" when logged at
+    /// another portion), then calories, protein and the day it was logged;
     /// tap to reopen at that portion, heart when the entry is one known food.
     private func recentRow(_ entry: FoodLogEntryDTO) -> some View {
         let name = entry.customName ?? "Meal"
         let key = FoodAffinity.identityKey(of: entry)
         let favoritable = !key.hasPrefix("name:")
         let p = entry.totalNutrition
-        return PressableCard(action: {
-            mealToLog = QuickMealLog(name: name, emoji: "🍽️", ingredients: ingredients(for: entry))
-        }) {
-            HStack(alignment: .top, spacing: 12) {
-                VStack(alignment: .leading, spacing: 4) {
+        return HStack(spacing: 10) {
+            Button {
+                mealToLog = QuickMealLog(name: name, emoji: "🍽️", ingredients: ingredients(for: entry))
+            } label: {
+                VStack(alignment: .leading, spacing: 3) {
                     HStack(spacing: 4) {
                         Text(name)
                             .font(.system(size: 15, weight: .semibold))
                             .foregroundStyle(theme.text)
+                            .lineLimit(1)
                         if let portion = portionLabel(for: entry) {
                             Text(portion).font(.caption).foregroundStyle(theme.dim)
                         }
                     }
-                    Text("\(p.calories) cal · \(p.proteinG)g pro · \(p.carbsG)g carbs · \(p.fatG)g fat")
-                        .font(.system(.caption2, design: .monospaced))
-                        .foregroundStyle(theme.accent)
-                    Text("Logged \(loggedDayLabel(entry.date))")
-                        .font(.caption).foregroundStyle(theme.dim)
-                }
-                Spacer(minLength: 0)
-                if favoritable {
-                    let isFavorite = favoriteIds.contains(key)
-                    Button { toggleFavorite(key) } label: {
-                        Image(systemName: isFavorite ? "heart.fill" : "heart")
-                            .foregroundStyle(isFavorite ? theme.accent : theme.dim)
-                            .font(.system(size: 16))
+                    HStack(spacing: 0) {
+                        Text("\(p.calories) cal · \(p.proteinG)g pro")
+                            .font(.system(.caption2, design: .monospaced))
+                            .foregroundStyle(theme.accent)
+                        Text(" · \(loggedDayLabel(entry.date))")
+                            .font(.caption2).foregroundStyle(theme.dim)
                     }
-                    .tactile(.ghost)
-                    .accessibilityLabel(isFavorite ? "Remove \(name) from favorites" : "Add \(name) to favorites")
+                    .lineLimit(1)
                 }
+                .frame(maxWidth: .infinity, minHeight: Self.recentRowHeight - 18, alignment: .leading)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityHint("\(p.carbsG)g carbs, \(p.fatG)g fat. Logged \(loggedDayLabel(entry.date))")
+            if favoritable {
+                let isFavorite = favoriteIds.contains(key)
+                Button { toggleFavorite(key) } label: {
+                    Image(systemName: isFavorite ? "heart.fill" : "heart")
+                        .foregroundStyle(isFavorite ? theme.accent : theme.dim)
+                        .font(.system(size: 16))
+                }
+                .tactile(.ghost)
+                .accessibilityLabel(isFavorite ? "Remove \(name) from favorites" : "Add \(name) to favorites")
             }
         }
+        .padding(.leading, 14)
+        .padding(.trailing, 6)
+        .padding(.vertical, 9)
     }
 
     /// "today" / "yesterday" / "Mon, Nov 17" — lowercase, unlike `MealHistoryDay.label`.

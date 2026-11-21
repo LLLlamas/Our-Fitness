@@ -177,3 +177,9 @@ Known limitation (not fixed, by decision): −1 stays enabled until the card ref
 Branch `feat/recent-scroll` (416c058, fbe8815, 72f2912, ab23c70 + this commit). On a throwaway iPhone 17 simulator (created and deleted by UDID): `xcodebuild test -scheme OurFitness` TEST SUCCEEDED (unit + persistence, 0 failures); UI smoke test (`-scheme OurFitnessUITests`, fresh simulator, onboarding + every tab) TEST SUCCEEDED, 2 tests; Release `xcodebuild build` (generic iOS Simulator) BUILD SUCCEEDED. The new Swift lines were scanned for force-unwraps and `try!`: there are none outside tests. Not verified: anything on a device, the Recent box with the keyboard up, small width or large Dynamic Type, −1 after midnight without a redraw.
 
 Shipped 2026-11-21 from the Mac (fastlane not installed), `main` at `c64651f` (merge of PR #21; same tree as the QA-tested `7535eb0`). `validate-ci-invariants.sh` exit 0; project.yml unchanged, so no regeneration. Release `xcodebuild archive` with the 2026-11-05 command-line signing overrides → ARCHIVE SUCCEEDED, watch app embedded. `-exportArchive` (`app-store-connect`, `destination upload`, automatic signing, `manageAppVersionAndBuildNumber`, `uploadSymbols`) → "Upload succeeded", EXPORT SUCCEEDED. ASC build number not captured locally — check TestFlight. Not verified: ASC processing finishing, the build on a device.
+
+## 2026-11-21 — Add food Recent list (branch fix/recent-list)
+
+- Recent rebuilt as one bordered compact list; > 4 rows scroll in their own box (~4⅔ rows, 45% cap), flashed indicator, bottom fade, "N · scroll" hint.
+- Verified: `xcodebuild build` (iPhone 17 sim) BUILD SUCCEEDED; throwaway XCUITest logged 8 foods on a fresh install and screenshotted Add food — 5th row peeks, inner list scrolls to the last row while the sheet stays put, keyboard-up state shows ~2½ rows. Test file deleted afterwards.
+- Not run: unit/persistence suites (no Domain or Data change); device check.
