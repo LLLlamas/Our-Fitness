@@ -4,7 +4,7 @@
 
 Full incident narratives: [docs/ci-history.md](ci-history.md). Setup: [docs/setup.md](setup.md).
 
-- **Local Mac (since 2026-08-08):** Xcode 26.6 / Swift 6.3.3 / XcodeGen 2.46 on an M5 Pro. Build and test **locally** — never push to CI to find out whether Swift compiles. The test suite runs locally too: `bundle exec fastlane ios tests` (after `xcodegen generate`).
+- **Local Mac (since 2026-08-08; Xcode 27.2 as of 2026-11-20, was 26.6):** XcodeGen 2.46 on an M5 Pro. Build and test **locally** — never push to CI to find out whether Swift compiles. The test suite runs locally too: `xcodebuild test -project OurFitness.xcodeproj -scheme OurFitness -destination 'platform=iOS Simulator,name=iPhone 17' CODE_SIGNING_ALLOWED=NO` (after `xcodegen generate`). The fastlane gems are not installed on this Mac (`bundle exec fastlane` → "command not found"); `bundle exec fastlane ios tests` (the `tests` lane, `scan` on the same scheme) works only after `bundle install`.
   ```bash
   set -o pipefail
   xcodegen generate    # only after editing project.yml

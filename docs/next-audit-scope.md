@@ -1,4 +1,4 @@
-# Next audit scope — prepared 2026-09-14, revised 2026-10-18
+# Next audit scope — prepared 2026-09-14, revised 2026-11-21
 
 Start with CLAUDE.md. This is a scoped backlog, not a claim that the remaining
 privacy features are implemented.
@@ -39,6 +39,26 @@ privacy features are implemented.
   promising exactly-once delivery under storage failure. Reconciliation exists;
   persistent retry does not. Include profile/erase generation boundaries.
 - Extract large view sections only when the measured change benefits from it.
+
+## Unverified from the 2026-11-20/21 Add food and Train work
+
+Built and unit/persistence-tested on the iPhone 17 simulator only
+([validation-log.md](validation-log.md), last three entries). Still open:
+
+- Device and watch: haptics (`Haptics.tap()` on −1, `Haptics.bump()` on the
+  counter's ±1), the keyboard Done toolbar on the hold and Edit Set fields, and
+  the watch app against this build (unchanged, not run).
+- Tapping a "Did you mean" pill (and the on-device AI rewrite timing).
+- The Add food Recent box (min(280 pt, 35%)) with the keyboard up.
+- Small width (iPhone SE) and large Dynamic Type: Train rows with −1/+1, the
+  rep counter wheel between its buttons, the minute row with a double-digit
+  Today value.
+- −1 left open across local midnight: stays enabled until the card refreshes
+  (the repo call then writes nothing). Known limitation, not fixed by decision;
+  re-check if a fix is wanted.
+- "Log hold" button hierarchy: an idea, not decided. With the timer open,
+  "Log hold" (`.tactile(.primary)`, `theme.ok` fill) and "Start hold"
+  (`.tactile(.primary)`) are both primary.
 
 ## Usage budget discipline
 

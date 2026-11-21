@@ -72,7 +72,7 @@ xcodebuild -project OurFitness.xcodeproj -scheme OurFitness \
   CODE_SIGNING_ALLOWED=NO build 2>&1 | grep -E '(error:|BUILD)'
 ```
 
-Tests: `bundle exec fastlane ios tests` (after `xcodegen generate`). UI smoke test, simulator conventions, signing, XcodeGen and TestFlight rules: [docs/ci.md](docs/ci.md). Stack: SwiftUI (iOS 17+), SwiftData, HealthKit, Swift Charts, XCTest, XcodeGen, Fastlane; no backend.
+Tests (unit + persistence): `xcodebuild test -project OurFitness.xcodeproj -scheme OurFitness -destination 'platform=iOS Simulator,name=iPhone 17' CODE_SIGNING_ALLOWED=NO` — the path used on this Mac, where the fastlane gems are not installed. `bundle exec fastlane ios tests` runs the same scheme once `bundle install` has been done. UI smoke test, simulator conventions, signing, XcodeGen and TestFlight rules: [docs/ci.md](docs/ci.md). Stack: SwiftUI (iOS 17+), SwiftData, HealthKit, Swift Charts, XCTest, XcodeGen, Fastlane; no backend.
 
 ## Design rules
 
@@ -98,7 +98,7 @@ Each `docs/map/` file is a table of "goal → file(s) and the rules that bind th
 | Calorie math | [docs/calorie-math.md](docs/calorie-math.md) | Net-MET formula, per-activity multipliers, step-overlap rule |
 | Data model | [docs/data-model.md](docs/data-model.md) | Entities, append-only logs, legacy `CardioSessionDTO`, pinned raw values |
 | CI / signing / TestFlight | [docs/ci.md](docs/ci.md) | Local commands, UI smoke test, signing, XcodeGen rules; incident history in [docs/ci-history.md](docs/ci-history.md) |
-| Validation history | [docs/validation-log.md](docs/validation-log.md) | What was verified and not at each milestone (historical) |
+| Validation history | [docs/validation-log.md](docs/validation-log.md) | What was verified and not at each milestone (historical; entries before 2026-11-01 in [docs/validation-log-archive.md](docs/validation-log-archive.md)) |
 
 ## Milestone documentation
 

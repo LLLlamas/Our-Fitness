@@ -4,7 +4,7 @@
 > Sections 3.1 to 3.5 are in the code; the living description is in [map/workouts.md](map/workouts.md)
 > and [map/progress.md](map/progress.md) (code and those rows win over this plan wherever they differ).
 > Section 1 below is the pre-change snapshot, kept for the reasoning. Verification record:
-> [validation-log.md](validation-log.md).
+> [validation-log-archive.md](validation-log-archive.md) (Oct 2026 entries).
 >
 > **Built**
 > - Pure engine `Domain/RepHistory.swift`: reps at an exact weight (0.01 lb canonical) by day and ISO week, last time, same day last week, comparisons, per-weight bests, new-best detection, weekly reps and its notes.
