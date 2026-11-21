@@ -171,3 +171,7 @@ Simulator: Pushups +1 toast read "+1 rep · 25 lb"; Carried Baby at "10 min" Tod
 
 Known limitation (not fixed, by decision): −1 stays enabled until the card refreshes if a row is left open across midnight; the repo call then finds no set today and writes nothing. Still not verified: the Recent box with the keyboard up, haptics on a device, small widths / large Dynamic Type.
 
+
+## Recent scroller, inline Train ±1, docs tidy (2026-11-21) — pre-ship QA
+
+Branch `feat/recent-scroll` (416c058, fbe8815, 72f2912, ab23c70 + this commit). On a throwaway iPhone 17 simulator (created and deleted by UDID): `xcodebuild test -scheme OurFitness` TEST SUCCEEDED (unit + persistence, 0 failures); UI smoke test (`-scheme OurFitnessUITests`, fresh simulator, onboarding + every tab) TEST SUCCEEDED, 2 tests; Release `xcodebuild build` (generic iOS Simulator) BUILD SUCCEEDED. The new Swift lines were scanned for force-unwraps and `try!`: there are none outside tests. Not verified: anything on a device, the Recent box with the keyboard up, small width or large Dynamic Type, −1 after midnight without a redraw.
