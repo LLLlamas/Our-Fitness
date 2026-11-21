@@ -3,17 +3,24 @@
 //
 // Header ring: distinct exercises logged today / total, plus today's burn.
 // Each row picks its controls from the exercise's SHAPE, never from the goal:
-//   • isometric            → tap opens the hold timer
-//   • tracks per-set weight → tap opens the rep counter (with its weight field)
-//   • one-tap loggable      → inline +1 (or +1 min) with undo; tapping the
-//                             row still opens the rep counter for bigger sets.
-//                             Undo removes only a set THIS +1 created (tracked
-//                             in view state) — never a rep-counter set; those
-//                             are edited/deleted via the clock → SetHistorySheet
+//   • isometric            → tap opens the hold timer; no ±1
+//   • every other shape     → inline −1 / +1 (−1 min / +1 min for a duration),
+//                             so a rep can be added or taken back without
+//                             opening the counter; tapping the row body still
+//                             opens the rep counter (with its weight field when
+//                             the lift tracks per-set weight) for bigger sets.
+//                             +1 logs a new 1-rep set (a per-set-weight lift is
+//                             stamped with the last weight ever used for it, else
+//                             bodyweight). −1 takes one rep off TODAY's newest set
+//                             (`Repos.removeOneFromToday`: a 1-rep set is deleted,
+//                             a longer one is re-priced through `updateSet`);
+//                             disabled at 0 today and never touches yesterday.
+//                             Whole sets are edited/deleted via the clock →
+//                             SetHistorySheet.
 // Every row also carries the clock (→ SetHistorySheet, the one set editor) and
 // ⓘ (→ ExerciseInfoSheet). Press-and-hold on the row body asks to delete the
 // exercise (confirmed); SetHistorySheet's "Delete exercise" is the explicit path.
-// The hold rides on the row-body buttons only, so +1 / undo / clock / ⓘ keep
+// The hold rides on the row-body buttons only, so −1 / +1 / clock / ⓘ keep
 // their plain taps.
 //
 // Calories shown here are the stored `caloriesEst` of the logged sets; every
@@ -40,9 +47,6 @@ struct ExercisesCard: View {
     @State private var activeHistory: ExerciseDTO?
     @State private var ringGlow: Bool = false
     @State private var reveal: CGFloat = 0
-    /// Set ids the inline +1 wrote this session, per exercise, newest last —
-    /// the only sets the row's undo may remove.
-    @State private var quickLoggedSetIds: [String: [UUID]] = [:]
     /// Set by a press-and-hold on a row; drives the delete confirmation. While
     /// it's non-nil the row-body tap is ignored, so lifting the finger after
     /// the hold doesn't also open the rep counter.
@@ -319,8 +323,8 @@ struct ExercisesCard: View {
                 .simultaneousGesture(deleteHold(ex))
                 .accessibilityHidden(true)
 
-                if ex.isOneTapLoggable {
-                    quickLogControls(ex)
+                if !ex.isIsometric {
+                    quickLogControls(ex, todaySets: stats.todaySets)
                 }
             }
         }
@@ -369,24 +373,27 @@ struct ExercisesCard: View {
         return " · \(Units.formatWeightWithUnit(lb: lb, system: unitSystem, decimals: 0))"
     }
 
+    /// Inline −1 / +1 for every non-isometric row. `todaySets` gates −1: with
+    /// nothing logged today there is nothing to take back.
     @ViewBuilder
-    private func quickLogControls(_ ex: ExerciseDTO) -> some View {
+    private func quickLogControls(_ ex: ExerciseDTO, todaySets: Int) -> some View {
+        let isMin = ex.kind == .duration
+        let unit = isMin ? "minute" : "rep"
         HStack(spacing: 6) {
-            if undoableQuickLogId(for: ex) != nil {
-                Button { undoLastSet(for: ex) } label: {
-                    Image(systemName: "arrow.uturn.backward")
-                        .font(.system(size: 13))
-                        .foregroundStyle(theme.dim)
-                }
-                .tactile(.ghost)
-                .accessibilityLabel("Undo last \(ex.name)")
-            }
-            Button { quickLog(ex) } label: {
-                Text(ex.kind == .duration ? "+1 min" : "+1")
+            Button { removeOne(ex) } label: {
+                Text(isMin ? "\u{2212}1 min" : "\u{2212}1").lineLimit(1).minimumScaleFactor(0.7)
             }
             .tactile(.secondary)
-            .accessibilityLabel(ex.kind == .duration ? "Log 1 minute of \(ex.name)" : "Log 1 \(ex.name)")
+            .disabled(todaySets == 0)
+            .accessibilityLabel("Remove 1 \(unit) of \(ex.name)")
+
+            Button { quickLog(ex) } label: {
+                Text(isMin ? "+1 min" : "+1").lineLimit(1).minimumScaleFactor(0.7)
+            }
+            .tactile(.primary)
+            .accessibilityLabel("Add 1 \(unit) of \(ex.name)")
         }
+        .layoutPriority(1)
     }
 
     // MARK: - Cells
@@ -434,6 +441,14 @@ struct ExercisesCard: View {
         // A fixed-load movement stamps the load it is done at, so a later edit
         // of the exercise's weight never re-reads this rep (nil for the rest).
         let load = exercise.fixedLoadLb(forRowWeight: nil, holdSeconds: nil)
+        // The exercise's whole history BEFORE this row (the card's own query only
+        // holds today + yesterday), so the new-best check doesn't depend on refresh timing.
+        let rowsBefore = Repos.setHistory(ctx, userId: profile.id, exerciseId: exercise.id, limit: 100_000)
+        // A per-set-weight lift has no fixed load: stamp the last weight ever used
+        // for it — the value the rep counter pre-fills — else bodyweight (nil).
+        let rowWeight = exercise.tracksPerSetWeight
+            ? RepHistory.lastWeightLb(for: exercise, rows: rowsBefore)
+            : load
         let cal = Repos.setCaloriesEstimate(
             exercise: exercise, reps: amount, holdSeconds: nil,
             bodyWeightLb: profile.weightLb, loadLb: load
@@ -441,15 +456,11 @@ struct ExercisesCard: View {
         let dto = WorkoutSetDTO(
             userId: profile.id,
             exerciseId: exercise.id,
-            weightLb: load,
+            weightLb: rowWeight,
             reps: amount,
             caloriesEst: cal
         )
-        // The exercise's whole history BEFORE this row (the card's own query only
-        // holds today + yesterday), so the new-best check doesn't depend on refresh timing.
-        let rowsBefore = Repos.setHistory(ctx, userId: profile.id, exerciseId: exercise.id, limit: 100_000)
         guard Repos.addSet(ctx, dto) else { return }
-        quickLoggedSetIds[exercise.id, default: []].append(dto.id)
         Task { @MainActor in
             ringGlow = true
             try? await Task.sleep(nanoseconds: 450_000_000)
@@ -485,28 +496,19 @@ struct ExercisesCard: View {
             Repos.deleteExercise(ctx, id: ex.id)
         }
         guard deleted else { return }
-        quickLoggedSetIds[ex.id] = nil
         toasts.show(Toast(title: "\(ex.name) deleted",
                           detail: "Exercise and its sets removed.",
                           accent: .warn, symbol: "trash.fill"))
     }
 
-    /// Newest +1 set for this exercise that still exists today. Sets deleted
-    /// in SetHistorySheet (or yesterday's, after midnight) are skipped.
-    private func undoableQuickLogId(for exercise: ExerciseDTO) -> UUID? {
-        guard let ids = quickLoggedSetIds[exercise.id], !ids.isEmpty else { return nil }
-        let todayStart = Calendar.current.startOfDay(for: Date())
-        let live = Set(setModels.lazy
-            .filter { $0.exerciseId == exercise.id && $0.timestamp >= todayStart }
-            .map(\.id))
-        return ids.last(where: { live.contains($0) })
-    }
-
-    private func undoLastSet(for exercise: ExerciseDTO) {
-        guard let id = undoableQuickLogId(for: exercise) else { return }
-        guard Repos.deleteSet(ctx, id: id) else { return }
-        quickLoggedSetIds[exercise.id]?.removeAll { $0 == id }
-        toasts.show(Toast(title: "Undone", detail: "\(exercise.name) · last log removed",
-                          accent: .warn, symbol: "arrow.uturn.backward"))
+    /// Inline −1: one rep (or minute) off today's newest set for this exercise.
+    /// Success-only feedback (rule 9); a quiet light tap, no toast.
+    private func removeOne(_ exercise: ExerciseDTO) {
+        let removed: Bool = withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            Repos.removeOneFromToday(ctx, userId: profile.id, exerciseId: exercise.id,
+                                     bodyWeightLb: profile.weightLb)
+        }
+        guard removed else { return }
+        Haptics.tap()
     }
 }

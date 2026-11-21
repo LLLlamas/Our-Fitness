@@ -471,4 +471,26 @@ final class RepHistoryTests: XCTestCase {
         XCTAssertEqual(RepHistory.durationText(seconds: 120), "2 min")
         XCTAssertEqual(RepHistory.durationText(seconds: 130), "2 min 10 s")
     }
+
+    // MARK: - newestSet (inline −1 target)
+
+    func test_newestSet_picksTodaysLatestRowOfThatExercise() {
+        var utc = Calendar(identifier: .gregorian); utc.timeZone = TimeZone(identifier: "UTC")!
+        let rows = [
+            row(pushups, nil, 10, "2026-05-27", hour: 8),
+            row(pushups, nil, 1, "2026-05-27", hour: 11),
+            row(bench, 135, 5, "2026-05-27", hour: 11),
+            row(pushups, nil, 30, "2026-05-26", hour: 20),
+        ]
+        let hit = RepHistory.newestSet(on: now, exerciseId: "pushups", rows: rows, calendar: utc)
+        XCTAssertEqual(hit?.timestamp, ts("2026-05-27", 11))
+        XCTAssertEqual(hit?.exerciseId, "pushups")
+    }
+
+    func test_newestSet_nilWhenOnlyEarlierDaysLogged() {
+        var utc = Calendar(identifier: .gregorian); utc.timeZone = TimeZone(identifier: "UTC")!
+        let rows = [row(pushups, nil, 30, "2026-05-26", hour: 23)]
+        XCTAssertNil(RepHistory.newestSet(on: now, exerciseId: "pushups", rows: rows, calendar: utc))
+        XCTAssertNil(RepHistory.newestSet(on: now, exerciseId: "pushups", rows: [], calendar: utc))
+    }
 }

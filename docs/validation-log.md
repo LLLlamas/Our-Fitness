@@ -243,3 +243,16 @@ Verified:
 - `-exportArchive`: "Upload succeeded", EXPORT SUCCEEDED.
 
 Not verified: ASC processing finishing, the build on a device, and the new toast text on screen.
+
+## Recent list pinned search + inline Train −1/+1 (branch feat/recent-scroll) — validation record
+
+Part 1 (`416c058`): Add food search field pinned above the scroll area; Recent rows get a "Logged today / yesterday / Mon, Nov 17" line; more than 3 recents scroll inside a 280 pt box. Part 2: every non-isometric Train row carries inline −1 / +1 (−1 min / +1 min for duration).
+
+Assumptions (orchestrator decisions, applied as written): isometric rows keep tap-opens-hold-timer and get no ±1; +1 on a per-set-weight lift stamps the last weight ever used for it (`RepHistory.lastWeightLb` over the full history, nil = bodyweight) while calories go through `Repos.setCaloriesEstimate` exactly like the rep counter (which also passes no load for a per-set-weight lift); −1 takes one rep/minute off today's newest set (delete when it is 1), disabled at 0 today, no toast, light haptic (`Haptics.tap()`) on success only. `quickLoggedSetIds` / `undoableQuickLogId` / `undoLastSet` were removed, so −1 can now shorten a rep-counter set as well as a +1 set.
+
+Ran (Xcode 27.2, own iPhone 17 simulator on iOS 27.2, `CODE_SIGNING_ALLOWED=NO`, `xcodebuild test`, fastlane absent): app BUILD SUCCEEDED; full run `OurFitnessTests` 605 tests, 0 failures; `OurFitnessPersistenceTests` 41 tests, 0 failures (new: 2 `RepHistoryTests` for `newestSet`, 6 `RemoveOneTodayTests`).
+
+Simulator walk (throwaway XCUITest, not committed; erased simulator): six foods logged through Add food (Banana, Egg, Apple, Oatmeal, Chicken breast, Rice); the empty-query view showed the pinned field, three Recent rows with "Logged today", the inner Recent box scrolled on its own (Apple / Egg drop soup appeared) with the search bar staying put, and a typed "chicken" result list scrolled under the pinned field. On Train (Lifted Baby, Carried Baby, Lifted Stroller plus a custom Pushups, which is `tracksPerSetWeight`): −1 was disabled at 0 on every row; a 10-rep, 25 lb counter set on Pushups, then +1 twice (history sheet showed 3 sets today) listed the two 1-rep sets at 25 lb (stamped) and the 10-rep set; −1 twice removed the two 1-rep sets, a third −1 turned the 10-rep set into 9 reps · 25 lb; Lifted Baby +1 then −1 returned to disabled, a 10-rep counter set became 9 with −1; Carried Baby +1 min then −1 min returned to disabled. "−1 MIN / +1 MIN" fit on one line at 402 pt width.
+
+Not verified: haptics on a device; the layout at small widths (iPhone SE) or large Dynamic Type; the minute row with a double-digit Today value (the Today cell wraps "1 min" over two lines even now, so a wider value may squeeze the buttons); a −1 across local midnight; the watch (unchanged, not run); no TestFlight build made.
+

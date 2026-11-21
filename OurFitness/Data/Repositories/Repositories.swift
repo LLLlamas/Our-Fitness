@@ -535,6 +535,31 @@ public enum Repos {
         }
     }
 
+    /// Take one rep (or one minute) off TODAY's total for an exercise: the newest
+    /// set logged today loses one rep through `updateSet` (so its calories
+    /// re-price exactly like an edit), or is deleted when it is a single rep.
+    /// Never touches an earlier day. Returns false when nothing was logged today
+    /// or the write failed (nothing changed).
+    @discardableResult
+    public static func removeOneFromToday(
+        _ ctx: ModelContext, userId: UUID, exerciseId: String, bodyWeightLb: Double, now: Date = Date()
+    ) -> Bool {
+        let dayStart = Calendar.current.startOfDay(for: now)
+        let desc = FetchDescriptor<WorkoutSetModel>(
+            predicate: #Predicate {
+                $0.userId == userId && $0.exerciseId == exerciseId && $0.timestamp >= dayStart
+            }
+        )
+        guard let rows = try? ctx.fetch(desc).map(\.snapshot),
+              let newest = RepHistory.newestSet(on: now, exerciseId: exerciseId, rows: rows)
+        else { return false }
+        if newest.reps > 1 {
+            return updateSet(ctx, id: newest.id, reps: newest.reps - 1, weightLb: newest.weightLb,
+                             holdSeconds: newest.holdSeconds, bodyWeightLb: bodyWeightLb)
+        }
+        return deleteSet(ctx, id: newest.id)
+    }
+
     /// The log-time calorie math, re-derived for an edited set.
     ///
     /// Public so the edit sheet can preview the exact figure the save will store

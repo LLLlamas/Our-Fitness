@@ -200,6 +200,17 @@ public enum RepHistory {
             .first
     }
 
+    /// The newest set of `exerciseId` logged on `now`'s calendar day — what the
+    /// Train row's inline −1 takes a rep (or minute) from. Never a set from an
+    /// earlier day. Nil when nothing was logged today.
+    public static func newestSet(
+        on now: Date, exerciseId: String, rows: [WorkoutSetDTO], calendar: Calendar = .current
+    ) -> WorkoutSetDTO? {
+        rows
+            .filter { $0.exerciseId == exerciseId && calendar.isDate($0.timestamp, inSameDayAs: now) }
+            .max { $0.timestamp < $1.timestamp }
+    }
+
     // MARK: - Reference days ("last time", "same day last week")
 
     /// The most recent day trained strictly before `dayKey`. `days` as returned
