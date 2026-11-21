@@ -414,11 +414,12 @@ struct AddFoodSheet: View {
                 let rows = LazyVStack(spacing: 8) {
                     ForEach(sections.recent) { entry in recentRow(entry) }
                 }
-                // More than three: its own scroller (about three rows tall) so the
-                // sections below stay on screen with up to 8 recents.
+                // More than three: its own scroller (about three rows tall, at most
+                // 35% of the container so a small screen with the keyboard up isn't
+                // taken over) so the sections below stay on screen with up to 8 recents.
                 if sections.recent.count > 3 {
                     ScrollView { rows.padding(.vertical, 2) }
-                        .frame(height: 280)
+                        .containerRelativeFrame(.vertical) { height, _ in min(280, height * 0.35) }
                 } else {
                     rows
                 }
@@ -504,7 +505,7 @@ struct AddFoodSheet: View {
         }
     }
 
-    /// "today" / "yesterday" / "Mon, Nov 17" — same wording as `MealHistoryDay.label`.
+    /// "today" / "yesterday" / "Mon, Nov 17" — lowercase, unlike `MealHistoryDay.label`.
     private func loggedDayLabel(_ key: String) -> String {
         if key == Dates.dayKey() { return "today" }
         let yesterday = Dates.dayKey(Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date())

@@ -403,15 +403,18 @@ public struct ExerciseDTO: Codable, Equatable, Sendable, Identifiable {
     }
 
     /// A loadable lift whose weight changes set to set (barbell press, curl…) —
-    /// no fixed `loadLb`, counted in reps, not a hold. Logging one needs a weight
-    /// field, so it gets the rep counter rather than a one-tap +1.
+    /// no fixed `loadLb`, counted in reps, not a hold. Logging a real set needs a
+    /// weight field (the rep counter); the Train row's inline +1 stamps the last
+    /// weight used for it.
     public var tracksPerSetWeight: Bool {
         !isIsometric && kind == .reps && loadLb == nil
             && (category == .compound || category == .isolation)
     }
 
     /// One tap records this correctly: no per-set weight to enter and not a
-    /// timed hold (a hold is `{reps:1, holdSeconds:N}`).
+    /// timed hold (a hold is `{reps:1, holdSeconds:N}`). Drives the watch
+    /// quick-log filter; the Train row's inline ±1 shows for every non-isometric
+    /// row, not just these.
     public var isOneTapLoggable: Bool {
         !isIsometric && !tracksPerSetWeight
     }

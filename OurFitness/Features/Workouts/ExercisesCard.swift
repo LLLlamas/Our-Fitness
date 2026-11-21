@@ -373,27 +373,27 @@ struct ExercisesCard: View {
         return " · \(Units.formatWeightWithUnit(lb: lb, system: unitSystem, decimals: 0))"
     }
 
-    /// Inline −1 / +1 for every non-isometric row. `todaySets` gates −1: with
-    /// nothing logged today there is nothing to take back.
+    /// Inline −1 / +1 for every non-isometric row (plain "−1" / "+1" even for a
+    /// minute row — the accessibility labels say minute). `todaySets` gates −1:
+    /// with nothing logged today there is nothing to take back.
     @ViewBuilder
     private func quickLogControls(_ ex: ExerciseDTO, todaySets: Int) -> some View {
         let isMin = ex.kind == .duration
         let unit = isMin ? "minute" : "rep"
         HStack(spacing: 6) {
             Button { removeOne(ex) } label: {
-                Text(isMin ? "\u{2212}1 min" : "\u{2212}1").lineLimit(1).minimumScaleFactor(0.7)
+                Text("\u{2212}1")
             }
             .tactile(.secondary)
             .disabled(todaySets == 0)
             .accessibilityLabel("Remove 1 \(unit) of \(ex.name)")
 
             Button { quickLog(ex) } label: {
-                Text(isMin ? "+1 min" : "+1").lineLimit(1).minimumScaleFactor(0.7)
+                Text("+1")
             }
             .tactile(.primary)
             .accessibilityLabel("Add 1 \(unit) of \(ex.name)")
         }
-        .layoutPriority(1)
     }
 
     // MARK: - Cells
@@ -407,6 +407,7 @@ struct ExercisesCard: View {
             let hasValue = ex.isIsometric ? holdSec > 0 : reps > 0
             Text(hasValue ? valueLabel(ex, reps: reps, holdSec: holdSec) : "—")
                 .font(.system(size: 20, weight: .semibold, design: .monospaced))
+                .lineLimit(1).minimumScaleFactor(0.6)
                 .foregroundStyle(hasValue ? theme.text : theme.dim)
                 .contentTransition(.numericText())
                 .animation(.spring(response: 0.3, dampingFraction: 0.7), value: ex.isIsometric ? holdSec : reps)
@@ -483,9 +484,13 @@ struct ExercisesCard: View {
             ? "+\(amount) min"
             : "+\(amount) rep\(amount == 1 ? "" : "s")"
         let calStr = cal >= 1 ? " · ~\(Int(cal)) cal" : ""
+        // A per-set-weight lift shows the weight it was stamped with.
+        let weightStr = exercise.tracksPerSetWeight
+            ? rowWeight.map { " · " + ProgressFormat.weight($0, system: system) } ?? ""
+            : ""
         toasts.show(Toast(
             title: exercise.name,
-            detail: unit + calStr,
+            detail: unit + weightStr + calStr,
             accent: .win,
             symbol: "checkmark.seal.fill"
         ))

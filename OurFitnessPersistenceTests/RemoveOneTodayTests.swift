@@ -119,4 +119,60 @@ final class RemoveOneTodayTests: XCTestCase {
                                                bodyWeightLb: 170, now: now))
         XCTAssertEqual(sets(ctx, "squats").first { $0.id == squat }?.reps, 12)
     }
+
+    func test_fixedLoadSet_keepsItsStampedLoadAfterTheExerciseLoadChanges() throws {
+        let ctx = try makeContext()
+        try insertExercise(ctx, id: "baby", loadLb: 20)
+        let id = try insertSet(ctx, "baby", reps: 5, weightLb: 20, secondsAgo: 600)
+        XCTAssertTrue(Repos.updateExercise(ctx, id: "baby", loadLb: 30))
+
+        XCTAssertTrue(Repos.removeOneFromToday(ctx, userId: user, exerciseId: "baby",
+                                               bodyWeightLb: 170, now: now))
+        let row = try XCTUnwrap(sets(ctx, "baby").first { $0.id == id })
+        XCTAssertEqual(row.reps, 4)
+        // The row stays at the load it was done at, never the exercise's new 30 lb.
+        XCTAssertEqual(row.weightLb, 20)
+        func baby(load: Double) -> ExerciseDTO {
+            ExerciseDTO(id: "baby", name: "baby", category: .bodyweight, muscleGroups: [],
+                        equipment: [], loadLb: load)
+        }
+        let at20 = Repos.setCaloriesEstimate(exercise: baby(load: 30), reps: 4, holdSeconds: nil,
+                                             bodyWeightLb: 170, loadLb: 20)
+        XCTAssertEqual(try XCTUnwrap(row.caloriesEst), at20, accuracy: 1e-9)
+        // Honest caveat: the flat estimators read only that a load exists, so a
+        // 30 lb pricing is numerically identical today; the stamped weight above
+        // is what proves the row was not re-read at 30 lb.
+        let at30 = Repos.setCaloriesEstimate(exercise: baby(load: 30), reps: 4, holdSeconds: nil,
+                                             bodyWeightLb: 170, loadLb: 30)
+        XCTAssertEqual(at20, at30, accuracy: 1e-9)
+    }
+
+    func test_durationSet_losesOneMinute() throws {
+        let ctx = try makeContext()
+        try insertExercise(ctx, id: "carry", kind: .duration)
+        let id = try insertSet(ctx, "carry", reps: 5, secondsAgo: 600)
+
+        XCTAssertTrue(Repos.removeOneFromToday(ctx, userId: user, exerciseId: "carry",
+                                               bodyWeightLb: 170, now: now))
+        let row = try XCTUnwrap(sets(ctx, "carry").first { $0.id == id })
+        XCTAssertEqual(row.reps, 4)
+        let expected = Repos.setCaloriesEstimate(
+            exercise: ExerciseDTO(id: "carry", name: "carry", category: .bodyweight,
+                                  muscleGroups: [], equipment: [], kind: .duration),
+            reps: 4, holdSeconds: nil, bodyWeightLb: 170)
+        XCTAssertEqual(try XCTUnwrap(row.caloriesEst), expected, accuracy: 1e-9)
+    }
+
+    func test_twoSetsWithTheSameTimestamp_totalDropsByExactlyOne() throws {
+        let ctx = try makeContext()
+        try insertExercise(ctx, id: "pushups")
+        try insertSet(ctx, "pushups", reps: 3, secondsAgo: 600)
+        try insertSet(ctx, "pushups", reps: 4, secondsAgo: 600)
+        let before = sets(ctx, "pushups").map(\.reps).reduce(0, +)
+
+        XCTAssertTrue(Repos.removeOneFromToday(ctx, userId: user, exerciseId: "pushups",
+                                               bodyWeightLb: 170, now: now))
+        XCTAssertEqual(sets(ctx, "pushups").map(\.reps).reduce(0, +), before - 1)
+    }
 }
+

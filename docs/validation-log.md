@@ -256,3 +256,11 @@ Simulator walk (throwaway XCUITest, not committed; erased simulator): six foods 
 
 Not verified: haptics on a device; the layout at small widths (iPhone SE) or large Dynamic Type; the minute row with a double-digit Today value (the Today cell wraps "1 min" over two lines even now, so a wider value may squeeze the buttons); a −1 across local midnight; the watch (unchanged, not run); no TestFlight build made.
 
+Audit fixes (follow-up commit on feat/recent-scroll): minute rows show plain "−1" / "+1" (no layoutPriority) and the stat value has `.lineLimit(1).minimumScaleFactor(0.6)`; the +1 toast on a per-set-weight lift shows the stamped weight ("+1 rep · 25 lb", `ProgressFormat.weight`, the formatter the new-best toast in the same function already uses); the Recent box is `min(280, 35% of container)` via `containerRelativeFrame` (the repo had no existing use of it, only unrelated `GeometryReader`s); comment fixes in `AddFoodSheet` and `Models.swift`. `RemoveOneTodayTests` gained fixed-load, duration and same-timestamp cases (now 9). Full run: `OurFitnessTests` 605, `OurFitnessPersistenceTests` 44, 0 failures (fresh own simulator, deleted afterwards).
+
+Fixed-load test caveat: the flat estimators read only that a load exists, so a 20 lb and a 30 lb pricing are numerically identical today; the test asserts the row keeps its stamped 20 lb weight and the 20 lb-priced calories, and pins that equality so a future weight-aware estimator will trip it.
+
+Simulator: Pushups +1 toast read "+1 rep · 25 lb"; Carried Baby at "10 min" Today stayed on one line beside −1/+1; the empty-query Recent box measured about 222 pt on the iPhone 17 sheet (35% of the sheet) and still scrolled.
+
+Known limitation (not fixed, by decision): −1 stays enabled until the card refreshes if a row is left open across midnight; the repo call then finds no set today and writes nothing. Still not verified: the Recent box with the keyboard up, haptics on a device, small widths / large Dynamic Type.
+
