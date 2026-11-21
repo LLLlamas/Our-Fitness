@@ -2,104 +2,11 @@
 
 > Moved from CLAUDE.md so the always-loaded file stays thin. Chronological record of what was actually verified (and what was not) at each milestone. Append new milestone records at the bottom; do not rewrite old ones. This is history, not current guidance: CLAUDE.md, docs/map/*.md and the code are authoritative.
 
+Entries before 2026-11-01 are in [validation-log-archive.md](validation-log-archive.md).
+
 ## Milestone documentation rule
 
 Update affected Markdown in every milestone commit alongside its code. Record current behavior, changed architecture/routing, validation actually performed, and remaining limitations. Keep dated incident narratives and research intact, with explicit historical/planned status where guidance has been superseded. Do not claim tests or external signing state were verified without evidence.
-
-## Audit remediation and handoff
-
-The 2026-09-14 audit-remediation handoff note (`docs/audit-handoff.md`, deleted Oct 2026 as superseded) is recoverable with `git show ff15fa5:docs/audit-handoff.md`. The open backlog it fed into is [next-audit-scope.md](next-audit-scope.md) (privacy controls,
-erase-local-data, measured performance), which is still accurate.
-
-When a session hands off, record unverified edits explicitly and update affected
-docs in the same milestone commit.
-
-Successful repository saves, live-session changes, and defaults changes schedule
-one coalesced phone-to-watch snapshot. The snapshot fetches 30 days of food logs
-and today's water/steps through `Repos+SnapshotReads.swift`; historical shortcut
-resolution and full medication history remain available. Move refreshes its
-Health readings on pull-to-refresh and foregrounding. Watch water keeps the
-original action timestamp. `SessionInputValidation` resolves known activity
-values on the phone and permits bounded custom intensity only for Other.
-
-The separate hostless `OurFitnessPersistenceTests` target compiles Domain,
-persistence models/repositories and selected session services directly. It checks
-failed-save recovery, completion idempotency, stale runners, seeded profiles and
-query equivalence with multi-year fixtures. System notification cleanup is
-injected out of hostless tests; physical phone/watch integration still needs
-manual verification. No historical schema or persisted raw value was changed.
-
-## Goal merge (Oct 2026) — validation record
-
-Build and Circuit were merged into one app (see Goals). Verified locally on Xcode 26.6:
-app + watch + widget build; `OurFitnessTests` + `OurFitnessPersistenceTests` pass;
-`OurFitnessUITests` smoke test passes on a freshly erased iPhone 17 simulator (it had been
-failing on `main` — uppercased button label, keyboard over the button, and the unhandled
-Connect-Health step); every tab was screenshotted on a Build-muscle profile (light theme,
-rings, merged Train list, heart-health card). Not verified: physical phone/watch,
-the Lock Screen Live Activity palette on device, and the launch backfill against a real
-pre-merge Build store.
-
-Follow-up the same day: app + watch icon recoloured into the light palette (same artwork:
-cream background, deep-sage glyph, terracotta bell); the CI placeholder generator uses the
-same tokens; the Lock Screen Live Activity banner is cream with dark text (the Dynamic
-Island stays system black). Duplicates removed: meal-idea detail sheet → `MealIngredientDetailSheet`,
-camera free-text form → `DescribeMealForm`, three slot pickers → `SlotPicker`, two macro
-chips → `MacroChip`, private info helpers → `InfoSheet` components, two food-search tasks
-→ `debouncedFoodSearch`/`FoodResultRow`, Pilates list → `RecentActivitySessions`, the
-double "WATER" label, the Meals empty-state's second Add button, two duration formatters,
-and the double nudge computation. Same validation as above (build, unit + persistence +
-UI smoke tests, simulator screenshots).
-
-## Restaurant menus, supplement brands, meal reminders (Oct 2026) — validation record
-
-Bundled DB rebuilt from FDC Foundation + Branded 2026-04-30 (SR Legacy 2018-04, final): 271,931 USDA rows (2 old IDs gone — white/whole-wheat bread; nothing references bundled-DB IDs, logs store their own macros) + 16,562 menu/product rows from 58 chains and 18 supplement brands, 66 MB. Negative USDA nutrients clamp to 0 in the build script. Every chain/brand file was audited row-by-row against its official source (fixes and removals logged in each file's `notes`). Audit measured on the Mac: FTS queries 5–20% slower than the old DB ("chicken" 11.7 → 14.1 ms), restaurant catalog loads off-main in ~100 ms (+~10 MB), menu filter < 1 ms per keystroke on the largest menu. Verified locally: app build, `OurFitnessTests` + `OurFitnessPersistenceTests`, `OurFitnessUITests` smoke test on an erased iPhone 17 simulator. Not verified: physical device timings, meal-reminder delivery and the cold-launch tap into Meals, the iOS 26 delete popover position on device.
-
-## Strength + tape measurements, Today insights (Oct 2026) — validation record
-
-*Superseded in part (Oct 2026, progress-tracking branch): the Strength card described here listed weighted lifts only and its `gainLb` could not go negative; it now lists every trained exercise and can show a decline, and the Training tracker is "Weekly Reps". See the record at the bottom of this file and [map/progress.md](map/progress.md).*
-
-Added the Strength card + tape-measure trackers (rows in Where to touch), the Today day-insights card, the shared `TrainingHistorySheet`, the Meals past-day guard and the Train set back-fill. An independent review of the pre-existing uncommitted work found and fixed: session-delete toast firing after a failed write, and the Meals return-to-today never firing on foreground (scenePhase is background → inactive → active, so the pair never matched; now a flag). Known, not fixed: `DayInsights` says "Nothing logged yesterday" to a brand-new profile; `TodayView` freezes its day keys at init, so a view kept alive across midnight reads stale (unconfirmed whether `RootView` rebuilds it).
-Verified locally on Xcode 26.6, **iPhone 17 Pro simulator**: app build; 544 unit + persistence tests; `OurFitnessUITests` smoke on an erased simulator (all tabs open, no crash report). **In-place upgrade:** built the previous commit, onboarded a profile with its UI test, installed the new build over it without erasing — launched on the old store with the profile intact (additive `BodyMetricModel` columns). Not verified: the Strength card and the new tape cards with real data on screen (the smoke profile has none), physical phone/watch.
-Testing convention going forward: simulator checks run on the iPhone 17 Pro (`-destination 'platform=iOS Simulator,id=<udid>'` — `name=iPhone 17 Pro` failed to resolve in `xcodebuild` on this Mac, the id works).
-
-## Progress tracking: reps at a weight (Oct 2026) — validation record
-
-Implemented plan sections 3.1 to 3.5 of [progress-tracking-plan.md](progress-tracking-plan.md) on branch `claude/awesome-dirac-rremd5` in a container with no Xcode: new `Domain/RepHistory.swift`, `StrengthProgress`/`TrainingHistory`/`EncouragementEngine` changes, `Repos.updateExercise` + fixed-load stamping and one-time backfill, rep counter / hold timer / `ExerciseInfoSheet` / new `ExerciseProgressSheet` / Strength card / Weekly Reps tracker / `TrainingHistorySheet` UI, new-best and weekly-reps toasts. Docs restructured the same day (thin CLAUDE.md, `docs/map/`, this log).
-
-**Verified**
-- Linux harness (docker image `ourfitness-swift`: `Domain/*.swift` + `Shared/WatchSyncPayload.swift` + all `OurFitnessTests/*.swift` in a throwaway SwiftPM package, run by the docs-sync pass after all code edits): **601 tests executed, 0 failures, 0 compile errors** (baseline before the change: 545). Covers `RepHistoryTests` (exact-weight folding, one-tap vs rep-counter rows, week edges, holds, duration, last time / same day last week, comparisons, bests and the 2-day baseline guard, weekly notes and the 75% edge, once-per-week announcement gate, canonical 0.01 lb weights), the `StrengthProgress` negative `gainLb`, `TrainingHistory` rep counts and `ExerciseLine.tally`, `SetEditCaloriesTests` (load override), `EncouragementEngineTests` (new copy, banned-words check).
-- `swiftc -parse` (syntax only) on `RepCounter`, `ToastCenter`, `ExerciseProgressSheet`, `ExerciseInfoSheet`, `ProgressView`, `TrainingHistorySheet`. Pure formatting/folding helpers extracted from those views were compiled against the real `Domain/` files on Linux and probed (reference lines, tally strip, `TrainingSummary.make`, `StrengthEntry.entries`).
-- Reviews: each agent re-read its own diff adversarially; an independent review of the integrated change found three real defects (weekly-reps toast not wired, no new-best/weekly toast on the one-tap `+1` path, metric vs imperial entry splitting one weight into two lines), all fixed and re-tested on Linux. Docs: all relative Markdown links re-checked; stale mentions of the removed set-based APIs grepped across every `.md`.
-
-**NOT verified**
-- Xcode compile of any SwiftUI/SwiftData code (`Features/`, `Repositories.swift`, `Seeder.swift`, `ToastCenter.swift`, `WatchSyncService.swift`) — API uses such as `chartForegroundStyleScale`, `Menu`/`Section`, `onChange`, and `StatDetailSheet` generic inference are unconfirmed.
-- `OurFitnessPersistenceTests`, including the new `FixedLoadTests` (17 tests: `updateExercise`, stamping, backfill idempotence, once-flag, `updateSet` re-pricing); the failed-save branch of `backfillFixedLoadWeightsOnce` is not injectable and untested.
-- Simulator, physical phone and watch: sheet layouts (medium-detent reference block, wheel inside a `ScrollView`, 375 pt comparison grid), hold haptic and backgrounding mid-hold, toast order and the weekly-note gate against real UserDefaults, `UnitSystem` day-label formats.
-- In-place upgrade of an existing store with nil-weight fixed-load rows (backfill, then a load edit) — the backfill and `updateExercise` stamping have never run against a real pre-change store.
-- Full-history fetch cost per rep save (`Repos.setHistory(limit: 100_000)`, `Repos.weeklyReps`) against a multi-year fixture; non-UTC time zones (Linux runs were UTC).
-- Research figures in the Weekly Reps ⓘ (about 10 hard sets per muscle per week; 80-120 reps rule of thumb) are unchecked against the papers.
-- The Linux harness cannot catch a Swift 6 / iOS-only API error in files it does not compile.
-
-## Docs audit, build and test on `main` (2026-10-18) — validation record
-
-Verified locally on Xcode 26.6, `main` at `ff15fa5` (before the docs and comment-only edits below): `xcodegen generate`; app build (scheme `OurFitness`, iPhone 17 simulator, `CODE_SIGNING_ALLOWED=NO`) **BUILD SUCCEEDED**; `scripts/validate-ci-invariants.sh` exit 0; scheme test run **TEST SUCCEEDED** with 496 `OurFitnessTests` + 26 `OurFitnessPersistenceTests` cases, 0 failures (run through `xcodebuild test`: fastlane gems are not installed on this Mac). This is the first Xcode compile of the progress-tracking branch code (reps at a weight, `FixedLoadTests`) that the entry above lists as unverified.
-Not run: `OurFitnessUITests` smoke test; any simulator walk-through, physical phone or watch check; the in-place upgrade of a store holding nil-weight fixed-load rows.
-Docs: deleted the superseded or duplicate `where-to-touch-notes.md` (every row already lives in `docs/map/`; its Strength entry was stale), `validation-records.md` (the same three records are above), `audit-handoff.md`, `medication-reminders-plan.md`, and the old-two-mode research and plan docs (`health-tracking-ui-plan`, `encouragement-system-plan`, `activity-and-ai-expansion-research`, `nutrition-plan-research`, `RepCheck`), plus root `nutrition-plan.html` and `screen.png`. All are recoverable with `git show ff15fa5:docs/<name>`. Fixed dead links (`AGENTS.md` → `map/watch.md`), the Reminders/plant text in `watch-app-setup.md`, and code comments that cited deleted docs.
-Shipped 2026-10-18 from the Mac (fastlane not installed): Release `xcodebuild archive` (automatic signing, team `GYFN949Q5E`) → ARCHIVE SUCCEEDED with the watch app embedded; `-exportArchive` with `destination upload` and `manageAppVersionAndBuildNumber` → "Upload succeeded". The archive's own build number reads 1; the number App Store Connect assigned was not captured, so check TestFlight. Not verified: App Store Connect processing finishing, and the build on a device.
-
-## Tendon-loading drills (2026-10-22) — validation record
-Added 5 catalog entries (Eccentric Heel Drop, Heavy Slow Calf Raise, Decline Squat, Spanish Squat, Eccentric Wrist Extension) with a tendon-goal boost in `ExerciseGoalMatcher`. Tests: `xcodebuild test` (scheme `OurFitness`, iPhone 17 simulator, `CODE_SIGNING_ALLOWED=NO`; fastlane not installed) **TEST SUCCEEDED**, 498 `OurFitnessTests` + 26 `OurFitnessPersistenceTests`, 0 failures. First run caught one real miss (a "lateral epicondylitis" goal also trips the existing `lat` back key, so a barbell row led); fixed by raising `tendonBonus` to 10.
-Sources checked this session (what was and was not confirmed):
-- Alfredson 1998, *Am J Sports Med* 26(3):360 — abstract: 15 recreational athletes, 12 weeks, all back to full running. 3 × 15 twice daily is confirmed from Beyer 2015's description of the ECC arm, not from Alfredson's own text.
-- Beyer 2015, *Am J Sports Med* — full text read: 58 patients, 12 weeks, ECC = 3 × 15 slow reps, straight + bent knee, twice a day, 7 days/week, ~3 s/rep; HSR = 3×/week, 3 exercises, 3–4 sets, 15RM wk 1 → 6RM wk 9–12, 3 s up + 3 s down; adherence 92% vs 78%; similar outcomes, held at 52 weeks.
-- Kongsgaard 2009, *Scand J Med Sci Sports* 19(6):790 — full text read: 39 men, decline squat = 3 × 15 slow reps on a 25° board, twice daily, 12 weeks, ~3 s/rep; HSR good short- and long-term, injections poor long-term. The decline-squat arm's own outcome numbers were not read.
-- Rio 2015, *Br J Sports Med* 49:1277 — abstract only (6 players; 7.0 → 0.17 vs 6.3 → 3.8 on the single-leg decline squat; strength +18.7%). The hold dosing (sets, seconds, %MVC) was NOT confirmed, so the app states none. The Spanish squat itself was not the tested exercise.
-- Bohm 2015, *Sports Med Open* — abstract: 27 studies, stiffness SMD 0.70.
-- Cullinane 2014, *Clin Rehabil* — via search summary only (12 studies, 8 RCTs; supports eccentric work, heterogeneous). Not opened.
-- Nordic hamstring curl, tibialis raise and pogo hops were left out: Nordic is a hamstring-muscle injury drill (and its meta-analysis is disputed), the other two had no source checked.
-METs reuse Calf raise 3.5 / Squat 5.0 / Wall sit 4.0 / Bicep curl 3.5; none were checked against the Compendium (open item 10 in [health-data-audit](health-data-audit.md)).
-Not run: UI smoke test, any simulator or device look at the ⓘ sheet or the "what should I work on?" screen with the new entries; the on-device AI path (`WorkoutSuggestionService`) now sees 5 more menu items and was not exercised.
 
 ## Easier meal logging (2026-11-05) — validation record
 Lenient food search (`FoodSearchQuery`: case/apostrophes/word order/plurals/spelling variants, stopwords, run-together names; USDA FTS OR's singular forms + variants), results ranked by match tier then A–Z with chains rare near NYC last (`RegionalChains`, also applied to `RestaurantMatcher.chains`); restaurant menus A–Z within each category; AddFoodSheet library A–Z after favorites/frequent, recents show and reopen at the last portion, new empty-state restaurants pills; ↺ "Log again" on day-log rows (via `requestAdd`); quarter-serving steps + ¼–2 quick pills. Data: scripted audit of all 1,202 `CommonFoods` rows — 0 duplicate ids, 0 negative/fiber>carbs/duplicate rows; 1 non-alcohol Atwater outlier (`quest-bar`, 190 cal vs 231 — fiber-heavy label, left as is), 19 alcohol rows (expected); 14 exact alias collisions resolved by removing the alias from the less specific food (aliases only — no number, id, name or serving changed; `git diff` verified).
@@ -243,3 +150,28 @@ Verified:
 - `-exportArchive`: "Upload succeeded", EXPORT SUCCEEDED.
 
 Not verified: ASC processing finishing, the build on a device, and the new toast text on screen.
+
+## Recent list pinned search + inline Train −1/+1 (branch feat/recent-scroll) — validation record
+
+Part 1 (`416c058`): Add food search field pinned above the scroll area; Recent rows get a "Logged today / yesterday / Mon, Nov 17" line; more than 3 recents scroll inside a 280 pt box. Part 2: every non-isometric Train row carries inline −1 / +1 (−1 min / +1 min for duration).
+
+Assumptions (orchestrator decisions, applied as written): isometric rows keep tap-opens-hold-timer and get no ±1; +1 on a per-set-weight lift stamps the last weight ever used for it (`RepHistory.lastWeightLb` over the full history, nil = bodyweight) while calories go through `Repos.setCaloriesEstimate` exactly like the rep counter (which also passes no load for a per-set-weight lift); −1 takes one rep/minute off today's newest set (delete when it is 1), disabled at 0 today, no toast, light haptic (`Haptics.tap()`) on success only. `quickLoggedSetIds` / `undoableQuickLogId` / `undoLastSet` were removed, so −1 can now shorten a rep-counter set as well as a +1 set.
+
+Ran (Xcode 27.2, own iPhone 17 simulator on iOS 27.2, `CODE_SIGNING_ALLOWED=NO`, `xcodebuild test`, fastlane absent): app BUILD SUCCEEDED; full run `OurFitnessTests` 605 tests, 0 failures; `OurFitnessPersistenceTests` 41 tests, 0 failures (new: 2 `RepHistoryTests` for `newestSet`, 6 `RemoveOneTodayTests`).
+
+Simulator walk (throwaway XCUITest, not committed; erased simulator): six foods logged through Add food (Banana, Egg, Apple, Oatmeal, Chicken breast, Rice); the empty-query view showed the pinned field, three Recent rows with "Logged today", the inner Recent box scrolled on its own (Apple / Egg drop soup appeared) with the search bar staying put, and a typed "chicken" result list scrolled under the pinned field. On Train (Lifted Baby, Carried Baby, Lifted Stroller plus a custom Pushups, which is `tracksPerSetWeight`): −1 was disabled at 0 on every row; a 10-rep, 25 lb counter set on Pushups, then +1 twice (history sheet showed 3 sets today) listed the two 1-rep sets at 25 lb (stamped) and the 10-rep set; −1 twice removed the two 1-rep sets, a third −1 turned the 10-rep set into 9 reps · 25 lb; Lifted Baby +1 then −1 returned to disabled, a 10-rep counter set became 9 with −1; Carried Baby +1 min then −1 min returned to disabled. "−1 MIN / +1 MIN" fit on one line at 402 pt width.
+
+Not verified: haptics on a device; the layout at small widths (iPhone SE) or large Dynamic Type; the minute row with a double-digit Today value (the Today cell wraps "1 min" over two lines even now, so a wider value may squeeze the buttons); a −1 across local midnight; the watch (unchanged, not run); no TestFlight build made.
+
+Audit fixes (follow-up commit on feat/recent-scroll): minute rows show plain "−1" / "+1" (no layoutPriority) and the stat value has `.lineLimit(1).minimumScaleFactor(0.6)`; the +1 toast on a per-set-weight lift shows the stamped weight ("+1 rep · 25 lb", `ProgressFormat.weight`, the formatter the new-best toast in the same function already uses); the Recent box is `min(280, 35% of container)` via `containerRelativeFrame` (the repo had no existing use of it, only unrelated `GeometryReader`s); comment fixes in `AddFoodSheet` and `Models.swift`. `RemoveOneTodayTests` gained fixed-load, duration and same-timestamp cases (now 9). Full run: `OurFitnessTests` 605, `OurFitnessPersistenceTests` 44, 0 failures (fresh own simulator, deleted afterwards).
+
+Fixed-load test caveat: the flat estimators read only that a load exists, so a 20 lb and a 30 lb pricing are numerically identical today; the test asserts the row keeps its stamped 20 lb weight and the 20 lb-priced calories, and pins that equality so a future weight-aware estimator will trip it.
+
+Simulator: Pushups +1 toast read "+1 rep · 25 lb"; Carried Baby at "10 min" Today stayed on one line beside −1/+1; the empty-query Recent box measured about 222 pt on the iPhone 17 sheet (35% of the sheet) and still scrolled.
+
+Known limitation (not fixed, by decision): −1 stays enabled until the card refreshes if a row is left open across midnight; the repo call then finds no set today and writes nothing. Still not verified: the Recent box with the keyboard up, haptics on a device, small widths / large Dynamic Type.
+
+
+## Recent scroller, inline Train ±1, docs tidy (2026-11-21) — pre-ship QA
+
+Branch `feat/recent-scroll` (416c058, fbe8815, 72f2912, ab23c70 + this commit). On a throwaway iPhone 17 simulator (created and deleted by UDID): `xcodebuild test -scheme OurFitness` TEST SUCCEEDED (unit + persistence, 0 failures); UI smoke test (`-scheme OurFitnessUITests`, fresh simulator, onboarding + every tab) TEST SUCCEEDED, 2 tests; Release `xcodebuild build` (generic iOS Simulator) BUILD SUCCEEDED. The new Swift lines were scanned for force-unwraps and `try!`: there are none outside tests. Not verified: anything on a device, the Recent box with the keyboard up, small width or large Dynamic Type, −1 after midnight without a redraw.

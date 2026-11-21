@@ -33,7 +33,7 @@ xcodegen generate            # .xcodeproj is gitignored — re-run after project
 open OurFitness.xcodeproj    # ⌘R to run, ⌘U to test
 ```
 
-CLI: `bundle exec fastlane ios compile` (build) / `bundle exec fastlane ios tests` (unit tests). TestFlight releases + full setup: [docs/setup.md](docs/setup.md).
+CLI: the `xcodebuild` build/test commands in [CLAUDE.md](CLAUDE.md) → "Build and test" (fastlane `ios compile` / `ios tests` work too after `bundle install`). TestFlight releases + full setup: [docs/setup.md](docs/setup.md).
 
 ---
 

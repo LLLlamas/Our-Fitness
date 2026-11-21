@@ -23,7 +23,7 @@ Status key: **Living** = describes current behavior, update it in the same commi
 | [watch-app-setup.md](watch-app-setup.md) | Living | Watch features, signing checklist, device verification |
 | [live-activity-setup.md](live-activity-setup.md) | Living | Live Activity / widget signing checklist |
 | [health-data-audit.md](health-data-audit.md) | Living | Read before changing any health or fitness number: what was fixed, what is verified, open sourcing questions |
-| [next-audit-scope.md](next-audit-scope.md) | Living | Open backlog: privacy controls, erase-local-data, measured performance |
+| [next-audit-scope.md](next-audit-scope.md) | Living | Open backlog: privacy controls, erase-local-data, measured performance, unverified checks from the 2026-11-20/21 Add food and Train work |
 
 ## Plans (not authoritative)
 
@@ -42,7 +42,8 @@ None right now.
 | Doc | Status | What it is |
 |---|---|---|
 | [removed-reminders.md](removed-reminders.md) | Historical | The removed Reminders feature (plants, generic reminders, medication): what went, how to recover it from git, leftover rows to erase |
-| [validation-log.md](validation-log.md) | Historical, append-only | What was verified and not at each milestone |
+| [validation-log.md](validation-log.md) | Historical, append-only | What was verified and not at each milestone, from 2026-11-01 on |
+| [validation-log-archive.md](validation-log-archive.md) | Historical, closed | Validation entries before 2026-11-01 (Sept–Oct 2026), moved verbatim on 2026-11-21 |
 | [ci-history.md](ci-history.md) | Historical | Incident narratives behind each CI "do not regress" rule |
 
 ## Deleted docs

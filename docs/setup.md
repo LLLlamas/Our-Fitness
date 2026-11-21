@@ -176,7 +176,8 @@ Build and test locally first — CI is confirmation, not discovery.
 ```bash
 xcodegen generate                        # if project.yml changed (or a pull touched it)
 # build + test in Xcode (⌘R / ⌘U), or:
-bundle exec fastlane ios tests
+xcodebuild test -project OurFitness.xcodeproj -scheme OurFitness -destination 'platform=iOS Simulator,name=iPhone 17' CODE_SIGNING_ALLOWED=NO
+# (or bundle exec fastlane ios tests, after bundle install)
 bash scripts/validate-ci-invariants.sh   # after xcodegen generate
 git add . && git commit -m "feat: add weekly planner skeleton" && git push origin main
 ```
