@@ -119,10 +119,15 @@ struct AddFoodSheet: View {
     var body: some View {
         let allLogs = logModels.map(\.snapshot)
         NavigationStack {
+            VStack(spacing: 0) {
+            // Pinned above the scroll area so the field stays in reach while
+            // My Foods / results scroll.
+            searchField
+                .padding(.horizontal, 20)
+                .padding(.top, 18)
+                .padding(.bottom, 8)
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    searchField
-
                     if trimmedQuery.isEmpty {
                         myFoods(allLogs: allLogs)
                         manualEntryRow
@@ -152,9 +157,11 @@ struct AddFoodSheet: View {
                     if !trimmedQuery.isEmpty && resultsAreStrong { describeCard(compact: true) }
                 }
                 .padding(.horizontal, 20)
-                .padding(.vertical, 18)
+                .padding(.top, 8)
+                .padding(.bottom, 18)
             }
             .scrollDismissesKeyboard(.interactively)
+            }
             .navigationTitle(targetDate == Dates.dayKey() ? "Add food" : "Add food · \(Dates.formatShort(targetDate))")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -404,8 +411,16 @@ struct AddFoodSheet: View {
         if !sections.recent.isEmpty {
             VStack(alignment: .leading, spacing: 6) {
                 sectionHeader("recent")
-                LazyVStack(spacing: 8) {
+                let rows = LazyVStack(spacing: 8) {
                     ForEach(sections.recent) { entry in recentRow(entry) }
+                }
+                // More than three: its own scroller (about three rows tall) so the
+                // sections below stay on screen with up to 8 recents.
+                if sections.recent.count > 3 {
+                    ScrollView { rows.padding(.vertical, 2) }
+                        .frame(height: 280)
+                } else {
+                    rows
                 }
             }
         }
@@ -471,6 +486,8 @@ struct AddFoodSheet: View {
                     Text("\(p.calories) cal · \(p.proteinG)g pro · \(p.carbsG)g carbs · \(p.fatG)g fat")
                         .font(.system(.caption2, design: .monospaced))
                         .foregroundStyle(theme.accent)
+                    Text("Logged \(loggedDayLabel(entry.date))")
+                        .font(.caption).foregroundStyle(theme.dim)
                 }
                 Spacer(minLength: 0)
                 if favoritable {
@@ -485,6 +502,15 @@ struct AddFoodSheet: View {
                 }
             }
         }
+    }
+
+    /// "today" / "yesterday" / "Mon, Nov 17" — same wording as `MealHistoryDay.label`.
+    private func loggedDayLabel(_ key: String) -> String {
+        if key == Dates.dayKey() { return "today" }
+        let yesterday = Dates.dayKey(Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date())
+        if key == yesterday { return "yesterday" }
+        guard let d = Dates.date(fromDayKey: key) else { return key }
+        return d.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day())
     }
 
     @ViewBuilder
