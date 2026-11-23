@@ -108,6 +108,22 @@ public enum TrainingHistory {
         return RepHistory.weeklyRepTotals(sets: sets, exercises: exercises)[key] ?? 0
     }
 
+    /// REPS logged on one local calendar day (`dayKey`), with the same rule as
+    /// `repsInWeek`: rep exercises only — holds, minutes and unknown exercises
+    /// don't count.
+    public static func repsOnDay(
+        _ sets: [WorkoutSetDTO],
+        exercises: [ExerciseDTO],
+        dayKey: String
+    ) -> Int {
+        let repIds = Set(exercises.filter(RepHistory.isRepExercise).map(\.id))
+        return sets.reduce(0) { total, s in
+            guard repIds.contains(s.exerciseId), s.reps > 0,
+                  Dates.dayKey(s.timestamp) == dayKey else { return total }
+            return total + s.reps
+        }
+    }
+
     /// One point per ISO week that has at least one rep, over the last `weeks`
     /// weeks (including the current, partial one). Oldest first; the point's
     /// `date` is the week's Monday as a dayKey. Weeks with no reps are omitted
