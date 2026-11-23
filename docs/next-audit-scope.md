@@ -60,6 +60,28 @@ Built and unit/persistence-tested on the iPhone 17 simulator only
   "Log hold" (`.tactile(.primary)`, `theme.ok` fill) and "Start hold"
   (`.tactile(.primary)`) are both primary.
 
+## Food search common sense — what's left after 2026-11-22
+
+Done on branch `fix/recent-list` (search order, USDA tidy-up, AI typical pick — see
+[map/nutrition.md](map/nutrition.md) "Food search", "USDA row tidy-up", "AI typical pick").
+Left, from the 2026-11-22 audit of 30 everyday queries against the real DB:
+
+- **Rebuild `usda-foods.db`** (`scripts/build-food-db.py`): read SR Legacy / FNDDS
+  `foodPortions` gramWeight for real household measures (whether the downloaded zips
+  include them is unverified); keep branded `servingSize` grams in a `serving_grams`
+  column (dropped today); add a `category` column instead of storing the branded
+  category as an alias; store generic names as more than the first comma segment.
+  Note the script caps branded at 18,000 but the shipped DB has ~264k branded rows —
+  it was built with a different cap; find out which before rebuilding.
+- **More than one serving per food**: `CommonFood` has one `servingLabel`, and the
+  detail sheet only offers multipliers. Cheddar now says "1 slice or ¼ cup shredded
+  (28 g)" because both weigh 28 g; foods whose common units differ need a portions array.
+- **Curated cereals**: only ~11 brands are curated; others rely on branded USDA rows
+  (Rice Krispies now ranks right via FTS relevance, but its label comes from the box text).
+- "cheese" still lists curated dishes that contain the word (Cheese danish,
+  Cheesecake, Bacon Egg & Cheese Biscuit) high, at tier 1–2. Owner call whether to demote.
+- Device check of the AI typical pick on a real iPhone with Apple Intelligence.
+
 ## Usage budget discipline
 
 Work one bounded change at a time; keep a buildable checkpoint. Before usage

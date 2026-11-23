@@ -51,6 +51,10 @@ struct AddFoodSheet: View {
     @State private var didYouMean: [String] = []
     /// AI answers per query (a tapped suggestion is stored as []), so each query is asked once.
     @State private var didYouMeanCache: [String: [String]] = [:]
+    /// Apple Intelligence's typical pick per query (`ServingPickService`), and
+    /// the queries already asked (a nil answer is remembered too).
+    @State private var typicalPicks: [String: ServingPick] = [:]
+    @State private var pickAsked: Set<String> = []
     @State private var mealToLog: QuickMealLog?
     @State private var templateToLog: SavedMealTemplateDTO?
     @State private var describeText: String?
@@ -100,6 +104,14 @@ struct AddFoodSheet: View {
     private func ingredients(for food: CommonFood) -> [MealIngredient] {
         SuggestedMeals.compositeIngredients[food.id]?
             .compactMap { $0.resolve() } ?? [MealIngredient.from(food)]
+    }
+
+    /// A search result as ingredients, at the typical pick's amount when the
+    /// pick is this single food.
+    private func ingredients(for food: CommonFood, pick: ServingPick?) -> [MealIngredient] {
+        var out = ingredients(for: food)
+        if let pick, pick.foodId == food.id, out.count == 1 { out[0].quantity = pick.quantity }
+        return out
     }
 
     private func ingredients(for entry: FoodLogEntryDTO) -> [MealIngredient] {
@@ -209,6 +221,18 @@ struct AddFoodSheet: View {
             try? await Task.sleep(nanoseconds: 1_200_000_000)
             guard !Task.isCancelled, q == trimmedQuery, strengthQuery == q, strength != .strong else { return }
             await checkDidYouMean(for: q)
+        }
+        // Results in: after a pause, ask Apple Intelligence (if available) which
+        // shown result a typical person logs and how much. Never blocks the list.
+        .task(id: "pick|\(strengthQuery)|\(displayedResults.first?.id ?? "")") {
+            let q = trimmedQuery
+            guard !q.isEmpty, strengthQuery == q, displayedResults.count >= 2, !pickAsked.contains(q),
+                  ServingPickService.shared.isAvailable else { return }
+            try? await Task.sleep(nanoseconds: 700_000_000)
+            guard !Task.isCancelled, q == trimmedQuery, strengthQuery == q else { return }
+            pickAsked.insert(q)
+            let pick = await ServingPickService.shared.pick(for: q, among: displayedResults)
+            if let pick { typicalPicks[q] = pick }
         }
         .overlay(alignment: .top) { ToastHost() }
         .presentationDetents([.large])
@@ -576,10 +600,12 @@ struct AddFoodSheet: View {
     @ViewBuilder
     private var foodList: some View {
         let ids = favoriteIds
+        let pick = strengthQuery == trimmedQuery ? typicalPicks[trimmedQuery] : nil
         LazyVStack(spacing: 8) {
-            ForEach(displayedResults, id: \.id) { food in
+            ForEach(ServingPick.reordered(displayedResults, pick: pick), id: \.id) { food in
                 FoodResultRow(
                     food: food,
+                    note: pick?.foodId == food.id ? typicalPickNote(pick!) : nil,
                     isFavorite: ids.contains(food.id),
                     onToggleFavorite: { toggleFavorite(food.id) },
                     sizes: sizeChoices[food.id] ?? [],
@@ -587,10 +613,17 @@ struct AddFoodSheet: View {
                         mealToLog = QuickMealLog(name: picked.name, emoji: "🍽️", ingredients: ingredients(for: picked))
                     }
                 ) {
-                    mealToLog = QuickMealLog(name: food.name, emoji: "🍽️", ingredients: ingredients(for: food))
+                    mealToLog = QuickMealLog(name: food.name, emoji: "🍽️", ingredients: ingredients(for: food, pick: pick))
                 }
             }
         }
+    }
+
+    /// "✦ Typical pick" plus the usual amount when it isn't one serving.
+    private func typicalPickNote(_ pick: ServingPick) -> String {
+        guard pick.quantity != 1 else { return "✦ Typical pick" }
+        let amount = pick.quantity.formatted(.number.precision(.fractionLength(0...2)))
+        return "✦ Typical pick · usually ×\(amount)"
     }
 }
 
@@ -669,6 +702,8 @@ private struct DebouncedFoodSearch: ViewModifier {
 /// ingredient picker doesn't).
 struct FoodResultRow: View {
     let food: CommonFood
+    /// Small accent line above the name (AddFoodSheet's AI typical pick).
+    var note: String? = nil
     var isFavorite: Bool = false
     var onToggleFavorite: (() -> Void)? = nil
     /// Other sizes of this item (chain results). Shown as small inline pills;
@@ -686,6 +721,11 @@ struct FoodResultRow: View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack(alignment: .top, spacing: 12) {
                     VStack(alignment: .leading, spacing: 4) {
+                        if let note {
+                            Text(note)
+                                .font(.system(size: 10, weight: .medium)).tracking(1)
+                                .foregroundStyle(theme.accent)
+                        }
                         Text(food.name)
                             .font(.system(size: 15, weight: .semibold))
                             .foregroundStyle(theme.text)

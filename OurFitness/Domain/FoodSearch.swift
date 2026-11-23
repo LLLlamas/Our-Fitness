@@ -375,3 +375,37 @@ public enum ServingSanity {
         return 0
     }
 }
+
+// MARK: - Typical pick (Apple Intelligence, validated here)
+
+/// The search result a typical person logs for one meal, and how many of its
+/// servings — proposed by `ServingPickService` (on-device model) and made safe
+/// here: the pick must be one of the results already shown and the amount
+/// one of `quantities`. Nutrition always comes from that result's own row.
+public struct ServingPick: Equatable, Sendable {
+    public let foodId: String
+    public let quantity: Double
+
+    /// Allowed multiples of the row's serving (inside the 0.25…10 portion clamp).
+    public static let quantities: [Double] = [0.5, 0.75, 1, 1.5, 2]
+    /// How many top results the model chooses among.
+    public static let candidateCount = 6
+
+    /// `choice` is the model's 1-based option number; out of range → nil.
+    /// `servings` snaps to the nearest allowed quantity (non-finite → 1).
+    public static func validated(choice: Int, servings: Double, candidates: [CommonFood]) -> ServingPick? {
+        guard candidates.indices.contains(choice - 1) else { return nil }
+        let amount = servings.isFinite
+            ? quantities.min { abs($0 - servings) < abs($1 - servings) } ?? 1
+            : 1
+        return ServingPick(foodId: candidates[choice - 1].id, quantity: amount)
+    }
+
+    /// `results` with the picked row moved to the front (nothing else moves).
+    public static func reordered(_ results: [CommonFood], pick: ServingPick?) -> [CommonFood] {
+        guard let pick, let i = results.firstIndex(where: { $0.id == pick.foodId }), i > 0 else { return results }
+        var out = results
+        out.insert(out.remove(at: i), at: 0)
+        return out
+    }
+}

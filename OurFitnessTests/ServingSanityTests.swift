@@ -69,4 +69,19 @@ final class ServingSanityTests: XCTestCase {
         // Household label beats a gram-only one at the same tier; bulk last.
         XCTAssertEqual(out.map(\.id), ["c1", "usda-11", "usda-10", "c2", "usda-13", "usda-12"])
     }
+
+    func testTypicalPickIsValidatedAgainstShownResults() {
+        let shown = [food("a", "Rice Krispies Holiday Colors"), food("b", "Rice Krispies Toasted Rice Cereal")]
+        XCTAssertEqual(ServingPick.validated(choice: 2, servings: 1.4, candidates: shown),
+                       ServingPick(foodId: "b", quantity: 1.5))                     // snapped to an allowed amount
+        XCTAssertNil(ServingPick.validated(choice: 3, servings: 1, candidates: shown))   // not a shown option
+        XCTAssertNil(ServingPick.validated(choice: 0, servings: 1, candidates: shown))
+        XCTAssertEqual(ServingPick.validated(choice: 1, servings: 40, candidates: shown)?.quantity, 2)
+        XCTAssertEqual(ServingPick.validated(choice: 1, servings: .nan, candidates: shown)?.quantity, 1)
+
+        let pick = ServingPick(foodId: "b", quantity: 1)
+        XCTAssertEqual(ServingPick.reordered(shown, pick: pick).map(\.id), ["b", "a"])
+        XCTAssertEqual(ServingPick.reordered(shown, pick: ServingPick(foodId: "zzz", quantity: 1)).map(\.id), ["a", "b"])
+        XCTAssertEqual(ServingPick.reordered(shown, pick: nil).map(\.id), ["a", "b"])
+    }
 }
