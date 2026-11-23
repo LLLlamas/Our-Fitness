@@ -1,6 +1,6 @@
 // Single "Add food" surface — replaces the separate "Log a meal" (free text) and
 // "Browse" (library) sheets. One field does both jobs:
-//   • empty  → "My Foods": favorites · recent (a list at the last portion, with
+//   • empty  → "My Foods": favorites · recent (a compact scrolling list at the last portion, with
 //              a heart on each) · recipes & my foods, each food shown once, + a
 //              manual-entry link
 //   • typed  → a "log what you described" card (FoodParser, AI-refined on open)
@@ -51,6 +51,10 @@ struct AddFoodSheet: View {
     @State private var didYouMean: [String] = []
     /// AI answers per query (a tapped suggestion is stored as []), so each query is asked once.
     @State private var didYouMeanCache: [String: [String]] = [:]
+    /// Apple Intelligence's typical pick per query (`ServingPickService`), and
+    /// the queries already asked (a nil answer is remembered too).
+    @State private var typicalPicks: [String: ServingPick] = [:]
+    @State private var pickAsked: Set<String> = []
     @State private var mealToLog: QuickMealLog?
     @State private var templateToLog: SavedMealTemplateDTO?
     @State private var describeText: String?
@@ -100,6 +104,14 @@ struct AddFoodSheet: View {
     private func ingredients(for food: CommonFood) -> [MealIngredient] {
         SuggestedMeals.compositeIngredients[food.id]?
             .compactMap { $0.resolve() } ?? [MealIngredient.from(food)]
+    }
+
+    /// A search result as ingredients, at the typical pick's amount when the
+    /// pick is this single food.
+    private func ingredients(for food: CommonFood, pick: ServingPick?) -> [MealIngredient] {
+        var out = ingredients(for: food)
+        if let pick, pick.foodId == food.id, out.count == 1 { out[0].quantity = pick.quantity }
+        return out
     }
 
     private func ingredients(for entry: FoodLogEntryDTO) -> [MealIngredient] {
@@ -209,6 +221,21 @@ struct AddFoodSheet: View {
             try? await Task.sleep(nanoseconds: 1_200_000_000)
             guard !Task.isCancelled, q == trimmedQuery, strengthQuery == q, strength != .strong else { return }
             await checkDidYouMean(for: q)
+        }
+        // Results in: after a pause, ask Apple Intelligence (if available) which
+        // shown result a typical person logs and how much. Never blocks the list.
+        .task(id: "pick|\(strengthQuery)|\(displayedResults.first?.id ?? "")") {
+            let q = trimmedQuery
+            guard !q.isEmpty, strengthQuery == q, displayedResults.count >= 2, !pickAsked.contains(q),
+                  ServingPickService.shared.isAvailable else { return }
+            try? await Task.sleep(nanoseconds: 700_000_000)
+            guard !Task.isCancelled, q == trimmedQuery, strengthQuery == q else { return }
+            let pick = await ServingPickService.shared.pick(for: q, among: displayedResults)
+            // Results changed mid-request (e.g. USDA rows arrived): this answer
+            // came from the old list — drop it and let the new task ask again.
+            guard !Task.isCancelled else { return }
+            pickAsked.insert(q)
+            if let pick { typicalPicks[q] = pick }
         }
         .overlay(alignment: .top) { ToastHost() }
         .presentationDetents([.large])
@@ -411,18 +438,7 @@ struct AddFoodSheet: View {
         if !sections.recent.isEmpty {
             VStack(alignment: .leading, spacing: 6) {
                 sectionHeader("recent")
-                let rows = LazyVStack(spacing: 8) {
-                    ForEach(sections.recent) { entry in recentRow(entry) }
-                }
-                // More than three: its own scroller (about three rows tall, at most
-                // 35% of the container so a small screen with the keyboard up isn't
-                // taken over) so the sections below stay on screen with up to 8 recents.
-                if sections.recent.count > 3 {
-                    ScrollView { rows.padding(.vertical, 2) }
-                        .containerRelativeFrame(.vertical) { height, _ in min(280, height * 0.35) }
-                } else {
-                    rows
-                }
+                recentList(sections.recent)
             }
         }
         if !sections.recipes.isEmpty {
@@ -463,46 +479,86 @@ struct AddFoodSheet: View {
         }
     }
 
-    /// One recent log as a row — same look as a search result: name (+ "×1.5"
-    /// when logged at another portion), calories and macros of what was logged,
+    /// One Recent row plus its hairline — sizes the list box before layout.
+    private static let recentRowHeight: CGFloat = 59
+
+    /// Recent as one bordered list (rows split by hairlines), as tall as its
+    /// rows up to 85% of the visible area — so it runs to the bottom of the
+    /// screen instead of stopping in a short box — and scrolls on its own
+    /// (indicator flashed on open) only when the rows don't fit, e.g. with the
+    /// keyboard up. The page keeps scrolling to the sections below it.
+    private func recentList(_ entries: [FoodLogEntryDTO]) -> some View {
+        let shape = RoundedRectangle(cornerRadius: 16, style: .continuous)
+        return ScrollView {
+            VStack(spacing: 0) {
+                ForEach(Array(entries.enumerated()), id: \.element.id) { index, entry in
+                    if index > 0 {
+                        Rectangle().fill(theme.line).frame(height: 1).padding(.leading, 14)
+                    }
+                    recentRow(entry)
+                }
+            }
+        }
+        .scrollBounceBehavior(.basedOnSize)
+        .scrollIndicatorsFlash(onAppear: true)
+        .containerRelativeFrame(.vertical) { height, _ in
+            min(Self.recentRowHeight * CGFloat(entries.count), height * 0.85)
+        }
+        .background(theme.card, in: shape)
+        .clipShape(shape)
+        .overlay { shape.strokeBorder(theme.line, lineWidth: 1) }
+    }
+
+    /// One recent log as a compact list row: name (+ "×1.5" when logged at
+    /// another portion), then calories, protein and the day it was logged;
     /// tap to reopen at that portion, heart when the entry is one known food.
     private func recentRow(_ entry: FoodLogEntryDTO) -> some View {
         let name = entry.customName ?? "Meal"
         let key = FoodAffinity.identityKey(of: entry)
         let favoritable = !key.hasPrefix("name:")
         let p = entry.totalNutrition
-        return PressableCard(action: {
-            mealToLog = QuickMealLog(name: name, emoji: "🍽️", ingredients: ingredients(for: entry))
-        }) {
-            HStack(alignment: .top, spacing: 12) {
-                VStack(alignment: .leading, spacing: 4) {
+        return HStack(spacing: 10) {
+            Button {
+                mealToLog = QuickMealLog(name: name, emoji: "🍽️", ingredients: ingredients(for: entry))
+            } label: {
+                VStack(alignment: .leading, spacing: 3) {
                     HStack(spacing: 4) {
                         Text(name)
                             .font(.system(size: 15, weight: .semibold))
                             .foregroundStyle(theme.text)
+                            .lineLimit(1)
                         if let portion = portionLabel(for: entry) {
                             Text(portion).font(.caption).foregroundStyle(theme.dim)
                         }
                     }
-                    Text("\(p.calories) cal · \(p.proteinG)g pro · \(p.carbsG)g carbs · \(p.fatG)g fat")
-                        .font(.system(.caption2, design: .monospaced))
-                        .foregroundStyle(theme.accent)
-                    Text("Logged \(loggedDayLabel(entry.date))")
-                        .font(.caption).foregroundStyle(theme.dim)
-                }
-                Spacer(minLength: 0)
-                if favoritable {
-                    let isFavorite = favoriteIds.contains(key)
-                    Button { toggleFavorite(key) } label: {
-                        Image(systemName: isFavorite ? "heart.fill" : "heart")
-                            .foregroundStyle(isFavorite ? theme.accent : theme.dim)
-                            .font(.system(size: 16))
+                    HStack(spacing: 0) {
+                        Text("\(p.calories) cal · \(p.proteinG)g pro")
+                            .font(.system(.caption2, design: .monospaced))
+                            .foregroundStyle(theme.accent)
+                        Text(" · \(loggedDayLabel(entry.date))")
+                            .font(.caption2).foregroundStyle(theme.dim)
                     }
-                    .tactile(.ghost)
-                    .accessibilityLabel(isFavorite ? "Remove \(name) from favorites" : "Add \(name) to favorites")
+                    .lineLimit(1)
                 }
+                .frame(maxWidth: .infinity, minHeight: Self.recentRowHeight - 18, alignment: .leading)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityHint("\(p.carbsG)g carbs, \(p.fatG)g fat. Logged \(loggedDayLabel(entry.date))")
+            if favoritable {
+                let isFavorite = favoriteIds.contains(key)
+                Button { toggleFavorite(key) } label: {
+                    Image(systemName: isFavorite ? "heart.fill" : "heart")
+                        .foregroundStyle(isFavorite ? theme.accent : theme.dim)
+                        .font(.system(size: 16))
+                }
+                .tactile(.ghost)
+                .accessibilityLabel(isFavorite ? "Remove \(name) from favorites" : "Add \(name) to favorites")
             }
         }
+        .padding(.leading, 14)
+        .padding(.trailing, 6)
+        .padding(.vertical, 9)
     }
 
     /// "today" / "yesterday" / "Mon, Nov 17" — lowercase, unlike `MealHistoryDay.label`.
@@ -547,10 +603,12 @@ struct AddFoodSheet: View {
     @ViewBuilder
     private var foodList: some View {
         let ids = favoriteIds
+        let pick = strengthQuery == trimmedQuery ? typicalPicks[trimmedQuery] : nil
         LazyVStack(spacing: 8) {
-            ForEach(displayedResults, id: \.id) { food in
+            ForEach(ServingPick.reordered(displayedResults, pick: pick), id: \.id) { food in
                 FoodResultRow(
                     food: food,
+                    note: pick?.foodId == food.id ? typicalPickNote(pick!) : nil,
                     isFavorite: ids.contains(food.id),
                     onToggleFavorite: { toggleFavorite(food.id) },
                     sizes: sizeChoices[food.id] ?? [],
@@ -558,10 +616,17 @@ struct AddFoodSheet: View {
                         mealToLog = QuickMealLog(name: picked.name, emoji: "🍽️", ingredients: ingredients(for: picked))
                     }
                 ) {
-                    mealToLog = QuickMealLog(name: food.name, emoji: "🍽️", ingredients: ingredients(for: food))
+                    mealToLog = QuickMealLog(name: food.name, emoji: "🍽️", ingredients: ingredients(for: food, pick: pick))
                 }
             }
         }
+    }
+
+    /// "✦ Typical pick" plus the usual amount when it isn't one serving.
+    private func typicalPickNote(_ pick: ServingPick) -> String {
+        guard pick.quantity != 1 else { return "✦ Typical pick" }
+        let amount = pick.quantity.formatted(.number.precision(.fractionLength(0...2)))
+        return "✦ Typical pick · usually ×\(amount)"
     }
 }
 
@@ -571,7 +636,7 @@ extension View {
     /// The one debounced food search: each keystroke restarts the task
     /// (cancelling the prior one), and only after a 180 ms pause does
     /// `FoodSearch.search` (curated + the USDA FTS5 scan + chain menus, off the
-    /// main thread) run — so typing never rescans 15–20k entries synchronously
+    /// main thread) run — so typing never rescans ~290k entries synchronously
     /// in `body`. A blank query shows `emptyResults()` immediately.
     func debouncedFoodSearch(
         query: String,
@@ -640,6 +705,8 @@ private struct DebouncedFoodSearch: ViewModifier {
 /// ingredient picker doesn't).
 struct FoodResultRow: View {
     let food: CommonFood
+    /// Small accent line above the name (AddFoodSheet's AI typical pick).
+    var note: String? = nil
     var isFavorite: Bool = false
     var onToggleFavorite: (() -> Void)? = nil
     /// Other sizes of this item (chain results). Shown as small inline pills;
@@ -657,6 +724,11 @@ struct FoodResultRow: View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack(alignment: .top, spacing: 12) {
                     VStack(alignment: .leading, spacing: 4) {
+                        if let note {
+                            Text(note)
+                                .font(.system(size: 10, weight: .medium)).tracking(1)
+                                .foregroundStyle(theme.accent)
+                        }
                         Text(food.name)
                             .font(.system(size: 15, weight: .semibold))
                             .foregroundStyle(theme.text)

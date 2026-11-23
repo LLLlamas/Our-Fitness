@@ -237,12 +237,14 @@ extension FoodSearch {
         let grouped = SizeVariants.group(hits, maxGroups: maxChainGroups)
         let shownIds = Set(hits.map(\.id))
         // A bare brand row ("Mcdonald's", alias "french fries") adds nothing once
-        // the chain's own menu answered; drop usda rows made only of chain words.
+        // the chain's own menu answered; drop usda rows made only of chain words
+        // (before any comma — `ServingSanity` names it "Mcdonald's, french fries").
         let chainWords = Set(([chain.name] + chain.aliases).flatMap(FoodSearchQuery.normalizedWords))
         let others = found.filter { f in
             if shownIds.contains(f.id) { return false }
             if !hits.isEmpty, f.id.hasPrefix("usda-") {
-                let nameWords = FoodSearchQuery.normalizedWords(f.name)
+                let lead = f.name.split(separator: ",").first.map(String.init) ?? f.name
+                let nameWords = FoodSearchQuery.normalizedWords(lead)
                 if !nameWords.isEmpty, nameWords.allSatisfy(chainWords.contains) { return false }
             }
             if f.id.hasPrefix("rest:") { return RestaurantChain.slug(ofRestaurantFoodId: f.id) == chain.slug }
@@ -261,7 +263,7 @@ extension FoodSearch {
     private static func strength(of foods: [CommonFood], for q: FoodSearchQuery, chainHit: Bool) -> MatchStrength {
         guard let first = foods.first else { return .none }
         if chainHit { return .strong }
-        if let tier = q.tier(name: first.name, aliases: first.aliases), tier <= 1 { return .strong }
+        if let tier = q.tier(of: first), tier <= 1 { return .strong }
         return .weak
     }
 }

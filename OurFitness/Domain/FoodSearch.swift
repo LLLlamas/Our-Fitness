@@ -2,10 +2,14 @@
 // pickers. Lenient on purpose: case, apostrophes, word order, simple plurals
 // and spelling variants don't matter ("Donuts" = "donut" = "doughnut";
 // "dunkin donut" finds "Dunkin' glazed donut"). Curated `CommonFoods` matches
-// come first; the offline USDA database broadens the results, with curated
-// entries winning on name so duplicates never appear. Each block is ranked by
-// match quality, then A–Z — chains rarely found near NYC sort after the rest
-// at the same quality (`RegionalChains`).
+// lead; the offline USDA database broadens the results, with curated entries
+// winning on name so duplicates never appear. Order (`merged`): close curated
+// matches (tier ≤ 2) → close USDA matches (tier ≤ 1) → loose curated (tier 3)
+// → other USDA → bulk/package USDA rows ("22lb 1ct", a flat 100 g) last. USDA
+// rows keep the database's FTS relevance as the tie-break — not A–Z, which
+// buried plain "Rice Krispies" under its colour variants — after match
+// quality, chains rare near NYC (`RegionalChains`) and household-measure
+// labels before weight/package-only ones (`ServingSanity`).
 
 import Foundation
 
@@ -17,13 +21,45 @@ public enum FoodSearch {
 
     static func combined(_ q: FoodSearchQuery, index: CuratedSearchIndex, database: SQLiteFoodDatabase) async -> [CommonFood] {
         guard !q.isEmpty else { return [] }
-        let curated = index.matches(q)
-        let curatedNames = Set(curated.map { $0.name.lowercased() })
+        let curated = index.rankedMatches(q)
+        let curatedNames = Set(curated.map { $0.food.name.lowercased() })
         let usda = await database.searchAsync(ftsQuery: q.ftsQuery, limit: 60)
             .map { $0.asCommonFood }
-            .filter { !curatedNames.contains($0.name.lowercased()) }
-            .compactMap { food in q.tier(name: food.name, aliases: food.aliases).map { (food, $0) } }
-        return curated + ranked(usda)
+            .enumerated()
+            .compactMap { rank, food -> USDAHit? in
+                guard !curatedNames.contains(food.name.lowercased()),
+                      let tier = q.tier(of: food) else { return nil }
+                return USDAHit(food: food, tier: tier, ftsRank: rank)
+            }
+        return merged(curated: curated, usda: usda)
+    }
+
+    /// One USDA row that passed `tier`, with its position in the FTS result.
+    struct USDAHit {
+        let food: CommonFood
+        let tier: Int
+        let ftsRank: Int
+    }
+
+    /// Curated (already ranked) and USDA hits in one list — see the file header
+    /// for the bands. Within a band the incoming order is kept.
+    static func merged(curated: [(food: CommonFood, tier: Int)], usda: [USDAHit]) -> [CommonFood] {
+        let sortedUSDA = usda.sorted { a, b in
+            let bulkA = ServingSanity.isBulk(a.food), bulkB = ServingSanity.isBulk(b.food)
+            if bulkA != bulkB { return !bulkA }
+            if a.tier != b.tier { return a.tier < b.tier }
+            let ra = RegionalChains.isRareNearby(foodId: a.food.id)
+            let rb = RegionalChains.isRareNearby(foodId: b.food.id)
+            if ra != rb { return !ra }
+            let la = ServingSanity.labelRank(a.food.servingLabel)
+            let lb = ServingSanity.labelRank(b.food.servingLabel)
+            if la != lb { return la < lb }
+            return a.ftsRank < b.ftsRank
+        }
+        let bands: [(band: Int, food: CommonFood)] =
+            curated.map { ($0.tier <= 2 ? 0 : 2, $0.food) }
+            + sortedUSDA.map { (ServingSanity.isBulk($0.food) ? 4 : ($0.tier <= 1 ? 1 : 3), $0.food) }
+        return (0...4).flatMap { b in bands.filter { $0.band == b }.map(\.food) }
     }
 
     /// Model-proposed alternative queries made safe to show: trimmed, blanks and
@@ -124,13 +160,22 @@ public struct FoodSearchQuery: Sendable {
     ///   2 — every word is in the name
     ///   3 — every word is somewhere in the name + aliases, or the run-together
     ///       query sits inside a run-together name/alias ("chickfila")
-    public func tier(name: String, aliases: [String]) -> Int? {
+    public func tier(name: String, aliases: [String], aliasesCanBeExact: Bool = true) -> Int? {
         let nameWords = Self.normalizedWords(name)
         let aliasWords = aliases.map(Self.normalizedWords)
-        return tier(nameWords: nameWords, aliasWords: aliasWords)
+        return tier(nameWords: nameWords, aliasWords: aliasWords, aliasesCanBeExact: aliasesCanBeExact)
     }
 
-    func tier(nameWords: [String], aliasWords: [[String]]) -> Int? {
+    /// `tier` for a search result. A USDA row's alias never counts as exact:
+    /// branded aliases are [description, brand, category] and generic ones the
+    /// description's comma segments, so "cheese" or "cereal" alone would make
+    /// every fondue and bran bud an exact match. Curated aliases are hand-written
+    /// synonyms and still count.
+    public func tier(of food: CommonFood) -> Int? {
+        tier(name: food.name, aliases: food.aliases, aliasesCanBeExact: !food.id.hasPrefix("usda-"))
+    }
+
+    func tier(nameWords: [String], aliasWords: [[String]], aliasesCanBeExact: Bool = true) -> Int? {
         guard !words.isEmpty else { return nil }
         func same(_ ws: [String]) -> Bool {
             ws.count == words.count && zip(ws, words).allSatisfy { t, q in
@@ -138,7 +183,7 @@ public struct FoodSearchQuery: Sendable {
                 return Self.forms(q).contains { tf.contains($0) }
             }
         }
-        if same(nameWords) || aliasWords.contains(where: same) { return 0 }
+        if same(nameWords) || (aliasesCanBeExact && aliasWords.contains(where: same)) { return 0 }
         func allHit(_ ws: [String]) -> Bool {
             words.allSatisfy { q in ws.contains { Self.hits(q, $0) } }
         }
@@ -196,9 +241,16 @@ final class CuratedSearchIndex: Sendable {
     }
 
     func matches(_ q: FoodSearchQuery) -> [CommonFood] {
-        FoodSearch.ranked(entries.compactMap { e in
+        rankedMatches(q).map(\.food)
+    }
+
+    /// `matches` with each food's tier, for `FoodSearch.merged`.
+    func rankedMatches(_ q: FoodSearchQuery) -> [(food: CommonFood, tier: Int)] {
+        let hits = entries.compactMap { e in
             q.tier(nameWords: e.name, aliasWords: e.aliases).map { (e.food, $0) }
-        })
+        }
+        let tiers = Dictionary(hits.map { ($0.0.id, $0.1) }, uniquingKeysWith: min)
+        return FoodSearch.ranked(hits).map { ($0, tiers[$0.id] ?? 3) }
     }
 }
 
@@ -228,5 +280,134 @@ public enum RegionalChains {
             return rareNearNYC.contains(slug)
         }
         return foodId.hasPrefix("ff-") && curatedPrefixes.contains { foodId.hasPrefix($0) }
+    }
+}
+
+// MARK: - Serving sanity (USDA rows)
+
+/// Makes USDA rows read the way a person logs a meal, without inventing data:
+/// labels and names are only reworded, and every gram weight and macro stays
+/// what the database holds. Applied in `FoodDatabaseEntry.asCommonFood` to
+/// `usda-` rows; also feeds `FoodSearch.merged`'s ordering.
+public enum ServingSanity {
+
+    /// Generic (SR Legacy / Foundation) rows got one of these labels from
+    /// `scripts/build-food-db.py` `SERVING_RULES`, matched against the WHOLE
+    /// description — so "Bread, oatmeal" got the oatmeal rule's "1 cup cooked".
+    /// Pattern = the script's keyword regex; nil = the script's fallback.
+    static let genericRules: [(label: String, pattern: String?, grams: String)] = [
+        ("1 tbsp (14 g)", #"\b(oil|butter|margarine|lard|shortening)\b"#, "14 g"),
+        ("1 tbsp (20 g)", #"\b(mayonnaise|ketchup|mustard|honey|syrup|jam|jelly)\b"#, "20 g"),
+        ("1 oz (28 g)", #"\b(cheese|nuts?|almonds?|walnuts?|pecans?|cashews?|pistachios?|seeds?)\b"#, "1 oz (28 g)"),
+        ("4 oz cooked (113 g)", #"\b(chicken|beef|pork|turkey|fish|salmon|cod|tilapia|tuna|shrimp|lamb|steak)\b"#, "4 oz (113 g)"),
+        ("1 cup cooked (158 g)", #"\b(rice|pasta|quinoa|couscous|barley|oats?|oatmeal)\b"#, "158 g"),
+        ("1 slice/piece (40 g)", #"\b(bread|bagel|tortilla|roll)\b"#, "40 g"),
+        ("1 cup (240 g)", #"\b(milk|juice|beverage|drink)\b"#, "240 g"),
+        ("1 medium (150 g)", #"\b(apple|banana|orange|pear|peach|plum)\b"#, "150 g"),
+        ("1 cup (150 g)", nil, "150 g"),
+    ]
+
+    /// The row as shown: generic rows get a readable name and an honest label,
+    /// branded labels lose their raw unit codes. Non-USDA rows pass through.
+    public static func tidied(_ food: CommonFood) -> CommonFood {
+        guard food.id.hasPrefix("usda-") else { return food }
+        var out = food
+        if let rule = genericRules.first(where: { $0.label == food.servingLabel }),
+           let description = food.aliases.first, description.contains(",") {
+            let segments = description.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+            let first = segments[0]
+            if food.name.lowercased() == first.lowercased() {
+                // "Cheese" ×300 → "Cheese, cheddar"; up to three segments.
+                let name = segments.prefix(3).joined(separator: ", ")
+                out = CommonFood(id: food.id, name: name.prefix(1).uppercased() + name.dropFirst(),
+                                 aliases: food.aliases, servingLabel: food.servingLabel,
+                                 calories: food.calories, proteinG: food.proteinG, carbsG: food.carbsG,
+                                 fatG: food.fatG, fiberG: food.fiberG)
+            }
+            // The household word is real only when the rule's keyword names the food itself.
+            let real = rule.pattern.map { first.lowercased().range(of: $0, options: .regularExpression) != nil } ?? false
+            if !real { out = relabeled(out, rule.grams) }
+            return out
+        }
+        let human = humanizedLabel(food.servingLabel)
+        return human == food.servingLabel ? out : relabeled(out, human)
+    }
+
+    private static func relabeled(_ f: CommonFood, _ label: String) -> CommonFood {
+        CommonFood(id: f.id, name: f.name, aliases: f.aliases, servingLabel: label,
+                   calories: f.calories, proteinG: f.proteinG, carbsG: f.carbsG,
+                   fatG: f.fatG, fiberG: f.fiberG)
+    }
+
+    /// Branded label text as people write it: "40GRM" → "40 g", "4 ONZ" → "4 oz",
+    /// "8 OZA" → "8 fl oz", "1 SLICE" → "1 slice", "0.5 cup" → "½ cup".
+    public static func humanizedLabel(_ label: String) -> String {
+        var s = label.trimmingCharacters(in: .whitespaces)
+        for (code, unit) in [("GRM", "g"), ("ONZ", "oz"), ("OZA", "fl oz"), ("MLT", "ml")] {
+            s = s.replacingOccurrences(of: #"(\d)\s*"# + code + #"\b"#, with: "$1 " + unit,
+                                       options: [.regularExpression, .caseInsensitive])
+        }
+        if s.rangeOfCharacter(from: .lowercaseLetters) == nil { s = s.lowercased() }
+        for (decimal, fraction) in [("0.25", "¼"), ("0.5", "½"), ("0.75", "¾"), ("0.33", "⅓"), ("0.67", "⅔")] {
+            s = s.replacingOccurrences(of: "^" + NSRegularExpression.escapedPattern(for: decimal) + #"(?=\s)"#,
+                                       with: fraction, options: .regularExpression)
+        }
+        return s
+    }
+
+    /// Bulk / institutional rows nobody logs for one meal: a package size in
+    /// the name ("Kellogg Rice Krispies Cereal 22lb 1ct") or a flat 100 g label
+    /// (the branded fallback when the label had no serving).
+    public static func isBulk(_ food: CommonFood) -> Bool {
+        guard food.id.hasPrefix("usda-") else { return false }
+        if food.name.range(of: #"\d\s?(lb|lbs|ct|count|pk|pack)\b"#, options: [.regularExpression, .caseInsensitive]) != nil {
+            return true
+        }
+        return food.servingLabel.range(of: #"^100\s?(g|grams?)\b"#, options: [.regularExpression, .caseInsensitive]) != nil
+    }
+
+    /// 0 = a household measure ("1 cup", "1 slice", "2 tbsp"); 1 = weight-only
+    /// ("40 g", "4 oz", "1 oz (28 g)") or a package unit ("1 container", "1/5 package").
+    public static func labelRank(_ label: String) -> Int {
+        let l = label.lowercased()
+        if l.range(of: #"^[\d./¼½¾⅓⅔\s]+(g|grams?|oz|fl oz|ml)\b"#, options: .regularExpression) != nil { return 1 }
+        if l.range(of: #"\b(container|package|pkg|box|pouch|bag)\b"#, options: .regularExpression) != nil { return 1 }
+        return 0
+    }
+}
+
+// MARK: - Typical pick (Apple Intelligence, validated here)
+
+/// The search result a typical person logs for one meal, and how many of its
+/// servings — proposed by `ServingPickService` (on-device model) and made safe
+/// here: the pick must be one of the results already shown and the amount
+/// one of `quantities`. Nutrition always comes from that result's own row.
+public struct ServingPick: Equatable, Sendable {
+    public let foodId: String
+    public let quantity: Double
+
+    /// Allowed multiples of the row's serving (inside the 0.25…10 portion clamp).
+    public static let quantities: [Double] = [0.5, 0.75, 1, 1.5, 2]
+    /// How many top results the model chooses among.
+    public static let candidateCount = 6
+
+    /// `choice` is the model's 1-based option number; out of range → nil.
+    /// `servings` snaps to the nearest allowed quantity (non-finite → 1).
+    public static func validated(choice: Int, servings: Double, candidates: [CommonFood]) -> ServingPick? {
+        // Range check before `choice - 1`: the number is model output, and
+        // `Int.min - 1` would trap.
+        guard choice >= 1, choice <= candidates.count else { return nil }
+        let amount = servings.isFinite
+            ? quantities.min { abs($0 - servings) < abs($1 - servings) } ?? 1
+            : 1
+        return ServingPick(foodId: candidates[choice - 1].id, quantity: amount)
+    }
+
+    /// `results` with the picked row moved to the front (nothing else moves).
+    public static func reordered(_ results: [CommonFood], pick: ServingPick?) -> [CommonFood] {
+        guard let pick, let i = results.firstIndex(where: { $0.id == pick.foodId }), i > 0 else { return results }
+        var out = results
+        out.insert(out.remove(at: i), at: 0)
+        return out
     }
 }

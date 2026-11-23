@@ -1,7 +1,11 @@
 // The Train tab's ONE exercise list — every exercise the profile owns, lifts,
 // holds and quick-log movements alike, each rendered exactly once.
 //
-// Header ring: distinct exercises logged today / total, plus today's burn.
+// Header ring: reps toward the user's reps goal (per day or per week, switch +
+// −/+ goal row under the header), plus today's burn. Reps, not sets — each +1
+// is its own 1-rep set. Math in Domain/RepTarget.swift; the goal is stored per
+// profile and period (`RepTargetPrefs`); unset = seeded from the user's own
+// last week, and with no history the row says "Set a goal".
 // Each row picks its controls from the exercise's SHAPE, never from the goal:
 //   • isometric            → tap opens the hold timer; no ±1
 //   • every other shape     → inline −1 / +1 (−1 min / +1 min for a duration),
@@ -30,6 +34,15 @@
 import SwiftUI
 import SwiftData
 
+/// Per-profile reps-goal keys. A stored 0 means "never set" — fall back to the
+/// default from last week (`RepTarget.resolve`).
+enum RepTargetPrefs {
+    static func periodKey(_ profileId: UUID) -> String { "repsTargetPeriod.\(profileId.uuidString)" }
+    static func goalKey(_ profileId: UUID, _ period: RepTarget.Period) -> String {
+        "repsTarget.\(period.rawValue).\(profileId.uuidString)"
+    }
+}
+
 struct ExercisesCard: View {
     let profile: ProfileDTO
 
@@ -53,6 +66,9 @@ struct ExercisesCard: View {
     @State private var pendingDelete: ExerciseDTO?
 
     @AppStorage(UnitSystem.storageKey) private var unitSystem: UnitSystem = .imperial
+    @AppStorage private var targetPeriodRaw: String
+    @AppStorage private var dayGoal: Int
+    @AppStorage private var weekGoal: Int
 
     init(profile: ProfileDTO) {
         self.profile = profile
@@ -61,9 +77,14 @@ struct ExercisesCard: View {
             filter: #Predicate<ExerciseModel> { $0.profileId == uid },
             sort: \.name, order: .forward
         )
-        // Today + yesterday: the rows show both days, older sets live in
-        // Training history (Train and Progress).
-        let cutoff = Dates.startOfYesterday()
+        _targetPeriodRaw = AppStorage(wrappedValue: RepTarget.Period.day.rawValue,
+                                      RepTargetPrefs.periodKey(uid))
+        _dayGoal = AppStorage(wrappedValue: 0, RepTargetPrefs.goalKey(uid, .day))
+        _weekGoal = AppStorage(wrappedValue: 0, RepTargetPrefs.goalKey(uid, .week))
+        // From last ISO week's Monday: the rows show today + yesterday (older
+        // sets live in Training history), the reps goal needs this week and
+        // last week (its default). Last Monday is always before yesterday.
+        let cutoff = Dates.startOfISOWeek(weeksAgo: 1)
         _setModels = Query(
             filter: #Predicate<WorkoutSetModel> { $0.userId == uid && $0.timestamp >= cutoff },
             sort: \.timestamp, order: .forward
@@ -122,12 +143,15 @@ struct ExercisesCard: View {
     var body: some View {
         let exercises = myExercises
         let stats = statsByExercise
-        let doneToday = exercises.filter { (stats[$0.id]?.todaySets ?? 0) > 0 }.count
         let todayCal = exercises.reduce(0.0) { $0 + (stats[$1.id]?.todayCal ?? 0) }
+        let target = repTarget(exercises)
 
         Card {
             VStack(alignment: .leading, spacing: 14) {
-                header(done: doneToday, total: exercises.count, todayCal: todayCal)
+                header(target: target, todayCal: todayCal)
+                if !exercises.isEmpty {
+                    goalRow(target)
+                }
 
                 if exercises.isEmpty {
                     // The whole block adds an exercise — a first-time user
@@ -198,41 +222,78 @@ struct ExercisesCard: View {
 
     // MARK: - Header
 
+    private struct TargetState {
+        let period: RepTarget.Period
+        let reps: Int
+        let goal: Int?
+        /// True when `goal` is last week's default, not one the user set.
+        let isDefault: Bool
+    }
+
+    private var targetPeriod: RepTarget.Period {
+        RepTarget.Period(rawValue: targetPeriodRaw) ?? .day
+    }
+
+    private func repTarget(_ exercises: [ExerciseDTO]) -> TargetState {
+        let period = targetPeriod
+        let totals = TrainingHistory.dailyRepTotals(setModels.map(\.snapshot), exercises: exercises)
+        let now = Date()
+        let stored = period == .day ? dayGoal : weekGoal
+        return TargetState(
+            period: period,
+            reps: RepTarget.reps(totals, period: period, now: now),
+            goal: RepTarget.resolve(
+                stored: stored,
+                suggested: RepTarget.suggestedGoal(totals, period: period, now: now)),
+            isDefault: stored <= 0
+        )
+    }
+
+    private func adjustGoal(_ direction: Int, _ target: TargetState) {
+        guard let next = RepTarget.adjusted(target.goal, by: direction, period: target.period),
+              next != target.goal || target.isDefault else { return }
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+            if target.period == .day { dayGoal = next } else { weekGoal = next }
+        }
+        Haptics.tap()
+    }
+
     @ViewBuilder
-    private func header(done: Int, total: Int, todayCal: Double) -> some View {
+    private func header(target: TargetState, todayCal: Double) -> some View {
+        let unit = target.period == .day ? "today" : "this week"
         HStack(alignment: .center, spacing: 12) {
-            // Real progress: how much of your list you've touched today. Zero
-            // when there's nothing to log, so the ring reads empty instead of
-            // pretending to be complete.
-            let pct = total > 0 ? Double(done) / Double(total) : 0
+            // Reps toward the goal. No goal yet = empty ring with the count,
+            // never a made-up target.
+            let pct = RepTarget.fraction(reps: target.reps, goal: target.goal)
             ProgressRing(pct: pct * Double(reveal), color: theme.accent,
                          trackColor: theme.barBg, lineWidth: 7)
                 .shadow(color: theme.accent.opacity(ringGlow ? 0.55 : 0), radius: ringGlow ? 10 : 0)
                 .animation(.spring(response: 0.35, dampingFraction: 0.65), value: ringGlow)
+                .animation(.spring(response: 0.4, dampingFraction: 0.8), value: pct)
                 .frame(width: 54, height: 54)
                 .overlay {
-                    Text("\(done)/\(total)")
+                    Text("\(target.reps)")
                         .font(.system(size: 13, weight: .semibold, design: .monospaced))
                         .foregroundStyle(theme.text)
+                        .minimumScaleFactor(0.6)
+                        .lineLimit(1)
+                        .padding(.horizontal, 8)
                         .contentTransition(.numericText())
                 }
                 .revealOnAppear($reveal)
-                .accessibilityLabel("\(done) of \(total) exercises logged today")
+                .accessibilityLabel(target.goal.map { "\(target.reps) of \($0) reps \(unit)" }
+                                    ?? "\(target.reps) reps \(unit), no goal set")
 
             VStack(alignment: .leading, spacing: 2) {
                 Text("Exercises")
                     .font(.system(size: 22, weight: .regular))
                     .foregroundStyle(theme.text)
+                Text(target.goal.map { "\(target.reps) of \($0) reps \(unit)" } ?? "\(target.reps) reps \(unit)")
+                    .font(.caption)
+                    .foregroundStyle(theme.dim)
+                    .contentTransition(.numericText())
                 if todayCal > 0 {
                     Text("~\(Int(todayCal)) cal burned today")
-                        .font(.caption)
-                        .foregroundStyle(theme.dim)
-                } else if done > 0 {
-                    Text("\(done) logged today")
-                        .font(.caption)
-                        .foregroundStyle(theme.dim)
-                } else {
-                    Text("tap an exercise to log it")
                         .font(.caption)
                         .foregroundStyle(theme.dim)
                 }
@@ -244,6 +305,36 @@ struct ExercisesCard: View {
             }
             .tactile(.ghost)
             .accessibilityLabel("Add exercise")
+        }
+    }
+
+    /// Day / Week switch + −/+ goal, same shape as WaterCard's goal row.
+    private func goalRow(_ target: TargetState) -> some View {
+        HStack(spacing: 10) {
+            Picker("Reps goal period", selection: Binding(
+                get: { targetPeriod },
+                set: { p in
+                    withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) { targetPeriodRaw = p.rawValue }
+                    Haptics.selection()
+                }
+            )) {
+                Text("Day").tag(RepTarget.Period.day)
+                Text("Week").tag(RepTarget.Period.week)
+            }
+            .pickerStyle(.segmented)
+            .frame(width: 116)
+            Spacer()
+            Button { adjustGoal(-1, target) } label: { Image(systemName: "minus") }
+                .tactile(.ghost)
+                .disabled(target.goal == nil)
+                .accessibilityLabel("Lower reps goal")
+            Text(target.goal.map { "\($0) reps" } ?? "Set a goal")
+                .font(.system(.caption, design: .monospaced))
+                .foregroundStyle(target.goal == nil ? theme.dim : theme.text)
+                .contentTransition(.numericText())
+            Button { adjustGoal(1, target) } label: { Image(systemName: "plus") }
+                .tactile(.ghost)
+                .accessibilityLabel("Raise reps goal")
         }
     }
 
@@ -443,7 +534,7 @@ struct ExercisesCard: View {
         // of the exercise's weight never re-reads this rep (nil for the rest).
         let load = exercise.fixedLoadLb(forRowWeight: nil, holdSeconds: nil)
         // The exercise's whole history BEFORE this row (the card's own query only
-        // holds today + yesterday), so the new-best check doesn't depend on refresh timing.
+        // starts last Monday), so the new-best check doesn't depend on refresh timing.
         let rowsBefore = Repos.setHistory(ctx, userId: profile.id, exerciseId: exercise.id, limit: 100_000)
         // A per-set-weight lift has no fixed load: stamp the last weight ever used
         // for it — the value the rep counter pre-fills — else bodyweight (nil).
