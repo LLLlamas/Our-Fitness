@@ -61,4 +61,43 @@ final class FoodSearchRealDataTests: XCTestCase {
         XCTAssertNil(chick.correctedQuery)
         XCTAssertFalse(chick.foods.isEmpty)
     }
+
+    // Common-sense ordering (2026-11-22 audit): the regular item first, bulk
+    // rows last, a human portion on the top cheese, plain yogurt before Greek.
+
+    func testPlainBrandItemLeadsItsVariants() async throws {
+        let out = try await search("rice krispies cereal")
+        XCTAssertEqual(out.foods.first?.id, "usda-1912508")     // Rice Krispies Toasted Rice Cereal, 1.25 cup
+        let top10 = out.foods.prefix(10)
+        XCTAssertFalse(top10.contains { $0.id == "usda-2236705" })   // "…22lb 1ct" bulk row
+        XCTAssertFalse(top10.contains { ServingSanity.isBulk($0) })
+        if let firstBulk = out.foods.firstIndex(where: ServingSanity.isBulk) {
+            XCTAssertFalse(out.foods[firstBulk...].contains { !ServingSanity.isBulk($0) })   // bulk rows sit last
+        }
+        XCTAssertFalse(out.foods.contains { $0.servingLabel.range(of: "GRM|ONZ|OZA", options: .regularExpression) != nil })
+    }
+
+    func testCheeseAndYogurtLeadWithEverydayPortions() async throws {
+        let cheese = try await search("cheese")
+        XCTAssertEqual(cheese.foods.first?.id, "cheese-cheddar")
+        XCTAssertTrue(cheese.foods.first?.servingLabel.contains("slice") ?? false)
+        // A branded fondue whose only "cheese" is its category is no exact match.
+        let fondueTier = FoodSearchQuery("cheese").tier(of: CommonFood(
+            id: "usda-1", name: "Alpenhaus Cheese Fondue", aliases: ["fondue", "alpenhaus", "cheese"],
+            servingLabel: "1 cup", calories: 0, proteinG: 0, carbsG: 0, fatG: 0, fiberG: 0))
+        XCTAssertEqual(fondueTier, 2)
+
+        let yogurt = try await search("yogurt")
+        XCTAssertEqual(yogurt.foods.first?.id, "yogurt-regular")
+        let greek = try await search("greek yogurt")
+        XCTAssertEqual(greek.foods.first?.id, "greek-yogurt")
+    }
+
+    func testStaplesStillLeadWithTheCuratedItem() async throws {
+        for (q, id) in [("milk", "milk-whole"), ("chicken breast", "chicken-breast"), ("cheerios", "cereal-cheerios"),
+                        ("white rice", "rice-white"), ("oatmeal", "oatmeal"), ("banana", "banana")] {
+            let out = try await search(q)
+            XCTAssertEqual(out.foods.first?.id, id, q)
+        }
+    }
 }

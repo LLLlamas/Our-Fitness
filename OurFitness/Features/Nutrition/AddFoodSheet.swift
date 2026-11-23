@@ -600,7 +600,7 @@ extension View {
     /// The one debounced food search: each keystroke restarts the task
     /// (cancelling the prior one), and only after a 180 ms pause does
     /// `FoodSearch.search` (curated + the USDA FTS5 scan + chain menus, off the
-    /// main thread) run — so typing never rescans 15–20k entries synchronously
+    /// main thread) run — so typing never rescans ~290k entries synchronously
     /// in `body`. A blank query shows `emptyResults()` immediately.
     func debouncedFoodSearch(
         query: String,

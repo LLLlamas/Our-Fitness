@@ -898,7 +898,7 @@ public enum CommonFoods {
         ),
         CommonFood(
             id: "greek-yogurt", name: "Greek yogurt",
-            aliases: ["greek yogurt", "yogurt", "greek yoghurt", "plain yogurt"],
+            aliases: ["greek yogurt", "greek yoghurt", "plain greek yogurt"],
             servingLabel: "1 cup (245 g)",
             calories: 220, proteinG: 20, carbsG: 9, fatG: 11, fiberG: 0
         ),
@@ -911,7 +911,8 @@ public enum CommonFoods {
         CommonFood(
             id: "cheese-cheddar", name: "Cheddar cheese",
             aliases: ["cheese", "cheddar", "cheddar cheese", "shredded cheese"],
-            servingLabel: "1 oz (28 g)",
+            // USDA SR: 1 slice (1 oz) = 28 g; 1 cup shredded = 113 g, so ¼ cup ≈ 28 g.
+            servingLabel: "1 slice or ¼ cup shredded (28 g)",
             calories: 115, proteinG: 7, carbsG: 0, fatG: 9, fiberG: 0
         ),
         CommonFood(
@@ -958,7 +959,8 @@ public enum CommonFoods {
         ),
         CommonFood(
             id: "yogurt-regular", name: "Yogurt (lowfat)",
-            aliases: ["lowfat yogurt", "fruit yogurt", "flavored yogurt", "low fat yogurt"],
+            // Plain lowfat (USDA SR 1 cup = 154 cal) — the everyday "yogurt", ahead of Greek.
+            aliases: ["yogurt", "plain yogurt", "lowfat yogurt", "fruit yogurt", "flavored yogurt", "low fat yogurt"],
             servingLabel: "1 cup (245 g)",
             calories: 154, proteinG: 13, carbsG: 17, fatG: 4, fiberG: 0
         ),

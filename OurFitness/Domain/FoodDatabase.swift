@@ -23,7 +23,7 @@
 import Foundation
 
 /// One USDA-derived food. Mirrors the fields `CommonFood` exposes so the parser
-/// can treat curated and USDA matches uniformly. Decoded from the bundled JSON.
+/// can treat curated and USDA matches uniformly. Read from the bundled SQLite (`usda-foods.db`).
 public struct FoodDatabaseEntry: Codable, Identifiable, Sendable, Equatable {
     public let id: String                // e.g. "usda-173688"
     public let name: String
@@ -51,12 +51,14 @@ public struct FoodDatabaseEntry: Codable, Identifiable, Sendable, Equatable {
     }
 
     /// Adapt to the curated `CommonFood` shape so parser callers stay uniform.
+    /// USDA rows come back reworded by `ServingSanity.tidied` (names, labels —
+    /// never numbers).
     public var asCommonFood: CommonFood {
-        CommonFood(
+        ServingSanity.tidied(CommonFood(
             id: id, name: name, aliases: aliases, servingLabel: servingLabel,
             calories: calories, proteinG: proteinG, carbsG: carbsG,
             fatG: fatG, fiberG: fiberG
-        )
+        ))
     }
 }
 
