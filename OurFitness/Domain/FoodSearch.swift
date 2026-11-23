@@ -394,7 +394,9 @@ public struct ServingPick: Equatable, Sendable {
     /// `choice` is the model's 1-based option number; out of range → nil.
     /// `servings` snaps to the nearest allowed quantity (non-finite → 1).
     public static func validated(choice: Int, servings: Double, candidates: [CommonFood]) -> ServingPick? {
-        guard candidates.indices.contains(choice - 1) else { return nil }
+        // Range check before `choice - 1`: the number is model output, and
+        // `Int.min - 1` would trap.
+        guard choice >= 1, choice <= candidates.count else { return nil }
         let amount = servings.isFinite
             ? quantities.min { abs($0 - servings) < abs($1 - servings) } ?? 1
             : 1

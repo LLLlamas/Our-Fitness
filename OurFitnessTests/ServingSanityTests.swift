@@ -76,6 +76,7 @@ final class ServingSanityTests: XCTestCase {
                        ServingPick(foodId: "b", quantity: 1.5))                     // snapped to an allowed amount
         XCTAssertNil(ServingPick.validated(choice: 3, servings: 1, candidates: shown))   // not a shown option
         XCTAssertNil(ServingPick.validated(choice: 0, servings: 1, candidates: shown))
+        XCTAssertNil(ServingPick.validated(choice: .min, servings: 1, candidates: shown))   // model output; must not trap
         XCTAssertEqual(ServingPick.validated(choice: 1, servings: 40, candidates: shown)?.quantity, 2)
         XCTAssertEqual(ServingPick.validated(choice: 1, servings: .nan, candidates: shown)?.quantity, 1)
 

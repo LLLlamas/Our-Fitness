@@ -236,15 +236,15 @@ struct ExercisesCard: View {
 
     private func repTarget(_ exercises: [ExerciseDTO]) -> TargetState {
         let period = targetPeriod
-        let sets = setModels.map(\.snapshot)
+        let totals = TrainingHistory.dailyRepTotals(setModels.map(\.snapshot), exercises: exercises)
         let now = Date()
         let stored = period == .day ? dayGoal : weekGoal
         return TargetState(
             period: period,
-            reps: RepTarget.reps(sets, exercises: exercises, period: period, now: now),
+            reps: RepTarget.reps(totals, period: period, now: now),
             goal: RepTarget.resolve(
                 stored: stored,
-                suggested: RepTarget.suggestedGoal(sets, exercises: exercises, period: period, now: now)),
+                suggested: RepTarget.suggestedGoal(totals, period: period, now: now)),
             isDefault: stored <= 0
         )
     }
@@ -534,7 +534,7 @@ struct ExercisesCard: View {
         // of the exercise's weight never re-reads this rep (nil for the rest).
         let load = exercise.fixedLoadLb(forRowWeight: nil, holdSeconds: nil)
         // The exercise's whole history BEFORE this row (the card's own query only
-        // holds today + yesterday), so the new-best check doesn't depend on refresh timing.
+        // starts last Monday), so the new-best check doesn't depend on refresh timing.
         let rowsBefore = Repos.setHistory(ctx, userId: profile.id, exerciseId: exercise.id, limit: 100_000)
         // A per-set-weight lift has no fixed load: stamp the last weight ever used
         // for it — the value the rep counter pre-fills — else bodyweight (nil).

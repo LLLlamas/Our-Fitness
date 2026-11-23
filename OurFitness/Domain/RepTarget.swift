@@ -3,8 +3,8 @@
 // (OurFitnessTests/RepTargetTests.swift).
 //
 // Reps, not sets: every +1 tap on the Train list is saved as its own 1-rep set,
-// so a set count would inflate. Reps come from `TrainingHistory` (rep exercises
-// only — holds and minutes never count).
+// so a set count would inflate. Reps come from `TrainingHistory.dailyRepTotals`
+// (rep exercises only — holds and minutes never count), folded once per render.
 //
 // The default goal is seeded from the user's OWN last ISO week. With no reps
 // last week there is no default (nil) and the card asks the user to set one —
@@ -29,18 +29,15 @@ public enum RepTarget {
         period == .day ? 2_000 : 10_000
     }
 
+    /// Per-day rep totals — fold once (`TrainingHistory.dailyRepTotals`) and
+    /// pass to `reps` / `suggestedGoal`, so a render walks the sets one time.
+    public typealias DailyTotals = [String: Int]
+
     /// Reps counted toward the target: today's, or this ISO week's so far.
-    public static func reps(
-        _ sets: [WorkoutSetDTO],
-        exercises: [ExerciseDTO],
-        period: Period,
-        now: Date = Date()
-    ) -> Int {
+    public static func reps(_ totals: DailyTotals, period: Period, now: Date = Date()) -> Int {
         switch period {
-        case .day:
-            return TrainingHistory.repsOnDay(sets, exercises: exercises, dayKey: Dates.dayKey(now))
-        case .week:
-            return TrainingHistory.repsInWeek(sets, exercises: exercises, weeksAgo: 0, now: now)
+        case .day:  return totals[Dates.dayKey(now)] ?? 0
+        case .week: return weekDays(now: now, weeksAgo: 0).reduce(0) { $0 + (totals[$1] ?? 0) }
         }
     }
 
@@ -48,27 +45,34 @@ public enum RepTarget {
     /// one step). Week = last week's reps. Day = last week's reps per day
     /// actually trained (rest days don't drag a training-day goal down).
     /// nil when last week had no reps.
-    public static func suggestedGoal(
-        _ sets: [WorkoutSetDTO],
-        exercises: [ExerciseDTO],
-        period: Period,
-        now: Date = Date()
-    ) -> Int? {
-        let lastWeek = TrainingHistory.repsInWeek(sets, exercises: exercises, weeksAgo: 1, now: now)
+    public static func suggestedGoal(_ totals: DailyTotals, period: Period, now: Date = Date()) -> Int? {
+        let days = weekDays(now: now, weeksAgo: 1).compactMap { totals[$0] }.filter { $0 > 0 }
+        let lastWeek = days.reduce(0, +)
         guard lastWeek > 0 else { return nil }
         switch period {
         case .week:
             return rounded(lastWeek, period: .week)
         case .day:
-            let monday = Dates.startOfISOWeek(now, weeksAgo: 1)
-            let trainedDays = (0..<7).filter { offset in
-                guard let d = Dates.isoCalendar.date(byAdding: .day, value: offset, to: monday)
-                else { return false }
-                return TrainingHistory.repsOnDay(sets, exercises: exercises, dayKey: Dates.dayKey(d)) > 0
-            }.count
-            guard trainedDays > 0 else { return nil }
-            let perDay = Double(lastWeek) / Double(trainedDays)
-            return rounded(Int(perDay.rounded()), period: .day)
+            return rounded(Int((Double(lastWeek) / Double(days.count)).rounded()), period: .day)
+        }
+    }
+
+    /// Convenience over raw sets (tests, one-off callers).
+    public static func reps(_ sets: [WorkoutSetDTO], exercises: [ExerciseDTO],
+                            period: Period, now: Date = Date()) -> Int {
+        reps(TrainingHistory.dailyRepTotals(sets, exercises: exercises), period: period, now: now)
+    }
+
+    public static func suggestedGoal(_ sets: [WorkoutSetDTO], exercises: [ExerciseDTO],
+                                     period: Period, now: Date = Date()) -> Int? {
+        suggestedGoal(TrainingHistory.dailyRepTotals(sets, exercises: exercises), period: period, now: now)
+    }
+
+    /// The seven day keys of the ISO week `weeksAgo` before `now`'s.
+    static func weekDays(now: Date, weeksAgo: Int) -> [String] {
+        let monday = Dates.startOfISOWeek(now, weeksAgo: weeksAgo)
+        return (0..<7).compactMap { offset in
+            Dates.isoCalendar.date(byAdding: .day, value: offset, to: monday).map { Dates.dayKey($0) }
         }
     }
 

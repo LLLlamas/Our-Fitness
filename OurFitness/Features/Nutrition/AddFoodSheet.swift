@@ -230,8 +230,11 @@ struct AddFoodSheet: View {
                   ServingPickService.shared.isAvailable else { return }
             try? await Task.sleep(nanoseconds: 700_000_000)
             guard !Task.isCancelled, q == trimmedQuery, strengthQuery == q else { return }
-            pickAsked.insert(q)
             let pick = await ServingPickService.shared.pick(for: q, among: displayedResults)
+            // Results changed mid-request (e.g. USDA rows arrived): this answer
+            // came from the old list — drop it and let the new task ask again.
+            guard !Task.isCancelled else { return }
+            pickAsked.insert(q)
             if let pick { typicalPicks[q] = pick }
         }
         .overlay(alignment: .top) { ToastHost() }
