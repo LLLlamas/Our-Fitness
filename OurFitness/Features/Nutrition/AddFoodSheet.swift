@@ -409,22 +409,9 @@ struct AddFoodSheet: View {
             }
         }
         if !sections.recent.isEmpty {
-            let scrolls = sections.recent.count > Self.recentVisibleRows
             VStack(alignment: .leading, spacing: 6) {
-                HStack {
-                    sectionHeader("recent")
-                    Spacer()
-                    if scrolls {
-                        HStack(spacing: 3) {
-                            Text("\(sections.recent.count) · scroll")
-                            Image(systemName: "chevron.down")
-                        }
-                        .font(.system(size: 10, weight: .medium))
-                        .foregroundStyle(theme.dim)
-                        .accessibilityHidden(true)
-                    }
-                }
-                recentList(sections.recent, scrolls: scrolls)
+                sectionHeader("recent")
+                recentList(sections.recent)
             }
         }
         if !sections.recipes.isEmpty {
@@ -465,46 +452,30 @@ struct AddFoodSheet: View {
         }
     }
 
-    /// Recent rows shown before the list scrolls; the box is this many rows
-    /// plus most of the next, so a cut-off row reads as "more below".
-    private static let recentVisibleRows = 4
-    private static let recentRowHeight: CGFloat = 58
+    /// One Recent row plus its hairline — sizes the list box before layout.
+    private static let recentRowHeight: CGFloat = 59
 
-    /// Recent as one bordered list (rows split by hairlines). Past
-    /// `recentVisibleRows` it gets its own scroller — capped at 45% of the
-    /// container so a small screen with the keyboard up isn't taken over — with
-    /// a flashed indicator and a bottom fade, so the sections below stay on screen.
-    @ViewBuilder
-    private func recentList(_ entries: [FoodLogEntryDTO], scrolls: Bool) -> some View {
+    /// Recent as one bordered list (rows split by hairlines), as tall as its
+    /// rows up to 85% of the visible area — so it runs to the bottom of the
+    /// screen instead of stopping in a short box — and scrolls on its own
+    /// (indicator flashed on open) only when the rows don't fit, e.g. with the
+    /// keyboard up. The page keeps scrolling to the sections below it.
+    private func recentList(_ entries: [FoodLogEntryDTO]) -> some View {
         let shape = RoundedRectangle(cornerRadius: 16, style: .continuous)
-        let rows = VStack(spacing: 0) {
-            ForEach(Array(entries.enumerated()), id: \.element.id) { index, entry in
-                if index > 0 {
-                    Rectangle().fill(theme.line).frame(height: 1).padding(.leading, 14)
+        return ScrollView {
+            VStack(spacing: 0) {
+                ForEach(Array(entries.enumerated()), id: \.element.id) { index, entry in
+                    if index > 0 {
+                        Rectangle().fill(theme.line).frame(height: 1).padding(.leading, 14)
+                    }
+                    recentRow(entry)
                 }
-                recentRow(entry)
             }
         }
-        Group {
-            if scrolls {
-                ScrollView {
-                    rows
-                }
-                .contentMargins(.bottom, 18, for: .scrollContent)
-                .scrollIndicators(.visible)
-                .scrollIndicatorsFlash(onAppear: true)
-                .containerRelativeFrame(.vertical) { height, _ in
-                    min(Self.recentRowHeight * (CGFloat(Self.recentVisibleRows) + 0.65), height * 0.45)
-                }
-                .overlay(alignment: .bottom) {
-                    LinearGradient(colors: [theme.card.opacity(0), theme.card.opacity(0.85)],
-                                   startPoint: .top, endPoint: .bottom)
-                        .frame(height: 14)
-                        .allowsHitTesting(false)
-                }
-            } else {
-                rows
-            }
+        .scrollBounceBehavior(.basedOnSize)
+        .scrollIndicatorsFlash(onAppear: true)
+        .containerRelativeFrame(.vertical) { height, _ in
+            min(Self.recentRowHeight * CGFloat(entries.count), height * 0.85)
         }
         .background(theme.card, in: shape)
         .clipShape(shape)

@@ -183,3 +183,4 @@ Shipped 2026-11-21 from the Mac (fastlane not installed), `main` at `c64651f` (m
 - Recent rebuilt as one bordered compact list; > 4 rows scroll in their own box (~4⅔ rows, 45% cap), flashed indicator, bottom fade, "N · scroll" hint.
 - Verified: `xcodebuild build` (iPhone 17 sim) BUILD SUCCEEDED; throwaway XCUITest logged 8 foods on a fresh install and screenshotted Add food — 5th row peeks, inner list scrolls to the last row while the sheet stays put, keyboard-up state shows ~2½ rows. Test file deleted afterwards.
 - Not run: unit/persistence suites (no Domain or Data change); device check.
+- 2026-11-22 follow-up: Recent box now sizes to its rows up to 85% of the visible area (no short capped box, no fade/hint). Build succeeded; throwaway XCUITest screenshots: keyboard down shows all 8 rows uncut, keyboard up scrolls inside the box. Test file deleted.
